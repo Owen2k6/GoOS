@@ -164,7 +164,7 @@ namespace GoOS
             {
                 Console.Clear();
             }
-            else if (input.ToLower() == "sysinf0")
+            else if (input.ToLower() == "sysinf")
             {
                 Console.WriteLine(" ");
                 Console.WriteLine("Goplex Studios GoOS 1.1.1");
@@ -194,6 +194,7 @@ namespace GoOS
 
                 Console.WriteLine("GoCalc 1.1");
                 Console.WriteLine("Note: can only do simple math");
+                Console.WriteLine("WARNING FROM DEVELOPERS: Decimals will crash the entire OS! be careful");
                 Console.WriteLine("Press ENTER to continue");
                 Console.ReadLine();
 
