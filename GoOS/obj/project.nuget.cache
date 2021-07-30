@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "S7Ul9vF8DueBMm62v95cgEVc0VINgWcHQEGsdbB6qepPtRJ07chZwZGgg1iFOgWUkWcNsWgDBL4RSR/gZjskRg==",
+  "dgSpecHash": "qIg5WjqkKbp30abHlrMc8D3+P5zTRPyKqIWWIC8oAetybRpUS8WaiL05EmfTVYKdsdxcyf8gJQkMQ0vwjaxXIQ==",
   "success": true,
-  "projectFilePath": "D:\\Users\\ybeny\\source\\repos\\GoOS\\GoOS\\GoOS.csproj",
+  "projectFilePath": "D:\\Users\\ybeny\\source\\repos\\GoplexOS\\GoOS\\GoOS.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Owen\\.nuget\\packages\\cosmos.build\\0.1.0-localbuild20210723050648\\cosmos.build.0.1.0-localbuild20210723050648.nupkg.sha512",
     "C:\\Users\\Owen\\.nuget\\packages\\cosmos.common\\0.1.0-localbuild20210723050648\\cosmos.common.0.1.0-localbuild20210723050648.nupkg.sha512",

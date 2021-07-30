@@ -192,7 +192,7 @@ namespace GoOS
                 string operation;
                 float answer;
 
-                Console.WriteLine("GoCalc 1.0");
+                Console.WriteLine("GoCalc 1.1");
                 Console.WriteLine("Note: can only do simple math");
                 Console.WriteLine("Press ENTER to continue");
                 Console.ReadLine();

@@ -1736,11 +1736,11 @@
   "project": {
     "version": "0.0.1",
     "restore": {
-      "projectUniqueName": "D:\\Users\\ybeny\\source\\repos\\GoOS\\GoOS\\GoOS.csproj",
+      "projectUniqueName": "D:\\Users\\ybeny\\source\\repos\\GoplexOS\\GoOS\\GoOS.csproj",
       "projectName": "GoOS",
-      "projectPath": "D:\\Users\\ybeny\\source\\repos\\GoOS\\GoOS\\GoOS.csproj",
+      "projectPath": "D:\\Users\\ybeny\\source\\repos\\GoplexOS\\GoOS\\GoOS.csproj",
       "packagesPath": "C:\\Users\\Owen\\.nuget\\packages\\",
-      "outputPath": "D:\\Users\\ybeny\\source\\repos\\GoOS\\GoOS\\obj\\",
+      "outputPath": "D:\\Users\\ybeny\\source\\repos\\GoplexOS\\GoOS\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
