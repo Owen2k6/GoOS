@@ -191,9 +191,8 @@ namespace GoOS
                 string operation;
                 float answer;
 
-                Console.WriteLine("GoCalc 1.1");
+                Console.WriteLine("GoCalc 1.5");
                 Console.WriteLine("Note: can only do simple math");
-                Console.WriteLine("WARNING FROM DEVELOPERS: Decimals will crash the entire OS! be careful");
                 Console.WriteLine("Press ENTER to continue");
                 Console.ReadLine();
 
