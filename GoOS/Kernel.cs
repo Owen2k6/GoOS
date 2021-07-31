@@ -198,7 +198,7 @@ namespace GoOS
                 Console.ReadLine();
 
                 Console.Write("Enter the first number in your basic equation: ");
-                firstNum = Convert.ToInt32(Console.ReadLine());
+                firstNum = float.Parse(Console.ReadLine());
 
                 //User input for equation
 
@@ -206,7 +206,7 @@ namespace GoOS
                 operation = Console.ReadLine();
 
                 Console.Write("Now enter your second number in the basic equation: ");
-                secondNum = Convert.ToInt32(Console.ReadLine());
+                secondNum = float.Parse(Console.ReadLine());
                 if (operation == "x")
                 {
                     answer = firstNum * secondNum;
