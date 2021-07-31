@@ -290,13 +290,6 @@ namespace GoOS
                     Console.WriteLine(e.ToString());
                 }
             }
-            else if (input.ToLower().IndexOf("add ") != -1) //Addition
-            {
-                string[] firststring = input.ToLower().Split("add ");
-                string[] secondstring = firststring[1].Split('+');
-                int finalresult = Int16.Parse(secondstring[0]) + Int16.Parse(secondstring[1]);
-                Console.WriteLine(finalresult);
-            }
             else
             {
                 Console.WriteLine("sorry, but `" + input + "` is not a command");
