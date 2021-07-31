@@ -198,7 +198,7 @@ namespace GoOS
                 Console.ReadLine();
 
                 Console.Write("Enter the first number in your basic equation: ");
-                firstNum = Convert.ToInt64(Console.ReadLine());
+                firstNum = Convert.ToInt32(Console.ReadLine());
 
                 //User input for equation
 
