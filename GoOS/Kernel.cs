@@ -135,7 +135,6 @@ namespace GoOS
                 Console.WriteLine("- readfile - Allows you to read files    -");
                 Console.WriteLine("------------------------------------------");
                 Console.WriteLine(" ");
-                //
             }
             else if (input.ToLower() == "credits")
             {
@@ -199,7 +198,7 @@ namespace GoOS
                 Console.ReadLine();
 
                 Console.Write("Enter the first number in your basic equation: ");
-                firstNum = Convert.ToInt32(Console.ReadLine());
+                firstNum = Convert.ToInt64(Console.ReadLine());
 
                 //User input for equation
 
