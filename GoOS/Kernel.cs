@@ -35,7 +35,25 @@ namespace GoOS
         public static VGAScreen VScreen = new VGAScreen();
         private static readonly CosmosVFS cosmosVFS = new Sys.FileSystem.CosmosVFS();
         private readonly Sys.FileSystem.CosmosVFS fs = cosmosVFS;
+        Canvas canvas;
 
+        private readonly Bitmap crashscreen = new Bitmap(10, 10,
+                new byte[] { 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0,
+                    255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255,
+                    0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255,
+                    0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 23, 59, 88, 255,
+                    23, 59, 88, 255, 0, 255, 243, 255, 0, 255, 243, 255, 23, 59, 88, 255, 23, 59, 88, 255, 0, 255, 243, 255, 0,
+                    255, 243, 255, 0, 255, 243, 255, 23, 59, 88, 255, 153, 57, 12, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255,
+                    243, 255, 0, 255, 243, 255, 153, 57, 12, 255, 23, 59, 88, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243,
+                    255, 0, 255, 243, 255, 0, 255, 243, 255, 72, 72, 72, 255, 72, 72, 72, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0,
+                    255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 72, 72,
+                    72, 255, 72, 72, 72, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255,
+                    10, 66, 148, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255,
+                    243, 255, 10, 66, 148, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 10, 66, 148, 255, 10, 66, 148, 255,
+                    10, 66, 148, 255, 10, 66, 148, 255, 10, 66, 148, 255, 10, 66, 148, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255,
+                    243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 10, 66, 148, 255, 10, 66, 148, 255, 10, 66, 148, 255, 10, 66, 148,
+                    255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255,
+                    0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, }, ColorDepth.ColorDepth32);
 
         protected override void BeforeRun()
         {
@@ -288,6 +306,50 @@ namespace GoOS
                 catch (Exception e)
                 {
                     Console.WriteLine(e.ToString());
+                }
+            }
+            else if (input.ToLower() == "graphic.systest.gapp")
+            {
+                canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(640, 480, ColorDepth.ColorDepth32));
+                canvas.Clear(System.Drawing.Color.Blue);
+
+                try
+                {
+                    Pen pen = new Pen(System.Drawing.Color.Red);
+
+                    // A red Point
+                    canvas.DrawPoint(pen, 69, 69);
+
+                    // A GreenYellow horizontal line
+                    pen.Color = System.Drawing.Color.GreenYellow;
+                    canvas.DrawLine(pen, 250, 100, 400, 100);
+
+                    // An IndianRed vertical line
+                    pen.Color = System.Drawing.Color.IndianRed;
+                    canvas.DrawLine(pen, 350, 150, 350, 250);
+
+                    // A MintCream diagonal line
+                    pen.Color = System.Drawing.Color.Aquamarine;
+                    canvas.DrawLine(pen, 250, 150, 400, 250);
+
+                    // A PaleVioletRed rectangle
+                    pen.Color = System.Drawing.Color.Red;
+                    canvas.DrawRectangle(pen, 350, 350, 80, 60);
+
+                    // A LimeGreen rectangle
+                    pen.Color = System.Drawing.Color.LightGreen;
+                    canvas.DrawRectangle(pen, 450, 450, 80, 60);
+
+                    // A bitmap
+                    canvas.DrawImage(crashscreen, new Point(1, 1));
+
+                    Console.ReadKey();
+                    Sys.Power.Shutdown();
+                }
+                catch (Exception e)
+                {
+                    mDebugger.Send("Exception occurred: " + e.Message);
+                    Sys.Power.Shutdown();
                 }
             }
             else
