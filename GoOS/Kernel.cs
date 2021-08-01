@@ -37,24 +37,6 @@ namespace GoOS
         private readonly Sys.FileSystem.CosmosVFS fs = cosmosVFS;
         Canvas canvas;
 
-        private readonly Bitmap crashscreen = new Bitmap(10, 10,
-                new byte[] { 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0,
-                    255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255,
-                    0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255,
-                    0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 23, 59, 88, 255,
-                    23, 59, 88, 255, 0, 255, 243, 255, 0, 255, 243, 255, 23, 59, 88, 255, 23, 59, 88, 255, 0, 255, 243, 255, 0,
-                    255, 243, 255, 0, 255, 243, 255, 23, 59, 88, 255, 153, 57, 12, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255,
-                    243, 255, 0, 255, 243, 255, 153, 57, 12, 255, 23, 59, 88, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243,
-                    255, 0, 255, 243, 255, 0, 255, 243, 255, 72, 72, 72, 255, 72, 72, 72, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0,
-                    255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 72, 72,
-                    72, 255, 72, 72, 72, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255,
-                    10, 66, 148, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255,
-                    243, 255, 10, 66, 148, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 10, 66, 148, 255, 10, 66, 148, 255,
-                    10, 66, 148, 255, 10, 66, 148, 255, 10, 66, 148, 255, 10, 66, 148, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255,
-                    243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 10, 66, 148, 255, 10, 66, 148, 255, 10, 66, 148, 255, 10, 66, 148,
-                    255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255,
-                    0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, 0, 255, 243, 255, }, ColorDepth.ColorDepth32);
-
         protected override void BeforeRun()
         {
             NetworkDevice nic = NetworkDevice.GetDeviceByName("eth0"); //get network device by name
@@ -187,7 +169,7 @@ namespace GoOS
                 Console.WriteLine("Goplex Studios GoOS 1.1.1");
                 Console.WriteLine("Build type: Release");
                 Console.WriteLine("Build number: 1512");
-                Console.WriteLine("Build Support key: 0x9364758789");
+                Console.WriteLine("Build Support key: 9364758789");
                 Console.WriteLine(" ");
             }
             else if (input.ToLower() == "shutdown")
@@ -317,31 +299,13 @@ namespace GoOS
                 {
                     Pen pen = new Pen(System.Drawing.Color.Red);
 
-                    // A red Point
-                    canvas.DrawPoint(pen, 69, 69);
-
                     // A GreenYellow horizontal line
                     pen.Color = System.Drawing.Color.GreenYellow;
-                    canvas.DrawLine(pen, 250, 100, 400, 100);
+                    canvas.DrawLine(pen, 12, 13, 640, 480);
 
                     // An IndianRed vertical line
                     pen.Color = System.Drawing.Color.IndianRed;
                     canvas.DrawLine(pen, 350, 150, 350, 250);
-
-                    // A MintCream diagonal line
-                    pen.Color = System.Drawing.Color.Aquamarine;
-                    canvas.DrawLine(pen, 250, 150, 400, 250);
-
-                    // A PaleVioletRed rectangle
-                    pen.Color = System.Drawing.Color.Red;
-                    canvas.DrawRectangle(pen, 350, 350, 80, 60);
-
-                    // A LimeGreen rectangle
-                    pen.Color = System.Drawing.Color.LightGreen;
-                    canvas.DrawRectangle(pen, 450, 450, 80, 60);
-
-                    // A bitmap
-                    canvas.DrawImage(crashscreen, new Point(1, 1));
 
                     Console.ReadKey();
                     Sys.Power.Shutdown();

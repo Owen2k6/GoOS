@@ -15,3 +15,4 @@ D:\Users\ybeny\source\repos\GoplexOS\GoOS\obj\Debug\netcoreapp2.0\cosmos\GoOS.As
 D:\Users\ybeny\source\repos\GoplexOS\GoOS\obj\Debug\netcoreapp2.0\cosmos\GoOS.csproj.CoreCompileInputs.cache
 D:\Users\ybeny\source\repos\GoplexOS\GoOS\obj\Debug\netcoreapp2.0\cosmos\GoOS.dll
 D:\Users\ybeny\source\repos\GoplexOS\GoOS\obj\Debug\netcoreapp2.0\cosmos\GoOS.pdb
+D:\Users\ybeny\source\repos\GoplexOS\GoOS\obj\Debug\netcoreapp2.0\cosmos\GoOS.csproj.AssemblyReference.cache
