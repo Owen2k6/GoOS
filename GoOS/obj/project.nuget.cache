@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "qIg5WjqkKbp30abHlrMc8D3+P5zTRPyKqIWWIC8oAetybRpUS8WaiL05EmfTVYKdsdxcyf8gJQkMQ0vwjaxXIQ==",
+  "dgSpecHash": "mJqnJ3/A3afvQS2ypMf46U9Wq6HlF6517SZqZONfHRQIr1T1gtmz5863bRWhCdNJK77YYtEnz9Th4Wmjcvd0mQ==",
   "success": true,
   "projectFilePath": "D:\\Users\\ybeny\\source\\repos\\GoplexOS\\GoOS\\GoOS.csproj",
   "expectedPackageFiles": [
@@ -16,12 +16,14 @@
     "C:\\Users\\Owen\\.nuget\\packages\\microsoft.netcore.dotnetapphost\\2.0.9\\microsoft.netcore.dotnetapphost.2.0.9.nupkg.sha512",
     "C:\\Users\\Owen\\.nuget\\packages\\microsoft.netcore.dotnethostpolicy\\2.0.9\\microsoft.netcore.dotnethostpolicy.2.0.9.nupkg.sha512",
     "C:\\Users\\Owen\\.nuget\\packages\\microsoft.netcore.dotnethostresolver\\2.0.9\\microsoft.netcore.dotnethostresolver.2.0.9.nupkg.sha512",
-    "C:\\Users\\Owen\\.nuget\\packages\\microsoft.netcore.platforms\\2.0.2\\microsoft.netcore.platforms.2.0.2.nupkg.sha512",
+    "C:\\Users\\Owen\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.1\\microsoft.netcore.platforms.5.0.1.nupkg.sha512",
+    "C:\\Users\\Owen\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
     "C:\\Users\\Owen\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
     "C:\\Users\\Owen\\.nuget\\packages\\runtime.win-x86.microsoft.netcore.app\\2.0.9\\runtime.win-x86.microsoft.netcore.app.2.0.9.nupkg.sha512",
     "C:\\Users\\Owen\\.nuget\\packages\\runtime.win-x86.microsoft.netcore.dotnetapphost\\2.0.9\\runtime.win-x86.microsoft.netcore.dotnetapphost.2.0.9.nupkg.sha512",
     "C:\\Users\\Owen\\.nuget\\packages\\runtime.win-x86.microsoft.netcore.dotnethostpolicy\\2.0.9\\runtime.win-x86.microsoft.netcore.dotnethostpolicy.2.0.9.nupkg.sha512",
-    "C:\\Users\\Owen\\.nuget\\packages\\runtime.win-x86.microsoft.netcore.dotnethostresolver\\2.0.9\\runtime.win-x86.microsoft.netcore.dotnethostresolver.2.0.9.nupkg.sha512"
+    "C:\\Users\\Owen\\.nuget\\packages\\runtime.win-x86.microsoft.netcore.dotnethostresolver\\2.0.9\\runtime.win-x86.microsoft.netcore.dotnethostresolver.2.0.9.nupkg.sha512",
+    "C:\\Users\\Owen\\.nuget\\packages\\system.drawing.common\\5.0.2\\system.drawing.common.5.0.2.nupkg.sha512"
   ],
   "logs": [
     {

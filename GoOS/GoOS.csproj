@@ -119,6 +119,7 @@
         <PackageReference Include="Cosmos.Debug.Kernel" Version="0-*" NoWarn="NU1604" />
         <PackageReference Include="Cosmos.System2" Version="0-*" NoWarn="NU1604" />
         <PackageReference Include="ManagedSoftwareExecution" Version="1.2.2" />
+        <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
     </ItemGroup>
 
 </Project>
