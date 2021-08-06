@@ -343,15 +343,10 @@ namespace GoOS
                     Sys.Power.Shutdown();
                 }
             }
-            else if (input.ToLower() == "update.systest.gapp")
+            else if (input.ToLower() == "update")
             {
                 Console.WriteLine("System Version: 1.2");
-                NetworkDevice nic = NetworkDevice.GetDeviceByName("eth0"); //get network device by name
-                IPConfig.Enable(nic, new Address(192, 168, 1, 69), new Address(255, 255, 255, 0), new Address(192, 168, 1, 254)); //enable IPv4 configuration
-                using (var xClient = new DHCPClient())
-                {
-                    xClient.SendDiscoverPacket();
-                }
+                Console.WriteLine("Check for updates on https://github.com/Owen2k6/GoOS/releases");
                 Console.WriteLine("Press any key to continue.");
                 Console.ReadKey();
             }
