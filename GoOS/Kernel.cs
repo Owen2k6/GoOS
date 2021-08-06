@@ -185,9 +185,9 @@ namespace GoOS
             else if (input.ToLower() == "sysinf")
             {
                 Console.WriteLine(" ");
-                Console.WriteLine("Goplex Studios GoOS 1.1.1");
+                Console.WriteLine("Goplex Studios GoOS 1.2");
                 Console.WriteLine("Build type: Release");
-                Console.WriteLine("Build number: 1512");
+                Console.WriteLine("Build number: 2000");
                 Console.WriteLine("Build Support key: 9364758789");
                 Console.WriteLine(" ");
             }
@@ -317,7 +317,7 @@ namespace GoOS
                 try
                 {
                     Pen pen = new Pen(System.Drawing.Color.Red);
-                    
+
 
                     // A GreenYellow horizontal line
                     pen.Color = System.Drawing.Color.White;
@@ -343,9 +343,17 @@ namespace GoOS
                     Sys.Power.Shutdown();
                 }
             }
-            else if (input.ToLower() == "update")
+            else if (input.ToLower() == "update.systest.gapp")
             {
-
+                Console.WriteLine("System Version: 1.2");
+                NetworkDevice nic = NetworkDevice.GetDeviceByName("eth0"); //get network device by name
+                IPConfig.Enable(nic, new Address(192, 168, 1, 69), new Address(255, 255, 255, 0), new Address(192, 168, 1, 254)); //enable IPv4 configuration
+                using (var xClient = new DHCPClient())
+                {
+                    xClient.SendDiscoverPacket();
+                }
+                Console.WriteLine("Press any key to continue.");
+                Console.ReadKey();
             }
             else
             {

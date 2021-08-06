@@ -100,10 +100,12 @@
         <Profile>VMware</Profile>
         <Description>Use VMware Player or Workstation to deploy and debug.</Description>
         <PxeInterface>192.168.0.8</PxeInterface>
-        <Version>0.0.1</Version>
+        <Version>1.2.0</Version>
         <Authors>Owen</Authors>
         <Company>Goplex Studios</Company>
         <Copyright>Goplex Studios 2021</Copyright>
+        <SignAssembly>false</SignAssembly>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
