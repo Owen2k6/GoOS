@@ -68,45 +68,12 @@ namespace GoOS
 
 
             }
-
-            var fs = new Sys.FileSystem.CosmosVFS();
+            CosmosVFS fs = new Sys.FileSystem.CosmosVFS();
             Sys.FileSystem.VFS.VFSManager.RegisterVFS(fs);
-            try
-            {
-                var file_stream = File.Create(@"0:\GoOS.sys");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-            try
-            {
-                var file_stream = File.Create(@"0:\Networking.sys");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-            try
-            {
-                File.WriteAllText(@"0:\GoOS.sys", "01110010 01100001 01110010 01100111 01101111 01101001 01101010 01101010 01101110 01100001 01100101 01101111 01110010 01101010 01100111 01101110 01101111 01100001 01110010 01100101 01101010 01100111 01101110 01101111 01101010 01100001 01110010 01101110 01100111 01101111 01101010 01110010 01100101 01100111 01101111 01101001 01101010 01100101 01100001 01110010 01101110 01100111 01101111 01101010 01100001 01110010 01101110 01100101 01100111 01101111 01101010 01100101 01110010 01100001 01101111 01101010 01100001 01110010 01101110 01100111 01101111 01100101 01101010 01110010 01101110 01100111 01101111 01101001 01101010 01100101 01100001 01110010 01101110 01100111 01101111 01101001 01101010 01100001 01110010 01100101 01101110 01100111 01101111 01101001 01101010 01100001 01110010 01100101 01101111 01101110 01100111 01100101 01101111 01101010 01101110 01100111 01101111 01100001 01101010 01100101 01110010 01101110 01100111 01101111 01101001 01101010 01100001 01100101 01110010 01101110 01100111 01101111 01101010 01100001 01110010 01100101 01101110 01100111 01101111 01101010 01110010 01100101 01100001 01101000 01101111 01110100 01101010 01101000 01110010 01100101 01100001 01101111 01110100 01101010 01101000 01110100 01101010 01110010 01101110 01110100 01100111 01101010 01101111 01110010 01100111 01101000 01101111 01110010 01101000 01100111 01100001 01101111 01101001 01101010 01101000 01100111 01101111 01101010 01100001 01110010 01100101 01101110 01100111 01101111 01101010 01101001 01100001 01110010 01100101 01101110 01100111 01101111 01100001 01110010 01101010 01100111 01101000 01101110 01101111 01100001 01101001 01101010 01100101 01110010 01100111 01101110 01101111 01100001 01101001 01101010 01110010 01101110 01100111 01101111 01100001 01110010 01101010 01101001 01101110 01100111 01101111 01101010 01101001 01100001 01110010 01101110 01100111 01101111 01101001 01101010 01100001 01110010 01101110 01100111 01101111 01101010 01100001 01110010 01110100 01101000 01101111 01101010 01110010 01110100 01101000 01110010 01101111 01100101 01100001 01101010 01101000 01110100 01101111 01101001 01100101 01101010 01110111 01101000 01101111 01110111 01101010 01100101 01101000 01110100 01101111 01101010 01101001 01100101 01110111 01110010 01110100 01101000 01101111 01100101 01110111 01101001 01110010 01101010 01110100 01101000 01101111 01110111 01100101 01110010 01101010 01101000 01110100 01101111 01101010 01110111 01100101 01110010 01110100 01101000 01101111 01110111 01101010 01100101 01110010 01110100 01101000 01101111 01101010 01110111 01100101 01101001 01110010 01101000 01110010 01100101 01110111 01101111 01101001 01110100 01101000 01110111 01100101 01110010 01101111 01101001 01101010 01110100 01101000 01110111 01100101 01101111 01110010 01101010 01110100 01101000 01110111 01101111 01100101 01110010 01101010 01110100 01101000 01110111 01101111 01100101 01110010 01101010 01101000 01110100 01101111 01101010 01100101 01110111 01110010 01101001 01110100 01101000 01110111 01101111 01101001 01110010 01101010 01110100 01101000 01101111 01110111 01100101 01110010 01101010 01101000 01110100 01101111 01101001 01101010 01110111 01110010 01100101 01101110 01100111 01101111 01101001 01101010 01110010 01100101 01110111 01101110 01101111 01110111 01101010 01100101 01110010 01110100 01101000 01110111 01101111 01110010 01100101 01101010 01101110 01100111 01101111 01101001 01110111 01110010 01101010 01100101 01110100 01101000 01101111 01101001 01110111 01101010 01100101 01110010 01101000 01110100 01101111 01101001 01101010 01110111 01100101 01110010 01101000 01110100 01101111 01101001 01101010 01110111 01100101 01110010 01101111 01110111 01101001 01101010 01100101 01110010 01101000 01110100 01101111 01101010 01110111 01100101 01110010 01101000 01110100 01110111 01100101 01101111 01101010 01110010 01101000 01110100 01101111 01110111 01100101 01110010 01101010 01101000 01110100 01110111 01100101 01101111 01110010 01101010 01110100 01101000 01101111 01101010 01110111 01100101 01110010 01101000 01110100 01101111 01100101 01110111 01101001 01110010 01101010 01110100 01101000 01101010 01100101 01110111 01101111 01110010 01101001 01110100 01101000 01101111 01110111 01100101 01101001 01110010 01101010 01110100 01101000 01101111 01100101 01110010 01101010 01110111 01101001 01101000 01110100 01101111 01110111 01101010 01100101 01110010 01101000 01110100 01101111 01101010 01110111 01101001 01100101 01110010 01101000 01110100 01101111 01110111 01100101 01101010 01110010 01101000 01110100 01110111 01101111 01110010 01100101 01101010 01110100 01101000 01100101 01110111 01110010 01101111 01101010 01101001 01101111 01100101 01110100 01101001 01101000 01101010 01100101 01110010 01110111 01101111 01101010 01101000 01110100 01110111 01101111 01101010 01100101 01110010 01110100 01101000 01110111");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-            try
-            {
-                File.WriteAllText(@"0:\Networking.sys", "01000111 01101111 01001111 01010011 00100000 01101110 01100101 01110100 01110111 01101111 01110010 01101011 01101001 01101110 01100111 00100000 01101101 01100001 01101110 01100001 01100111 01100101 01101101 01100101 01101110 01110100 00100000 01101001 01110011 00100000 01100001 00100000 01110011 01111001 01110011 01110100 01100101 01101101 00100000 01100110 01101001 01101100 01100101 00101110 00100000 01110011 01111001 01110011 01110100 01100101 01101101 00100000 01100110 01101001 01101100 01100101 01110011 00100000 01101000 01100001 01110110 01100101 00100000 01101110 01101111 00100000 01110101 01110011 01100101 00100000 01100010 01110101 01110100 00101110 00100000 01101101 01101001 01100111 01101000 01110100 00100000 01100001 01110011 00100000 01110111 01100101 01101100 01101100 00100000 01101000 01100001 01110110 01100101 00100000 01110011 01101111 01101101 01100101 00100000 01110010 01100101 01100001 01101100 01101001 01110011 01101101 00100000 01110100 01101111 00100000 01110100 01101000 01100101 00100000 01100110 01101001 01101100 01100101 01110011 01111001 01110011 01110100 01100101 01101101 00100000 00111011 00101001");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
             Console.Clear();
             Cosmos.HAL.Global.TextScreen.SetColors(ConsoleColor.Black, ConsoleColor.White);
             Console.WriteLine("   Goplex Studios - GoOS");
-            Console.WriteLine("   Version 1.2");
+            Console.WriteLine("   Version 1.3 Dev");
             Console.WriteLine("   ");
             Console.WriteLine("   Type HELP for a list of commands");
             Console.WriteLine("   Type SUPPORT for support links...");
@@ -117,15 +84,6 @@ namespace GoOS
             Console.WriteLine("   " + $"{drive.TotalSize}" + " bytes");
             Console.WriteLine("   " + $"{drive.AvailableFreeSpace}" + " bytes free");
             Console.Write(@"0:\ ");
-            try
-            {
-                Sys.FileSystem.VFS.VFSManager.CreateFile(@"0:\BootSuccess.txt");
-                Sys.FileSystem.VFS.VFSManager.DeleteFile(@"0:\BootSuccess.txt");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
         }
 
         protected override void Run()
@@ -135,202 +93,29 @@ namespace GoOS
 
 
 
-            if (input.ToLower() == "help")
+            if (input.ToLower() == "setup")
             {
-                Help.help();
-            }
-            else if (input.ToLower() == "credits")
-            {
-                Console.Clear();
-                Console.WriteLine("----------------------------------");
-                Console.WriteLine("-------------credits--------------");
-                Console.WriteLine("----------------------------------");
-                Console.WriteLine("----------------------------------");
-                Console.WriteLine("---------Created by Owen----------");
-                Console.WriteLine("----------------------------------");
-                Console.WriteLine("----------------------------------");
-                Console.WriteLine("---------Helped by Zulo-----------");
-                Console.WriteLine("----------------------------------");
-                Console.WriteLine("----------------------------------");
-                Console.WriteLine("-----Others that have helped!-----");
-                Console.WriteLine("----------------------------------");
-                Console.WriteLine("----------------------------------");
-                Console.WriteLine("---------British Geek Guy---------");
-                Console.WriteLine("----------------------------------");
-                Console.WriteLine("Thank you for trying out GoOS!");
-                Console.WriteLine(" ");
-                Console.WriteLine("Returned to Command centre");
-                Console.WriteLine(" ");
-            }
-            else if (input.ToLower() == "clear")
-            {
-                Console.Clear();
-            }
-            else if (input.ToLower() == "sysinf")
-            {
-                Console.WriteLine(" ");
-                Console.WriteLine("Goplex Studios GoOS 1.2");
-                Console.WriteLine("Build type: Release");
-                Console.WriteLine("Build number: 2000");
-                Console.WriteLine("Build Support key: 9364758789");
-                Console.WriteLine(" ");
-            }
-            else if (input.ToLower() == "shutdown")
-            {
-                Shutdown.ShutdownCommand();
-            }
-            else if (input.ToLower() == "support")
-            {
-                Console.WriteLine("Discord: https://dsc.gg/goplex");
-                Console.WriteLine("type the link into the VM host webbrowser");
-                Console.WriteLine("if your running the os as your active OS, please stick to using VMs until we have a stable mainframe.");
-            }
-            else if (input.ToLower() == "gocalc")
-            {
-                float firstNum;
-                float secondNum;                   //Variables for equation
-                string operation;
-                float answer;
-
-                Console.WriteLine("GoCalc 1.5");
-                Console.WriteLine("Note: can only do simple math");
-                Console.WriteLine("Press ENTER to continue");
-                Console.ReadLine();
-
-                Console.Write("Enter the first number in your basic equation: ");
-                firstNum = float.Parse(Console.ReadLine());
-
-                //User input for equation
-
-                Console.Write("Ok now enter your operation ( x , / , +, -) ");
-                operation = Console.ReadLine();
-
-                Console.Write("Now enter your second number in the basic equation: ");
-                secondNum = float.Parse(Console.ReadLine());
-                if (operation == "x")
+                if (!File.Exists(@"0:\setupdone"))
                 {
-                    answer = firstNum * secondNum;
-                    Console.WriteLine(firstNum + " x " + secondNum + " = " + answer);
-                    Console.WriteLine("Press ENTER to continue");
-                    Console.ReadLine();
-                }
-                else if (operation == "/")
-                {
-                    answer = firstNum / secondNum;
-                    Console.WriteLine(firstNum + " / " + secondNum + " = " + answer);
-                    Console.WriteLine("Press ENTER to continue");
-                    Console.ReadLine();
-                }
-                //Getting answers
-                else if (operation == "+")
-                {
-                    answer = firstNum + secondNum;
-                    Console.WriteLine(firstNum + " + " + secondNum + " = " + answer);
-                    Console.WriteLine("Press ENTER to continue");
-                    Console.ReadLine();
-                }
-                else if (operation == "-")
-                {
-                    answer = firstNum - secondNum;
-                    Console.WriteLine(firstNum + " - " + secondNum + " = " + answer);
-                    Console.WriteLine("Press ENTER to continue");
-                    Console.ReadLine();
+                    Console.WriteLine("Welcome to GoOS!");
+                    Console.WriteLine("This is an installer to help you get the essential apps for GoOS! ");
+                    Console.WriteLine("Press Any Key to enter the setup");
+                    Console.WriteLine("Press Ctrl+C to close GoOS");
+                    Console.ReadKey();
+                    var file_stream = File.Create(@"0:\setupdone");
                 }
                 else
                 {
-                    Console.WriteLine("Sorry that is not correct format! Please restart!");     //Catch
-                    Console.WriteLine("Press ENTER to continue");
-                    Console.ReadLine();
+                    Console.WriteLine("Looks like GoOS is already installed!");
                 }
-
             }
             else if (input.ToLower() == "dir")
             {
-                string[] filePaths = Directory.GetFiles(@"0:\");
-                for (int i = 0; i < filePaths.Length; ++i)
+                var directory_list = Sys.FileSystem.VFS.VFSManager.GetDirectoryListing("0:/");
+                foreach (var directoryEntry in directory_list)
                 {
-                    string path = filePaths[i];
-                    Console.WriteLine(System.IO.Path.GetFileName(path));
+                    Console.WriteLine(directoryEntry.mName);
                 }
-                foreach (var d in System.IO.Directory.GetDirectories(@"0:\"))
-                {
-                    var dir = new DirectoryInfo(d);
-                    var dirName = dir.Name;
-
-                    Console.WriteLine(dirName + " <DIR>");
-                }
-
-            }
-            else if (input.ToLower() == "ipconfig")
-            {
-                Console.WriteLine(NetworkConfig.CurrentConfig.Value.IPAddress.ToString());
-            }
-            else if (input.ToLower() == "readfile")
-            {
-                Console.WriteLine("Path to file");
-                var FTR = Console.ReadLine();
-                try
-                {
-                    Console.WriteLine(File.ReadAllText(FTR));
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.ToString());
-                }
-            }
-            else if (input.ToLower() == "createfile")
-            {
-                var FTR = Console.ReadLine();
-                Console.WriteLine("Path (Path must exist. )");
-                try
-                {
-                    Console.WriteLine(File.ReadAllText(FTR));
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.ToString());
-                }
-            }
-            else if (input.ToLower() == "graphic.systest.gapp")
-            {
-                canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(640, 480, ColorDepth.ColorDepth32));
-                canvas.Clear(System.Drawing.Color.Blue);
-
-                try
-                {
-                    Pen pen = new Pen(System.Drawing.Color.Red);
-
-
-                    // A GreenYellow horizontal line
-                    pen.Color = System.Drawing.Color.White;
-                    canvas.DrawLine(pen, 0, 10, 640, 10);
-                    canvas.DrawLine(pen, 0, 9, 640, 9);
-                    canvas.DrawLine(pen, 0, 8, 640, 8);
-                    canvas.DrawLine(pen, 0, 7, 640, 7);
-                    canvas.DrawLine(pen, 0, 6, 640, 6);
-                    canvas.DrawLine(pen, 0, 5, 640, 5);
-                    canvas.DrawLine(pen, 0, 4, 640, 4);
-                    canvas.DrawLine(pen, 0, 3, 640, 3);
-                    canvas.DrawLine(pen, 0, 2, 640, 2);
-                    canvas.DrawLine(pen, 0, 1, 640, 1);
-                    canvas.DrawLine(pen, 0, 0, 640, 0);
-                    canvas.DrawLine(pen, 0, 0, 640, 0);
-
-                    Console.ReadKey();
-                    Sys.Power.Shutdown();
-                }
-                catch (Exception e)
-                {
-                    mDebugger.Send("Exception occurred: " + e.Message);
-                    Sys.Power.Shutdown();
-                }
-            }
-            else if (input.ToLower() == "update")
-            {
-                Console.WriteLine("System Version: 1.2");
-                Console.WriteLine("Check for updates on https://github.com/Owen2k6/GoOS/releases");
-                Console.WriteLine("Press any key to continue.");
-                Console.ReadKey();
             }
             else
             {
