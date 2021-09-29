@@ -78,6 +78,13 @@ namespace GoOS
             }
             else if (input.ToLower() == "sysinf")
             {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine(" System Infomation.");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(" OS: Goplex Studios GoOS");
+                Console.WriteLine(" Build: 10234");
+                Console.WriteLine(" ");
+                Console.ForegroundColor = ConsoleColor.Green;
             }
             else
             {
