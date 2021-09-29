@@ -54,7 +54,7 @@ namespace GoOS
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Clear();
             Console.WriteLine("Goplex Studios - GoOS Ver. 2.0");
-            Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.Write(prefix);
             Console.ForegroundColor = ConsoleColor.Green;
         }
@@ -86,7 +86,7 @@ namespace GoOS
                 Console.WriteLine("Type HELP for a list of commands");
                 Console.ForegroundColor = ConsoleColor.Green;
             }
-            Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.Write(prefix);
             Console.ForegroundColor = ConsoleColor.Green;
         }
