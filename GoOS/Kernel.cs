@@ -53,10 +53,8 @@ namespace GoOS
             Cosmos.HAL.Global.TextScreen = textscr;
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Clear();
-            Console.Write(prefix);
-
-            
             Console.WriteLine("Goplex Studios - GoOS Ver. 2.0");
+            Console.Write(prefix);
         }
 
         protected override void Run()
@@ -68,18 +66,25 @@ namespace GoOS
 
             if (input.ToLower() == "help")
             {
-                Console.WriteLine("~~~GoOS Help~~~");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine(" ~~~GoOS Help~~~");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(" help -=- Shows this page");
+                Console.WriteLine(" sysinf -=- Shows system info");
+                Console.ForegroundColor = ConsoleColor.Green;
             }
             else if (input.ToLower() == "sysinf")
             {
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("sorry, but `" + input + "` is not a command");
-                Console.WriteLine("type HELP for a list of commands");
-                Console.Write(prefix);
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine("Type HELP for a list of commands");
+                Console.ForegroundColor = ConsoleColor.Green;
             }
-                
-            }
+            Console.Write(prefix);
+        }
         }
     } 
