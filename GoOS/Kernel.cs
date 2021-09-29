@@ -52,22 +52,9 @@ namespace GoOS
             var textscr = Cosmos.HAL.Global.TextScreen;
             Cosmos.System.Global.Console = new Cosmos.System.Console(textscr);
             Cosmos.HAL.Global.TextScreen = textscr;
-            Console.ForegroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Clear();
             Console.WriteLine("Goplex Studios - GoOS Ver. 2.0");
-            if (isenabled == false)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("GOSBB failed to start... Bool is set to false!");
-                Console.ForegroundColor = ConsoleColor.Green;
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Console.WriteLine("GOSBB is operating normally!");
-                Console.WriteLine("If you dont know what this is, don't worry. this will be moved into the onstartup tasks once its finished!");
-                Console.ForegroundColor = ConsoleColor.Green;
-            }
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.Write(prefix);
             Console.ForegroundColor = ConsoleColor.Green;
