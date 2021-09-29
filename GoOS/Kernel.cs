@@ -56,8 +56,6 @@ namespace GoOS
             Console.Clear();
             Console.WriteLine("Goplex Studios - GoOS Ver. 2.0");
             Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine("Development build. built for Owen#5152 and British Geek Guy#4489");
-            Console.WriteLine("Do not redistribute this build.");
             Console.Write(prefix);
             Console.ForegroundColor = ConsoleColor.Green;
         }
