@@ -40,14 +40,14 @@ namespace GoOS
         {
             return false;
         }
-
+        bool isenabled = true;
         public static VGAScreen VScreen = new VGAScreen();
         private static readonly CosmosVFS cosmosVFS = new Sys.FileSystem.CosmosVFS();
         private readonly Sys.FileSystem.CosmosVFS fs = cosmosVFS;
 
         protected override void BeforeRun()
         {
-            bool isenabled = false;
+            
             String prefix = @"0:\ ";
             var textscr = Cosmos.HAL.Global.TextScreen;
             Cosmos.System.Global.Console = new Cosmos.System.Console(textscr);
@@ -59,6 +59,13 @@ namespace GoOS
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("GOSBB failed to start... Bool is set to false!");
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine("GOSBB is operating normally!");
+                Console.WriteLine("If you dont know what this is, don't worry. this will be moved into the onstartup tasks once its finished!");
                 Console.ForegroundColor = ConsoleColor.Green;
             }
             Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -90,7 +97,14 @@ namespace GoOS
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(" OS: Goplex Studios GoOS");
                 Console.WriteLine(" Build: 10234");
-                Console.WriteLine(" GOSBB: 0.12a");
+                if (isenabled == false)
+                {
+                    Console.WriteLine(" GOSBB: N/A");
+                }
+                else
+                {
+                    Console.WriteLine(" GOSBB: 0.12a");
+                }
                 Console.WriteLine(" System Type: 32x");
                 Console.WriteLine(" ");
                 Console.ForegroundColor = ConsoleColor.Green;

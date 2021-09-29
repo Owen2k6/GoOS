@@ -32,7 +32,8 @@ namespace GoOS.GOSBB
 {
     public class goosbackend
     {
-        Boolean isenabled = true;
+        //tbh this is just some place for coding fun... not to be used for production. all thats in Kernel.CS
+
     }
 
 }
