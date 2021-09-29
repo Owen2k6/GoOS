@@ -73,6 +73,7 @@ namespace GoOS
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(" help -=- Shows this page");
                 Console.WriteLine(" sysinf -=- Shows system info");
+                Console.WriteLine(" ");
                 Console.ForegroundColor = ConsoleColor.Green;
             }
             else if (input.ToLower() == "sysinf")
