@@ -47,6 +47,7 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
+            bool isenabled = false;
             String prefix = @"0:\ ";
             var textscr = Cosmos.HAL.Global.TextScreen;
             Cosmos.System.Global.Console = new Cosmos.System.Console(textscr);
@@ -54,6 +55,12 @@ namespace GoOS
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Clear();
             Console.WriteLine("Goplex Studios - GoOS Ver. 2.0");
+            if (isenabled == false)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("GOSBB failed to start... Bool is set to false!");
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.Write(prefix);
             Console.ForegroundColor = ConsoleColor.Green;
@@ -83,7 +90,7 @@ namespace GoOS
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(" OS: Goplex Studios GoOS");
                 Console.WriteLine(" Build: 10234");
-                Console.WriteLine(" GOSBB: 0.01a");
+                Console.WriteLine(" GOSBB: 0.12a");
                 Console.WriteLine(" System Type: 32x");
                 Console.WriteLine(" ");
                 Console.ForegroundColor = ConsoleColor.Green;
