@@ -83,14 +83,14 @@ namespace GoOS
                 Console.WriteLine(" System Infomation.");
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(" OS: Goplex Studios GoOS");
-                Console.WriteLine(" Build: 10234");
+                Console.WriteLine(" Build: 11012");
                 if (isenabled == false)
                 {
                     Console.WriteLine(" GOSBB: N/A");
                 }
                 else
                 {
-                    Console.WriteLine(" GOSBB: 0.12a");
+                    Console.WriteLine(" GOSBB: 1.0");
                 }
                 Console.WriteLine(" System Type: 32x");
                 Console.WriteLine(" ");
