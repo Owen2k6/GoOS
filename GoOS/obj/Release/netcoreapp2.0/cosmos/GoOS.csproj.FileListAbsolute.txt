@@ -1,9 +1,0 @@
-D:\Users\ybeny\source\repos\GoOS\GoOS\bin\Release\netcoreapp2.0\cosmos\GoOS.deps.json
-D:\Users\ybeny\source\repos\GoOS\GoOS\bin\Release\netcoreapp2.0\cosmos\GoOS.dll
-D:\Users\ybeny\source\repos\GoOS\GoOS\bin\Release\netcoreapp2.0\cosmos\GoOS.pdb
-D:\Users\ybeny\source\repos\GoOS\GoOS\obj\Release\netcoreapp2.0\cosmos\GoOS.csproj.AssemblyReference.cache
-D:\Users\ybeny\source\repos\GoOS\GoOS\obj\Release\netcoreapp2.0\cosmos\GoOS.AssemblyInfoInputs.cache
-D:\Users\ybeny\source\repos\GoOS\GoOS\obj\Release\netcoreapp2.0\cosmos\GoOS.AssemblyInfo.cs
-D:\Users\ybeny\source\repos\GoOS\GoOS\obj\Release\netcoreapp2.0\cosmos\GoOS.csproj.CoreCompileInputs.cache
-D:\Users\ybeny\source\repos\GoOS\GoOS\obj\Release\netcoreapp2.0\cosmos\GoOS.dll
-D:\Users\ybeny\source\repos\GoOS\GoOS\obj\Release\netcoreapp2.0\cosmos\GoOS.pdb
