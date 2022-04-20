@@ -164,7 +164,7 @@ namespace GoOS
                 String name = Console.ReadLine();
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("????: Ah. Hello there, " + name);
-                Console.WriteLine("????: When there are Convos, press any key to move on to the next message :)");
+                Console.WriteLine("????: When there are Convos, press ENTER to move on to the next message :)");
                 Console.ReadKey();
                 Console.WriteLine("????: You probably dont know me, but its better that way...");
                 Console.ReadKey();
@@ -181,8 +181,8 @@ namespace GoOS
                 Console.WriteLine("????: Selection Options: TEMPLERUN");
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.Write("Choose One of the Options: ");
-                Console.ForegroundColor = ConsoleColor.Yellow;
                 String selection = Console.ReadLine();
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 if(selection == "templerun")
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
