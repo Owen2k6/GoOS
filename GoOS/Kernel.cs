@@ -77,9 +77,14 @@ namespace GoOS
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("Goplex Studios GoOS System Build 100");
+            Console.WriteLine("Goplex Studios GoOS");
             Console.WriteLine("Copyright 2022 (c) Owen2k6");
-            Console.WriteLine("This is a PRIVATE DEVELOPMENT BUILD. DO NOT REDISTRIBUTE");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            // Console.WriteLine("This is a PRIVATE DEVELOPMENT BUILD. DO NOT REDISTRIBUTE");
+            // Console.Writeline("This is a PRIVATE BETA BUILD. DO NOT REDISTRIBUTE");
+            // Console.Writeline("This is a Public Beta Build.");
+            // Console.Writeline("This is a Public Development Build.");
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("For more info on GoOS, type 'cinfo'.");
             Console.WriteLine("Support Status for this build could not be found.");
             Console.WriteLine("Type 'HELP' for a list of working commands");
@@ -91,7 +96,7 @@ namespace GoOS
             Console.Write("0:\\");
             String input = Console.ReadLine();
             //And so it begins...
-            if(input == "cinfo")
+            if (input == "cinfo")
             {
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine("Goplex Operating System");
@@ -99,15 +104,14 @@ namespace GoOS
                 Console.WriteLine("GoOS is owned by Goplex Studios.");
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("SYSTEM INFOMATION:");
-                Console.WriteLine("\nGoOS Version 0.0.0.0");
-                Console.WriteLine("Owen2k6 Api version: N/A");
-                Console.WriteLine("Apps installed: 1");
-                Console.WriteLine("GKL VER: 0.0.0.0");
+                Console.WriteLine("GoOS Version 1.3.5.20");
+                Console.WriteLine("Owen2k6 Api version: 0.12");
+                Console.WriteLine("Branch: DEV");
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Copyright 2022 (c) Owen2k6");
                 Console.ForegroundColor = ConsoleColor.Green;
-            } 
-            else if(input == "help")
+            }
+            else if (input == "help")
             {
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine("Goplex Operating System");
@@ -115,16 +119,29 @@ namespace GoOS
                 Console.WriteLine("HELP - Shows system commands");
                 Console.WriteLine("CINFO - Shows system infomation");
                 Console.ForegroundColor = ConsoleColor.Green;
-            } 
-            else if(input == "support")
+            }
+            else if (input == "support")
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("GoOS 1");
-                Console.WriteLine("Support EXPR date: 01/04/2022");
+                Console.WriteLine("Support EXPR date: 13/06/2022");
                 Console.WriteLine("Support Center list:");
                 Console.WriteLine("- Goplex Studios Discord: https://discord.gg/3tex5G8Grp");
-                Console.WriteLine("- Support Forums: http://forums.owen2k6.com/");
             }
+            else if (input == "testapp") 
+            { 
+            
+            }
+
+
+
+
+
+
+
+
+
+
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;

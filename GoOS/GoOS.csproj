@@ -16,7 +16,7 @@
         <ISOFile>bin\Debug\net5.0\GoOS.iso</ISOFile>
         <CompileVBEMultiboot>False</CompileVBEMultiboot>
         <ExtractMapFile>False</ExtractMapFile>
-        <VMwareEdition>Player</VMwareEdition>
+        <VMwareEdition>Workstation</VMwareEdition>
         <VMware_StackCorruptionDetectionEnabled>True</VMware_StackCorruptionDetectionEnabled>
         <VMware_StackCorruptionDetectionLevel>MethodFooters</VMware_StackCorruptionDetectionLevel>
         <VMware_Description>Use VMware Player or Workstation to deploy and debug.</VMware_Description>
@@ -28,9 +28,9 @@
         <VMware_CosmosDebugPort>Serial: COM1</VMware_CosmosDebugPort>
         <VMware_VisualStudioDebugPort>Pipe: Cosmos\Serial</VMware_VisualStudioDebugPort>
         <VMware_PxeInterface>192.168.0.8</VMware_PxeInterface>
-        <VMware_VMwareEdition>Player</VMware_VMwareEdition>
-        <VMware_EnableGDB>False</VMware_EnableGDB>
-        <VMware_StartCosmosGDB>False</VMware_StartCosmosGDB>
+        <VMware_VMwareEdition>Workstation</VMware_VMwareEdition>
+        <VMware_EnableGDB>True</VMware_EnableGDB>
+        <VMware_StartCosmosGDB>True</VMware_StartCosmosGDB>
         <VMware_ISOFile>bin\Debug\net5.0\GoOS.iso</VMware_ISOFile>
         <VMware_CompileVBEMultiboot>False</VMware_CompileVBEMultiboot>
         <VMware_ExtractMapFile>False</VMware_ExtractMapFile>
@@ -51,6 +51,23 @@
         <ISO_ISOFile>bin\Debug\net5.0\GoOS.iso</ISO_ISOFile>
         <ISO_CompileVBEMultiboot>False</ISO_CompileVBEMultiboot>
         <ISO_ExtractMapFile>False</ISO_ExtractMapFile>
+        <IntelEdison_StackCorruptionDetectionEnabled>True</IntelEdison_StackCorruptionDetectionEnabled>
+        <IntelEdison_StackCorruptionDetectionLevel>MethodFooters</IntelEdison_StackCorruptionDetectionLevel>
+        <IntelEdison_Description>Connect to Intel Edison device to deploy and debug.</IntelEdison_Description>
+        <IntelEdison_Deployment>BinaryImage</IntelEdison_Deployment>
+        <IntelEdison_Launch>IntelEdison</IntelEdison_Launch>
+        <IntelEdison_DebugEnabled>False</IntelEdison_DebugEnabled>
+        <IntelEdison_DebugMode>Source</IntelEdison_DebugMode>
+        <IntelEdison_IgnoreDebugStubAttribute>False</IntelEdison_IgnoreDebugStubAttribute>
+        <IntelEdison_CosmosDebugPort>Serial: COM1</IntelEdison_CosmosDebugPort>
+        <IntelEdison_VisualStudioDebugPort>Pipe: Cosmos\Serial</IntelEdison_VisualStudioDebugPort>
+        <IntelEdison_PxeInterface>192.168.0.8</IntelEdison_PxeInterface>
+        <IntelEdison_VMwareEdition>Workstation</IntelEdison_VMwareEdition>
+        <IntelEdison_EnableGDB>True</IntelEdison_EnableGDB>
+        <IntelEdison_StartCosmosGDB>True</IntelEdison_StartCosmosGDB>
+        <IntelEdison_ISOFile>bin\Debug\net5.0\GoOS.iso</IntelEdison_ISOFile>
+        <IntelEdison_CompileVBEMultiboot>False</IntelEdison_CompileVBEMultiboot>
+        <IntelEdison_ExtractMapFile>False</IntelEdison_ExtractMapFile>
     </PropertyGroup>
 
     <PropertyGroup>
