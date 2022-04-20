@@ -124,6 +124,9 @@ namespace GoOS
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("GoOS 1");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Bug reports must be taken in as TICKETS only. See the Goplex Studios Discord server for more info.");
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("Support EXPR date: 13/06/2022");
                 Console.WriteLine("Support Center list:");
                 Console.WriteLine("- Goplex Studios Discord: https://discord.gg/3tex5G8Grp");
