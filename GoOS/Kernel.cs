@@ -96,6 +96,7 @@ namespace GoOS
             Console.Write("0:\\");
             String input = Console.ReadLine();
             //And so it begins...
+            //Commands Section
             if (input == "cinfo")
             {
                 Console.ForegroundColor = ConsoleColor.Magenta;
@@ -118,6 +119,7 @@ namespace GoOS
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine("HELP - Shows system commands");
                 Console.WriteLine("CINFO - Shows system infomation");
+                Console.WriteLine("SUPPORT - Shows how to get support");
                 Console.ForegroundColor = ConsoleColor.Green;
             }
             else if (input == "support")
@@ -125,22 +127,77 @@ namespace GoOS
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("Goplex Studios Support");
                 Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("== For OS Support");
                 Console.WriteLine("To get support, you must be in the Goplex Studios Discord Server.");
                 Console.WriteLine("Discord Link: https://discord.gg/3tex5G8Grp");
                 Console.WriteLine("Open support tickets in #get-staff-help");
+                Console.WriteLine("== To report a bug");
+                Console.WriteLine("Go to the issues tab on the Owen2k6/GoOS Github page");
+                Console.WriteLine("and submit an issue with the bug tag.");
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("Provide the following infomation when opening \n a support ticket.");
+                Console.WriteLine("Provide the following infomation when opening \n a support ticket or bug report.");
                 Console.WriteLine("Support Code: 019x2910b11");
                 Console.WriteLine("GOOSE: 1.0000.0");
                 Console.WriteLine("O2K6API: 0.12");
+                Console.WriteLine("GoOS: 1.3x");
             }
-            else if (input == "testapp")  
+            else if (input == "games")  
             {
-            
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine("Goplex Games List");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("TEXTADVENTURES - Text based adventure game because why not");
+                Console.ForegroundColor = ConsoleColor.Green;
             }
 
+            //Games Section
 
+            else if (input == "textadventures")
+            {
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine("Goplex Studios - Text Adventures");
+                Console.WriteLine("Developed using GoOS Core");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("????: Hello there, what's your name?");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write("Enter a name: ");
+                String name = Console.ReadLine();
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("????: Ah. Hello there, " + name);
+                Console.WriteLine("????: When there are Convos, press any key to move on to the next message :)");
+                Console.ReadKey();
+                Console.WriteLine("????: You probably dont know me, but its better that way...");
+                Console.ReadKey();
+                Console.WriteLine("????: Anyways, There are 1 stories we can enter.");
+                Console.WriteLine("????: Yes i know wrong plural, but there will be more written in the future!");
+                Console.ReadKey();
+                Console.WriteLine("????: The first one i'll say is \"Temple Run\" ");
+                Console.WriteLine("????: - You are a criminal planning the heist of a lifetime");
+                Console.WriteLine("????: This heist is set on robbing the great temple.");
+                Console.ReadKey();
+                Console.WriteLine("????: For now, Temple Run is the only available story.");
+                Console.ReadKey();
+                Console.WriteLine("????: So what will it be?");
+                Console.WriteLine("????: Selection Options: TEMPLERUN");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write("Choose One of the Options: ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                String selection = Console.ReadLine();
+                if(selection == "templerun")
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\"Temple Run\" Selected.");
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine("You wake up... it's 2:45AM and you can't get to sleep...");
+                    Console.ReadKey();
+                    Console.WriteLine("You look at your calendar...");
+                    Console.ReadKey();
+                    Console.WriteLine("It's August 4th 2023. 3 days before the heist.");
+                    Console.ReadKey();
+                    Console.WriteLine(name + ": Damn we need to get planning if we're gonna pull this off... ");
 
+                }
+            }
 
 
 
