@@ -80,7 +80,7 @@ namespace GoOS
             Console.WriteLine("Goplex Studios GoOS");
             Console.WriteLine("Copyright 2022 (c) Owen2k6");
             Console.ForegroundColor = ConsoleColor.Yellow;
-            // Console.WriteLine("This is a PRIVATE DEVELOPMENT BUILD. DO NOT REDISTRIBUTE");
+             Console.WriteLine("This is a PRIVATE DEVELOPMENT BUILD. DO NOT REDISTRIBUTE");
             // Console.Writeline("This is a PRIVATE BETA BUILD. DO NOT REDISTRIBUTE");
             // Console.Writeline("This is a Public Beta Build.");
             // Console.Writeline("This is a Public Development Build.");
