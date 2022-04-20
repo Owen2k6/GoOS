@@ -93,7 +93,8 @@ namespace GoOS
 
         protected override void Run()
         {
-            Console.Write("0:\\");
+            String Drive = "0";
+            Console.Write(Drive,":\\");
             String input = Console.ReadLine();
             //And so it begins...
             if (input == "cinfo")
@@ -133,7 +134,8 @@ namespace GoOS
                 Console.WriteLine("- Goplex Studios Discord: https://discord.gg/3tex5G8Grp");
             }
             else if (input == "testapp") 
-            { 
+            {
+                Drive = "1";
             
             }
 
