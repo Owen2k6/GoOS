@@ -123,14 +123,16 @@ namespace GoOS
             else if (input == "support")
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("GoOS 1");
+                Console.WriteLine("Goplex Studios Support");
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Bug reports must be taken in as TICKETS only.");
-                Console.WriteLine("See the Goplex Studios Discord server for more info.");
+                Console.WriteLine("To get support, you must be in the Goplex Studios Discord Server.");
+                Console.WriteLine("Discord Link: https://discord.gg/3tex5G8Grp");
+                Console.WriteLine("Open support tickets in #get-staff-help");
                 Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("Provide the following infomation when opening \n a support ticket.");
                 Console.WriteLine("Support Code: 019x2910b11");
-                Console.WriteLine("Support Center list:");
-                Console.WriteLine("- Goplex Studios Discord: https://discord.gg/3tex5G8Grp");
+                Console.WriteLine("GOOSE: 1.0000.0");
+                Console.WriteLine("O2K6API: 0.12");
             }
             else if (input == "testapp")  
             {
