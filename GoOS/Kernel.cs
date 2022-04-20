@@ -93,8 +93,7 @@ namespace GoOS
 
         protected override void Run()
         {
-            String Drive = "0";
-            Console.Write(Drive + ":\\");
+            Console.Write("0:\\");
             String input = Console.ReadLine();
             //And so it begins...
             if (input == "cinfo")
@@ -135,7 +134,6 @@ namespace GoOS
             }
             else if (input == "testapp") 
             {
-                Drive = "1";
             
             }
 
