@@ -106,7 +106,7 @@ namespace GoOS
                 Console.WriteLine("SYSTEM INFOMATION:");
                 Console.WriteLine("GoOS Version 1.3.5.20");
                 Console.WriteLine("Owen2k6 Api version: 0.12");
-                Console.WriteLine("Branch: DEV");
+                Console.WriteLine("Branch: Development");
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Copyright 2022 (c) Owen2k6");
                 Console.ForegroundColor = ConsoleColor.Green;
