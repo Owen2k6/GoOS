@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "5gQmPJR9ERrglMX/a3afUp/6mdI+vQykDz7MmI7Fm9xGs2rpN48+yZKXqVqf6LQCH+HcC6H7/+DRsCb/Cm5Pew==",
+  "success": true,
+  "projectFilePath": "O:\\Users\\Owen\\Documents\\GitHub\\GoOS-Source\\GoOS\\GoOS.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Owen\\.nuget\\packages\\cosmos.build\\0.1.0-localbuild20220310045356\\cosmos.build.0.1.0-localbuild20220310045356.nupkg.sha512",
+    "C:\\Users\\Owen\\.nuget\\packages\\cosmos.common\\0.1.0-localbuild20220310045401\\cosmos.common.0.1.0-localbuild20220310045401.nupkg.sha512",
+    "C:\\Users\\Owen\\.nuget\\packages\\cosmos.core\\0.1.0-localbuild20220310045401\\cosmos.core.0.1.0-localbuild20220310045401.nupkg.sha512",
+    "C:\\Users\\Owen\\.nuget\\packages\\cosmos.debug.kernel\\0.1.0-localbuild20220310045401\\cosmos.debug.kernel.0.1.0-localbuild20220310045401.nupkg.sha512",
+    "C:\\Users\\Owen\\.nuget\\packages\\cosmos.hal2\\0.1.0-localbuild20220310045401\\cosmos.hal2.0.1.0-localbuild20220310045401.nupkg.sha512",
+    "C:\\Users\\Owen\\.nuget\\packages\\cosmos.system2\\0.1.0-localbuild20220310045401\\cosmos.system2.0.1.0-localbuild20220310045401.nupkg.sha512",
+    "C:\\Users\\Owen\\.nuget\\packages\\il2cpu.api\\0.1.0-localbuild20220310045401\\il2cpu.api.0.1.0-localbuild20220310045401.nupkg.sha512"
+  ],
+  "logs": []
+}
