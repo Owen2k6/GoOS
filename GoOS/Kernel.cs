@@ -118,7 +118,7 @@ namespace GoOS
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine("HELP - Shows system commands");
                 Console.WriteLine("CINFO - Shows system infomation");
-                Console.ForegroundColor = ConsoleColor.Green; 
+                Console.ForegroundColor = ConsoleColor.Green;
             }
             else if (input == "support")
             {
