@@ -239,6 +239,9 @@ namespace GoOS
                     Console.WriteLine(name + ": Got some things i want to do before heading down. see you there.");
                     Console.WriteLine(name + " Left the call");
                     Console.ReadKey();
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("This Game is still under development. You have reached the end of this game so far!");
+                    Console.WriteLine("Keep your OS Up to date to recieve updates for this game!");
 
                 }
             }
