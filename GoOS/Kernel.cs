@@ -132,7 +132,7 @@ namespace GoOS
                 Console.WriteLine("Support Center list:");
                 Console.WriteLine("- Goplex Studios Discord: https://discord.gg/3tex5G8Grp");
             }
-            else if (input == "testapp")  
+            else if (input == "testapp") 
             {
             
             }
