@@ -367,10 +367,10 @@ namespace GoOS
             Console.WriteLine("Goplex Studios GoOS");
             Console.WriteLine("Copyright 2022 (c) Owen2k6");
             Console.ForegroundColor = ConsoleColor.Yellow;
-             Console.WriteLine("This is a PRIVATE DEVELOPMENT BUILD. DO NOT REDISTRIBUTE");
-            // Console.Writeline("This is a PRIVATE BETA BUILD. DO NOT REDISTRIBUTE");
-            // Console.Writeline("This is a Public Beta Build.");
-            // Console.Writeline("This is a Public Development Build.");
+            // Console.WriteLine("This is a PRIVATE DEVELOPMENT BUILD. DO NOT REDISTRIBUTE");
+            // Console.WriteLine("This is a PRIVATE BETA BUILD. DO NOT REDISTRIBUTE");
+             Console.WriteLine("This is a Public Beta Build.");
+            // Console.WriteLine("This is a Public Development Build.");
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("For more info on GoOS, type 'cinfo'.");
             Console.WriteLine("Support Status for this build could not be found.");
@@ -392,7 +392,7 @@ namespace GoOS
                 Console.WriteLine("GoOS is owned by Goplex Studios.");
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("SYSTEM INFOMATION:");
-                Console.WriteLine("GoOS Version 1.3.5.147");
+                Console.WriteLine("GoOS Version 1.3.5.150");
                 Console.WriteLine("Owen2k6 Api version: 0.13");
                 Console.WriteLine("Branch: Beta");
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -424,11 +424,7 @@ namespace GoOS
                 Console.WriteLine("Go to the issues tab on the Owen2k6/GoOS Github page");
                 Console.WriteLine("and submit an issue with the bug tag.");
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("Provide the following infomation when opening \n a support ticket or bug report.");
                 Console.WriteLine("Support Code: 019x2910b11");
-                Console.WriteLine("GOOSE: 1.0000.0");
-                Console.WriteLine("O2K6API: 0.13");
-                Console.WriteLine("GoOS: 1.3x");
             }
             else if (input == "games")  
             {
