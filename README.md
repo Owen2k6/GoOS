@@ -10,7 +10,7 @@ For the version support system, see SUPPORT.MD
  - Has 2 games (TEXTADVENTURES and SNAKE)
  - Networking (In Testing)
  - Active Development
- - Almost 2 years of work
+ - Almost 1 years of work
  - Has GoOS Core as a backend
 
 
