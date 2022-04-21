@@ -230,7 +230,7 @@ namespace GoOS
 
         public int xy2p(int x, int y)
         {
-            return y * 80 + x;
+            return y * 40 + x;
         }
 
         public int randomFood()
