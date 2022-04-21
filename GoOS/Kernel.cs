@@ -407,6 +407,8 @@ namespace GoOS
                 Console.WriteLine("HELP - Shows system commands");
                 Console.WriteLine("CINFO - Shows system infomation");
                 Console.WriteLine("SUPPORT - Shows how to get support");
+                Console.WriteLine("GAMES - Shows the list of GoOS Games");
+                Console.WriteLine("CORE - Displays GoOS Core infomation");
                 Console.ForegroundColor = ConsoleColor.Green;
             }
             else if (input == "support")
@@ -436,9 +438,18 @@ namespace GoOS
                 Console.WriteLine("TEXTADVENTURES - Text based adventure game because why not");
                 Console.ForegroundColor = ConsoleColor.Green;
             }
-            else if (input == "ui")
+            else if (input == "core")
             {
-                
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("GoOS Core Ver 1.0");
+                Console.Write("The Main backend to GoOS.");
+                Console.Write("==========================");
+                Console.Write("==Developed using Cosmos==");
+                Console.Write("==========================");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("GoOS Core Is still in early development.");
+                Console.Write("there are a lot of issues known and we are working on it!");
+                Console.ForegroundColor = ConsoleColor.Green;
             }
 
             //Games Section
@@ -635,6 +646,7 @@ namespace GoOS
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write("is not a command");
                 Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine("");
                 Console.WriteLine("Type HELP for a list of commands");
                 Console.ForegroundColor = ConsoleColor.Green;
             }
