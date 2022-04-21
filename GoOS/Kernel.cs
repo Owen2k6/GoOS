@@ -230,7 +230,7 @@ namespace GoOS
 
         public int xy2p(int x, int y)
         {
-            return y * 10 + x;
+            return y * 80 + x;
         }
 
         public int randomFood()
@@ -531,7 +531,10 @@ namespace GoOS
             }
             else if (input == "snake")
             {
-                    configSnake();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("This game is known to crash GoOS. Press ENTER to continue");
+                Console.ReadKey();
+                configSnake();
                 ConsoleKey x;
                 while (true)
                 {
