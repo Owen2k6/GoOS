@@ -392,9 +392,9 @@ namespace GoOS
                 Console.WriteLine("GoOS is owned by Goplex Studios.");
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("SYSTEM INFOMATION:");
-                Console.WriteLine("GoOS Version 1.3.5.20");
-                Console.WriteLine("Owen2k6 Api version: 0.12");
-                Console.WriteLine("Branch: Development");
+                Console.WriteLine("GoOS Version 1.3.5.147");
+                Console.WriteLine("Owen2k6 Api version: 0.13");
+                Console.WriteLine("Branch: Beta");
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Copyright 2022 (c) Owen2k6");
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -427,7 +427,7 @@ namespace GoOS
                 Console.WriteLine("Provide the following infomation when opening \n a support ticket or bug report.");
                 Console.WriteLine("Support Code: 019x2910b11");
                 Console.WriteLine("GOOSE: 1.0000.0");
-                Console.WriteLine("O2K6API: 0.12");
+                Console.WriteLine("O2K6API: 0.13");
                 Console.WriteLine("GoOS: 1.3x");
             }
             else if (input == "games")  
@@ -441,7 +441,7 @@ namespace GoOS
             else if (input == "core")
             {
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.Write("GoOS Core Ver 1.0");
+                Console.Write("GoOS Core Ver 0.3");
                 Console.Write("The Main backend to GoOS.");
                 Console.Write("==========================");
                 Console.Write("==Developed using Cosmos==");
