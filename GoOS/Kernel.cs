@@ -82,13 +82,13 @@ namespace GoOS
                         point[0] = point[0] - 1;
                         break;
                     case 2:
-                        point[0] = point[0] + 1;
+                        point[0] = point[0] + 40;
                         break;
                     case 3:
                         point[0] = point[0] + 1;
                         break;
                     case 4:
-                        point[0] = point[0] - 1;
+                        point[0] = point[0] - 40;
                         break;
                     default:
                         break;
