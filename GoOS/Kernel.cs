@@ -1,33 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Sys = Cosmos.System;
-using Cosmos.Core;
+﻿using Cosmos.HAL;
 using Cosmos.System.Graphics;
-using Cosmos.System.FileSystem;
-using Cosmos.System.FileSystem.VFS;
-using Cosmos.Debug.Kernel;
-using Cosmos.HAL.Drivers.PCI.Video;
-using Cosmos.System.Network;
-using System.IO;
-using Cosmos.System.Network.IPv4.UDP.DHCP;
-using Cosmos.System.Network.IPv4.TCP;
 using Cosmos.System.Network.Config;
-using Cosmos.HAL;
 using Cosmos.System.Network.IPv4;
+using Cosmos.System.Network.IPv4.TCP;
+using Cosmos.System.Network.IPv4.UDP.DHCP;
 using Cosmos.System.Network.IPv4.UDP.DNS;
-using Cosmos.System.Network.IPv4.TCP.FTP;
-using Cosmos;
-using Cosmos.HAL.Drivers.USB;
-using Cosmos.HAL.Drivers.PCI;
-using Cosmos.HAL.Drivers;
-using Cosmos.HAL.Network;
-using Cosmos.Common.Extensions;
-using Cosmos.Common;
-using Cosmos.Core.Memory;
-using Cosmos.Core.IOGroup;
-using System.Drawing;
-using Cosmos.System.Graphics;
+using System;
+using System.Collections.Generic;
+using Sys = Cosmos.System;
 
 namespace GoOS
 {
@@ -50,26 +30,27 @@ namespace GoOS
         public List<int[]> snake;
         public List<int> food;
         public int randomNumber;
+        public int snakeCount;
         Random rnd = new Random();
 
         /* SNAKE FUNCS */
         public string getSnakeScore()
         {
-            if (snake.Count < 10)
+            if (snakeCount < 10)
             {
-                return snake.Count + "   ";
+                return snakeCount + "   ";
             }
-            else if (snake.Count < 100)
+            else if (snakeCount < 100)
             {
-                return snake.Count + "  ";
+                return snakeCount + "  ";
             }
-            else if (snake.Count < 1000)
+            else if (snakeCount < 1000)
             {
-                return snake.Count + " ";
+                return snakeCount + " ";
             }
             else
             {
-                return snake.Count + "";
+                return snakeCount + "";
             }
         }
 
@@ -143,7 +124,7 @@ namespace GoOS
         public Boolean gameover()
         {
             int head = snake[0][0];
-            for (int i = 1; i < snake.Count; i++)
+            for (int i = 1; i < snakeCount; i++)
             {
                 if (head == snake[i][0])
                 {
@@ -228,7 +209,7 @@ namespace GoOS
 
         public void delay(int time)
         {
-            for (int i = 0; i < time; i++) ;
+            for (int i = 3; i < time; i++) ;
         }
 
         public int xy2p(int x, int y)
@@ -267,7 +248,7 @@ namespace GoOS
             List<int[]> tmp = new List<int[]>();
             foreach (int[] com in commands)
             {
-                if (com[1] < snake.Count)
+                if (com[1] < snakeCount)
                 {
                     snake[com[1]][1] = com[0];
                     com[1] = com[1] + 1;
@@ -285,8 +266,8 @@ namespace GoOS
                 if (snake[0][0] == pos)
                 {
                     foodtmp.Add(randomFood());
-                    int tmp1 = snake[snake.Count - 1][0];
-                    int tmp2 = snake[snake.Count - 1][1];
+                    int tmp1 = snake[snakeCount - 1][0];
+                    int tmp2 = snake[snakeCount - 1][1];
                     if (tmp2 == 1)
                     {
                         tmp1 = tmp1 + 1;
