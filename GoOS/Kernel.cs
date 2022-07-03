@@ -622,6 +622,7 @@ namespace GoOS
                 Console.WriteLine("ADD - Add 2 numbers");
                 Console.WriteLine("SUBTRACT - Subtract 2 numbers");
                 Console.WriteLine("DIVIDE - Divide 2 numbers");
+                Console.WriteLine("MULTIPLY - Multiply 2 numbers");
                 Console.WriteLine("SQUARE - Square a number");
                 Console.WriteLine("CUBE - Cube a number");
                 Console.WriteLine("POWER10 - Make a number to the power of 10");
@@ -636,6 +637,57 @@ namespace GoOS
                 int no2 = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine("Adding up to");
                 int ans = no1 + no2;
+            }else if (input == "subtract")
+            {
+                Console.WriteLine("GoCalc - Subtraction");
+                Console.WriteLine("Whole numbers only !!");
+                Console.WriteLine("Enter the first number: ");
+                int no1 = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Enter the second number: ");
+                int no2 = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Adding up to");
+                int ans = no1 - no2;
+            }else if (input == "divide")
+            {
+                Console.WriteLine("GoCalc - Division");
+                Console.WriteLine("Whole numbers only !!");
+                Console.WriteLine("Enter the first number: ");
+                int no1 = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Enter the second number: ");
+                int no2 = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Adding up to");
+                int ans = no1 / no2;
+            }else if (input == "multiply")
+            {
+                Console.WriteLine("GoCalc - Multiplication");
+                Console.WriteLine("Whole numbers only !!");
+                Console.WriteLine("Enter the first number: ");
+                int no1 = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Enter the second number: ");
+                int no2 = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Adding up to");
+                int ans = no1 * no2;
+            }else if (input == "square")
+            {
+                Console.WriteLine("GoCalc - Squaring");
+                Console.WriteLine("Whole numbers only !!");
+                Console.WriteLine("Enter number to square: ");
+                int no1 = Convert.ToInt32(Console.ReadLine());
+                int ans = no1 * no1;
+            }else if (input == "cube")
+            {
+                Console.WriteLine("GoCalc - Cubing");
+                Console.WriteLine("Whole numbers only !!");
+                Console.WriteLine("Enter number to cube: ");
+                int no1 = Convert.ToInt32(Console.ReadLine());
+                int ans = no1 * no1 * no1;
+            }else if (input == "power10")
+            {
+                Console.WriteLine("GoCalc - To the power of 10");
+                Console.WriteLine("Whole numbers only !!");
+                Console.WriteLine("Enter number to p10: ");
+                int no1 = Convert.ToInt32(Console.ReadLine());
+                int ans = no1 * no1 * no1 * no1 * no1 * no1 * no1* no1 * no1 * no1;
             }
 
 
