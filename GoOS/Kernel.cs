@@ -373,7 +373,7 @@ namespace GoOS
                 Console.WriteLine("GoOS is owned by Goplex Studios.");
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("SYSTEM INFOMATION:");
-                Console.WriteLine("GoOS Version 1.3.5.188");
+                Console.WriteLine("GoOS Version 1.3.5.189");
                 Console.WriteLine("Owen2k6 Api version: 0.14");
                 Console.WriteLine("Branch: Development");
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -390,6 +390,7 @@ namespace GoOS
                 Console.WriteLine("SUPPORT - Shows how to get support");
                 Console.WriteLine("GAMES - Shows the list of GoOS Games");
                 Console.WriteLine("CORE - Displays GoOS Core infomation");
+                Console.WriteLine("CALC - Shows a list of possible calculation commands");
                 Console.ForegroundColor = ConsoleColor.Green;
             }
             else if (input == "support")
@@ -611,6 +612,30 @@ namespace GoOS
                         configSnake();
                     }
                 } 
+            }
+
+            else if (input == "calc")
+            {
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine("GoCalc Commands");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("ADD - Add 2 numbers");
+                Console.WriteLine("SUBTRACT - Subtract 2 numbers");
+                Console.WriteLine("DIVIDE - Divide 2 numbers");
+                Console.WriteLine("SQUARE - Square a number");
+                Console.WriteLine("CUBE - Cube a number");
+                Console.WriteLine("POWER10 - Make a number to the power of 10");
+                Console.ForegroundColor = ConsoleColor.Green;
+            }else if (input == "add")
+            {
+                Console.WriteLine("GoCalc - Addition");
+                Console.WriteLine("Whole numbers only !!");
+                Console.WriteLine("Enter the first number: ");
+                int no1 = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Enter the second number: ");
+                int no2 = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Adding up to");
+                int ans = no1 + no2;
             }
 
 
