@@ -29,6 +29,22 @@ using Cosmos.Core.IOGroup;
 using System.Drawing;
 using Cosmos.System.Graphics;
 
+//Goplex Studios - GoOS
+//Copyright (C) 2022  Owen2k6
+//
+//This program is free software: you can redistribute it and/or modify
+//it under the terms of the GNU General Public License as published by
+//the Free Software Foundation, either version 3 of the License, or
+//(at your option) any later version.
+//
+//This program is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+//
+//You should have received a copy of the GNU General Public License
+//along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 namespace GoOS
 {
     public class Kernel : Sys.Kernel
@@ -392,9 +408,9 @@ namespace GoOS
                 Console.WriteLine("GoOS is owned by Goplex Studios.");
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("SYSTEM INFOMATION:");
-                Console.WriteLine("GoOS Version 1.3.5.150");
-                Console.WriteLine("Owen2k6 Api version: 0.13");
-                Console.WriteLine("Branch: Beta");
+                Console.WriteLine("GoOS Version 1.3.5.20");
+                Console.WriteLine("Owen2k6 Api version: 0.12");
+                Console.WriteLine("Branch: Release");
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Copyright 2022 (c) Owen2k6");
                 Console.ForegroundColor = ConsoleColor.Green;
