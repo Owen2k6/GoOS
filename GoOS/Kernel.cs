@@ -408,9 +408,6 @@ namespace GoOS
                 Console.WriteLine("GoOS is owned by Goplex Studios.");
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("SYSTEM INFOMATION:");
-                Console.WriteLine("GoOS Version 1.3.5.20");
-                Console.WriteLine("Owen2k6 Api version: 0.12");
-                Console.WriteLine("Branch: Release");
                 Console.WriteLine("GoOS Version 1.3.5.150");
                 Console.WriteLine("Owen2k6 Api version: 0.13");
                 Console.WriteLine("Branch: Beta");
