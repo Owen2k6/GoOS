@@ -351,7 +351,8 @@ namespace GoOS
 
 
                 }
-            } catch
+            }
+            catch
             {
                 Console.WriteLine("Error starting Goplex Web Interface.");
                 Console.WriteLine("The system will proceed to boot without networking.");
@@ -415,7 +416,9 @@ namespace GoOS
             {
                 Console.WriteLine("Start Tutorial before running GoOS Kernel.");
                 Console.ReadLine();
-            } else {
+            }
+            else
+            {
                 Console.WriteLine("Continue to GoOS with no tutorial.");
             }
             Console.ForegroundColor = ConsoleColor.Green;
@@ -453,7 +456,19 @@ namespace GoOS
                 Console.WriteLine("GAMES - Shows the list of GoOS Games");
                 Console.WriteLine("CORE - Displays GoOS Core infomation");
                 Console.WriteLine("CALC - Shows a list of possible calculation commands");
+                Console.WriteLine("CREDITS - Shows the GoOS Developers");
                 Console.ForegroundColor = ConsoleColor.Green;
+            }
+            else if (input == "credits")
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("Goplex Studios - GoOS");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Contributors:");
+                Console.WriteLine("Owen2k6 - Main Developer and creator");
+                Console.WriteLine("Zulo - Helped create the command system");
+                Console.WriteLine("");
+                Console.WriteLine("");
             }
             else if (input == "support")
             {
@@ -462,13 +477,13 @@ namespace GoOS
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("== For OS Support");
                 Console.WriteLine("To get support, you must be in the Goplex Studios Discord Server.");
-                Console.WriteLine("Discord Link: https://discord.gg/3tex5G8Grp");
+                Console.WriteLine("Discord Link: https://discord.owen2k6.com/");
                 Console.WriteLine("Open support tickets in #get-staff-help");
                 Console.WriteLine("== To report a bug");
                 Console.WriteLine("Go to the issues tab on the Owen2k6/GoOS Github page");
                 Console.WriteLine("and submit an issue with the bug tag.");
             }
-            else if (input == "games")  
+            else if (input == "games")
             {
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine("Goplex Games List");
@@ -523,7 +538,7 @@ namespace GoOS
                 Console.Write("Choose One of the Options: ");
                 String selection = Console.ReadLine();
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                if(selection == "templerun")
+                if (selection == "templerun")
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\"Temple Run\" Selected.");
@@ -667,7 +682,7 @@ namespace GoOS
                     {
                         configSnake();
                     }
-                } 
+                }
             }
 
             else if (input == "calc")
@@ -683,7 +698,8 @@ namespace GoOS
                 Console.WriteLine("CUBE - Cube a number");
                 Console.WriteLine("POWER10 - Make a number to the power of 10");
                 Console.ForegroundColor = ConsoleColor.Green;
-            }else if (input == "add")
+            }
+            else if (input == "add")
             {
                 Console.WriteLine("GoCalc - Addition");
                 Console.WriteLine("Whole numbers only !!");
@@ -704,7 +720,8 @@ namespace GoOS
                 int no2 = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine("Adding up to");
                 int ans = no1 - no2;
-            }else if (input == "divide")
+            }
+            else if (input == "divide")
             {
                 Console.WriteLine("GoCalc - Division");
                 Console.WriteLine("Whole numbers only !!");
@@ -725,7 +742,8 @@ namespace GoOS
                 int no2 = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine("Adding up to");
                 int ans = no1 * no2;
-            }else if (input == "square")
+            }
+            else if (input == "square")
             {
                 Console.WriteLine("GoCalc - Squaring");
                 Console.WriteLine("Whole numbers only !!");
@@ -740,13 +758,14 @@ namespace GoOS
                 Console.WriteLine("Enter number to cube: ");
                 int no1 = Convert.ToInt32(Console.ReadLine());
                 int ans = no1 * no1 * no1;
-            }else if (input == "power10")
+            }
+            else if (input == "power10")
             {
                 Console.WriteLine("GoCalc - To the power of 10");
                 Console.WriteLine("Whole numbers only !!");
                 Console.WriteLine("Enter number to p10: ");
                 int no1 = Convert.ToInt32(Console.ReadLine());
-                int ans = no1 * no1 * no1 * no1 * no1 * no1 * no1* no1 * no1 * no1;
+                int ans = no1 * no1 * no1 * no1 * no1 * no1 * no1 * no1 * no1 * no1;
             }
 
 

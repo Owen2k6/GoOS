@@ -1,38 +1,38 @@
 {
   "format": 1,
   "restore": {
-    "O:\\Users\\Owen\\Documents\\GitHub\\GoOS-Source\\GoOS\\GoOS.csproj": {}
+    "D:\\Git\\GoOS-Source\\GoOS\\GoOS.csproj": {}
   },
   "projects": {
-    "O:\\Users\\Owen\\Documents\\GitHub\\GoOS-Source\\GoOS\\GoOS.csproj": {
+    "D:\\Git\\GoOS-Source\\GoOS\\GoOS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "O:\\Users\\Owen\\Documents\\GitHub\\GoOS-Source\\GoOS\\GoOS.csproj",
+        "projectUniqueName": "D:\\Git\\GoOS-Source\\GoOS\\GoOS.csproj",
         "projectName": "GoOS",
-        "projectPath": "O:\\Users\\Owen\\Documents\\GitHub\\GoOS-Source\\GoOS\\GoOS.csproj",
-        "packagesPath": "C:\\Users\\Owen\\.nuget\\packages\\",
-        "outputPath": "O:\\Users\\Owen\\Documents\\GitHub\\GoOS-Source\\GoOS\\obj\\",
+        "projectPath": "D:\\Git\\GoOS-Source\\GoOS\\GoOS.csproj",
+        "packagesPath": "C:\\Users\\Owen2k6\\.nuget\\packages\\",
+        "outputPath": "D:\\Git\\GoOS-Source\\GoOS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Owen\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Owen2k6\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net5.0"
+          "net6.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Users\\Owen\\AppData\\Roaming\\Cosmos User Kit\\packages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "C:\\Users\\Owen2k6\\AppData\\Roaming\\Cosmos User Kit\\packages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net5.0": {
-            "targetAlias": "net5.0",
+          "net6.0": {
+            "targetAlias": "net6.0",
             "projectReferences": {}
           }
         },
@@ -43,8 +43,8 @@
         }
       },
       "frameworks": {
-        "net5.0": {
-          "targetAlias": "net5.0",
+        "net6.0": {
+          "targetAlias": "net6.0",
           "dependencies": {
             "Cosmos.Build": {
               "target": "Package",
@@ -74,7 +74,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -83,7 +84,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }
