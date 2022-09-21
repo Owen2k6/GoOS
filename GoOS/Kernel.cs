@@ -467,11 +467,12 @@ namespace GoOS
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("Goplex Studios - GoOS");
+                Console.WriteLine("Discord Link: https://discord.owen2k6.com/");
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Contributors:");
                 Console.WriteLine("Owen2k6 - Main Developer and creator");
                 Console.WriteLine("Zulo - Helped create the command system");
-                Console.WriteLine("moderator_man - Helped with my .gitignore issue");
+                Console.WriteLine("moderator_man - Helped with my .gitignore issue and knows code fr");
                 Console.WriteLine("");
             }
             else if (input == "support")
