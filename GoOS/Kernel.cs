@@ -505,7 +505,7 @@ namespace GoOS
                 Console.Write("==========================");
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write("GoOS Core Is still in early development.");
-                Console.Write("there are a lot of issues known and we are working on it!");
+                Console.Write("there are a lot of issues known and we are working on it! ");
                 Console.ForegroundColor = ConsoleColor.Green;
             }
 
@@ -783,7 +783,7 @@ namespace GoOS
                 if (!adminconsoledisk)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("GoOS Admin: Notice. ensure you are using the issued iso file provided by Owen2k6 on release.");
+                    Console.WriteLine("GoOS Admin: Ensure you are using the iso file provided by Owen2k6 on release.");
                     Console.WriteLine("GoOS Admin: The system will crash if a disk can not be located. ");
                     Console.WriteLine("GoOS Admin: Press any key to continue");
                     Console.ReadKey();
@@ -792,7 +792,8 @@ namespace GoOS
                     adminconsoledisk = true;
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
-                if (adminconsoledisk) {
+                if (adminconsoledisk)
+                {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("GoOS Admin: System Already has hard disk loaded");
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -837,6 +838,20 @@ namespace GoOS
                     {
                         Console.WriteLine(file);
                     }
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
+            }
+            else if (input == "notepad") {
+                if (!adminconsoledisk)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("GoOS Admin: There is currently no disk loaded to the system. type \"LOADDISK\" to activate the disk");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
+                if (adminconsoledisk)
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    MIV.StartMIV();
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
             }
