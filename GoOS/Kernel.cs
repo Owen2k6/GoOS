@@ -8,6 +8,7 @@ using Cosmos.System.Network.IPv4.UDP.DNS;
 using System;
 using System.Collections.Generic;
 using Sys = Cosmos.System;
+using System.IO;
 
 
 //Goplex Studios - GoOS
@@ -30,6 +31,9 @@ namespace GoOS
 {
     public class Kernel : Sys.Kernel
     {
+        private Boolean adminconsoledisk = false;
+        private static Sys.FileSystem.CosmosVFS FS;
+        public static string file;
 
         private static string request = string.Empty;
         private static TcpClient tcpc = new TcpClient(80);
@@ -770,9 +774,24 @@ namespace GoOS
                 int ans = no1 * no1 * no1 * no1 * no1 * no1 * no1 * no1 * no1 * no1;
             }
 
+            // GoOS Admin
 
-
-
+            //FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize();
+            else if (input == "loaddisk")
+            {
+                if (!adminconsoledisk)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("GoOS Admin: Notice. ensure you are using the issued iso file provided by Owen2k6 on release.");
+                    Console.WriteLine("GoOS Admin: The system will crash if a disk can not be located.");
+                    Console.WriteLine("GoOS Admin: Press any key to continue");
+                    Console.ReadKey();
+                    FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize(true);
+                    Console.WriteLine("GoOS Admin: HardDisk enabled for session");
+                    adminconsoledisk = true;
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
+            }
 
 
 
