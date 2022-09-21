@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using Sys = Cosmos.System;
 using System.IO;
+using System.Linq.Expressions;
 
 
 //Goplex Studios - GoOS
@@ -412,18 +413,18 @@ namespace GoOS
             Console.WriteLine("  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine("  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("");
-            Console.WriteLine("Welcome to GoOS. Would you like a basics tutorial?");
-            String input = Console.ReadLine();
-            if (input == "yes")
-            {
-                Console.WriteLine("Start Tutorial before running GoOS Kernel.");
-                Console.ReadLine();
+            try{
+                FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize(true);
+                adminconsoledisk = true;
             }
-            else
+            catch (Exception e)
             {
-                Console.WriteLine("Continue to GoOS with no tutorial.");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("GoOS Admin could not detect a disk. system will not support any apps that require a HDD to write/read from.");
+                Console.WriteLine("GoOS Needs a HDD installed to use some of the cool features");
+                Console.WriteLine("The GitHub releases page usually includes a disk built for GoOS");
+                Console.WriteLine("Disks aren't required but they're highly reccomended.");
+                adminconsoledisk = false;
             }
             Console.ForegroundColor = ConsoleColor.Green;
         }
@@ -779,48 +780,58 @@ namespace GoOS
 
             //Disk Only stuff
             //FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize();
-            else if (input == "loaddisk")
-            {
-                if (!adminconsoledisk)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("GoOS Admin: Ensure you are using the iso file provided by Owen2k6 on release.");
-                    Console.WriteLine("GoOS Admin: The system will crash if a disk can not be located. ");
-                    Console.WriteLine("GoOS Admin: Press any key to continue");
-                    Console.ReadKey();
-                    FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize(true);
-                    Console.WriteLine("GoOS Admin: HardDisk enabled for session");
-                    adminconsoledisk = true;
-                    Console.ForegroundColor = ConsoleColor.Green;
-                }
-                if (adminconsoledisk)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("GoOS Admin: System Already has hard disk loaded");
-                    Console.ForegroundColor = ConsoleColor.Green;
-                }
-            }
+            //else if (input == "loaddisk")
+            //{
+                //if (!adminconsoledisk)
+                //{
+                //    Console.ForegroundColor = ConsoleColor.Red;
+                //    Console.WriteLine("GoOS Admin: Ensure you are using the iso file provided by Owen2k6 on release.");
+                //    Console.WriteLine("GoOS Admin: The system will crash if a disk can not be located. ");
+                //    Console.WriteLine("GoOS Admin: Press any key to continue");
+                //    Console.ReadKey();
+                //    FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize(true);
+                //    Console.WriteLine("GoOS Admin: HardDisk enabled for session");
+                //    adminconsoledisk = true;
+                //    Console.ForegroundColor = ConsoleColor.Green;
+                //}
+                //if (adminconsoledisk)
+                //{
+                //    Console.ForegroundColor = ConsoleColor.Red;
+                //    Console.WriteLine("GoOS Admin: System Already has hard disk loaded");
+                //    Console.ForegroundColor = ConsoleColor.Green;
+                //}
+            //}
             else if (input == "diskcheck")
             {
                 if (!adminconsoledisk)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("GoOS Admin: There is currently no disk loaded to the system. type \"LOADDISK\" to activate the disk");
+                    Console.WriteLine("GoOS Admin: There is currently no disk loaded to the system.");
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
                 if (adminconsoledisk)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("GoOS Admin: Showing Disk Information for 0:\\");
-                    var available_space = FS.GetAvailableFreeSpace(@"0:\");
-                    var total_space = FS.GetTotalSize(@"0:\");
-                    var label = FS.GetFileSystemLabel(@"0:\");
-                    var fs_type = FS.GetFileSystemType(@"0:\");
-                    Console.WriteLine("Available Free Space: " + available_space + "(" + (available_space/ 1e+9) + "GiB)");
-                    Console.WriteLine("Total Space on disk: " + total_space + "(" + (total_space / 1e+9) + "GiB)");
-                    Console.WriteLine("Disk Label: " + label);
-                    Console.WriteLine("File System Type: " + fs_type);
-                    Console.ForegroundColor = ConsoleColor.Green;
+                    try
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("GoOS Admin: Showing Disk Information for 0:\\");
+                        var available_space = FS.GetAvailableFreeSpace(@"0:\");
+                        var total_space = FS.GetTotalSize(@"0:\");
+                        var label = FS.GetFileSystemLabel(@"0:\");
+                        var fs_type = FS.GetFileSystemType(@"0:\");
+                        Console.WriteLine("Available Free Space: " + available_space + "(" + (available_space / 1e+9) + "GiB)");
+                        Console.WriteLine("Total Space on disk: " + total_space + "(" + (total_space / 1e+9) + "GiB)");
+                        Console.WriteLine("Disk Label: " + label);
+                        Console.WriteLine("File System Type: " + fs_type);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine("GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                        Console.WriteLine("GoOS Admin: For system security, we have disabled all Drive functions.");
+                        adminconsoledisk = false;
+                        Console.ForegroundColor = ConsoleColor.Green;
+                    }
                 }
             }
             else if (input == "ls")
@@ -828,25 +839,35 @@ namespace GoOS
                 if (!adminconsoledisk)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("GoOS Admin: There is currently no disk loaded to the system. type \"LOADDISK\" to activate the disk");
+                    Console.WriteLine("GoOS Admin: There is currently no disk loaded to the system.");
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
                 if (adminconsoledisk)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    var directory_list = Directory.GetFiles(@"0:\");
-                    foreach (var file in directory_list)
+                    try
                     {
-                        Console.WriteLine(file);
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        var directory_list = Directory.GetFiles(@"0:\");
+                        foreach (var file in directory_list)
+                        {
+                            Console.WriteLine(file);
+                        }
+                        Console.ForegroundColor = ConsoleColor.Green;
                     }
-                    Console.ForegroundColor = ConsoleColor.Green;
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                        Console.WriteLine("GoOS Admin: For system security, we have disabled all Drive functions.");
+                        adminconsoledisk = false;
+                        Console.ForegroundColor = ConsoleColor.Green;
+                    }
                 }
             }
             else if (input == "notepad") {
                 if (!adminconsoledisk)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("GoOS Admin: There is currently no disk loaded to the system. type \"LOADDISK\" to activate the disk");
+                    Console.WriteLine("GoOS Admin: There is currently no disk loaded to the system.");
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
                 if (adminconsoledisk)
