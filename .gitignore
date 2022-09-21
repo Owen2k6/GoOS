@@ -1,2 +1,23 @@
 # Build results
 /GoOS/bin/
+GoOS/bin/Debug/net5.0/GoOS.iso
+GoOS/bin/Debug/net6.0/GoOS.asm
+GoOS/bin/Debug/net6.0/GoOS.bin
+GoOS/bin/Debug/net6.0/GoOS.bin.gz
+GoOS/bin/Debug/net6.0/GoOS.cdb
+GoOS/bin/Debug/net6.0/GoOS.dll
+GoOS/bin/Debug/net6.0/GoOS.log.html
+GoOS/bin/Debug/net6.0/GoOS.obj
+GoOS/bin/Debug/net6.0/GoOS.pdb
+GoOS/bin/Debug/net6.0/ISO/boot/GoOS.bin.gz
+GoOS/bin/Debug/net6.0/ISO/boot/grub/i386-pc/eltorito.img
+GoOS/bin/Debug/net6.0/XSharp.Assembler.log
+GoOS/obj/Debug/net6.0/GoOS.csproj.CoreCompileInputs.cache
+GoOS/obj/Debug/net6.0/GoOS.dll
+GoOS/obj/Debug/net6.0/GoOS.pdb
+GoOS/obj/Debug/net6.0/ref/GoOS.dll
+GoOS/obj/Debug/net6.0/refint/GoOS.dll
+GoOS/.vs/GoOS/FileContentIndex/38ff5730-0e3f-4a94-82a5-ce3a75c44352.vsidx
+GoOS/.vs/GoOS/FileContentIndex/25313dfb-5876-40bf-a164-4eb6fc8313ef.vsidx
+GoOS/.vs/GoOS/v17/.suo
+/.idea/
