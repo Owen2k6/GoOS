@@ -815,8 +815,8 @@ namespace GoOS
                     var total_space = FS.GetTotalSize(@"0:\");
                     var label = FS.GetFileSystemLabel(@"0:\");
                     var fs_type = FS.GetFileSystemType(@"0:\");
-                    Console.WriteLine("Available Free Space: " + available_space);
-                    Console.WriteLine("Total Space on disk: " + total_space);
+                    Console.WriteLine("Available Free Space: " + available_space + "(" + (available_space/ 1e+9) + "GiB)");
+                    Console.WriteLine("Total Space on disk: " + total_space + "(" + (total_space / 1e+9) + "GiB)");
                     Console.WriteLine("Disk Label: " + label);
                     Console.WriteLine("File System Type: " + fs_type);
                     Console.ForegroundColor = ConsoleColor.Green;
