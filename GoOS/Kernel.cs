@@ -8,6 +8,7 @@ using Cosmos.System.Network.IPv4.UDP.DNS;
 using System;
 using System.Collections.Generic;
 using Sys = Cosmos.System;
+using Core;
 
 
 //Goplex Studios - GoOS
@@ -684,6 +685,8 @@ namespace GoOS
                     }
                 }
             }
+
+            //Calculator Area
 
             else if (input == "calc")
             {
