@@ -1,22 +1,2 @@
 # Build results
-GoOS\bin\Debug\net5.0\GoOS.iso
-GoOS/bin/Debug/net5.0/GoOS.iso
-GoOS/bin/Debug/net6.0/GoOS.pdb
-GoOS/bin/Debug/net6.0/GoOS.obj
-GoOS/bin/Debug/net6.0/GoOS.dll
-GoOS/bin/Debug/net6.0/GoOS.cdb
-GoOS/bin/Debug/net6.0/GoOS.bin.gz
-GoOS/bin/Debug/net6.0/GoOS.bin
-GoOS/bin/Debug/net6.0/GoOS.asm
-GoOS/bin/Debug/net5.0/GoOS.iso
-GoOS/obj/Debug/net6.0/GoOS.dll
-GoOS/obj/Debug/net6.0/GoOS.pdb
-GoOS/bin/Debug/net6.0/ISO/boot/GoOS.bin.gz
-GoOS/bin/Debug/net6.0/GoOS.pdb
-GoOS/bin/Debug/net6.0/GoOS.obj
-GoOS/bin/Debug/net6.0/GoOS.dll
-GoOS/bin/Debug/net6.0/GoOS.cdb
-GoOS/bin/Debug/net6.0/GoOS.bin.gz
-GoOS/bin/Debug/net6.0/GoOS.bin
-GoOS/bin/Debug/net6.0/GoOS.asm
-GoOS/bin/Debug/net5.0/GoOS.iso
+/GoOS/bin/
