@@ -10,7 +10,17 @@ using System.Collections.Generic;
 using Sys = Cosmos.System;
 using System.IO;
 using System.Linq.Expressions;
-
+using Cosmos.Core.Memory;
+using System.Drawing;
+using IL2CPU.API.Attribs;
+using System.Text;
+using CosmosTTF;
+using TechOS.System;
+using TechOS.GUI;
+using Cosmos.System.FileSystem.VFS;
+using Cosmos.System.FileSystem;
+using Cosmos.Core;
+using Cosmos.Core.Memory;
 
 //Goplex Studios - GoOS
 //Copyright (C) 2022  Owen2k6
@@ -32,7 +42,23 @@ namespace GoOS
 {
     public class Kernel : Sys.Kernel
     {
+
+        //[ManifestResourceStream(ResourceName = "Wallpaper.bmp")]
+        //public static byte[] Wallpaper;
+        //public static Bitmap wallpaper = new Bitmap(Wallpaper);
+        public static Canvas canvas;
+
+
         private Boolean adminconsoledisk = false;
+
+
+        //Login Data
+        private Boolean loginsystemenabled = false;
+        private String username = null;
+        private String password = null;
+
+
+
         private static Sys.FileSystem.CosmosVFS FS;
         public static string file;
 
@@ -334,6 +360,7 @@ namespace GoOS
         }
         protected override void BeforeRun()
         {
+
             try
             {
                 NetworkDevice nic = NetworkDevice.GetDeviceByName("eth0"); //get network device by name
@@ -415,6 +442,7 @@ namespace GoOS
             Console.WriteLine("  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
             try{
                 FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize(true);
+                var total_space = FS.GetTotalSize(@"0:\");
                 adminconsoledisk = true;
             }
             catch (Exception e)
@@ -427,6 +455,28 @@ namespace GoOS
                 adminconsoledisk = false;
             }
             Console.ForegroundColor = ConsoleColor.Green;
+            if (loginsystemenabled)
+            {
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                //Login System 0.1 Primitive edition
+                Console.WriteLine("Hello, " + username + "!");
+                Console.WriteLine("In order to proceed into GoOS, you must login with your password.");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                String input = Console.ReadLine();
+                if(input == password)
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.Clear();
+                    Console.WriteLine("Welcome back to GoOS.");
+                }
+                else
+                {
+                    Console.WriteLine("Incorrect password.");
+                    Console.WriteLine("Press any key to retry");
+                    Console.ReadKey();
+                    Cosmos.System.Power.Reboot();
+                }
+            }
         }
 
         protected override void Run()
@@ -876,6 +926,37 @@ namespace GoOS
                     MIV.StartMIV();
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
+            }
+            
+            //smth cool bro
+            
+            else if (input == "gui") {
+                if (!adminconsoledisk)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("GoOS Admin: There is currently no disk loaded to the system.");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
+                if (adminconsoledisk)
+                {
+                    // backup canvases
+                    //
+                    // canvas = new VBECanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
+                    // canvas = new SVGAIICanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
+                    canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
+                    Sys.MouseManager.ScreenWidth = 1012;
+                    Sys.MouseManager.ScreenHeight = 768;
+                    while (true)
+                    {
+                        Heap.Collect();
+                        canvas.Clear(Color.Green);
+                        //guicanvas.DrawImage(wallpaper, 0, 0);
+                        Cursor.DrawCursor(canvas, Sys.MouseManager.X, Sys.MouseManager.Y);
+                        canvas.Display();
+                    }
+                }
+
+
             }
 
 
