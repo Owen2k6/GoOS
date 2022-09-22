@@ -81,283 +81,6 @@ namespace GoOS
         public int snakeCount;
         Random rnd = new Random();
 
-        /* SNAKE FUNCS */
-        public string getSnakeScore()
-        {
-            if (snakeCount < 10)
-            {
-                return snakeCount + "   ";
-            }
-            else if (snakeCount < 100)
-            {
-                return snakeCount + "  ";
-            }
-            else if (snakeCount < 1000)
-            {
-                return snakeCount + " ";
-            }
-            else
-            {
-                return snakeCount + "";
-            }
-        }
-
-        public void updatePosotion()
-        {
-            List<int[]> tmp = new List<int[]>();
-
-            foreach (int[] point in snake)
-            {
-                switch (point[1])
-                {
-                    case 1:
-                        point[0] = point[0] - 1;
-                        break;
-                    case 2:
-                        point[0] = point[0] + 80;
-                        break;
-                    case 3:
-                        point[0] = point[0] + 1;
-                        break;
-                    case 4:
-                        point[0] = point[0] - 80;
-                        break;
-                    default:
-                        break;
-                }
-                tmp.Add(point);
-            }
-            snake = tmp;
-        }
-
-        public void changeArray()
-        {
-            for (int i = 0; i < matrix.Length; i++)
-            {
-                matrix[i] = 0;
-            }
-
-            foreach (int[] point in snake)
-            {
-                matrix[point[0]] = 3;
-            }
-
-            foreach (int point in food)
-            {
-                matrix[point] = 2;
-            }
-
-            for (int i = 0; i < matrix.Length; i++)
-            {
-                if (i <= 79 && i >= 0)
-                {
-                    matrix[i] = 1;
-                }
-                else if (i <= 1760 && i >= 1679)
-                {
-                    matrix[i] = 1;
-                }
-                else if (i % 80 == 0)
-                {
-                    matrix[i] = 1;
-                }
-
-                else if (i % 80 == 79)
-                {
-                    matrix[i] = 1;
-                }
-            }
-        }
-
-        public Boolean gameover()
-        {
-            int head = snake[0][0];
-            for (int i = 1; i < snakeCount; i++)
-            {
-                if (head == snake[i][0])
-                {
-                    return true;
-                }
-            }
-            if (head % 80 == 79 || head % 80 == 0 || head <= 1760 && head >= 1679 || head <= 79 && head >= 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public void printGame()
-        {
-            for (int i = 0; i < matrix.Length; i++)
-            {
-                if (gameover() && i == 585)
-                {
-                    Console.Write("###############################");
-                    i = i + 30;
-                }
-                else if (gameover() && i == 665)
-                {
-                    Console.Write("###############################");
-                    i = i + 30;
-                }
-                else if (gameover() && i == 745)
-                {
-                    Console.Write("####                       ####");
-                    i = i + 30;
-                }
-                else if (gameover() && i == 825)
-                {
-                    Console.Write("####       GAMEOVER        ####");
-                    i = i + 30;
-                }
-                else if (gameover() && i == 905)
-                {
-                    Console.Write("####      Score: " + getSnakeScore() + "      ####");
-                    i = i + 30;
-                }
-                else if (gameover() && i == 985)
-                {
-                    Console.Write("####                       ####");
-                    i = i + 30;
-                }
-                else if (gameover() && i == 1065)
-                {
-                    Console.Write("###############################");
-                    i = i + 30;
-                }
-                else if (gameover() && i == 1145)
-                {
-                    Console.Write("###############################");
-                    i = i + 30;
-                }
-                else if (matrix[i] == 1)
-                {
-                    Console.Write("#");
-                }
-                else if (matrix[i] == 2)
-                {
-                    Console.Write("$");
-                }
-                else if (matrix[i] == 3)
-                {
-                    Console.Write("*");
-                }
-                else
-                {
-                    Console.Write(" ");
-                }
-            }
-
-            Console.Write("#  Current score: " + getSnakeScore() + "      Exit game: ESC button      Restart game: R button  #");
-            Console.Write("################################################################################");
-        }
-
-        public void delay(int time)
-        {
-            for (int i = 3; i < time; i++) ;
-        }
-
-        public int xy2p(int x, int y)
-        {
-            return y * 80 + x;
-        }
-
-        public int randomFood()
-        {
-            int rand = rnd.Next(81, 1700);
-            if (rand != randomNumber)
-            {
-                randomNumber = rand;
-                return rand;
-            }
-            else
-            {
-                return 1400;
-            }
-        }
-
-        public void configSnake()
-        {
-            matrix = new int[1760];
-            commands = new List<int[]>();
-            snake = new List<int[]>();
-            food = new List<int>();
-            randomNumber = 0;
-            snake.Add(new int[2] { xy2p(10, 10), 3 });
-            changeArray();
-            food.Add(randomFood());
-        }
-
-        public void updateDirections()
-        {
-            List<int[]> tmp = new List<int[]>();
-            foreach (int[] com in commands)
-            {
-                if (com[1] < snakeCount)
-                {
-                    snake[com[1]][1] = com[0];
-                    com[1] = com[1] + 1;
-                    tmp.Add(com);
-                }
-            }
-            commands = tmp;
-        }
-
-        public void checkIfTouchFood()
-        {
-            List<int> foodtmp = new List<int>();
-            foreach (int pos in food)
-            {
-                if (snake[0][0] == pos)
-                {
-                    foodtmp.Add(randomFood());
-                    int tmp1 = snake[snakeCount - 1][0];
-                    int tmp2 = snake[snakeCount - 1][1];
-                    if (tmp2 == 1)
-                    {
-                        tmp1 = tmp1 + 1;
-                    }
-                    else if (tmp2 == 2)
-                    {
-                        tmp1 = tmp1 - 80;
-                    }
-                    else if (tmp2 == 3)
-                    {
-                        tmp1 = tmp1 - 1;
-                    }
-                    else if (tmp2 == 4)
-                    {
-                        tmp1 = tmp1 + 80;
-                    }
-                    snake.Add(new int[] { tmp1, tmp2 });
-                }
-                else
-                {
-                    foodtmp.Add(pos);
-                }
-            }
-            food = foodtmp;
-        }
-
-        public void printLogo()
-        {
-            Console.WriteLine(); Console.WriteLine(); Console.WriteLine(); Console.WriteLine(); Console.WriteLine();
-            Console.WriteLine(); Console.WriteLine(); Console.WriteLine(); Console.WriteLine(); Console.WriteLine();
-            Console.WriteLine("  #####                               ");
-            Console.WriteLine(" #     # #    #   ##   #    # ######  ");
-            Console.WriteLine(" #       ##   #  #  #  #   #  #       ");
-            Console.WriteLine("  #####  # #  # #    # ####   #####   ");
-            Console.WriteLine("       # #  # # ###### #  #   #       ");
-            Console.WriteLine(" #     # #   ## #    # #   #  #       ");
-            Console.WriteLine("  #####  #    # #    # #    # ######  ");
-            Console.WriteLine("         Created by Denis Bartashevich");
-            Console.WriteLine("    Imported into GoOS Core by Owen2k6");
-            Console.WriteLine("");
-
-        }
         protected override void BeforeRun()
         {
 
@@ -440,7 +163,8 @@ namespace GoOS
             Console.WriteLine("  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine("  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
-            try{
+            try
+            {
                 FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize(true);
                 var total_space = FS.GetTotalSize(@"0:\");
                 adminconsoledisk = true;
@@ -463,7 +187,7 @@ namespace GoOS
                 Console.WriteLine("In order to proceed into GoOS, you must login with your password.");
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 String input = Console.ReadLine();
-                if(input == password)
+                if (input == password)
                 {
                     Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.Clear();
@@ -656,90 +380,6 @@ namespace GoOS
 
                 }
             }
-            else if (input == "snake")
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("This game is known to crash GoOS. Press ENTER to continue");
-                Console.WriteLine("CPU IS KNOWN TO OVERLOAD ON RUN. Press ENTER to continue");
-                Console.ReadKey();
-                configSnake();
-                ConsoleKey x;
-                while (true)
-                {
-                    while (gameover())
-                    {
-                        printGame();
-                        Boolean endGame = false;
-                        switch (Console.ReadKey(true).Key)
-                        {
-                            case ConsoleKey.R:
-                                configSnake();
-                                break;
-                            case ConsoleKey.Escape:
-                                endGame = true;
-                                break;
-                        }
-
-                        if (endGame)
-                        {
-                            break;
-                        }
-                    }
-                    while (!Console.KeyAvailable && !gameover())
-                    {
-
-                        updateDirections();
-
-                        updatePosotion();
-
-                        checkIfTouchFood();
-
-                        Console.Clear();
-                        changeArray();
-                        printGame();
-                        delay(10000000);
-                    }
-
-                    x = Console.ReadKey(true).Key;
-
-                    if (x == ConsoleKey.LeftArrow)
-                    {
-                        if (snake[0][1] != 3)
-                        {
-                            commands.Add(new int[2] { 1, 0 });
-                        }
-                    }
-                    else if (x == ConsoleKey.UpArrow)
-                    {
-                        if (snake[0][1] != 2)
-                        {
-                            commands.Add(new int[2] { 4, 0 });
-                        }
-                    }
-                    else if (x == ConsoleKey.RightArrow)
-                    {
-                        if (snake[0][1] != 1)
-                        {
-                            commands.Add(new int[2] { 3, 0 });
-                        }
-                    }
-                    else if (x == ConsoleKey.DownArrow)
-                    {
-                        if (snake[0][1] != 4)
-                        {
-                            commands.Add(new int[2] { 2, 0 });
-                        }
-                    }
-                    else if (x == ConsoleKey.Escape)
-                    {
-                        break;
-                    }
-                    else if (x == ConsoleKey.R)
-                    {
-                        configSnake();
-                    }
-                }
-            }
 
             //Calculator Area
 
@@ -832,24 +472,24 @@ namespace GoOS
             //FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize();
             //else if (input == "loaddisk")
             //{
-                //if (!adminconsoledisk)
-                //{
-                //    Console.ForegroundColor = ConsoleColor.Red;
-                //    Console.WriteLine("GoOS Admin: Ensure you are using the iso file provided by Owen2k6 on release.");
-                //    Console.WriteLine("GoOS Admin: The system will crash if a disk can not be located. ");
-                //    Console.WriteLine("GoOS Admin: Press any key to continue");
-                //    Console.ReadKey();
-                //    FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize(true);
-                //    Console.WriteLine("GoOS Admin: HardDisk enabled for session");
-                //    adminconsoledisk = true;
-                //    Console.ForegroundColor = ConsoleColor.Green;
-                //}
-                //if (adminconsoledisk)
-                //{
-                //    Console.ForegroundColor = ConsoleColor.Red;
-                //    Console.WriteLine("GoOS Admin: System Already has hard disk loaded");
-                //    Console.ForegroundColor = ConsoleColor.Green;
-                //}
+            //if (!adminconsoledisk)
+            //{
+            //    Console.ForegroundColor = ConsoleColor.Red;
+            //    Console.WriteLine("GoOS Admin: Ensure you are using the iso file provided by Owen2k6 on release.");
+            //    Console.WriteLine("GoOS Admin: The system will crash if a disk can not be located. ");
+            //    Console.WriteLine("GoOS Admin: Press any key to continue");
+            //    Console.ReadKey();
+            //    FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize(true);
+            //    Console.WriteLine("GoOS Admin: HardDisk enabled for session");
+            //    adminconsoledisk = true;
+            //    Console.ForegroundColor = ConsoleColor.Green;
+            //}
+            //if (adminconsoledisk)
+            //{
+            //    Console.ForegroundColor = ConsoleColor.Red;
+            //    Console.WriteLine("GoOS Admin: System Already has hard disk loaded");
+            //    Console.ForegroundColor = ConsoleColor.Green;
+            //}
             //}
             else if (input == "diskcheck")
             {
@@ -875,7 +515,7 @@ namespace GoOS
                         Console.WriteLine("File System Type: " + fs_type);
                         Console.ForegroundColor = ConsoleColor.Green;
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         Console.WriteLine("GoOS Admin: Error Loading disk! You might have disconnected the drive!");
                         Console.WriteLine("GoOS Admin: For system security, we have disabled all Drive functions.");
@@ -913,7 +553,8 @@ namespace GoOS
                     }
                 }
             }
-            else if (input == "notepad") {
+            else if (input == "notepad")
+            {
                 if (!adminconsoledisk)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -927,34 +568,34 @@ namespace GoOS
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
             }
-            
+
             //smth cool bro
-            
+
             //else if (input == "gui") {
-                //if (!adminconsoledisk)
-                //{
-                //    Console.ForegroundColor = ConsoleColor.Red;
-                //    Console.WriteLine("GoOS Admin: There is currently no disk loaded to the system.");
-                //    Console.ForegroundColor = ConsoleColor.Green;
-                //}
-                //if (adminconsoledisk)
-                //{
-                    // backup canvases
-                    //
-                    // canvas = new VBECanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
-                    // canvas = new SVGAIICanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
-               //     canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
-               //     Sys.MouseManager.ScreenWidth = 1012;
-               //     Sys.MouseManager.ScreenHeight = 768;
-               //     while (true)
-               //     {
-               //         Heap.Collect();
-               //         canvas.Clear(Color.Green);
-               //         //guicanvas.DrawImage(wallpaper, 0, 0);
-               //         Cursor.DrawCursor(canvas, Sys.MouseManager.X, Sys.MouseManager.Y);
-               //         canvas.Display();
-               //     }
-               // }
+            //if (!adminconsoledisk)
+            //{
+            //    Console.ForegroundColor = ConsoleColor.Red;
+            //    Console.WriteLine("GoOS Admin: There is currently no disk loaded to the system.");
+            //    Console.ForegroundColor = ConsoleColor.Green;
+            //}
+            //if (adminconsoledisk)
+            //{
+            // backup canvases
+            //
+            // canvas = new VBECanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
+            // canvas = new SVGAIICanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
+            //     canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
+            //     Sys.MouseManager.ScreenWidth = 1012;
+            //     Sys.MouseManager.ScreenHeight = 768;
+            //     while (true)
+            //     {
+            //         Heap.Collect();
+            //         canvas.Clear(Color.Green);
+            //         //guicanvas.DrawImage(wallpaper, 0, 0);
+            //         Cursor.DrawCursor(canvas, Sys.MouseManager.X, Sys.MouseManager.Y);
+            //         canvas.Display();
+            //     }
+            // }
 
 
             //}
