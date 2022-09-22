@@ -930,34 +930,34 @@ namespace GoOS
             
             //smth cool bro
             
-            else if (input == "gui") {
-                if (!adminconsoledisk)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("GoOS Admin: There is currently no disk loaded to the system.");
-                    Console.ForegroundColor = ConsoleColor.Green;
-                }
-                if (adminconsoledisk)
-                {
+            //else if (input == "gui") {
+                //if (!adminconsoledisk)
+                //{
+                //    Console.ForegroundColor = ConsoleColor.Red;
+                //    Console.WriteLine("GoOS Admin: There is currently no disk loaded to the system.");
+                //    Console.ForegroundColor = ConsoleColor.Green;
+                //}
+                //if (adminconsoledisk)
+                //{
                     // backup canvases
                     //
                     // canvas = new VBECanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
                     // canvas = new SVGAIICanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
-                    canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
-                    Sys.MouseManager.ScreenWidth = 1012;
-                    Sys.MouseManager.ScreenHeight = 768;
-                    while (true)
-                    {
-                        Heap.Collect();
-                        canvas.Clear(Color.Green);
-                        //guicanvas.DrawImage(wallpaper, 0, 0);
-                        Cursor.DrawCursor(canvas, Sys.MouseManager.X, Sys.MouseManager.Y);
-                        canvas.Display();
-                    }
-                }
+               //     canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
+               //     Sys.MouseManager.ScreenWidth = 1012;
+               //     Sys.MouseManager.ScreenHeight = 768;
+               //     while (true)
+               //     {
+               //         Heap.Collect();
+               //         canvas.Clear(Color.Green);
+               //         //guicanvas.DrawImage(wallpaper, 0, 0);
+               //         Cursor.DrawCursor(canvas, Sys.MouseManager.X, Sys.MouseManager.Y);
+               //         canvas.Display();
+               //     }
+               // }
 
 
-            }
+            //}
 
 
 
