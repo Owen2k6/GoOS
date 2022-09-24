@@ -160,9 +160,8 @@ namespace GoOS
             log(ConsoleColor.DarkRed, "               GGGGGGGGGGGGGGGGGGGGGG              ");
             log(ConsoleColor.Magenta, "  GGGGGGGGGG GGGGGGGGGGGGGGGGGGGGGGGGGG            ");
             log(ConsoleColor.DarkMagenta, "  GGGGGGGG   GGGGGGGGG        GGGGGG               ");
-            log(ConsoleColor.Green, "  GGGGGGG    GGGGG                                 ");
-            textcolour(ConsoleColor.DarkRed);
-            log(ConsoleColor.Green, "  GGGGGG     GGG                                   ");
+            log(ConsoleColor.Red, "  GGGGGGG    GGGGG                                 ");
+            log(ConsoleColor.DarkRed, "  GGGGGG     GGG                                   ");
             //Do NOT change owen.
             textcolour(ConsoleColor.Magenta);
             write("  GGGGG      GG                                    ");
@@ -233,7 +232,9 @@ namespace GoOS
 
         protected override void Run()
         {
+            textcolour(ConsoleColor.Green);
             write("0:\\");
+            textcolour(ConsoleColor.Gray);
             String input = Console.ReadLine().ToLower();
             //And so it begins...
             //Commands Section
@@ -473,6 +474,75 @@ namespace GoOS
                     }
                 }
             }
+            else if (input == "run")
+            {
+                if (!adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: Enter file name");
+                    textcolour(ConsoleColor.Yellow);
+                    write("FilePath: 0:\\");
+                    String inputaman = Console.ReadLine();
+                    try
+                    {
+                        log(ConsoleColor.Blue, "GoOS Admin: Attempting to run " + inputaman);
+                        if (!inputaman.EndsWith(".goexe"))
+                        {
+                            log(ConsoleColor.Red, "GoOS Admin: Incompatible format.");
+                            log(ConsoleColor.Red, "GoOS Admin: File must be .goexe");
+                        }
+                        if (inputaman.EndsWith(".goexe"))
+                        {
+                            var content = File.ReadAllLines(@"0:\" + inputaman);
+                            string theysaid = null;
+                            int count = 0;
+                            foreach (string line in content)
+                            {
+                                count = count + 1;
+                                //log(ConsoleColor.Magenta, "LINE FOUND: CONTENT: " + line);
+                                if (line.StartsWith("print="))
+                                {
+                                    string thingtosay = line.Replace("print=", "");
+                                    thingtosay = thingtosay.Replace("{getInput}", theysaid);
+                                    log(ConsoleColor.Magenta, thingtosay);
+                                }
+                                if (line.StartsWith("sleep="))
+                                {
+                                    String howlong = line.Split("=")[1];
+                                    int potato = Convert.ToInt32(howlong);
+                                    sleep(potato);
+                                }
+                                if (line.StartsWith("input="))
+                                {
+                                    if (line == "input=")
+                                    {
+                                        textcolour(ConsoleColor.Blue);
+                                        theysaid = Console.ReadLine();
+                                    }
+                                    else
+                                    {
+                                        String addon = line.Replace("input=", "");
+                                        write(addon);
+                                        textcolour(ConsoleColor.Blue);
+                                        theysaid = Console.ReadLine();
+                                    }
+
+                                }
+
+                            }
+
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log(ConsoleColor.Red, "Please send the following to GoOS Developers");
+                        log(ConsoleColor.Red, e.ToString());
+                    }
+                }
+            }
             else if (input == "ld")
             {
                 if (!adminconsoledisk)
@@ -529,33 +599,34 @@ namespace GoOS
 
             //smth cool bro
 
-            else if (input == "gui") {
-            if (!adminconsoledisk)
+            else if (input == "gui")
             {
-                log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
-            }
-            if (adminconsoledisk)
-            {
-            // backup canvases
-            //
-            // canvas = new VBECanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
-            // canvas = new SVGAIICanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
-                 canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
-                 Sys.MouseManager.ScreenWidth = 1012;
-                 Sys.MouseManager.ScreenHeight = 768;
-                 while (true)
-                 {
-                     Heap.Collect();
-                     canvas.Clear(Color.Green);
-                     //guicanvas.DrawImage(wallpaper, 0, 0);
-                     TextBox.textbox(canvas, 4, 4, 0, 0, "GoOS GUI");
-                     TextBox.textbox(canvas, 12, 12, 0, 0, "24092022");
-                     TextBox.textbox(canvas, 40, 40, 60, 24, "24092022");
-                     Cursor.DrawCursor(canvas, Sys.MouseManager.X, Sys.MouseManager.Y);
-                     
-                     canvas.Display();
-                 }
-             }
+                if (!adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    // backup canvases
+                    //
+                    // canvas = new VBECanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
+                    // canvas = new SVGAIICanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
+                    canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
+                    Sys.MouseManager.ScreenWidth = 1012;
+                    Sys.MouseManager.ScreenHeight = 768;
+                    while (true)
+                    {
+                        Heap.Collect();
+                        canvas.Clear(Color.Green);
+                        //guicanvas.DrawImage(wallpaper, 0, 0);
+                        TextBox.textbox(canvas, 4, 4, 0, 0, "GoOS GUI");
+                        TextBox.textbox(canvas, 12, 12, 0, 0, "24092022");
+                        TextBox.textbox(canvas, 40, 40, 60, 24, "24092022");
+                        Cursor.DrawCursor(canvas, Sys.MouseManager.X, Sys.MouseManager.Y);
+
+                        canvas.Display();
+                    }
+                }
 
 
             }
