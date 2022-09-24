@@ -182,7 +182,7 @@ namespace GoOS
             textcolour(ConsoleColor.Magenta);
             write("  GGGGG      GG           GGGGGGGGGGGGGGGGGGG      ");
             textcolour(ConsoleColor.White);
-            write("Private Development Build");
+            write("Development Channel");
             print("");
             textcolour(ConsoleColor.DarkMagenta);
             print("  GGGGGG     GGGG         GGGGGGGGGGGGGGGGGG       ");
