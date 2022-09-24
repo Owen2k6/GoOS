@@ -271,6 +271,14 @@ namespace GoOS
                 print("CORE - Displays GoOS Core infomation");
                 print("CALC - Shows a list of possible calculation commands");
                 print("CREDITS - Shows the GoOS Developers");
+                print("DISKCHECK - Check Disk Information");
+                print("LS - List all files on the disk");
+                print("NOTEPAD - MIV Notepad (Looks like VIM)");
+                print("DEL - Delete a file");
+                print("LD - ReLabel a disk (Rename disk)");
+                print("FTP - Will not work - File Transfer Protocol");
+                print("IPCONF - List all networking information");
+                print("GUI - See a cool lil test!");
                 textcolour(ConsoleColor.Green);
             }
             else if (input == "credits")
@@ -696,12 +704,6 @@ namespace GoOS
                 print("GoOS Admin: Showing Internet Information");
                 print(NetworkConfiguration.CurrentAddress.ToString());
                 textcolour(ConsoleColor.Green);
-            }
-            else if (input == "sleeper")
-            {
-                print("shhhh wait");
-                sleep(2000);
-                print("2000 ticks wasted :)");
             }
 
             //smth cool bro
