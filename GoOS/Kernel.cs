@@ -56,6 +56,11 @@ namespace GoOS
         {
             Console.WriteLine(str);
         }
+        public void log(System.ConsoleColor colour, string str)
+        {
+            Console.ForegroundColor = colour;
+            Console.WriteLine(str);
+        }
         public void write(string str)
         {
             Console.Write(str);
@@ -144,60 +149,49 @@ namespace GoOS
             }
             catch
             {
-                print("Error starting Goplex Web Interface.");
-                print("The system will proceed to boot without networking.");
-                print("Press ENTER to continue (and yes it has to be ENTER)");
+                log(ConsoleColor.Green, "Error starting Goplex Web Interface.");
+                log(ConsoleColor.Green, "The system will proceed to boot without networking.");
+                log(ConsoleColor.Green, "Press ENTER to continue (and yes it has to be ENTER)");
                 Console.ReadLine();
             }
 
             Console.Clear();
-            textcolour(ConsoleColor.Green);
-            textcolour(ConsoleColor.Red);
-            print("                    GGGGGGGGGGGG                   ");
+            log(ConsoleColor.Red, "                    GGGGGGGGGGGG                   ");
+            log(ConsoleColor.DarkRed, "               GGGGGGGGGGGGGGGGGGGGGG              ");
+            log(ConsoleColor.Magenta, "  GGGGGGGGGG GGGGGGGGGGGGGGGGGGGGGGGGGG            ");
+            log(ConsoleColor.DarkMagenta, "  GGGGGGGG   GGGGGGGGG        GGGGGG               ");
+            log(ConsoleColor.Green, "  GGGGGGG    GGGGG                                 ");
             textcolour(ConsoleColor.DarkRed);
-            print("               GGGGGGGGGGGGGGGGGGGGGG              ");
-            textcolour(ConsoleColor.Magenta);
-            print("  GGGGGGGGGG GGGGGGGGGGGGGGGGGGGGGGGGGG            ");
-            textcolour(ConsoleColor.DarkMagenta);
-            print("  GGGGGGGG   GGGGGGGGG        GGGGGG               ");
-            textcolour(ConsoleColor.Red);
-            print("  GGGGGGG    GGGGG                                 ");
-            textcolour(ConsoleColor.DarkRed);
-            print("  GGGGGG     GGG                                   ");
+            log(ConsoleColor.Green, "  GGGGGG     GGG                                   ");
+            //Do NOT change owen.
             textcolour(ConsoleColor.Magenta);
             write("  GGGGG      GG                                    ");
             textcolour(ConsoleColor.White);
             write("Goplex Studios GoOS.");
-            print("");
+            log(ConsoleColor.Green, "");
             textcolour(ConsoleColor.Red);
             write("  GGGGG      G            GGGGGGGGGGGGGGGGGGGG     ");
             textcolour(ConsoleColor.White);
             write("Copyright 2022 (c) Owen2k6.");
-            print("");
+            log(ConsoleColor.Green, "");
             textcolour(ConsoleColor.DarkRed);
             write("  GGGGG      GG           GGGGGGGGGGGGGGGGGGG      ");
             textcolour(ConsoleColor.White);
             write("Version 1.4");
-            print("");
+            log(ConsoleColor.Green, "");
             textcolour(ConsoleColor.Magenta);
             write("  GGGGG      GG           GGGGGGGGGGGGGGGGGGG      ");
             textcolour(ConsoleColor.White);
             write("Development Channel");
-            print("");
-            textcolour(ConsoleColor.DarkMagenta);
-            print("  GGGGGG     GGGG         GGGGGGGGGGGGGGGGGG       ");
-            textcolour(ConsoleColor.Red);
-            print("  GGGGGGG    GGGGGG              GGGGGGGGGG        ");
-            textcolour(ConsoleColor.DarkRed);
-            print("  GGGGGGGGG  GGGGGGGGGGGGGGGGGGGGGGGGGGGG          ");
-            textcolour(ConsoleColor.Magenta);
-            print("  GGGGGGGGGGG                                      ");
-            textcolour(ConsoleColor.DarkMagenta);
-            print("  GGGGGGGGGGGGGGG                  GGGG            ");
-            textcolour(ConsoleColor.Red);
-            print("  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
-            textcolour(ConsoleColor.DarkRed);
-            print("  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
+            log(ConsoleColor.Green, "");
+            //Ok now continue
+            log(ConsoleColor.DarkMagenta, "  GGGGGG     GGGG         GGGGGGGGGGGGGGGGGG       ");
+            log(ConsoleColor.Red, "  GGGGGGG    GGGGGG              GGGGGGGGGG        ");
+            log(ConsoleColor.DarkRed, "  GGGGGGGGG  GGGGGGGGGGGGGGGGGGGGGGGGGGGG          ");
+            log(ConsoleColor.Magenta, "  GGGGGGGGGGG                                      ");
+            log(ConsoleColor.DarkMagenta, "  GGGGGGGGGGGGGGG                  GGGG            ");
+            log(ConsoleColor.Red, "  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
+            log(ConsoleColor.DarkRed, "  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
             try
             {
                 FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize(true);
@@ -206,11 +200,10 @@ namespace GoOS
             }
             catch (Exception e)
             {
-                textcolour(ConsoleColor.Red);
-                print("GoOS Admin could not detect a disk. system will not support any apps that require a HDD to write/read from.");
-                print("GoOS Needs a HDD installed to use some of the cool features");
-                print("The GitHub releases page usually includes a disk built for GoOS");
-                print("Disks aren't required but they're highly reccomended.");
+                log(ConsoleColor.Red, "GoOS Admin could not detect a disk. system will not support any apps that require a HDD to write/read from.");
+                log(ConsoleColor.Red, "GoOS Needs a HDD installed to use some of the cool features");
+                log(ConsoleColor.Red, "The GitHub releases page usually includes a disk built for GoOS");
+                log(ConsoleColor.Red, "Disks aren't required but they're highly reccomended.");
                 adminconsoledisk = false;
             }
             textcolour(ConsoleColor.Green);
@@ -218,20 +211,20 @@ namespace GoOS
             {
                 textcolour(ConsoleColor.Magenta);
                 //Login System 0.1 Primitive edition
-                print("Hello, " + username + "!");
-                print("In order to proceed into GoOS, you must login with your password.");
+                log(ConsoleColor.Magenta, "Hello, " + username + "!");
+                log(ConsoleColor.Magenta, "In order to proceed into GoOS, you must login with your password.");
                 textcolour(ConsoleColor.Yellow);
                 String input = Console.ReadLine();
                 if (input == password)
                 {
                     textcolour(ConsoleColor.Cyan);
                     Console.Clear();
-                    print("Welcome back to GoOS.");
+                    log(ConsoleColor.Cyan, "Welcome back to GoOS.");
                 }
                 else
                 {
-                    print("Incorrect password.");
-                    print("Press any key to retry");
+                    log(ConsoleColor.Red, "Incorrect password.");
+                    log(ConsoleColor.Red, "Press any key to retry");
                     Console.ReadKey();
                     Cosmos.System.Power.Reboot();
                 }
@@ -241,270 +234,150 @@ namespace GoOS
         protected override void Run()
         {
             write("0:\\");
-            String input = Console.ReadLine();
+            String input = Console.ReadLine().ToLower();
             //And so it begins...
             //Commands Section
             if (input == "cinfo")
             {
-                textcolour(ConsoleColor.Magenta);
-                print("Goplex Operating System");
-                textcolour(ConsoleColor.Blue);
-                print("GoOS is owned by Goplex Studios.");
-                textcolour(ConsoleColor.DarkYellow);
-                print("SYSTEM INFOMATION:");
-                print("GoOS Version 1.4");
-                print("Owen2k6 Api version: 0.15");
-                print("Branch: Development");
-                textcolour(ConsoleColor.Red);
-                print("Copyright 2022 (c) Owen2k6");
-                textcolour(ConsoleColor.Green);
+                log(ConsoleColor.Magenta, "Goplex Operating System");
+                log(ConsoleColor.Blue, "GoOS is owned by Goplex Studios.");
+                log(ConsoleColor.Red, "SYSTEM INFOMATION:");
+                log(ConsoleColor.Red, "GoOS Version 1.4");
+                log(ConsoleColor.Red, "Owen2k6 Api version: 0.15");
+                log(ConsoleColor.Red, "Branch: Development");
+                log(ConsoleColor.White, "Copyright 2022 (c) Owen2k6");
             }
             else if (input == "help")
             {
-                textcolour(ConsoleColor.Magenta);
-                print("Goplex Operating System");
-                textcolour(ConsoleColor.Blue);
-                print("HELP - Shows system commands");
-                print("CINFO - Shows system infomation");
-                print("SUPPORT - Shows how to get support");
-                print("GAMES - Shows the list of GoOS Games");
-                print("CORE - Displays GoOS Core infomation");
-                print("CALC - Shows a list of possible calculation commands");
-                print("CREDITS - Shows the GoOS Developers");
-                print("DISKCHECK - Check Disk Information");
-                print("LS - List all files on the disk");
-                print("NOTEPAD - MIV Notepad (Looks like VIM)");
-                print("DEL - Delete a file");
-                print("LD - ReLabel a disk (Rename disk)");
-                print("FTP - Will not work - File Transfer Protocol");
-                print("IPCONF - List all networking information");
-                print("GUI - See a cool lil test!");
-                textcolour(ConsoleColor.Green);
+                log(ConsoleColor.Magenta, "Goplex Operating System");
+                log(ConsoleColor.Blue, "HELP - Shows system commands");
+                log(ConsoleColor.Blue, "CINFO - Shows system infomation");
+                log(ConsoleColor.Blue, "SUPPORT - Shows how to get support");
+                log(ConsoleColor.Blue, "GAMES - Shows the list of GoOS Games");
+                log(ConsoleColor.Blue, "CORE - Displays GoOS Core infomation");
+                log(ConsoleColor.Blue, "CALC - Shows a list of possible calculation commands");
+                log(ConsoleColor.Blue, "CREDITS - Shows the GoOS Developers");
+                log(ConsoleColor.Blue, "DISKCHECK - Check Disk Information");
+                log(ConsoleColor.Blue, "LS - List all files on the disk");
+                log(ConsoleColor.Blue, "NOTEPAD - MIV Notepad (Looks like VIM)");
+                log(ConsoleColor.Blue, "DEL - Delete a file");
+                log(ConsoleColor.Blue, "LD - ReLabel a disk (Rename disk)");
+                log(ConsoleColor.Blue, "FTP - Will not work - File Transfer Protocol");
+                log(ConsoleColor.Blue, "IPCONF - List all networking information");
+                log(ConsoleColor.Blue, "GUI - See a cool lil test!");
             }
             else if (input == "credits")
             {
-                textcolour(ConsoleColor.Cyan);
-                print("Goplex Studios - GoOS");
-                print("Discord Link: https://discord.owen2k6.com/");
-                textcolour(ConsoleColor.Red);
-                print("Contributors:");
-                print("Owen2k6 - Main Developer and creator");
-                print("Zulo - Helped create the command system");
-                print("moderator_man - Helped with my .gitignore issue and knows code fr");
-                print("");
+                log(ConsoleColor.Cyan, "Goplex Studios - GoOS");
+                log(ConsoleColor.Cyan, "Discord Link: https://discord.owen2k6.com/");
+                log(ConsoleColor.Red, "Contributors:");
+                log(ConsoleColor.Red, "Owen2k6 - Main Developer and creator");
+                log(ConsoleColor.Red, "Zulo - Helped create the command system");
+                log(ConsoleColor.Red, "moderator_man - Helped with my .gitignore issue and knows code fr");
+                log(ConsoleColor.Red, "");
             }
             else if (input == "support")
             {
-                textcolour(ConsoleColor.Cyan);
-                print("Goplex Studios Support");
-                textcolour(ConsoleColor.Red);
-                print("== For OS Support");
-                print("To get support, you must be in the Goplex Studios Discord Server.");
-                print("Discord Link: https://discord.owen2k6.com/");
-                print("Open support tickets in #get-staff-help");
-                print("== To report a bug");
-                print("Go to the issues tab on the Owen2k6/GoOS Github page");
-                print("and submit an issue with the bug tag.");
-            }
-            else if (input == "games")
-            {
-                textcolour(ConsoleColor.Magenta);
-                print("Goplex Games List");
-                textcolour(ConsoleColor.Blue);
-                print("TEXTADVENTURES - Text based adventure game because why not");
-                textcolour(ConsoleColor.Green);
+                log(ConsoleColor.Cyan, "Goplex Studios Support");
+                log(ConsoleColor.Red, "== For OS Support");
+                log(ConsoleColor.Red, "To get support, you must be in the Goplex Studios Discord Server.");
+                log(ConsoleColor.Red, "Discord Link: https://discord.owen2k6.com/");
+                log(ConsoleColor.Red, "Open support tickets in #get-staff-help");
+                log(ConsoleColor.Red, "== To report a bug");
+                log(ConsoleColor.Red, "Go to the issues tab on the Owen2k6/GoOS Github page");
+                log(ConsoleColor.Red, "and submit an issue with the bug tag.");
             }
             else if (input == "core")
             {
-                textcolour(ConsoleColor.Magenta);
-                print("GoOS Core Ver 0.3");
-                print("The Main backend to GoOS.");
-                print("==========================");
-                print("==Developed using Cosmos==");
-                print("==========================");
-                textcolour(ConsoleColor.Red);
-                print("GoOS Core Is still in early development.");
-                print("there are a lot of issues known and we are working on it! ");
-                textcolour(ConsoleColor.Green);
+                log(ConsoleColor.Magenta, "GoOS Core Ver 0.3");
+                log(ConsoleColor.Magenta, "The Main backend to GoOS.");
+                log(ConsoleColor.Magenta, "==========================");
+                log(ConsoleColor.Magenta, "==Developed using Cosmos==");
+                log(ConsoleColor.Magenta, "==========================");
+                log(ConsoleColor.Red, "GoOS Core Is still in early development.");
+                log(ConsoleColor.Red, "there are a lot of issues known and we are working on it! ");
             }
 
             //Games Section
-
-            else if (input == "textadventures")
-            {
-                textcolour(ConsoleColor.Magenta);
-                print("Goplex Studios - Text Adventures");
-                print("Developed using GoOS Core");
-                textcolour(ConsoleColor.Yellow);
-                print("????: Hello there, what's your name?");
-                textcolour(ConsoleColor.Blue);
-                write("Enter a name: ");
-                String name = Console.ReadLine();
-                textcolour(ConsoleColor.Yellow);
-                print("????: Ah. Hello there, " + name);
-                print("????: When there are Convos, press ENTER to move on to the next message :)");
-                Console.ReadKey();
-                print("????: You probably dont know me, but its better that way...");
-                Console.ReadKey();
-                print("????: Anyways, There are 1 stories we can enter.");
-                print("????: Yes i know wrong plural, but there will be more written in the future!");
-                Console.ReadKey();
-                print("????: The first one i'll say is \"Temple Run\" ");
-                print("????: - You are a criminal planning the heist of a lifetime");
-                print("????: This heist is set on robbing the great temple.");
-                Console.ReadKey();
-                print("????: For now, Temple Run is the only available story.");
-                Console.ReadKey();
-                print("????: So what will it be?");
-                print("????: Selection Options: TEMPLERUN");
-                textcolour(ConsoleColor.Blue);
-                write("Choose One of the Options: ");
-                String selection = Console.ReadLine();
-                textcolour(ConsoleColor.Yellow);
-                if (selection == "templerun")
-                {
-                    textcolour(ConsoleColor.Red);
-                    print("\"Temple Run\" Selected.");
-                    textcolour(ConsoleColor.Blue);
-                    print("You wake up... it's 2:45AM and you can't get to sleep...");
-                    Console.ReadKey();
-                    print("You look at your calendar...");
-                    Console.ReadKey();
-                    print("It's August 4th 2023. 3 days before the heist.");
-                    Console.ReadKey();
-                    print(name + ": Damn we need to get planning if we're gonna pull this off... ");
-                    Console.ReadKey();
-                    print("You pick up your phone and call Joe the Fixer...");
-                    Console.ReadKey();
-                    print(name + ": Joe! How have you been man...");
-                    Console.ReadKey();
-                    textcolour(ConsoleColor.DarkYellow);
-                    print("Joe: Hello... things are not so good...");
-                    Console.ReadKey();
-                    textcolour(ConsoleColor.Blue);
-                    print(name + ": What? Why?");
-                    Console.ReadKey();
-                    textcolour(ConsoleColor.DarkYellow);
-                    print("Joe: Because our plans aren't really in the best ways. How would we survive a 100+ Meter fall into Stone?");
-                    Console.ReadKey();
-                    textcolour(ConsoleColor.Blue);
-                    print(name + "That was Bob's idea... Not mine");
-                    Console.ReadKey();
-                    textcolour(ConsoleColor.DarkYellow);
-                    print("Joe: God. Bob really... Right im adding him to the call.");
-                    Console.ReadKey();
-                    textcolour(ConsoleColor.Cyan);
-                    print("Bob has been added to the call.");
-                    Console.ReadKey();
-                    print("Bob: What do you want Joe?");
-                    Console.ReadKey();
-                    textcolour(ConsoleColor.DarkYellow);
-                    print("Joe: You know what i want... This plan was pulled out of your-");
-                    textcolour(ConsoleColor.Cyan);
-                    print("Bob: OK OK. Fine. but jumping in is the best option");
-                    Console.ReadKey();
-                    textcolour(ConsoleColor.DarkYellow);
-                    print("Joe: Ok. well we gotta head down to the planning table before we \n can really think of anything else to do.");
-                    Console.ReadKey();
-                    textcolour(ConsoleColor.Cyan);
-                    print("Bob: Alright. i'll meet you down there.");
-                    print("Bob Left the call");
-                    Console.ReadKey();
-                    textcolour(ConsoleColor.DarkYellow);
-                    print("Joe: Got that " + name + "? We'll meet you down there.");
-                    Console.ReadKey();
-                    textcolour(ConsoleColor.Blue);
-                    print(name + ": Got some things i want to do before heading down. see you there.");
-                    print(name + " Left the call");
-                    Console.ReadKey();
-                    textcolour(ConsoleColor.Red);
-                    print("This Game is still under development. You have reached the end of this game so far!");
-                    print("Keep your OS Up to date to recieve updates for this game!");
-
-                }
-            }
 
             //Calculator Area
 
             else if (input == "calc")
             {
-                textcolour(ConsoleColor.Magenta);
-                print("GoCalc Commands");
-                textcolour(ConsoleColor.Blue);
-                print("ADD - Add 2 numbers");
-                print("SUBTRACT - Subtract 2 numbers");
-                print("DIVIDE - Divide 2 numbers");
-                print("MULTIPLY - Multiply 2 numbers");
-                print("SQUARE - Square a number");
-                print("CUBE - Cube a number");
-                print("POWER10 - Make a number to the power of 10");
-                textcolour(ConsoleColor.Green);
+                log(ConsoleColor.Magenta, "GoCalc Commands");
+                log(ConsoleColor.Blue, "ADD - Add 2 numbers");
+                log(ConsoleColor.Blue, "SUBTRACT - Subtract 2 numbers");
+                log(ConsoleColor.Blue, "DIVIDE - Divide 2 numbers");
+                log(ConsoleColor.Blue, "MULTIPLY - Multiply 2 numbers");
+                log(ConsoleColor.Blue, "SQUARE - Square a number");
+                log(ConsoleColor.Blue, "CUBE - Cube a number");
+                log(ConsoleColor.Blue, "POWER10 - Make a number to the power of 10");
             }
             else if (input == "add")
             {
-                print("GoCalc - Addition");
-                print("Whole numbers only !!");
-                print("Enter the first number: ");
+                log(ConsoleColor.Green, "GoCalc - Addition");
+                log(ConsoleColor.Green, "Whole numbers only !!");
+                log(ConsoleColor.Green, "Enter the first number: ");
                 int no1 = Convert.ToInt32(Console.ReadLine());
-                print("Enter the second number: ");
+                log(ConsoleColor.Green, "Enter the second number: ");
                 int no2 = Convert.ToInt32(Console.ReadLine());
-                print("Adding up to");
+                log(ConsoleColor.Green, "Adding up to");
                 int ans = no1 + no2;
             }
             else if (input == "subtract")
             {
-                print("GoCalc - Subtraction");
-                print("Whole numbers only !!");
-                print("Enter the first number: ");
+                log(ConsoleColor.Green, "GoCalc - Subtraction");
+                log(ConsoleColor.Green, "Whole numbers only !!");
+                log(ConsoleColor.Green, "Enter the first number: ");
                 int no1 = Convert.ToInt32(Console.ReadLine());
-                print("Enter the second number: ");
+                log(ConsoleColor.Green, "Enter the second number: ");
                 int no2 = Convert.ToInt32(Console.ReadLine());
-                print("Adding up to");
+                log(ConsoleColor.Green, "Adding up to");
                 int ans = no1 - no2;
             }
             else if (input == "divide")
             {
-                print("GoCalc - Division");
-                print("Whole numbers only !!");
-                print("Enter the first number: ");
+                log(ConsoleColor.Green, "GoCalc - Division");
+                log(ConsoleColor.Green, "Whole numbers only !!");
+                log(ConsoleColor.Green, "Enter the first number: ");
                 int no1 = Convert.ToInt32(Console.ReadLine());
-                print("Enter the second number: ");
+                log(ConsoleColor.Green, "Enter the second number: ");
                 int no2 = Convert.ToInt32(Console.ReadLine());
-                print("Adding up to");
+                log(ConsoleColor.Green, "Adding up to");
                 int ans = no1 / no2;
             }
             else if (input == "multiply")
             {
-                print("GoCalc - Multiplication");
-                print("Whole numbers only !!");
-                print("Enter the first number: ");
+                log(ConsoleColor.Green, "GoCalc - Multiplication");
+                log(ConsoleColor.Green, "Whole numbers only !!");
+                log(ConsoleColor.Green, "Enter the first number: ");
                 int no1 = Convert.ToInt32(Console.ReadLine());
-                print("Enter the second number: ");
+                log(ConsoleColor.Green, "Enter the second number: ");
                 int no2 = Convert.ToInt32(Console.ReadLine());
-                print("Adding up to");
+                log(ConsoleColor.Green, "Adding up to");
                 int ans = no1 * no2;
             }
             else if (input == "square")
             {
-                print("GoCalc - Squaring");
-                print("Whole numbers only !!");
-                print("Enter number to square: ");
+                log(ConsoleColor.Green, "GoCalc - Squaring");
+                log(ConsoleColor.Green, "Whole numbers only !!");
+                log(ConsoleColor.Green, "Enter number to square: ");
                 int no1 = Convert.ToInt32(Console.ReadLine());
                 int ans = no1 * no1;
             }
             else if (input == "cube")
             {
-                print("GoCalc - Cubing");
-                print("Whole numbers only !!");
-                print("Enter number to cube: ");
+                log(ConsoleColor.Green, "GoCalc - Cubing");
+                log(ConsoleColor.Green, "Whole numbers only !!");
+                log(ConsoleColor.Green, "Enter number to cube: ");
                 int no1 = Convert.ToInt32(Console.ReadLine());
                 int ans = no1 * no1 * no1;
             }
             else if (input == "power10")
             {
-                print("GoCalc - To the power of 10");
-                print("Whole numbers only !!");
-                print("Enter number to p10: ");
+                log(ConsoleColor.Green, "GoCalc - To the power of 10");
+                log(ConsoleColor.Green, "Whole numbers only !!");
+                log(ConsoleColor.Green, "Enter number to p10: ");
                 int no1 = Convert.ToInt32(Console.ReadLine());
                 int ans = no1 * no1 * no1 * no1 * no1 * no1 * no1 * no1 * no1 * no1;
             }
@@ -512,58 +385,31 @@ namespace GoOS
             // GoOS Admin
 
             //Disk Only stuff
-            //FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize();
-            //else if (input == "loaddisk")
-            //{
-            //if (!adminconsoledisk)
-            //{
-            //    textcolour(ConsoleColor.Red;
-            //    print("GoOS Admin: Ensure you are using the iso file provided by Owen2k6 on release.");
-            //    print("GoOS Admin: The system will crash if a disk can not be located. ");
-            //    print("GoOS Admin: Press any key to continue");
-            //    Console.ReadKey();
-            //    FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize(true);
-            //    print("GoOS Admin: HardDisk enabled for session");
-            //    adminconsoledisk = true;
-            //    textcolour(ConsoleColor.Green;
-            //}
-            //if (adminconsoledisk)
-            //{
-            //    textcolour(ConsoleColor.Red;
-            //    print("GoOS Admin: System Already has hard disk loaded");
-            //    textcolour(ConsoleColor.Green;
-            //}
-            //}
             else if (input == "diskcheck")
             {
                 if (!adminconsoledisk)
                 {
-                    textcolour(ConsoleColor.Red);
-                    print("GoOS Admin: There is currently no disk loaded to the system.");
-                    textcolour(ConsoleColor.Green);
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
                 }
                 if (adminconsoledisk)
                 {
                     try
                     {
-                        textcolour(ConsoleColor.Red);
-                        print("GoOS Admin: Showing Disk Information for 0:\\");
+                        log(ConsoleColor.Red, "GoOS Admin: Showing Disk Information for 0:\\");
                         var available_space = FS.GetAvailableFreeSpace(@"0:\");
                         var total_space = FS.GetTotalSize(@"0:\");
                         var label = FS.GetFileSystemLabel(@"0:\");
                         var fs_type = FS.GetFileSystemType(@"0:\");
-                        print("Available Free Space: " + available_space + "(" + (available_space / 1e+9) + "GiB)");
-                        print("Total Space on disk: " + total_space + "(" + (total_space / 1e+9) + "GiB)");
-                        print("Disk Label: " + label);
-                        print("File System Type: " + fs_type);
-                        textcolour(ConsoleColor.Green);
+                        log(ConsoleColor.Red, "Available Free Space: " + available_space + "(" + (available_space / 1e+9) + "GiB)");
+                        log(ConsoleColor.Red, "Total Space on disk: " + total_space + "(" + (total_space / 1e+9) + "GiB)");
+                        log(ConsoleColor.Red, "Disk Label: " + label);
+                        log(ConsoleColor.Red, "File System Type: " + fs_type);
                     }
                     catch (Exception e)
                     {
-                        print("GoOS Admin: Error Loading disk! You might have disconnected the drive!");
-                        print("GoOS Admin: For system security, we have disabled all Drive functions.");
+                        log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                        log(ConsoleColor.Red, "GoOS Admin: For system security, we have disabled all Drive functions.");
                         adminconsoledisk = false;
-                        textcolour(ConsoleColor.Green);
                     }
                 }
             }
@@ -571,28 +417,23 @@ namespace GoOS
             {
                 if (!adminconsoledisk)
                 {
-                    textcolour(ConsoleColor.Red);
-                    print("GoOS Admin: There is currently no disk loaded to the system.");
-                    textcolour(ConsoleColor.Green);
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
                 }
                 if (adminconsoledisk)
                 {
                     try
                     {
-                        textcolour(ConsoleColor.Red);
                         var directory_list = Directory.GetFiles(@"0:\");
                         foreach (var file in directory_list)
                         {
-                            print(file);
+                            log(ConsoleColor.Red, file);
                         }
-                        textcolour(ConsoleColor.Green);
                     }
                     catch (Exception e)
                     {
-                        print("GoOS Admin: Error Loading disk! You might have disconnected the drive!");
-                        print("GoOS Admin: For system security, we have disabled all Drive functions.");
+                        log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                        log(ConsoleColor.Red, "GoOS Admin: For system security, we have disabled all Drive functions.");
                         adminconsoledisk = false;
-                        textcolour(ConsoleColor.Green);
                     }
                 }
             }
@@ -600,44 +441,35 @@ namespace GoOS
             {
                 if (!adminconsoledisk)
                 {
-                    textcolour(ConsoleColor.Red);
-                    print("GoOS Admin: There is currently no disk loaded to the system.");
-                    textcolour(ConsoleColor.Green);
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
                 }
                 if (adminconsoledisk)
                 {
                     textcolour(ConsoleColor.White);
                     MIV.StartMIV();
-                    textcolour(ConsoleColor.Green);
                 }
             }
             else if (input == "del")
             {
                 if (!adminconsoledisk)
                 {
-                    textcolour(ConsoleColor.Red);
-                    print("GoOS Admin: There is currently no disk loaded to the system.");
-                    textcolour(ConsoleColor.Green);
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
                 }
                 if (adminconsoledisk)
                 {
-                    textcolour(ConsoleColor.Red);
-                    print("GoOS Admin: Enter file name");
+                    log(ConsoleColor.Red, "GoOS Admin: Enter file name");
                     textcolour(ConsoleColor.Yellow);
                     write("FilePath: 0:\\");
                     String inputaman = Console.ReadLine();
                     try
                     {
                         File.Delete(@"0:\" + inputaman);
-                        textcolour(ConsoleColor.Blue);
-                        print("GoOS Admin: File Deleted!");
-                        textcolour(ConsoleColor.Green);
+                        log(ConsoleColor.Blue, "GoOS Admin: File Deleted!");
                     }
                     catch (Exception e)
                     {
-                        print("Please send the following to GoOS Developers");
-                        print(e.ToString());
-                        textcolour(ConsoleColor.Green);
+                        log(ConsoleColor.Red, "Please send the following to GoOS Developers");
+                        log(ConsoleColor.Red, e.ToString());
                     }
                 }
             }
@@ -645,16 +477,13 @@ namespace GoOS
             {
                 if (!adminconsoledisk)
                 {
-                    textcolour(ConsoleColor.Red);
-                    print("GoOS Admin: There is currently no disk loaded to the system.");
-                    textcolour(ConsoleColor.Green);
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
                 }
                 if (adminconsoledisk)
                 {
-                    textcolour(ConsoleColor.Red);
                     var label = FS.GetFileSystemLabel(@"0:\");
-                    print("GoOS Admin: Relabel disk");
-                    print("GoOS Admin: Press ENTER to leave the label as \"" + label + "\"");
+                    log(ConsoleColor.Red, "GoOS Admin: Relabel disk");
+                    log(ConsoleColor.Red, "GoOS Admin: Press ENTER to leave the label as \"" + label + "\"");
                     textcolour(ConsoleColor.Yellow);
                     write("New Label for 0:\\: ");
                     String inputamana = Console.ReadLine();
@@ -665,15 +494,12 @@ namespace GoOS
                     try
                     {
                         FS.SetFileSystemLabel(@"0:\", inputamana);
-                        textcolour(ConsoleColor.Blue);
-                        print("GoOS Admin: Drive Label modified from " + label + " to " + inputamana);
-                        textcolour(ConsoleColor.Green);
+                        log(ConsoleColor.Blue, "GoOS Admin: Drive Label modified from " + label + " to " + inputamana);
                     }
                     catch (Exception e)
                     {
-                        print("Please send the following to GoOS Developers");
-                        print(e.ToString());
-                        textcolour(ConsoleColor.Green);
+                        log(ConsoleColor.Red, "Please send the following to GoOS Developers");
+                        log(ConsoleColor.Red, e.ToString());
                     }
                 }
             }
@@ -681,29 +507,24 @@ namespace GoOS
             {
                 if (!adminconsoledisk)
                 {
-                    textcolour(ConsoleColor.Red);
-                    print("GoOS Admin: There is currently no disk loaded to the system.");
-                    textcolour(ConsoleColor.Green);
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
                 }
                 if (adminconsoledisk)
                 {
                     using (var xServer = new FtpServer(FS, "0:\\"))
                     {
                         /** Listen for new FTP client connections **/
-                        print("GoOS Admin: Listening on " + NetworkConfiguration.CurrentAddress.ToString() + ":21");
-                        print("Use PLAIN configurations with no login information.");
-                        print("FTP MODE ENABLED. REBOOT TO DISABLE");
+                        log(ConsoleColor.Blue, "GoOS Admin: Listening on " + NetworkConfiguration.CurrentAddress.ToString() + ":21");
+                        log(ConsoleColor.Blue, "Use PLAIN configurations with no login information.");
+                        log(ConsoleColor.Blue, "FTP MODE ENABLED. REBOOT TO DISABLE");
                         xServer.Listen();
                     }
                 }
             }
             else if (input == "ipconf")
             {
-
-                textcolour(ConsoleColor.Red);
-                print("GoOS Admin: Showing Internet Information");
-                print(NetworkConfiguration.CurrentAddress.ToString());
-                textcolour(ConsoleColor.Green);
+                log(ConsoleColor.Red, "GoOS Admin: Showing Internet Information");
+                log(ConsoleColor.Red, NetworkConfiguration.CurrentAddress.ToString());
             }
 
             //smth cool bro
@@ -711,9 +532,7 @@ namespace GoOS
             else if (input == "gui") {
             if (!adminconsoledisk)
             {
-                textcolour(ConsoleColor.Red);
-                print("GoOS Admin: There is currently no disk loaded to the system.");
-                textcolour(ConsoleColor.Green);
+                log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
             }
             if (adminconsoledisk)
             {
@@ -752,9 +571,8 @@ namespace GoOS
                 textcolour(ConsoleColor.Red);
                 write("is not a command");
                 textcolour(ConsoleColor.Magenta);
-                print("");
-                print("Type HELP for a list of commands");
-                textcolour(ConsoleColor.Green);
+                log(ConsoleColor.Green, "");
+                log(ConsoleColor.Magenta, "Type HELP for a list of commands");
             }
             textcolour(ConsoleColor.Green);
         }
