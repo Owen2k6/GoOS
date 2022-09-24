@@ -499,27 +499,27 @@ namespace GoOS
                             var content = File.ReadAllLines(@"0:\" + inputaman);
                             string theysaid = null;
                             int count = 1;
-                            String a;
-                            String b;
-                            String c;
-                            String d;
-                            String e;
-                            String f;
-                            String g;
-                            String h;
-                            String i;
-                            String j;
+                            String a = null;
+                            String b = null;
+                            String c = null;
+                            String d = null;
+                            String e = null;
+                            String f = null;
+                            String g = null;
+                            String h = null;
+                            String i = null;
+                            String j = null;
                             foreach (string line in content)
                             {
                                 count = count + 1;
                                 //log(ConsoleColor.Magenta, "LINE FOUND: CONTENT: " + line);
                                 if (line.StartsWith("#"))
                                 {
-                                    
+
                                 }
                                 if (line.StartsWith(""))
                                 {
-                                    
+
                                 }
                                 if (line.StartsWith("print="))
                                 {
@@ -549,11 +549,137 @@ namespace GoOS
                                     }
 
                                 }
+                                if (line.StartsWith("if1"))
+                                {
+                                    //version by MrDumbrava#9459
+                                    string contentOfLine = line;
+                                    string[] contents = contentOfLine.Split('=');
+                                    if (contents[1] == "{getInput}")
+                                    {
+                                        if (input == contents[2])
+                                        {
+                                            Console.WriteLine(input + " equals object 2");
+                                        }
+                                    }
+                                    else if (contents[2] == "{getInput}")
+                                    {
+                                        if (contents[2] == input)
+                                        {
+                                            Console.WriteLine("Object 1 equals " + input);
+                                        }
+                                    }
+                                }
+                                if (line.StartsWith("if"))
+                                {
+                                    //version by GoOS God
+                                    //i actually dont know
+                                    if (line.Split("=")[1] == "1" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "2" || line.Split("=")[1] == "2" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "1")
+                                    {
+                                        if (a == b)
+                                        {
+                                            log(ConsoleColor.Magenta, line.Split("=")[4]);
+                                        }
+                                        if (a != b)
+                                        {
+
+                                            if (line.Split("=")[5].Equals("end"))
+                                            {
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                log(ConsoleColor.Magenta, line.Split("=")[5]);
+                                            }
+                                        }
+
+                                    }
+                                    if (line.Split("=")[1] == "3" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "4" || line.Split("=")[1] == "4" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "3")
+                                    {
+                                        if (c == d)
+                                        {
+                                            log(ConsoleColor.Magenta, line.Split("=")[4]);
+                                        }
+                                        if (c != d)
+                                        {
+
+                                            if (line.Split("=")[5].Equals("end"))
+                                            {
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                log(ConsoleColor.Magenta, line.Split("=")[5]);
+                                            }
+                                        }
+
+                                    }
+                                    if (line.Split("=")[1] == "5" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "6" || line.Split("=")[1] == "6" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "5")
+                                    {
+                                        if (e == f)
+                                        {
+                                            log(ConsoleColor.Magenta, line.Split("=")[4]);
+                                        }
+                                        if (e != f)
+                                        {
+
+                                            if (line.Split("=")[5].Equals("end"))
+                                            {
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                log(ConsoleColor.Magenta, line.Split("=")[5]);
+                                            }
+                                        }
+
+                                    }
+                                    if (line.Split("=")[1] == "7" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "8" || line.Split("=")[1] == "8" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "7")
+                                    {
+                                        if (g == h)
+                                        {
+                                            log(ConsoleColor.Magenta, line.Split("=")[4]);
+                                        }
+                                        if (g != h)
+                                        {
+
+                                            if (line.Split("=")[5].Equals("end"))
+                                            {
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                log(ConsoleColor.Magenta, line.Split("=")[5]);
+                                            }
+                                        }
+
+                                    }
+                                    if (line.Split("=")[1] == "9" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "10" || line.Split("=")[1] == "10" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "9")
+                                    {
+                                        if (i == j)
+                                        {
+                                            log(ConsoleColor.Magenta, line.Split("=")[4]);
+                                        }
+                                        if (i != j)
+                                        {
+
+                                            if (line.Split("=")[5].Equals("end"))
+                                            {
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                log(ConsoleColor.Magenta, line.Split("=")[5]);
+                                            }
+                                        }
+
+                                    }
+
+                                }
                                 if (line.StartsWith("variable="))
                                 {
                                     if (line.Split("=")[1] == "1")
                                     {
-                                        if(line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
                                             log(ConsoleColor.Red, "ERROR ON LINE " + count);
                                             log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
@@ -567,7 +693,7 @@ namespace GoOS
                                     }
                                     if (line.Split("=")[1] == "2")
                                     {
-                                        if(line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
                                             log(ConsoleColor.Red, "ERROR ON LINE " + count);
                                             log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
@@ -579,9 +705,9 @@ namespace GoOS
                                             b = gethandled;
                                         }
                                     }
-                                    if (line.Split("=")[1] == "2")
+                                    if (line.Split("=")[1] == "3")
                                     {
-                                        if(line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
                                             log(ConsoleColor.Red, "ERROR ON LINE " + count);
                                             log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
@@ -595,7 +721,7 @@ namespace GoOS
                                     }
                                     if (line.Split("=")[1] == "4")
                                     {
-                                        if(line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
                                             log(ConsoleColor.Red, "ERROR ON LINE " + count);
                                             log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
@@ -609,7 +735,7 @@ namespace GoOS
                                     }
                                     if (line.Split("=")[1] == "5")
                                     {
-                                        if(line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
                                             log(ConsoleColor.Red, "ERROR ON LINE " + count);
                                             log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
@@ -623,7 +749,7 @@ namespace GoOS
                                     }
                                     if (line.Split("=")[1] == "6")
                                     {
-                                        if(line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
                                             log(ConsoleColor.Red, "ERROR ON LINE " + count);
                                             log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
@@ -637,7 +763,7 @@ namespace GoOS
                                     }
                                     if (line.Split("=")[1] == "7")
                                     {
-                                        if(line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
                                             log(ConsoleColor.Red, "ERROR ON LINE " + count);
                                             log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
@@ -651,7 +777,7 @@ namespace GoOS
                                     }
                                     if (line.Split("=")[1] == "8")
                                     {
-                                        if(line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
                                             log(ConsoleColor.Red, "ERROR ON LINE " + count);
                                             log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
@@ -665,7 +791,7 @@ namespace GoOS
                                     }
                                     if (line.Split("=")[1] == "9")
                                     {
-                                        if(line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
                                             log(ConsoleColor.Red, "ERROR ON LINE " + count);
                                             log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
@@ -679,7 +805,7 @@ namespace GoOS
                                     }
                                     if (line.Split("=")[1] == "10")
                                     {
-                                        if(line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
                                             log(ConsoleColor.Red, "ERROR ON LINE " + count);
                                             log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
