@@ -498,11 +498,29 @@ namespace GoOS
                         {
                             var content = File.ReadAllLines(@"0:\" + inputaman);
                             string theysaid = null;
-                            int count = 0;
+                            int count = 1;
+                            String a;
+                            String b;
+                            String c;
+                            String d;
+                            String e;
+                            String f;
+                            String g;
+                            String h;
+                            String i;
+                            String j;
                             foreach (string line in content)
                             {
                                 count = count + 1;
                                 //log(ConsoleColor.Magenta, "LINE FOUND: CONTENT: " + line);
+                                if (line.StartsWith("#"))
+                                {
+                                    
+                                }
+                                if (line.StartsWith(""))
+                                {
+                                    
+                                }
                                 if (line.StartsWith("print="))
                                 {
                                     string thingtosay = line.Replace("print=", "");
@@ -528,6 +546,150 @@ namespace GoOS
                                         write(addon);
                                         textcolour(ConsoleColor.Blue);
                                         theysaid = Console.ReadLine();
+                                    }
+
+                                }
+                                if (line.StartsWith("variable="))
+                                {
+                                    if (line.Split("=")[1] == "1")
+                                    {
+                                        if(line.Split("=")[3] == null || line.Split("=")[3] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[3].Replace("{getInput}", theysaid);
+                                            a = gethandled;
+                                        }
+                                    }
+                                    if (line.Split("=")[1] == "2")
+                                    {
+                                        if(line.Split("=")[3] == null || line.Split("=")[3] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[3].Replace("{getInput}", theysaid);
+                                            b = gethandled;
+                                        }
+                                    }
+                                    if (line.Split("=")[1] == "3")
+                                    {
+                                        if(line.Split("=")[3] == null || line.Split("=")[3] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[3].Replace("{getInput}", theysaid);
+                                            c = gethandled;
+                                        }
+                                    }
+                                    if (line.Split("=")[1] == "4")
+                                    {
+                                        if(line.Split("=")[3] == null || line.Split("=")[3] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[3].Replace("{getInput}", theysaid);
+                                            d = gethandled;
+                                        }
+                                    }
+                                    if (line.Split("=")[1] == "5")
+                                    {
+                                        if(line.Split("=")[3] == null || line.Split("=")[3] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[3].Replace("{getInput}", theysaid);
+                                            e = gethandled;
+                                        }
+                                    }
+                                    if (line.Split("=")[1] == "6")
+                                    {
+                                        if(line.Split("=")[3] == null || line.Split("=")[3] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[3].Replace("{getInput}", theysaid);
+                                            f = gethandled;
+                                        }
+                                    }
+                                    if (line.Split("=")[1] == "7")
+                                    {
+                                        if(line.Split("=")[3] == null || line.Split("=")[3] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[3].Replace("{getInput}", theysaid);
+                                            g = gethandled;
+                                        }
+                                    }
+                                    if (line.Split("=")[1] == "8")
+                                    {
+                                        if(line.Split("=")[3] == null || line.Split("=")[3] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[3].Replace("{getInput}", theysaid);
+                                            h = gethandled;
+                                        }
+                                    }
+                                    if (line.Split("=")[1] == "9")
+                                    {
+                                        if(line.Split("=")[3] == null || line.Split("=")[3] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[3].Replace("{getInput}", theysaid);
+                                            i = gethandled;
+                                        }
+                                    }
+                                    if (line.Split("=")[1] == "10")
+                                    {
+                                        if(line.Split("=")[3] == null || line.Split("=")[3] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[3].Replace("{getInput}", theysaid);
+                                            j = gethandled;
+                                        }
                                     }
 
                                 }
