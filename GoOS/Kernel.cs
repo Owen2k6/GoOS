@@ -14,9 +14,6 @@ using Cosmos.Core.Memory;
 using System.Drawing;
 using IL2CPU.API.Attribs;
 using System.Text;
-using CosmosTTF;
-using TechOS.System;
-using TechOS.GUI;
 using Cosmos.System.FileSystem.VFS;
 using Cosmos.System.FileSystem;
 using Cosmos.Core;
@@ -881,32 +878,8 @@ namespace GoOS
 
             else if (input == "gui")
             {
-                if (!adminconsoledisk)
-                {
-                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
-                }
-                if (adminconsoledisk)
-                {
-                    // backup canvases
-                    //
-                    // canvas = new VBECanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
-                    // canvas = new SVGAIICanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
-                    canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
-                    Sys.MouseManager.ScreenWidth = 1012;
-                    Sys.MouseManager.ScreenHeight = 768;
-                    while (true)
-                    {
-                        Heap.Collect();
-                        canvas.Clear(Color.Green);
-                        //guicanvas.DrawImage(wallpaper, 0, 0);
-                        TextBox.textbox(canvas, 4, 4, 0, 0, "GoOS GUI");
-                        TextBox.textbox(canvas, 12, 12, 0, 0, "24092022");
-                        TextBox.textbox(canvas, 40, 40, 60, 24, "24092022");
-                        Cursor.DrawCursor(canvas, Sys.MouseManager.X, Sys.MouseManager.Y);
-
-                        canvas.Display();
-                    }
-                }
+                
+                
 
 
             }
