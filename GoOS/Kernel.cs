@@ -806,6 +806,55 @@ namespace GoOS
                                     }
 
                                 }
+                                if (line.StartsWith("randomnum"))
+                                {
+                                    String Num1 = line.Split("=")[1];
+                                    String Num2 = line.Split("=")[2];
+                                    String varstore = line.Split("=")[3];
+                                    int Num1int = Convert.ToInt32(Num1);
+                                    int Num2int = Convert.ToInt32(Num2);
+                                    if (varstore == "1")
+                                    {
+                                        a = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+                                    if (varstore == "2")
+                                    {
+                                        b = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+                                    if (varstore == "3")
+                                    {
+                                        c = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+                                    if (varstore == "4")
+                                    {
+                                        d = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+                                    if (varstore == "5")
+                                    {
+                                        e = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+                                    if (varstore == "6")
+                                    {
+                                        f = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+                                    if (varstore == "7")
+                                    {
+                                        g = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+                                    if (varstore == "8")
+                                    {
+                                        h = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+                                    if (varstore == "9")
+                                    {
+                                        i = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+                                    if (varstore == "10")
+                                    {
+                                        j = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+
+                                }
 
                             }
 
@@ -878,8 +927,8 @@ namespace GoOS
 
             else if (input == "gui")
             {
-                
-                
+
+
 
 
             }
