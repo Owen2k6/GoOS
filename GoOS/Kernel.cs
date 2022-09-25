@@ -47,6 +47,11 @@ namespace GoOS
 
     public class Kernel : Sys.Kernel
     {
+        //Vars for OS
+        public string version = "1.4";
+        public string BuildType = "Release";
+
+
         //GoOS Core
         public void print(string str)
         {
@@ -172,12 +177,12 @@ namespace GoOS
             textcolour(ConsoleColor.DarkRed);
             write("  GGGGG      GG           GGGGGGGGGGGGGGGGGGG      ");
             textcolour(ConsoleColor.White);
-            write("Version 1.4");
+            write("Version "+version);
             log(ConsoleColor.Green, "");
             textcolour(ConsoleColor.Magenta);
             write("  GGGGG      GG           GGGGGGGGGGGGGGGGGGG      ");
             textcolour(ConsoleColor.White);
-            write("Development Channel");
+            write("Welcome to GoOS");
             log(ConsoleColor.Green, "");
             //Ok now continue
             log(ConsoleColor.DarkMagenta, "  GGGGGG     GGGG         GGGGGGGGGGGGGGGGGG       ");
@@ -239,9 +244,8 @@ namespace GoOS
                 log(ConsoleColor.Magenta, "Goplex Operating System");
                 log(ConsoleColor.Blue, "GoOS is owned by Goplex Studios.");
                 log(ConsoleColor.Red, "SYSTEM INFOMATION:");
-                log(ConsoleColor.Red, "GoOS Version 1.4");
-                log(ConsoleColor.Red, "Owen2k6 Api version: 0.15");
-                log(ConsoleColor.Red, "Branch: Development");
+                log(ConsoleColor.Red, "GoOS Version "+version);
+                log(ConsoleColor.Red, "Build Type: "+BuildType);
                 log(ConsoleColor.White, "Copyright 2022 (c) Owen2k6");
             }
             else if (input == "help")
