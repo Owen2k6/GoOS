@@ -556,6 +556,23 @@ namespace GoOS
                                     }
 
                                 }
+                                if (line.StartsWith("stop"))
+                                {
+                                    if (line == "stop=")
+                                    {
+                                        textcolour(ConsoleColor.Blue);
+                                        Console.ReadKey();
+                                    }
+                                    else
+                                    {
+                                        String addon = line.Replace("stop=", "");
+                                        textcolour(ConsoleColor.DarkRed);
+                                        write(addon);
+                                        textcolour(ConsoleColor.Blue);
+                                        Console.ReadKey();
+                                    }
+
+                                }
                                 if (line.StartsWith("if"))
                                 {
                                     //version by GoOS God
@@ -571,12 +588,11 @@ namespace GoOS
 
                                             if (line.Split("=")[5].Equals("end"))
                                             {
+
                                                 break;
                                             }
-                                            else
-                                            {
-                                                log(ConsoleColor.Magenta, line.Split("=")[5]);
-                                            }
+                                            log(ConsoleColor.Magenta, line.Split("=")[5]);
+
                                         }
 
                                     }
@@ -857,13 +873,14 @@ namespace GoOS
                                 }
 
                             }
+                            log(ConsoleColor.Yellow, "Application.exit");
 
                         }
                     }
                     catch (Exception e)
                     {
-                        log(ConsoleColor.Red, "This is an error created by the run system meaning there is something wrong with the GoCode executer");
-                        log(ConsoleColor.Red, "This must be reported to GoOS Devs asap!");
+                        log(ConsoleColor.Red, "GoOS Admin has killed this program as an error has occoured");
+                        log(ConsoleColor.Red, "Report this to the app developer or the GoOS Devs for assistance.");
                         log(ConsoleColor.Red, "Screenshot this stack trace:");
                         log(ConsoleColor.Red, e.ToString());
                     }
