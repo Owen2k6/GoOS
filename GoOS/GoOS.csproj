@@ -79,11 +79,12 @@
         <Profile>VMware</Profile>
         <Description>Use VMware Player or Workstation to deploy and debug.</Description>
         <PxeInterface>192.168.0.8</PxeInterface>
-        <CompressionType>Gzip</CompressionType>
+        <CompressionType>None</CompressionType>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+      <Optimize>True</Optimize>
     </PropertyGroup>
 
     <ItemGroup>
