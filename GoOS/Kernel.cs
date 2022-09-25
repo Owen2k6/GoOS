@@ -17,7 +17,6 @@ using System.Text;
 using Cosmos.System.FileSystem.VFS;
 using Cosmos.System.FileSystem;
 using Cosmos.Core;
-using Cosmos.Core.Memory;
 using CosmosFtpServer;
 using Cosmos.System.Network.IPv4.UDP;
 using System.Diagnostics;
@@ -562,6 +561,7 @@ namespace GoOS
                                     {
                                         textcolour(ConsoleColor.Blue);
                                         Console.ReadKey();
+                                        Console.WriteLine();
                                     }
                                     else
                                     {
@@ -570,6 +570,7 @@ namespace GoOS
                                         write(addon);
                                         textcolour(ConsoleColor.Blue);
                                         Console.ReadKey();
+                                        Console.WriteLine();
                                     }
 
                                 }
@@ -870,6 +871,10 @@ namespace GoOS
                                         j = rnd.Next(Num1int, Num2int).ToString();
                                     }
 
+                                }
+                                if (line.StartsWith("clear"))
+                                {
+                                    Console.Clear();
                                 }
 
                             }
