@@ -1,3 +1,5 @@
-# GoOS-Source
-The source code of GoOS.
-Some factors are remaining closed source. (These are mainly Backend things)
+# GoOS
+GoplexOS man
+
+
+We have a lot of work to put in this, but it's getting somewhere!
