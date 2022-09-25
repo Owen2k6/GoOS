@@ -1,33 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Sys = Cosmos.System;
-using Cosmos.Core;
+﻿using Cosmos.HAL;
 using Cosmos.System.Graphics;
-using Cosmos.System.FileSystem;
-using Cosmos.System.FileSystem.VFS;
-using Cosmos.Debug.Kernel;
-using Cosmos.HAL.Drivers.PCI.Video;
-using Cosmos.System.Network;
-using System.IO;
-using Cosmos.System.Network.IPv4.UDP.DHCP;
-using Cosmos.System.Network.IPv4.TCP;
 using Cosmos.System.Network.Config;
-using Cosmos.HAL;
 using Cosmos.System.Network.IPv4;
+using Cosmos.System.Network.IPv4.TCP;
+using Cosmos.System.Network.IPv4.UDP.DHCP;
 using Cosmos.System.Network.IPv4.UDP.DNS;
-using Cosmos.System.Network.IPv4.TCP.FTP;
-using Cosmos;
-using Cosmos.HAL.Drivers.USB;
-using Cosmos.HAL.Drivers.PCI;
-using Cosmos.HAL.Drivers;
-using Cosmos.HAL.Network;
-using Cosmos.Common.Extensions;
-using Cosmos.Common;
+using System;
+using System.Collections.Generic;
+using Sys = Cosmos.System;
+using System.IO;
+using System.Linq.Expressions;
 using Cosmos.Core.Memory;
-using Cosmos.Core.IOGroup;
 using System.Drawing;
-using Cosmos.System.Graphics;
+using IL2CPU.API.Attribs;
+using System.Text;
+using Cosmos.System.FileSystem.VFS;
+using Cosmos.System.FileSystem;
+using Cosmos.Core;
+using CosmosFtpServer;
+using Cosmos.System.Network.IPv4.UDP;
+using System.Diagnostics;
+using GoOS;
+using Cosmos.HAL.BlockDevice.Registers;
+using System.Threading;
 
 //Goplex Studios - GoOS
 //Copyright (C) 2022  Owen2k6
@@ -47,8 +42,60 @@ using Cosmos.System.Graphics;
 
 namespace GoOS
 {
+
+
+
     public class Kernel : Sys.Kernel
     {
+        //GoOS Core
+        public void print(string str)
+        {
+            Console.WriteLine(str);
+        }
+        public void log(System.ConsoleColor colour, string str)
+        {
+            Console.ForegroundColor = colour;
+            Console.WriteLine(str);
+        }
+        public void write(string str)
+        {
+            Console.Write(str);
+        }
+        public void textcolour(System.ConsoleColor colour)
+        {
+            Console.ForegroundColor = colour;
+        }
+        public void highlightcolour(System.ConsoleColor colour)
+        {
+            Console.BackgroundColor = colour;
+        }
+        public void sleep(int time)
+        {
+            Thread.Sleep(time);
+        }
+        //Core end
+
+
+
+
+        //[ManifestResourceStream(ResourceName = "Wallpaper.bmp")]
+        //public static byte[] Wallpaper;
+        //public static Bitmap wallpaper = new Bitmap(Wallpaper);
+        public static Canvas canvas;
+
+
+        private Boolean adminconsoledisk = false;
+
+
+        //Login Data
+        private Boolean loginsystemenabled = false;
+        private String username = null;
+        private String password = null;
+
+
+
+        private static Sys.FileSystem.CosmosVFS FS;
+        public static string file;
 
         private static string request = string.Empty;
         private static TcpClient tcpc = new TcpClient(80);
@@ -66,291 +113,16 @@ namespace GoOS
         public List<int[]> snake;
         public List<int> food;
         public int randomNumber;
+        public int snakeCount;
         Random rnd = new Random();
 
-        /* SNAKE FUNCS */
-        public string getSnakeScore()
-        {
-            if (snake.Count < 10)
-            {
-                return snake.Count + "   ";
-            }
-            else if (snake.Count < 100)
-            {
-                return snake.Count + "  ";
-            }
-            else if (snake.Count < 1000)
-            {
-                return snake.Count + " ";
-            }
-            else
-            {
-                return snake.Count + "";
-            }
-        }
-
-        public void updatePosotion()
-        {
-            List<int[]> tmp = new List<int[]>();
-
-            foreach (int[] point in snake)
-            {
-                switch (point[1])
-                {
-                    case 1:
-                        point[0] = point[0] - 1;
-                        break;
-                    case 2:
-                        point[0] = point[0] + 80;
-                        break;
-                    case 3:
-                        point[0] = point[0] + 1;
-                        break;
-                    case 4:
-                        point[0] = point[0] - 80;
-                        break;
-                    default:
-                        break;
-                }
-                tmp.Add(point);
-            }
-            snake = tmp;
-        }
-
-        public void changeArray()
-        {
-            for (int i = 0; i < matrix.Length; i++)
-            {
-                matrix[i] = 0;
-            }
-
-            foreach (int[] point in snake)
-            {
-                matrix[point[0]] = 3;
-            }
-
-            foreach (int point in food)
-            {
-                matrix[point] = 2;
-            }
-
-            for (int i = 0; i < matrix.Length; i++)
-            {
-                if (i <= 79 && i >= 0)
-                {
-                    matrix[i] = 1;
-                }
-                else if (i <= 1760 && i >= 1679)
-                {
-                    matrix[i] = 1;
-                }
-                else if (i % 80 == 0)
-                {
-                    matrix[i] = 1;
-                }
-
-                else if (i % 80 == 79)
-                {
-                    matrix[i] = 1;
-                }
-            }
-        }
-
-        public Boolean gameover()
-        {
-            int head = snake[0][0];
-            for (int i = 1; i < snake.Count; i++)
-            {
-                if (head == snake[i][0])
-                {
-                    return true;
-                }
-            }
-            if (head % 80 == 79 || head % 80 == 0 || head <= 1760 && head >= 1679 || head <= 79 && head >= 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public void printGame()
-        {
-            for (int i = 0; i < matrix.Length; i++)
-            {
-                if (gameover() && i == 585)
-                {
-                    Console.Write("###############################");
-                    i = i + 30;
-                }
-                else if (gameover() && i == 665)
-                {
-                    Console.Write("###############################");
-                    i = i + 30;
-                }
-                else if (gameover() && i == 745)
-                {
-                    Console.Write("####                       ####");
-                    i = i + 30;
-                }
-                else if (gameover() && i == 825)
-                {
-                    Console.Write("####       GAMEOVER        ####");
-                    i = i + 30;
-                }
-                else if (gameover() && i == 905)
-                {
-                    Console.Write("####      Score: " + getSnakeScore() + "      ####");
-                    i = i + 30;
-                }
-                else if (gameover() && i == 985)
-                {
-                    Console.Write("####                       ####");
-                    i = i + 30;
-                }
-                else if (gameover() && i == 1065)
-                {
-                    Console.Write("###############################");
-                    i = i + 30;
-                }
-                else if (gameover() && i == 1145)
-                {
-                    Console.Write("###############################");
-                    i = i + 30;
-                }
-                else if (matrix[i] == 1)
-                {
-                    Console.Write("#");
-                }
-                else if (matrix[i] == 2)
-                {
-                    Console.Write("$");
-                }
-                else if (matrix[i] == 3)
-                {
-                    Console.Write("*");
-                }
-                else
-                {
-                    Console.Write(" ");
-                }
-            }
-
-            Console.Write("#  Current score: " + getSnakeScore() + "      Exit game: ESC button      Restart game: R button  #");
-            Console.Write("################################################################################");
-        }
-
-        public void delay(int time)
-        {
-            for (int i = 0; i < time; i++) ;
-        }
-
-        public int xy2p(int x, int y)
-        {
-            return y * 80 + x;
-        }
-
-        public int randomFood()
-        {
-            int rand = rnd.Next(81, 1700);
-            if (rand != randomNumber)
-            {
-                randomNumber = rand;
-                return rand;
-            }
-            else
-            {
-                return 1400;
-            }
-        }
-
-        public void configSnake()
-        {
-            matrix = new int[1760];
-            commands = new List<int[]>();
-            snake = new List<int[]>();
-            food = new List<int>();
-            randomNumber = 0;
-            snake.Add(new int[2] { xy2p(10, 10), 3 });
-            changeArray();
-            food.Add(randomFood());
-        }
-
-        public void updateDirections()
-        {
-            List<int[]> tmp = new List<int[]>();
-            foreach (int[] com in commands)
-            {
-                if (com[1] < snake.Count)
-                {
-                    snake[com[1]][1] = com[0];
-                    com[1] = com[1] + 1;
-                    tmp.Add(com);
-                }
-            }
-            commands = tmp;
-        }
-
-        public void checkIfTouchFood()
-        {
-            List<int> foodtmp = new List<int>();
-            foreach (int pos in food)
-            {
-                if (snake[0][0] == pos)
-                {
-                    foodtmp.Add(randomFood());
-                    int tmp1 = snake[snake.Count - 1][0];
-                    int tmp2 = snake[snake.Count - 1][1];
-                    if (tmp2 == 1)
-                    {
-                        tmp1 = tmp1 + 1;
-                    }
-                    else if (tmp2 == 2)
-                    {
-                        tmp1 = tmp1 - 80;
-                    }
-                    else if (tmp2 == 3)
-                    {
-                        tmp1 = tmp1 - 1;
-                    }
-                    else if (tmp2 == 4)
-                    {
-                        tmp1 = tmp1 + 80;
-                    }
-                    snake.Add(new int[] { tmp1, tmp2 });
-                }
-                else
-                {
-                    foodtmp.Add(pos);
-                }
-            }
-            food = foodtmp;
-        }
-
-        public void printLogo()
-        {
-            Console.WriteLine(); Console.WriteLine(); Console.WriteLine(); Console.WriteLine(); Console.WriteLine();
-            Console.WriteLine(); Console.WriteLine(); Console.WriteLine(); Console.WriteLine(); Console.WriteLine();
-            Console.WriteLine("  #####                               ");
-            Console.WriteLine(" #     # #    #   ##   #    # ######  ");
-            Console.WriteLine(" #       ##   #  #  #  #   #  #       ");
-            Console.WriteLine("  #####  # #  # #    # ####   #####   ");
-            Console.WriteLine("       # #  # # ###### #  #   #       ");
-            Console.WriteLine(" #     # #   ## #    # #   #  #       ");
-            Console.WriteLine("  #####  #    # #    # #    # ######  ");
-            Console.WriteLine("         Created by Denis Bartashevich");
-            Console.WriteLine("    Imported into GoOS Core by Owen2k6");
-            Console.WriteLine("");
-
-        }
         protected override void BeforeRun()
         {
+
             try
             {
                 NetworkDevice nic = NetworkDevice.GetDeviceByName("eth0"); //get network device by name
-                IPConfig.Enable(nic, new Address(192, 168, 1, 69), new Address(255, 255, 255, 0), new Address(192, 168, 1, 254)); //enable IPv4 configuration
+                IPConfig.Enable(nic, new Address(192, 168, 1, 32), new Address(255, 255, 255, 0), new Address(192, 168, 1, 254)); //enable IPv4 configuration
                 using (var xClient = new DHCPClient())
                 {
                     /** Send a DHCP Discover packet **/
@@ -369,300 +141,839 @@ namespace GoOS
 
 
                 }
-            } catch
+
+            }
+            catch
             {
-                Console.WriteLine("Error starting Goplex Web Interface.");
-                Console.WriteLine("The system will proceed to boot without networking.");
-                Console.WriteLine("Press ENTER to continue (and yes it has to be ENTER)");
+                log(ConsoleColor.Green, "Error starting Goplex Web Interface.");
+                log(ConsoleColor.Green, "The system will proceed to boot without networking.");
+                log(ConsoleColor.Green, "Press ENTER to continue (and yes it has to be ENTER)");
                 Console.ReadLine();
             }
 
             Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("Goplex Studios GoOS");
-            Console.WriteLine("Copyright 2022 (c) Owen2k6");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            // Console.WriteLine("This is a PRIVATE DEVELOPMENT BUILD. DO NOT REDISTRIBUTE");
-            // Console.WriteLine("This is a PRIVATE BETA BUILD. DO NOT REDISTRIBUTE");
-             Console.WriteLine("This is a Public Beta Build.");
-            // Console.WriteLine("This is a Public Development Build.");
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("For more info on GoOS, type 'cinfo'.");
-            Console.WriteLine("Support Status for this build could not be found.");
-            Console.WriteLine("Type 'HELP' for a list of working commands");
-            Console.ForegroundColor = ConsoleColor.Green;
+            log(ConsoleColor.Red, "                    GGGGGGGGGGGG                   ");
+            log(ConsoleColor.DarkRed, "               GGGGGGGGGGGGGGGGGGGGGG              ");
+            log(ConsoleColor.Magenta, "  GGGGGGGGGG GGGGGGGGGGGGGGGGGGGGGGGGGG            ");
+            log(ConsoleColor.DarkMagenta, "  GGGGGGGG   GGGGGGGGG        GGGGGG               ");
+            log(ConsoleColor.Red, "  GGGGGGG    GGGGG                                 ");
+            log(ConsoleColor.DarkRed, "  GGGGGG     GGG                                   ");
+            //Do NOT change owen.
+            textcolour(ConsoleColor.Magenta);
+            write("  GGGGG      GG                                    ");
+            textcolour(ConsoleColor.White);
+            write("Goplex Studios GoOS.");
+            log(ConsoleColor.Green, "");
+            textcolour(ConsoleColor.Red);
+            write("  GGGGG      G            GGGGGGGGGGGGGGGGGGGG     ");
+            textcolour(ConsoleColor.White);
+            write("Copyright 2022 (c) Owen2k6.");
+            log(ConsoleColor.Green, "");
+            textcolour(ConsoleColor.DarkRed);
+            write("  GGGGG      GG           GGGGGGGGGGGGGGGGGGG      ");
+            textcolour(ConsoleColor.White);
+            write("Version 1.4");
+            log(ConsoleColor.Green, "");
+            textcolour(ConsoleColor.Magenta);
+            write("  GGGGG      GG           GGGGGGGGGGGGGGGGGGG      ");
+            textcolour(ConsoleColor.White);
+            write("Development Channel");
+            log(ConsoleColor.Green, "");
+            //Ok now continue
+            log(ConsoleColor.DarkMagenta, "  GGGGGG     GGGG         GGGGGGGGGGGGGGGGGG       ");
+            log(ConsoleColor.Red, "  GGGGGGG    GGGGGG              GGGGGGGGGG        ");
+            log(ConsoleColor.DarkRed, "  GGGGGGGGG  GGGGGGGGGGGGGGGGGGGGGGGGGGGG          ");
+            log(ConsoleColor.Magenta, "  GGGGGGGGGGG                                      ");
+            log(ConsoleColor.DarkMagenta, "  GGGGGGGGGGGGGGG                  GGGG            ");
+            log(ConsoleColor.Red, "  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
+            log(ConsoleColor.DarkRed, "  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
+            try
+            {
+                FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize(true);
+                var total_space = FS.GetTotalSize(@"0:\");
+                adminconsoledisk = true;
+            }
+            catch (Exception e)
+            {
+                log(ConsoleColor.Red, "GoOS Admin could not detect a disk. system will not support any apps that require a HDD to write/read from.");
+                log(ConsoleColor.Red, "GoOS Needs a HDD installed to use some of the cool features");
+                log(ConsoleColor.Red, "The GitHub releases page usually includes a disk built for GoOS");
+                log(ConsoleColor.Red, "Disks aren't required but they're highly reccomended.");
+                adminconsoledisk = false;
+            }
+            textcolour(ConsoleColor.Green);
+            if (loginsystemenabled)
+            {
+                textcolour(ConsoleColor.Magenta);
+                //Login System 0.1 Primitive edition
+                log(ConsoleColor.Magenta, "Hello, " + username + "!");
+                log(ConsoleColor.Magenta, "In order to proceed into GoOS, you must login with your password.");
+                textcolour(ConsoleColor.Yellow);
+                String input = Console.ReadLine();
+                if (input == password)
+                {
+                    textcolour(ConsoleColor.Cyan);
+                    Console.Clear();
+                    log(ConsoleColor.Cyan, "Welcome back to GoOS.");
+                }
+                else
+                {
+                    log(ConsoleColor.Red, "Incorrect password.");
+                    log(ConsoleColor.Red, "Press any key to retry");
+                    Console.ReadKey();
+                    Cosmos.System.Power.Reboot();
+                }
+            }
         }
 
         protected override void Run()
         {
-            Console.Write("0:\\");
-            String input = Console.ReadLine();
+            textcolour(ConsoleColor.Green);
+            write("0:\\");
+            textcolour(ConsoleColor.Gray);
+            String input = Console.ReadLine().ToLower();
             //And so it begins...
             //Commands Section
             if (input == "cinfo")
             {
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.WriteLine("Goplex Operating System");
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine("GoOS is owned by Goplex Studios.");
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.WriteLine("SYSTEM INFOMATION:");
-                Console.WriteLine("GoOS Version 1.3.5.20");
-                Console.WriteLine("Owen2k6 Api version: 0.12");
-                Console.WriteLine("Branch: Release");
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Copyright 2022 (c) Owen2k6");
-                Console.ForegroundColor = ConsoleColor.Green;
+                log(ConsoleColor.Magenta, "Goplex Operating System");
+                log(ConsoleColor.Blue, "GoOS is owned by Goplex Studios.");
+                log(ConsoleColor.Red, "SYSTEM INFOMATION:");
+                log(ConsoleColor.Red, "GoOS Version 1.4");
+                log(ConsoleColor.Red, "Owen2k6 Api version: 0.15");
+                log(ConsoleColor.Red, "Branch: Development");
+                log(ConsoleColor.White, "Copyright 2022 (c) Owen2k6");
             }
             else if (input == "help")
             {
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.WriteLine("Goplex Operating System");
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine("HELP - Shows system commands");
-                Console.WriteLine("CINFO - Shows system infomation");
-                Console.WriteLine("SUPPORT - Shows how to get support");
-                Console.WriteLine("GAMES - Shows the list of GoOS Games");
-                Console.WriteLine("CORE - Displays GoOS Core infomation");
-                Console.ForegroundColor = ConsoleColor.Green;
+                log(ConsoleColor.Magenta, "Goplex Operating System");
+                log(ConsoleColor.Blue, "HELP - Shows system commands");
+                log(ConsoleColor.Blue, "CINFO - Shows system infomation");
+                log(ConsoleColor.Blue, "SUPPORT - Shows how to get support");
+                log(ConsoleColor.Blue, "GAMES - Shows the list of GoOS Games");
+                log(ConsoleColor.Blue, "CORE - Displays GoOS Core infomation");
+                log(ConsoleColor.Blue, "CALC - Shows a list of possible calculation commands");
+                log(ConsoleColor.Blue, "CREDITS - Shows the GoOS Developers");
+                log(ConsoleColor.Blue, "DISKCHECK - Check Disk Information");
+                log(ConsoleColor.Blue, "LS - List all files on the disk");
+                log(ConsoleColor.Blue, "NOTEPAD - MIV Notepad (Looks like VIM)");
+                log(ConsoleColor.Blue, "DEL - Delete a file");
+                log(ConsoleColor.Blue, "LD - ReLabel a disk (Rename disk)");
+                log(ConsoleColor.Blue, "FTP - Will not work - File Transfer Protocol");
+                log(ConsoleColor.Blue, "IPCONF - List all networking information");
+                log(ConsoleColor.Blue, "GUI - See a cool lil test!");
+            }
+            else if (input == "credits")
+            {
+                log(ConsoleColor.Cyan, "Goplex Studios - GoOS");
+                log(ConsoleColor.Cyan, "Discord Link: https://discord.owen2k6.com/");
+                log(ConsoleColor.Red, "Contributors:");
+                log(ConsoleColor.Red, "Owen2k6 - Main Developer and creator");
+                log(ConsoleColor.Red, "Zulo - Helped create the command system");
+                log(ConsoleColor.Red, "moderator_man - Helped with my .gitignore issue and knows code fr");
+                log(ConsoleColor.Red, "");
             }
             else if (input == "support")
             {
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("Goplex Studios Support");
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("== For OS Support");
-                Console.WriteLine("To get support, you must be in the Goplex Studios Discord Server.");
-                Console.WriteLine("Discord Link: https://discord.gg/3tex5G8Grp");
-                Console.WriteLine("Open support tickets in #get-staff-help");
-                Console.WriteLine("== To report a bug");
-                Console.WriteLine("Go to the issues tab on the Owen2k6/GoOS Github page");
-                Console.WriteLine("and submit an issue with the bug tag.");
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("Support Code: 019x2910b11");
-            }
-            else if (input == "games")  
-            {
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.WriteLine("Goplex Games List");
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine("TEXTADVENTURES - Text based adventure game because why not");
-                Console.ForegroundColor = ConsoleColor.Green;
+                log(ConsoleColor.Cyan, "Goplex Studios Support");
+                log(ConsoleColor.Red, "== For OS Support");
+                log(ConsoleColor.Red, "To get support, you must be in the Goplex Studios Discord Server.");
+                log(ConsoleColor.Red, "Discord Link: https://discord.owen2k6.com/");
+                log(ConsoleColor.Red, "Open support tickets in #get-staff-help");
+                log(ConsoleColor.Red, "== To report a bug");
+                log(ConsoleColor.Red, "Go to the issues tab on the Owen2k6/GoOS Github page");
+                log(ConsoleColor.Red, "and submit an issue with the bug tag.");
             }
             else if (input == "core")
             {
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.Write("GoOS Core Ver 0.3");
-                Console.Write("The Main backend to GoOS.");
-                Console.Write("==========================");
-                Console.Write("==Developed using Cosmos==");
-                Console.Write("==========================");
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write("GoOS Core Is still in early development.");
-                Console.Write("there are a lot of issues known and we are working on it!");
-                Console.ForegroundColor = ConsoleColor.Green;
+                log(ConsoleColor.Magenta, "GoOS Core Ver 0.3");
+                log(ConsoleColor.Magenta, "The Main backend to GoOS.");
+                log(ConsoleColor.Magenta, "==========================");
+                log(ConsoleColor.Magenta, "==Developed using Cosmos==");
+                log(ConsoleColor.Magenta, "==========================");
+                log(ConsoleColor.Red, "GoOS Core Is still in early development.");
+                log(ConsoleColor.Red, "there are a lot of issues known and we are working on it! ");
             }
 
             //Games Section
 
-            else if (input == "textadventures")
-            {
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.WriteLine("Goplex Studios - Text Adventures");
-                Console.WriteLine("Developed using GoOS Core");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("????: Hello there, what's your name?");
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.Write("Enter a name: ");
-                String name = Console.ReadLine();
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("????: Ah. Hello there, " + name);
-                Console.WriteLine("????: When there are Convos, press ENTER to move on to the next message :)");
-                Console.ReadKey();
-                Console.WriteLine("????: You probably dont know me, but its better that way...");
-                Console.ReadKey();
-                Console.WriteLine("????: Anyways, There are 1 stories we can enter.");
-                Console.WriteLine("????: Yes i know wrong plural, but there will be more written in the future!");
-                Console.ReadKey();
-                Console.WriteLine("????: The first one i'll say is \"Temple Run\" ");
-                Console.WriteLine("????: - You are a criminal planning the heist of a lifetime");
-                Console.WriteLine("????: This heist is set on robbing the great temple.");
-                Console.ReadKey();
-                Console.WriteLine("????: For now, Temple Run is the only available story.");
-                Console.ReadKey();
-                Console.WriteLine("????: So what will it be?");
-                Console.WriteLine("????: Selection Options: TEMPLERUN");
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.Write("Choose One of the Options: ");
-                String selection = Console.ReadLine();
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                if(selection == "templerun")
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("\"Temple Run\" Selected.");
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine("You wake up... it's 2:45AM and you can't get to sleep...");
-                    Console.ReadKey();
-                    Console.WriteLine("You look at your calendar...");
-                    Console.ReadKey();
-                    Console.WriteLine("It's August 4th 2023. 3 days before the heist.");
-                    Console.ReadKey();
-                    Console.WriteLine(name + ": Damn we need to get planning if we're gonna pull this off... ");
-                    Console.ReadKey();
-                    Console.WriteLine("You pick up your phone and call Joe the Fixer...");
-                    Console.ReadKey();
-                    Console.WriteLine(name + ": Joe! How have you been man...");
-                    Console.ReadKey();
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine("Joe: Hello... things are not so good...");
-                    Console.ReadKey();
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine(name + ": What? Why?");
-                    Console.ReadKey();
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine("Joe: Because our plans aren't really in the best ways. How would we survive a 100+ Meter fall into Stone?");
-                    Console.ReadKey();
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine(name + "That was Bob's idea... Not mine");
-                    Console.ReadKey();
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine("Joe: God. Bob really... Right im adding him to the call.");
-                    Console.ReadKey();
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine("Bob has been added to the call.");
-                    Console.ReadKey();
-                    Console.WriteLine("Bob: What do you want Joe?");
-                    Console.ReadKey();
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine("Joe: You know what i want... This plan was pulled out of your-");
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine("Bob: OK OK. Fine. but jumping in is the best option");
-                    Console.ReadKey();
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine("Joe: Ok. well we gotta head down to the planning table before we \n can really think of anything else to do.");
-                    Console.ReadKey();
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine("Bob: Alright. i'll meet you down there.");
-                    Console.WriteLine("Bob Left the call");
-                    Console.ReadKey();
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine("Joe: Got that " + name + "? We'll meet you down there.");
-                    Console.ReadKey();
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine(name + ": Got some things i want to do before heading down. see you there.");
-                    Console.WriteLine(name + " Left the call");
-                    Console.ReadKey();
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("This Game is still under development. You have reached the end of this game so far!");
-                    Console.WriteLine("Keep your OS Up to date to recieve updates for this game!");
+            //Calculator Area
 
+            else if (input == "calc")
+            {
+                log(ConsoleColor.Magenta, "GoCalc Commands");
+                log(ConsoleColor.Blue, "ADD - Add 2 numbers");
+                log(ConsoleColor.Blue, "SUBTRACT - Subtract 2 numbers");
+                log(ConsoleColor.Blue, "DIVIDE - Divide 2 numbers");
+                log(ConsoleColor.Blue, "MULTIPLY - Multiply 2 numbers");
+                log(ConsoleColor.Blue, "SQUARE - Square a number");
+                log(ConsoleColor.Blue, "CUBE - Cube a number");
+                log(ConsoleColor.Blue, "POWER10 - Make a number to the power of 10");
+            }
+            else if (input == "add")
+            {
+                log(ConsoleColor.Green, "GoCalc - Addition");
+                log(ConsoleColor.Green, "Whole numbers only !!");
+                log(ConsoleColor.Green, "Enter the first number: ");
+                int no1 = Convert.ToInt32(Console.ReadLine());
+                log(ConsoleColor.Green, "Enter the second number: ");
+                int no2 = Convert.ToInt32(Console.ReadLine());
+                log(ConsoleColor.Green, "Adding up to");
+                int ans = no1 + no2;
+            }
+            else if (input == "subtract")
+            {
+                log(ConsoleColor.Green, "GoCalc - Subtraction");
+                log(ConsoleColor.Green, "Whole numbers only !!");
+                log(ConsoleColor.Green, "Enter the first number: ");
+                int no1 = Convert.ToInt32(Console.ReadLine());
+                log(ConsoleColor.Green, "Enter the second number: ");
+                int no2 = Convert.ToInt32(Console.ReadLine());
+                log(ConsoleColor.Green, "Adding up to");
+                int ans = no1 - no2;
+            }
+            else if (input == "divide")
+            {
+                log(ConsoleColor.Green, "GoCalc - Division");
+                log(ConsoleColor.Green, "Whole numbers only !!");
+                log(ConsoleColor.Green, "Enter the first number: ");
+                int no1 = Convert.ToInt32(Console.ReadLine());
+                log(ConsoleColor.Green, "Enter the second number: ");
+                int no2 = Convert.ToInt32(Console.ReadLine());
+                log(ConsoleColor.Green, "Adding up to");
+                int ans = no1 / no2;
+            }
+            else if (input == "multiply")
+            {
+                log(ConsoleColor.Green, "GoCalc - Multiplication");
+                log(ConsoleColor.Green, "Whole numbers only !!");
+                log(ConsoleColor.Green, "Enter the first number: ");
+                int no1 = Convert.ToInt32(Console.ReadLine());
+                log(ConsoleColor.Green, "Enter the second number: ");
+                int no2 = Convert.ToInt32(Console.ReadLine());
+                log(ConsoleColor.Green, "Adding up to");
+                int ans = no1 * no2;
+            }
+            else if (input == "square")
+            {
+                log(ConsoleColor.Green, "GoCalc - Squaring");
+                log(ConsoleColor.Green, "Whole numbers only !!");
+                log(ConsoleColor.Green, "Enter number to square: ");
+                int no1 = Convert.ToInt32(Console.ReadLine());
+                int ans = no1 * no1;
+            }
+            else if (input == "cube")
+            {
+                log(ConsoleColor.Green, "GoCalc - Cubing");
+                log(ConsoleColor.Green, "Whole numbers only !!");
+                log(ConsoleColor.Green, "Enter number to cube: ");
+                int no1 = Convert.ToInt32(Console.ReadLine());
+                int ans = no1 * no1 * no1;
+            }
+            else if (input == "power10")
+            {
+                log(ConsoleColor.Green, "GoCalc - To the power of 10");
+                log(ConsoleColor.Green, "Whole numbers only !!");
+                log(ConsoleColor.Green, "Enter number to p10: ");
+                int no1 = Convert.ToInt32(Console.ReadLine());
+                int ans = no1 * no1 * no1 * no1 * no1 * no1 * no1 * no1 * no1 * no1;
+            }
+
+            // GoOS Admin
+
+            //Disk Only stuff
+            else if (input == "diskcheck")
+            {
+                if (!adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    try
+                    {
+                        log(ConsoleColor.Red, "GoOS Admin: Showing Disk Information for 0:\\");
+                        var available_space = FS.GetAvailableFreeSpace(@"0:\");
+                        var total_space = FS.GetTotalSize(@"0:\");
+                        var label = FS.GetFileSystemLabel(@"0:\");
+                        var fs_type = FS.GetFileSystemType(@"0:\");
+                        log(ConsoleColor.Red, "Available Free Space: " + available_space + "(" + (available_space / 1e+9) + "GiB)");
+                        log(ConsoleColor.Red, "Total Space on disk: " + total_space + "(" + (total_space / 1e+9) + "GiB)");
+                        log(ConsoleColor.Red, "Disk Label: " + label);
+                        log(ConsoleColor.Red, "File System Type: " + fs_type);
+                    }
+                    catch (Exception e)
+                    {
+                        log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                        log(ConsoleColor.Red, "GoOS Admin: For system security, we have disabled all Drive functions.");
+                        adminconsoledisk = false;
+                    }
                 }
             }
-            else if (input == "snake")
+            else if (input == "ls")
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("This game is known to crash GoOS. Press ENTER to continue");
-                Console.ReadKey();
-                configSnake();
-                ConsoleKey x;
-                while (true)
+                if (!adminconsoledisk)
                 {
-                    while (gameover())
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    try
                     {
-                        printGame();
-                        Boolean endGame = false;
-                        switch (Console.ReadKey(true).Key)
+                        var directory_list = Directory.GetFiles(@"0:\");
+                        foreach (var file in directory_list)
                         {
-                            case ConsoleKey.R:
-                                configSnake();
-                                break;
-                            case ConsoleKey.Escape:
-                                endGame = true;
-                                break;
-                        }
-
-                        if (endGame)
-                        {
-                            break;
+                            log(ConsoleColor.Red, file);
                         }
                     }
-                    while (!Console.KeyAvailable && !gameover())
+                    catch (Exception e)
                     {
-
-                        updateDirections();
-
-                        updatePosotion();
-
-                        checkIfTouchFood();
-
-                        Console.Clear();
-                        changeArray();
-                        printGame();
-                        delay(10000000);
+                        log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                        log(ConsoleColor.Red, "GoOS Admin: For system security, we have disabled all Drive functions.");
+                        adminconsoledisk = false;
                     }
-
-                    x = Console.ReadKey(true).Key;
-
-                    if (x == ConsoleKey.LeftArrow)
+                }
+            }
+            else if (input == "notepad")
+            {
+                if (!adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    textcolour(ConsoleColor.White);
+                    MIV.StartMIV();
+                }
+            }
+            else if (input == "del")
+            {
+                if (!adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: Enter file name");
+                    textcolour(ConsoleColor.Yellow);
+                    write("FilePath: 0:\\");
+                    String inputaman = Console.ReadLine();
+                    try
                     {
-                        if (snake[0][1] != 3)
+                        File.Delete(@"0:\" + inputaman);
+                        log(ConsoleColor.Blue, "GoOS Admin: File Deleted!");
+                    }
+                    catch (Exception e)
+                    {
+                        log(ConsoleColor.Red, "Please send the following to GoOS Developers");
+                        log(ConsoleColor.Red, e.ToString());
+                    }
+                }
+            }
+            else if (input == "run")
+            {
+                if (!adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: Enter file name");
+                    textcolour(ConsoleColor.Yellow);
+                    write("FilePath: 0:\\");
+                    String inputaman = Console.ReadLine();
+                    try
+                    {
+                        log(ConsoleColor.Blue, "GoOS Admin: Attempting to run " + inputaman);
+                        if (!inputaman.EndsWith(".goexe"))
                         {
-                            commands.Add(new int[2] { 1, 0 });
+                            log(ConsoleColor.Red, "GoOS Admin: Incompatible format.");
+                            log(ConsoleColor.Red, "GoOS Admin: File must be .goexe");
+                        }
+                        if (inputaman.EndsWith(".goexe"))
+                        {
+                            var content = File.ReadAllLines(@"0:\" + inputaman);
+                            string theysaid = null;
+                            int count = 1;
+                            String a = null;
+                            String b = null;
+                            String c = null;
+                            String d = null;
+                            String e = null;
+                            String f = null;
+                            String g = null;
+                            String h = null;
+                            String i = null;
+                            String j = null;
+                            foreach (string line in content)
+                            {
+                                count = count + 1;
+                                //log(ConsoleColor.Magenta, "LINE FOUND: CONTENT: " + line);
+                                if (line.StartsWith("#"))
+                                {
+
+                                }
+                                if (line.StartsWith(""))
+                                {
+
+                                }
+                                if (line.StartsWith("print"))
+                                {
+                                    string thingtosay = line.Replace("print=", "");
+                                    thingtosay = thingtosay.Replace("{getInput}", theysaid);
+                                    thingtosay = thingtosay.Replace("{1}", a);
+                                    thingtosay = thingtosay.Replace("{2}", b);
+                                    thingtosay = thingtosay.Replace("{3}", c);
+                                    thingtosay = thingtosay.Replace("{4}", d);
+                                    thingtosay = thingtosay.Replace("{5}", e);
+                                    thingtosay = thingtosay.Replace("{6}", f);
+                                    thingtosay = thingtosay.Replace("{7}", g);
+                                    thingtosay = thingtosay.Replace("{8}", h);
+                                    thingtosay = thingtosay.Replace("{9}", i);
+                                    thingtosay = thingtosay.Replace("{10}", j);
+                                    log(ConsoleColor.Magenta, thingtosay);
+                                }
+                                if (line.StartsWith("sleep"))
+                                {
+                                    String howlong = line.Split("=")[1];
+                                    int potato = Convert.ToInt32(howlong);
+                                    sleep(potato);
+                                }
+                                if (line.StartsWith("input"))
+                                {
+                                    if (line == "input=")
+                                    {
+                                        textcolour(ConsoleColor.Blue);
+                                        theysaid = Console.ReadLine();
+                                    }
+                                    else
+                                    {
+                                        String addon = line.Replace("input=", "");
+                                        write(addon);
+                                        textcolour(ConsoleColor.Blue);
+                                        theysaid = Console.ReadLine();
+                                    }
+
+                                }
+                                if (line.StartsWith("stop"))
+                                {
+                                    if (line == "stop=")
+                                    {
+                                        textcolour(ConsoleColor.Blue);
+                                        Console.ReadKey();
+                                        Console.WriteLine();
+                                    }
+                                    else
+                                    {
+                                        String addon = line.Replace("stop=", "");
+                                        textcolour(ConsoleColor.DarkRed);
+                                        write(addon);
+                                        textcolour(ConsoleColor.Blue);
+                                        Console.ReadKey();
+                                        Console.WriteLine();
+                                    }
+
+                                }
+                                if (line.StartsWith("if"))
+                                {
+                                    //version by GoOS God
+                                    //i actually dont know
+                                    if (line.Split("=")[1] == "1" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "2" || line.Split("=")[1] == "2" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "1")
+                                    {
+                                        if (a == b)
+                                        {
+                                            log(ConsoleColor.Magenta, line.Split("=")[4]);
+                                        }
+                                        if (a != b)
+                                        {
+
+                                            if (line.Split("=")[5].Equals("end"))
+                                            {
+
+                                                break;
+                                            }
+                                            log(ConsoleColor.Magenta, line.Split("=")[5]);
+
+                                        }
+
+                                    }
+                                    if (line.Split("=")[1] == "3" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "4" || line.Split("=")[1] == "4" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "3")
+                                    {
+                                        if (c == d)
+                                        {
+                                            log(ConsoleColor.Magenta, line.Split("=")[4]);
+                                        }
+                                        if (c != d)
+                                        {
+
+                                            if (line.Split("=")[5].Equals("end"))
+                                            {
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                log(ConsoleColor.Magenta, line.Split("=")[5]);
+                                            }
+                                        }
+
+                                    }
+                                    if (line.Split("=")[1] == "5" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "6" || line.Split("=")[1] == "6" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "5")
+                                    {
+                                        if (e == f)
+                                        {
+                                            log(ConsoleColor.Magenta, line.Split("=")[4]);
+                                        }
+                                        if (e != f)
+                                        {
+
+                                            if (line.Split("=")[5].Equals("end"))
+                                            {
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                log(ConsoleColor.Magenta, line.Split("=")[5]);
+                                            }
+                                        }
+
+                                    }
+                                    if (line.Split("=")[1] == "7" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "8" || line.Split("=")[1] == "8" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "7")
+                                    {
+                                        if (g == h)
+                                        {
+                                            log(ConsoleColor.Magenta, line.Split("=")[4]);
+                                        }
+                                        if (g != h)
+                                        {
+
+                                            if (line.Split("=")[5].Equals("end"))
+                                            {
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                log(ConsoleColor.Magenta, line.Split("=")[5]);
+                                            }
+                                        }
+
+                                    }
+                                    if (line.Split("=")[1] == "9" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "10" || line.Split("=")[1] == "10" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "9")
+                                    {
+                                        if (i == j)
+                                        {
+                                            log(ConsoleColor.Magenta, line.Split("=")[4]);
+                                        }
+                                        if (i != j)
+                                        {
+
+                                            if (line.Split("=")[5].Equals("end"))
+                                            {
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                log(ConsoleColor.Magenta, line.Split("=")[5]);
+                                            }
+                                        }
+
+                                    }
+
+                                }
+                                if (line.StartsWith("variable"))
+                                {
+                                    if (line.Split("=")[1] == "1")
+                                    {
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
+                                            a = gethandled;
+                                        }
+                                    }
+                                    if (line.Split("=")[1] == "2")
+                                    {
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
+                                            b = gethandled;
+                                        }
+                                    }
+                                    if (line.Split("=")[1] == "3")
+                                    {
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
+                                            c = gethandled;
+                                        }
+                                    }
+                                    if (line.Split("=")[1] == "4")
+                                    {
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
+                                            d = gethandled;
+                                        }
+                                    }
+                                    if (line.Split("=")[1] == "5")
+                                    {
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
+                                            e = gethandled;
+                                        }
+                                    }
+                                    if (line.Split("=")[1] == "6")
+                                    {
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
+                                            f = gethandled;
+                                        }
+                                    }
+                                    if (line.Split("=")[1] == "7")
+                                    {
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
+                                            g = gethandled;
+                                        }
+                                    }
+                                    if (line.Split("=")[1] == "8")
+                                    {
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
+                                            h = gethandled;
+                                        }
+                                    }
+                                    if (line.Split("=")[1] == "9")
+                                    {
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
+                                            i = gethandled;
+                                        }
+                                    }
+                                    if (line.Split("=")[1] == "10")
+                                    {
+                                        if (line.Split("=")[2] == null || line.Split("=")[2] == "")
+                                        {
+                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
+                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
+                                            j = gethandled;
+                                        }
+                                    }
+
+                                }
+                                if (line.StartsWith("randomnum"))
+                                {
+                                    String Num1 = line.Split("=")[1];
+                                    String Num2 = line.Split("=")[2];
+                                    String varstore = line.Split("=")[3];
+                                    int Num1int = Convert.ToInt32(Num1);
+                                    int Num2int = Convert.ToInt32(Num2);
+                                    if (varstore == "1")
+                                    {
+                                        a = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+                                    if (varstore == "2")
+                                    {
+                                        b = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+                                    if (varstore == "3")
+                                    {
+                                        c = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+                                    if (varstore == "4")
+                                    {
+                                        d = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+                                    if (varstore == "5")
+                                    {
+                                        e = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+                                    if (varstore == "6")
+                                    {
+                                        f = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+                                    if (varstore == "7")
+                                    {
+                                        g = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+                                    if (varstore == "8")
+                                    {
+                                        h = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+                                    if (varstore == "9")
+                                    {
+                                        i = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+                                    if (varstore == "10")
+                                    {
+                                        j = rnd.Next(Num1int, Num2int).ToString();
+                                    }
+
+                                }
+                                if (line.StartsWith("clear"))
+                                {
+                                    Console.Clear();
+                                }
+
+                            }
+                            log(ConsoleColor.Yellow, "Application.exit");
+
                         }
                     }
-                    else if (x == ConsoleKey.UpArrow)
+                    catch (Exception e)
                     {
-                        if (snake[0][1] != 2)
-                        {
-                            commands.Add(new int[2] { 4, 0 });
-                        }
+                        log(ConsoleColor.Red, "GoOS Admin has killed this program as an error has occoured");
+                        log(ConsoleColor.Red, "Report this to the app developer or the GoOS Devs for assistance.");
+                        log(ConsoleColor.Red, "Screenshot this stack trace:");
+                        log(ConsoleColor.Red, e.ToString());
                     }
-                    else if (x == ConsoleKey.RightArrow)
+                }
+            }
+            else if (input == "ld")
+            {
+                if (!adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    var label = FS.GetFileSystemLabel(@"0:\");
+                    log(ConsoleColor.Red, "GoOS Admin: Relabel disk");
+                    log(ConsoleColor.Red, "GoOS Admin: Press ENTER to leave the label as \"" + label + "\"");
+                    textcolour(ConsoleColor.Yellow);
+                    write("New Label for 0:\\: ");
+                    String inputamana = Console.ReadLine();
+                    if (inputamana == string.Empty)
                     {
-                        if (snake[0][1] != 1)
-                        {
-                            commands.Add(new int[2] { 3, 0 });
-                        }
+                        inputamana = label;
                     }
-                    else if (x == ConsoleKey.DownArrow)
+                    try
                     {
-                        if (snake[0][1] != 4)
-                        {
-                            commands.Add(new int[2] { 2, 0 });
-                        }
+                        FS.SetFileSystemLabel(@"0:\", inputamana);
+                        log(ConsoleColor.Blue, "GoOS Admin: Drive Label modified from " + label + " to " + inputamana);
                     }
-                    else if (x == ConsoleKey.Escape)
+                    catch (Exception e)
                     {
-                        break;
+                        log(ConsoleColor.Red, "Please send the following to GoOS Developers");
+                        log(ConsoleColor.Red, e.ToString());
                     }
-                    else if (x == ConsoleKey.R)
+                }
+            }
+            else if (input == "ftp")
+            {
+                if (!adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    using (var xServer = new FtpServer(FS, "0:\\"))
                     {
-                        configSnake();
+                        /** Listen for new FTP client connections **/
+                        log(ConsoleColor.Blue, "GoOS Admin: Listening on " + NetworkConfiguration.CurrentAddress.ToString() + ":21");
+                        log(ConsoleColor.Blue, "Use PLAIN configurations with no login information.");
+                        log(ConsoleColor.Blue, "FTP MODE ENABLED. REBOOT TO DISABLE");
+                        xServer.Listen();
                     }
-                } 
+                }
+            }
+            else if (input == "ipconf")
+            {
+                log(ConsoleColor.Red, "GoOS Admin: Showing Internet Information");
+                log(ConsoleColor.Red, NetworkConfiguration.CurrentAddress.ToString());
             }
 
+            //smth cool bro
+
+            else if (input == "gui")
+            {
 
 
 
+
+            }
 
 
 
             else
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write("sorry, but ");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write("`" + input + "` ");
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write("is not a command");
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.WriteLine("");
-                Console.WriteLine("Type HELP for a list of commands");
-                Console.ForegroundColor = ConsoleColor.Green;
+                textcolour(ConsoleColor.Red);
+                write("sorry, but ");
+                textcolour(ConsoleColor.Yellow);
+                write("`" + input + "` ");
+                textcolour(ConsoleColor.Red);
+                write("is not a command");
+                textcolour(ConsoleColor.Magenta);
+                log(ConsoleColor.Green, "");
+                log(ConsoleColor.Magenta, "Type HELP for a list of commands");
             }
-            Console.ForegroundColor = ConsoleColor.Green;
+            textcolour(ConsoleColor.Green);
         }
     }
+
+
 }
+
+
