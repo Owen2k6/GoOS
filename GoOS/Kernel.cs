@@ -521,19 +521,29 @@ namespace GoOS
                                 {
 
                                 }
-                                if (line.StartsWith("print="))
+                                if (line.StartsWith("print"))
                                 {
                                     string thingtosay = line.Replace("print=", "");
                                     thingtosay = thingtosay.Replace("{getInput}", theysaid);
+                                    thingtosay = thingtosay.Replace("{1}", a);
+                                    thingtosay = thingtosay.Replace("{2}", b);
+                                    thingtosay = thingtosay.Replace("{3}", c);
+                                    thingtosay = thingtosay.Replace("{4}", d);
+                                    thingtosay = thingtosay.Replace("{5}", e);
+                                    thingtosay = thingtosay.Replace("{6}", f);
+                                    thingtosay = thingtosay.Replace("{7}", g);
+                                    thingtosay = thingtosay.Replace("{8}", h);
+                                    thingtosay = thingtosay.Replace("{9}", i);
+                                    thingtosay = thingtosay.Replace("{10}", j);
                                     log(ConsoleColor.Magenta, thingtosay);
                                 }
-                                if (line.StartsWith("sleep="))
+                                if (line.StartsWith("sleep"))
                                 {
                                     String howlong = line.Split("=")[1];
                                     int potato = Convert.ToInt32(howlong);
                                     sleep(potato);
                                 }
-                                if (line.StartsWith("input="))
+                                if (line.StartsWith("input"))
                                 {
                                     if (line == "input=")
                                     {
@@ -548,26 +558,6 @@ namespace GoOS
                                         theysaid = Console.ReadLine();
                                     }
 
-                                }
-                                if (line.StartsWith("if1"))
-                                {
-                                    //version by MrDumbrava#9459
-                                    string contentOfLine = line;
-                                    string[] contents = contentOfLine.Split('=');
-                                    if (contents[1] == "{getInput}")
-                                    {
-                                        if (input == contents[2])
-                                        {
-                                            Console.WriteLine(input + " equals object 2");
-                                        }
-                                    }
-                                    else if (contents[2] == "{getInput}")
-                                    {
-                                        if (contents[2] == input)
-                                        {
-                                            Console.WriteLine("Object 1 equals " + input);
-                                        }
-                                    }
                                 }
                                 if (line.StartsWith("if"))
                                 {
@@ -675,7 +665,7 @@ namespace GoOS
                                     }
 
                                 }
-                                if (line.StartsWith("variable="))
+                                if (line.StartsWith("variable"))
                                 {
                                     if (line.Split("=")[1] == "1")
                                     {
@@ -826,7 +816,9 @@ namespace GoOS
                     }
                     catch (Exception e)
                     {
-                        log(ConsoleColor.Red, "Please send the following to GoOS Developers");
+                        log(ConsoleColor.Red, "This is an error created by the run system meaning there is something wrong with the GoCode executer");
+                        log(ConsoleColor.Red, "This must be reported to GoOS Devs asap!");
+                        log(ConsoleColor.Red, "Screenshot this stack trace:");
                         log(ConsoleColor.Red, e.ToString());
                     }
                 }
