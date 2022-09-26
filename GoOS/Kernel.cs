@@ -48,8 +48,8 @@ namespace GoOS
     public class Kernel : Sys.Kernel
     {
         //Vars for OS
-        public string version = "1.4";
-        public string BuildType = "Release";
+        public string version = "1.4.1";
+        public string BuildType = "Development";
 
 
         //GoOS Core
@@ -210,7 +210,7 @@ namespace GoOS
             if (loginsystemenabled)
             {
                 textcolour(ConsoleColor.Magenta);
-                //Login System 0.1 Primitive edition
+                //Login System 0.1 Primitive edition - its bad
                 log(ConsoleColor.Magenta, "Hello, " + username + "!");
                 log(ConsoleColor.Magenta, "In order to proceed into GoOS, you must login with your password.");
                 textcolour(ConsoleColor.Yellow);
@@ -496,6 +496,7 @@ namespace GoOS
                         }
                         if (inputaman.EndsWith(".goexe"))
                         {
+                            log(ConsoleColor.Yellow, "Application.Start");
                             var content = File.ReadAllLines(@"0:\" + inputaman);
                             string theysaid = null;
                             int count = 1;
@@ -936,6 +937,7 @@ namespace GoOS
                     using (var xServer = new FtpServer(FS, "0:\\"))
                     {
                         /** Listen for new FTP client connections **/
+// this does not work
                         log(ConsoleColor.Blue, "GoOS Admin: Listening on " + NetworkConfiguration.CurrentAddress.ToString() + ":21");
                         log(ConsoleColor.Blue, "Use PLAIN configurations with no login information.");
                         log(ConsoleColor.Blue, "FTP MODE ENABLED. REBOOT TO DISABLE");
