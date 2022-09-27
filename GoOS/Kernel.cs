@@ -1016,6 +1016,8 @@ namespace GoOS
 
             else if (input == "gui")
             {
+                log(ConsoleColor.Red, "Notice: if the GUI crashes please reboot. most likely you ran out of ram.");
+                Console.ReadKey();
                 // THIS IS DANGEROUS. DO NOT DISABLE CMDM AT ANY TIME UNLESS ENTERING A UI.
                 cmdm = false;
                 canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
@@ -1065,6 +1067,10 @@ namespace GoOS
                 GuiHelp.Rectangle = new Rectangle(276, 0, 69, 20);
                 GuiHelp.Text = "Help";
 
+
+                var texter = new TextView(desktop);
+                texter.HAlign = Alignment.End;
+                texter.Text = "GoOS GUI. If the system freezes up or kernel panics. reboot you ran out of ram.";
 
                 #endregion
 
