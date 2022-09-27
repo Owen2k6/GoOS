@@ -23,6 +23,8 @@ using System.Diagnostics;
 using GoOS;
 using Cosmos.HAL.BlockDevice.Registers;
 using System.Threading;
+using CitrineUI.Views;
+using CitrineUI;
 
 //Goplex Studios - GoOS
 //Copyright (C) 2022  Owen2k6
@@ -48,8 +50,37 @@ namespace GoOS
     public class Kernel : Sys.Kernel
     {
         //Vars for OS
+<<<<<<< Updated upstream
         public string version = "1.4.1";
         public string BuildType = "Development";
+=======
+        public string version = "1.4";
+        public string BuildType = "Release";
+        public bool cmdm = true;
+
+        #region GoOS UI shit
+        //UI
+        private Canvas canvas;
+        private Desktop desktop;
+        private Button GuiGoHome;
+        private Button GuiFile;
+        private Button GuiEdit;
+        private Button GuiOptions;
+        private Button GuiHelp;
+        private ContextMenuItem MolificusMaximus;
+        #endregion
+
+        private int timesClicked = 0;
+
+        // The function that will run when we click the button.
+        // The parameters are important here, they must be as follows.
+        private void Clicked(object? sender, EventArgs e)
+        {
+            // When the button is clicked, make it show how many times it was clicked.
+            //timesClicked++;
+            //button.Text = $"Clicked {timesClicked} time(s)!";
+        }
+>>>>>>> Stashed changes
 
 
         //GoOS Core
@@ -81,12 +112,6 @@ namespace GoOS
         //Core end
 
 
-
-
-        //[ManifestResourceStream(ResourceName = "Wallpaper.bmp")]
-        //public static byte[] Wallpaper;
-        //public static Bitmap wallpaper = new Bitmap(Wallpaper);
-        public static Canvas canvas;
 
 
         private Boolean adminconsoledisk = false;
@@ -231,7 +256,18 @@ namespace GoOS
             }
         }
 
-        protected override void Run()
+        protected override void Run() 
+        {
+            while (cmdm)
+            {
+                CommandMode();
+            }
+            Heap.Collect();
+            // Render all the views (buttons, images etc.) that are within the desktop.
+            desktop.Render();
+        }
+
+        protected void CommandMode()
         {
             textcolour(ConsoleColor.Green);
             write("0:\\");
@@ -275,7 +311,7 @@ namespace GoOS
                 log(ConsoleColor.Red, "Owen2k6 - Main Developer and creator");
                 log(ConsoleColor.Red, "Zulo - Helped create the command system");
                 log(ConsoleColor.Red, "moderator_man - Helped with my .gitignore issue and knows code fr");
-                log(ConsoleColor.Red, "");
+                log(ConsoleColor.Red, "atmo - GUI Libs");
             }
             else if (input == "support")
             {
@@ -499,6 +535,7 @@ namespace GoOS
                             log(ConsoleColor.Yellow, "Application.Start");
                             var content = File.ReadAllLines(@"0:\" + inputaman);
                             string theysaid = null;
+                            ConsoleKey keypressed = ConsoleKey.O;
                             int count = 1;
                             String a = null;
                             String b = null;
@@ -565,6 +602,7 @@ namespace GoOS
                                     if (line == "stop=")
                                     {
                                         textcolour(ConsoleColor.Blue);
+                                        log(ConsoleColor.Green, "Press any key to continue...");
                                         Console.ReadKey();
                                         Console.WriteLine();
                                     }
@@ -955,10 +993,38 @@ namespace GoOS
 
             else if (input == "gui")
             {
+                // THIS IS DANGEROUS. DO NOT DISABLE CMDM AT ANY TIME UNLESS ENTERING A UI.
+                cmdm = false;
+                canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
+                CitrineUI.Text.TextRenderer.Initialize();
 
+                Sys.MouseManager.ScreenWidth = (uint)canvas.Mode.Columns;
+                Sys.MouseManager.ScreenHeight = (uint)canvas.Mode.Rows;
 
+                desktop = new Desktop(canvas);
+                desktop.BackgroundColor = Color.FromArgb(114, 161, 255);
 
+                GuiGoHome = new Button(desktop);
+                GuiGoHome.Rectangle = new Rectangle(0, 0, 69, 20);
+                GuiGoHome.Text = "GoHome";
+                GuiFile = new Button(desktop);
+                GuiFile.Rectangle = new Rectangle(69, 0, 69, 20);
+                GuiFile.Text = "File";
+                GuiEdit = new Button(desktop);
+                GuiEdit.Rectangle = new Rectangle(138, 0, 69, 20);
+                GuiEdit.Text = "Edit";
+                GuiOptions = new Button(desktop);
+                GuiOptions.Rectangle = new Rectangle(207, 0, 69, 20);
+                GuiOptions.Text = "Options";
+                GuiHelp = new Button(desktop);
+                GuiHelp.Rectangle = new Rectangle(276, 0, 69, 20);
+                GuiHelp.Text = "Help";
 
+                TextBox textBox = new TextBox(desktop);
+
+                textBox.Rectangle = new Rectangle(64, 116, 256, 20);
+                textBox.Placeholder = "Type something...";
+                desktop.CreateCursor();
             }
 
 
