@@ -1069,7 +1069,7 @@ namespace GoOS
 
 
                 var texter = new TextView(desktop);
-                texter.HAlign = Alignment.End;
+                texter.HAlign = Alignment.Middle;
                 texter.Text = "GoOS GUI. If the system freezes up or kernel panics. reboot you ran out of ram.";
 
                 #endregion
