@@ -50,12 +50,8 @@ namespace GoOS
     public class Kernel : Sys.Kernel
     {
         //Vars for OS
-<<<<<<< Updated upstream
         public string version = "1.4.1";
         public string BuildType = "Development";
-=======
-        public string version = "1.4";
-        public string BuildType = "Release";
         public bool cmdm = true;
 
         #region GoOS UI shit
@@ -80,7 +76,6 @@ namespace GoOS
             //timesClicked++;
             //button.Text = $"Clicked {timesClicked} time(s)!";
         }
->>>>>>> Stashed changes
 
 
         //GoOS Core
@@ -202,7 +197,7 @@ namespace GoOS
             textcolour(ConsoleColor.DarkRed);
             write("  GGGGG      GG           GGGGGGGGGGGGGGGGGGG      ");
             textcolour(ConsoleColor.White);
-            write("Version "+version);
+            write("Version " + version);
             log(ConsoleColor.Green, "");
             textcolour(ConsoleColor.Magenta);
             write("  GGGGG      GG           GGGGGGGGGGGGGGGGGGG      ");
@@ -256,7 +251,7 @@ namespace GoOS
             }
         }
 
-        protected override void Run() 
+        protected override void Run()
         {
             while (cmdm)
             {
@@ -280,8 +275,8 @@ namespace GoOS
                 log(ConsoleColor.Magenta, "Goplex Operating System");
                 log(ConsoleColor.Blue, "GoOS is owned by Goplex Studios.");
                 log(ConsoleColor.Red, "SYSTEM INFOMATION:");
-                log(ConsoleColor.Red, "GoOS Version "+version);
-                log(ConsoleColor.Red, "Build Type: "+BuildType);
+                log(ConsoleColor.Red, "GoOS Version " + version);
+                log(ConsoleColor.Red, "Build Type: " + BuildType);
                 log(ConsoleColor.White, "Copyright 2022 (c) Owen2k6");
             }
             else if (input == "help")
@@ -975,7 +970,7 @@ namespace GoOS
                     using (var xServer = new FtpServer(FS, "0:\\"))
                     {
                         /** Listen for new FTP client connections **/
-// this does not work
+                        // this does not work
                         log(ConsoleColor.Blue, "GoOS Admin: Listening on " + NetworkConfiguration.CurrentAddress.ToString() + ":21");
                         log(ConsoleColor.Blue, "Use PLAIN configurations with no login information.");
                         log(ConsoleColor.Blue, "FTP MODE ENABLED. REBOOT TO DISABLE");
