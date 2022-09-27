@@ -56,26 +56,41 @@ namespace GoOS
 
         #region GoOS UI shit
         //UI
-        private Canvas canvas;
-        private Desktop desktop;
-        private Button GuiGoHome;
-        private Button GuiFile;
-        private Button GuiEdit;
-        private Button GuiOptions;
-        private Button GuiHelp;
-        private ContextMenuItem MolificusMaximus;
+        public Canvas canvas;
+        public Desktop desktop;
+        public Button GuiGoHome;
+        public Button GuiFile;
+        public Button GuiEdit;
+        public Button GuiOptions;
+        public Button GuiHelp;
         #endregion
 
-        private int timesClicked = 0;
 
-        // The function that will run when we click the button.
-        // The parameters are important here, they must be as follows.
-        private void Clicked(object? sender, EventArgs e)
+        private void GoHomeClicked(object? sender, EventArgs e)
         {
-            // When the button is clicked, make it show how many times it was clicked.
-            //timesClicked++;
-            //button.Text = $"Clicked {timesClicked} time(s)!";
+            new ContextMenuWindow((int)GuiGoHome.ScreenBounds.X, (int)GuiGoHome.ScreenBounds.Y + 20, GuiGoHome, desktop);
         }
+        private void ShutDownClicked(object? sender, EventArgs e)
+        {
+            Cosmos.System.Power.Shutdown();
+        }
+        private void AboutClicked(object? sender, EventArgs e)
+        {
+            var about = new Window(desktop);
+            about.Rectangle = new Rectangle(64, 64, 384, 200);
+            var textView = new TextView(about);
+            textView.Rectangle = new Rectangle(60, 32, 360, 50);
+            textView.Text = "Goplex OS \n" +
+                "Version: " + version + "\n" +
+                "Build Type: "+BuildType+"\n" +
+                "Copyright (c) 2022 Owen2k6 \n" +
+                "Total RAM: " + Cosmos.Core.CPU.GetAmountOfRAM() +"\n" +
+                "RAM Free: "+ Cosmos.Core.GCImplementation.GetAvailableRAM(); ;
+            about.Title = "About";
+
+        }
+
+
 
 
         //GoOS Core
@@ -999,28 +1014,51 @@ namespace GoOS
                 desktop = new Desktop(canvas);
                 desktop.BackgroundColor = Color.FromArgb(114, 161, 255);
 
+                #region GoOS GUI TitleBar
                 GuiGoHome = new Button(desktop);
                 GuiGoHome.Rectangle = new Rectangle(0, 0, 69, 20);
                 GuiGoHome.Text = "GoHome";
+                GuiGoHome.Clicked += GoHomeClicked;
+
+
+                var Shutdown = new ContextMenuItem("Shutdown", null);
+                Shutdown.Clicked += ShutDownClicked;
+                var AboutPC = new ContextMenuItem("About this PC", null);
+                AboutPC.Clicked += AboutClicked;
+
+                GuiGoHome.ContextMenuItems = new List<ContextMenuItem>() { AboutPC, Shutdown };
+
+
+
                 GuiFile = new Button(desktop);
                 GuiFile.Rectangle = new Rectangle(69, 0, 69, 20);
                 GuiFile.Text = "File";
+
+
+
                 GuiEdit = new Button(desktop);
                 GuiEdit.Rectangle = new Rectangle(138, 0, 69, 20);
                 GuiEdit.Text = "Edit";
+
+
+
                 GuiOptions = new Button(desktop);
                 GuiOptions.Rectangle = new Rectangle(207, 0, 69, 20);
                 GuiOptions.Text = "Options";
+
+
+
                 GuiHelp = new Button(desktop);
                 GuiHelp.Rectangle = new Rectangle(276, 0, 69, 20);
                 GuiHelp.Text = "Help";
 
-                TextBox textBox = new TextBox(desktop);
 
-                textBox.Rectangle = new Rectangle(64, 116, 256, 20);
-                textBox.Placeholder = "Type something...";
+                #endregion
+
+
                 desktop.CreateCursor();
             }
+
 
 
 
@@ -1038,6 +1076,7 @@ namespace GoOS
             }
             textcolour(ConsoleColor.Green);
         }
+
     }
 
 
