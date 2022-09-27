@@ -79,13 +79,14 @@ namespace GoOS
             var about = new Window(desktop);
             about.Rectangle = new Rectangle(64, 64, 384, 200);
             var textView = new TextView(about);
+
             textView.Rectangle = new Rectangle(60, 32, 360, 50);
             textView.Text = "Goplex OS \n" +
                 "Version: " + version + "\n" +
-                "Build Type: "+BuildType+"\n" +
+                "Build Type: " + BuildType + "\n" +
                 "Copyright (c) 2022 Owen2k6 \n" +
-                "Total RAM: " + Cosmos.Core.CPU.GetAmountOfRAM() +"\n" +
-                "RAM Free: "+ Cosmos.Core.GCImplementation.GetAvailableRAM(); ;
+                "Total RAM: " + Cosmos.Core.CPU.GetAmountOfRAM() + "\n" +
+                "RAM Free: " + Cosmos.Core.GCImplementation.GetAvailableRAM(); ;
             about.Title = "About";
 
         }
@@ -494,6 +495,18 @@ namespace GoOS
                 {
                     textcolour(ConsoleColor.White);
                     MIV.StartMIV();
+                }
+            }
+            else if (input == "gostudio")
+            {
+                if (!adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    textcolour(ConsoleColor.White);
+                    GOSStudio.StartGSS();
                 }
             }
             else if (input == "del")

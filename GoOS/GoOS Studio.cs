@@ -12,31 +12,31 @@ namespace GoOS
         public static void printGSSStartScreen()
         {
             Console.Clear();
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|                              GoOS Studio 2022.9");
-            Console.WriteLine("|");
-            Console.WriteLine("|                                 Based on GSS");
-            Console.WriteLine("|                             ");
-            Console.WriteLine("|                            ");
-            Console.WriteLine("|                   ");
-            Console.WriteLine("|");
-            Console.WriteLine("|                        type /help             for information");
-            Console.WriteLine("|                        type /gss.exit         to exit");
-            Console.WriteLine("|                        type /gss.exit.save    save to file and exit");
-            Console.WriteLine("|                        press w                to write");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.Write("|");
+            Console.WriteLine("~");
+            Console.WriteLine("~");
+            Console.WriteLine("~");
+            Console.WriteLine("~");
+            Console.WriteLine("~");
+            Console.WriteLine("~");
+            Console.WriteLine("~");
+            Console.WriteLine("~            GoOS Studio (MIV But with colours)");
+            Console.WriteLine("~");
+            Console.WriteLine("~            ");
+            Console.WriteLine("~            ");
+            Console.WriteLine("~            ");
+            Console.WriteLine("~            ");
+            Console.WriteLine("~");
+            Console.WriteLine("~                     type :help<Enter>          for information");
+            Console.WriteLine("~                     type :q<Enter>             to exit");
+            Console.WriteLine("~                     type :wq<Enter>            save to file and exit");
+            Console.WriteLine("~                     press i                    to write");
+            Console.WriteLine("~");
+            Console.WriteLine("~");
+            Console.WriteLine("~");
+            Console.WriteLine("~");
+            Console.WriteLine("~");
+            Console.WriteLine("~");
+            Console.Write("~");
         }
 
         public static String stringCopy(String value)
@@ -58,13 +58,61 @@ namespace GoOS
             delay(10000000);
             Console.Clear();
 
+            bool startOfLine = true;
             for (int i = 0; i < pos; i++)
             {
+                if (startOfLine == true && chars[i] == '#')
+                {
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    startOfLine = false;
+                }
+                if (startOfLine == true && chars[i] == 'p' && chars[i + 1] == 'r' && chars[i + 2] == 'i' && chars[i + 3] == 'n' && chars[i + 4] == 't' && chars[i + 5] == '=')
+                {
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    startOfLine = false;
+                }
+                if (startOfLine == true && chars[i] == 's' && chars[i + 1] == 'l' && chars[i + 2] == 'e' && chars[i + 3] == 'e' && chars[i + 4] == 'p' && chars[i + 5] == '=')
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    startOfLine = false;
+                }
+                if (startOfLine == true && chars[i] == 'i' && chars[i + 1] == 'n' && chars[i + 2] == 'p' && chars[i + 3] == 'u' && chars[i + 4] == 't' && chars[i + 5] == '=')
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    startOfLine = false;
+                }
+                if (startOfLine == true && chars[i] == 's' && chars[i + 1] == 't' && chars[i + 2] == 'o' && chars[i + 3] == 'p' && chars[i + 4] == '=')
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    startOfLine = false;
+                }
+                if (startOfLine == true && chars[i] == 'i' && chars[i + 1] == 'f' && chars[i + 2] == '=')
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    startOfLine = false;
+                }
+                if (startOfLine == true && chars[i] == 'v' && chars[i + 1] == 'a' && chars[i + 2] == 'r' && chars[i + 3] == 'i' && chars[i + 4] == 'a' && chars[i + 5] == 'b' && chars[i + 6] == 'l' && chars[i + 7] == 'e' && chars[i + 8] == '=')
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    startOfLine = false;
+                }
+                if (startOfLine == true && chars[i] == 'r' && chars[i + 1] == 'a' && chars[i + 2] == 'n' && chars[i + 3] == 'd' && chars[i + 4] == 'o' && chars[i + 5] == 'm' && chars[i + 6] == 'n' && chars[i + 7] == 'u' && chars[i + 8] == 'm' && chars[i + 9] == '=')
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    startOfLine = false;
+                }
+                if (startOfLine == true && chars[i] == 'c' && chars[i + 1] == 'l' && chars[i + 2] == 'e' && chars[i + 3] == 'a' && chars[i + 4] == 'r')
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    startOfLine = false;
+                }
                 if (chars[i] == '\n')
                 {
                     Console.WriteLine("");
                     countNewLine++;
                     countChars = 0;
+                    Console.ForegroundColor = ConsoleColor.White;
+                    startOfLine = true;
                 }
                 else
                 {
@@ -74,6 +122,8 @@ namespace GoOS
                     {
                         countNewLine++;
                     }
+                    
+
                 }
             }
 
@@ -82,7 +132,7 @@ namespace GoOS
             for (int i = 0; i < 23 - countNewLine; i++)
             {
                 Console.WriteLine("");
-                Console.Write("|");
+                Console.Write("~");
             }
 
             //PRINT INSTRUCTION
@@ -91,9 +141,7 @@ namespace GoOS
             {
                 if (i < infoBar.Length)
                 {
-                    Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write(infoBar[i]);
-                    Console.ForegroundColor = ConsoleColor.White;
                 }
                 else
                 {
@@ -138,16 +186,16 @@ namespace GoOS
 
                 if (isForbiddenKey(keyInfo.Key)) continue;
 
-                else if (!editMode && keyInfo.KeyChar == '/')
+                else if (!editMode && keyInfo.KeyChar == ':')
                 {
-                    infoBar = "/";
+                    infoBar = ":";
                     printGSSScreen(chars, pos, infoBar, editMode);
                     do
                     {
                         keyInfo = Console.ReadKey(true);
                         if (keyInfo.Key == ConsoleKey.Enter)
                         {
-                            if (infoBar == "/gss.exit.save")
+                            if (infoBar == ":wq")
                             {
                                 String returnString = String.Empty;
                                 for (int i = 0; i < pos; i++)
@@ -156,12 +204,12 @@ namespace GoOS
                                 }
                                 return returnString;
                             }
-                            else if (infoBar == "/gss.exit")
+                            else if (infoBar == ":q")
                             {
                                 return null;
 
                             }
-                            else if (infoBar == "/help")
+                            else if (infoBar == ":help")
                             {
                                 printGSSStartScreen();
                                 break;
@@ -182,9 +230,9 @@ namespace GoOS
                         {
                             infoBar += "q";
                         }
-                        else if (keyInfo.KeyChar == '/')
+                        else if (keyInfo.KeyChar == ':')
                         {
-                            infoBar += "/";
+                            infoBar += ":";
                         }
                         else if (keyInfo.KeyChar == 'w')
                         {
@@ -225,10 +273,10 @@ namespace GoOS
                     continue;
                 }
 
-                else if (keyInfo.Key == ConsoleKey.W && !editMode)
+                else if (keyInfo.Key == ConsoleKey.I && !editMode)
                 {
                     editMode = true;
-                    infoBar = "You're in write mode! Press ESC to exit this mode.";
+                    infoBar = "-- INSERT --";
                     printGSSScreen(chars, pos, infoBar, editMode);
                     continue;
                 }
@@ -277,54 +325,44 @@ namespace GoOS
             Console.WriteLine("Enter file's filename to open:");
             Console.WriteLine("If the specified file does not exist, it will be created.");
             Kernel.file = Console.ReadLine();
-            if (Kernel.file.EndsWith(".goexe"))
+            try
             {
-                try
+                if (File.Exists(@"0:\" + Kernel.file))
                 {
-                    if (File.Exists(@"0:\" + Kernel.file))
-                    {
-                        Console.WriteLine("Found file!");
-                    }
-                    else if (!File.Exists(@"0:\" + Kernel.file))
-                    {
-                        Console.WriteLine("Creating file!");
-                        File.Create(@"0:\" + Kernel.file);
-                    }
-                    Console.Clear();
+                    Console.WriteLine("Found file!");
                 }
-                catch (Exception ex)
+                else if (!File.Exists(@"0:\" + Kernel.file))
                 {
-                    Console.WriteLine(ex.Message);
+                    Console.WriteLine("Creating file!");
+                    File.Create(@"0:\" + Kernel.file);
                 }
-
-                String text = String.Empty;
-                Console.WriteLine("Do you want to open " + Kernel.file + " content? (Yes/No)");
-                if (Console.ReadLine().ToLower() == "yes" || Console.ReadLine().ToLower() == "y")
-                {
-                    text = GSS(File.ReadAllText(@"0:\" + Kernel.file));
-                }
-                else if (Console.ReadLine().ToLower() == "y" || Console.ReadLine().ToLower() == "y")
-                {
-                    text = GSS(File.ReadAllText(@"0:\" + Kernel.file));
-                }
-                else
-                {
-                    text = GSS(null);
-                }
-
                 Console.Clear();
-
-                if (text != null)
-                {
-                    File.WriteAllText(@"0:\" + Kernel.file, text);
-                    Console.WriteLine("Content has been saved to " + Kernel.file);
-                }
-                Console.WriteLine("Press any key to continue...");
-                Console.ReadKey(true);
-            } else
-            {
-                Console.WriteLine("GoOS Studio will only edit .goexe files.");
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            String text = String.Empty;
+            Console.WriteLine("Do you want to open " + Kernel.file + " content? (Yes/No)");
+            if (Console.ReadLine().ToLower() == "yes" || Console.ReadLine().ToLower() == "y")
+            {
+                text = GSS(File.ReadAllText(@"0:\" + Kernel.file));
+            }
+            else
+            {
+                text = GSS(null);
+            }
+
+            Console.Clear();
+
+            if (text != null)
+            {
+                File.WriteAllText(@"0:\" + Kernel.file, text);
+                Console.WriteLine("Content has been saved to " + Kernel.file);
+            }
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey(true);
         }
     }
 }
