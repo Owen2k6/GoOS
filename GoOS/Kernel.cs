@@ -23,6 +23,8 @@ using System.Diagnostics;
 using GoOS;
 using Cosmos.HAL.BlockDevice.Registers;
 using System.Threading;
+using CitrineUI.Views;
+using CitrineUI;
 
 //Goplex Studios - GoOS
 //Copyright (C) 2022  Owen2k6
@@ -50,6 +52,46 @@ namespace GoOS
         //Vars for OS
         public string version = "1.4.1";
         public string BuildType = "Development";
+        public bool cmdm = true;
+
+        #region GoOS UI shit
+        //UI
+        public Canvas canvas;
+        public Desktop desktop;
+        public Button GuiGoHome;
+        public Button GuiFile;
+        public Button GuiEdit;
+        public Button GuiOptions;
+        public Button GuiHelp;
+        #endregion
+
+
+        private void GoHomeClicked(object? sender, EventArgs e)
+        {
+            new ContextMenuWindow((int)GuiGoHome.ScreenBounds.X, (int)GuiGoHome.ScreenBounds.Y + 20, GuiGoHome, desktop);
+        }
+        private void ShutDownClicked(object? sender, EventArgs e)
+        {
+            Cosmos.System.Power.Shutdown();
+        }
+        private void AboutClicked(object? sender, EventArgs e)
+        {
+            var about = new Window(desktop);
+            about.Rectangle = new Rectangle(64, 64, 384, 200);
+            var textView = new TextView(about);
+
+            textView.Rectangle = new Rectangle(60, 32, 360, 50);
+            textView.Text = "Goplex OS \n" +
+                "Version: " + version + "\n" +
+                "Build Type: " + BuildType + "\n" +
+                "Copyright (c) 2022 Owen2k6 \n" +
+                "Total RAM: " + Cosmos.Core.CPU.GetAmountOfRAM() + "\n" +
+                "RAM Free: " + Cosmos.Core.GCImplementation.GetAvailableRAM(); ;
+            about.Title = "About";
+
+        }
+
+
 
 
         //GoOS Core
@@ -81,12 +123,6 @@ namespace GoOS
         //Core end
 
 
-
-
-        //[ManifestResourceStream(ResourceName = "Wallpaper.bmp")]
-        //public static byte[] Wallpaper;
-        //public static Bitmap wallpaper = new Bitmap(Wallpaper);
-        public static Canvas canvas;
 
 
         private Boolean adminconsoledisk = false;
@@ -177,7 +213,7 @@ namespace GoOS
             textcolour(ConsoleColor.DarkRed);
             write("  GGGGG      GG           GGGGGGGGGGGGGGGGGGG      ");
             textcolour(ConsoleColor.White);
-            write("Version "+version);
+            write("Version " + version);
             log(ConsoleColor.Green, "");
             textcolour(ConsoleColor.Magenta);
             write("  GGGGG      GG           GGGGGGGGGGGGGGGGGGG      ");
@@ -233,6 +269,17 @@ namespace GoOS
 
         protected override void Run()
         {
+            while (cmdm)
+            {
+                CommandMode();
+            }
+            Heap.Collect();
+            // Render all the views (buttons, images etc.) that are within the desktop.
+            desktop.Render();
+        }
+
+        protected void CommandMode()
+        {
             textcolour(ConsoleColor.Green);
             write("0:\\");
             textcolour(ConsoleColor.Gray);
@@ -244,8 +291,8 @@ namespace GoOS
                 log(ConsoleColor.Magenta, "Goplex Operating System");
                 log(ConsoleColor.Blue, "GoOS is owned by Goplex Studios.");
                 log(ConsoleColor.Red, "SYSTEM INFOMATION:");
-                log(ConsoleColor.Red, "GoOS Version "+version);
-                log(ConsoleColor.Red, "Build Type: "+BuildType);
+                log(ConsoleColor.Red, "GoOS Version " + version);
+                log(ConsoleColor.Red, "Build Type: " + BuildType);
                 log(ConsoleColor.White, "Copyright 2022 (c) Owen2k6");
             }
             else if (input == "help")
@@ -275,7 +322,7 @@ namespace GoOS
                 log(ConsoleColor.Red, "Owen2k6 - Main Developer and creator");
                 log(ConsoleColor.Red, "Zulo - Helped create the command system");
                 log(ConsoleColor.Red, "moderator_man - Helped with my .gitignore issue and knows code fr");
-                log(ConsoleColor.Red, "");
+                log(ConsoleColor.Red, "atmo - GUI Libs");
             }
             else if (input == "support")
             {
@@ -450,6 +497,18 @@ namespace GoOS
                     MIV.StartMIV();
                 }
             }
+            else if (input == "gostudio")
+            {
+                if (!adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    textcolour(ConsoleColor.White);
+                    GOSStudio.StartGSS();
+                }
+            }
             else if (input == "del")
             {
                 if (!adminconsoledisk)
@@ -499,6 +558,7 @@ namespace GoOS
                             log(ConsoleColor.Yellow, "Application.Start");
                             var content = File.ReadAllLines(@"0:\" + inputaman);
                             string theysaid = null;
+                            ConsoleKey keypressed = ConsoleKey.O;
                             int count = 1;
                             String a = null;
                             String b = null;
@@ -565,6 +625,7 @@ namespace GoOS
                                     if (line == "stop=")
                                     {
                                         textcolour(ConsoleColor.Blue);
+                                        log(ConsoleColor.Green, "Press any key to continue...");
                                         Console.ReadKey();
                                         Console.WriteLine();
                                     }
@@ -937,7 +998,7 @@ namespace GoOS
                     using (var xServer = new FtpServer(FS, "0:\\"))
                     {
                         /** Listen for new FTP client connections **/
-// this does not work
+                        // this does not work
                         log(ConsoleColor.Blue, "GoOS Admin: Listening on " + NetworkConfiguration.CurrentAddress.ToString() + ":21");
                         log(ConsoleColor.Blue, "Use PLAIN configurations with no login information.");
                         log(ConsoleColor.Blue, "FTP MODE ENABLED. REBOOT TO DISABLE");
@@ -955,11 +1016,66 @@ namespace GoOS
 
             else if (input == "gui")
             {
+                log(ConsoleColor.Red, "Notice: if the GUI crashes please reboot. most likely you ran out of ram.");
+                Console.ReadKey();
+                // THIS IS DANGEROUS. DO NOT DISABLE CMDM AT ANY TIME UNLESS ENTERING A UI.
+                cmdm = false;
+                canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
+                CitrineUI.Text.TextRenderer.Initialize();
+
+                Sys.MouseManager.ScreenWidth = (uint)canvas.Mode.Columns;
+                Sys.MouseManager.ScreenHeight = (uint)canvas.Mode.Rows;
+
+                desktop = new Desktop(canvas);
+                desktop.BackgroundColor = Color.FromArgb(114, 161, 255);
+
+                #region GoOS GUI TitleBar
+                GuiGoHome = new Button(desktop);
+                GuiGoHome.Rectangle = new Rectangle(0, 0, 69, 20);
+                GuiGoHome.Text = "GoHome";
+                GuiGoHome.Clicked += GoHomeClicked;
+
+
+                var Shutdown = new ContextMenuItem("Shutdown", null);
+                Shutdown.Clicked += ShutDownClicked;
+                var AboutPC = new ContextMenuItem("About this PC", null);
+                AboutPC.Clicked += AboutClicked;
+
+                GuiGoHome.ContextMenuItems = new List<ContextMenuItem>() { AboutPC, Shutdown };
 
 
 
+                GuiFile = new Button(desktop);
+                GuiFile.Rectangle = new Rectangle(69, 0, 69, 20);
+                GuiFile.Text = "File";
 
+
+
+                GuiEdit = new Button(desktop);
+                GuiEdit.Rectangle = new Rectangle(138, 0, 69, 20);
+                GuiEdit.Text = "Edit";
+
+
+
+                GuiOptions = new Button(desktop);
+                GuiOptions.Rectangle = new Rectangle(207, 0, 69, 20);
+                GuiOptions.Text = "Options";
+
+
+
+                GuiHelp = new Button(desktop);
+                GuiHelp.Rectangle = new Rectangle(276, 0, 69, 20);
+                GuiHelp.Text = "Help";
+
+
+                
+
+                #endregion
+
+
+                desktop.CreateCursor();
             }
+
 
 
 
@@ -977,6 +1093,7 @@ namespace GoOS
             }
             textcolour(ConsoleColor.Green);
         }
+
     }
 
 
