@@ -20,7 +20,7 @@ namespace GoOS
             Console.WriteLine("~");
             Console.WriteLine("~");
             Console.WriteLine("~            GoOS Studio (MIV But with colours)");
-            Console.WriteLine("~");
+            Console.WriteLine("~                 Enjoy :) ");
             Console.WriteLine("~            ");
             Console.WriteLine("~            ");
             Console.WriteLine("~            ");
