@@ -169,7 +169,7 @@ namespace GoOS
         protected override void BeforeRun()
         {
 
-//Somehow i realized this doesnt work unless i make it work dedicated to whatever it's doing. 
+            //Somehow i realized this doesnt work unless i make it work dedicated to whatever it's doing. 
             try
             {
                 NetworkDevice nic = NetworkDevice.GetDeviceByName("eth0"); //get network device by name
@@ -1086,7 +1086,7 @@ namespace GoOS
                 desktop.CreateCursor();
             }
 
-            else if (input == "Godo")
+            else if (input.StartsWith("godo"))
             {
                 String[] cheese = input.Split(".");
                 if (cheese[1].Equals("pakgo"))
