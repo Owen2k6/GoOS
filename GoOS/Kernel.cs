@@ -42,6 +42,12 @@ using CitrineUI;
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+/** 
+TODO:
+ - Remove GoOS Networking
+**/
+
+
 namespace GoOS
 {
 
@@ -160,6 +166,7 @@ namespace GoOS
         protected override void BeforeRun()
         {
 
+//Somehow i realized this doesnt work unless i make it work dedicated to whatever it's doing. 
             try
             {
                 NetworkDevice nic = NetworkDevice.GetDeviceByName("eth0"); //get network device by name
