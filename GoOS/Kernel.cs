@@ -1088,7 +1088,7 @@ namespace GoOS
 
             else if (input.StartsWith("godo"))
             {
-                String[] cheese = input.Split(".");
+                String[] cheese = input.Split(" ");
                 if (cheese[1].Equals("pakgo"))
                 {
                     if (cheese.Length < 1)
@@ -1098,22 +1098,28 @@ namespace GoOS
                     else if (cheese.Length == 3)
                     {
                         log(ConsoleColor.Yellow, "Lets roll.");
-                        using (var xClient = new TcpClient(4242))
+                        try
                         {
-                            xClient.Connect(new Address(185, 199, 110, 133), 4242);
-                            //GitHub IP for reference 140.82.121.3
-                            //GitHub UserContent data 185.199.110.133
-                            /** Send data **/
-                            xClient.Send(Encoding.ASCII.GetBytes("GET / HTTP/1.1\nHost: raw.githubusercontent.com/Owen2k6/GoOS-Exchange/main/" + cheese[3]));
+                            using (var xClient = new TcpClient(4242))
+                            {
+                                xClient.Connect(new Address(185, 199, 110, 133), 4242);
+                                //GitHub IP for reference 140.82.121.3
+                                //GitHub UserContent data 185.199.110.133
+                                /** Send data **/
+                                xClient.Send(Encoding.ASCII.GetBytes("GET / HTTP/1.1\nHost: raw.githubusercontent.com/Owen2k6/GoOS-Exchange/main/" + cheese[3] + ".goexe"));
 
-                            /** Receive data **/
-                            var endpoint = new EndPoint(Address.Zero, 0);
-                            var data = xClient.Receive(ref endpoint);  //set endpoint to remote machine IP:port
-                            var data2 = xClient.NonBlockingReceive(ref endpoint); //retrieve receive buffer without waiting
-                            string bitString = BitConverter.ToString(data2);
-                            File.Create(@"0:\" + cheese[3]);
-                            File.WriteAllText(@"0:\" + cheese[3], bitString);
-                            print(bitString);
+                                /** Receive data **/
+                                var endpoint = new EndPoint(Address.Zero, 0);
+                                var data = xClient.Receive(ref endpoint);  //set endpoint to remote machine IP:port
+                                var data2 = xClient.NonBlockingReceive(ref endpoint); //retrieve receive buffer without waiting
+                                string bitString = BitConverter.ToString(data2);
+                                File.Create(@"0:\" + cheese[3]);
+                                File.WriteAllText(@"0:\" + cheese[3], bitString);
+                                print(bitString);
+                            }
+                        } catch (Exception a)
+                        {
+                            log(ConsoleColor.Red, "wtf happened yo. dis shit died on you");
                         }
                     }
                     else
