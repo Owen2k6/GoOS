@@ -168,31 +168,13 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
+            //Console.BackgroundColor = ConsoleColor.DarkBlue;
 
             //Somehow i realized this doesnt work unless i make it work dedicated to whatever it's doing. 
             try
             {
                 NetworkDevice nic = NetworkDevice.GetDeviceByName("eth0"); //get network device by name
                 IPConfig.Enable(nic, new Address(192, 168, 1, 32), new Address(255, 255, 255, 0), new Address(192, 168, 1, 254)); //enable IPv4 configuration
-                using (var xClient = new DHCPClient())
-                {
-                    /** Send a DHCP Discover packet **/
-                    //This will automatically set the IP config after DHCP response
-                    xClient.SendDiscoverPacket();
-                }
-                using (var xClient = new DnsClient())
-                {
-                    xClient.Connect(new Address(192, 168, 1, 254)); //DNS Server address
-
-                    /** Send DNS ask for a single domain name **/
-                    xClient.SendAsk("github.com");
-
-                    /** Receive DNS Response **/
-                    Address destination = xClient.Receive(); //can set a timeout value
-
-
-                }
-
             }
             catch
             {
@@ -293,10 +275,10 @@ namespace GoOS
             textcolour(ConsoleColor.Green);
             write("0:\\");
             textcolour(ConsoleColor.Gray);
-            String input = Console.ReadLine().ToLower();
+            String input = Console.ReadLine();
             //And so it begins...
             //Commands Section
-            if (input == "cinfo")
+            if (input.Equals("cinfo", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Magenta, "Goplex Operating System");
                 log(ConsoleColor.Blue, "GoOS is owned by Goplex Studios.");
@@ -305,7 +287,7 @@ namespace GoOS
                 log(ConsoleColor.Red, "Build Type: " + BuildType);
                 log(ConsoleColor.White, "Copyright 2022 (c) Owen2k6");
             }
-            else if (input == "help")
+            else if (input.Equals("help", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Magenta, "Goplex Operating System");
                 log(ConsoleColor.Blue, "HELP - Shows system commands");
@@ -324,7 +306,7 @@ namespace GoOS
                 log(ConsoleColor.Blue, "IPCONF - List all networking information");
                 log(ConsoleColor.Blue, "GUI - See a cool lil test!");
             }
-            else if (input == "credits")
+            else if (input.Equals("credits", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Cyan, "Goplex Studios - GoOS");
                 log(ConsoleColor.Cyan, "Discord Link: https://discord.owen2k6.com/");
@@ -334,7 +316,7 @@ namespace GoOS
                 log(ConsoleColor.Red, "moderator_man - Helped with my .gitignore issue and knows code fr");
                 log(ConsoleColor.Red, "atmo - GUI Libs");
             }
-            else if (input == "support")
+            else if (input.Equals("support", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Cyan, "Goplex Studios Support");
                 log(ConsoleColor.Red, "== For OS Support");
@@ -345,7 +327,7 @@ namespace GoOS
                 log(ConsoleColor.Red, "Go to the issues tab on the Owen2k6/GoOS Github page");
                 log(ConsoleColor.Red, "and submit an issue with the bug tag.");
             }
-            else if (input == "core")
+            else if (input.Equals("core", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Magenta, "GoOS Core Ver 0.3");
                 log(ConsoleColor.Magenta, "The Main backend to GoOS.");
@@ -360,7 +342,7 @@ namespace GoOS
 
             //Calculator Area
 
-            else if (input == "calc")
+            else if (input.Equals("calc", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Magenta, "GoCalc Commands");
                 log(ConsoleColor.Blue, "ADD - Add 2 numbers");
@@ -371,7 +353,7 @@ namespace GoOS
                 log(ConsoleColor.Blue, "CUBE - Cube a number");
                 log(ConsoleColor.Blue, "POWER10 - Make a number to the power of 10");
             }
-            else if (input == "add")
+            else if (input.Equals("add", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Green, "GoCalc - Addition");
                 log(ConsoleColor.Green, "Whole numbers only !!");
@@ -382,7 +364,7 @@ namespace GoOS
                 log(ConsoleColor.Green, "Adding up to");
                 int ans = no1 + no2;
             }
-            else if (input == "subtract")
+            else if (input.Equals("subtract", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Green, "GoCalc - Subtraction");
                 log(ConsoleColor.Green, "Whole numbers only !!");
@@ -393,7 +375,7 @@ namespace GoOS
                 log(ConsoleColor.Green, "Adding up to");
                 int ans = no1 - no2;
             }
-            else if (input == "divide")
+            else if (input.Equals("divide", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Green, "GoCalc - Division");
                 log(ConsoleColor.Green, "Whole numbers only !!");
@@ -404,7 +386,7 @@ namespace GoOS
                 log(ConsoleColor.Green, "Adding up to");
                 int ans = no1 / no2;
             }
-            else if (input == "multiply")
+            else if (input.Equals("multiply", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Green, "GoCalc - Multiplication");
                 log(ConsoleColor.Green, "Whole numbers only !!");
@@ -415,7 +397,7 @@ namespace GoOS
                 log(ConsoleColor.Green, "Adding up to");
                 int ans = no1 * no2;
             }
-            else if (input == "square")
+            else if (input.Equals("square", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Green, "GoCalc - Squaring");
                 log(ConsoleColor.Green, "Whole numbers only !!");
@@ -423,7 +405,7 @@ namespace GoOS
                 int no1 = Convert.ToInt32(Console.ReadLine());
                 int ans = no1 * no1;
             }
-            else if (input == "cube")
+            else if (input.Equals("cube", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Green, "GoCalc - Cubing");
                 log(ConsoleColor.Green, "Whole numbers only !!");
@@ -431,7 +413,7 @@ namespace GoOS
                 int no1 = Convert.ToInt32(Console.ReadLine());
                 int ans = no1 * no1 * no1;
             }
-            else if (input == "power10")
+            else if (input.Equals("power10", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Green, "GoCalc - To the power of 10");
                 log(ConsoleColor.Green, "Whole numbers only !!");
@@ -443,7 +425,7 @@ namespace GoOS
             // GoOS Admin
 
             //Disk Only stuff
-            else if (input == "diskcheck")
+            else if (input.Equals("diskcheck", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
@@ -471,7 +453,7 @@ namespace GoOS
                     }
                 }
             }
-            else if (input == "ls")
+            else if (input.Equals("ls", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
@@ -495,7 +477,7 @@ namespace GoOS
                     }
                 }
             }
-            else if (input == "notepad")
+            else if (input.Equals("notepad", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
@@ -507,7 +489,7 @@ namespace GoOS
                     MIV.StartMIV();
                 }
             }
-            else if (input == "gostudio")
+            else if (input.Equals("gostudio", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
@@ -519,7 +501,7 @@ namespace GoOS
                     GOSStudio.StartGSS();
                 }
             }
-            else if (input == "del")
+            else if (input.Equals("del", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
@@ -543,7 +525,7 @@ namespace GoOS
                     }
                 }
             }
-            else if (input == "run")
+            else if (input.Equals("run", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
@@ -967,7 +949,7 @@ namespace GoOS
                     }
                 }
             }
-            else if (input == "ld")
+            else if (input.Equals("ld", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
@@ -997,7 +979,7 @@ namespace GoOS
                     }
                 }
             }
-            else if (input == "ftp")
+            else if (input.Equals("ftp", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
@@ -1016,7 +998,7 @@ namespace GoOS
                     }
                 }
             }
-            else if (input == "ipconf")
+            else if (input.Equals("ipconf", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Red, "GoOS Admin: Showing Internet Information");
                 log(ConsoleColor.Red, NetworkConfiguration.CurrentAddress.ToString());
@@ -1024,7 +1006,7 @@ namespace GoOS
 
             //smth cool bro
 
-            else if (input == "gui")
+            else if (input.Equals("gui", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Red, "Notice: if the GUI crashes please reboot. most likely you ran out of ram.");
                 Console.ReadKey();
@@ -1084,50 +1066,6 @@ namespace GoOS
 
 
                 desktop.CreateCursor();
-            }
-
-            else if (input.StartsWith("godo"))
-            {
-                String[] cheese = input.Split(" ");
-                if (cheese[1].Equals("pakgo"))
-                {
-                    if (cheese.Length < 1)
-                    {
-                        log(ConsoleColor.Red, "eyo bro you forgot to say what i need to get.");
-                    }
-                    else if (cheese.Length == 3)
-                    {
-                        log(ConsoleColor.Yellow, "Lets roll.");
-                        try
-                        {
-                            using (var xClient = new TcpClient(4242))
-                            {
-                                xClient.Connect(new Address(185, 199, 110, 133), 4242);
-                                //GitHub IP for reference 140.82.121.3
-                                //GitHub UserContent data 185.199.110.133
-                                /** Send data **/
-                                xClient.Send(Encoding.ASCII.GetBytes("GET / HTTP/1.1\nHost: raw.githubusercontent.com/Owen2k6/GoOS-Exchange/main/" + cheese[3] + ".goexe"));
-
-                                /** Receive data **/
-                                var endpoint = new EndPoint(Address.Zero, 0);
-                                var data = xClient.Receive(ref endpoint);  //set endpoint to remote machine IP:port
-                                var data2 = xClient.NonBlockingReceive(ref endpoint); //retrieve receive buffer without waiting
-                                string bitString = BitConverter.ToString(data2);
-                                File.Create(@"0:\" + cheese[3]);
-                                File.WriteAllText(@"0:\" + cheese[3], bitString);
-                                print(bitString);
-                            }
-                        } catch (Exception a)
-                        {
-                            log(ConsoleColor.Red, "wtf happened yo. dis shit died on you");
-                        }
-                    }
-                    else
-                    {
-                        log(ConsoleColor.Red, "Yo bro smth wrong with your syntax");
-                    }
-                }
-
             }
 
 
