@@ -25,6 +25,9 @@ using Cosmos.HAL.BlockDevice.Registers;
 using System.Threading;
 using CitrineUI.Views;
 using CitrineUI;
+using static System.Net.Mime.MediaTypeNames;
+using Cosmos.System;
+using Console = System.Console;
 
 //Goplex Studios - GoOS
 //Copyright (C) 2022  Owen2k6
@@ -57,7 +60,7 @@ namespace GoOS
     {
         //Vars for OS
         public string version = "1.4.1";
-        public string BuildType = "Development";
+        public string BuildType = "Beta";
         public bool cmdm = true;
 
         #region GoOS UI shit
@@ -166,7 +169,7 @@ namespace GoOS
         protected override void BeforeRun()
         {
 
-//Somehow i realized this doesnt work unless i make it work dedicated to whatever it's doing. 
+            //Somehow i realized this doesnt work unless i make it work dedicated to whatever it's doing. 
             try
             {
                 NetworkDevice nic = NetworkDevice.GetDeviceByName("eth0"); //get network device by name
@@ -1075,12 +1078,50 @@ namespace GoOS
                 GuiHelp.Text = "Help";
 
 
-                
+
 
                 #endregion
 
 
                 desktop.CreateCursor();
+            }
+
+            else if (input.StartsWith("godo"))
+            {
+                String[] cheese = input.Split(".");
+                if (cheese[1].Equals("pakgo"))
+                {
+                    if (cheese.Length < 1)
+                    {
+                        log(ConsoleColor.Red, "eyo bro you forgot to say what i need to get.");
+                    }
+                    else if (cheese.Length == 3)
+                    {
+                        log(ConsoleColor.Yellow, "Lets roll.");
+                        using (var xClient = new TcpClient(4242))
+                        {
+                            xClient.Connect(new Address(185, 199, 110, 133), 4242);
+                            //GitHub IP for reference 140.82.121.3
+                            //GitHub UserContent data 185.199.110.133
+                            /** Send data **/
+                            xClient.Send(Encoding.ASCII.GetBytes("GET / HTTP/1.1\nHost: raw.githubusercontent.com/Owen2k6/GoOS-Exchange/main/" + cheese[3]));
+
+                            /** Receive data **/
+                            var endpoint = new EndPoint(Address.Zero, 0);
+                            var data = xClient.Receive(ref endpoint);  //set endpoint to remote machine IP:port
+                            var data2 = xClient.NonBlockingReceive(ref endpoint); //retrieve receive buffer without waiting
+                            string bitString = BitConverter.ToString(data2);
+                            File.Create(@"0:\" + cheese[3]);
+                            File.WriteAllText(@"0:\" + cheese[3], bitString);
+                            print(bitString);
+                        }
+                    }
+                    else
+                    {
+                        log(ConsoleColor.Red, "Yo bro smth wrong with your syntax");
+                    }
+                }
+
             }
 
 
