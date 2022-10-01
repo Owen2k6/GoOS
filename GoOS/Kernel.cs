@@ -1068,7 +1068,22 @@ namespace GoOS
                 desktop.CreateCursor();
             }
 
+            else if (input.StartsWith("godo ", StringComparison.OrdinalIgnoreCase))
+            {
+                using (var xClient = new TcpClient(80))
+                {
+                    xClient.Connect(new Address(135, 125, 172, 225), 80);
+                    //135.125.172.225
 
+                    /** Send data **/
+                    xClient.Send(Encoding.ASCII.GetBytes(""));
+
+                    /** Receive data **/
+                    var endpoint = new EndPoint(Address.Zero, 0);
+                    var data = xClient.Receive(ref endpoint);  //set endpoint to remote machine IP:port
+                    var data2 = xClient.NonBlockingReceive(ref endpoint); //retrieve receive buffer without waiting
+                }
+            }
 
 
             else

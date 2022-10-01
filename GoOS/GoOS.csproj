@@ -15,6 +15,7 @@
         <IgnoreDebugStubAttribute>False</IgnoreDebugStubAttribute>
         <ISOFile>bin\Debug\net5.0\GoOS.iso</ISOFile>
         <CompileVBEMultiboot>False</CompileVBEMultiboot>
+        <VBEResolution>1024x768x32</VBEResolution>
         <ExtractMapFile>False</ExtractMapFile>
         <VMwareEdition>Player</VMwareEdition>
         <VMware_StackCorruptionDetectionEnabled>True</VMware_StackCorruptionDetectionEnabled>
@@ -77,14 +78,24 @@
         <CosmosDebugPort>Serial: COM1</CosmosDebugPort>
         <Launch>VMware</Launch>
         <Profile>VMware</Profile>
-        <Description>Use VMware Player or Workstation to deploy and debug.</Description>
+        <Description>Simple text based OS with some cool features</Description>
         <PxeInterface>192.168.0.8</PxeInterface>
         <CompressionType>None</CompressionType>
+        <SignAssembly>False</SignAssembly>
+        <Authors>Owen2k6</Authors>
+        <Company>Goplex Studios</Company>
+        <Product>Goplex OS</Product>
+        <Copyright>Copyright (C) 2022 Owen2k6</Copyright>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
       <Optimize>True</Optimize>
+      <FileAlignment>512</FileAlignment>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <FileAlignment>512</FileAlignment>
     </PropertyGroup>
 	
 
