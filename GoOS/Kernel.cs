@@ -172,66 +172,7 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
-            try
-            {
-                //This is highly insecure however it's easier for me to code in rn just so i can add a much larger feature. i beg you not to make password systems like this.
-                if (File.Exists(@"0:\⚠.goplexsecure"))
-                {
-                    var protectedfile = File.ReadAllLines(@"0:\⚠.goplexsecure");
-                    foreach(String line in protectedfile)
-                    {
-                        if (line.StartsWith("username: "))
-                        {
-                            string data = line.Replace("username: ", "");
-                            username = data;
-                        }
-                        if (line.StartsWith("password: "))
-                        {
-                            string data = line.Replace("password: ", "");
-                            if (data == "")
-                            {
-                                loginsystemenabled = false;
-                            }
-                            else
-                            {
-                                loginsystemenabled = true;
-                                password = data;
-                            }
-                        }
-                        if (line.StartsWith("rootpassword: "))
-                        {
-                            rootpassword = line.Replace("rootpassword: ", "");
-                        }
-                    }
-                }
-                if (!File.Exists(@"0:\⚠.goplexsecure"))
-                {
-                    File.Create(@"0:\⚠.goplexsecure");
-                    File.WriteAllText(@"0:\⚠.goplexsecure", "username: \npassword: \nrootpassword: root");
-                }
-            } catch(Exception e)
-            {
-
-            }
             //Console.BackgroundColor = ConsoleColor.DarkBlue;
-
-            //Somehow i realized this doesnt work unless i make it work dedicated to whatever it's doing. 
-            try
-            {
-                using (var xClient = new DHCPClient())
-                {
-                    /** Send a DHCP Discover packet **/
-                    //This will automatically set the IP config after DHCP response
-                    xClient.SendDiscoverPacket();
-                }
-            }
-            catch
-            {
-                log(ConsoleColor.Green, "Error starting Goplex Web Interface.");
-                log(ConsoleColor.Green, "The system will proceed to boot without networking.");
-                log(ConsoleColor.Green, "Press ENTER to continue (and yes it has to be ENTER)");
-                Console.ReadLine();
-            }
 
             Console.Clear();
             log(ConsoleColor.Red, "                    GGGGGGGGGGGG                   ");
@@ -282,6 +223,49 @@ namespace GoOS
                 log(ConsoleColor.Red, "The GitHub releases page usually includes a disk built for GoOS");
                 log(ConsoleColor.Red, "Disks aren't required but they're highly reccomended.");
                 adminconsoledisk = false;
+            }
+            try
+            {
+                //This is highly insecure however it's easier for me to code in rn just so i can add a much larger feature. i beg you not to make password systems like this.
+                if (File.Exists(@"0:\passwordsystem.goplexsecure"))
+                {
+                    var protectedfile = File.ReadAllLines(@"0:\passwordsystem.goplexsecure");
+                    foreach (String line in protectedfile)
+                    {
+                        if (line.StartsWith("username: "))
+                        {
+                            string data = line.Replace("username: ", "");
+                            username = data;
+                        }
+                        if (line.StartsWith("password: "))
+                        {
+                            string data = line.Replace("password: ", "");
+                            if (data == "")
+                            {
+                                loginsystemenabled = false;
+                            }
+                            else
+                            {
+                                loginsystemenabled = true;
+                                password = data;
+                            }
+                        }
+                        if (line.StartsWith("rootpassword: "))
+                        {
+                            rootpassword = line.Replace("rootpassword: ", "");
+                        }
+                    }
+                }
+                if (!File.Exists(@"0:\passwordsystem.goplexsecure"))
+                {
+                    File.Create(@"0:\passwordsystem.goplexsecure");
+                    File.WriteAllText(@"0:\passwordsystem.goplexsecure", "username: \npassword: \nrootpassword: root");
+                }
+            }
+            catch (Exception e)
+            {
+                log(ConsoleColor.Red, "ERROR! " + e);
+                Console.ReadLine();
             }
             textcolour(ConsoleColor.Green);
             if (loginsystemenabled)
