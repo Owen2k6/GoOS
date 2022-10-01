@@ -59,9 +59,11 @@ namespace GoOS
     public class Kernel : Sys.Kernel
     {
         //Vars for OS
-        public string version = "1.4.1";
+        public string version = "1.4.1-beta-4";
         public string BuildType = "Beta";
         public bool cmdm = true;
+        public bool root = false;
+        public bool gui = false;
 
         #region GoOS UI shit
         //UI
@@ -139,8 +141,10 @@ namespace GoOS
 
         //Login Data
         private Boolean loginsystemenabled = false;
+        private Boolean rootloginsystemenabled = false;
         private String username = null;
         private String password = null;
+        private String rootpassword = null;
 
 
 
@@ -168,6 +172,47 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
+            try
+            {
+                //This is highly insecure however it's easier for me to code in rn just so i can add a much larger feature. i beg you not to make password systems like this.
+                if (File.Exists(@"0:\⚠.goplexsecure"))
+                {
+                    var protectedfile = File.ReadAllLines(@"0:\⚠.goplexsecure");
+                    foreach(String line in protectedfile)
+                    {
+                        if (line.StartsWith("username: "))
+                        {
+                            string data = line.Replace("username: ", "");
+                            username = data;
+                        }
+                        if (line.StartsWith("password: "))
+                        {
+                            string data = line.Replace("password: ", "");
+                            if (data == "")
+                            {
+                                loginsystemenabled = false;
+                            }
+                            else
+                            {
+                                loginsystemenabled = true;
+                                password = data;
+                            }
+                        }
+                        if (line.StartsWith("rootpassword: "))
+                        {
+                            rootpassword = line.Replace("rootpassword: ", "");
+                        }
+                    }
+                }
+                if (!File.Exists(@"0:\⚠.goplexsecure"))
+                {
+                    File.Create(@"0:\⚠.goplexsecure");
+                    File.WriteAllText(@"0:\⚠.goplexsecure", "username: \npassword: \nrootpassword: root");
+                }
+            } catch(Exception e)
+            {
+
+            }
             //Console.BackgroundColor = ConsoleColor.DarkBlue;
 
             //Somehow i realized this doesnt work unless i make it work dedicated to whatever it's doing. 
@@ -269,9 +314,17 @@ namespace GoOS
             {
                 CommandMode();
             }
-            Heap.Collect();
-            // Render all the views (buttons, images etc.) that are within the desktop.
-            desktop.Render();
+            while (gui)
+            {
+                Heap.Collect();
+                // Render all the views (buttons, images etc.) that are within the desktop.
+                desktop.Render();
+            }
+            while (root)
+            {
+                Root();
+            }
+
         }
 
         protected void CommandMode()
@@ -297,7 +350,6 @@ namespace GoOS
                 log(ConsoleColor.Blue, "HELP - Shows system commands");
                 log(ConsoleColor.Blue, "CINFO - Shows system infomation");
                 log(ConsoleColor.Blue, "SUPPORT - Shows how to get support");
-                log(ConsoleColor.Blue, "GAMES - Shows the list of GoOS Games");
                 log(ConsoleColor.Blue, "CORE - Displays GoOS Core infomation");
                 log(ConsoleColor.Blue, "CALC - Shows a list of possible calculation commands");
                 log(ConsoleColor.Blue, "CREDITS - Shows the GoOS Developers");
@@ -367,6 +419,7 @@ namespace GoOS
                 int no2 = Convert.ToInt32(Console.ReadLine());
                 log(ConsoleColor.Green, "Adding up to");
                 int ans = no1 + no2;
+                log(ConsoleColor.Yellow, "Answer: " + ans);
             }
             else if (input.Equals("subtract", StringComparison.OrdinalIgnoreCase))
             {
@@ -378,6 +431,7 @@ namespace GoOS
                 int no2 = Convert.ToInt32(Console.ReadLine());
                 log(ConsoleColor.Green, "Adding up to");
                 int ans = no1 - no2;
+                log(ConsoleColor.Yellow, "Answer: " + ans);
             }
             else if (input.Equals("divide", StringComparison.OrdinalIgnoreCase))
             {
@@ -389,6 +443,7 @@ namespace GoOS
                 int no2 = Convert.ToInt32(Console.ReadLine());
                 log(ConsoleColor.Green, "Adding up to");
                 int ans = no1 / no2;
+                log(ConsoleColor.Yellow, "Answer: " + ans);
             }
             else if (input.Equals("multiply", StringComparison.OrdinalIgnoreCase))
             {
@@ -400,6 +455,7 @@ namespace GoOS
                 int no2 = Convert.ToInt32(Console.ReadLine());
                 log(ConsoleColor.Green, "Adding up to");
                 int ans = no1 * no2;
+                log(ConsoleColor.Yellow, "Answer: " + ans);
             }
             else if (input.Equals("square", StringComparison.OrdinalIgnoreCase))
             {
@@ -408,6 +464,7 @@ namespace GoOS
                 log(ConsoleColor.Green, "Enter number to square: ");
                 int no1 = Convert.ToInt32(Console.ReadLine());
                 int ans = no1 * no1;
+                log(ConsoleColor.Yellow, "Answer: " + ans);
             }
             else if (input.Equals("cube", StringComparison.OrdinalIgnoreCase))
             {
@@ -416,6 +473,7 @@ namespace GoOS
                 log(ConsoleColor.Green, "Enter number to cube: ");
                 int no1 = Convert.ToInt32(Console.ReadLine());
                 int ans = no1 * no1 * no1;
+                log(ConsoleColor.Yellow, "Answer: " + ans);
             }
             else if (input.Equals("power10", StringComparison.OrdinalIgnoreCase))
             {
@@ -424,6 +482,7 @@ namespace GoOS
                 log(ConsoleColor.Green, "Enter number to p10: ");
                 int no1 = Convert.ToInt32(Console.ReadLine());
                 int ans = no1 * no1 * no1 * no1 * no1 * no1 * no1 * no1 * no1 * no1;
+                log(ConsoleColor.Yellow, "Answer: " + ans);
             }
 
             // GoOS Admin
@@ -1113,12 +1172,39 @@ namespace GoOS
                 log(ConsoleColor.Green, "");
                 log(ConsoleColor.Magenta, "Type HELP for a list of commands");
             }
-                textcolour(ConsoleColor.Green);
-            }
-
+            textcolour(ConsoleColor.Green);
         }
 
 
+        protected void Root()
+        {
+            textcolour(ConsoleColor.Red);
+            write("GoOS Admin:");
+            textcolour(ConsoleColor.Gray);
+            String input = Console.ReadLine();
+            if (input.Equals("goos.cmd.list", StringComparison.OrdinalIgnoreCase))
+            {
+                log(ConsoleColor.DarkRed, "GoOS Root Commands:");
+                log(ConsoleColor.DarkRed, "WHITE = SAFE");
+                log(ConsoleColor.DarkRed, "RED = DANGEROUS");
+                log(ConsoleColor.Yellow, "Password Security -");
+                log(ConsoleColor.White, "GOOS.SECURITY.PASSWORD.CHANGE");
+                log(ConsoleColor.White, "GOOS.SECURITY.PASSWORD.REMOVE");
+                log(ConsoleColor.White, "GOOS.SECURITY.PASSWORD");
+                log(ConsoleColor.Yellow, "Disk Commands -");
+                log(ConsoleColor.White, "GOOS.DISK.RELABEL");
+                log(ConsoleColor.White, "GOOS.DISK.SCAN");
+                log(ConsoleColor.White, "GOOS.DISK.LISTALL");
+            }
+            else
+            {
+                log(ConsoleColor.Red, "Bad command. type GoOS.CMD.List for a list of user friendly commands");
+            }
+        }
+
     }
+
+
+}
 
 
