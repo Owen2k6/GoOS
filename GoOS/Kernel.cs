@@ -173,8 +173,12 @@ namespace GoOS
             //Somehow i realized this doesnt work unless i make it work dedicated to whatever it's doing. 
             try
             {
-                NetworkDevice nic = NetworkDevice.GetDeviceByName("eth0"); //get network device by name
-                IPConfig.Enable(nic, new Address(192, 168, 1, 32), new Address(255, 255, 255, 0), new Address(192, 168, 1, 254)); //enable IPv4 configuration
+                using (var xClient = new DHCPClient())
+                {
+                    /** Send a DHCP Discover packet **/
+                    //This will automatically set the IP config after DHCP response
+                    xClient.SendDiscoverPacket();
+                }
             }
             catch
             {
@@ -1068,20 +1072,31 @@ namespace GoOS
                 desktop.CreateCursor();
             }
 
-            else if (input.StartsWith("godo ", StringComparison.OrdinalIgnoreCase))
+            else if (input.Equals("gogetAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", StringComparison.OrdinalIgnoreCase))
             {
-                using (var xClient = new TcpClient(80))
+                textcolour(ConsoleColor.Yellow);
+                write("What app do you want to install: ");
+                textcolour(ConsoleColor.White);
+                String filetoget = Console.ReadLine();
+                textcolour(ConsoleColor.Green);
+                using (var xClient = new TcpClient(39482))
                 {
                     xClient.Connect(new Address(135, 125, 172, 225), 80);
                     //135.125.172.225
 
                     /** Send data **/
-                    xClient.Send(Encoding.ASCII.GetBytes(""));
+                    xClient.Send(Encoding.ASCII.GetBytes("GET /" + filetoget + ".goexe HTTP/1.1\nHost: ubnserver.owen2k6.com\n\n"));
 
                     /** Receive data **/
                     var endpoint = new EndPoint(Address.Zero, 0);
                     var data = xClient.Receive(ref endpoint);  //set endpoint to remote machine IP:port
                     var data2 = xClient.NonBlockingReceive(ref endpoint); //retrieve receive buffer without waiting
+                    string bitString = BitConverter.ToString(data2);
+                    File.Create(@"0:\" + filetoget + ".goexe");
+                    File.WriteAllText(@"0:\" + filetoget + ".goexe", bitString);
+                    print(bitString);
+
+
                 }
             }
 
@@ -1098,12 +1113,12 @@ namespace GoOS
                 log(ConsoleColor.Green, "");
                 log(ConsoleColor.Magenta, "Type HELP for a list of commands");
             }
-            textcolour(ConsoleColor.Green);
+                textcolour(ConsoleColor.Green);
+            }
+
         }
 
+
     }
-
-
-}
 
 
