@@ -297,6 +297,7 @@ namespace GoOS
             while (cmdm)
             {
                 CommandMode();
+                Heap.Collect();
             }
             while (gui)
             {
@@ -307,6 +308,7 @@ namespace GoOS
             while (root)
             {
                 Root();
+                Heap.Collect();
             }
 
         }
@@ -1172,6 +1174,8 @@ namespace GoOS
                 log(ConsoleColor.DarkRed, "WHITE = SAFE");
                 log(ConsoleColor.DarkRed, "RED = DANGEROUS");
                 log(ConsoleColor.Yellow, "Password Security -");
+                log(ConsoleColor.White, "GOOS.ROOT.SECURITY.PASSWORD.CHANGE");
+                log(ConsoleColor.White, "GOOS.ROOT.SECURITY.PASSWORD");
                 log(ConsoleColor.White, "GOOS.SECURITY.PASSWORD.CHANGE");
                 log(ConsoleColor.White, "GOOS.SECURITY.PASSWORD.REMOVE");
                 log(ConsoleColor.White, "GOOS.SECURITY.PASSWORD");
@@ -1179,6 +1183,7 @@ namespace GoOS
                 log(ConsoleColor.White, "GOOS.DISK.RELABEL");
                 log(ConsoleColor.White, "GOOS.DISK.SCAN");
                 log(ConsoleColor.White, "GOOS.DISK.LISTALL");
+                log(ConsoleColor.Red, "GOOS.DISK.FORMAT");
             }
             else
             {
