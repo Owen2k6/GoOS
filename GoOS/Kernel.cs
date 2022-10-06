@@ -28,6 +28,7 @@ using CitrineUI;
 using static System.Net.Mime.MediaTypeNames;
 using Cosmos.System;
 using Console = System.Console;
+using System.Linq;
 
 //Goplex Studios - GoOS
 //Copyright (C) 2022  Owen2k6
@@ -1061,6 +1062,7 @@ namespace GoOS
                 Console.ReadKey();
                 // THIS IS DANGEROUS. DO NOT DISABLE CMDM AT ANY TIME UNLESS ENTERING A UI.
                 cmdm = false;
+                gui = true;
                 canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
                 CitrineUI.Text.TextRenderer.Initialize();
 
@@ -1115,6 +1117,23 @@ namespace GoOS
 
 
                 desktop.CreateCursor();
+            }
+            else if (input.Equals("root", StringComparison.OrdinalIgnoreCase))
+            {
+                //Root function activator. do not disable modes without enabling other modes.
+                print("");
+                write("Root Password:");
+                String passinpt = Console.ReadLine();
+                if (passinpt == rootpassword)
+                {
+                    cmdm = false;
+                    root = true;
+                }
+                else
+                {
+                    Console.Clear();
+                    log(ConsoleColor.Red, "GoOS Admin: Password incorrect.");
+                }
             }
 
             else if (input.Equals("gogetAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", StringComparison.OrdinalIgnoreCase))
@@ -1184,10 +1203,192 @@ namespace GoOS
                 log(ConsoleColor.White, "GOOS.DISK.SCAN");
                 log(ConsoleColor.White, "GOOS.DISK.LISTALL");
                 log(ConsoleColor.Red, "GOOS.DISK.FORMAT");
+                log(ConsoleColor.Yellow, "Root Settings -");
+                log(ConsoleColor.White, "GOOS.ROOT.EXIT");
             }
-            else
+            else if (input.Equals("goos.root.security.password.change", StringComparison.OrdinalIgnoreCase))
             {
-                log(ConsoleColor.Red, "Bad command. type GoOS.CMD.List for a list of user friendly commands");
+                log(ConsoleColor.Red, "This feature is unavailable at the current time.");
+                log(ConsoleColor.Red, "edit passwordsystem.goplexsecure in to change passwords for now.");
+
+            }
+            else if (input.Equals("goos.root.security.password.remove", StringComparison.OrdinalIgnoreCase))
+            {
+                log(ConsoleColor.Red, "This feature is unavailable at the current time.");
+                log(ConsoleColor.Red, "edit passwordsystem.goplexsecure in to change passwords for now.");
+            }
+            else if (input.Equals("goos.security.password.change", StringComparison.OrdinalIgnoreCase))
+            {
+                log(ConsoleColor.Red, "This feature is unavailable at the current time.");
+                log(ConsoleColor.Red, "edit passwordsystem.goplexsecure in to change passwords for now.");
+            }
+            else if (input.Equals("goos.security.password.remove", StringComparison.OrdinalIgnoreCase))
+            {
+                log(ConsoleColor.Red, "This feature is unavailable at the current time.");
+                log(ConsoleColor.Red, "edit passwordsystem.goplexsecure in to change passwords for now.");
+            }
+            else if (input.Equals("goos.security.password", StringComparison.OrdinalIgnoreCase))
+            {
+                log(ConsoleColor.Red, "Requesting data.");
+                var grabpass = password;
+                log(ConsoleColor.Red, "Data Recieved.");
+                print(grabpass);
+            }
+            else if (input.Equals("goos.disk.relabel", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    var label = FS.GetFileSystemLabel(@"0:\");
+                    log(ConsoleColor.Red, "GoOS Admin: Relabel disk");
+                    log(ConsoleColor.Red, "GoOS Admin: Press ENTER to leave the label as \"" + label + "\"");
+                    textcolour(ConsoleColor.Yellow);
+                    write("New Label for 0:\\: ");
+                    String inputamana = Console.ReadLine();
+                    if (inputamana == string.Empty)
+                    {
+                        inputamana = label;
+                    }
+                    try
+                    {
+                        FS.SetFileSystemLabel(@"0:\", inputamana);
+                        log(ConsoleColor.Blue, "GoOS Admin: Drive Label modified from " + label + " to " + inputamana);
+                    }
+                    catch (Exception e)
+                    {
+                        log(ConsoleColor.Red, "Please send the following to GoOS Developers");
+                        log(ConsoleColor.Red, e.ToString());
+                    }
+                }
+            }
+            else if (input.Equals("goos.disk.scan", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    try
+                    {
+                        log(ConsoleColor.Red, "GoOS Admin: Showing Disk Information for 0:\\");
+                        var available_space = FS.GetAvailableFreeSpace(@"0:\");
+                        var total_space = FS.GetTotalSize(@"0:\");
+                        var label = FS.GetFileSystemLabel(@"0:\");
+                        var fs_type = FS.GetFileSystemType(@"0:\");
+                        log(ConsoleColor.Red, "Available Free Space: " + available_space + "(" + (available_space / 1e+9) + "GiB)");
+                        log(ConsoleColor.Red, "Total Space on disk: " + total_space + "(" + (total_space / 1e+9) + "GiB)");
+                        log(ConsoleColor.Red, "Disk Label: " + label);
+                        log(ConsoleColor.Red, "File System Type: " + fs_type);
+                    }
+                    catch (Exception e)
+                    {
+                        log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                        log(ConsoleColor.Red, "GoOS Admin: For system security, we have disabled all Drive functions.");
+                        adminconsoledisk = false;
+                    }
+                }
+            }
+            else if (input.Equals("goos.disk.listall", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    try
+                    {
+                        var directory_list_directories = Directory.GetDirectories(@"0:\");
+                        foreach (var folder in directory_list_directories)
+                        {
+                            log(ConsoleColor.Red, folder);
+                        }
+                        var directory_list = Directory.GetFiles(@"0:\");
+                        foreach (var file in directory_list)
+                        {
+                            log(ConsoleColor.Red, file);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                        log(ConsoleColor.Red, "GoOS Admin: For system security, we have disabled all Drive functions.");
+                        adminconsoledisk = false;
+                    }
+                }
+            }
+            else if (input.Equals("goos.disk.format", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    try
+                    {
+                        bool proceed = false;
+                        bool hasentered = false;
+                        while (!hasentered)
+                        {
+                            write("Are you sure you want to format drive 0:\\?");
+                            string inputer = Console.ReadLine();
+                            if (inputer.Equals("yes", StringComparison.OrdinalIgnoreCase))
+                            {
+                                log(ConsoleColor.Red, "ARE YOU SURE?");
+                                string inputer2 = Console.ReadLine();
+                                if (inputer2.Equals("yes", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    proceed = true;
+                                    hasentered = true;
+                                }
+                                if (inputer2.Equals("no", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    print("aborted.");
+                                    hasentered = true;
+                                }
+                            }
+                            if (inputer.Equals("no", StringComparison.OrdinalIgnoreCase))
+                            {
+                                print("aborted.");
+                                hasentered = true;
+
+                            }
+                        }
+                        if (proceed)
+                        {
+                            try
+                            {
+                                var directory_list = Directory.GetFiles(@"0:\");
+                                foreach (var file in directory_list)
+                                {
+                                    File.Delete(@"0:\" + file);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                                log(ConsoleColor.Red, "GoOS Admin: For system security, we have disabled all Drive functions.");
+                                adminconsoledisk = false;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                        log(ConsoleColor.Red, "GoOS Admin: For system security, we have disabled all Drive functions.");
+                        adminconsoledisk = false;
+                    }
+                }
+            }
+            else if (input.Equals("goos.root.exit", StringComparison.OrdinalIgnoreCase))
+            {
+                root = false;
+                cmdm = true;
             }
         }
 
