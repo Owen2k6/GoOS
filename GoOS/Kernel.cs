@@ -28,6 +28,7 @@ using CitrineUI;
 using static System.Net.Mime.MediaTypeNames;
 using Cosmos.System;
 using Console = System.Console;
+using System.Linq;
 
 //Goplex Studios - GoOS
 //Copyright (C) 2022  Owen2k6
@@ -59,9 +60,11 @@ namespace GoOS
     public class Kernel : Sys.Kernel
     {
         //Vars for OS
-        public string version = "1.4.1";
+        public string version = "1.4.1-beta-4";
         public string BuildType = "Beta";
         public bool cmdm = true;
+        public bool root = false;
+        public bool gui = false;
 
         #region GoOS UI shit
         //UI
@@ -139,8 +142,10 @@ namespace GoOS
 
         //Login Data
         private Boolean loginsystemenabled = false;
+        private Boolean rootloginsystemenabled = false;
         private String username = null;
         private String password = null;
+        private String rootpassword = null;
 
 
 
@@ -168,39 +173,7 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
-
-            //Somehow i realized this doesnt work unless i make it work dedicated to whatever it's doing. 
-            try
-            {
-                NetworkDevice nic = NetworkDevice.GetDeviceByName("eth0"); //get network device by name
-                IPConfig.Enable(nic, new Address(192, 168, 1, 32), new Address(255, 255, 255, 0), new Address(192, 168, 1, 254)); //enable IPv4 configuration
-                using (var xClient = new DHCPClient())
-                {
-                    /** Send a DHCP Discover packet **/
-                    //This will automatically set the IP config after DHCP response
-                    xClient.SendDiscoverPacket();
-                }
-                using (var xClient = new DnsClient())
-                {
-                    xClient.Connect(new Address(192, 168, 1, 254)); //DNS Server address
-
-                    /** Send DNS ask for a single domain name **/
-                    xClient.SendAsk("github.com");
-
-                    /** Receive DNS Response **/
-                    Address destination = xClient.Receive(); //can set a timeout value
-
-
-                }
-
-            }
-            catch
-            {
-                log(ConsoleColor.Green, "Error starting Goplex Web Interface.");
-                log(ConsoleColor.Green, "The system will proceed to boot without networking.");
-                log(ConsoleColor.Green, "Press ENTER to continue (and yes it has to be ENTER)");
-                Console.ReadLine();
-            }
+            //Console.BackgroundColor = ConsoleColor.DarkBlue;
 
             Console.Clear();
             log(ConsoleColor.Red, "                    GGGGGGGGGGGG                   ");
@@ -252,6 +225,49 @@ namespace GoOS
                 log(ConsoleColor.Red, "Disks aren't required but they're highly reccomended.");
                 adminconsoledisk = false;
             }
+            try
+            {
+                //This is highly insecure however it's easier for me to code in rn just so i can add a much larger feature. i beg you not to make password systems like this.
+                if (File.Exists(@"0:\passwordsystem.goplexsecure"))
+                {
+                    var protectedfile = File.ReadAllLines(@"0:\passwordsystem.goplexsecure");
+                    foreach (String line in protectedfile)
+                    {
+                        if (line.StartsWith("username: "))
+                        {
+                            string data = line.Replace("username: ", "");
+                            username = data;
+                        }
+                        if (line.StartsWith("password: "))
+                        {
+                            string data = line.Replace("password: ", "");
+                            if (data == "")
+                            {
+                                loginsystemenabled = false;
+                            }
+                            else
+                            {
+                                loginsystemenabled = true;
+                                password = data;
+                            }
+                        }
+                        if (line.StartsWith("rootpassword: "))
+                        {
+                            rootpassword = line.Replace("rootpassword: ", "");
+                        }
+                    }
+                }
+                if (!File.Exists(@"0:\passwordsystem.goplexsecure"))
+                {
+                    File.Create(@"0:\passwordsystem.goplexsecure");
+                    File.WriteAllText(@"0:\passwordsystem.goplexsecure", "username: \npassword: \nrootpassword: root");
+                }
+            }
+            catch (Exception e)
+            {
+                log(ConsoleColor.Red, "ERROR! " + e);
+                Console.ReadLine();
+            }
             textcolour(ConsoleColor.Green);
             if (loginsystemenabled)
             {
@@ -282,10 +298,20 @@ namespace GoOS
             while (cmdm)
             {
                 CommandMode();
+                Heap.Collect();
             }
-            Heap.Collect();
-            // Render all the views (buttons, images etc.) that are within the desktop.
-            desktop.Render();
+            while (gui)
+            {
+                Heap.Collect();
+                // Render all the views (buttons, images etc.) that are within the desktop.
+                desktop.Render();
+            }
+            while (root)
+            {
+                Root();
+                Heap.Collect();
+            }
+
         }
 
         protected void CommandMode()
@@ -293,10 +319,10 @@ namespace GoOS
             textcolour(ConsoleColor.Green);
             write("0:\\");
             textcolour(ConsoleColor.Gray);
-            String input = Console.ReadLine().ToLower();
+            String input = Console.ReadLine();
             //And so it begins...
             //Commands Section
-            if (input == "cinfo")
+            if (input.Equals("cinfo", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Magenta, "Goplex Operating System");
                 log(ConsoleColor.Blue, "GoOS is owned by Goplex Studios.");
@@ -305,13 +331,12 @@ namespace GoOS
                 log(ConsoleColor.Red, "Build Type: " + BuildType);
                 log(ConsoleColor.White, "Copyright 2022 (c) Owen2k6");
             }
-            else if (input == "help")
+            else if (input.Equals("help", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Magenta, "Goplex Operating System");
                 log(ConsoleColor.Blue, "HELP - Shows system commands");
                 log(ConsoleColor.Blue, "CINFO - Shows system infomation");
                 log(ConsoleColor.Blue, "SUPPORT - Shows how to get support");
-                log(ConsoleColor.Blue, "GAMES - Shows the list of GoOS Games");
                 log(ConsoleColor.Blue, "CORE - Displays GoOS Core infomation");
                 log(ConsoleColor.Blue, "CALC - Shows a list of possible calculation commands");
                 log(ConsoleColor.Blue, "CREDITS - Shows the GoOS Developers");
@@ -324,7 +349,7 @@ namespace GoOS
                 log(ConsoleColor.Blue, "IPCONF - List all networking information");
                 log(ConsoleColor.Blue, "GUI - See a cool lil test!");
             }
-            else if (input == "credits")
+            else if (input.Equals("credits", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Cyan, "Goplex Studios - GoOS");
                 log(ConsoleColor.Cyan, "Discord Link: https://discord.owen2k6.com/");
@@ -334,7 +359,7 @@ namespace GoOS
                 log(ConsoleColor.Red, "moderator_man - Helped with my .gitignore issue and knows code fr");
                 log(ConsoleColor.Red, "atmo - GUI Libs");
             }
-            else if (input == "support")
+            else if (input.Equals("support", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Cyan, "Goplex Studios Support");
                 log(ConsoleColor.Red, "== For OS Support");
@@ -345,7 +370,7 @@ namespace GoOS
                 log(ConsoleColor.Red, "Go to the issues tab on the Owen2k6/GoOS Github page");
                 log(ConsoleColor.Red, "and submit an issue with the bug tag.");
             }
-            else if (input == "core")
+            else if (input.Equals("core", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Magenta, "GoOS Core Ver 0.3");
                 log(ConsoleColor.Magenta, "The Main backend to GoOS.");
@@ -360,7 +385,7 @@ namespace GoOS
 
             //Calculator Area
 
-            else if (input == "calc")
+            else if (input.Equals("calc", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Magenta, "GoCalc Commands");
                 log(ConsoleColor.Blue, "ADD - Add 2 numbers");
@@ -371,7 +396,7 @@ namespace GoOS
                 log(ConsoleColor.Blue, "CUBE - Cube a number");
                 log(ConsoleColor.Blue, "POWER10 - Make a number to the power of 10");
             }
-            else if (input == "add")
+            else if (input.Equals("add", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Green, "GoCalc - Addition");
                 log(ConsoleColor.Green, "Whole numbers only !!");
@@ -381,8 +406,9 @@ namespace GoOS
                 int no2 = Convert.ToInt32(Console.ReadLine());
                 log(ConsoleColor.Green, "Adding up to");
                 int ans = no1 + no2;
+                log(ConsoleColor.Yellow, "Answer: " + ans);
             }
-            else if (input == "subtract")
+            else if (input.Equals("subtract", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Green, "GoCalc - Subtraction");
                 log(ConsoleColor.Green, "Whole numbers only !!");
@@ -392,8 +418,9 @@ namespace GoOS
                 int no2 = Convert.ToInt32(Console.ReadLine());
                 log(ConsoleColor.Green, "Adding up to");
                 int ans = no1 - no2;
+                log(ConsoleColor.Yellow, "Answer: " + ans);
             }
-            else if (input == "divide")
+            else if (input.Equals("divide", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Green, "GoCalc - Division");
                 log(ConsoleColor.Green, "Whole numbers only !!");
@@ -403,8 +430,9 @@ namespace GoOS
                 int no2 = Convert.ToInt32(Console.ReadLine());
                 log(ConsoleColor.Green, "Adding up to");
                 int ans = no1 / no2;
+                log(ConsoleColor.Yellow, "Answer: " + ans);
             }
-            else if (input == "multiply")
+            else if (input.Equals("multiply", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Green, "GoCalc - Multiplication");
                 log(ConsoleColor.Green, "Whole numbers only !!");
@@ -414,36 +442,40 @@ namespace GoOS
                 int no2 = Convert.ToInt32(Console.ReadLine());
                 log(ConsoleColor.Green, "Adding up to");
                 int ans = no1 * no2;
+                log(ConsoleColor.Yellow, "Answer: " + ans);
             }
-            else if (input == "square")
+            else if (input.Equals("square", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Green, "GoCalc - Squaring");
                 log(ConsoleColor.Green, "Whole numbers only !!");
                 log(ConsoleColor.Green, "Enter number to square: ");
                 int no1 = Convert.ToInt32(Console.ReadLine());
                 int ans = no1 * no1;
+                log(ConsoleColor.Yellow, "Answer: " + ans);
             }
-            else if (input == "cube")
+            else if (input.Equals("cube", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Green, "GoCalc - Cubing");
                 log(ConsoleColor.Green, "Whole numbers only !!");
                 log(ConsoleColor.Green, "Enter number to cube: ");
                 int no1 = Convert.ToInt32(Console.ReadLine());
                 int ans = no1 * no1 * no1;
+                log(ConsoleColor.Yellow, "Answer: " + ans);
             }
-            else if (input == "power10")
+            else if (input.Equals("power10", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Green, "GoCalc - To the power of 10");
                 log(ConsoleColor.Green, "Whole numbers only !!");
                 log(ConsoleColor.Green, "Enter number to p10: ");
                 int no1 = Convert.ToInt32(Console.ReadLine());
                 int ans = no1 * no1 * no1 * no1 * no1 * no1 * no1 * no1 * no1 * no1;
+                log(ConsoleColor.Yellow, "Answer: " + ans);
             }
 
             // GoOS Admin
 
             //Disk Only stuff
-            else if (input == "diskcheck")
+            else if (input.Equals("diskcheck", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
@@ -471,7 +503,7 @@ namespace GoOS
                     }
                 }
             }
-            else if (input == "ls")
+            else if (input.Equals("ls", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
@@ -495,7 +527,7 @@ namespace GoOS
                     }
                 }
             }
-            else if (input == "notepad")
+            else if (input.Equals("notepad", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
@@ -507,7 +539,7 @@ namespace GoOS
                     MIV.StartMIV();
                 }
             }
-            else if (input == "gostudio")
+            else if (input.Equals("gostudio", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
@@ -519,7 +551,7 @@ namespace GoOS
                     GOSStudio.StartGSS();
                 }
             }
-            else if (input == "del")
+            else if (input.Equals("del", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
@@ -543,7 +575,7 @@ namespace GoOS
                     }
                 }
             }
-            else if (input == "run")
+            else if (input.Equals("run", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
@@ -967,7 +999,7 @@ namespace GoOS
                     }
                 }
             }
-            else if (input == "ld")
+            else if (input.Equals("ld", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
@@ -997,7 +1029,7 @@ namespace GoOS
                     }
                 }
             }
-            else if (input == "ftp")
+            else if (input.Equals("ftp", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
@@ -1016,7 +1048,7 @@ namespace GoOS
                     }
                 }
             }
-            else if (input == "ipconf")
+            else if (input.Equals("ipconf", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Red, "GoOS Admin: Showing Internet Information");
                 log(ConsoleColor.Red, NetworkConfiguration.CurrentAddress.ToString());
@@ -1024,12 +1056,13 @@ namespace GoOS
 
             //smth cool bro
 
-            else if (input == "gui")
+            else if (input.Equals("gui", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Red, "Notice: if the GUI crashes please reboot. most likely you ran out of ram.");
                 Console.ReadKey();
                 // THIS IS DANGEROUS. DO NOT DISABLE CMDM AT ANY TIME UNLESS ENTERING A UI.
                 cmdm = false;
+                gui = true;
                 canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
                 CitrineUI.Text.TextRenderer.Initialize();
 
@@ -1085,46 +1118,51 @@ namespace GoOS
 
                 desktop.CreateCursor();
             }
-
-            else if (input.StartsWith("godo"))
+            else if (input.Equals("root", StringComparison.OrdinalIgnoreCase))
             {
-                String[] cheese = input.Split(".");
-                if (cheese[1].Equals("pakgo"))
+                //Root function activator. do not disable modes without enabling other modes.
+                print("");
+                write("Root Password:");
+                String passinpt = Console.ReadLine();
+                if (passinpt == rootpassword)
                 {
-                    if (cheese.Length < 1)
-                    {
-                        log(ConsoleColor.Red, "eyo bro you forgot to say what i need to get.");
-                    }
-                    else if (cheese.Length == 3)
-                    {
-                        log(ConsoleColor.Yellow, "Lets roll.");
-                        using (var xClient = new TcpClient(4242))
-                        {
-                            xClient.Connect(new Address(185, 199, 110, 133), 4242);
-                            //GitHub IP for reference 140.82.121.3
-                            //GitHub UserContent data 185.199.110.133
-                            /** Send data **/
-                            xClient.Send(Encoding.ASCII.GetBytes("GET / HTTP/1.1\nHost: raw.githubusercontent.com/Owen2k6/GoOS-Exchange/main/" + cheese[3]));
-
-                            /** Receive data **/
-                            var endpoint = new EndPoint(Address.Zero, 0);
-                            var data = xClient.Receive(ref endpoint);  //set endpoint to remote machine IP:port
-                            var data2 = xClient.NonBlockingReceive(ref endpoint); //retrieve receive buffer without waiting
-                            string bitString = BitConverter.ToString(data2);
-                            File.Create(@"0:\" + cheese[3]);
-                            File.WriteAllText(@"0:\" + cheese[3], bitString);
-                            print(bitString);
-                        }
-                    }
-                    else
-                    {
-                        log(ConsoleColor.Red, "Yo bro smth wrong with your syntax");
-                    }
+                    cmdm = false;
+                    root = true;
                 }
-
+                else
+                {
+                    Console.Clear();
+                    log(ConsoleColor.Red, "GoOS Admin: Password incorrect.");
+                }
             }
 
+            else if (input.Equals("gogetAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", StringComparison.OrdinalIgnoreCase))
+            {
+                textcolour(ConsoleColor.Yellow);
+                write("What app do you want to install: ");
+                textcolour(ConsoleColor.White);
+                String filetoget = Console.ReadLine();
+                textcolour(ConsoleColor.Green);
+                using (var xClient = new TcpClient(39482))
+                {
+                    xClient.Connect(new Address(135, 125, 172, 225), 80);
+                    //135.125.172.225
 
+                    /** Send data **/
+                    xClient.Send(Encoding.ASCII.GetBytes("GET /" + filetoget + ".goexe HTTP/1.1\nHost: ubnserver.owen2k6.com\n\n"));
+
+                    /** Receive data **/
+                    var endpoint = new EndPoint(Address.Zero, 0);
+                    var data = xClient.Receive(ref endpoint);  //set endpoint to remote machine IP:port
+                    var data2 = xClient.NonBlockingReceive(ref endpoint); //retrieve receive buffer without waiting
+                    string bitString = BitConverter.ToString(data2);
+                    File.Create(@"0:\" + filetoget + ".goexe");
+                    File.WriteAllText(@"0:\" + filetoget + ".goexe", bitString);
+                    print(bitString);
+
+
+                }
+            }
 
 
             else
@@ -1140,6 +1178,218 @@ namespace GoOS
                 log(ConsoleColor.Magenta, "Type HELP for a list of commands");
             }
             textcolour(ConsoleColor.Green);
+        }
+
+
+        protected void Root()
+        {
+            textcolour(ConsoleColor.Red);
+            write("GoOS Admin:");
+            textcolour(ConsoleColor.Gray);
+            String input = Console.ReadLine();
+            if (input.Equals("goos.cmd.list", StringComparison.OrdinalIgnoreCase))
+            {
+                log(ConsoleColor.DarkRed, "GoOS Root Commands:");
+                log(ConsoleColor.DarkRed, "WHITE = SAFE");
+                log(ConsoleColor.DarkRed, "RED = DANGEROUS");
+                log(ConsoleColor.Yellow, "Password Security -");
+                log(ConsoleColor.White, "GOOS.ROOT.SECURITY.PASSWORD.CHANGE");
+                log(ConsoleColor.White, "GOOS.ROOT.SECURITY.PASSWORD");
+                log(ConsoleColor.White, "GOOS.SECURITY.PASSWORD.CHANGE");
+                log(ConsoleColor.White, "GOOS.SECURITY.PASSWORD.REMOVE");
+                log(ConsoleColor.White, "GOOS.SECURITY.PASSWORD");
+                log(ConsoleColor.Yellow, "Disk Commands -");
+                log(ConsoleColor.White, "GOOS.DISK.RELABEL");
+                log(ConsoleColor.White, "GOOS.DISK.SCAN");
+                log(ConsoleColor.White, "GOOS.DISK.LISTALL");
+                log(ConsoleColor.Red, "GOOS.DISK.FORMAT");
+                log(ConsoleColor.Yellow, "Root Settings -");
+                log(ConsoleColor.White, "GOOS.ROOT.EXIT");
+            }
+            else if (input.Equals("goos.root.security.password.change", StringComparison.OrdinalIgnoreCase))
+            {
+                log(ConsoleColor.Red, "This feature is unavailable at the current time.");
+                log(ConsoleColor.Red, "edit passwordsystem.goplexsecure in to change passwords for now.");
+
+            }
+            else if (input.Equals("goos.root.security.password.remove", StringComparison.OrdinalIgnoreCase))
+            {
+                log(ConsoleColor.Red, "This feature is unavailable at the current time.");
+                log(ConsoleColor.Red, "edit passwordsystem.goplexsecure in to change passwords for now.");
+            }
+            else if (input.Equals("goos.security.password.change", StringComparison.OrdinalIgnoreCase))
+            {
+                log(ConsoleColor.Red, "This feature is unavailable at the current time.");
+                log(ConsoleColor.Red, "edit passwordsystem.goplexsecure in to change passwords for now.");
+            }
+            else if (input.Equals("goos.security.password.remove", StringComparison.OrdinalIgnoreCase))
+            {
+                log(ConsoleColor.Red, "This feature is unavailable at the current time.");
+                log(ConsoleColor.Red, "edit passwordsystem.goplexsecure in to change passwords for now.");
+            }
+            else if (input.Equals("goos.security.password", StringComparison.OrdinalIgnoreCase))
+            {
+                log(ConsoleColor.Red, "Requesting data.");
+                var grabpass = password;
+                log(ConsoleColor.Red, "Data Recieved.");
+                print(grabpass);
+            }
+            else if (input.Equals("goos.disk.relabel", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    var label = FS.GetFileSystemLabel(@"0:\");
+                    log(ConsoleColor.Red, "GoOS Admin: Relabel disk");
+                    log(ConsoleColor.Red, "GoOS Admin: Press ENTER to leave the label as \"" + label + "\"");
+                    textcolour(ConsoleColor.Yellow);
+                    write("New Label for 0:\\: ");
+                    String inputamana = Console.ReadLine();
+                    if (inputamana == string.Empty)
+                    {
+                        inputamana = label;
+                    }
+                    try
+                    {
+                        FS.SetFileSystemLabel(@"0:\", inputamana);
+                        log(ConsoleColor.Blue, "GoOS Admin: Drive Label modified from " + label + " to " + inputamana);
+                    }
+                    catch (Exception e)
+                    {
+                        log(ConsoleColor.Red, "Please send the following to GoOS Developers");
+                        log(ConsoleColor.Red, e.ToString());
+                    }
+                }
+            }
+            else if (input.Equals("goos.disk.scan", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    try
+                    {
+                        log(ConsoleColor.Red, "GoOS Admin: Showing Disk Information for 0:\\");
+                        var available_space = FS.GetAvailableFreeSpace(@"0:\");
+                        var total_space = FS.GetTotalSize(@"0:\");
+                        var label = FS.GetFileSystemLabel(@"0:\");
+                        var fs_type = FS.GetFileSystemType(@"0:\");
+                        log(ConsoleColor.Red, "Available Free Space: " + available_space + "(" + (available_space / 1e+9) + "GiB)");
+                        log(ConsoleColor.Red, "Total Space on disk: " + total_space + "(" + (total_space / 1e+9) + "GiB)");
+                        log(ConsoleColor.Red, "Disk Label: " + label);
+                        log(ConsoleColor.Red, "File System Type: " + fs_type);
+                    }
+                    catch (Exception e)
+                    {
+                        log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                        log(ConsoleColor.Red, "GoOS Admin: For system security, we have disabled all Drive functions.");
+                        adminconsoledisk = false;
+                    }
+                }
+            }
+            else if (input.Equals("goos.disk.listall", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    try
+                    {
+                        var directory_list_directories = Directory.GetDirectories(@"0:\");
+                        foreach (var folder in directory_list_directories)
+                        {
+                            log(ConsoleColor.Red, folder);
+                        }
+                        var directory_list = Directory.GetFiles(@"0:\");
+                        foreach (var file in directory_list)
+                        {
+                            log(ConsoleColor.Red, file);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                        log(ConsoleColor.Red, "GoOS Admin: For system security, we have disabled all Drive functions.");
+                        adminconsoledisk = false;
+                    }
+                }
+            }
+            else if (input.Equals("goos.disk.format", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!adminconsoledisk)
+                {
+                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                }
+                if (adminconsoledisk)
+                {
+                    try
+                    {
+                        bool proceed = false;
+                        bool hasentered = false;
+                        while (!hasentered)
+                        {
+                            write("Are you sure you want to format drive 0:\\?");
+                            string inputer = Console.ReadLine();
+                            if (inputer.Equals("yes", StringComparison.OrdinalIgnoreCase))
+                            {
+                                log(ConsoleColor.Red, "ARE YOU SURE?");
+                                string inputer2 = Console.ReadLine();
+                                if (inputer2.Equals("yes", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    proceed = true;
+                                    hasentered = true;
+                                }
+                                if (inputer2.Equals("no", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    print("aborted.");
+                                    hasentered = true;
+                                }
+                            }
+                            if (inputer.Equals("no", StringComparison.OrdinalIgnoreCase))
+                            {
+                                print("aborted.");
+                                hasentered = true;
+
+                            }
+                        }
+                        if (proceed)
+                        {
+                            try
+                            {
+                                var directory_list = Directory.GetFiles(@"0:\");
+                                foreach (var file in directory_list)
+                                {
+                                    File.Delete(@"0:\" + file);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                                log(ConsoleColor.Red, "GoOS Admin: For system security, we have disabled all Drive functions.");
+                                adminconsoledisk = false;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                        log(ConsoleColor.Red, "GoOS Admin: For system security, we have disabled all Drive functions.");
+                        adminconsoledisk = false;
+                    }
+                }
+            }
+            else if (input.Equals("goos.root.exit", StringComparison.OrdinalIgnoreCase))
+            {
+                root = false;
+                cmdm = true;
+            }
         }
 
     }
