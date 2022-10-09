@@ -29,6 +29,8 @@ using static System.Net.Mime.MediaTypeNames;
 using Cosmos.System;
 using Console = System.Console;
 using System.Linq;
+using Cosmos.HAL.BlockDevice;
+using System.Reflection.Emit;
 
 //Goplex Studios - GoOS
 //Copyright (C) 2022  Owen2k6
@@ -1389,6 +1391,10 @@ namespace GoOS
             {
                 root = false;
                 cmdm = true;
+            }
+            else if (input.Equals("goos.test.idk", StringComparison.OrdinalIgnoreCase))
+            {
+                
             }
         }
 
