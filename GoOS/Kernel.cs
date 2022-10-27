@@ -1236,7 +1236,7 @@ namespace GoOS
                 log(ConsoleColor.Red, "Data Recieved.");
                 print(grabpass);
             }
-            else if (input.Equals("goos.disk.relabel", StringComparison.OrdinalIgnoreCase))
+            else    if (input.Equals("goos.disk.relabel", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
