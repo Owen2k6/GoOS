@@ -1,19 +1,6 @@
 {
   "format": 1,
   "restore": {
-<<<<<<< Updated upstream
-    "C:\\Users\\User\\Documents\\GitHub\\GoOS-GoCode-IVT\\GoOS\\GoOS.csproj": {}
-  },
-  "projects": {
-    "C:\\Users\\User\\Documents\\GitHub\\GoOS-GoCode-IVT\\GoOS\\GoOS.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\User\\Documents\\GitHub\\GoOS-GoCode-IVT\\GoOS\\GoOS.csproj",
-        "projectName": "GoOS",
-        "projectPath": "C:\\Users\\User\\Documents\\GitHub\\GoOS-GoCode-IVT\\GoOS\\GoOS.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\Documents\\GitHub\\GoOS-GoCode-IVT\\GoOS\\obj\\",
-=======
     "D:\\GitHub\\GoOS\\GoOS\\GoOS.csproj": {}
   },
   "projects": {
@@ -25,7 +12,6 @@
         "projectPath": "D:\\GitHub\\GoOS\\GoOS\\GoOS.csproj",
         "packagesPath": "C:\\Users\\Owen2k6\\.nuget\\packages\\",
         "outputPath": "D:\\GitHub\\GoOS\\GoOS\\obj\\",
->>>>>>> Stashed changes
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",

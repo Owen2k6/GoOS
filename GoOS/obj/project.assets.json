@@ -550,19 +550,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-<<<<<<< Updated upstream
-      "projectUniqueName": "C:\\Users\\User\\Documents\\GitHub\\GoOS-GoCode-IVT\\GoOS\\GoOS.csproj",
-      "projectName": "GoOS",
-      "projectPath": "C:\\Users\\User\\Documents\\GitHub\\GoOS-GoCode-IVT\\GoOS\\GoOS.csproj",
-      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\Documents\\GitHub\\GoOS-GoCode-IVT\\GoOS\\obj\\",
-=======
       "projectUniqueName": "D:\\GitHub\\GoOS\\GoOS\\GoOS.csproj",
       "projectName": "GoOS",
       "projectPath": "D:\\GitHub\\GoOS\\GoOS\\GoOS.csproj",
       "packagesPath": "C:\\Users\\Owen2k6\\.nuget\\packages\\",
       "outputPath": "D:\\GitHub\\GoOS\\GoOS\\obj\\",
->>>>>>> Stashed changes
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -638,5 +630,13 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file D:\\GitHub\\GoOS\\GoOS\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

@@ -1,14 +1,8 @@
 {
   "version": 2,
-<<<<<<< Updated upstream
-  "dgSpecHash": "F7LccFr9/7HTAFk3qomcpmEnMOC+A3bKEAHBRxz5IQpDcXqP1+Nudl5KqaNMbK8Hq8dEK6w2i6eaEWCpAOOYZw==",
-  "success": true,
-  "projectFilePath": "C:\\Users\\User\\Documents\\GitHub\\GoOS-GoCode-IVT\\GoOS\\GoOS.csproj",
-=======
   "dgSpecHash": "KOSaCbApMLVEzsLvH+9YX7i0MlCNQv3ozJPUUChHFyl215rLIQoRgS6oMcJyKkrg6qK6t3t4sxckn4VfSVEvXw==",
   "success": true,
   "projectFilePath": "D:\\GitHub\\GoOS\\GoOS\\GoOS.csproj",
->>>>>>> Stashed changes
   "expectedPackageFiles": [
     "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.build\\0.1.0-localbuild20230312123846\\cosmos.build.0.1.0-localbuild20230312123846.nupkg.sha512",
     "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.common\\0.1.0-localbuild20230312123902\\cosmos.common.0.1.0-localbuild20230312123902.nupkg.sha512",
@@ -18,5 +12,12 @@
     "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.system2\\0.1.0-localbuild20230312123902\\cosmos.system2.0.1.0-localbuild20230312123902.nupkg.sha512",
     "C:\\Users\\Owen2k6\\.nuget\\packages\\il2cpu.api\\0.1.0-localbuild20230312123902\\il2cpu.api.0.1.0-localbuild20230312123902.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file D:\\GitHub\\GoOS\\GoOS\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }
