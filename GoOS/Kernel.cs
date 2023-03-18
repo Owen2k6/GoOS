@@ -195,37 +195,68 @@ namespace GoOS
             write(currentdirfix);
             textcolour(ConsoleColor.Gray);
             String input = Console.ReadLine();
+            String[] args = input.Split(' ');
             string olddir = @"0:\";
 
             //codein tiem
-            switch (input)
+            switch (args[0])
             {
                 case "help":
+                    if(args.Length > 1) {
+                        log(ConsoleColor.Red, "Too many arguments");
+                        break;
+                    }
                     GoOS.Commands.Help.main();
                     break;
                 case "run":
-                    String[] args = input.Split(new char[] { ' ' });
                     GoOS.Commands.run.main();
                     break;
                 case "mkdir":
-                    write("Path: 0:\\");
-                    string potato = Console.ReadLine();
+                    if (args.Length > 2)
+                    {
+                        log(ConsoleColor.Red, "Too many arguments");
+                        break;
+                    }
+                    if (args.Length == 1)
+                    {
+                        log(ConsoleColor.Red, "Missing arguments");
+                        break;
+                    }
+                    string potato = args[1];
                     if (potato.Contains(@"0:\")) { potato.Replace(@"0:\", ""); }
                     //potato = potato.Split("mkdir ")[1];
                     if (!Directory.Exists(potato))
                         Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\" + potato);
                     break;
                 case "mkfile":
-                    write("Path: 0:\\");
-                    string potato2 = Console.ReadLine();
+                    if (args.Length > 2)
+                    {
+                        log(ConsoleColor.Red, "Too many arguments");
+                        break;
+                    }
+                    if (args.Length == 1)
+                    {
+                        log(ConsoleColor.Red, "Missing arguments");
+                        break;
+                    }
+                    string potato2 = args[1];
                     if (potato2.Contains(@"0:\")) { potato2.Replace(@"0:\", ""); }
                     //potato2 = potato2.Split("mkfile ")[1];
                     if (!File.Exists(potato2))
                         File.Create(Directory.GetCurrentDirectory() + @"\" + potato2);
                     break;
                 case "deldir":
-                    write("Path: 0:\\");
-                    string opotato = Console.ReadLine();
+                    if (args.Length > 2)
+                    {
+                        log(ConsoleColor.Red, "Too many arguments");
+                        break;
+                    }
+                    if (args.Length == 1)
+                    {
+                        log(ConsoleColor.Red, "Missing arguments");
+                        break;
+                    }
+                    string opotato = args[1];
                     if (opotato.Contains(@"0:\")) { opotato.Replace(@"0:\", ""); }
                     //opotato = opotato.Split("deldir ")[1];
                     opotato = "\\" + opotato;
@@ -237,8 +268,17 @@ namespace GoOS
                     }
                     break;
                 case "delfile":
-                    write("Path: 0:\\");
-                    string ppotato = Console.ReadLine();
+                    if (args.Length > 2)
+                    {
+                        log(ConsoleColor.Red, "Too many arguments");
+                        break;
+                    }
+                    if (args.Length == 1)
+                    {
+                        log(ConsoleColor.Red, "Missing arguments");
+                        break;
+                    }
+                    string ppotato = args[1];
                     if (ppotato.Contains("0:\\")) { ppotato.Replace(@"0:\", ""); }
                     //ppotato = ppotato.Split("delfile ")[1];
                     if (File.Exists(Directory.GetCurrentDirectory() + @"\" + ppotato))
@@ -251,8 +291,17 @@ namespace GoOS
                 case "cd":
                     try
                     {
-                        write("Path: 0:\\");
-                        string fuck = Console.ReadLine();
+                        if (args.Length > 2)
+                        {
+                            log(ConsoleColor.Red, "Too many arguments");
+                            break;
+                        }
+                        if (args.Length == 1)
+                        {
+                            log(ConsoleColor.Red, "Missing arguments");
+                            break;
+                        }
+                        string fuck = args[1];
                         string rootf = @"0:\";
                         string cdir = Directory.GetCurrentDirectory();
                         olddir = cdir;
@@ -273,26 +322,6 @@ namespace GoOS
                     Directory.SetCurrentDirectory(roota);
                     break;
                 case "dir":
-                    string cdir3000 = Directory.GetCurrentDirectory();
-                    string cdir3001 = @"0:\";
-                    if (cdir3000.Contains(@"0:\\"))
-                    {
-                        cdir3001 = cdir3000.Replace(@"0:\\", @"0:\");
-                    }
-                    Console.WriteLine("\nDirectory listing at " + cdir3001 + "\n");
-                    var directoryList = VFSManager.GetDirectoryListing(cdir3001);
-                    var files = 0;
-                    foreach (var directoryEntry in directoryList)
-                    {
-                        if (Directory.Exists(cdir3001 + directoryEntry.mName))
-                            Console.WriteLine("<Dir> " + directoryEntry.mName);
-                        if (File.Exists(cdir3001 + directoryEntry.mName))
-                            Console.WriteLine("<File> " + directoryEntry.mName);
-                        files += 1;
-                    }
-                    Console.WriteLine("\nFound " + files + " elements\n");
-                    break;
-                case "altdir":
                     string cdir3002 = Directory.GetCurrentDirectory();
                     string cdir3003 = @"0:\";
                     if (cdir3002.Contains(@"0:\\"))
