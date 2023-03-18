@@ -75,17 +75,16 @@ namespace GoOS
         {
             Console.ForegroundColor = colour;
             Console.WriteLine(str);
-        }public void clog(System.ConsoleColor colour, string str)
+        }
+        public void clog(System.ConsoleColor colour, string str)
         {
             Console.ForegroundColor = colour;
-            String ctrs = str.Replace("G", "█");
-            CP737Console.Write(ctrs + "\n");
+            CP737Console.Write(str + "\n");
         }
         public void cwrite(string str)
         {
-            String ctrs = str.Replace("X", "█");
-            CP737Console.Write(ctrs);
-            
+            CP737Console.Write(str);
+
         }
         public void write(string str)
         {
@@ -133,8 +132,8 @@ namespace GoOS
         public int randomNumber;
         public int snakeCount;
         Random rnd = new Random();
-        string username = null;
-        string computername = null;
+        public static string username = null;
+        public static string computername = null;
 
         protected override void BeforeRun()
         {
@@ -156,7 +155,8 @@ namespace GoOS
             }
             try
             {
-                if (!File.Exists(@"0:\content\sys\setup.gms")) {
+                if (!File.Exists(@"0:\content\sys\setup.gms"))
+                {
                     Sys.FileSystem.VFS.VFSManager.CreateFile(@"0:\content\sys\setup.gms");
                     var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
                     var setupstream = setupcontent.GetFileStream();
@@ -177,70 +177,83 @@ namespace GoOS
 
                 }
                 var systemsetup = File.ReadAllLines(@"0:\content\sys\setup.gms");
-                foreach(string line in systemsetup)
+                foreach (string line in systemsetup)
                 {
-                    if(line.StartsWith("username: "))
+                    if (line.StartsWith("username: "))
                     {
                         username = line.Replace("username: ", "");
                     }
-                    if(line.StartsWith("computername: "))
+                    if (line.StartsWith("computername: "))
                     {
                         computername = line.Replace("computername: ", "");
                     }
                 }
-                
-                
 
-            } catch(Exception e)
-            {
-                
+
+
             }
-            if (username == null) {
-                    username = "user";
-                
-                }
-            if (computername == null) {
-                    computername = "GoOS";
-                
-                }
+            catch (Exception e)
+            {
+
+            }
+            if (username == null)
+            {
+                username = "user";
+
+            }
+            if (computername == null)
+            {
+                computername = "GoOS";
+
+            }
             //Console.BackgroundColor = ConsoleColor.DarkBlue;
 
             Console.Clear();
-            clog(ConsoleColor.Red, "                    GGGGGGGGGGGG                   ");
-            clog(ConsoleColor.DarkRed, "               GGGGGGGGGGGGGGGGGGGGGG              ");
-            clog(ConsoleColor.Magenta, "  GGGGGGGGGG GGGGGGGGGGGGGGGGGGGGGGGGGG            ");
-            clog(ConsoleColor.DarkMagenta, "  GGGGGGGG   GGGGGGGGG        GGGGGG               ");
-            clog(ConsoleColor.Red, "  GGGGGGG    GGGGG                                 ");
-            clog(ConsoleColor.DarkRed, "  GGGGGG     GGG                                   ");
+            clog(ConsoleColor.DarkMagenta, "╔═════════════════════════════════════════════════════════════════════════════╗");
+            clog(ConsoleColor.Red, "║═══════════════════████████████══════════════════════════════════════════════║");
+            clog(ConsoleColor.DarkRed, "║══════════════██████████████████████═════════════════════════════════════════║");
+            clog(ConsoleColor.Magenta, "║═██████████═██████████████████████████═══════════════════════════════════════║");
+            clog(ConsoleColor.DarkMagenta, "║═████████═══█████████════════██████══════════════════════════════════════════║");
+            clog(ConsoleColor.Red, "║═███████════█████════════════════════════════════════════════════════════════║");
+            clog(ConsoleColor.DarkRed, "║═██████═════███══════════════════════════════════════════════════════════════║");
             //Do NOT change owen.
             textcolour(ConsoleColor.Magenta);
-            cwrite("  XXXXX      XX                                    ");
+            cwrite("║═█████══════██══════════════════════════════════");
             textcolour(ConsoleColor.White);
             cwrite("Goplex Studios GoOS.");
+            textcolour(ConsoleColor.Magenta);
+            cwrite("═════════║");
             clog(ConsoleColor.Green, "");
             textcolour(ConsoleColor.Red);
-            cwrite("  XXXXX      X            XXXXXXXXXXXXXXXXXXXX     ");
+            cwrite("║═█████══════█════════════████████████████████═══");
             textcolour(ConsoleColor.White);
             cwrite("Copyright 2023 (c) Owen2k6.");
+            textcolour(ConsoleColor.Red);
+            cwrite("══║");
             clog(ConsoleColor.Green, "");
             textcolour(ConsoleColor.DarkRed);
-            cwrite("  XXXXX      XX           XXXXXXXXXXXXXXXXXXX      ");
+            cwrite("║═█████══════██═══════════███████████████████════");
             textcolour(ConsoleColor.White);
             cwrite("Version " + version);
+            textcolour(ConsoleColor.DarkRed);
+            cwrite(" ═════════════════║");
             clog(ConsoleColor.Green, "");
             textcolour(ConsoleColor.Magenta);
-            cwrite("  XXXXX      XX           XXXXXXXXXXXXXXXXXXX      ");
+            cwrite("║═█████══════██═══════════███████████████████════");
             textcolour(ConsoleColor.White);
             cwrite("Welcome to GoOS");
+            textcolour(ConsoleColor.Magenta);
+            cwrite("══════════════║");
             clog(ConsoleColor.Green, "");
             //Ok now continue
-            clog(ConsoleColor.DarkMagenta, "  GGGGGG     GGGG         GGGGGGGGGGGGGGGGGG       ");
-            clog(ConsoleColor.Red, "  GGGGGGG    GGGGGG              GGGGGGGGGG        ");
-            clog(ConsoleColor.DarkRed, "  GGGGGGGGG  GGGGGGGGGGGGGGGGGGGGGGGGGGGG          ");
-            clog(ConsoleColor.Magenta, "  GGGGGGGGGGG                                      ");
-            clog(ConsoleColor.DarkMagenta, "  GGGGGGGGGGGGGGG                  GGGG            ");
-            clog(ConsoleColor.Red, "  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
-            clog(ConsoleColor.DarkRed, "  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
+            clog(ConsoleColor.DarkMagenta, "║═██████═════████═════════██████████████████══════════════════════════════════║");
+            clog(ConsoleColor.Red, "║═███████════██████══════════════██████████═══════════════════════════════════║");
+            clog(ConsoleColor.DarkRed, "║═█████████══████████████████████████████═════════════════════════════════════║");
+            clog(ConsoleColor.Magenta, "║═███████████═════════════════════════════════════════════════════════════════║");
+            clog(ConsoleColor.DarkMagenta, "║═███████████████══════════════════████═══════════════════════════════════════║");
+            clog(ConsoleColor.Red, "║═█████████████████████████████████████═══════════════════════════════════════║");
+            clog(ConsoleColor.DarkRed, "║═█████████████████████████████████████═══════════════════════════════════════║");
+            clog(ConsoleColor.Magenta, "╚═════════════════════════════════════════════════════════════════════════════╝");
 
             string roota = @"0:\";
             Directory.SetCurrentDirectory(roota);
@@ -275,7 +288,8 @@ namespace GoOS
             switch (args[0])
             {
                 case "help":
-                    if(args.Length > 1) {
+                    if (args.Length > 1)
+                    {
                         log(ConsoleColor.Red, "Too many arguments");
                         break;
                     }
@@ -432,7 +446,7 @@ namespace GoOS
                     {
                         var directory_list = Directory.GetFiles(cdir3003);
                         var directory2_list = Directory.GetDirectories(cdir3003);
-                        log(ConsoleColor.Gray,"\nDirectory listing at " + cdir3003 + "\n");
+                        log(ConsoleColor.Gray, "\nDirectory listing at " + cdir3003 + "\n");
                         foreach (var file in directory_list)
                         {
                             log(ConsoleColor.Gray, "<File> " + file);
@@ -449,24 +463,22 @@ namespace GoOS
                     {
                         log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
                     }
-                        break;
+                    break;
                 case "notepad":
                     textcolour(ConsoleColor.White);
                     MIV.StartMIV();
                     break;
-                default:
-                    Console.WriteLine("Invalid command.");
-                    break;
-                case "controlpanel":
-                    ControlPanel.Open();
+                case "settings":
+                    GoOS.ControlPanel.ControlPanel.Open();
                     break;
                 default:
                     Console.WriteLine("Invalid command.");
                     break;
+
             }
 
 
-            textcolour(ConsoleColor.Green);        
+            textcolour(ConsoleColor.Green);
         }
 
         /// 
@@ -1198,12 +1210,12 @@ namespace GoOS
                 {
                     //using (var xServer = new FtpServer(FS, "0:\\"))
                     //{
-                        /** Listen for new FTP client connections **/
-                        // this does not work
-                   //     log(ConsoleColor.Blue, "GoOS Admin: Listening on " + NetworkConfiguration.CurrentAddress.ToString() + ":21");
-                   //     log(ConsoleColor.Blue, "Use PLAIN configurations with no login information.");
-                   //     log(ConsoleColor.Blue, "FTP MODE ENABLED. REBOOT TO DISABLE");
-                   //     xServer.Listen();
+                    /** Listen for new FTP client connections **/
+                    // this does not work
+                    //     log(ConsoleColor.Blue, "GoOS Admin: Listening on " + NetworkConfiguration.CurrentAddress.ToString() + ":21");
+                    //     log(ConsoleColor.Blue, "Use PLAIN configurations with no login information.");
+                    //     log(ConsoleColor.Blue, "FTP MODE ENABLED. REBOOT TO DISABLE");
+                    //     xServer.Listen();
                     //}
                 }
             }
@@ -1332,7 +1344,7 @@ namespace GoOS
                 log(ConsoleColor.Red, "Data Recieved.");
                 //print(grabpass);
             }
-            else    if (input.Equals("goos.disk.relabel", StringComparison.OrdinalIgnoreCase))
+            else if (input.Equals("goos.disk.relabel", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
@@ -1490,7 +1502,7 @@ namespace GoOS
             }
             else if (input.Equals("goos.test.idk", StringComparison.OrdinalIgnoreCase))
             {
-                
+
             }
         }
 

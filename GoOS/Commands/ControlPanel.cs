@@ -2,6 +2,38 @@
 using System.Collections.Generic;
 using System.Text;
 using static System.ConsoleColor;
+using Cosmos.HAL;
+using Cosmos.System.Graphics;
+using Cosmos.System.Network.Config;
+using Cosmos.System.Network.IPv4;
+using Cosmos.System.Network.IPv4.TCP;
+using Cosmos.System.Network.IPv4.UDP.DHCP;
+using Cosmos.System.Network.IPv4.UDP.DNS;
+using System;
+using System.Collections.Generic;
+using Sys = Cosmos.System;
+using System.IO;
+using System.Linq.Expressions;
+using Cosmos.Core.Memory;
+using System.Drawing;
+using IL2CPU.API.Attribs;
+using System.Text;
+using Cosmos.System.FileSystem.VFS;
+using Cosmos.System.FileSystem;
+using Cosmos.Core;
+using Cosmos.System.Network.IPv4.UDP;
+using System.Diagnostics;
+using GoOS;
+using Cosmos.HAL.BlockDevice.Registers;
+using System.Threading;
+using static System.Net.Mime.MediaTypeNames;
+using Cosmos.System;
+using Console = System.Console;
+using System.Linq;
+using Cosmos.HAL.BlockDevice;
+using System.Reflection.Emit;
+using System.Runtime.InteropServices;
+using System.Reflection.Metadata;
 
 namespace GoOS.ControlPanel
 {
@@ -198,7 +230,7 @@ namespace GoOS.ControlPanel
                     switch (key.Key)
                     {
                         case ConsoleKey.Tab:
-                            Console.BackgroundColor = Red;
+                           // Console.BackgroundColor = Red;
                             Console.ForegroundColor = White;
 
                             if (selected == "change username")
@@ -251,7 +283,11 @@ namespace GoOS.ControlPanel
                     Console.Write("New Username: ");
                     string thingtosave = Console.ReadLine();
 
-                    // Username saving code here Owen
+                    var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
+                    var setupstream = setupcontent.GetFileStream();
+                    byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {thingtosave}\ncomputername: {Kernel.computername}");
+                    setupstream.Write(textToWrite, 0, textToWrite.Length);
+                    Kernel.username = thingtosave;
 
                     MessageBox();
                     menu = "main";
@@ -267,7 +303,11 @@ namespace GoOS.ControlPanel
                     Console.Write("New Computer Name: ");
                     string thingtosave = Console.ReadLine();
 
-                    // Computer name saving code here Owen
+                    var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
+                    var setupstream = setupcontent.GetFileStream();
+                    byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {Kernel.username}\ncomputername: {thingtosave}");
+                    setupstream.Write(textToWrite, 0, textToWrite.Length);
+                    Kernel.computername = thingtosave;
 
                     MessageBox();
                     menu = "main";
@@ -276,6 +316,8 @@ namespace GoOS.ControlPanel
                     DrawMainText();
                 }
             }
+            Console.WriteLine();
+            Console.Clear();
         }
     }
 
