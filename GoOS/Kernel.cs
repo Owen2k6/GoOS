@@ -30,6 +30,7 @@ using Cosmos.HAL.BlockDevice;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Reflection.Metadata;
+using System.Diagnostics.Metrics;
 
 //Goplex Studios - GoOS
 //Copyright (C) 2022  Owen2k6
@@ -139,6 +140,7 @@ namespace GoOS
         {
             try
             {
+                Console.WriteLine("Starting GoOS...");
                 FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize(true);
                 var total_space = FS.GetTotalSize(@"0:\");
                 adminconsoledisk = true;
@@ -157,24 +159,7 @@ namespace GoOS
             {
                 if (!File.Exists(@"0:\content\sys\setup.gms"))
                 {
-                    Sys.FileSystem.VFS.VFSManager.CreateFile(@"0:\content\sys\setup.gms");
-                    var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
-                    var setupstream = setupcontent.GetFileStream();
-                    if (setupstream.CanWrite)
-                    {
-                        Console.Clear();
-                        log(ConsoleColor.Green, "Welcome to GoOS!");
-                        log(ConsoleColor.Green, "Before we continue, you need to set up your computer.");
-                        write("Enter a username (default: User): ");
-                        String usrn = Console.ReadLine();
-                        write("Name your computer (default: GoOS): ");
-                        String cprn = Console.ReadLine();
-
-                        byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {usrn}\ncomputername: {cprn}");
-                        setupstream.Write(textToWrite, 0, textToWrite.Length);
-                    }
-
-
+                    OOBE.Open();
                 }
                 var systemsetup = File.ReadAllLines(@"0:\content\sys\setup.gms");
                 foreach (string line in systemsetup)
@@ -188,9 +173,6 @@ namespace GoOS
                         computername = line.Replace("computername: ", "");
                     }
                 }
-
-
-
             }
             catch (Exception e)
             {
