@@ -155,6 +155,11 @@ namespace GoOS
             }
             try
             {
+                textcolour(ConsoleColor.Cyan);
+                Console.WriteLine("GoOS is performing first boot...");
+                Console.WriteLine("initialising file system...");
+                Console.WriteLine("This may take some time.");
+                textcolour(ConsoleColor.White);
                 if (!File.Exists(@"0:\content\sys\setup.gms"))
                 {
                     Sys.FileSystem.VFS.VFSManager.CreateFile(@"0:\content\sys\setup.gms");
@@ -162,16 +167,7 @@ namespace GoOS
                     var setupstream = setupcontent.GetFileStream();
                     if (setupstream.CanWrite)
                     {
-                        Console.Clear();
-                        log(ConsoleColor.Green, "Welcome to GoOS!");
-                        log(ConsoleColor.Green, "Before we continue, you need to set up your computer.");
-                        write("Enter a username (default: User): ");
-                        String usrn = Console.ReadLine();
-                        write("Name your computer (default: GoOS): ");
-                        String cprn = Console.ReadLine();
-
-                        byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {usrn}\ncomputername: {cprn}");
-                        setupstream.Write(textToWrite, 0, textToWrite.Length);
+                        OOBE.Open();
                     }
 
 

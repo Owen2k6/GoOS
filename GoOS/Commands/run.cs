@@ -695,6 +695,10 @@ namespace GoOS.Commands
                         if(line.StartsWith("load="))
                         {
                             string loadbuster = line.Substring(5);
+                            if (loadbuster == "a")
+                            {
+                                //if (!File.Exists)
+                            }
 
                         }
                     } 
