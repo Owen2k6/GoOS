@@ -182,8 +182,17 @@ namespace GoOS
         protected override void Run()
         {
             textcolour(ConsoleColor.Green);
-            string currentdir = Directory.GetCurrentDirectory();
-            write(currentdir);
+            string currentdir = Directory.GetCurrentDirectory() + @"\";
+            string currentdirfix= @"0:\";
+            if (currentdir.Contains(@"0:\\"))
+            {
+                currentdirfix = currentdir.Replace(@"0:\\", @"0:\");
+            }
+            else if (currentdir.Contains(@"0:\\\"))
+            {
+                currentdirfix = currentdir.Replace(@"0:\\\", @"0:\");
+            }
+            write(currentdirfix);
             textcolour(ConsoleColor.Gray);
             String input = Console.ReadLine();
             string olddir = @"0:\";
@@ -265,19 +274,54 @@ namespace GoOS
                     break;
                 case "dir":
                     string cdir3000 = Directory.GetCurrentDirectory();
-                    if (cdir3000.Contains(@"0:\\")) { cdir3000.Replace(@"0:\\", @"0:\"); }
-                    Console.WriteLine("\nDirectory listing at " + cdir3000 + "\n");
-                    var directoryList = VFSManager.GetDirectoryListing(Directory.GetCurrentDirectory());
+                    string cdir3001 = @"0:\";
+                    if (cdir3000.Contains(@"0:\\"))
+                    {
+                        cdir3001 = cdir3000.Replace(@"0:\\", @"0:\");
+                    }
+                    Console.WriteLine("\nDirectory listing at " + cdir3001 + "\n");
+                    var directoryList = VFSManager.GetDirectoryListing(cdir3001);
                     var files = 0;
                     foreach (var directoryEntry in directoryList)
                     {
-                        if (Directory.Exists(Directory.GetCurrentDirectory() + directoryEntry.mName))
+                        if (Directory.Exists(cdir3001 + directoryEntry.mName))
                             Console.WriteLine("<Dir> " + directoryEntry.mName);
-                        if (File.Exists(Directory.GetCurrentDirectory() + directoryEntry.mName))
+                        if (File.Exists(cdir3001 + directoryEntry.mName))
                             Console.WriteLine("<File> " + directoryEntry.mName);
                         files += 1;
                     }
                     Console.WriteLine("\nFound " + files + " elements\n");
+                    break;
+                case "altdir":
+                    string cdir3002 = Directory.GetCurrentDirectory();
+                    string cdir3003 = @"0:\";
+                    if (cdir3002.Contains(@"0:\\"))
+                    {
+                        cdir3003 = cdir3002.Replace(@"0:\\", @"0:\");
+                    }
+                    try
+                    {
+                        var directory_list = Directory.GetFiles(cdir3003);
+                        var directory2_list = Directory.GetDirectories(cdir3003);
+                        log(ConsoleColor.Gray,"\nDirectory listing at " + cdir3003 + "\n");
+                        foreach (var file in directory_list)
+                        {
+                            log(ConsoleColor.Gray, "<File> " + file);
+                        }
+                        foreach (var directory in directory2_list)
+                        {
+                            log(ConsoleColor.Gray, "<Dir> " + directory);
+                        }
+                        log(ConsoleColor.Gray, "\nUsing alternate dir command\n");
+                    }
+                    catch (Exception e)
+                    {
+                        log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                    }
+                        break;
+                case "notepad":
+                    textcolour(ConsoleColor.White);
+                    MIV.StartMIV();
                     break;
                 default:
                     Console.WriteLine("Invalid command.");
@@ -300,6 +344,7 @@ namespace GoOS
             String input = Console.ReadLine();
             //And so it begins...
             //Commands Section
+            //^ commands are a living nightmare -ekeleze
             if (input.Equals("cinfo", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Magenta, "Goplex Operating System");
