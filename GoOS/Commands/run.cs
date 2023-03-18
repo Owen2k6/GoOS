@@ -39,27 +39,22 @@ namespace GoOS.Commands
             Thread.Sleep(time);
         }
 
-        public static void main()
+        public static void main(string run)
         {
-            log(ConsoleColor.Red, "GoOS Admin: Enter file name");
-            textcolour(ConsoleColor.Yellow);
-            write("FilePath: 0:\\");
-            String inputaman = Console.ReadLine();
+            String inputaman = run;
             
             
             try
             {
-                log(ConsoleColor.Blue, "GoOS Admin: Attempting to run " + inputaman);
+                //log(ConsoleColor.Blue, "GoOS Admin: Attempting to run " + inputaman);
                 if (!inputaman.EndsWith(".goexe"))
                 {
-                    log(ConsoleColor.Red, "GoOS Admin: Incompatible format.");
-                    log(ConsoleColor.Red, "GoOS Admin: File must be .goexe");
+                    log(ConsoleColor.Red, "Incompatible format.");
+                    log(ConsoleColor.Red, "File must be .goexe");
                 }
                 if (inputaman.EndsWith(".goexe"))
                 {
                     string fuckingprogramname = null;
-
-
 
                     log(ConsoleColor.Yellow, "Application.Start");
                     var content = File.ReadAllLines(@"0:\" + inputaman);

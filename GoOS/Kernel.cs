@@ -209,7 +209,17 @@ namespace GoOS
                     GoOS.Commands.Help.main();
                     break;
                 case "run":
-                    GoOS.Commands.run.main();
+                    if (args.Length > 2)
+                    {
+                        log(ConsoleColor.Red, "Too many arguments");
+                        break;
+                    }
+                    if (args.Length == 1)
+                    {
+                        log(ConsoleColor.Red, "Missing arguments");
+                        break;
+                    }
+                    GoOS.Commands.run.main(args[1]);
                     break;
                 case "mkdir":
                     if (args.Length > 2)
@@ -315,13 +325,30 @@ namespace GoOS
                     catch { Console.WriteLine("\nDirectory not found\n"); }
                     break;
                 case "cd..":
+                    if (args.Length > 1)
+                    {
+                        log(ConsoleColor.Red, "Too many arguments");
+                        break;
+                    }
                     Directory.SetCurrentDirectory(olddir);
                     break;
                 case "cdr":
+                    if (args.Length > 1)
+                    {
+                        log(ConsoleColor.Red, "Too many arguments");
+                        break;
+                    }
                     string roota = @"0:\";
                     Directory.SetCurrentDirectory(roota);
                     break;
                 case "dir":
+                    if (args.Length > 1)
+                    {
+                        log(ConsoleColor.Red, "Too many arguments");
+                        break;
+                    }
+                    int filecount = 0;
+                    int foldercount = 0;
                     string cdir3002 = Directory.GetCurrentDirectory();
                     string cdir3003 = @"0:\";
                     if (cdir3002.Contains(@"0:\\"))
@@ -336,12 +363,14 @@ namespace GoOS
                         foreach (var file in directory_list)
                         {
                             log(ConsoleColor.Gray, "<File> " + file);
+                            filecount++;
                         }
                         foreach (var directory in directory2_list)
                         {
                             log(ConsoleColor.Gray, "<Dir> " + directory);
+                            foldercount++;
                         }
-                        log(ConsoleColor.Gray, "\nUsing alternate dir command\n");
+                        log(ConsoleColor.Gray, $"\nListed {filecount} files and {foldercount} folders in this directory.\n");
                     }
                     catch (Exception e)
                     {
