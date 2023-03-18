@@ -12,7 +12,7 @@ Goto https://discord.owen2k6.com/ and open a staff help ticket, otherwise use th
 | 1.4.1-beta3  | :x: | Ended on beta4 release.|
 | 1.4.1-beta2         | :x:     | Ended on beta3 release.|
 | 1.4.1-beta1   | :x: | Ended on beta2 release.|
-| 1.4           | :white_check_mark:     | 11/10/2022|
+| 1.4           | :x:     | Ended 11/10/2022|
 | 1.3    | :x: | Ended 16/10/2021  |
 | 1.2     | :x: | Ended 03/10/2021  |
 | 1.1     | :x:                | Ended 15/07/2021  |
