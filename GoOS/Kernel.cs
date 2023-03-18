@@ -457,7 +457,12 @@ namespace GoOS
                 default:
                     Console.WriteLine("Invalid command.");
                     break;
-            
+                case "controlpanel":
+                    ControlPanel.Open();
+                    break;
+                default:
+                    Console.WriteLine("Invalid command.");
+                    break;
             }
 
 
