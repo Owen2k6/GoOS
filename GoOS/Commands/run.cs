@@ -697,9 +697,104 @@ namespace GoOS.Commands
                             string loadbuster = line.Substring(5);
                             if (loadbuster == "a")
                             {
-                                //if (!File.Exists)
+                                if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\a.txt"))
+                                {
+                                    using (StreamReader streamReader = new StreamReader(@"0:\content\prf\" + fuckingprogramname + @"\a.txt", Encoding.UTF8))
+                                    {
+                                        a = streamReader.ReadToEnd();
+                                    }
+                                }
                             }
-
+                            if (loadbuster == "b")
+                            {
+                                if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\b.txt"))
+                                {
+                                    using (StreamReader streamReader = new StreamReader(@"0:\content\prf\" + fuckingprogramname + @"\b.txt", Encoding.UTF8))
+                                    {
+                                        b = streamReader.ReadToEnd();
+                                    }
+                                }
+                            }
+                            if (loadbuster == "c")
+                            {
+                                if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\c.txt"))
+                                {
+                                    using (StreamReader streamReader = new StreamReader(@"0:\content\prf\" + fuckingprogramname + @"\c.txt", Encoding.UTF8))
+                                    {
+                                        c = streamReader.ReadToEnd();
+                                    }
+                                }
+                            }
+                            if (loadbuster == "d")
+                            {
+                                if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\d.txt"))
+                                {
+                                    using (StreamReader streamReader = new StreamReader(@"0:\content\prf\" + fuckingprogramname + @"\d.txt", Encoding.UTF8))
+                                    {
+                                        d = streamReader.ReadToEnd();
+                                    }
+                                }
+                            }
+                            if (loadbuster == "e")
+                            {
+                                if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\e.txt"))
+                                {
+                                    using (StreamReader streamReader = new StreamReader(@"0:\content\prf\" + fuckingprogramname + @"\e.txt", Encoding.UTF8))
+                                    {
+                                        e = streamReader.ReadToEnd();
+                                    }
+                                }
+                            }
+                            if (loadbuster == "f")
+                            {
+                                if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\f.txt"))
+                                {
+                                    using (StreamReader streamReader = new StreamReader(@"0:\content\prf\" + fuckingprogramname + @"\f.txt", Encoding.UTF8))
+                                    {
+                                        f = streamReader.ReadToEnd();
+                                    }
+                                }
+                            }
+                            if (loadbuster == "g")
+                            {
+                                if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\g.txt"))
+                                {
+                                    using (StreamReader streamReader = new StreamReader(@"0:\content\prf\" + fuckingprogramname + @"\g.txt", Encoding.UTF8))
+                                    {
+                                        g = streamReader.ReadToEnd();
+                                    }
+                                }
+                            }
+                            if (loadbuster == "h")
+                            {
+                                if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\h.txt"))
+                                {
+                                    using (StreamReader streamReader = new StreamReader(@"0:\content\prf\" + fuckingprogramname + @"\h.txt", Encoding.UTF8))
+                                    {
+                                        h = streamReader.ReadToEnd();
+                                    }
+                                }
+                            }
+                            if (loadbuster == "i")
+                            {
+                                if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\i.txt"))
+                                {
+                                    using (StreamReader streamReader = new StreamReader(@"0:\content\prf\" + fuckingprogramname + @"\i.txt", Encoding.UTF8))
+                                    {
+                                        i = streamReader.ReadToEnd();
+                                    }
+                                }
+                            }
+                            if (loadbuster == "j")
+                            {
+                                if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\j.txt"))
+                                {
+                                    using (StreamReader streamReader = new StreamReader(@"0:\content\prf\" + fuckingprogramname + @"\j.txt", Encoding.UTF8))
+                                    {
+                                        j = streamReader.ReadToEnd();
+                                    }
+                                }
+                            }
                         }
                     } 
                     if (endmessage != null)
