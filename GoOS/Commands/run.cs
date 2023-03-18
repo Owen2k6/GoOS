@@ -125,58 +125,6 @@ namespace GoOS.Commands
                         }
                         if (line.StartsWith("stop"))
                         {
-                            if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + "\a.txt"))
-                            {
-                                File.Create(@"0:\content\prf\" + fuckingprogramname + "\a.txt");
-                                TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + "\a.txt");
-                                tw.WriteLine(a);
-                                tw.Close();
-                            }
-                            else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + "\a.txt"))
-                            {
-                                TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + "\a.txt");
-                                tw.WriteLine(a);
-                                tw.Close();
-                            }
-                            if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + "\b.txt"))
-                            {
-                                File.Create(@"0:\content\prf\" + fuckingprogramname + "\b.txt");
-                                TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + "\b.txt");
-                                tw.WriteLine(b);
-                                tw.Close();
-                            }
-                            else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + "\b.txt"))
-                            {
-                                TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + "\b.txt");
-                                tw.WriteLine(b);
-                                tw.Close();
-                            }
-                            if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\c.txt"))
-                            {
-                                File.Create(@"0:\content\prf\" + fuckingprogramname + @"\c.txt");
-                                TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\c.txt");
-                                tw.WriteLine(c);
-                                tw.Close();
-                            }
-                            else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\c.txt"))
-                            {
-                                TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\c.txt");
-                                tw.WriteLine(c);
-                                tw.Close();
-                            }
-                            if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\b.txt"))
-                            {
-                                File.Create(@"0:\content\prf\" + fuckingprogramname + @"\b.txt");
-                                TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\b.txt");
-                                tw.WriteLine(b);
-                                tw.Close();
-                            }
-                            else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\b.txt"))
-                            {
-                                TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\b.txt");
-                                tw.WriteLine(b);
-                                tw.Close();
-                            }
                             if (line == "stop=")
                             {
                                 textcolour(ConsoleColor.Blue);
@@ -193,7 +141,6 @@ namespace GoOS.Commands
                                 Console.ReadKey();
                                 Console.WriteLine();
                             }
-
                         }
                         if (line.StartsWith("if"))
                         {
@@ -580,8 +527,177 @@ namespace GoOS.Commands
                                         Strings.Add(baman3, i);
                                     if (baman2 == "j")
                                         Strings.Add(baman3, j);
+                        } 
+                        if (line.StartsWith("save="))
+                        {
+                            string savebuster = line.Substring(5);
+                            if (savebuster == "a")
+                            {
+                                if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\a.txt"))
+                                {
+                                    File.Create(@"0:\content\prf\" + fuckingprogramname + @"\a.txt");
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\a.txt");
+                                    tw.WriteLine(a);
+                                    tw.Close();
+                                }
+                                else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\a.txt"))
+                                {
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\a.txt");
+                                    tw.WriteLine(a);
+                                    tw.Close();
+                                }
+                            }
+                            if (savebuster == "b")
+                            {
+                                if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\b.txt"))
+                                {
+                                    File.Create(@"0:\content\prf\" + fuckingprogramname + @"\b.txt");
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\b.txt");
+                                    tw.WriteLine(b);
+                                    tw.Close();
+                                }
+                                else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\b.txt"))
+                                {
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\b.txt");
+                                    tw.WriteLine(b);
+                                    tw.Close();
+                                }
+                            }
+                            if (savebuster == "c")
+                            {
+                                if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\c.txt"))
+                                {
+                                    File.Create(@"0:\content\prf\" + fuckingprogramname + @"\c.txt");
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\c.txt");
+                                    tw.WriteLine(c);
+                                    tw.Close();
+                                }
+                                else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\c.txt"))
+                                {
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\c.txt");
+                                    tw.WriteLine(c);
+                                    tw.Close();
+                                }
+                            }
+                            if (savebuster == "d")
+                            {
+                                if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\d.txt"))
+                                {
+                                    File.Create(@"0:\content\prf\" + fuckingprogramname + @"\d.txt");
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\d.txt");
+                                    tw.WriteLine(d);
+                                    tw.Close();
+                                }
+                                else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\d.txt"))
+                                {
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\d.txt");
+                                    tw.WriteLine(d);
+                                    tw.Close();
+                                }
+                            }
+                            if (savebuster == "e")
+                            {
+                                if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\e.txt"))
+                                {
+                                    File.Create(@"0:\content\prf\" + fuckingprogramname + @"\e.txt");
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\e.txt");
+                                    tw.WriteLine(e);
+                                    tw.Close();
+                                }
+                                else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\e.txt"))
+                                {
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\e.txt");
+                                    tw.WriteLine(e);
+                                    tw.Close();
+                                }
+                            }
+                            if (savebuster == "f")
+                            {
+                                if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\f.txt"))
+                                {
+                                    File.Create(@"0:\content\prf\" + fuckingprogramname + @"\f.txt");
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\f.txt");
+                                    tw.WriteLine(f);
+                                    tw.Close();
+                                }
+                                else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\f.txt"))
+                                {
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\f.txt");
+                                    tw.WriteLine(f);
+                                    tw.Close();
+                                }
+                            }
+                            if (savebuster == "g")
+                            {
+                                if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\g.txt"))
+                                {
+                                    File.Create(@"0:\content\prf\" + fuckingprogramname + @"\g.txt");
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\g.txt");
+                                    tw.WriteLine(g);
+                                    tw.Close();
+                                }
+                                else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\g.txt"))
+                                {
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\g.txt");
+                                    tw.WriteLine(g);
+                                    tw.Close();
+                                }
+                            }
+                            if (savebuster == "h")
+                            {
+                                if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\h.txt"))
+                                {
+                                    File.Create(@"0:\content\prf\" + fuckingprogramname + @"\h.txt");
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\h.txt");
+                                    tw.WriteLine(h);
+                                    tw.Close();
+                                }
+                                else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\h.txt"))
+                                {
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\h.txt");
+                                    tw.WriteLine(h);
+                                    tw.Close();
+                                }
+                            }
+                            if (savebuster == "i")
+                            {
+                                if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\i.txt"))
+                                {
+                                    File.Create(@"0:\content\prf\" + fuckingprogramname + @"\i.txt");
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\i.txt");
+                                    tw.WriteLine(i);
+                                    tw.Close();
+                                }
+                                else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\i.txt"))
+                                {
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\i.txt");
+                                    tw.WriteLine(i);
+                                    tw.Close();
+                                }
+                            }
+                            if (savebuster == "j")
+                            {
+                                if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\j.txt"))
+                                {
+                                    File.Create(@"0:\content\prf\" + fuckingprogramname + @"\j.txt");
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\j.txt");
+                                    tw.WriteLine(j);
+                                    tw.Close();
+                                }
+                                else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\j.txt"))
+                                {
+                                    TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\j.txt");
+                                    tw.WriteLine(j);
+                                    tw.Close();
+                                }
+                            }
+                        } 
+                        if(line.StartsWith("load="))
+                        {
+                            string loadbuster = line.Substring(5);
+
                         }
-                    }
+                    } 
                     if (endmessage != null)
                     {
                         endmessage = "Process has ended.";

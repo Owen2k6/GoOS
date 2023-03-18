@@ -2,8 +2,38 @@
 using System.Collections.Generic;
 using System.Text;
 using static System.ConsoleColor;
+using Cosmos.HAL;
+using Cosmos.System.Graphics;
+using Cosmos.System.Network.Config;
+using Cosmos.System.Network.IPv4;
+using Cosmos.System.Network.IPv4.TCP;
+using Cosmos.System.Network.IPv4.UDP.DHCP;
+using Cosmos.System.Network.IPv4.UDP.DNS;
+using System;
+using System.Collections.Generic;
 using Sys = Cosmos.System;
+using System.IO;
+using System.Linq.Expressions;
+using Cosmos.Core.Memory;
+using System.Drawing;
+using IL2CPU.API.Attribs;
+using System.Text;
+using Cosmos.System.FileSystem.VFS;
+using Cosmos.System.FileSystem;
+using Cosmos.Core;
+using Cosmos.System.Network.IPv4.UDP;
+using System.Diagnostics;
+using GoOS;
+using Cosmos.HAL.BlockDevice.Registers;
+using System.Threading;
+using static System.Net.Mime.MediaTypeNames;
+using Cosmos.System;
 using Console = System.Console;
+using System.Linq;
+using Cosmos.HAL.BlockDevice;
+using System.Reflection.Emit;
+using System.Runtime.InteropServices;
+using System.Reflection.Metadata;
 
 namespace GoOS.ControlPanel
 {
@@ -128,7 +158,7 @@ namespace GoOS.ControlPanel
             {
                 Console.BackgroundColor = Black;
                 Console.ForegroundColor = Red;
-                CP737Console.Write("╔═══════════════════════════ GoplexOS Control Panel ═══════════════════════════╗\n" +
+                CP737Console.Write("╔═════════════════════════════════ GoOS Setup ═════════════════════════════════╗\n" +
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
@@ -152,7 +182,7 @@ namespace GoOS.ControlPanel
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
-                                   "╚═════[TAB - Selection]═══[ESC - Exit]═════════════════════════════════════════");
+                                   "╚═════[TAB - Selection]════════════════════════════════════════════════════════");
                 if (CP737Console.unicodeToCP737.TryGetValue('╝', out byte mapped))
                 {
                     CP737Console.console.mText[79, 24] = mapped;
@@ -286,8 +316,11 @@ namespace GoOS.ControlPanel
                     DrawMainText();
                 }
             }
-            Console.BackgroundColor = Black;
+            Console.WriteLine();
             Console.Clear();
+            Console.BackgroundColor = Black;
         }
     }
+
+    
 }

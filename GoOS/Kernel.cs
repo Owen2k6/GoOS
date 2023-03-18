@@ -30,7 +30,6 @@ using Cosmos.HAL.BlockDevice;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Reflection.Metadata;
-using System.Diagnostics.Metrics;
 
 //Goplex Studios - GoOS
 //Copyright (C) 2022  Owen2k6
@@ -140,7 +139,6 @@ namespace GoOS
         {
             try
             {
-                Console.WriteLine("Starting GoOS...");
                 FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize(true);
                 var total_space = FS.GetTotalSize(@"0:\");
                 adminconsoledisk = true;
@@ -159,7 +157,24 @@ namespace GoOS
             {
                 if (!File.Exists(@"0:\content\sys\setup.gms"))
                 {
-                    OOBE.Open();
+                    Sys.FileSystem.VFS.VFSManager.CreateFile(@"0:\content\sys\setup.gms");
+                    var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
+                    var setupstream = setupcontent.GetFileStream();
+                    if (setupstream.CanWrite)
+                    {
+                        Console.Clear();
+                        log(ConsoleColor.Green, "Welcome to GoOS!");
+                        log(ConsoleColor.Green, "Before we continue, you need to set up your computer.");
+                        write("Enter a username (default: User): ");
+                        String usrn = Console.ReadLine();
+                        write("Name your computer (default: GoOS): ");
+                        String cprn = Console.ReadLine();
+
+                        byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {usrn}\ncomputername: {cprn}");
+                        setupstream.Write(textToWrite, 0, textToWrite.Length);
+                    }
+
+
                 }
                 var systemsetup = File.ReadAllLines(@"0:\content\sys\setup.gms");
                 foreach (string line in systemsetup)
@@ -173,6 +188,9 @@ namespace GoOS
                         computername = line.Replace("computername: ", "");
                     }
                 }
+
+
+
             }
             catch (Exception e)
             {
@@ -327,16 +345,7 @@ namespace GoOS
                         log(ConsoleColor.Red, "Missing arguments");
                         break;
                     }
-                    string opotato = args[1];
-                    if (opotato.Contains(@"0:\")) { opotato.Replace(@"0:\", ""); }
-                    //opotato = opotato.Split("deldir ")[1];
-                    opotato = "\\" + opotato;
-                    if (Directory.Exists(Directory.GetCurrentDirectory() + @"\" + opotato))
-                        Directory.Delete(Directory.GetCurrentDirectory() + @"\" + opotato, true);
-                    else if (!Directory.Exists(opotato))
-                    {
-                        Console.WriteLine("Directory does not exist.");
-                    }
+                    GoOS.Commands.Delete.DeleteDirectory(args[1]);
                     break;
                 case "delfile":
                     if (args.Length > 2)
@@ -349,15 +358,7 @@ namespace GoOS
                         log(ConsoleColor.Red, "Missing arguments");
                         break;
                     }
-                    string ppotato = args[1];
-                    if (ppotato.Contains("0:\\")) { ppotato.Replace(@"0:\", ""); }
-                    //ppotato = ppotato.Split("delfile ")[1];
-                    if (File.Exists(Directory.GetCurrentDirectory() + @"\" + ppotato))
-                        File.Delete(Directory.GetCurrentDirectory() + @"\" + ppotato);
-                    else if (!File.Exists(ppotato))
-                    {
-                        Console.WriteLine("File does not exist.");
-                    };
+                    GoOS.Commands.Delete.DeleteFile(args[1]);   
                     break;
                 case "cd":
                         if (args.Length > 2)
