@@ -319,11 +319,7 @@ namespace GoOS
                         log(ConsoleColor.Red, "Missing arguments");
                         break;
                     }
-                    string potato = args[1];
-                    if (potato.Contains(@"0:\")) { potato.Replace(@"0:\", ""); }
-                    //potato = potato.Split("mkdir ")[1];
-                    if (!Directory.Exists(potato))
-                        Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\" + potato);
+                    GoOS.Commands.Make.MakeDirectory(args[1]);
                     break;
                 case "mkfile":
                     if (args.Length > 2)
@@ -336,11 +332,7 @@ namespace GoOS
                         log(ConsoleColor.Red, "Missing arguments");
                         break;
                     }
-                    string potato2 = args[1];
-                    if (potato2.Contains(@"0:\")) { potato2.Replace(@"0:\", ""); }
-                    //potato2 = potato2.Split("mkfile ")[1];
-                    if (!File.Exists(potato2))
-                        File.Create(Directory.GetCurrentDirectory() + @"\" + potato2);
+                    GoOS.Commands.Make.MakeFile(args[1]);
                     break;
                 case "deldir":
                     if (args.Length > 2)
