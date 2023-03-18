@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +12,7 @@ namespace GoOS.Commands
 {
     public class run
     {
+        static Dictionary<string, string> Strings = new Dictionary<string, string>() { };
         //GoOS Core
         public static void print(string str)
         {
@@ -43,6 +46,8 @@ namespace GoOS.Commands
             textcolour(ConsoleColor.Yellow);
             write("FilePath: 0:\\");
             String inputaman = Console.ReadLine();
+            
+            
             try
             {
                 log(ConsoleColor.Blue, "GoOS Admin: Attempting to run " + inputaman);
@@ -54,10 +59,10 @@ namespace GoOS.Commands
                 if (inputaman.EndsWith(".goexe"))
                 {
                     string fuckingprogramname = null;
-                    
 
 
-                        log(ConsoleColor.Yellow, "Application.Start");
+
+                    log(ConsoleColor.Yellow, "Application.Start");
                     var content = File.ReadAllLines(@"0:\" + inputaman);
                     string theysaid = null;
                     ConsoleKey keypressed = ConsoleKey.O;
@@ -397,7 +402,8 @@ namespace GoOS.Commands
                         }
                         if (line.StartsWith("regprog"))
                         {
-                            if(hasbeenregistered) {
+                            if (hasbeenregistered)
+                            {
                                 log(ConsoleColor.Red, "Attempted second register. Application may be attempting to reregister as another application!!!");
                                 break;
                             }
@@ -416,6 +422,119 @@ namespace GoOS.Commands
                                 Directory.CreateDirectory(@"0:\content\prf\" + fuckingprogramname + @"\");
                             }
                         }
+                        if (line.StartsWith("nvstring"))
+                        {
+                            string key = line.Substring(9, line.IndexOf(" =") - 9);
+
+                            if (Strings.ContainsKey(key))
+                            {
+                                Strings.Remove(key);
+                            }
+
+                           
+                            
+                                Strings.Add(key, line.Substring(line.IndexOf("\"") + 1, line.LastIndexOf("\"") - (line.IndexOf("\"") + 1)));
+                            
+                        }
+                        if (line.StartsWith("nvprint"))
+                        {
+                            int start = line.IndexOf('(');
+                            int end = line.IndexOf(')') - start;
+
+                            if (line.Substring(start + 1, end - 1).Contains('+'))
+                            {
+                                string[] contents = line.Substring(start + 1, end - 1).Split('+');
+                                string result = "";
+                                foreach (string cunt in contents)
+                                {
+                                    if (cunt.Trim().Contains('"'))
+                                    {
+                                        string thing = cunt.Trim();
+                                        thing = thing.Substring(1, thing.LastIndexOf('"') - 1);
+                                        result += thing;
+                                    }
+                                    if (Strings.TryGetValue(cunt.Trim(), out string strval))
+                                    {
+                                        result += strval;
+                                    }
+                                }
+
+                                Console.WriteLine(result);
+                            }
+                            else
+                            {
+                                if (Strings.TryGetValue(line.Substring(start + 1, end - 1), out string strval))
+                                {
+                                    Console.WriteLine(strval);
+                                }else
+                                {
+                                    Console.WriteLine("err");
+                                }
+                            }
+                        }
+                        if (line.StartsWith("nvov"))
+                        {
+                                string baman = line.Substring(5);
+                                char baman1 = baman.Last();
+                                string baman2 = baman1.ToString();
+                                string baman15 = baman.Substring(0);
+                                string baman3 = baman15.Replace(" " + baman2, "");
+
+                                if (Strings.TryGetValue(baman3, out string strval))
+                                {
+                                    if (baman2 == "a")
+                                        a = strval;
+                                    if (baman2 == "b")
+                                        b = strval;
+                                    if (baman2 == "c")
+                                        c = strval;
+                                    if (baman2 == "d")
+                                        d = strval;
+                                    if (baman2 == "e")
+                                        e = strval;
+                                    if (baman2 == "f")
+                                        f = strval;
+                                    if (baman2 == "g")
+                                        g = strval;
+                                    if (baman2 == "h")
+                                        h = strval;
+                                    if (baman2 == "i")
+                                        i = strval;
+                                    if (baman2 == "j")
+                                        j = strval;
+                                }
+                        }
+                        if (line.StartsWith("ovnv"))
+                        {
+                                string baman = line.Substring(5);
+                                string baman2 = baman.Substring(0,1);
+                                string baman3 = baman.Substring(2);
+
+                                if (Strings.ContainsKey(baman3))
+                                {
+                                    Strings.Remove(baman3);
+                                }
+                                    if (baman2 == "a")
+                                        Strings.Add(baman3, a);
+                                    if (baman2 == "b")
+                                        Strings.Add(baman3, b);
+                                    if (baman2 == "c")
+                                        Strings.Add(baman3, c);
+                                    if (baman2 == "d")
+                                        Strings.Add(baman3, d);
+                                    if (baman2 == "e")
+                                        Strings.Add(baman3, e);
+                                    if (baman2 == "f")
+                                        Strings.Add(baman3, f);
+                                    if (baman2 == "g")
+                                        Strings.Add(baman3, g);
+                                    if (baman2 == "h")
+                                        Strings.Add(baman3, h);
+                                    if (baman2 == "i")
+                                        Strings.Add(baman3, i);
+                                    if (baman2 == "j")
+                                        Strings.Add(baman3, j);
+                        }
                     }
                     if (endmessage != null)
                     {
@@ -430,3 +549,4 @@ namespace GoOS.Commands
         }
     }
 }
+

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\Documents\\GitHub\\GoOS\\GoOS\\GoOS.csproj": {}
+    "C:\\Users\\User\\Documents\\GitHub\\GoOS-GoCode-IVT\\GoOS\\GoOS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\Documents\\GitHub\\GoOS\\GoOS\\GoOS.csproj": {
+    "C:\\Users\\User\\Documents\\GitHub\\GoOS-GoCode-IVT\\GoOS\\GoOS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\Documents\\GitHub\\GoOS\\GoOS\\GoOS.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Documents\\GitHub\\GoOS-GoCode-IVT\\GoOS\\GoOS.csproj",
         "projectName": "GoOS",
-        "projectPath": "C:\\Users\\User\\Documents\\GitHub\\GoOS\\GoOS\\GoOS.csproj",
+        "projectPath": "C:\\Users\\User\\Documents\\GitHub\\GoOS-GoCode-IVT\\GoOS\\GoOS.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\Documents\\GitHub\\GoOS\\GoOS\\obj\\",
+        "outputPath": "C:\\Users\\User\\Documents\\GitHub\\GoOS-GoCode-IVT\\GoOS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
