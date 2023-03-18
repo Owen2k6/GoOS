@@ -75,6 +75,17 @@ namespace GoOS
         {
             Console.ForegroundColor = colour;
             Console.WriteLine(str);
+        }public void clog(System.ConsoleColor colour, string str)
+        {
+            Console.ForegroundColor = colour;
+            String ctrs = str.Replace("G", "█");
+            CP737Console.Write(ctrs + "\n");
+        }
+        public void cwrite(string str)
+        {
+            String ctrs = str.Replace("X", "█");
+            CP737Console.Write(ctrs);
+            
         }
         public void write(string str)
         {
@@ -146,11 +157,12 @@ namespace GoOS
             try
             {
                 if (!File.Exists(@"0:\content\sys\setup.gms")) {
-                    File.Create(@"0:\content\sys\setup.gms");
+                    Sys.FileSystem.VFS.VFSManager.CreateFile(@"0:\content\sys\setup.gms");
                     var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
                     var setupstream = setupcontent.GetFileStream();
                     if (setupstream.CanWrite)
                     {
+                        Console.Clear();
                         log(ConsoleColor.Green, "Welcome to GoOS!");
                         log(ConsoleColor.Green, "Before we continue, you need to set up your computer.");
                         write("Enter a username (default: User): ");
@@ -194,51 +206,51 @@ namespace GoOS
             //Console.BackgroundColor = ConsoleColor.DarkBlue;
 
             Console.Clear();
-            log(ConsoleColor.Red, "                    GGGGGGGGGGGG                   ");
-            log(ConsoleColor.DarkRed, "               GGGGGGGGGGGGGGGGGGGGGG              ");
-            log(ConsoleColor.Magenta, "  GGGGGGGGGG GGGGGGGGGGGGGGGGGGGGGGGGGG            ");
-            log(ConsoleColor.DarkMagenta, "  GGGGGGGG   GGGGGGGGG        GGGGGG               ");
-            log(ConsoleColor.Red, "  GGGGGGG    GGGGG                                 ");
-            log(ConsoleColor.DarkRed, "  GGGGGG     GGG                                   ");
+            clog(ConsoleColor.Red, "                    GGGGGGGGGGGG                   ");
+            clog(ConsoleColor.DarkRed, "               GGGGGGGGGGGGGGGGGGGGGG              ");
+            clog(ConsoleColor.Magenta, "  GGGGGGGGGG GGGGGGGGGGGGGGGGGGGGGGGGGG            ");
+            clog(ConsoleColor.DarkMagenta, "  GGGGGGGG   GGGGGGGGG        GGGGGG               ");
+            clog(ConsoleColor.Red, "  GGGGGGG    GGGGG                                 ");
+            clog(ConsoleColor.DarkRed, "  GGGGGG     GGG                                   ");
             //Do NOT change owen.
             textcolour(ConsoleColor.Magenta);
-            write("  GGGGG      GG                                    ");
+            cwrite("  XXXXX      XX                                    ");
             textcolour(ConsoleColor.White);
-                                                                                               write("Goplex Studios GoOS.");
-            log(ConsoleColor.Green, "");
+            cwrite("Goplex Studios GoOS.");
+            clog(ConsoleColor.Green, "");
             textcolour(ConsoleColor.Red);
-            write("  GGGGG      G            GGGGGGGGGGGGGGGGGGGG     ");
+            cwrite("  XXXXX      X            XXXXXXXXXXXXXXXXXXXX     ");
             textcolour(ConsoleColor.White);
-                                                                                               write("Copyright 2023 (c) Owen2k6.");
-            log(ConsoleColor.Green, "");
+            cwrite("Copyright 2023 (c) Owen2k6.");
+            clog(ConsoleColor.Green, "");
             textcolour(ConsoleColor.DarkRed);
-            write("  GGGGG      GG           GGGGGGGGGGGGGGGGGGG      ");
+            cwrite("  XXXXX      XX           XXXXXXXXXXXXXXXXXXX      ");
             textcolour(ConsoleColor.White);
-                                                                                               write("Version " + version);
-            log(ConsoleColor.Green, "");
+            cwrite("Version " + version);
+            clog(ConsoleColor.Green, "");
             textcolour(ConsoleColor.Magenta);
-            write("  GGGGG      GG           GGGGGGGGGGGGGGGGGGG      ");
+            cwrite("  XXXXX      XX           XXXXXXXXXXXXXXXXXXX      ");
             textcolour(ConsoleColor.White);
-            write("Welcome to GoOS");
-            log(ConsoleColor.Green, "");
+            cwrite("Welcome to GoOS");
+            clog(ConsoleColor.Green, "");
             //Ok now continue
-            log(ConsoleColor.DarkMagenta, "  GGGGGG     GGGG         GGGGGGGGGGGGGGGGGG       ");
-            log(ConsoleColor.Red, "  GGGGGGG    GGGGGG              GGGGGGGGGG        ");
-            log(ConsoleColor.DarkRed, "  GGGGGGGGG  GGGGGGGGGGGGGGGGGGGGGGGGGGGG          ");
-            log(ConsoleColor.Magenta, "  GGGGGGGGGGG                                      ");
-            log(ConsoleColor.DarkMagenta, "  GGGGGGGGGGGGGGG                  GGGG            ");
-            log(ConsoleColor.Red, "  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
-            log(ConsoleColor.DarkRed, "  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
-            
+            clog(ConsoleColor.DarkMagenta, "  GGGGGG     GGGG         GGGGGGGGGGGGGGGGGG       ");
+            clog(ConsoleColor.Red, "  GGGGGGG    GGGGGG              GGGGGGGGGG        ");
+            clog(ConsoleColor.DarkRed, "  GGGGGGGGG  GGGGGGGGGGGGGGGGGGGGGGGGGGGG          ");
+            clog(ConsoleColor.Magenta, "  GGGGGGGGGGG                                      ");
+            clog(ConsoleColor.DarkMagenta, "  GGGGGGGGGGGGGGG                  GGGG            ");
+            clog(ConsoleColor.Red, "  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
+            clog(ConsoleColor.DarkRed, "  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
+
             string roota = @"0:\";
             Directory.SetCurrentDirectory(roota);
         }
 
         protected override void Run()
         {
-            textcolour(ConsoleColor.Green);
+            textcolour(ConsoleColor.Cyan);
             string currentdir = Directory.GetCurrentDirectory() + @"\";
-            string currentdirfix= @"0:\";
+            string currentdirfix = @"0:\";
             if (currentdir.Contains(@"0:\\"))
             {
                 currentdirfix = currentdir.Replace(@"0:\\", @"0:\");
@@ -247,8 +259,14 @@ namespace GoOS
             {
                 currentdirfix = currentdir.Replace(@"0:\\\", @"0:\");
             }
-            write($"{username}@{computername} " + currentdirfix);
-            textcolour(ConsoleColor.Gray);
+            write($"{username}");
+            textcolour(ConsoleColor.Yellow);
+            write("@");
+            textcolour(ConsoleColor.Cyan);
+            write($"{computername} ");
+            textcolour(ConsoleColor.Green);
+            write(currentdirfix);
+            textcolour(ConsoleColor.White);
             String input = Console.ReadLine();
             String[] args = input.Split(' ');
             string olddir = @"0:\";
