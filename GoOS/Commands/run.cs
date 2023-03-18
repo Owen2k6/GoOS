@@ -54,18 +54,7 @@ namespace GoOS.Commands
                 if (inputaman.EndsWith(".goexe"))
                 {
                     string fuckingprogramname = null;
-                    if (!Directory.Exists(@"0:\content\prf\"))
-                    {
-                        Directory.CreateDirectory(@"0:\content\prf\");
-                        if(!Directory.Exists(@"0:\content\prf\" + fuckingprogramname + @"\"))
-                        {
-                            Directory.CreateDirectory(@"0:\content\prf\" + fuckingprogramname + @"\");
-                        }
-                    }
-                    else if(!Directory.Exists(@"0:\content\prf\" + fuckingprogramname + @"\"))
-                    {
-                        Directory.CreateDirectory(@"0:\content\prf\" + fuckingprogramname + @"\");
-                    }
+                    
 
 
                         log(ConsoleColor.Yellow, "Application.Start");
@@ -414,6 +403,18 @@ namespace GoOS.Commands
                             }
                             fuckingprogramname = line.Replace("regprog=", "");
                             hasbeenregistered = true;
+                            if (!Directory.Exists(@"0:\content\prf\"))
+                            {
+                                Directory.CreateDirectory(@"0:\content\prf\");
+                                if (!Directory.Exists(@"0:\content\prf\" + fuckingprogramname + @"\"))
+                                {
+                                    Directory.CreateDirectory(@"0:\content\prf\" + fuckingprogramname + @"\");
+                                }
+                            }
+                            else if (!Directory.Exists(@"0:\content\prf\" + fuckingprogramname + @"\"))
+                            {
+                                Directory.CreateDirectory(@"0:\content\prf\" + fuckingprogramname + @"\");
+                            }
                         }
                     }
                     if (endmessage != null)
