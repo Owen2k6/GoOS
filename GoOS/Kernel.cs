@@ -28,6 +28,8 @@ using Console = System.Console;
 using System.Linq;
 using Cosmos.HAL.BlockDevice;
 using System.Reflection.Emit;
+using System.Runtime.InteropServices;
+using System.Reflection.Metadata;
 
 //Goplex Studios - GoOS
 //Copyright (C) 2022  Owen2k6
@@ -120,9 +122,75 @@ namespace GoOS
         public int randomNumber;
         public int snakeCount;
         Random rnd = new Random();
+        string username = null;
+        string computername = null;
 
         protected override void BeforeRun()
         {
+            try
+            {
+                FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize(true);
+                var total_space = FS.GetTotalSize(@"0:\");
+                adminconsoledisk = true;
+            }
+            catch (Exception e)
+            {
+                log(ConsoleColor.Red, "GoOS Admin could not detect a disk. system will not support any apps that require a HDD to write/read from.");
+                log(ConsoleColor.Red, "GoOS Needs a HDD installed to use some of the cool features");
+                log(ConsoleColor.Red, "The GitHub releases page usually includes a disk built for GoOS");
+                log(ConsoleColor.Red, "Disks aren't required but they're highly reccomended.");
+                log(ConsoleColor.White, "Press any key to continue.");
+                Console.ReadKey();
+                adminconsoledisk = false;
+            }
+            try
+            {
+                if (!File.Exists(@"0:\content\sys\setup.gms")) {
+                    File.Create(@"0:\content\sys\setup.gms");
+                    var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
+                    var setupstream = setupcontent.GetFileStream();
+                    if (setupstream.CanWrite)
+                    {
+                        log(ConsoleColor.Green, "Welcome to GoOS!");
+                        log(ConsoleColor.Green, "Before we continue, you need to set up your computer.");
+                        write("Enter a username (default: User): ");
+                        String usrn = Console.ReadLine();
+                        write("Name your computer (default: GoOS): ");
+                        String cprn = Console.ReadLine();
+
+                        byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {usrn}\ncomputername: {cprn}");
+                        setupstream.Write(textToWrite, 0, textToWrite.Length);
+                    }
+
+
+                }
+                var systemsetup = File.ReadAllLines(@"0:\content\sys\setup.gms");
+                foreach(string line in systemsetup)
+                {
+                    if(line.StartsWith("username: "))
+                    {
+                        username = line.Replace("username: ", "");
+                    }
+                    if(line.StartsWith("computername: "))
+                    {
+                        computername = line.Replace("computername: ", "");
+                    }
+                }
+                
+                
+
+            } catch(Exception e)
+            {
+                
+            }
+            if (username == null) {
+                    username = "user";
+                
+                }
+            if (computername == null) {
+                    computername = "GoOS";
+                
+                }
             //Console.BackgroundColor = ConsoleColor.DarkBlue;
 
             Console.Clear();
@@ -161,20 +229,7 @@ namespace GoOS
             log(ConsoleColor.DarkMagenta, "  GGGGGGGGGGGGGGG                  GGGG            ");
             log(ConsoleColor.Red, "  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
             log(ConsoleColor.DarkRed, "  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ");
-            try
-            {
-                FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize(true);
-                var total_space = FS.GetTotalSize(@"0:\");
-                adminconsoledisk = true;
-            }
-            catch (Exception e)
-            {
-                log(ConsoleColor.Red, "GoOS Admin could not detect a disk. system will not support any apps that require a HDD to write/read from.");
-                log(ConsoleColor.Red, "GoOS Needs a HDD installed to use some of the cool features");
-                log(ConsoleColor.Red, "The GitHub releases page usually includes a disk built for GoOS");
-                log(ConsoleColor.Red, "Disks aren't required but they're highly reccomended.");
-                adminconsoledisk = false;
-            }
+            
             string roota = @"0:\";
             Directory.SetCurrentDirectory(roota);
         }
@@ -192,7 +247,7 @@ namespace GoOS
             {
                 currentdirfix = currentdir.Replace(@"0:\\\", @"0:\");
             }
-            write(currentdirfix);
+            write($"{username}@{computername} " + currentdirfix);
             textcolour(ConsoleColor.Gray);
             String input = Console.ReadLine();
             String[] args = input.Split(' ');
