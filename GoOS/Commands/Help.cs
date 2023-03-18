@@ -37,7 +37,7 @@ namespace GoOS.Commands
             Thread.Sleep(time);
         }
 
-        public static void main()
+        public static void Main()
         {
             int page = 1;
             while (true)

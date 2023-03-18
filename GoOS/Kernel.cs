@@ -106,7 +106,7 @@ namespace GoOS
 
 
 
-
+        public static string olddir = @"0:\";
         private Boolean adminconsoledisk = false;
 
 
@@ -282,7 +282,7 @@ namespace GoOS
             textcolour(ConsoleColor.White);
             String input = Console.ReadLine();
             String[] args = input.Split(' ');
-            string olddir = @"0:\";
+            
 
             //codein tiem
             switch (args[0])
@@ -293,7 +293,7 @@ namespace GoOS
                         log(ConsoleColor.Red, "Too many arguments");
                         break;
                     }
-                    GoOS.Commands.Help.main();
+                    GoOS.Commands.Help.Main();
                     break;
                 case "run":
                     if (args.Length > 2)
@@ -306,7 +306,7 @@ namespace GoOS
                         log(ConsoleColor.Red, "Missing arguments");
                         break;
                     }
-                    GoOS.Commands.run.main(args[1]);
+                    GoOS.Commands.Run.Main(args[1]);
                     break;
                 case "mkdir":
                     if (args.Length > 2)
@@ -386,8 +386,6 @@ namespace GoOS
                     };
                     break;
                 case "cd":
-                    try
-                    {
                         if (args.Length > 2)
                         {
                             log(ConsoleColor.Red, "Too many arguments");
@@ -398,18 +396,7 @@ namespace GoOS
                             log(ConsoleColor.Red, "Missing arguments");
                             break;
                         }
-                        string fuck = args[1];
-                        string rootf = @"0:\";
-                        string cdir = Directory.GetCurrentDirectory();
-                        olddir = cdir;
-                        // this fuck = fuck.Split("cd ")[1];
-                        if (fuck.Contains(@"0:\")) { fuck.Replace(@"0:\", ""); }
-                        if (!fuck.Contains("\\") && fuck != rootf) { fuck = "\\" + fuck; }
-                        // this too fuck = fuck.Split("cd ")[1];
-                        if (Directory.Exists(Directory.GetCurrentDirectory() + fuck))
-                            Directory.SetCurrentDirectory(Directory.GetCurrentDirectory() + fuck);
-                    }
-                    catch { Console.WriteLine("\nDirectory not found\n"); }
+                    GoOS.Commands.Cd.Run(args[1]);
                     break;
                 case "cd..":
                     if (args.Length > 1)
@@ -434,35 +421,7 @@ namespace GoOS
                         log(ConsoleColor.Red, "Too many arguments");
                         break;
                     }
-                    int filecount = 0;
-                    int foldercount = 0;
-                    string cdir3002 = Directory.GetCurrentDirectory();
-                    string cdir3003 = @"0:\";
-                    if (cdir3002.Contains(@"0:\\"))
-                    {
-                        cdir3003 = cdir3002.Replace(@"0:\\", @"0:\");
-                    }
-                    try
-                    {
-                        var directory_list = Directory.GetFiles(cdir3003);
-                        var directory2_list = Directory.GetDirectories(cdir3003);
-                        log(ConsoleColor.Gray, "\nDirectory listing at " + cdir3003 + "\n");
-                        foreach (var file in directory_list)
-                        {
-                            log(ConsoleColor.Gray, "<File> " + file);
-                            filecount++;
-                        }
-                        foreach (var directory in directory2_list)
-                        {
-                            log(ConsoleColor.Gray, "<Dir> " + directory);
-                            foldercount++;
-                        }
-                        log(ConsoleColor.Gray, $"\nListed {filecount} files and {foldercount} folders in this directory.\n");
-                    }
-                    catch (Exception e)
-                    {
-                        log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
-                    }
+                    GoOS.Commands.Dir.Run();
                     break;
                 case "notepad":
                     textcolour(ConsoleColor.White);

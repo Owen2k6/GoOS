@@ -158,7 +158,7 @@ namespace GoOS.ControlPanel
             {
                 Console.BackgroundColor = Black;
                 Console.ForegroundColor = Red;
-                CP737Console.Write("╔═══════════════════════════ GoplexOS Control Panel ═══════════════════════════╗\n" +
+                CP737Console.Write("╔═════════════════════════════════ GoOS Setup ═════════════════════════════════╗\n" +
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
@@ -182,7 +182,7 @@ namespace GoOS.ControlPanel
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
-                                   "╚══════════════════════════════════════════════════════════════════════════════");
+                                   "╚═════[TAB - Selection]════════════════════════════════════════════════════════");
                 if (CP737Console.unicodeToCP737.TryGetValue('╝', out byte mapped))
                 {
                     CP737Console.console.mText[79, 24] = mapped;
@@ -230,7 +230,7 @@ namespace GoOS.ControlPanel
                     switch (key.Key)
                     {
                         case ConsoleKey.Tab:
-                           // Console.BackgroundColor = Red;
+                            Console.BackgroundColor = Red;
                             Console.ForegroundColor = White;
 
                             if (selected == "change username")
@@ -318,6 +318,7 @@ namespace GoOS.ControlPanel
             }
             Console.WriteLine();
             Console.Clear();
+            Console.BackgroundColor = Black;
         }
     }
 

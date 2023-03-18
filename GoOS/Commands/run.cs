@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GoOS.Commands
 {
-    public class run
+    public class Run
     {
         static Dictionary<string, string> Strings = new Dictionary<string, string>() { };
         //GoOS Core
@@ -39,7 +39,7 @@ namespace GoOS.Commands
             Thread.Sleep(time);
         }
 
-        public static void main(string run)
+        public static void Main(string run)
         {
             String inputaman = run;
             
@@ -125,6 +125,58 @@ namespace GoOS.Commands
                         }
                         if (line.StartsWith("stop"))
                         {
+                            if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + "\a.txt"))
+                            {
+                                File.Create(@"0:\content\prf\" + fuckingprogramname + "\a.txt");
+                                TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + "\a.txt");
+                                tw.WriteLine(a);
+                                tw.Close();
+                            }
+                            else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + "\a.txt"))
+                            {
+                                TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + "\a.txt");
+                                tw.WriteLine(a);
+                                tw.Close();
+                            }
+                            if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + "\b.txt"))
+                            {
+                                File.Create(@"0:\content\prf\" + fuckingprogramname + "\b.txt");
+                                TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + "\b.txt");
+                                tw.WriteLine(b);
+                                tw.Close();
+                            }
+                            else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + "\b.txt"))
+                            {
+                                TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + "\b.txt");
+                                tw.WriteLine(b);
+                                tw.Close();
+                            }
+                            if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\c.txt"))
+                            {
+                                File.Create(@"0:\content\prf\" + fuckingprogramname + @"\c.txt");
+                                TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\c.txt");
+                                tw.WriteLine(c);
+                                tw.Close();
+                            }
+                            else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\c.txt"))
+                            {
+                                TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\c.txt");
+                                tw.WriteLine(c);
+                                tw.Close();
+                            }
+                            if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\b.txt"))
+                            {
+                                File.Create(@"0:\content\prf\" + fuckingprogramname + @"\b.txt");
+                                TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\b.txt");
+                                tw.WriteLine(b);
+                                tw.Close();
+                            }
+                            else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\b.txt"))
+                            {
+                                TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\b.txt");
+                                tw.WriteLine(b);
+                                tw.Close();
+                            }
                             if (line == "stop=")
                             {
                                 textcolour(ConsoleColor.Blue);
