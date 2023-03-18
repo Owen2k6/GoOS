@@ -17,14 +17,11 @@ using System.Text;
 using Cosmos.System.FileSystem.VFS;
 using Cosmos.System.FileSystem;
 using Cosmos.Core;
-using CosmosFtpServer;
 using Cosmos.System.Network.IPv4.UDP;
 using System.Diagnostics;
 using GoOS;
 using Cosmos.HAL.BlockDevice.Registers;
 using System.Threading;
-using CitrineUI.Views;
-using CitrineUI;
 using static System.Net.Mime.MediaTypeNames;
 using Cosmos.System;
 using Console = System.Console;
@@ -62,51 +59,10 @@ namespace GoOS
     public class Kernel : Sys.Kernel
     {
         //Vars for OS
-        public string version = "1.4.1-beta-4";
+        public string version = "1.5";
         public string BuildType = "Beta";
         public bool cmdm = true;
         public bool root = false;
-        public bool gui = false;
-
-        #region GoOS UI shit
-        //UI
-        public Canvas canvas;
-        public Desktop desktop;
-        public Button GuiGoHome;
-        public Button GuiFile;
-        public Button GuiEdit;
-        public Button GuiOptions;
-        public Button GuiHelp;
-        #endregion
-
-
-        private void GoHomeClicked(object? sender, EventArgs e)
-        {
-            new ContextMenuWindow((int)GuiGoHome.ScreenBounds.X, (int)GuiGoHome.ScreenBounds.Y + 20, GuiGoHome, desktop);
-        }
-        private void ShutDownClicked(object? sender, EventArgs e)
-        {
-            Cosmos.System.Power.Shutdown();
-        }
-        private void AboutClicked(object? sender, EventArgs e)
-        {
-            var about = new Window(desktop);
-            about.Rectangle = new Rectangle(64, 64, 384, 200);
-            var textView = new TextView(about);
-
-            textView.Rectangle = new Rectangle(60, 32, 360, 50);
-            textView.Text = "Goplex OS \n" +
-                "Version: " + version + "\n" +
-                "Build Type: " + BuildType + "\n" +
-                "Copyright (c) 2022 Owen2k6 \n" +
-                "Total RAM: " + Cosmos.Core.CPU.GetAmountOfRAM() + "\n" +
-                "RAM Free: " + Cosmos.Core.GCImplementation.GetAvailableRAM(); ;
-            about.Title = "About";
-
-        }
-
-
-
 
         //GoOS Core
         public void print(string str)
@@ -140,14 +96,6 @@ namespace GoOS
 
 
         private Boolean adminconsoledisk = false;
-
-
-        //Login Data
-        private Boolean loginsystemenabled = false;
-        private Boolean rootloginsystemenabled = false;
-        private String username = null;
-        private String password = null;
-        private String rootpassword = null;
 
 
 
@@ -188,17 +136,17 @@ namespace GoOS
             textcolour(ConsoleColor.Magenta);
             write("  GGGGG      GG                                    ");
             textcolour(ConsoleColor.White);
-            write("Goplex Studios GoOS.");
+                                                                                               write("Goplex Studios GoOS.");
             log(ConsoleColor.Green, "");
             textcolour(ConsoleColor.Red);
             write("  GGGGG      G            GGGGGGGGGGGGGGGGGGGG     ");
             textcolour(ConsoleColor.White);
-            write("Copyright 2022 (c) Owen2k6.");
+                                                                                               write("Copyright 2023 (c) Owen2k6.");
             log(ConsoleColor.Green, "");
             textcolour(ConsoleColor.DarkRed);
             write("  GGGGG      GG           GGGGGGGGGGGGGGGGGGG      ");
             textcolour(ConsoleColor.White);
-            write("Version " + version);
+                                                                                               write("Version " + version);
             log(ConsoleColor.Green, "");
             textcolour(ConsoleColor.Magenta);
             write("  GGGGG      GG           GGGGGGGGGGGGGGGGGGG      ");
@@ -227,95 +175,123 @@ namespace GoOS
                 log(ConsoleColor.Red, "Disks aren't required but they're highly reccomended.");
                 adminconsoledisk = false;
             }
-            try
-            {
-                //This is highly insecure however it's easier for me to code in rn just so i can add a much larger feature. i beg you not to make password systems like this.
-                if (File.Exists(@"0:\passwordsystem.goplexsecure"))
-                {
-                    var protectedfile = File.ReadAllLines(@"0:\passwordsystem.goplexsecure");
-                    foreach (String line in protectedfile)
-                    {
-                        if (line.StartsWith("username: "))
-                        {
-                            string data = line.Replace("username: ", "");
-                            username = data;
-                        }
-                        if (line.StartsWith("password: "))
-                        {
-                            string data = line.Replace("password: ", "");
-                            if (data == "")
-                            {
-                                loginsystemenabled = false;
-                            }
-                            else
-                            {
-                                loginsystemenabled = true;
-                                password = data;
-                            }
-                        }
-                        if (line.StartsWith("rootpassword: "))
-                        {
-                            rootpassword = line.Replace("rootpassword: ", "");
-                        }
-                    }
-                }
-                if (!File.Exists(@"0:\passwordsystem.goplexsecure"))
-                {
-                    File.Create(@"0:\passwordsystem.goplexsecure");
-                    File.WriteAllText(@"0:\passwordsystem.goplexsecure", "username: \npassword: \nrootpassword: root");
-                }
-            }
-            catch (Exception e)
-            {
-                log(ConsoleColor.Red, "ERROR! " + e);
-                Console.ReadLine();
-            }
-            textcolour(ConsoleColor.Green);
-            if (loginsystemenabled)
-            {
-                textcolour(ConsoleColor.Magenta);
-                //Login System 0.1 Primitive edition - its bad
-                log(ConsoleColor.Magenta, "Hello, " + username + "!");
-                log(ConsoleColor.Magenta, "In order to proceed into GoOS, you must login with your password.");
-                textcolour(ConsoleColor.Yellow);
-                String input = Console.ReadLine();
-                if (input == password)
-                {
-                    textcolour(ConsoleColor.Cyan);
-                    Console.Clear();
-                    log(ConsoleColor.Cyan, "Welcome back to GoOS.");
-                }
-                else
-                {
-                    log(ConsoleColor.Red, "Incorrect password.");
-                    log(ConsoleColor.Red, "Press any key to retry");
-                    Console.ReadKey();
-                    Cosmos.System.Power.Reboot();
-                }
-            }
+            string roota = @"0:\";
+            Directory.SetCurrentDirectory(roota);
         }
 
         protected override void Run()
         {
-            while (cmdm)
+            textcolour(ConsoleColor.Green);
+            string currentdir = Directory.GetCurrentDirectory();
+            write(currentdir);
+            textcolour(ConsoleColor.Gray);
+            String input = Console.ReadLine();
+            string olddir = @"0:\";
+
+            //codein tiem
+            switch (input)
             {
-                CommandMode();
-                Heap.Collect();
-            }
-            while (gui)
-            {
-                Heap.Collect();
-                // Render all the views (buttons, images etc.) that are within the desktop.
-                desktop.Render();
-            }
-            while (root)
-            {
-                Root();
-                Heap.Collect();
+                case "help":
+                    GoOS.Commands.Help.main();
+                    break;
+                case "run":
+                    String[] args = input.Split(new char[] { ' ' });
+                    GoOS.Commands.run.main();
+                    break;
+                case "mkdir":
+                    write("Path: 0:\\");
+                    string potato = Console.ReadLine();
+                    if (potato.Contains(@"0:\")) { potato.Replace(@"0:\", ""); }
+                    //potato = potato.Split("mkdir ")[1];
+                    if (!Directory.Exists(potato))
+                        Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\" + potato);
+                    break;
+                case "mkfile":
+                    write("Path: 0:\\");
+                    string potato2 = Console.ReadLine();
+                    if (potato2.Contains(@"0:\")) { potato2.Replace(@"0:\", ""); }
+                    //potato2 = potato2.Split("mkfile ")[1];
+                    if (!File.Exists(potato2))
+                        File.Create(Directory.GetCurrentDirectory() + @"\" + potato2);
+                    break;
+                case "deldir":
+                    write("Path: 0:\\");
+                    string opotato = Console.ReadLine();
+                    if (opotato.Contains(@"0:\")) { opotato.Replace(@"0:\", ""); }
+                    //opotato = opotato.Split("deldir ")[1];
+                    opotato = "\\" + opotato;
+                    if (Directory.Exists(Directory.GetCurrentDirectory() + @"\" + opotato))
+                        Directory.Delete(Directory.GetCurrentDirectory() + @"\" + opotato, true);
+                    else if (!Directory.Exists(opotato))
+                    {
+                        Console.WriteLine("Directory does not exist.");
+                    }
+                    break;
+                case "delfile":
+                    write("Path: 0:\\");
+                    string ppotato = Console.ReadLine();
+                    if (ppotato.Contains("0:\\")) { ppotato.Replace(@"0:\", ""); }
+                    //ppotato = ppotato.Split("delfile ")[1];
+                    if (File.Exists(Directory.GetCurrentDirectory() + @"\" + ppotato))
+                        File.Delete(Directory.GetCurrentDirectory() + @"\" + ppotato);
+                    else if (!File.Exists(ppotato))
+                    {
+                        Console.WriteLine("File does not exist.");
+                    };
+                    break;
+                case "cd":
+                    try
+                    {
+                        write("Path: 0:\\");
+                        string fuck = Console.ReadLine();
+                        string rootf = @"0:\";
+                        string cdir = Directory.GetCurrentDirectory();
+                        olddir = cdir;
+                        // this fuck = fuck.Split("cd ")[1];
+                        if (fuck.Contains(@"0:\")) { fuck.Replace(@"0:\", ""); }
+                        if (!fuck.Contains("\\") && fuck != rootf) { fuck = "\\" + fuck; }
+                        // this too fuck = fuck.Split("cd ")[1];
+                        if (Directory.Exists(Directory.GetCurrentDirectory() + fuck))
+                            Directory.SetCurrentDirectory(Directory.GetCurrentDirectory() + fuck);
+                    }
+                    catch { Console.WriteLine("\nDirectory not found\n"); }
+                    break;
+                case "cd..":
+                    Directory.SetCurrentDirectory(olddir);
+                    break;
+                case "cdr":
+                    string roota = @"0:\";
+                    Directory.SetCurrentDirectory(roota);
+                    break;
+                case "dir":
+                    string cdir3000 = Directory.GetCurrentDirectory();
+                    if (cdir3000.Contains(@"0:\\")) { cdir3000.Replace(@"0:\\", @"0:\"); }
+                    Console.WriteLine("\nDirectory listing at " + cdir3000 + "\n");
+                    var directoryList = VFSManager.GetDirectoryListing(Directory.GetCurrentDirectory());
+                    var files = 0;
+                    foreach (var directoryEntry in directoryList)
+                    {
+                        if (Directory.Exists(Directory.GetCurrentDirectory() + directoryEntry.mName))
+                            Console.WriteLine("<Dir> " + directoryEntry.mName);
+                        if (File.Exists(Directory.GetCurrentDirectory() + directoryEntry.mName))
+                            Console.WriteLine("<File> " + directoryEntry.mName);
+                        files += 1;
+                    }
+                    Console.WriteLine("\nFound " + files + " elements\n");
+                    break;
+                default:
+                    Console.WriteLine("Invalid command.");
+                    break;
+            
             }
 
+
+            textcolour(ConsoleColor.Green);        
         }
 
+        /// 
+        ///  ANYTHING BELOW IS NOT IN USE. DO NOT TOUCH!
+        /// 
         protected void CommandMode()
         {
             textcolour(ConsoleColor.Green);
@@ -550,7 +526,7 @@ namespace GoOS
                 if (adminconsoledisk)
                 {
                     textcolour(ConsoleColor.White);
-                    GOSStudio.StartGSS();
+                    //GOSStudio.StartGSS();
                 }
             }
             else if (input.Equals("del", StringComparison.OrdinalIgnoreCase))
@@ -1039,15 +1015,15 @@ namespace GoOS
                 }
                 if (adminconsoledisk)
                 {
-                    using (var xServer = new FtpServer(FS, "0:\\"))
-                    {
+                    //using (var xServer = new FtpServer(FS, "0:\\"))
+                    //{
                         /** Listen for new FTP client connections **/
                         // this does not work
-                        log(ConsoleColor.Blue, "GoOS Admin: Listening on " + NetworkConfiguration.CurrentAddress.ToString() + ":21");
-                        log(ConsoleColor.Blue, "Use PLAIN configurations with no login information.");
-                        log(ConsoleColor.Blue, "FTP MODE ENABLED. REBOOT TO DISABLE");
-                        xServer.Listen();
-                    }
+                   //     log(ConsoleColor.Blue, "GoOS Admin: Listening on " + NetworkConfiguration.CurrentAddress.ToString() + ":21");
+                   //     log(ConsoleColor.Blue, "Use PLAIN configurations with no login information.");
+                   //     log(ConsoleColor.Blue, "FTP MODE ENABLED. REBOOT TO DISABLE");
+                   //     xServer.Listen();
+                    //}
                 }
             }
             else if (input.Equals("ipconf", StringComparison.OrdinalIgnoreCase))
@@ -1058,84 +1034,23 @@ namespace GoOS
 
             //smth cool bro
 
-            else if (input.Equals("gui", StringComparison.OrdinalIgnoreCase))
-            {
-                log(ConsoleColor.Red, "Notice: if the GUI crashes please reboot. most likely you ran out of ram.");
-                Console.ReadKey();
-                // THIS IS DANGEROUS. DO NOT DISABLE CMDM AT ANY TIME UNLESS ENTERING A UI.
-                cmdm = false;
-                gui = true;
-                canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
-                CitrineUI.Text.TextRenderer.Initialize();
 
-                Sys.MouseManager.ScreenWidth = (uint)canvas.Mode.Columns;
-                Sys.MouseManager.ScreenHeight = (uint)canvas.Mode.Rows;
-
-                desktop = new Desktop(canvas);
-                desktop.BackgroundColor = Color.FromArgb(114, 161, 255);
-
-                #region GoOS GUI TitleBar
-                GuiGoHome = new Button(desktop);
-                GuiGoHome.Rectangle = new Rectangle(0, 0, 69, 20);
-                GuiGoHome.Text = "GoHome";
-                GuiGoHome.Clicked += GoHomeClicked;
-
-
-                var Shutdown = new ContextMenuItem("Shutdown", null);
-                Shutdown.Clicked += ShutDownClicked;
-                var AboutPC = new ContextMenuItem("About this PC", null);
-                AboutPC.Clicked += AboutClicked;
-
-                GuiGoHome.ContextMenuItems = new List<ContextMenuItem>() { AboutPC, Shutdown };
-
-
-
-                GuiFile = new Button(desktop);
-                GuiFile.Rectangle = new Rectangle(69, 0, 69, 20);
-                GuiFile.Text = "File";
-
-
-
-                GuiEdit = new Button(desktop);
-                GuiEdit.Rectangle = new Rectangle(138, 0, 69, 20);
-                GuiEdit.Text = "Edit";
-
-
-
-                GuiOptions = new Button(desktop);
-                GuiOptions.Rectangle = new Rectangle(207, 0, 69, 20);
-                GuiOptions.Text = "Options";
-
-
-
-                GuiHelp = new Button(desktop);
-                GuiHelp.Rectangle = new Rectangle(276, 0, 69, 20);
-                GuiHelp.Text = "Help";
-
-
-
-
-                #endregion
-
-
-                desktop.CreateCursor();
-            }
             else if (input.Equals("root", StringComparison.OrdinalIgnoreCase))
             {
                 //Root function activator. do not disable modes without enabling other modes.
                 print("");
                 write("Root Password:");
                 String passinpt = Console.ReadLine();
-                if (passinpt == rootpassword)
-                {
-                    cmdm = false;
-                    root = true;
-                }
-                else
-                {
-                    Console.Clear();
-                    log(ConsoleColor.Red, "GoOS Admin: Password incorrect.");
-                }
+                //if (passinpt == rootpassword)
+                //{
+                //    cmdm = false;
+                //    root = true;
+                //}
+                //else
+                //{
+                ///    Console.Clear();
+                //    log(ConsoleColor.Red, "GoOS Admin: Password incorrect.");
+                //}
             }
 
             else if (input.Equals("gogetAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", StringComparison.OrdinalIgnoreCase))
@@ -1232,9 +1147,9 @@ namespace GoOS
             else if (input.Equals("goos.security.password", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Red, "Requesting data.");
-                var grabpass = password;
+                //var grabpass = password;
                 log(ConsoleColor.Red, "Data Recieved.");
-                print(grabpass);
+                //print(grabpass);
             }
             else    if (input.Equals("goos.disk.relabel", StringComparison.OrdinalIgnoreCase))
             {

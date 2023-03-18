@@ -17,7 +17,7 @@
         <CompileVBEMultiboot>False</CompileVBEMultiboot>
         <VBEResolution>1024x768x32</VBEResolution>
         <ExtractMapFile>False</ExtractMapFile>
-        <VMwareEdition>Player</VMwareEdition>
+        <VMwareEdition>Workstation</VMwareEdition>
         <VMware_StackCorruptionDetectionEnabled>True</VMware_StackCorruptionDetectionEnabled>
         <VMware_StackCorruptionDetectionLevel>MethodFooters</VMware_StackCorruptionDetectionLevel>
         <VMware_Description>Use VMware Player or Workstation to deploy and debug.</VMware_Description>
@@ -97,64 +97,6 @@
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
       <FileAlignment>512</FileAlignment>
     </PropertyGroup>
-	
-
-	
-	  <ItemGroup>
-    <None Remove="Assets\ContextIcons\copy.bmp" />
-    <None Remove="Assets\ContextIcons\cut.bmp" />
-    <None Remove="Assets\ContextIcons\newFile.bmp" />
-    <None Remove="Assets\ContextIcons\paste.bmp" />
-    <None Remove="Assets\ContextIcons\recycle.bmp" />
-    <None Remove="Assets\ContextIcons\refresh.bmp" />
-    <None Remove="Assets\ContextIcons\rename.bmp" />
-    <None Remove="Assets\Cursors\cursor.bmp" />
-    <None Remove="Assets\Cursors\grab.bmp" />
-    <None Remove="Assets\Cursors\text.bmp" />
-    <None Remove="Assets\Fonts\TTF\Inter.ttf" />
-    <None Remove="Assets\Fonts\TTF\OpenSans.ttf" />
-    <None Remove="Assets\Icons\question.bmp" />
-    <None Remove="Assets\Views\checkBox.bmp" />
-    <None Remove="Assets\Views\checkBoxChecked.bmp" />
-    <None Remove="Assets\Views\CheckBox\0.bmp" />
-    <None Remove="Assets\Views\CheckBox\1.bmp" />
-    <None Remove="Assets\Views\CheckBox\2.bmp" />
-    <None Remove="Assets\Views\CheckBox\3.bmp" />
-    <None Remove="Assets\Views\CheckBox\4.bmp" />
-    <None Remove="Assets\Views\closeIcon.bmp" />
-    <None Remove="Assets\Views\defaultIcon.bmp" />
-    <None Remove="Assets\Views\listArrow.bmp" />
-    <None Remove="Assets\Views\listCheck.bmp" />
-    <None Remove="Assets\Views\oldDefaultIcon.bmp" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\ContextIcons\copy.bmp" />
-    <EmbeddedResource Include="Assets\ContextIcons\cut.bmp" />
-    <EmbeddedResource Include="Assets\ContextIcons\newFile.bmp" />
-    <EmbeddedResource Include="Assets\ContextIcons\paste.bmp" />
-    <EmbeddedResource Include="Assets\ContextIcons\recycle.bmp" />
-    <EmbeddedResource Include="Assets\ContextIcons\refresh.bmp" />
-    <EmbeddedResource Include="Assets\ContextIcons\rename.bmp" />
-    <EmbeddedResource Include="Assets\Cursors\cursor.bmp" />
-    <EmbeddedResource Include="Assets\Cursors\grab.bmp" />
-    <EmbeddedResource Include="Assets\Cursors\text.bmp" />
-    <EmbeddedResource Include="Assets\Fonts\TTF\Inter.ttf" />
-    <EmbeddedResource Include="Assets\Fonts\TTF\OpenSans.ttf" />
-    <EmbeddedResource Include="Assets\Icons\question.bmp" />
-    <EmbeddedResource Include="Assets\Views\checkBox.bmp" />
-    <EmbeddedResource Include="Assets\Views\checkBoxChecked.bmp" />
-    <EmbeddedResource Include="Assets\Views\CheckBox\0.bmp" />
-    <EmbeddedResource Include="Assets\Views\CheckBox\1.bmp" />
-    <EmbeddedResource Include="Assets\Views\CheckBox\2.bmp" />
-    <EmbeddedResource Include="Assets\Views\CheckBox\3.bmp" />
-    <EmbeddedResource Include="Assets\Views\CheckBox\4.bmp" />
-    <EmbeddedResource Include="Assets\Views\closeIcon.bmp" />
-    <EmbeddedResource Include="Assets\Views\defaultIcon.bmp" />
-    <EmbeddedResource Include="Assets\Views\listArrow.bmp" />
-    <EmbeddedResource Include="Assets\Views\listCheck.bmp" />
-    <EmbeddedResource Include="Assets\Views\oldDefaultIcon.bmp" />
-  </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Cosmos.Build" Version="0-*" NoWarn="NU1604" />
