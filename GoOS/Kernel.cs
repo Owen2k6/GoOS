@@ -405,6 +405,9 @@ namespace GoOS
                 case "settings":
                     GoOS.ControlPanel.ControlPanel.Open();
                     break;
+                case "clear":
+                    Console.Clear();
+                    break;
                 default:
                     Console.WriteLine("Invalid command.");
                     break;
