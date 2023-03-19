@@ -21,7 +21,7 @@ namespace GoOS.Virtualisation.ChaOS
     {
         public static bool runmode = false;
 
-        public const string ver = "Release 1.2";
+        public const string ver = "Version 1.3 GoOS VM";
         public const string copyright = "Copyright (c) 2022 Goplex Studios";
 
         public static string username = "usr";
@@ -91,7 +91,7 @@ namespace GoOS.Virtualisation.ChaOS
                         log(" sysinfo - Gives info about the system");
                         log(" username - Username related functions");
                         log(" color - Allows you to change the color scheme");
-                        log(" sd/shutdown - Shuts down ChaOS");
+                        log(" sd/shutdown/stop - Shuts down ChaOS");
                         log(" rb/reboot - Reboots the system");
                         clog(" diskinfo - Gives info about the disk" + us, color);
                         clog(" cd - Opens directory" + us, color);
@@ -172,7 +172,7 @@ namespace GoOS.Virtualisation.ChaOS
                         Console.SetCursorPosition(0, 7);
                         cwrite("  ______   __                   ______    ______  \n /      \\ |  \\                 /      \\  /      \\ \n|  $$$$$$\\| $$____    ______  |  $$$$$$\\|  $$$$$$\\\n| $$   \\$$| $$    \\  |      \\ | $$  | $$| $$___\\$$\n| $$      | $$$$$$$\\  \\$$$$$$\\| $$  | $$ \\$$    \\ \n| $$   __ | $$  | $$ /      $$| $$  | $$ _\\$$$$$$\\\n| $$__/  \\| $$  | $$|  $$$$$$$| $$__/ $$|  \\__| $$\n \\$$    $$| $$  | $$ \\$$    $$ \\$$    $$ \\$$    $$\n  \\$$$$$$  \\$$   \\$$  \\$$$$$$$  \\$$$$$$   \\$$$$$$ ", DarkGreen);
                         Console.SetCursorPosition(60, 9);
-                        cwrite("Version 1.2", Yellow);
+                        cwrite("Version 1.3 GoOS VM", Yellow);
                         Console.SetCursorPosition(62, 11);
                         cwrite("Credits", Yellow);
                         Console.SetCursorPosition(57, 12);
@@ -195,18 +195,11 @@ namespace GoOS.Virtualisation.ChaOS
                     else if (input == "notepad" && disk)
                         MIV.StartMIV();
 
-                    else if (input == "shutdown" || input == "sd")
+                    else if (input == "shutdown" || input == "sd" || input == "stop")
                     {
                         if (disk) SaveChangesToDisk();
                         clog("Shutting down...", Gray);
-                        Sys.Power.Shutdown();
-                    }
-
-                    else if (input == "reboot" || input == "rb")
-                    {
-                        if (disk) SaveChangesToDisk();
-                        clog("Rebooting...", Gray);
-                        Sys.Power.Reboot();
+                        runmode = false;
                     }
 
                     else if (input.StartsWith("echo"))
