@@ -113,31 +113,26 @@ namespace GoOS
 
         #endregion
 
-        static bool running = true;
         static string usrn, cprn;
 
         public static void Open()
         {
-            while (running)
+            DrawPage(0);
+            DrawPage(1);
+            DrawPage(2);
+            Sys.FileSystem.VFS.VFSManager.CreateFile(@"0:\content\sys\setup.gms");
+            var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
+            var setupstream = setupcontent.GetFileStream();
+            if (setupstream.CanWrite)
             {
-                DrawPage(0);
-                DrawPage(1);
-                DrawPage(2);
-                Sys.FileSystem.VFS.VFSManager.CreateFile(@"0:\content\sys\setup.gms");
-                var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
-                var setupstream = setupcontent.GetFileStream();
-                if (setupstream.CanWrite)
-                {
-                    MessageBox(0);
-                    byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {usrn}\ncomputername: {cprn}");
-                    setupstream.Write(textToWrite, 0, textToWrite.Length);
-                    MessageBox(1);
-                    MessageBox(2);
-                }
-                else
-                {
-                    MessageBox(2);
-                }
+                MessageBox(0);
+                byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {usrn}\ncomputername: {cprn}");
+                setupstream.Write(textToWrite, 0, textToWrite.Length);
+                MessageBox(1);
+            }
+            else
+            {
+                MessageBox(2);
             }
         }
 
@@ -151,7 +146,7 @@ namespace GoOS
             try
             {
                 Console.BackgroundColor = Black;
-                Console.ForegroundColor = DarkRed;
+                Console.ForegroundColor = Green;
                 CP737Console.Write("╔══════════════════════════════════════════════════════════════════════════════╗\n" +
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
@@ -194,7 +189,7 @@ namespace GoOS
             int OldX = Console.CursorLeft; int OldY = Console.CursorTop;
 
             Console.SetCursorPosition(40 - (Title.Length / 2), Y);
-            Console.ForegroundColor = Red;
+            Console.ForegroundColor = Cyan;
             Console.Write(Title);
             Console.SetCursorPosition(OldX, OldY);
         }
@@ -226,15 +221,14 @@ namespace GoOS
             {
                 DrawFrame();
                 DrawTitle(" GoOS Setup ", 0);
-                DrawControls("[ENTER - Continue]═══[ESC - Exit]");
-                int screenWidth = 80;
+                DrawControls("[ENTER - Continue]");
                 string welcomeText = "Welcome to GoOS";
                 string setupText = "We have some things to set up and get sorted!";
-                string continueText = "Press enter to continue, otherwise press escape to exit setup.";
+                string continueText = "Press enter to continue...";
 
-                int welcomePosition = (screenWidth / 2) - (welcomeText.Length / 2);
-                int setupPosition = (screenWidth / 2) - (setupText.Length / 2);
-                int continuePosition = (screenWidth / 2) - (continueText.Length / 2);
+                int welcomePosition = 40 - (welcomeText.Length / 2);
+                int setupPosition = 40 - (setupText.Length / 2);
+                int continuePosition = 40 - (continueText.Length / 2);
 
                 Console.SetCursorPosition(welcomePosition, 2);
                 Console.Write(welcomeText);
@@ -242,26 +236,21 @@ namespace GoOS
                 Console.SetCursorPosition(setupPosition, 3);
                 Console.Write(setupText);
 
+                Console.SetCursorPosition(continuePosition, 22);
                 Console.Write(continueText);
 
-                ConsoleKeyInfo key = Console.ReadKey(true);
+                #region Key reading
 
-                while (key.Key != ConsoleKey.Enter)
-                {
-                    switch (key.Key)
-                    {
-                        case ConsoleKey.Escape:
-                            running = false;
-                            Console.Clear();
-                            break;
-                    }
-                }
+                ConsoleKeyInfo key = Console.ReadKey(true);
+                while (key.Key != ConsoleKey.Enter) {}
+
+                #endregion
             }
             else if (page == 1)
             {
                 DrawFrame();
                 DrawTitle(" Usage Agreements - GoOS Setup ", 0);
-                int screenWidth = 80;
+                DrawControls("[F8 - Agree]═══[ESC - Shut down]");
                 string title = "Usage Agreements";
                 string q = "While nobody reads them, we want you to know some basic guidelines.";
                 string w = "Please refrain from creating Viruses in the GoCode engine.";
@@ -270,17 +259,17 @@ namespace GoOS
                 string t = "We will grant support to users based on SUPPORT.MD";
                 string y = "on our Github page. Forks of our OS will not be supported";
                 string u = "by us. Keep your OS up to date to keep getting support!";
-                string i = "Press any key to accept this UA. Terminate OS if declined.";
+                string i = "Press F8 to accept UA, otherwise press Escape to shut down...";
 
-                int titlePos = (screenWidth / 2) - (title.Length / 2);
-                int qPos = (screenWidth / 2) - (q.Length / 2);
-                int wPos = (screenWidth / 2) - (w.Length / 2);
-                int ePos = (screenWidth /2) - (e.Length / 2);
-                int rPos = (screenWidth / 2) - (r.Length / 2);
-                int tPos = (screenWidth / 2) - (t.Length / 2);
-                int yPos = (screenWidth / 2) - (y.Length / 2);
-                int uPos = (screenWidth / 2) - (u.Length / 2);
-                int iPos = (screenWidth / 2) - (i.Length / 2);
+                int titlePos = 40 - (title.Length / 2);
+                int qPos = 40 - (q.Length / 2);
+                int wPos = 40 - (w.Length / 2);
+                int ePos = 40 - (e.Length / 2);
+                int rPos = 40 - (r.Length / 2);
+                int tPos = 40 - (t.Length / 2);
+                int yPos = 40 - (y.Length / 2);
+                int uPos = 40 - (u.Length / 2);
+                int iPos = 40 - (i.Length / 2);
 
                 Console.SetCursorPosition(titlePos, 2);
                 Console.Write(title);
@@ -298,34 +287,51 @@ namespace GoOS
                 Console.Write(u);
                 Console.SetCursorPosition(iPos, 13);
                 Console.Write(i);
-                Console.ReadKey();
 
+                #region Key reading
 
+                ConsoleKeyInfo key = Console.ReadKey(true);
+                bool done = false;
+
+                while (!done)
+                {
+                    switch (key.Key)
+                    {
+                        case ConsoleKey.Escape:
+                            Sys.Power.Shutdown();
+                            break;
+
+                        case ConsoleKey.F8:
+                            done = true;
+                            break;
+                    }
+                }
+
+                #endregion
             }
             else if (page == 2)
             {
                 DrawFrame();
                 DrawTitle(" Accounts - GoOS Setup ", 0);
-                int screenWidth = 80;
                 string title = "Your Account";
                 string q = "There is more planned in the future, however we only";
                 string w = "need 2 things from you. Your name and your computer's name.";
-                string e = "";
-                string r = "";
+                string e = "Username: ";
+                string r = "Computer Name: ";
                 string t = "";
                 string y = "";
-                string u = "Username: ";
-                string i = "Computer Name: ";
+                string u = "";
+                string i = "";
 
-                int titlePos = (screenWidth / 2) - (title.Length / 2);
-                int qPos = (screenWidth / 2) - (q.Length / 2);
-                int wPos = (screenWidth / 2) - (w.Length / 2);
-                int ePos = (screenWidth / 2) - (e.Length / 2);
-                int rPos = (screenWidth / 2) - (r.Length / 2);
-                int tPos = (screenWidth / 2) - (t.Length / 2);
-                int yPos = (screenWidth / 2) - (y.Length / 2);
-                int uPos = (screenWidth / 2) - (u.Length / 2);
-                int iPos = (screenWidth / 2) - (i.Length / 2);
+                int titlePos = 40 - (title.Length / 2);
+                int qPos = 40 - (q.Length / 2);
+                int wPos = 40 - (w.Length / 2);
+                int ePos = 40 - (e.Length / 2);
+                int rPos = 40 - (r.Length / 2);
+                int tPos = 40 - (t.Length / 2);
+                int yPos = 40 - (y.Length / 2);
+                int uPos = 40 - (u.Length / 2);
+                int iPos = 40 - (i.Length / 2);
 
                 Console.SetCursorPosition(titlePos, 2);
                 Console.Write(title);
@@ -334,11 +340,10 @@ namespace GoOS
                 Console.SetCursorPosition (wPos, 4);
                 Console.Write(w);
 
-
                 Console.SetCursorPosition (wPos, 6);
-                Console.Write(u);
+                Console.Write(e);
                 Console.SetCursorPosition(wPos, 8);
-                Console.Write(i);
+                Console.Write(r);
 
                 Console.ForegroundColor = Gray;
                 Console.SetCursorPosition(wPos + 10, 6);
@@ -350,7 +355,7 @@ namespace GoOS
 
         private static void MessageBox(int message)
         {
-            Console.ForegroundColor = DarkRed;
+            Console.ForegroundColor = Green;
 
             if (message == 0)
             {
@@ -360,7 +365,7 @@ namespace GoOS
                 CP737Console.Write("║                    ║", 29, 13);
                 CP737Console.Write("╚════════════════════╝", 29, 14);
 
-                Console.ForegroundColor = Red;
+                Console.ForegroundColor = Cyan;
                 DrawTitle(" Info ", 10);
                 Console.SetCursorPosition(31, 12);
                 Console.Write("Saving settings...");
@@ -373,7 +378,7 @@ namespace GoOS
                 CP737Console.Write("║                                        ║", 19, 13);
                 CP737Console.Write("╚════════════════════════════════════════╝", 19, 14);
 
-                Console.ForegroundColor = Red;
+                Console.ForegroundColor = Cyan;
                 DrawTitle(" Info ", 10);
                 Console.SetCursorPosition(21, 12);
                 Console.Write("Settings have been saved successfully!");
@@ -388,7 +393,7 @@ namespace GoOS
                 CP737Console.Write("║                                                      ║", 12, 13);
                 CP737Console.Write("╚══════════════════════════════════════════════════════╝", 12, 14);
 
-                Console.ForegroundColor = Red;
+                Console.ForegroundColor = Cyan;
                 DrawTitle(" Info ", 10);
                 Console.SetCursorPosition(14, 12);
                 Console.Write("A serious error has occoured, setup cannot continue.");
