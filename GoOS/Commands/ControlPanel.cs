@@ -255,7 +255,7 @@ namespace GoOS.ControlPanel
             Console.SetCursorPosition(40 - (w.Length / 2), 4);
             Console.Write(w);
 
-            MkButton("Change Computer Name", 15, 11, Cyan, Gray);
+            MkButton("Change Computer Name", 15, 11, Cyan, Black);
             MkButton("Change Username", 44, 11, Black, Cyan);
             MkButton("Reset System", 33, 14, Black, Cyan);
         }
@@ -368,7 +368,7 @@ namespace GoOS.ControlPanel
                         case ConsoleKey.LeftArrow:
                             if (selected == 2)
                             {
-                                MkButton("Change Computer Name", 15, 11, Cyan, Gray); // Select button
+                                MkButton("Change Computer Name", 15, 11, Cyan, Black); // Select button
                                 MkButton("Change Username", 44, 11, Black, Cyan); // Deselect button
                                 selected = 1;
                             }
@@ -376,7 +376,7 @@ namespace GoOS.ControlPanel
                         case ConsoleKey.UpArrow:
                             if (selected == 3)
                             {
-                                MkButton("Change Computer Name", 15, 11, Cyan, White); // Select button
+                                MkButton("Change Computer Name", 15, 11, Cyan, Black); // Select button
                                 MkButton("Reset System", 33, 14, Black, Cyan); // Deselect button
                                 selected = 1;
                             }
@@ -385,13 +385,13 @@ namespace GoOS.ControlPanel
                         case ConsoleKey.DownArrow:
                             if (selected == 1)
                             {
-                                MkButton("Reset System", 33, 14, Cyan, Gray); // Select button
+                                MkButton("Reset System", 33, 14, Cyan, Black); // Select button
                                 MkButton("Change Computer Name", 15, 11, Black, Cyan); // Deselect button
                                 selected = 3;
                             }
                             else if (selected == 2)
                             {
-                                MkButton("Reset System", 33, 14, Cyan, Gray); // Select button
+                                MkButton("Reset System", 33, 14, Cyan, Black); // Select button
                                 MkButton("Change Username", 44, 11, Black, Cyan); // Deselect button
                                 selected = 3;
                             }
@@ -400,13 +400,13 @@ namespace GoOS.ControlPanel
                         case ConsoleKey.RightArrow:
                             if (selected == 1)
                             {
-                                MkButton("Change Username", 44, 11, Cyan, Gray); // Select button
+                                MkButton("Change Username", 44, 11, Cyan, Black); // Select button
                                 MkButton("Change Computer Name", 15, 11, Black, Cyan); // Deselect button
                                 selected = 2;
                             }
                             else if (selected == 3)
                             {
-                                MkButton("Change Username", 44, 11, Cyan, Gray); // Select button
+                                MkButton("Change Username", 44, 11, Cyan, Black); // Select button
                                 MkButton("Reset System", 33, 14, Black, Cyan); // Deselect button
                                 selected = 2;
                             }
