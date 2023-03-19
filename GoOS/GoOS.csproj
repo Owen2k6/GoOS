@@ -86,6 +86,7 @@
         <Company>Goplex Studios</Company>
         <Product>Goplex OS</Product>
         <Copyright>Copyright (C) 2022 Owen2k6</Copyright>
+        <OptimizationLevel>3</OptimizationLevel>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

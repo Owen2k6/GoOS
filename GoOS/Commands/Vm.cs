@@ -9,7 +9,11 @@ namespace GoOS.Commands
     internal class Vm
     {
         public static void command(string args) {
+            Console.WriteLine("Virtual Machine now booting...");
+            if (args.Equals("chaos"))
+            {
 
+            }
         }
     }
 }
