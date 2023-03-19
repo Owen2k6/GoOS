@@ -58,7 +58,15 @@ namespace GoOS.Commands
                 }
                 foreach (var file in directory_list)
                 {
-                    log(ConsoleColor.Gray, "<File> " + file);
+                    if (file.EndsWith(".gms"))
+                    {
+                        log(ConsoleColor.DarkRed, "<System> Protected File");
+                    }
+                    else
+                    {
+                        log(ConsoleColor.Gray, "<File> " + file);
+                        
+                    }
                     filecount++;
                 }
                 log(ConsoleColor.Gray, $"\nListed {filecount} files and {foldercount} folders in this directory.\n");
