@@ -47,12 +47,6 @@ using System.Reflection.Metadata;
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-/** 
-TODO:
- - Remove GoOS Networking
-**/
-
-
 namespace GoOS
 {
 
@@ -111,7 +105,7 @@ namespace GoOS
 
 
 
-        private static Sys.FileSystem.CosmosVFS FS;
+        public static Sys.FileSystem.CosmosVFS FS;
         public static string file;
 
         private static string request = string.Empty;
@@ -153,16 +147,43 @@ namespace GoOS
                 Console.ReadKey();
                 adminconsoledisk = false;
             }
+            if (!File.Exists(@"0:\content\sys\setup.gms"))
+            {
+                Sys.FileSystem.VFS.VFSManager.CreateFile(@"0:\content\sys\version.gms");
+                var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\version.gms");
+                var setupstream = setupcontent.GetFileStream();
+                if (setupstream.CanWrite)
+                {
+                    byte[] textToWrite = Encoding.ASCII.GetBytes($"GoOS.System.Version is set to {version} \n Note to users reading this: DO NOT ALTER. IMPORTANT IF USER DATA NEEDS CONVERTING.");
+                    setupstream.Write(textToWrite, 0, textToWrite.Length);
+                }
+                else
+                {
+                    CP737Console.Write("╔═══════════════════════ Alert! ═══════════════════════╗", 24, 10);
+                    CP737Console.Write("║                                                      ║", 24, 11);
+                    CP737Console.Write("║    An error has occoured, system can not continue    ║", 24, 12);
+                    CP737Console.Write("║         Open a ticket on the discord server!         ║", 24, 13);
+                    CP737Console.Write("║                                                      ║", 24, 13);
+                    CP737Console.Write("╚══════════════════════════════════════════════════════╝", 24, 14);
+                    Console.ReadKey();
+                    bool pool = true;
+                    while (pool)
+                    {
+
+                    }
+
+                }
+            }
             try
             {
                 textcolour(ConsoleColor.Cyan);
-                Console.WriteLine("GoOS is performing first boot...");
-                Console.WriteLine("initialising file system...");
-                Console.WriteLine("This may take some time.");
                 textcolour(ConsoleColor.White);
                 if (!File.Exists(@"0:\content\sys\setup.gms"))
                 {
-                        OOBE.Open();
+                    Console.WriteLine("GoOS is performing first boot...");
+                    Console.WriteLine("initialising file system...");
+                    Console.WriteLine("This may take some time.");
+                    OOBE.Open();
 
 
                 }
@@ -272,7 +293,7 @@ namespace GoOS
             textcolour(ConsoleColor.White);
             String input = Console.ReadLine();
             String[] args = input.Split(' ');
-            
+
 
             //codein tiem
             switch (args[0])
@@ -348,19 +369,19 @@ namespace GoOS
                         log(ConsoleColor.Red, "Missing arguments");
                         break;
                     }
-                    GoOS.Commands.Delete.DeleteFile(args[1]);   
+                    GoOS.Commands.Delete.DeleteFile(args[1]);
                     break;
                 case "cd":
-                        if (args.Length > 2)
-                        {
-                            log(ConsoleColor.Red, "Too many arguments");
-                            break;
-                        }
-                        if (args.Length == 1)
-                        {
-                            log(ConsoleColor.Red, "Missing arguments");
-                            break;
-                        }
+                    if (args.Length > 2)
+                    {
+                        log(ConsoleColor.Red, "Too many arguments");
+                        break;
+                    }
+                    if (args.Length == 1)
+                    {
+                        log(ConsoleColor.Red, "Missing arguments");
+                        break;
+                    }
                     GoOS.Commands.Cd.Run(args[1]);
                     break;
                 case "cd..":

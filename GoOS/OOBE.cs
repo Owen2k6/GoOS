@@ -201,7 +201,7 @@ namespace GoOS
                 Console.SetCursorPosition(setupPosition, 3);
                 Console.Write(setupText);
 
-                Console.SetCursorPosition(continuePosition, 13);
+                Console.SetCursorPosition(continuePosition, 22);
                 Console.Write(continueText);
             }
             else if (page == 1)
@@ -279,14 +279,14 @@ namespace GoOS
                 Console.Write(q);
                 Console.SetCursorPosition (wPos, 4);
                 Console.Write(w);
-                Console.SetCursorPosition (uPos, 12);
+                Console.SetCursorPosition (30, 6);
                 Console.Write(u);
-                Console.SetCursorPosition (iPos, 13);
+                Console.SetCursorPosition (25, 6);
                 Console.Write(i);
-                Console.SetCursorPosition(uPos, 12);
+                Console.SetCursorPosition(30, 12);
                 Console.Write("Username: ");
                 usrn = Console.ReadLine();
-                Console.SetCursorPosition(iPos, 13);
+                Console.SetCursorPosition(25, 13);
                 Console.Write("Computer Name: ");
                 cprn = Console.ReadLine();
             }

@@ -9,6 +9,34 @@ namespace GoOS.ControlPanel
 {
     public static class ControlPanel
     {
+        // Welcome to the most commented file in GoOS
+        //agreed
+        // GoOS Core
+        public static void print(string str)
+        {
+            Console.WriteLine(str);
+        }
+        public static void log(System.ConsoleColor colour, string str)
+        {
+            Console.ForegroundColor = colour;
+            Console.WriteLine(str);
+        }
+        public static void write(string str)
+        {
+            Console.Write(str);
+        }
+        public static void textcolour(System.ConsoleColor colour)
+        {
+            Console.ForegroundColor = colour;
+        }
+        public static void highlightcolour(System.ConsoleColor colour)
+        {
+            Console.BackgroundColor = colour;
+        }
+        public static void sleep(int time)
+        {
+            System.Threading.Thread.Sleep(time);
+        }
         #region CP737
 
         /// <summary>
@@ -128,7 +156,7 @@ namespace GoOS.ControlPanel
             {
                 Console.BackgroundColor = Black;
                 Console.ForegroundColor = Red;
-                CP737Console.Write("╔═══════════════════════════ GoplexOS Control Panel ═══════════════════════════╗\n" +
+                CP737Console.Write("╔══════════════════════════════════ Settings ══════════════════════════════════╗\n" +
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
@@ -163,14 +191,27 @@ namespace GoOS.ControlPanel
 
         private static void DrawMainText()
         {
-            Console.SetCursorPosition(46, 11);
-            Console.BackgroundColor = Black;
-            Console.ForegroundColor = Red;
-            Console.Write("Change Computer Name");
-            Console.SetCursorPosition(18, 11);
-            Console.BackgroundColor = Red;
-            Console.ForegroundColor = White;
-            Console.Write("Change Username");
+            int mem = (int)(Kernel.FS.GetTotalSize(@"0:\") / 1000000);
+            int screenWidth = 80;
+            string title = "System information";
+            string q = $"Total Storage (bytes): {mem}";
+            string w = $"Total Memory (megabytes): {Cosmos.Core.CPU.GetAmountOfRAM()}";
+
+            int titlePos = (screenWidth / 2) - (title.Length / 2);
+            int qPos = (screenWidth / 2) - (q.Length / 2);
+            int wPos = (screenWidth / 2) - (w.Length / 2);
+
+            Console.SetCursorPosition(titlePos, 2);
+            Console.Write(title);
+            Console.SetCursorPosition(qPos, 3);
+            Console.Write(q);
+            Console.SetCursorPosition(wPos, 4);
+            Console.Write(w);
+
+
+            setButton("Reset System", 3, 18, 14, Black, Red);
+            setButton("Change Username", 2, 46, 11, Black, Red);
+            setButton("Change Computer Name", 1, 18, 11, Black, Red);
         }
 
         private static void MessageBox()
@@ -183,12 +224,21 @@ namespace GoOS.ControlPanel
             Console.ReadKey();
         }
 
+        private static void setButton(string name, int id, int x, int y, ConsoleColor highlight, ConsoleColor colour)
+        {
+            Console.SetCursorPosition(x, y);
+            Console.BackgroundColor = highlight;
+            Console.ForegroundColor = colour;
+            Console.Write(name);
+        }
+
         private static void Run()
         {
             bool running = true;
             string menu = "main";
-            string selected = "change username";
+            int selected = 1;
 
+            int mem = (int)(Kernel.FS.GetTotalSize(@"0:\") / 1000000);
             DrawMainText();
 
             while (running)
@@ -200,44 +250,40 @@ namespace GoOS.ControlPanel
                     switch (key.Key)
                     {
                         case ConsoleKey.Tab:
-                            Console.BackgroundColor = Red;
+                            Console.BackgroundColor = Black;
                             Console.ForegroundColor = White;
 
-                            if (selected == "change username")
+                            if (selected == 1)
                             {
-                                Console.SetCursorPosition(18, 11);
-                                Console.BackgroundColor = Black;
-                                Console.ForegroundColor = Red;
-                                Console.Write("Change Username");
-
-                                Console.SetCursorPosition(46, 11);
-                                Console.BackgroundColor = Red;
-                                Console.ForegroundColor = White;
-                                Console.Write("Change Computer Name");
-                                selected = "change computer name";
+                                setButton("Change Username", 2, 46, 11, Black, Red);
+                                setButton("Change Computer Name", 1, 18, 11, Black, Red);
+                                selected = 2;
                             }
-                            else if (selected == "change computer name")
+                            else if (selected == 2)
                             {
-                                Console.SetCursorPosition(46, 11);
-                                Console.BackgroundColor = Black;
-                                Console.ForegroundColor = Red;
-                                Console.Write("Change Computer Name");
-
-                                Console.SetCursorPosition(18, 11);
-                                Console.BackgroundColor = Red;
-                                Console.ForegroundColor = White;
-                                Console.Write("Change Username");
-                                selected = "change username";
+                                setButton("Change Computer Name", 1, 18, 11, Black, Red);
+                                setButton("Reset System", 3, 18, 14, Black, Red);
+                                selected = 3;
+                            }
+                            else if (selected == 3)
+                            {
+                                setButton("Reset System", 3, 18, 14, Black, Red);
+                                setButton("Change Username", 2, 46, 11, Black, Red);
+                                selected = 1;
                             }
                             break;
                         case ConsoleKey.Enter:
-                            if (selected == "change username")
+                            if (selected == 1)
                             {
                                 menu = "username";
                             }
-                            else if (selected == "change computer name")
+                            else if (selected == 2)
                             {
                                 menu = "computer name";
+                            }
+                            else if (selected == 3)
+                            {
+                                menu = "reset system";
                             }
                             break;
                         case ConsoleKey.Escape:
@@ -253,6 +299,8 @@ namespace GoOS.ControlPanel
                     Console.Write("New Username: ");
                     string thingtosave = Console.ReadLine();
 
+                    System.IO.File.Delete(@"0:\content\sys\setup.gms");
+                    System.IO.File.Create(@"0:\content\sys\setup.gms");
                     var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
                     var setupstream = setupcontent.GetFileStream();
                     byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {thingtosave}\ncomputername: {Kernel.computername}");
@@ -261,7 +309,7 @@ namespace GoOS.ControlPanel
 
                     MessageBox();
                     menu = "main";
-                    selected = "change username";
+                    selected = 2;
                     DrawFrame();
                     DrawMainText();
                 }
@@ -273,6 +321,8 @@ namespace GoOS.ControlPanel
                     Console.Write("New Computer Name: ");
                     string thingtosave = Console.ReadLine();
 
+                    System.IO.File.Delete(@"0:\content\sys\setup.gms");
+                    System.IO.File.Create(@"0:\content\sys\setup.gms");
                     var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
                     var setupstream = setupcontent.GetFileStream();
                     byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {Kernel.username}\ncomputername: {thingtosave}");
@@ -281,7 +331,111 @@ namespace GoOS.ControlPanel
 
                     MessageBox();
                     menu = "main";
-                    selected = "change username";
+                    selected = 2;
+                    DrawFrame();
+                    DrawMainText();
+                }
+
+                else if (menu == "reset system")
+                {
+                    DrawFrame();
+                    Console.SetCursorPosition(2, 11);
+                    Console.Write("Are you sure? (Y/N)");
+                    string thingtosave = Console.ReadLine();
+                    if (thingtosave == @"Y")
+                    {
+                        thingtosave = @"y";
+                    }
+                    if (thingtosave == @"N")
+                    {
+                        thingtosave = @"n";
+                    }
+
+                    if (thingtosave == @"y")
+                    {
+                        // note that that wont do shit
+
+                        try
+                        {
+                            //DONT ALTER. SOMEHOW IT WORKS
+                            //YOU ARE FRENCH IF YOU TOUCH IT
+                            System.IO.File.Delete(@"0:\content\sys\setup.gms");
+                            System.IO.Directory.Delete(@"0:\content\prf");
+                            var directory_list = System.IO.Directory.GetFiles(@"0:\");
+                            foreach (var file in directory_list)
+                            {
+                                System.IO.File.Delete(@"0:\" + file);
+                            }
+                            var directory_list3 = System.IO.Directory.GetDirectories(@"0:\");
+                            foreach (var file in directory_list3)
+                            {
+                                System.IO.File.Delete(@"0:\" + file);
+                            }
+                            Kernel.FS.Initialize(false);
+                        }
+                        catch (Exception monkeyballs)
+                        {
+                            DrawFrame();
+                            int screenWidth = 80;
+                            string title = "System Reset";
+                            string q = "GoOS is now back to factory default settings.";
+                            string w = "The system will no longer operate until restarted.";
+                            string e = "";
+                            string r = "Once restarted, the GoOS setup will launch instantly.";
+                            string t = "";
+                            string y = "";
+                            string u = "";
+                            string i = "";
+
+                            int titlePos = (screenWidth / 2) - (title.Length / 2);
+                            int qPos = (screenWidth / 2) - (q.Length / 2);
+                            int wPos = (screenWidth / 2) - (w.Length / 2);
+                            int ePos = (screenWidth / 2) - (e.Length / 2);
+                            int rPos = (screenWidth / 2) - (r.Length / 2);
+                            int tPos = (screenWidth / 2) - (t.Length / 2);
+                            int yPos = (screenWidth / 2) - (y.Length / 2);
+                            int uPos = (screenWidth / 2) - (u.Length / 2);
+                            int iPos = (screenWidth / 2) - (i.Length / 2);
+
+                            Console.SetCursorPosition(titlePos, 2);
+                            Console.Write(title);
+                            Console.SetCursorPosition(qPos, 3);
+                            Console.Write(q);
+                            Console.SetCursorPosition(wPos, 4);
+                            Console.Write(w);
+                            Console.SetCursorPosition(rPos, 10);
+                            Console.Write(r);
+                            bool pool = true;
+                            while (pool)
+                            {
+                                //The system will forever hang. this code will never end.
+                                //What why?
+                                // so the user has to restart to complete the reset
+                                // Ohhh
+                                // building test now
+                                // aight
+                                // IT WORKS
+                                // wasdfghjkloipqwerty
+                                // i take that as a pogchamp
+                                // you should add the ability to add custom commands and features to your bot somehow
+                            }
+
+                        }
+
+                    }
+                    else // you dont need an elif for no. literally anything else and kick out
+                    {
+                        MessageBox();
+                        menu = "main";
+                        selected = 2;
+                        DrawFrame();
+                        DrawMainText();
+                    }
+
+
+                    MessageBox();
+                    menu = "main";
+                    selected = 2;
                     DrawFrame();
                     DrawMainText();
                 }
