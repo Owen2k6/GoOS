@@ -57,8 +57,8 @@ namespace GoOS
     public class Kernel : Sys.Kernel
     {
         //Vars for OS
-        public string version = "1.5";
-        public string BuildType = "Beta";
+        public static string version = "1.5";
+        public static string BuildType = "Beta";
         public bool cmdm = true;
         public bool root = false;
 
@@ -152,45 +152,11 @@ namespace GoOS
             }
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {
-                Console.WriteLine("GoOS is performing first boot...");
-                Console.WriteLine("initialising file system...");
-                Console.WriteLine("This may take some time.");
-                File.Create(@"0:\content\sys\version.gms");
-                File.Create(@"0:\content\sys\userinfo.gms");
-                File.Create(@"0:\content\sys\option-showprotectedfiles.gms");
-                File.Create(@"0:\content\sys\option-editprotectedfiles.gms");
-                File.Create(@"0:\content\sys\option-deleteprotectedfiles.gms");
-                var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\version.gms");
-                var setupstream = setupcontent.GetFileStream();
-                if (setupstream.CanWrite)
-                {
-                    byte[] textToWrite = Encoding.ASCII.GetBytes($"System.Version is set to {version} \n Note to users reading this: DO NOT ALTER. IMPORTANT IF USER DATA NEEDS CONVERTING.");
-                    setupstream.Write(textToWrite, 0, textToWrite.Length);
-                }
-                else
-                {
-                    CP737Console.Write("╔═══════════════════════ Alert! ═══════════════════════╗", 24, 10);
-                    CP737Console.Write("║                                                      ║", 24, 11);
-                    CP737Console.Write("║    An error has occoured, system can not continue    ║", 24, 12);
-                    CP737Console.Write("║         Open a ticket on the discord server!         ║", 24, 13);
-                    CP737Console.Write("║                                                      ║", 24, 13);
-                    CP737Console.Write("╚══════════════════════════════════════════════════════╝", 24, 14);
-                    Console.ReadKey();
-                    bool pool = true;
-                    while (pool)
-                    {
-
-                    }
-
-                }
+                OOBE.Open();
             }
             try
             {
                 textcolour(ThemeManager.Default);
-                if (!File.Exists(@"0:\content\sys\setup.gms"))
-                {
-                    OOBE.Open();
-                }
                 var systemsetup = File.ReadAllLines(@"0:\content\sys\setup.gms");
                 foreach (string line in systemsetup)
                 {
