@@ -117,18 +117,27 @@ namespace GoOS
 
         public static void Open()
         {
+            DrawPage(0);
+            Console.ReadKey(true);
+            DrawPage(1);
+            DrawPage(2);
             Sys.FileSystem.VFS.VFSManager.CreateFile(@"0:\content\sys\setup.gms");
             var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
             var setupstream = setupcontent.GetFileStream();
             if (setupstream.CanWrite)
             {
-                DrawPage(0);
-                Console.ReadKey(true);
-                DrawPage(1);
-                DrawPage(2);
-
                 byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {usrn}\ncomputername: {cprn}");
                 setupstream.Write(textToWrite, 0, textToWrite.Length);
+                MessageBox();
+            }else
+            {
+                CP737Console.Write("╔════════════════════════ Info ════════════════════════╗", 24, 10);
+                CP737Console.Write("║                                                      ║", 24, 11);
+                CP737Console.Write("║ A serious error has occoured, setup can not continue ║", 24, 12);
+                CP737Console.Write("║                                                      ║", 24, 13);
+                CP737Console.Write("╚══════════════════════════════════════════════════════╝", 24, 14);
+                Console.ReadKey();
+                Console.Clear();
             }
         }
 
@@ -177,25 +186,108 @@ namespace GoOS
             if (page == 0)
             {
                 DrawFrame();
-                Console.SetCursorPosition(23, 10);
-                Console.Write("Welcome to GoplexOS! Before you can");
-                Console.SetCursorPosition(20, 11);
-                Console.Write("continue, we need to set up your computer");
-                Console.SetCursorPosition(27, 13);
-                Console.Write("Press any key to continue...");
+                int screenWidth = 80;
+                string welcomeText = "Welcome to GoOS";
+                string setupText = "We have some things to set up and get sorted!";
+                string continueText = "Press any key to continue...";
+
+                int welcomePosition = (screenWidth / 2) - (welcomeText.Length / 2);
+                int setupPosition = (screenWidth / 2) - (setupText.Length / 2);
+                int continuePosition = (screenWidth / 2) - (continueText.Length / 2);
+
+                Console.SetCursorPosition(welcomePosition, 2);
+                Console.Write(welcomeText);
+
+                Console.SetCursorPosition(setupPosition, 3);
+                Console.Write(setupText);
+
+                Console.SetCursorPosition(continuePosition, 13);
+                Console.Write(continueText);
             }
             else if (page == 1)
             {
                 DrawFrame();
-                Console.SetCursorPosition(2, 11);
-                Console.Write("New Username: ");
-                usrn = Console.ReadLine();
+                int screenWidth = 80;
+                string title = "Usage Agreements";
+                string q = "While nobody reads them, we want you to know some basic guidelines.";
+                string w = "Please refrain from creating Viruses in the GoCode engine.";
+                string e = "We do not submit any data or files to Goplex Studios or Owen2k6";
+                string r = "You are in full control and nothing is sent over the net.";
+                string t = "We will grant support to users based on SUPPORT.MD";
+                string y = "on our Github page. Forks of our OS will not be supported";
+                string u = "by us. Keep your OS up to date to keep getting support!";
+                string i = "Press any key to accept this UA. Terminate OS if declined.";
+
+                int titlePos = (screenWidth / 2) - (title.Length / 2);
+                int qPos = (screenWidth / 2) - (q.Length / 2);
+                int wPos = (screenWidth / 2) - (w.Length / 2);
+                int ePos = (screenWidth /2) - (e.Length / 2);
+                int rPos = (screenWidth / 2) - (r.Length / 2);
+                int tPos = (screenWidth / 2) - (t.Length / 2);
+                int yPos = (screenWidth / 2) - (y.Length / 2);
+                int uPos = (screenWidth / 2) - (u.Length / 2);
+                int iPos = (screenWidth / 2) - (i.Length / 2);
+
+                Console.SetCursorPosition(titlePos, 2);
+                Console.Write(title);
+                Console.SetCursorPosition(qPos, 3);
+                Console.Write(q);
+                Console.SetCursorPosition(wPos, 4);
+                Console.Write(w);
+                Console.SetCursorPosition(ePos, 5);
+                Console.Write(e);
+                Console.SetCursorPosition(rPos, 6);
+                Console.Write(r);
+                Console.SetCursorPosition(tPos, 7);
+                Console.Write(t);
+                Console.SetCursorPosition(uPos, 8);
+                Console.Write(u);
+                Console.SetCursorPosition(iPos, 13);
+                Console.Write(i);
+                Console.ReadKey();
+
+
             }
             else if (page == 2)
             {
+
                 DrawFrame();
-                Console.SetCursorPosition(2, 11);
-                Console.Write("New Computer Name: ");
+                int screenWidth = 80;
+                string title = "Your Account";
+                string q = "There is more planned in the future, however";
+                string w = "We only need 2 things from you. Username and Computername.";
+                string e = "";
+                string r = "";
+                string t = "";
+                string y = "";
+                string u = "Username:";
+                string i = "Computer Name:";
+
+                int titlePos = (screenWidth / 2) - (title.Length / 2);
+                int qPos = (screenWidth / 2) - (q.Length / 2);
+                int wPos = (screenWidth / 2) - (w.Length / 2);
+                int ePos = (screenWidth / 2) - (e.Length / 2);
+                int rPos = (screenWidth / 2) - (r.Length / 2);
+                int tPos = (screenWidth / 2) - (t.Length / 2);
+                int yPos = (screenWidth / 2) - (y.Length / 2);
+                int uPos = (screenWidth / 2) - (u.Length / 2);
+                int iPos = (screenWidth / 2) - (i.Length / 2);
+
+                Console.SetCursorPosition(titlePos, 2);
+                Console.Write(title);
+                Console.SetCursorPosition (qPos, 3);
+                Console.Write(q);
+                Console.SetCursorPosition (wPos, 4);
+                Console.Write(w);
+                Console.SetCursorPosition (uPos, 12);
+                Console.Write(u);
+                Console.SetCursorPosition (iPos, 13);
+                Console.Write(i);
+                Console.SetCursorPosition(uPos, 12);
+                Console.Write("Username: ");
+                usrn = Console.ReadLine();
+                Console.SetCursorPosition(iPos, 13);
+                Console.Write("Computer Name: ");
                 cprn = Console.ReadLine();
             }
         }

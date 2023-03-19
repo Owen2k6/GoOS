@@ -162,13 +162,7 @@ namespace GoOS
                 textcolour(ConsoleColor.White);
                 if (!File.Exists(@"0:\content\sys\setup.gms"))
                 {
-                    Sys.FileSystem.VFS.VFSManager.CreateFile(@"0:\content\sys\setup.gms");
-                    var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
-                    var setupstream = setupcontent.GetFileStream();
-                    if (setupstream.CanWrite)
-                    {
                         OOBE.Open();
-                    }
 
 
                 }

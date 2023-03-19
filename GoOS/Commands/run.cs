@@ -142,7 +142,7 @@ namespace GoOS.Commands
                                 Console.WriteLine();
                             }
                         }
-                        if (line.StartsWith("if"))
+                        /*old if code. No touchey!*/ if (line.StartsWith("if"))
                         {
                             if (line.Split("=")[1] == "1" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "2" || line.Split("=")[1] == "2" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "1")
                             {
@@ -796,6 +796,30 @@ namespace GoOS.Commands
                                 }
                             }
                         }
+                        /*if (line.StartsWith("if"))
+                        {
+                            string removeIf = line.Substring(3);
+                            if (removeIf.Contains("=="))
+                            {
+                                string equals2split1 = removeIf.Split(@"==")[0];
+                                string equals2split2 = removeIf.Split(@"==")[1];
+
+                                if (equals2split1 == equals2split2)
+                                {
+
+                                }
+                            }
+                            if (removeIf.Contains("!="))
+                            {
+                                string equals2split1 = removeIf.Split(@"!=")[0];
+                                string equals2split2 = removeIf.Split(@"!=")[1];
+
+                                if (equals2split1 != equals2split2)
+                                {
+
+                                }
+                            }
+                        }*/
                     } 
                     if (endmessage != null)
                     {
