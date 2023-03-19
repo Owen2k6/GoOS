@@ -10,7 +10,7 @@ GoOS is a simple operating system (OS) built from scratch using goCosmos (https:
 
 ## Requirements
 
-  - 512MB ram or more
+  - 128MB ram or more
   - 1GB HDD Preformatted as FAT32 (vhd provided on any release)
   - 8MB Video Memory or more
   - PS/2 Keyboard
