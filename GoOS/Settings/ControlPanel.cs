@@ -5,6 +5,7 @@ using static System.ConsoleColor;
 using Sys = Cosmos.System;
 using Console = System.Console;
 using static GoOS.Themes.ThemeManager;
+using Cosmos.System.FileSystem;
 
 namespace GoOS.Settings
 {
@@ -484,6 +485,7 @@ namespace GoOS.Settings
                             //DONT ALTER. SOMEHOW IT WORKS
                             //YOU ARE FRENCH IF YOU TOUCH IT
                             // no
+                            /*
                             System.IO.File.Delete(@"0:\content\sys\setup.gms");
                             emptyDir(@"0:\content\prf");
                             System.IO.Directory.Delete(@"0:\content\prf");
@@ -506,8 +508,84 @@ namespace GoOS.Settings
                             {
                                 System.IO.File.Delete(@"0:\" + directory);
                             }
-                            Kernel.FS.Initialize(true);
-                            Cosmos.System.FileSystem.Disk.
+                            */
+                            DrawFrame();
+                            int screenWidth = 80;
+                            string title = "RESET IN PROGRESS";
+                            string q = @"GoOS is performing a full format on drive 0:\";
+                            string w = "The system will no longer operate until restarted.";
+                            string e = "";
+                            string r = "Once restarted, the GoOS setup will launch instantly.";
+                            string t = "";
+                            string y = "";
+                            string u = "";
+                            string i = "";
+
+                            int titlePos = screenWidth / 2 - title.Length / 2;
+                            int qPos = screenWidth / 2 - q.Length / 2;
+                            int wPos = screenWidth / 2 - w.Length / 2;
+                            int ePos = screenWidth / 2 - e.Length / 2;
+                            int rPos = screenWidth / 2 - r.Length / 2;
+                            int tPos = screenWidth / 2 - t.Length / 2;
+                            int yPos = screenWidth / 2 - y.Length / 2;
+                            int uPos = screenWidth / 2 - u.Length / 2;
+                            int iPos = screenWidth / 2 - i.Length / 2;
+
+                            Console.SetCursorPosition(titlePos, 2);
+                            Console.Write(title);
+                            Console.SetCursorPosition(qPos, 3);
+                            Console.Write(q);
+                            Console.SetCursorPosition(wPos, 4);
+                            Console.Write(w);
+                            Console.SetCursorPosition(rPos, 10);
+                            Console.Write(r);
+                            Kernel.FS.Disks[0].FormatPartition(0, "FAT", false);
+                            DrawFrame();
+                             screenWidth = 80;
+                             title = "System Reset";
+                             q = "GoOS is now back to factory default settings.";
+                             w = "The system will no longer operate until restarted.";
+                             e = "";
+                             r = "Once restarted, the GoOS setup will launch instantly.";
+                             t = "";
+                             y = "";
+                             u = "";
+                             i = "";
+
+                             titlePos = screenWidth / 2 - title.Length / 2;
+                             qPos = screenWidth / 2 - q.Length / 2;
+                             wPos = screenWidth / 2 - w.Length / 2;
+                             ePos = screenWidth / 2 - e.Length / 2;
+                             rPos = screenWidth / 2 - r.Length / 2;
+                             tPos = screenWidth / 2 - t.Length / 2;
+                             yPos = screenWidth / 2 - y.Length / 2;
+                             uPos = screenWidth / 2 - u.Length / 2;
+                             iPos = screenWidth / 2 - i.Length / 2;
+
+                            Console.SetCursorPosition(titlePos, 2);
+                            Console.Write(title);
+                            Console.SetCursorPosition(qPos, 3);
+                            Console.Write(q);
+                            Console.SetCursorPosition(wPos, 4);
+                            Console.Write(w);
+                            Console.SetCursorPosition(rPos, 10);
+                            Console.Write(r);
+                            bool pool = true;
+                            while (pool)
+                            {
+                                //The system will forever hang. this code will never end.
+                                //What why?
+                                // so the user has to restart to complete the reset
+                                // Ohhh
+                                // building test now
+                                // aight
+                                // IT WORKS
+                                // wasdfghjkloipqwerty
+                                // i take that as a pogchamp
+                                // you should add the ability to add custom commands and features to your bot somehow
+                            }
+
+
                         }
                         catch (Exception monkeyballs)
                         {
