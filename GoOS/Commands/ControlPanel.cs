@@ -263,22 +263,64 @@ namespace GoOS.ControlPanel
         /// <summary>
         /// Shows a message box.
         /// </summary>
-        private static void MessageBox()
+        private static bool MessageBox(int message)
         {
-            // TODO: Apply new style
-            Console.ForegroundColor = DarkRed;
-            CP737Console.Write("╔══════════════════════════════╗", 24, 10);
-            CP737Console.Write("║                              ║", 24, 11);
-            CP737Console.Write("║                              ║", 24, 12);
-            CP737Console.Write("║                              ║", 24, 13);
-            CP737Console.Write("╚══════════════════════════════╝", 24, 14);
+            if (message == 0)
+            {
+                Console.ForegroundColor = DarkRed;
+                CP737Console.Write("╔══════════════════════════════╗", 24, 10);
+                CP737Console.Write("║                              ║", 24, 11);
+                CP737Console.Write("║                              ║", 24, 12);
+                CP737Console.Write("║                              ║", 24, 13);
+                CP737Console.Write("╚══════════════════════════════╝", 24, 14);
 
-            Console.ForegroundColor = Red;
-            DrawTitle("Info", 10);
-            Console.SetCursorPosition(26, 12);
-            Console.Write("Contents saved successfully.");
+                Console.ForegroundColor = Red;
+                DrawTitle(" Info ", 10);
+                Console.SetCursorPosition(26, 12);
+                Console.Write("Contents saved successfully.");
 
-            Console.ReadKey();
+                Console.ReadKey();
+
+                return false;
+            }
+            else if (message == 1)
+            {
+                Console.ForegroundColor = DarkRed;
+                CP737Console.Write("╔════════════════════════╗", 27, 10);
+                CP737Console.Write("║                        ║", 27, 11);
+                CP737Console.Write("║                        ║", 27, 12);
+                CP737Console.Write("║                        ║", 27, 13);
+                CP737Console.Write("╚════════════════════════╝", 27, 14);
+
+                Console.ForegroundColor = Red;
+                DrawTitle(" Confirmation ", 10);
+                Console.SetCursorPosition(26, 12);
+                Console.Write("Are you sure? (Y/N): ");
+
+                #region Key reading
+
+                ConsoleKeyInfo key = Console.ReadKey(true);
+
+                while (key.Key != ConsoleKey.Y || key.Key != ConsoleKey.N)
+                {
+                    switch (key.Key)
+                    {
+                        case ConsoleKey.Y:
+                            Console.Write("Y");
+                            return true;
+
+                        case ConsoleKey.N:
+                            Console.Write("N");
+                            return false;
+                    }
+                }
+
+                #endregion
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -407,7 +449,7 @@ namespace GoOS.ControlPanel
                     setupstream.Write(textToWrite, 0, textToWrite.Length);
                     Kernel.username = thingtosave;
 
-                    MessageBox();
+                    MessageBox(0);
                     menu = "main";
                     selected = 2;
                     DrawFrame();
@@ -431,7 +473,7 @@ namespace GoOS.ControlPanel
                     setupstream.Write(textToWrite, 0, textToWrite.Length);
                     Kernel.computername = thingtosave;
 
-                    MessageBox();
+                    MessageBox(0);
                     menu = "main";
                     selected = 2;
                     DrawFrame();
@@ -440,6 +482,9 @@ namespace GoOS.ControlPanel
 
                 else if (menu == "reset system")
                 {
+                    MessageBox(1);
+
+
                     DrawFrame();
                     Console.SetCursorPosition(2, 11);
                     Console.Write("Are you sure? (Y/N)");
