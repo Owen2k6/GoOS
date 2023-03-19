@@ -155,8 +155,13 @@ namespace GoOS.ControlPanel
             try
             {
                 Console.BackgroundColor = Black;
+<<<<<<< Updated upstream
                 Console.ForegroundColor = Red;
                 CP737Console.Write("╔══════════════════════════════════ Settings ══════════════════════════════════╗\n" +
+=======
+                Console.ForegroundColor = Green;
+                CP737Console.Write("╔══════════════════════════════════════════════════════════════════════════════╗\n" +
+>>>>>>> Stashed changes
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
@@ -189,6 +194,7 @@ namespace GoOS.ControlPanel
             catch { }
         }
 
+<<<<<<< Updated upstream
         private static void DrawMainText()
         {
             int mem = (int)(Kernel.FS.GetTotalSize(@"0:\") / 1000000);
@@ -202,32 +208,105 @@ namespace GoOS.ControlPanel
             int wPos = (screenWidth / 2) - (w.Length / 2);
 
             Console.SetCursorPosition(titlePos, 2);
+=======
+        /// <summary>
+        /// Writes a title to the top of the frame.
+        /// </summary>
+        /// <param name="Title">The title to be written.</param>
+        private static void DrawTitle(string Title, int Y)
+        {
+            int OldX = Console.CursorLeft; int OldY = Console.CursorTop;
+
+            Console.SetCursorPosition(40 - (Title.Length / 2), Y);
+            Console.ForegroundColor = Cyan;
+            Console.Write(Title);
+            Console.SetCursorPosition(OldX, OldY);
+        }
+
+        /// <summary>
+        /// Write some controls to the bottom of the screen.
+        /// </summary>
+        /// <param name="Controls">The controls to be written.</param>
+        private static void DrawControls(string Controls)
+        {
+            Console.ForegroundColor = Cyan;
+            int OldX = Console.CursorLeft; int OldY = Console.CursorTop;
+            Console.SetCursorPosition(6, 24);
+            foreach (char c in Controls)
+            {
+                if (c == '═')
+                {
+                    Console.CursorLeft++;
+                }
+                else
+                {
+                    Console.Write(c);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Draws the text of the main screen.
+        /// </summary>
+        private static void DrawMainText()
+        {
+            Console.ForegroundColor = Green;
+            string title = "System information:";
+            string q = "Total Storage (mb): " + (int)Kernel.FS.GetTotalSize(@"0:\") / 1e6;
+            string w = "Total Memory (mb): " + Cosmos.Core.CPU.GetAmountOfRAM();
+
+            // We already know that screenWidth is going to be 40, so we set it directly so its faster.
+            Console.SetCursorPosition(40 - (title.Length / 2), 2);
+            Console.ForegroundColor = Cyan;
+>>>>>>> Stashed changes
             Console.Write(title);
             Console.SetCursorPosition(qPos, 3);
             Console.Write(q);
             Console.SetCursorPosition(wPos, 4);
             Console.Write(w);
+            Console.ForegroundColor = Green;
 
+<<<<<<< Updated upstream
 
             setButton("Reset System", 3, 18, 14, Black, Red);
             setButton("Change Username", 2, 46, 11, Black, Red);
             setButton("Change Computer Name", 1, 18, 11, Black, Red);
+=======
+            MkButton("Change Computer Name", 15, 11, Cyan, Black);
+            MkButton("Change Username", 44, 11, Black, Cyan);
+            MkButton("Reset System", 33, 14, Black, Cyan);
+>>>>>>> Stashed changes
         }
 
         private static void MessageBox()
         {
+<<<<<<< Updated upstream
             CP737Console.Write("╔════════════ Info ════════════╗", 24, 10);
+=======
+            // TODO: Apply new style
+            Console.ForegroundColor = Green;
+            CP737Console.Write("╔══════════════════════════════╗", 24, 10);
+>>>>>>> Stashed changes
             CP737Console.Write("║                              ║", 24, 11);
             CP737Console.Write("║ Contents saved successfully. ║", 24, 12);
             CP737Console.Write("║                              ║", 24, 13);
             CP737Console.Write("╚══════════════════════════════╝", 24, 14);
+<<<<<<< Updated upstream
+=======
+            DrawTitle("Info", 10);
+
+            Console.ForegroundColor = Cyan;
+            Console.SetCursorPosition(26, 12);
+            Console.Write("Contents saved successfully.");
+
+>>>>>>> Stashed changes
             Console.ReadKey();
         }
 
         private static void setButton(string name, int id, int x, int y, ConsoleColor highlight, ConsoleColor colour)
         {
             Console.SetCursorPosition(x, y);
-            Console.BackgroundColor = highlight;
+            Console.BackgroundColor = highlight; 
             Console.ForegroundColor = colour;
             Console.Write(name);
         }
@@ -245,10 +324,18 @@ namespace GoOS.ControlPanel
             {
                 if (menu == "main")
                 {
+<<<<<<< Updated upstream
+=======
+                    Console.ForegroundColor = Cyan;
+                    DrawTitle(" Settings ", 0); // Do not remove spaces!
+                    DrawControls("═══[ ARROWS - Selection ]═══[ ESC - Exit ]═══[ ENTER - Continue ]");
+
+>>>>>>> Stashed changes
                     ConsoleKeyInfo key = Console.ReadKey(true);
 
                     switch (key.Key)
                     {
+<<<<<<< Updated upstream
                         case ConsoleKey.Tab:
                             Console.BackgroundColor = Black;
                             Console.ForegroundColor = White;
@@ -270,6 +357,52 @@ namespace GoOS.ControlPanel
                                 setButton("Reset System", 3, 18, 14, Black, Red);
                                 setButton("Change Username", 2, 46, 11, Black, Red);
                                 selected = 1;
+=======
+                        case ConsoleKey.LeftArrow:
+                            if (selected == 2)
+                            {
+                                MkButton("Change Computer Name", 15, 11, Cyan, Black); // Select button
+                                MkButton("Change Username", 44, 11, Black, Cyan); // Deselect button
+                                selected = 1;
+                            }
+                            break;
+                        case ConsoleKey.UpArrow:
+                            if (selected == 3)
+                            {
+                                MkButton("Change Computer Name", 15, 11, Cyan, Black); // Select button
+                                MkButton("Reset System", 33, 14, Black, Cyan); // Deselect button
+                                selected = 1;
+                            }
+                            break;
+
+                        case ConsoleKey.DownArrow:
+                            if (selected == 1)
+                            {
+                                MkButton("Reset System", 33, 14, Cyan, Black); // Select button
+                                MkButton("Change Computer Name", 15, 11, Black, Cyan); // Deselect button
+                                selected = 3;
+                            }
+                            else if (selected == 2)
+                            {
+                                MkButton("Reset System", 33, 14, Cyan, Black); // Select button
+                                MkButton("Change Username", 44, 11, Black, Cyan); // Deselect button
+                                selected = 3;
+                            }
+                            break;
+
+                        case ConsoleKey.RightArrow:
+                            if (selected == 1)
+                            {
+                                MkButton("Change Username", 44, 11, Cyan, Black); // Select button
+                                MkButton("Change Computer Name", 15, 11, Black, Cyan); // Deselect button
+                                selected = 2;
+                            }
+                            else if (selected == 3)
+                            {
+                                MkButton("Change Username", 44, 11, Cyan, Black); // Select button
+                                MkButton("Reset System", 33, 14, Black, Cyan); // Deselect button
+                                selected = 2;
+>>>>>>> Stashed changes
                             }
                             break;
                         case ConsoleKey.Enter:
@@ -296,7 +429,10 @@ namespace GoOS.ControlPanel
                 {
                     DrawFrame();
                     Console.SetCursorPosition(2, 11);
+
+                    Console.ForegroundColor = Cyan;
                     Console.Write("New Username: ");
+                    Console.ForegroundColor = Green;
                     string thingtosave = Console.ReadLine();
 
                     System.IO.File.Delete(@"0:\content\sys\setup.gms");
@@ -318,7 +454,9 @@ namespace GoOS.ControlPanel
                 {
                     DrawFrame();
                     Console.SetCursorPosition(2, 11);
+                    Console.ForegroundColor = Cyan;
                     Console.Write("New Computer Name: ");
+                    Console.ForegroundColor = Green;
                     string thingtosave = Console.ReadLine();
 
                     System.IO.File.Delete(@"0:\content\sys\setup.gms");
@@ -340,7 +478,9 @@ namespace GoOS.ControlPanel
                 {
                     DrawFrame();
                     Console.SetCursorPosition(2, 11);
+                    Console.ForegroundColor = Cyan;
                     Console.Write("Are you sure? (Y/N)");
+<<<<<<< Updated upstream
                     string thingtosave = Console.ReadLine();
                     if (thingtosave == @"Y")
                     {
@@ -350,6 +490,10 @@ namespace GoOS.ControlPanel
                     {
                         thingtosave = @"n";
                     }
+=======
+                    Console.ForegroundColor = Green;
+                    string thingtosave = Console.ReadLine().ToLower();
+>>>>>>> Stashed changes
 
                     if (thingtosave == @"y")
                     {
