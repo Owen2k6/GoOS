@@ -47,10 +47,10 @@ namespace GoOS.Commands
             try
             {
                 //log(ConsoleColor.Blue, "GoOS Admin: Attempting to run " + inputaman);
-                if (!inputaman.EndsWith(".goexe"))
+                if (!inputaman.EndsWith(".gexe") && !inputaman.EndsWith(".goexe"))
                 {
                     log(ConsoleColor.Red, "Incompatible format.");
-                    log(ConsoleColor.Red, "File must be .goexe");
+                    log(ConsoleColor.Red, "File must be .gexe");
                 }
                 if (inputaman.EndsWith(".goexe"))
                 {
