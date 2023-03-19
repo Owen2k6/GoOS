@@ -228,7 +228,7 @@ namespace GoOS
             clog(ThemeManager.Startup18, "║═█████████████████████████████████████═══════════════════════════════════════║");
             clog(ThemeManager.Startup19, "╚═════════════════════════════════════════════════════════════════════════════╝");
             clog(ThemeManager.WindowText, "╔═════════════════════════════════════════════════════════════════════════════╗");
-            clog(ThemeManager.WindowText, "║  GoOS Beta release 1.5a0. Report bugs in #issues on the github! 19/03/2023  ║");
+            clog(ThemeManager.WindowText, "║      GoOS Beta release 1.5-pre1. Report bugs in #issues on the github!      ║");
             clog(ThemeManager.WindowText, "╚═════════════════════════════════════════════════════════════════════════════╝");
 
             string roota = @"0:\";
