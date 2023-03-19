@@ -14,6 +14,9 @@ using static ChaOS.DiskManager;
 using Cosmos.System.FileSystem.VFS;
 using System.Runtime.ConstrainedExecution;
 using static GoOS.Kernel;
+using GoOS.Commands;
+using GoOS.Themes;
+using GoOS.Virtualisation.ChaOS;
 
 namespace GoOS.Virtualisation.ChaOS
 {
@@ -29,8 +32,12 @@ namespace GoOS.Virtualisation.ChaOS
         public static string input;
         public static string inputBeforeLower;
         public static string inputCapitalized;
+        public static string input1;
+        public static string inputBeforeLower1;
+        public static string inputCapitalized1;
 
         public static string rootdir = @"0:\content\vrt\ChaOS\";
+
 
         public static void boot(string rootpath)
         {
@@ -65,14 +72,24 @@ namespace GoOS.Virtualisation.ChaOS
                 try
                 {
                     if (!Directory.GetCurrentDirectory().StartsWith(rootdir)) Directory.SetCurrentDirectory(rootdir); // Directory error correction
-
-                    if (disk) write(username + " (" + Directory.GetCurrentDirectory() + "): ");
+                    string truedir = Directory.GetCurrentDirectory();
+                    string falsedir = @"0:\";
+                    if (truedir.Contains(@"0:\content\vrt\ChaOS\"))
+                    {
+                        falsedir = truedir.Replace(@"0:\content\vrt\ChaOS\", @"0:\");
+                    }
+                    if (disk) write(username + " (" + falsedir + "): ");
                     else write(username + " > ");
 
-                    inputBeforeLower = Console.ReadLine();         // Input
+                    inputBeforeLower = Console.ReadLine();
+                    /*(if (inputBeforeLower1.Contains(@"0:\"))
+                    {
+                        inputBeforeLower = inputBeforeLower1.Replace(@"0:\", @"0:\content\vrt\ChaOS\");
+                    }*/
                     inputCapitalized = inputBeforeLower.ToUpper(); // Input converted to uppercase
                     input = inputBeforeLower.ToLower().Trim();     // Input converted to lowercase
 
+                    String[] args = inputBeforeLower.Split(' ');
                     log();
 
                     if (input.StartsWith("help"))
@@ -248,9 +265,9 @@ namespace GoOS.Virtualisation.ChaOS
 
                     else if (input.StartsWith("mkdir"))
                     {
-                        try { inputCapitalized = inputCapitalized.Split("MKDIR ")[1]; } catch { clog("No arguments\n", Red); CanContinue = false; }
-                        if (inputCapitalized.Contains("0:\\")) { inputCapitalized.Replace("0:\\", ""); }
-                        if (inputCapitalized.Contains(" ")) { clog("Directory name cannot contain spaces!\n", Red); CanContinue = false; }
+                        try { inputBeforeLower = inputBeforeLower.Split("mkdir ")[1]; } catch { clog("No arguments\n", Red); CanContinue = false; }
+                        if (inputBeforeLower.Contains("0:\\")) { inputBeforeLower.Replace("0:\\", ""); }
+                        if (inputBeforeLower.Contains(" ")) { clog("Directory name cannot contain spaces!\n", Red); CanContinue = false; }
                         if (CanContinue)
                         {
                             if (!Directory.Exists(inputCapitalized))
@@ -262,13 +279,13 @@ namespace GoOS.Virtualisation.ChaOS
 
                     else if (input.StartsWith("mkfile"))
                     {
-                        try { inputCapitalized = inputCapitalized.Split("MKFILE ")[1]; } catch { clog("No arguments\n", Red); CanContinue = false; }
-                        if (inputCapitalized.Contains("0:\\")) { input.Replace("0:\\", ""); }
-                        if (inputCapitalized.Contains(" ")) { clog("Filename cannot contain spaces!\n", Red); CanContinue = false; }
+                        try { inputBeforeLower = inputBeforeLower.Split("mkfile ")[1]; } catch { clog("No arguments\n", Red); CanContinue = false; }
+                        if (inputBeforeLower.Contains("0:\\")) { input.Replace("0:\\", ""); }
+                        if (inputBeforeLower.Contains(" ")) { clog("Filename cannot contain spaces!\n", Red); CanContinue = false; }
                         if (CanContinue)
                         {
-                            if (!File.Exists(inputCapitalized))
-                                File.Create(Directory.GetCurrentDirectory() + @"\" + inputCapitalized);
+                            if (!File.Exists(inputBeforeLower))
+                                File.Create(Directory.GetCurrentDirectory() + @"\" + inputBeforeLower);
                             else
                                 clog("File already exists!\n", Red);
                         }
@@ -276,13 +293,13 @@ namespace GoOS.Virtualisation.ChaOS
 
                     else if (input.StartsWith("deldir"))
                     {
-                        try { inputCapitalized = inputCapitalized.Split("DELDIR ")[1]; } catch { clog("No arguments\n", Red); CanContinue = false; }
-                        if (inputCapitalized.Contains("0:\\")) { input.Replace("0:\\", ""); }
-                        if (inputCapitalized.Contains(" ")) { clog("Filename cannot contain spaces!\n", Red); CanContinue = false; }
+                        try { inputBeforeLower = inputBeforeLower.Split("deldir ")[1]; } catch { clog("No arguments\n", Red); CanContinue = false; }
+                        if (inputBeforeLower.Contains("0:\\")) { input.Replace("0:\\", ""); }
+                        if (inputBeforeLower.Contains(" ")) { clog("Filename cannot contain spaces!\n", Red); CanContinue = false; }
                         if (CanContinue)
                         {
-                            if (Directory.Exists(inputCapitalized))
-                                Directory.Delete(Directory.GetCurrentDirectory() + @"\" + inputCapitalized, true);
+                            if (Directory.Exists(inputBeforeLower))
+                                Directory.Delete(Directory.GetCurrentDirectory() + @"\" + inputBeforeLower, true);
                             else
                                 clog("Directory not found!\n", Red);
                         }
@@ -290,13 +307,13 @@ namespace GoOS.Virtualisation.ChaOS
 
                     else if (input.StartsWith("delfile"))
                     {
-                        try { inputCapitalized = inputCapitalized.Split("DELFILE ")[1]; } catch { clog("No arguments\n", Red); CanContinue = false; }
-                        if (inputCapitalized.Contains("0:\\")) { input.Replace("0:\\", ""); }
-                        if (inputCapitalized.Contains(" ")) { clog("Filename cannot contain spaces!\n", Red); CanContinue = false; }
+                        try { inputBeforeLower = inputBeforeLower.Split("delfile ")[1]; } catch { clog("No arguments\n", Red); CanContinue = false; }
+                        if (inputBeforeLower.Contains("0:\\")) { input.Replace("0:\\", ""); }
+                        if (inputBeforeLower.Contains(" ")) { clog("Filename cannot contain spaces!\n", Red); CanContinue = false; }
                         if (CanContinue)
                         {
-                            if (File.Exists(inputCapitalized))
-                                File.Delete(Directory.GetCurrentDirectory() + @"\" + inputCapitalized);
+                            if (File.Exists(inputBeforeLower))
+                                File.Delete(Directory.GetCurrentDirectory() + @"\" + inputBeforeLower);
                             else
                                 clog("File not found!\n", Red);
                         }
@@ -316,14 +333,14 @@ namespace GoOS.Virtualisation.ChaOS
 
                         else if (input.StartsWith("cd "))
                         {
-                            try { inputCapitalized = inputCapitalized.Split("CD ")[1]; } catch { clog("No arguments\n", Red); CanContinue = false; }
-                            if (inputCapitalized.Trim() != string.Empty) CanContinue = true;
+                            try { inputBeforeLower = inputBeforeLower.Split("cd ")[1]; } catch { clog("No arguments\n", Red); CanContinue = false; }
+                            if (inputBeforeLower.Trim() != string.Empty) CanContinue = true;
                             if (CanContinue)
                             {
-                                if (inputCapitalized.Contains(@"0:\")) { inputCapitalized.Replace(@"0:\", ""); }
-                                if (Directory.GetCurrentDirectory() != rootdir) { inputCapitalized = @"\" + inputCapitalized; }
-                                if (Directory.Exists(Directory.GetCurrentDirectory() + inputCapitalized))
-                                    Directory.SetCurrentDirectory(Directory.GetCurrentDirectory() + inputCapitalized);
+                                if (inputBeforeLower.Contains(@"0:\")) { inputBeforeLower.Replace(@"0:\", ""); }
+                                if (Directory.GetCurrentDirectory() != rootdir) { inputBeforeLower = @"\" + inputBeforeLower; }
+                                if (Directory.Exists(Directory.GetCurrentDirectory() + inputBeforeLower))
+                                    Directory.SetCurrentDirectory(Directory.GetCurrentDirectory() + inputBeforeLower);
                                 else clog("Directory not found!\n", Red);
                             }
                         }
@@ -338,7 +355,7 @@ namespace GoOS.Virtualisation.ChaOS
 
                     else if (input == "dir" && disk)
                     {
-                        clog("Directory listing at " + Directory.GetCurrentDirectory(), Yellow);
+                        clog("Directory listing at " + falsedir, Yellow);
                         var directoryList = VFSManager.GetDirectoryListing(Directory.GetCurrentDirectory());
                         var files = 0; var dirs = 0;
                         foreach (var directoryEntry in directoryList)
