@@ -48,7 +48,7 @@ namespace GoOS.Commands
                 {
                     case 1:
                         log(ConsoleColor.White, "HELP - Shows this exact page.");
-                        log(ConsoleColor.White, "RUN - Run a goexe file.");
+                        log(ConsoleColor.White, "RUN - Run a goexe file."); // Useless comment, ignore me or your family goes away.
                         log(ConsoleColor.White, "delfile - Delete a file");
                         log(ConsoleColor.White, "deldir - Delete a directory");
                         log(ConsoleColor.White, "mkfile - Make a file");
