@@ -485,18 +485,29 @@ namespace GoOS.Settings
                             //YOU ARE FRENCH IF YOU TOUCH IT
                             // no
                             System.IO.File.Delete(@"0:\content\sys\setup.gms");
+                            emptyDir(@"0:\content\prf");
                             System.IO.Directory.Delete(@"0:\content\prf");
+                            emptyDir(@"0:\content\");
+                            System.IO.Directory.Delete(@"0:\content\");
+                            emptyDir(@"0:\");
+                            System.IO.Directory.Delete(@"0:\");
+                            System.IO.File.Delete(@"0:\content\sys\version.gms");
+                            System.IO.File.Delete(@"0:\content\sys\userinfo.gms");
+                            System.IO.File.Delete(@"0:\content\sys\option-showprotectedfiles.gms");
+                            System.IO.File.Delete(@"0:\content\sys\option-editprotectedfiles.gms");
+                            System.IO.File.Delete(@"0:\content\sys\option-deleteprotectedfiles.gms");
                             var directory_list = System.IO.Directory.GetFiles(@"0:\");
                             foreach (var file in directory_list)
                             {
                                 System.IO.File.Delete(@"0:\" + file);
                             }
                             var directory_list3 = System.IO.Directory.GetDirectories(@"0:\");
-                            foreach (var file in directory_list3)
+                            foreach (var directory in directory_list3)
                             {
-                                System.IO.File.Delete(@"0:\" + file);
+                                System.IO.File.Delete(@"0:\" + directory);
                             }
-                            Kernel.FS.Initialize(false);
+                            Kernel.FS.Initialize(true);
+                            Cosmos.System.FileSystem.Disk.
                         }
                         catch (Exception monkeyballs)
                         {
@@ -567,6 +578,15 @@ namespace GoOS.Settings
             }
             Console.BackgroundColor = Black;
             Console.Clear();
+        }
+
+        private static void emptyDir(string path)
+        {
+            var dirtokill = System.IO.Directory.GetFiles(path);
+            foreach (var files in dirtokill)
+            {
+                System.IO.File.Delete(@"0:\" + files);
+            }
         }
     }
 }

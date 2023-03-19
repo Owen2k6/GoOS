@@ -208,12 +208,12 @@ namespace GoOS
             {
 
             }
-            if (username == null)
+            if (username == null || username == "")
             {
                 username = "user";
 
             }
-            if (computername == null)
+            if (computername == null || computername == "")
             {
                 computername = "GoOS";
 
@@ -262,7 +262,7 @@ namespace GoOS
             clog(ThemeManager.Startup18, "║═█████████████████████████████████████═══════════════════════════════════════║");
             clog(ThemeManager.Startup19, "╚═════════════════════════════════════════════════════════════════════════════╝");
             clog(ThemeManager.WindowText, "╔═════════════════════════════════════════════════════════════════════════════╗");
-            clog(ThemeManager.WindowText, "║  Notice. This is a beta build of GoOS 1.5. There will be bugs and issues!!  ║");
+            clog(ThemeManager.WindowText, "║  GoOS Beta release 1.5a0. Report bugs in #issues on the github! 19/03/2023  ║");
             clog(ThemeManager.WindowText, "╚═════════════════════════════════════════════════════════════════════════════╝");
 
             string roota = @"0:\";
