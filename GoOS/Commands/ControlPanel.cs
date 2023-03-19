@@ -272,9 +272,9 @@ namespace GoOS.ControlPanel
             CP737Console.Write("║                              ║", 24, 12);
             CP737Console.Write("║                              ║", 24, 13);
             CP737Console.Write("╚══════════════════════════════╝", 24, 14);
-            DrawTitle("Info", 10);
 
             Console.ForegroundColor = Red;
+            DrawTitle("Info", 10);
             Console.SetCursorPosition(26, 12);
             Console.Write("Contents saved successfully.");
 
@@ -319,6 +319,10 @@ namespace GoOS.ControlPanel
 
                     switch (key.Key)
                     {
+                        // ID 1: Change Computer Name
+                        // ID 2: Change Username
+                        // ID 3: Reset System
+
                         case ConsoleKey.LeftArrow:
                             if (selected == 2)
                             {
