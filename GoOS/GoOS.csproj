@@ -85,7 +85,9 @@
         <Authors>Owen2k6</Authors>
         <Company>Goplex Studios</Company>
         <Product>Goplex OS</Product>
-        <Copyright>Copyright (C) 2022 Owen2k6</Copyright>
+        <Copyright>Copyright (C) 2023 Owen2k6</Copyright>
+        <OptimizationLevel>2</OptimizationLevel>
+        <RemoveBootDebugOutput>True</RemoveBootDebugOutput>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

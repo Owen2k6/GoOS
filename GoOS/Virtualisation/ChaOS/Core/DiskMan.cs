@@ -33,7 +33,7 @@ namespace ChaOS
             {
                 if (Directory.Exists(systempath))
                 {
-                    if (File.Exists(Files.userfile)) Kernel.username = File.ReadAllText(Files.userfile);
+                    if (File.Exists(Files.userfile)) GoOS.Kernel.username = File.ReadAllText(Files.userfile);
                     if (File.Exists(Files.colorfile)) SetScreenColor((ConsoleColor)File.ReadAllBytes(Files.colorfile)[0], (ConsoleColor)File.ReadAllBytes(Files.colorfile)[1], false);
                 }
             }
@@ -43,7 +43,7 @@ namespace ChaOS
         {
             clog("Writing changes to disk...", Gray);
             Directory.CreateDirectory(systempath);
-            File.WriteAllText(Files.userfile, Kernel.username);
+            File.WriteAllText(Files.userfile, GoOS.Kernel.username);
             File.WriteAllBytes(Files.colorfile, new byte[] { (byte)Console.BackgroundColor, (byte)Console.ForegroundColor });
         }
     }
