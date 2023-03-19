@@ -6,7 +6,7 @@ GoOS is a simple operating system (OS) built from scratch using goCosmos (https:
     Simple command-line interface
     Basic file system support (FAT32)
     Command-line commands for common tasks, such as creating directories and files, and running programs
-    Runs on both virtual machines and real hardware (NOT RECOMENDED)
+    Runs on both virtual machines and real hardware (NOT RECOMENDED ON REAL HARDWARE)
 
 ## Requirements
 
