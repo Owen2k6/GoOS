@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using GoOS.Themes;
 
 namespace GoOS.Commands
 {
@@ -50,30 +51,30 @@ namespace GoOS.Commands
             {
                 var directory_list = Directory.GetFiles(cdir3003);
                 var directory2_list = Directory.GetDirectories(cdir3003);
-                log(ConsoleColor.Gray, "\nDirectory listing at " + cdir3003 + "\n");
+                log(ThemeManager.Default, "\nDirectory listing at " + cdir3003 + "\n");
                 foreach (var directory in directory2_list)
                 {
-                    log(ConsoleColor.Gray, "<Dir> " + directory);
+                    log(ThemeManager.Default, "<Dir> " + directory);
                     foldercount++;
                 }
                 foreach (var file in directory_list)
                 {
                     if (file.EndsWith(".gms"))
                     {
-                        log(ConsoleColor.DarkRed, "<System> Protected File");
+                        log(ThemeManager.ErrorText, "<System> Protected File");
                     }
                     else
                     {
-                        log(ConsoleColor.Gray, "<File> " + file);
+                        log(ThemeManager.Default, "<File> " + file);
                         
                     }
                     filecount++;
                 }
-                log(ConsoleColor.Gray, $"\nListed {filecount} files and {foldercount} folders in this directory.\n");
+                log(ThemeManager.Default, $"\nListed {filecount} files and {foldercount} folders in this directory.\n");
             }
             catch (Exception e)
             {
-                log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                log(ThemeManager.ErrorText, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
             }
         }
     }

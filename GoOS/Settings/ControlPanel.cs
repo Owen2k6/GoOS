@@ -4,6 +4,7 @@ using System.Text;
 using static System.ConsoleColor;
 using Sys = Cosmos.System;
 using Console = System.Console;
+using static GoOS.Themes.ThemeManager;
 
 namespace GoOS.Settings
 {
@@ -167,7 +168,7 @@ namespace GoOS.Settings
             try
             {
                 Console.BackgroundColor = Black;
-                Console.ForegroundColor = Green;
+                Console.ForegroundColor = WindowBorder;
                 CP737Console.Write("╔══════════════════════════════════════════════════════════════════════════════╗\n" +
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
@@ -210,7 +211,7 @@ namespace GoOS.Settings
             int OldX = Console.CursorLeft; int OldY = Console.CursorTop;
 
             Console.SetCursorPosition(40 - Title.Length / 2, Y);
-            Console.ForegroundColor = Cyan;
+            Console.ForegroundColor = WindowText;
             Console.Write(Title);
             Console.SetCursorPosition(OldX, OldY);
         }
@@ -241,7 +242,7 @@ namespace GoOS.Settings
         /// </summary>
         private static void DrawMainText()
         {
-            Console.ForegroundColor = Cyan;
+            Console.ForegroundColor = WindowText;
             string title = "System information:";
             string q = "Total Storage (mb): " + (int)Kernel.FS.GetTotalSize(@"0:\") / 1e6;
             string w = "Total Memory (mb): " + Cosmos.Core.CPU.GetAmountOfRAM();
@@ -254,8 +255,9 @@ namespace GoOS.Settings
             Console.SetCursorPosition(40 - w.Length / 2, 4);
             Console.Write(w);
 
-            MkButton("Change Username", 44, 11, Black, Cyan);
-            MkButton("Reset System", 33, 14, Black, Cyan);
+            MkButton("Change Computer Name", 15, 11, WindowText, Default);
+            MkButton("Change Username", 44, 11, Black, WindowText);
+            MkButton("Reset System", 33, 14, Black, WindowText);
         }
 
         /// <summary>
@@ -263,14 +265,14 @@ namespace GoOS.Settings
         /// </summary>
         private static void MessageBox()
         {
-            Console.ForegroundColor = Green;
+            Console.ForegroundColor = WindowBorder;
             CP737Console.Write("╔════════════════════╗", 29, 10);
             CP737Console.Write("║                    ║", 29, 11);
             CP737Console.Write("║                    ║", 29, 12);
             CP737Console.Write("║                    ║", 29, 13);
             CP737Console.Write("╚════════════════════╝", 29, 14);
 
-            Console.ForegroundColor = Cyan;
+            Console.ForegroundColor = WindowText;
             DrawTitle(" Info ", 10);
             Console.SetCursorPosition(31, 12);
             Console.Write("Saving settings...");
@@ -308,7 +310,7 @@ namespace GoOS.Settings
             {
                 if (menu == "main")
                 {
-                    DrawTitle(" Settings ", 0); // Do not remove spaces!
+                    DrawTitle(" Settings ", 0);
                     DrawControls("[ARROWS - Selection]═══[ESC - Exit]═══[ENTER - Continue]");
 
                     ConsoleKeyInfo key = Console.ReadKey(true);
@@ -322,16 +324,16 @@ namespace GoOS.Settings
                         case ConsoleKey.LeftArrow:
                             if (selected == 2)
                             {
-                                MkButton("Change Computer Name", 15, 11, Cyan, White); // Select button
-                                MkButton("Change Username", 44, 11, Black, Cyan); // Deselect button
+                                MkButton("Change Computer Name", 15, 11, WindowText, Default); // Select button
+                                MkButton("Change Username", 44, 11, Black, WindowText); // Deselect button
                                 selected = 1;
                             }
                             break;
                         case ConsoleKey.UpArrow:
                             if (selected == 3)
                             {
-                                MkButton("Change Computer Name", 15, 11, Cyan, Black); // Select button
-                                MkButton("Reset System", 33, 14, Black, Cyan); // Deselect button
+                                MkButton("Change Computer Name", 15, 11, WindowText, Black); // Select button
+                                MkButton("Reset System", 33, 14, Black, WindowText); // Deselect button
                                 selected = 1;
                             }
                             break;
@@ -339,14 +341,14 @@ namespace GoOS.Settings
                         case ConsoleKey.DownArrow:
                             if (selected == 1)
                             {
-                                MkButton("Reset System", 33, 14, Cyan, White); // Select button
-                                MkButton("Change Computer Name", 15, 11, Black, Cyan); // Deselect button
+                                MkButton("Reset System", 33, 14, WindowText, Default); // Select button
+                                MkButton("Change Computer Name", 15, 11, Black, WindowText); // Deselect button
                                 selected = 3;
                             }
                             else if (selected == 2)
                             {
-                                MkButton("Reset System", 33, 14, Cyan, White); // Select button
-                                MkButton("Change Username", 44, 11, Black, Cyan); // Deselect button
+                                MkButton("Reset System", 33, 14, WindowText, Default); // Select button
+                                MkButton("Change Username", 44, 11, Black, WindowText); // Deselect button
                                 selected = 3;
                             }
                             break;
@@ -354,14 +356,14 @@ namespace GoOS.Settings
                         case ConsoleKey.RightArrow:
                             if (selected == 1)
                             {
-                                MkButton("Change Username", 44, 11, Cyan, White); // Select button
-                                MkButton("Change Computer Name", 15, 11, Black, Cyan); // Deselect button
+                                MkButton("Change Username", 44, 11, WindowText, Default); // Select button
+                                MkButton("Change Computer Name", 15, 11, Black, WindowText); // Deselect button
                                 selected = 2;
                             }
                             else if (selected == 3)
                             {
-                                MkButton("Change Username", 44, 11, Cyan, White); // Select button
-                                MkButton("Reset System", 33, 14, Black, Cyan); // Deselect button
+                                MkButton("Change Username", 44, 11, WindowText, Default); // Select button
+                                MkButton("Reset System", 33, 14, Black, WindowText); // Deselect button
                                 selected = 2;
                             }
                             break;
@@ -436,14 +438,14 @@ namespace GoOS.Settings
 
                 else if (menu == "reset system")
                 {
-                    Console.ForegroundColor = Green;
+                    Console.ForegroundColor = WindowBorder;
                     CP737Console.Write("╔════════════════════════╗", 27, 10);
                     CP737Console.Write("║                        ║", 27, 11);
                     CP737Console.Write("║                        ║", 27, 12);
                     CP737Console.Write("║                        ║", 27, 13);
                     CP737Console.Write("╚════════════════════════╝", 27, 14);
 
-                    Console.ForegroundColor = Cyan;
+                    Console.ForegroundColor = WindowText;
                     DrawTitle(" Confirmation ", 10);
                     Console.SetCursorPosition(29, 12);
                     Console.Write("Are you sure? (Y/N): ");

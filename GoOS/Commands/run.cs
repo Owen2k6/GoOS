@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using GoOS.Themes;
 
 namespace GoOS.Commands
 {
@@ -49,8 +50,8 @@ namespace GoOS.Commands
                 //log(ConsoleColor.Blue, "GoOS Admin: Attempting to run " + inputaman);
                 if (!inputaman.EndsWith(".gexe") && !inputaman.EndsWith(".goexe"))
                 {
-                    log(ConsoleColor.Red, "Incompatible format.");
-                    log(ConsoleColor.Red, "File must be .gexe");
+                    log(ThemeManager.ErrorText, "Incompatible format.");
+                    log(ThemeManager.ErrorText, "File must be .gexe");
                 }
                 if (inputaman.EndsWith(".goexe"))
                 {
@@ -124,7 +125,7 @@ namespace GoOS.Commands
                         {
                             if (hasbeenregistered)
                             {
-                                log(ConsoleColor.Red, "Attempted second register. Application may be attempting to reregister as another application!!!");
+                                log(ThemeManager.ErrorText, "Attempted second register. Application may be attempting to reregister as another application!!!");
                                 break;
                             }
                             fuckingprogramname = line.Replace("regprog=", "");
@@ -270,12 +271,12 @@ namespace GoOS.Commands
                     {
                         endmessage = "Process has ended.";
                     }
-                    log(ConsoleColor.Red, endmessage);
+                    log(ThemeManager.ErrorText, endmessage);
                 }
             }
             catch (Exception e)
             {
-                log(ConsoleColor.Red, e.Message);
+                log(ThemeManager.ErrorText, e.Message);
             }
         }
     }

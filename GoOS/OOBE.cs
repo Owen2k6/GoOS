@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using static System.ConsoleColor;
 using Sys = Cosmos.System;
+using static System.ConsoleColor;
+using static GoOS.Themes.ThemeManager;
 
 namespace GoOS
 {
@@ -145,7 +146,7 @@ namespace GoOS
             try
             {
                 Console.BackgroundColor = Black;
-                Console.ForegroundColor = Green;
+                Console.ForegroundColor = WindowBorder;
                 CP737Console.Write("╔══════════════════════════════════════════════════════════════════════════════╗\n" +
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
@@ -188,7 +189,7 @@ namespace GoOS
             int OldX = Console.CursorLeft; int OldY = Console.CursorTop;
 
             Console.SetCursorPosition(40 - (Title.Length / 2), Y);
-            Console.ForegroundColor = Cyan;
+            Console.ForegroundColor = WindowText;
             Console.Write(Title);
             Console.SetCursorPosition(OldX, OldY);
         }
@@ -344,7 +345,7 @@ namespace GoOS
                 Console.SetCursorPosition(wPos, 8);
                 Console.Write(r);
 
-                Console.ForegroundColor = Gray;
+                Console.ForegroundColor = Default;
                 Console.SetCursorPosition(wPos + 10, 6);
                 usrn = Console.ReadLine();
                 Console.SetCursorPosition(wPos + 15, 8);
@@ -354,7 +355,7 @@ namespace GoOS
 
         private static void MessageBox(int message)
         {
-            Console.ForegroundColor = Green;
+            Console.ForegroundColor = WindowBorder;
 
             if (message == 0)
             {
@@ -364,7 +365,7 @@ namespace GoOS
                 CP737Console.Write("║                    ║", 29, 13);
                 CP737Console.Write("╚════════════════════╝", 29, 14);
 
-                Console.ForegroundColor = Cyan;
+                Console.ForegroundColor = WindowText;
                 DrawTitle(" Info ", 10);
                 Console.SetCursorPosition(31, 12);
                 Console.Write("Saving settings...");
@@ -378,7 +379,7 @@ namespace GoOS
                 CP737Console.Write("║                                                      ║", 12, 13);
                 CP737Console.Write("╚══════════════════════════════════════════════════════╝", 12, 14);
 
-                Console.ForegroundColor = Cyan;
+                Console.ForegroundColor = WindowText;
                 DrawTitle(" Info ", 10);
                 Console.SetCursorPosition(14, 12);
                 Console.Write("A serious error has occoured, setup cannot continue.");
