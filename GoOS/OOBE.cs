@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Text;
 using Sys = Cosmos.System;
+using Cosmos.System.FileSystem.VFS;
 using static System.ConsoleColor;
 using static GoOS.Themes.ThemeManager;
 
@@ -118,21 +120,40 @@ namespace GoOS
 
         public static void Open()
         {
-            DrawPage(0);
-            DrawPage(1);
-            DrawPage(2);
-            MessageBox(0);
-            Sys.FileSystem.VFS.VFSManager.CreateFile(@"0:\content\sys\setup.gms");
-            var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
+            DrawFrame();
+            DrawTitle(" GoOS Setup ", 0);
+            MessageBox(1);
+            VFSManager.CreateFile(@"0:\content\sys\version.gms");
+            VFSManager.CreateFile(@"0:\content\sys\userinfo.gms");
+            VFSManager.CreateFile(@"0:\content\sys\option-showprotectedfiles.gms");
+            VFSManager.CreateFile(@"0:\content\sys\option-editprotectedfiles.gms");
+            VFSManager.CreateFile(@"0:\content\sys\option-deleteprotectedfiles.gms");
+            var setupcontent = VFSManager.GetFile(@"0:\content\sys\version.gms");
             var setupstream = setupcontent.GetFileStream();
             if (setupstream.CanWrite)
             {
-                byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {usrn}\ncomputername: {cprn}");
+                byte[] textToWrite = Encoding.ASCII.GetBytes($"System.Version is set to {Kernel.version} \n Note to users reading this: DO NOT ALTER. IMPORTANT IF USER DATA NEEDS CONVERTING.");
                 setupstream.Write(textToWrite, 0, textToWrite.Length);
             }
             else
             {
-                MessageBox(1);
+                MessageBox(2);
+            }
+            DrawPage(0);
+            DrawPage(1);
+            DrawPage(2);
+            MessageBox(0);
+            VFSManager.CreateFile(@"0:\content\sys\setup.gms");
+            var setupcontent1 = VFSManager.GetFile(@"0:\content\sys\setup.gms");
+            var setupstream1 = setupcontent1.GetFileStream();
+            if (setupstream.CanWrite)
+            {
+                byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {usrn}\ncomputername: {cprn}");
+                setupstream1.Write(textToWrite, 0, textToWrite.Length);
+            }
+            else
+            {
+                MessageBox(2);
             }
         }
 
@@ -369,9 +390,21 @@ namespace GoOS
                 DrawTitle(" Info ", 10);
                 Console.SetCursorPosition(31, 12);
                 Console.Write("Saving settings...");
-                Console.Clear();
             }
             else if (message == 1)
+            {
+                CP737Console.Write("╔════════════════════╗", 29, 10);
+                CP737Console.Write("║                    ║", 29, 11);
+                CP737Console.Write("║                    ║", 29, 12);
+                CP737Console.Write("║                    ║", 29, 13);
+                CP737Console.Write("╚════════════════════╝", 29, 14);
+
+                Console.ForegroundColor = WindowText;
+                DrawTitle(" Info ", 10);
+                Console.SetCursorPosition(31, 12);
+                Console.Write("Preparing Setup...");
+            }
+            else if (message == 2)
             {
                 CP737Console.Write("╔══════════════════════════════════════════════════════╗", 12, 10);
                 CP737Console.Write("║                                                      ║", 12, 11);
@@ -383,8 +416,7 @@ namespace GoOS
                 DrawTitle(" Info ", 10);
                 Console.SetCursorPosition(14, 12);
                 Console.Write("A serious error has occoured, setup cannot continue.");
-                Console.ReadKey();
-                Console.Clear();
+                while (true) { Console.ReadKey(true); } // Lock up
             }
         }
     }
