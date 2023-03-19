@@ -513,10 +513,10 @@ namespace GoOS.Settings
                             int screenWidth = 80;
                             string title = "RESET IN PROGRESS";
                             string q = @"GoOS is performing a full format on drive 0:\";
-                            string w = "The system will no longer operate until restarted.";
+                            string w = "Do not turn off your computer.";
                             string e = "";
-                            string r = "Once restarted, the GoOS setup will launch instantly.";
-                            string t = "";
+                            string r = "This process will take up to a few minutes";
+                            string t = "depending on your Disk size.";
                             string y = "";
                             string u = "";
                             string i = "";
@@ -539,10 +539,14 @@ namespace GoOS.Settings
                             Console.Write(w);
                             Console.SetCursorPosition(rPos, 10);
                             Console.Write(r);
-                            Kernel.FS.Disks[0].FormatPartition(0, "FAT", false);
+                            Console.SetCursorPosition(rPos, 11);
+                            Console.Write(t);
+
+                            Kernel.FS.Disks[0].FormatPartition(0, "FAT32", false);
+
                             DrawFrame();
                              screenWidth = 80;
-                             title = "System Reset";
+                             title = "System reset complete.";
                              q = "GoOS is now back to factory default settings.";
                              w = "The system will no longer operate until restarted.";
                              e = "";
@@ -591,12 +595,12 @@ namespace GoOS.Settings
                         {
                             DrawFrame();
                             int screenWidth = 80;
-                            string title = "System Reset";
-                            string q = "GoOS is now back to factory default settings.";
-                            string w = "The system will no longer operate until restarted.";
+                            string title = "error";
+                            string q = @"error";
+                            string w = "error";
                             string e = "";
-                            string r = "Once restarted, the GoOS setup will launch instantly.";
-                            string t = "";
+                            string r = "error";
+                            string t = monkeyballs.ToString();
                             string y = "";
                             string u = "";
                             string i = "";
@@ -619,6 +623,8 @@ namespace GoOS.Settings
                             Console.Write(w);
                             Console.SetCursorPosition(rPos, 10);
                             Console.Write(r);
+                            Console.SetCursorPosition(rPos, 11);
+                            Console.Write(t);
                             bool pool = true;
                             while (pool)
                             {
@@ -633,7 +639,6 @@ namespace GoOS.Settings
                                 // i take that as a pogchamp
                                 // you should add the ability to add custom commands and features to your bot somehow
                             }
-
                         }
 
                     }
