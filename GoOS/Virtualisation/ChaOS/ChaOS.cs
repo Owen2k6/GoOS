@@ -50,11 +50,13 @@ namespace GoOS.Virtualisation.ChaOS
             catch (Exception ex) { Crash(ex, true); }
 
             runmode = true;
+            run(rootpath);
         }
         public static void run(string rtp)
         {
+            runmode = true;
 
-            while (runmode)
+            while (runmode == true)
             {
                 //run contents in here
 

@@ -11,13 +11,6 @@ namespace GoOS.Commands
     internal class Vm
     {
         public static void command(string args) {
-<<<<<<< Updated upstream
-            Console.WriteLine("Virtual Machine now booting...");
-            if (args.Equals("chaos"))
-            {
-
-            }
-=======
             string uprootdir = @"0:\content\vrt\";
             string rootdir = @"0:\content\vrt\ChaOS\";
 
@@ -35,7 +28,6 @@ namespace GoOS.Commands
             }
 
             GoOS.Virtualisation.ChaOS.ChaOS.boot(@"0:\content\vrt\ChaOS\");
->>>>>>> Stashed changes
         }
     }
 }
