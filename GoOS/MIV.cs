@@ -272,19 +272,20 @@ namespace GoOS
         }
         public static void StartMIV()
         {
+            string cdir = Directory.GetCurrentDirectory();
             Console.WriteLine("Enter file's filename to open:");
             Console.WriteLine("If the specified file does not exist, it will be created.");
             Kernel.file = Console.ReadLine();
             try
             {
-                if (File.Exists(@"0:\" + Kernel.file))
+                if (File.Exists(cdir + @"\" + Kernel.file))
                 {
                     Console.WriteLine("Found file!");
                 }
-                else if (!File.Exists(@"0:\" + Kernel.file))
+                else if (!File.Exists(cdir + @"\" + Kernel.file))
                 {
                     Console.WriteLine("Creating file!");
-                    File.Create(@"0:\" + Kernel.file);
+                    File.Create(cdir + @"\" + Kernel.file);
                 }
                 Console.Clear();
             }
@@ -297,7 +298,7 @@ namespace GoOS
             Console.WriteLine("Do you want to open " + Kernel.file + " content? (Yes/No)");
             if (Console.ReadLine().ToLower() == "yes" || Console.ReadLine().ToLower() == "y")
             {
-                text = miv(File.ReadAllText(@"0:\" + Kernel.file));
+                text = miv(File.ReadAllText(cdir + @"\" + Kernel.file));
             }
             else
             {
@@ -308,7 +309,7 @@ namespace GoOS
 
             if (text != null)
             {
-                File.WriteAllText(@"0:\" + Kernel.file, text);
+                File.WriteAllText(cdir + @"\" + Kernel.file, text);
                 Console.WriteLine("Content has been saved to " + Kernel.file);
             }
             Console.WriteLine("Press any key to continue...");

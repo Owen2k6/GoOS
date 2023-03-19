@@ -42,8 +42,8 @@ namespace GoOS.Commands
         public static void Main(string run)
         {
             String inputaman = run;
-            
-            
+
+
             try
             {
                 //log(ConsoleColor.Blue, "GoOS Admin: Attempting to run " + inputaman);
@@ -61,16 +61,6 @@ namespace GoOS.Commands
                     string theysaid = null;
                     ConsoleKey keypressed = ConsoleKey.O;
                     int count = 1;
-                    String a = null;
-                    String b = null;
-                    String c = null;
-                    String d = null;
-                    String e = null;
-                    String f = null;
-                    String g = null;
-                    String h = null;
-                    String i = null;
-                    String j = null;
                     String endmessage = "Process has ended.";
                     Boolean hasbeenregistered = false;
                     foreach (string line in content)
@@ -125,254 +115,7 @@ namespace GoOS.Commands
                                 Console.ReadKey();
                                 Console.WriteLine();
                             }
-                        }
-                        /*old if code. No touchey!*/ if (line.StartsWith("if"))
-                        {
-                            if (line.Split("=")[1] == "1" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "2" || line.Split("=")[1] == "2" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "1")
-                            {
-                                if (a == b)
-                                {
-                                    log(ConsoleColor.Magenta, line.Split("=")[4]);
-                                }
-                                if (a != b)
-                                {
-
-                                    if (line.Split("=")[5].Equals("end"))
-                                    {
-
-                                        break;
-                                    }
-                                    log(ConsoleColor.Magenta, line.Split("=")[5]);
-
-                                }
-
-                            }
-                            if (line.Split("=")[1] == "3" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "4" || line.Split("=")[1] == "4" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "3")
-                            {
-                                if (c == d)
-                                {
-                                    log(ConsoleColor.Magenta, line.Split("=")[4]);
-                                }
-                                if (c != d)
-                                {
-
-                                    if (line.Split("=")[5].Equals("end"))
-                                    {
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        log(ConsoleColor.Magenta, line.Split("=")[5]);
-                                    }
-                                }
-
-                            }
-                            if (line.Split("=")[1] == "5" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "6" || line.Split("=")[1] == "6" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "5")
-                            {
-                                if (e == f)
-                                {
-                                    log(ConsoleColor.Magenta, line.Split("=")[4]);
-                                }
-                                if (e != f)
-                                {
-
-                                    if (line.Split("=")[5].Equals("end"))
-                                    {
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        log(ConsoleColor.Magenta, line.Split("=")[5]);
-                                    }
-                                }
-
-                            }
-                            if (line.Split("=")[1] == "7" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "8" || line.Split("=")[1] == "8" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "7")
-                            {
-                                if (g == h)
-                                {
-                                    log(ConsoleColor.Magenta, line.Split("=")[4]);
-                                }
-                                if (g != h)
-                                {
-
-                                    if (line.Split("=")[5].Equals("end"))
-                                    {
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        log(ConsoleColor.Magenta, line.Split("=")[5]);
-                                    }
-                                }
-
-                            }
-                            if (line.Split("=")[1] == "9" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "10" || line.Split("=")[1] == "10" && line.Split("=")[2] == "equals" && line.Split("=")[3] == "9")
-                            {
-                                if (i == j)
-                                {
-                                    log(ConsoleColor.Magenta, line.Split("=")[4]);
-                                }
-                                if (i != j)
-                                {
-
-                                    if (line.Split("=")[5].Equals("end"))
-                                    {
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        log(ConsoleColor.Magenta, line.Split("=")[5]);
-                                    }
-                                }
-
-                            }
-
-                        }
-                        if (line.StartsWith("variable"))
-                        {
-                            if (line.Split("=")[1] == "1")
-                            {
-                                if (line.Split("=")[2] == null || line.Split("=")[2] == "")
-                                {
-                                    log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                    log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
-                                    break;
-                                }
-                                else
-                                {
-                                    String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
-                                    a = gethandled;
-                                }
-                            }
-                            if (line.Split("=")[1] == "2")
-                            {
-                                if (line.Split("=")[2] == null || line.Split("=")[2] == "")
-                                {
-                                    log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                    log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
-                                    break;
-                                }
-                                else
-                                {
-                                    String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
-                                    b = gethandled;
-                                }
-                            }
-                            if (line.Split("=")[1] == "3")
-                            {
-                                if (line.Split("=")[2] == null || line.Split("=")[2] == "")
-                                {
-                                    log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                    log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
-                                    break;
-                                }
-                                else
-                                {
-                                    String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
-                                    c = gethandled;
-                                }
-                            }
-                            if (line.Split("=")[1] == "4")
-                            {
-                                if (line.Split("=")[2] == null || line.Split("=")[2] == "")
-                                {
-                                    log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                    log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
-                                    break;
-                                }
-                                else
-                                {
-                                    String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
-                                    d = gethandled;
-                                }
-                            }
-                            if (line.Split("=")[1] == "5")
-                            {
-                                if (line.Split("=")[2] == null || line.Split("=")[2] == "")
-                                {
-                                    log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                    log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
-                                    break;
-                                }
-                                else
-                                {
-                                    String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
-                                    e = gethandled;
-                                }
-                            }
-                            if (line.Split("=")[1] == "6")
-                            {
-                                if (line.Split("=")[2] == null || line.Split("=")[2] == "")
-                                {
-                                    log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                    log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
-                                    break;
-                                }
-                                else
-                                {
-                                    String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
-                                    f = gethandled;
-                                }
-                            }
-                            if (line.Split("=")[1] == "7")
-                            {
-                                if (line.Split("=")[2] == null || line.Split("=")[2] == "")
-                                {
-                                    log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                    log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
-                                    break;
-                                }
-                                else
-                                {
-                                    String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
-                                    g = gethandled;
-                                }
-                            }
-                            if (line.Split("=")[1] == "8")
-                            {
-                                if (line.Split("=")[2] == null || line.Split("=")[2] == "")
-                                {
-                                    log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                    log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
-                                    break;
-                                }
-                                else
-                                {
-                                    String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
-                                    h = gethandled;
-                                }
-                            }
-                            if (line.Split("=")[1] == "9")
-                            {
-                                if (line.Split("=")[2] == null || line.Split("=")[2] == "")
-                                {
-                                    log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                    log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
-                                    break;
-                                }
-                                else
-                                {
-                                    String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
-                                    i = gethandled;
-                                }
-                            }
-                            if (line.Split("=")[1] == "10")
-                            {
-                                if (line.Split("=")[2] == null || line.Split("=")[2] == "")
-                                {
-                                    log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                    log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
-                                    break;
-                                }
-                                else
-                                {
-                                    String gethandled = line.Split("=")[2].Replace("{getInput}", theysaid);
-                                    j = gethandled;
-                                }
-                            }
-
-                        }
+                        }                       
                         if (line.StartsWith("endmsg"))
                         {
                             endmessage = line.Replace("endmsg=", "");
@@ -401,62 +144,42 @@ namespace GoOS.Commands
                         }
                         if (line.StartsWith("string"))
                         {
-                            string key = line.Substring(6, line.IndexOf(" =") - 6);
+                            string whythehellnotwork = line.Replace(@"string ", "");
+                            string varName = whythehellnotwork.Split(@" = ")[0];
+                            string varContents = whythehellnotwork.Split(@" = ")[1];
 
-                            if (Strings.ContainsKey(key))
+                            if (Strings.ContainsKey(varName))
                             {
-                                Strings.Remove(key);
+                                Strings.Remove(varName);
                             }
 
-                           
-                            
-                                Strings.Add(key, line.Substring(line.IndexOf("\"") + 1, line.LastIndexOf("\"") - (line.IndexOf("\"") + 1)));
-                            
+
+
+                            Strings.Add(varName, varContents);
+
                         }
-                        if (line.StartsWith("print="))
+                        if (line.StartsWith(@"print="))
                         {
-                            string assSplitter = line.Substring(6);
-                            //Console.WriteLine(assSplitter + "This is assSplitter");
-                            
+                            string assSplitter = line.Replace(@"print=", "");
                             // we like splitting ass round here
-
-                            if (assSplitter.Contains('+'))
+                            if (assSplitter.Contains("\""))
                             {
-                                string[] contents = assSplitter.Split('+');
-                                string result = "";
-                                foreach (string cunt in contents)
-                                {
-                                    if (cunt.Trim().Contains('"'))
-                                    {
-                                        string thing = cunt.Trim();
-                                        thing = thing.Substring(1, thing.LastIndexOf('"') - 1);
-                                        result += thing;
-                                    }
-                                    if (Strings.TryGetValue(cunt.Trim(), out string strval))
-                                    {
-                                        result += strval;
-                                    } //broken area here.//
-                                }
-
-                                Console.WriteLine(result);
+                                string thighs = assSplitter.Replace("\"", "");
+                                Console.WriteLine(thighs);
                             }
-                            else
+                            else if (Strings.TryGetValue(assSplitter, out string what))
                             {
-                                if(Strings.TryGetValue(assSplitter, out string what))
+                                try
                                 {
-                                    try
-                                    {
-                                        Console.WriteLine(what + "---");
-                                    } catch
-                                    {
-                                        Console.WriteLine("owen is gay");
-                                    }
-                                } //also broken here.//
-                                
-                                    
+                                    Console.WriteLine(what);
+                                }
+                                catch
+                                {
+                                    Console.WriteLine("owen is gay");
+                                }
                             }
                         }
-                        /*if (line.StartsWith("if"))
+                        if (line.StartsWith("if"))
                         {
                             string removeIf = line.Substring(3);
                             if (removeIf.Contains("=="))
@@ -479,8 +202,8 @@ namespace GoOS.Commands
 
                                 }
                             }
-                        }*/
-                        if(line.StartsWith(@"save="))
+                        }
+                        if (line.StartsWith(@"save="))
                         {
                             string whatvartosave = line.Substring(5);
                             if (Strings.TryGetValue(whatvartosave, out string strval))
@@ -518,11 +241,9 @@ namespace GoOS.Commands
                                         tw.Close();
                                     }
                                 }
-
-
                             }
                         }
-                        if(line.StartsWith(@"load="))
+                        if (line.StartsWith(@"load="))
                         {
                             string whatvartoload = line.Substring(5);
                             string ass = null;
@@ -544,14 +265,15 @@ namespace GoOS.Commands
                                 }
                             }
                         }
-                    } 
+                    }
                     if (endmessage != null)
                     {
                         endmessage = "Process has ended.";
                     }
                     log(ConsoleColor.Red, endmessage);
                 }
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 log(ConsoleColor.Red, e.Message);
             }
