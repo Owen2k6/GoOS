@@ -120,19 +120,18 @@ namespace GoOS
             DrawPage(0);
             DrawPage(1);
             DrawPage(2);
+            MessageBox(0);
             Sys.FileSystem.VFS.VFSManager.CreateFile(@"0:\content\sys\setup.gms");
             var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
             var setupstream = setupcontent.GetFileStream();
             if (setupstream.CanWrite)
             {
-                MessageBox(0);
                 byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {usrn}\ncomputername: {cprn}");
                 setupstream.Write(textToWrite, 0, textToWrite.Length);
-                MessageBox(1);
             }
             else
             {
-                MessageBox(2);
+                MessageBox(1);
             }
         }
 
@@ -369,23 +368,9 @@ namespace GoOS
                 DrawTitle(" Info ", 10);
                 Console.SetCursorPosition(31, 12);
                 Console.Write("Saving settings...");
-            }
-            else if (message == 1)
-            {
-                CP737Console.Write("╔════════════════════════════════════════╗", 19, 10);
-                CP737Console.Write("║                                        ║", 19, 11);
-                CP737Console.Write("║                                        ║", 19, 12);
-                CP737Console.Write("║                                        ║", 19, 13);
-                CP737Console.Write("╚════════════════════════════════════════╝", 19, 14);
-
-                Console.ForegroundColor = Cyan;
-                DrawTitle(" Info ", 10);
-                Console.SetCursorPosition(21, 12);
-                Console.Write("Settings have been saved successfully!");
-                Console.ReadKey();
                 Console.Clear();
             }
-            else if (message == 2)
+            else if (message == 1)
             {
                 CP737Console.Write("╔══════════════════════════════════════════════════════╗", 12, 10);
                 CP737Console.Write("║                                                      ║", 12, 11);

@@ -222,57 +222,61 @@ namespace GoOS
                 computername = "GoOS";
 
             }
-            //Console.BackgroundColor = ConsoleColor.DarkBlue;
 
+            ThemeManager.SetTheme(Themes.Default);
             Console.Clear();
-            clog(ConsoleColor.DarkMagenta, "╔═════════════════════════════════════════════════════════════════════════════╗");
-            clog(ConsoleColor.Red, "║═══════════════════████████████══════════════════════════════════════════════║");
-            clog(ConsoleColor.DarkRed, "║══════════════██████████████████████═════════════════════════════════════════║");
-            clog(ConsoleColor.Magenta, "║═██████████═██████████████████████████═══════════════════════════════════════║");
-            clog(ConsoleColor.DarkMagenta, "║═████████═══█████████════════██████══════════════════════════════════════════║");
-            clog(ConsoleColor.Red, "║═███████════█████════════════════════════════════════════════════════════════║");
-            clog(ConsoleColor.DarkRed, "║═██████═════███════════════════════════════════╔═══════════════════════════╗═║");
+            clog(ThemeManager.Startup1, "╔═════════════════════════════════════════════════════════════════════════════╗");
+            clog(ThemeManager.Startup2, "║═══════════════════████████████══════════════════════════════════════════════║");
+            clog(ThemeManager.Startup3, "║══════════════██████████████████████═════════════════════════════════════════║");
+            clog(ThemeManager.Startup4, "║═██████████═██████████████████████████═══════════════════════════════════════║");
+            clog(ThemeManager.Startup5, "║═████████═══█████████════════██████══════════════════════════════════════════║");
+            clog(ThemeManager.Startup6, "║═███████════█████════════════════════════════════════════════════════════════║");
+            clog(ThemeManager.Startup7, "║═██████═════███════════════════════════════════╔═══════════════════════════╗═║");
             //Do NOT change owen.
-            textcolour(ConsoleColor.Magenta);
+            textcolour(ThemeManager.Startup8);
             cwrite("║═█████══════██═════════════════════════════════║");
-            textcolour(ConsoleColor.White);
+            textcolour(ThemeManager.Default);
             cwrite("Goplex Studios GoOS.       ");
-            textcolour(ConsoleColor.Magenta);
+            textcolour(ThemeManager.Startup8);
             cwrite("║═║");
-            clog(ConsoleColor.Green, "");
-            textcolour(ConsoleColor.Red);
+            /*clog(ConsoleColor.Green, "");*/
+            Console.WriteLine();
+            textcolour(ThemeManager.Startup9);
             cwrite("║═█████══════█════════════████████████████████══║");
-            textcolour(ConsoleColor.White);
+            textcolour(ThemeManager.Default);
             cwrite("Copyright 2023 (c) Owen2k6.");
-            textcolour(ConsoleColor.Red);
+            textcolour(ThemeManager.Startup9);
             cwrite("║═║");
-            clog(ConsoleColor.Green, "");
-            textcolour(ConsoleColor.DarkRed);
+            /*clog(ConsoleColor.Green, "");*/
+            Console.WriteLine();
+            textcolour(ThemeManager.Startup10);
             cwrite("║═█████══════██═══════════███████████████████═══║");
-            textcolour(ConsoleColor.White);
-            cwrite("Version " + version+ "               ");
-            textcolour(ConsoleColor.DarkRed);
+            textcolour(ThemeManager.Default);
+            cwrite("Version " + version + ".              ");
+            textcolour(ThemeManager.Startup10);
             cwrite(" ║═║");
-            clog(ConsoleColor.Green, "");
-            textcolour(ConsoleColor.Magenta);
+            /*clog(ConsoleColor.Green, "");*/
+            Console.WriteLine();
+            textcolour(ThemeManager.Startup11);
             cwrite("║═█████══════██═══════════███████████████████═══║");
-            textcolour(ConsoleColor.White);
-            cwrite("Welcome to GoOS            ");
-            textcolour(ConsoleColor.Magenta);
+            textcolour(ThemeManager.Default);
+            cwrite("Welcome to GoOS.           ");
+            textcolour(ThemeManager.Startup11);
             cwrite("║═║");
-            clog(ConsoleColor.Green, "");
+            /*clog(ConsoleColor.Green, "");*/
+            Console.WriteLine();
             //Ok now continue
-            clog(ConsoleColor.DarkMagenta, "║═██████═════████═════════██████████████████════╚═══════════════════════════╝═║");
-            clog(ConsoleColor.Red, "║═███████════██████══════════════██████████═══════════════════════════════════║");
-            clog(ConsoleColor.DarkRed, "║═█████████══████████████████████████████═════════════════════════════════════║");
-            clog(ConsoleColor.Magenta, "║═███████████═════════════════════════════════════════════════════════════════║");
-            clog(ConsoleColor.DarkMagenta, "║═███████████████══════════════════████═══════════════════════════════════════║");
-            clog(ConsoleColor.Red, "║═█████████████████████████████████████═══════════════════════════════════════║");
-            clog(ConsoleColor.DarkRed, "║═█████████████████████████████████████═══════════════════════════════════════║");
-            clog(ConsoleColor.Magenta, "╚═════════════════════════════════════════════════════════════════════════════╝");
-            clog(ConsoleColor.Cyan, "╔═════════════════════════════════════════════════════════════════════════════╗");
-            clog(ConsoleColor.Cyan, "║  Notice. This is a beta build of GoOS 1.5. There will be bugs and issues!!  ║");
-            clog(ConsoleColor.Cyan, "╚═════════════════════════════════════════════════════════════════════════════╝");
+            clog(ThemeManager.Startup12, "║═██████═════████═════════██████████████████════╚═══════════════════════════╝═║");
+            clog(ThemeManager.Startup13, "║═███████════██████══════════════██████████═══════════════════════════════════║");
+            clog(ThemeManager.Startup14, "║═█████████══████████████████████████████═════════════════════════════════════║");
+            clog(ThemeManager.Startup15, "║═███████████═════════════════════════════════════════════════════════════════║");
+            clog(ThemeManager.Startup16, "║═███████████████══════════════════████═══════════════════════════════════════║");
+            clog(ThemeManager.Startup17, "║═█████████████████████████████████████═══════════════════════════════════════║");
+            clog(ThemeManager.Startup18, "║═█████████████████████████████████████═══════════════════════════════════════║");
+            clog(ThemeManager.Startup19, "╚═════════════════════════════════════════════════════════════════════════════╝");
+            clog(ThemeManager.WindowText, "╔═════════════════════════════════════════════════════════════════════════════╗");
+            clog(ThemeManager.WindowText, "║  Notice. This is a beta build of GoOS 1.5. There will be bugs and issues!!  ║");
+            clog(ThemeManager.WindowText, "╚═════════════════════════════════════════════════════════════════════════════╝");
 
             string roota = @"0:\";
             Directory.SetCurrentDirectory(roota);
