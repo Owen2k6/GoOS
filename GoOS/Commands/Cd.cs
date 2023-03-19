@@ -25,6 +25,6 @@ namespace GoOS.Commands
             catch {
                 Console.WriteLine("\nDirectory not found\n");
             }
-            }
+        }
     }
 }

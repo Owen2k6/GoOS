@@ -30,6 +30,8 @@ using Cosmos.HAL.BlockDevice;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Reflection.Metadata;
+using GoOS.Settings;
+using GoOS.Themes;
 
 //Goplex Studios - GoOS
 //Copyright (C) 2022  Owen2k6
@@ -131,6 +133,7 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
+            ThemeManager.SetTheme(Theme.Default);
             try
             {
                 FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize(true);
@@ -139,11 +142,11 @@ namespace GoOS
             }
             catch (Exception e)
             {
-                log(ConsoleColor.Red, "GoOS Admin could not detect a disk. system will not support any apps that require a HDD to write/read from.");
-                log(ConsoleColor.Red, "GoOS Needs a HDD installed to use some of the cool features");
-                log(ConsoleColor.Red, "The GitHub releases page usually includes a disk built for GoOS");
-                log(ConsoleColor.Red, "Disks aren't required but they're highly reccomended.");
-                log(ConsoleColor.White, "Press any key to continue.");
+                log(ThemeManager.ErrorText, "GoOS Admin could not detect a disk. system will not support any apps that require a HDD to write/read from.");
+                log(ThemeManager.ErrorText, "GoOS Needs a HDD installed to use some of the cool features");
+                log(ThemeManager.ErrorText, "The GitHub releases page usually includes a disk built for GoOS");
+                log(ThemeManager.ErrorText, "Disks aren't required but they're highly reccomended.");
+                log(ThemeManager.Default, "Press any key to continue.");
                 Console.ReadKey();
                 adminconsoledisk = false;
             }
@@ -152,16 +155,16 @@ namespace GoOS
                 Console.WriteLine("GoOS is performing first boot...");
                 Console.WriteLine("initialising file system...");
                 Console.WriteLine("This may take some time.");
-                System.IO.File.Create(@"0:\content\sys\version.gms");
-                System.IO.File.Create(@"0:\content\sys\userinfo.gms");
-                System.IO.File.Create(@"0:\content\sys\option-showprotectedfiles.gms");
-                System.IO.File.Create(@"0:\content\sys\option-editprotectedfiles.gms");
-                System.IO.File.Create(@"0:\content\sys\option-deleteprotectedfiles.gms");
+                File.Create(@"0:\content\sys\version.gms");
+                File.Create(@"0:\content\sys\userinfo.gms");
+                File.Create(@"0:\content\sys\option-showprotectedfiles.gms");
+                File.Create(@"0:\content\sys\option-editprotectedfiles.gms");
+                File.Create(@"0:\content\sys\option-deleteprotectedfiles.gms");
                 var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\version.gms");
                 var setupstream = setupcontent.GetFileStream();
                 if (setupstream.CanWrite)
                 {
-                    byte[] textToWrite = Encoding.ASCII.GetBytes($"GoOS.System.Version is set to {version} \n Note to users reading this: DO NOT ALTER. IMPORTANT IF USER DATA NEEDS CONVERTING.");
+                    byte[] textToWrite = Encoding.ASCII.GetBytes($"System.Version is set to {version} \n Note to users reading this: DO NOT ALTER. IMPORTANT IF USER DATA NEEDS CONVERTING.");
                     setupstream.Write(textToWrite, 0, textToWrite.Length);
                 }
                 else
@@ -183,14 +186,10 @@ namespace GoOS
             }
             try
             {
-                textcolour(ConsoleColor.Cyan);
-                textcolour(ConsoleColor.White);
+                textcolour(ThemeManager.Default);
                 if (!File.Exists(@"0:\content\sys\setup.gms"))
                 {
-                    
                     OOBE.Open();
-
-
                 }
                 var systemsetup = File.ReadAllLines(@"0:\content\sys\setup.gms");
                 foreach (string line in systemsetup)
@@ -204,9 +203,6 @@ namespace GoOS
                         computername = line.Replace("computername: ", "");
                     }
                 }
-
-
-
             }
             catch (Exception e)
             {
@@ -222,57 +218,52 @@ namespace GoOS
                 computername = "GoOS";
 
             }
-            //Console.BackgroundColor = ConsoleColor.DarkBlue;
 
             Console.Clear();
-            clog(ConsoleColor.DarkMagenta, "╔═════════════════════════════════════════════════════════════════════════════╗");
-            clog(ConsoleColor.Red, "║═══════════════════████████████══════════════════════════════════════════════║");
-            clog(ConsoleColor.DarkRed, "║══════════════██████████████████████═════════════════════════════════════════║");
-            clog(ConsoleColor.Magenta, "║═██████████═██████████████████████████═══════════════════════════════════════║");
-            clog(ConsoleColor.DarkMagenta, "║═████████═══█████████════════██████══════════════════════════════════════════║");
-            clog(ConsoleColor.Red, "║═███████════█████════════════════════════════════════════════════════════════║");
-            clog(ConsoleColor.DarkRed, "║═██████═════███════════════════════════════════╔═══════════════════════════╗═║");
+            clog(ThemeManager.Startup1, "╔═════════════════════════════════════════════════════════════════════════════╗");
+            clog(ThemeManager.Startup2, "║═══════════════════████████████══════════════════════════════════════════════║");
+            clog(ThemeManager.Startup3, "║══════════════██████████████████████═════════════════════════════════════════║");
+            clog(ThemeManager.Startup4, "║═██████████═██████████████████████████═══════════════════════════════════════║");
+            clog(ThemeManager.Startup5, "║═████████═══█████████════════██████══════════════════════════════════════════║");
+            clog(ThemeManager.Startup6, "║═███████════█████════════════════════════════════════════════════════════════║");
+            clog(ThemeManager.Startup7, "║═██████═════███════════════════════════════════╔═══════════════════════════╗═║");
             //Do NOT change owen.
-            textcolour(ConsoleColor.Magenta);
+            textcolour(ThemeManager.Startup8);
             cwrite("║═█████══════██═════════════════════════════════║");
-            textcolour(ConsoleColor.White);
+            textcolour(ThemeManager.Default);
             cwrite("Goplex Studios GoOS.       ");
-            textcolour(ConsoleColor.Magenta);
-            cwrite("║═║");
-            clog(ConsoleColor.Green, "");
-            textcolour(ConsoleColor.Red);
+            textcolour(ThemeManager.Startup8);
+            cwrite("║═║\n");
+            textcolour(ThemeManager.Startup9);
             cwrite("║═█████══════█════════════████████████████████══║");
-            textcolour(ConsoleColor.White);
+            textcolour(ThemeManager.Default);
             cwrite("Copyright 2023 (c) Owen2k6.");
-            textcolour(ConsoleColor.Red);
-            cwrite("║═║");
-            clog(ConsoleColor.Green, "");
-            textcolour(ConsoleColor.DarkRed);
+            textcolour(ThemeManager.Startup9);
+            cwrite("║═║\n");
+            textcolour(ThemeManager.Startup10);
             cwrite("║═█████══════██═══════════███████████████████═══║");
-            textcolour(ConsoleColor.White);
-            cwrite("Version " + version+ "               ");
-            textcolour(ConsoleColor.DarkRed);
-            cwrite(" ║═║");
-            clog(ConsoleColor.Green, "");
-            textcolour(ConsoleColor.Magenta);
+            textcolour(ThemeManager.Default);
+            cwrite("Version " + version + "               ");
+            textcolour(ThemeManager.Startup10);
+            cwrite(" ║═║\n");
+            textcolour(ThemeManager.Startup11);
             cwrite("║═█████══════██═══════════███████████████████═══║");
-            textcolour(ConsoleColor.White);
-            cwrite("Welcome to GoOS            ");
-            textcolour(ConsoleColor.Magenta);
-            cwrite("║═║");
-            clog(ConsoleColor.Green, "");
+            textcolour(ThemeManager.Default);
+            cwrite("Welcome to GoOS.           ");
+            textcolour(ThemeManager.Startup11);
+            cwrite("║═║\n");
             //Ok now continue
-            clog(ConsoleColor.DarkMagenta, "║═██████═════████═════════██████████████████════╚═══════════════════════════╝═║");
-            clog(ConsoleColor.Red, "║═███████════██████══════════════██████████═══════════════════════════════════║");
-            clog(ConsoleColor.DarkRed, "║═█████████══████████████████████████████═════════════════════════════════════║");
-            clog(ConsoleColor.Magenta, "║═███████████═════════════════════════════════════════════════════════════════║");
-            clog(ConsoleColor.DarkMagenta, "║═███████████████══════════════════████═══════════════════════════════════════║");
-            clog(ConsoleColor.Red, "║═█████████████████████████████████████═══════════════════════════════════════║");
-            clog(ConsoleColor.DarkRed, "║═█████████████████████████████████████═══════════════════════════════════════║");
-            clog(ConsoleColor.Magenta, "╚═════════════════════════════════════════════════════════════════════════════╝");
-            clog(ConsoleColor.Cyan, "╔═════════════════════════════════════════════════════════════════════════════╗");
-            clog(ConsoleColor.Cyan, "║  Notice. This is a beta build of GoOS 1.5. There will be bugs and issues!!  ║");
-            clog(ConsoleColor.Cyan, "╚═════════════════════════════════════════════════════════════════════════════╝");
+            clog(ThemeManager.Startup12, "║═██████═════████═════════██████████████████════╚═══════════════════════════╝═║");
+            clog(ThemeManager.Startup13, "║═███████════██████══════════════██████████═══════════════════════════════════║");
+            clog(ThemeManager.Startup14, "║═█████████══████████████████████████████═════════════════════════════════════║");
+            clog(ThemeManager.Startup15, "║═███████████═════════════════════════════════════════════════════════════════║");
+            clog(ThemeManager.Startup16, "║═███████████████══════════════════████═══════════════════════════════════════║");
+            clog(ThemeManager.Startup17, "║═█████████████████████████████████████═══════════════════════════════════════║");
+            clog(ThemeManager.Startup18, "║═█████████████████████████████████████═══════════════════════════════════════║");
+            clog(ThemeManager.Startup19, "╚═════════════════════════════════════════════════════════════════════════════╝");
+            clog(ThemeManager.WindowText, "╔═════════════════════════════════════════════════════════════════════════════╗");
+            clog(ThemeManager.WindowText, "║  Notice. This is a beta build of GoOS 1.5. There will be bugs and issues!!  ║");
+            clog(ThemeManager.WindowText, "╚═════════════════════════════════════════════════════════════════════════════╝");
 
             string roota = @"0:\";
             Directory.SetCurrentDirectory(roota);
@@ -280,7 +271,7 @@ namespace GoOS
 
         protected override void Run()
         {
-            textcolour(ConsoleColor.Cyan);
+            textcolour(ThemeManager.WindowText);
             string currentdir = Directory.GetCurrentDirectory() + @"\";
             string currentdirfix = @"0:\";
             if (currentdir.Contains(@"0:\\"))
@@ -292,13 +283,13 @@ namespace GoOS
                 currentdirfix = currentdir.Replace(@"0:\\\", @"0:\");
             }
             write($"{username}");
-            textcolour(ConsoleColor.Yellow);
+            textcolour(ThemeManager.Other1);
             write("@");
-            textcolour(ConsoleColor.Cyan);
+            textcolour(ThemeManager.WindowText);
             write($"{computername} ");
-            textcolour(ConsoleColor.Green);
+            textcolour(ThemeManager.WindowBorder);
             write(currentdirfix);
-            textcolour(ConsoleColor.White);
+            textcolour(ThemeManager.Default);
             String input = Console.ReadLine();
             String[] args = input.Split(' ');
 
@@ -309,93 +300,93 @@ namespace GoOS
                 case "help":
                     if (args.Length > 1)
                     {
-                        log(ConsoleColor.Red, "Too many arguments");
+                        log(ThemeManager.ErrorText, "Too many arguments");
                         break;
                     }
-                    GoOS.Commands.Help.Main();
+                    Commands.Help.Main();
                     break;
                 case "run":
                     if (args.Length > 2)
                     {
-                        log(ConsoleColor.Red, "Too many arguments");
+                        log(ThemeManager.ErrorText, "Too many arguments");
                         break;
                     }
                     if (args.Length == 1)
                     {
-                        log(ConsoleColor.Red, "Missing arguments");
+                        log(ThemeManager.ErrorText, "Missing arguments");
                         break;
                     }
-                    GoOS.Commands.Run.Main(args[1]);
+                    Commands.Run.Main(args[1]);
                     break;
                 case "mkdir":
                     if (args.Length > 2)
                     {
-                        log(ConsoleColor.Red, "Too many arguments");
+                        log(ThemeManager.ErrorText, "Too many arguments");
                         break;
                     }
                     if (args.Length == 1)
                     {
-                        log(ConsoleColor.Red, "Missing arguments");
+                        log(ThemeManager.ErrorText, "Missing arguments");
                         break;
                     }
-                    GoOS.Commands.Make.MakeDirectory(args[1]);
+                    Commands.Make.MakeDirectory(args[1]);
                     break;
                 case "mkfile":
                     if (args.Length > 2)
                     {
-                        log(ConsoleColor.Red, "Too many arguments");
+                        log(ThemeManager.ErrorText, "Too many arguments");
                         break;
                     }
                     if (args.Length == 1)
                     {
-                        log(ConsoleColor.Red, "Missing arguments");
+                        log(ThemeManager.ErrorText, "Missing arguments");
                         break;
                     }
-                    GoOS.Commands.Make.MakeFile(args[1]);
+                    Commands.Make.MakeFile(args[1]);
                     break;
                 case "deldir":
                     if (args.Length > 2)
                     {
-                        log(ConsoleColor.Red, "Too many arguments");
+                        log(ThemeManager.ErrorText, "Too many arguments");
                         break;
                     }
                     if (args.Length == 1)
                     {
-                        log(ConsoleColor.Red, "Missing arguments");
+                        log(ThemeManager.ErrorText, "Missing arguments");
                         break;
                     }
-                    GoOS.Commands.Delete.DeleteDirectory(args[1]);
+                    Commands.Delete.DeleteDirectory(args[1]);
                     break;
                 case "delfile":
                     if (args.Length > 2)
                     {
-                        log(ConsoleColor.Red, "Too many arguments");
+                        log(ThemeManager.ErrorText, "Too many arguments");
                         break;
                     }
                     if (args.Length == 1)
                     {
-                        log(ConsoleColor.Red, "Missing arguments");
+                        log(ThemeManager.ErrorText, "Missing arguments");
                         break;
                     }
-                    GoOS.Commands.Delete.DeleteFile(args[1]);
+                    Commands.Delete.DeleteFile(args[1]);
                     break;
                 case "cd":
                     if (args.Length > 2)
                     {
-                        log(ConsoleColor.Red, "Too many arguments");
+                        log(ThemeManager.ErrorText, "Too many arguments");
                         break;
                     }
                     if (args.Length == 1)
                     {
-                        log(ConsoleColor.Red, "Missing arguments");
+                        log(ThemeManager.ErrorText, "Missing arguments");
                         break;
                     }
-                    GoOS.Commands.Cd.Run(args[1]);
+                    Commands.Cd.Run(args[1]);
                     break;
                 case "cd..":
                     if (args.Length > 1)
                     {
-                        log(ConsoleColor.Red, "Too many arguments");
+                        log(ThemeManager.ErrorText, "Too many arguments");
                         break;
                     }
                     Directory.SetCurrentDirectory(olddir);
@@ -403,7 +394,7 @@ namespace GoOS
                 case "cdr":
                     if (args.Length > 1)
                     {
-                        log(ConsoleColor.Red, "Too many arguments");
+                        log(ThemeManager.ErrorText, "Too many arguments");
                         break;
                     }
                     string roota = @"0:\";
@@ -412,50 +403,50 @@ namespace GoOS
                 case "dir":
                     if (args.Length > 1)
                     {
-                        log(ConsoleColor.Red, "Too many arguments");
+                        log(ThemeManager.ErrorText, "Too many arguments");
                         break;
                     }
-                    GoOS.Commands.Dir.Run();
+                    Commands.Dir.Run();
                     break;
                 case "ls":
                     if (args.Length > 1)
                     {
-                        log(ConsoleColor.Red, "Too many arguments");
+                        log(ThemeManager.ErrorText, "Too many arguments");
                         break;
                     }
-                    GoOS.Commands.Dir.Run();
+                    Commands.Dir.Run();
                     break;
                 case "notepad":
-                    textcolour(ConsoleColor.White);
+                    textcolour(ThemeManager.Default);
                     MIV.StartMIV();
                     break;
                 case "settings":
-                    GoOS.ControlPanel.ControlPanel.Open();
+                    ControlPanel.Open();
                     break;
                 case "vm":
                     if (args.Length > 2)
                     {
-                        log(ConsoleColor.Red, "Too many arguments");
+                        log(ThemeManager.ErrorText, "Too many arguments");
                         break;
                     }
                     if (args.Length == 1)
                     {
-                        log(ConsoleColor.Red, "Missing arguments");
+                        log(ThemeManager.ErrorText, "Missing arguments");
                         break;
                     }
-                    GoOS.Commands.Vm.command(args[1]);
+                    Commands.Vm.command(args[1]);
                     break;
                 case "clear":
                     Console.Clear();
+                    break;
+                case "toggletheme":
+                    Commands.ToggleTheme.Main();
                     break;
                 default:
                     Console.WriteLine("Invalid command.");
                     break;
 
             }
-
-
-            textcolour(ConsoleColor.Green);
         }
 
         /// 
@@ -474,9 +465,9 @@ namespace GoOS
             {
                 log(ConsoleColor.Magenta, "Goplex Operating System");
                 log(ConsoleColor.Blue, "GoOS is owned by Goplex Studios.");
-                log(ConsoleColor.Red, "SYSTEM INFOMATION:");
-                log(ConsoleColor.Red, "GoOS Version " + version);
-                log(ConsoleColor.Red, "Build Type: " + BuildType);
+                log(ThemeManager.ErrorText, "SYSTEM INFOMATION:");
+                log(ThemeManager.ErrorText, "GoOS Version " + version);
+                log(ThemeManager.ErrorText, "Build Type: " + BuildType);
                 log(ConsoleColor.White, "Copyright 2022 (c) Owen2k6");
             }
             else if (input.Equals("help", StringComparison.OrdinalIgnoreCase))
@@ -501,32 +492,32 @@ namespace GoOS
             {
                 log(ConsoleColor.Cyan, "Goplex Studios - GoOS");
                 log(ConsoleColor.Cyan, "Discord Link: https://discord.owen2k6.com/");
-                log(ConsoleColor.Red, "Contributors:");
-                log(ConsoleColor.Red, "Owen2k6 - Main Developer and creator");
-                log(ConsoleColor.Red, "Zulo - Helped create the command system");
-                log(ConsoleColor.Red, "moderator_man - Helped with my .gitignore issue and knows code fr");
-                log(ConsoleColor.Red, "atmo - GUI Libs");
+                log(ThemeManager.ErrorText, "Contributors:");
+                log(ThemeManager.ErrorText, "Owen2k6 - Main Developer and creator");
+                log(ThemeManager.ErrorText, "Zulo - Helped create the command system");
+                log(ThemeManager.ErrorText, "moderator_man - Helped with my .gitignore issue and knows code fr");
+                log(ThemeManager.ErrorText, "atmo - GUI Libs");
             }
             else if (input.Equals("support", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Cyan, "Goplex Studios Support");
-                log(ConsoleColor.Red, "== For OS Support");
-                log(ConsoleColor.Red, "To get support, you must be in the Goplex Studios Discord Server.");
-                log(ConsoleColor.Red, "Discord Link: https://discord.owen2k6.com/");
-                log(ConsoleColor.Red, "Open support tickets in #get-staff-help");
-                log(ConsoleColor.Red, "== To report a bug");
-                log(ConsoleColor.Red, "Go to the issues tab on the Owen2k6/GoOS Github page");
-                log(ConsoleColor.Red, "and submit an issue with the bug tag.");
+                log(ThemeManager.ErrorText, "== For OS Support");
+                log(ThemeManager.ErrorText, "To get support, you must be in the Goplex Studios Discord Server.");
+                log(ThemeManager.ErrorText, "Discord Link: https://discord.owen2k6.com/");
+                log(ThemeManager.ErrorText, "Open support tickets in #get-staff-help");
+                log(ThemeManager.ErrorText, "== To report a bug");
+                log(ThemeManager.ErrorText, "Go to the issues tab on the Owen2k6/GoOS Github page");
+                log(ThemeManager.ErrorText, "and submit an issue with the bug tag.");
             }
             else if (input.Equals("core", StringComparison.OrdinalIgnoreCase))
             {
                 log(ConsoleColor.Magenta, "GoOS Core Ver 0.3");
-                log(ConsoleColor.Magenta, "The Main backend to GoOS.");
+                log(ConsoleColor.Magenta, "The Main backend to ");
                 log(ConsoleColor.Magenta, "==========================");
                 log(ConsoleColor.Magenta, "==Developed using Cosmos==");
                 log(ConsoleColor.Magenta, "==========================");
-                log(ConsoleColor.Red, "GoOS Core Is still in early development.");
-                log(ConsoleColor.Red, "there are a lot of issues known and we are working on it! ");
+                log(ThemeManager.ErrorText, "GoOS Core Is still in early development.");
+                log(ThemeManager.ErrorText, "there are a lot of issues known and we are working on it! ");
             }
 
             //Games Section
@@ -627,26 +618,26 @@ namespace GoOS
             {
                 if (!adminconsoledisk)
                 {
-                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                    log(ThemeManager.ErrorText, "GoOS Admin: There is currently no disk loaded to the system.");
                 }
                 if (adminconsoledisk)
                 {
                     try
                     {
-                        log(ConsoleColor.Red, "GoOS Admin: Showing Disk Information for 0:\\");
+                        log(ThemeManager.ErrorText, "GoOS Admin: Showing Disk Information for 0:\\");
                         var available_space = FS.GetAvailableFreeSpace(@"0:\");
                         var total_space = FS.GetTotalSize(@"0:\");
                         var label = FS.GetFileSystemLabel(@"0:\");
                         var fs_type = FS.GetFileSystemType(@"0:\");
-                        log(ConsoleColor.Red, "Available Free Space: " + available_space + "(" + (available_space / 1e+9) + "GiB)");
-                        log(ConsoleColor.Red, "Total Space on disk: " + total_space + "(" + (total_space / 1e+9) + "GiB)");
-                        log(ConsoleColor.Red, "Disk Label: " + label);
-                        log(ConsoleColor.Red, "File System Type: " + fs_type);
+                        log(ThemeManager.ErrorText, "Available Free Space: " + available_space + "(" + (available_space / 1e+9) + "GiB)");
+                        log(ThemeManager.ErrorText, "Total Space on disk: " + total_space + "(" + (total_space / 1e+9) + "GiB)");
+                        log(ThemeManager.ErrorText, "Disk Label: " + label);
+                        log(ThemeManager.ErrorText, "File System Type: " + fs_type);
                     }
                     catch (Exception e)
                     {
-                        log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
-                        log(ConsoleColor.Red, "GoOS Admin: For system security, we have disabled all Drive functions.");
+                        log(ThemeManager.ErrorText, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                        log(ThemeManager.ErrorText, "GoOS Admin: For system security, we have disabled all Drive functions.");
                         adminconsoledisk = false;
                     }
                 }
@@ -655,7 +646,7 @@ namespace GoOS
             {
                 if (!adminconsoledisk)
                 {
-                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                    log(ThemeManager.ErrorText, "GoOS Admin: There is currently no disk loaded to the system.");
                 }
                 if (adminconsoledisk)
                 {
@@ -664,13 +655,13 @@ namespace GoOS
                         var directory_list = Directory.GetFiles(@"0:\");
                         foreach (var file in directory_list)
                         {
-                            log(ConsoleColor.Red, file);
+                            log(ThemeManager.ErrorText, file);
                         }
                     }
                     catch (Exception e)
                     {
-                        log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
-                        log(ConsoleColor.Red, "GoOS Admin: For system security, we have disabled all Drive functions.");
+                        log(ThemeManager.ErrorText, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                        log(ThemeManager.ErrorText, "GoOS Admin: For system security, we have disabled all Drive functions.");
                         adminconsoledisk = false;
                     }
                 }
@@ -679,7 +670,7 @@ namespace GoOS
             {
                 if (!adminconsoledisk)
                 {
-                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                    log(ThemeManager.ErrorText, "GoOS Admin: There is currently no disk loaded to the system.");
                 }
                 if (adminconsoledisk)
                 {
@@ -691,7 +682,7 @@ namespace GoOS
             {
                 if (!adminconsoledisk)
                 {
-                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                    log(ThemeManager.ErrorText, "GoOS Admin: There is currently no disk loaded to the system.");
                 }
                 if (adminconsoledisk)
                 {
@@ -703,11 +694,11 @@ namespace GoOS
             {
                 if (!adminconsoledisk)
                 {
-                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                    log(ThemeManager.ErrorText, "GoOS Admin: There is currently no disk loaded to the system.");
                 }
                 if (adminconsoledisk)
                 {
-                    log(ConsoleColor.Red, "GoOS Admin: Enter file name");
+                    log(ThemeManager.ErrorText, "GoOS Admin: Enter file name");
                     textcolour(ConsoleColor.Yellow);
                     write("FilePath: 0:\\");
                     String inputaman = Console.ReadLine();
@@ -718,8 +709,8 @@ namespace GoOS
                     }
                     catch (Exception e)
                     {
-                        log(ConsoleColor.Red, "Please send the following to GoOS Developers");
-                        log(ConsoleColor.Red, e.ToString());
+                        log(ThemeManager.ErrorText, "Please send the following to GoOS Developers");
+                        log(ThemeManager.ErrorText, e.ToString());
                     }
                 }
             }
@@ -727,11 +718,11 @@ namespace GoOS
             {
                 if (!adminconsoledisk)
                 {
-                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                    log(ThemeManager.ErrorText, "GoOS Admin: There is currently no disk loaded to the system.");
                 }
                 if (adminconsoledisk)
                 {
-                    log(ConsoleColor.Red, "GoOS Admin: Enter file name");
+                    log(ThemeManager.ErrorText, "GoOS Admin: Enter file name");
                     textcolour(ConsoleColor.Yellow);
                     write("FilePath: 0:\\");
                     String inputaman = Console.ReadLine();
@@ -740,8 +731,8 @@ namespace GoOS
                         log(ConsoleColor.Blue, "GoOS Admin: Attempting to run " + inputaman);
                         if (!inputaman.EndsWith(".goexe"))
                         {
-                            log(ConsoleColor.Red, "GoOS Admin: Incompatible format.");
-                            log(ConsoleColor.Red, "GoOS Admin: File must be .goexe");
+                            log(ThemeManager.ErrorText, "GoOS Admin: Incompatible format.");
+                            log(ThemeManager.ErrorText, "GoOS Admin: File must be .goexe");
                         }
                         if (inputaman.EndsWith(".goexe"))
                         {
@@ -941,8 +932,8 @@ namespace GoOS
                                     {
                                         if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
-                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            log(ThemeManager.ErrorText, "ERROR ON LINE " + count);
+                                            log(ThemeManager.ErrorText, "Variable creation must have a value and can not be blank.");
                                             break;
                                         }
                                         else
@@ -955,8 +946,8 @@ namespace GoOS
                                     {
                                         if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
-                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            log(ThemeManager.ErrorText, "ERROR ON LINE " + count);
+                                            log(ThemeManager.ErrorText, "Variable creation must have a value and can not be blank.");
                                             break;
                                         }
                                         else
@@ -969,8 +960,8 @@ namespace GoOS
                                     {
                                         if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
-                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            log(ThemeManager.ErrorText, "ERROR ON LINE " + count);
+                                            log(ThemeManager.ErrorText, "Variable creation must have a value and can not be blank.");
                                             break;
                                         }
                                         else
@@ -983,8 +974,8 @@ namespace GoOS
                                     {
                                         if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
-                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            log(ThemeManager.ErrorText, "ERROR ON LINE " + count);
+                                            log(ThemeManager.ErrorText, "Variable creation must have a value and can not be blank.");
                                             break;
                                         }
                                         else
@@ -997,8 +988,8 @@ namespace GoOS
                                     {
                                         if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
-                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            log(ThemeManager.ErrorText, "ERROR ON LINE " + count);
+                                            log(ThemeManager.ErrorText, "Variable creation must have a value and can not be blank.");
                                             break;
                                         }
                                         else
@@ -1011,8 +1002,8 @@ namespace GoOS
                                     {
                                         if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
-                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            log(ThemeManager.ErrorText, "ERROR ON LINE " + count);
+                                            log(ThemeManager.ErrorText, "Variable creation must have a value and can not be blank.");
                                             break;
                                         }
                                         else
@@ -1025,8 +1016,8 @@ namespace GoOS
                                     {
                                         if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
-                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            log(ThemeManager.ErrorText, "ERROR ON LINE " + count);
+                                            log(ThemeManager.ErrorText, "Variable creation must have a value and can not be blank.");
                                             break;
                                         }
                                         else
@@ -1039,8 +1030,8 @@ namespace GoOS
                                     {
                                         if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
-                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            log(ThemeManager.ErrorText, "ERROR ON LINE " + count);
+                                            log(ThemeManager.ErrorText, "Variable creation must have a value and can not be blank.");
                                             break;
                                         }
                                         else
@@ -1053,8 +1044,8 @@ namespace GoOS
                                     {
                                         if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
-                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            log(ThemeManager.ErrorText, "ERROR ON LINE " + count);
+                                            log(ThemeManager.ErrorText, "Variable creation must have a value and can not be blank.");
                                             break;
                                         }
                                         else
@@ -1067,8 +1058,8 @@ namespace GoOS
                                     {
                                         if (line.Split("=")[2] == null || line.Split("=")[2] == "")
                                         {
-                                            log(ConsoleColor.Red, "ERROR ON LINE " + count);
-                                            log(ConsoleColor.Red, "Variable creation must have a value and can not be blank.");
+                                            log(ThemeManager.ErrorText, "ERROR ON LINE " + count);
+                                            log(ThemeManager.ErrorText, "Variable creation must have a value and can not be blank.");
                                             break;
                                         }
                                         else
@@ -1140,10 +1131,10 @@ namespace GoOS
                     }
                     catch (Exception e)
                     {
-                        log(ConsoleColor.Red, "GoOS Admin has killed this program as an error has occoured");
-                        log(ConsoleColor.Red, "Report this to the app developer or the GoOS Devs for assistance.");
-                        log(ConsoleColor.Red, "Screenshot this stack trace:");
-                        log(ConsoleColor.Red, e.ToString());
+                        log(ThemeManager.ErrorText, "GoOS Admin has killed this program as an error has occoured");
+                        log(ThemeManager.ErrorText, "Report this to the app developer or the GoOS Devs for assistance.");
+                        log(ThemeManager.ErrorText, "Screenshot this stack trace:");
+                        log(ThemeManager.ErrorText, e.ToString());
                     }
                 }
             }
@@ -1151,13 +1142,13 @@ namespace GoOS
             {
                 if (!adminconsoledisk)
                 {
-                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                    log(ThemeManager.ErrorText, "GoOS Admin: There is currently no disk loaded to the system.");
                 }
                 if (adminconsoledisk)
                 {
                     var label = FS.GetFileSystemLabel(@"0:\");
-                    log(ConsoleColor.Red, "GoOS Admin: Relabel disk");
-                    log(ConsoleColor.Red, "GoOS Admin: Press ENTER to leave the label as \"" + label + "\"");
+                    log(ThemeManager.ErrorText, "GoOS Admin: Relabel disk");
+                    log(ThemeManager.ErrorText, "GoOS Admin: Press ENTER to leave the label as \"" + label + "\"");
                     textcolour(ConsoleColor.Yellow);
                     write("New Label for 0:\\: ");
                     String inputamana = Console.ReadLine();
@@ -1172,8 +1163,8 @@ namespace GoOS
                     }
                     catch (Exception e)
                     {
-                        log(ConsoleColor.Red, "Please send the following to GoOS Developers");
-                        log(ConsoleColor.Red, e.ToString());
+                        log(ThemeManager.ErrorText, "Please send the following to GoOS Developers");
+                        log(ThemeManager.ErrorText, e.ToString());
                     }
                 }
             }
@@ -1181,7 +1172,7 @@ namespace GoOS
             {
                 if (!adminconsoledisk)
                 {
-                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                    log(ThemeManager.ErrorText, "GoOS Admin: There is currently no disk loaded to the system.");
                 }
                 if (adminconsoledisk)
                 {
@@ -1198,8 +1189,8 @@ namespace GoOS
             }
             else if (input.Equals("ipconf", StringComparison.OrdinalIgnoreCase))
             {
-                log(ConsoleColor.Red, "GoOS Admin: Showing Internet Information");
-                log(ConsoleColor.Red, NetworkConfiguration.CurrentAddress.ToString());
+                log(ThemeManager.ErrorText, "GoOS Admin: Showing Internet Information");
+                log(ThemeManager.ErrorText, NetworkConfiguration.CurrentAddress.ToString());
             }
 
             //smth cool bro
@@ -1219,7 +1210,7 @@ namespace GoOS
                 //else
                 //{
                 ///    Console.Clear();
-                //    log(ConsoleColor.Red, "GoOS Admin: Password incorrect.");
+                //    log(ThemeManager.ErrorText, "GoOS Admin: Password incorrect.");
                 //}
             }
 
@@ -1254,11 +1245,11 @@ namespace GoOS
 
             else
             {
-                textcolour(ConsoleColor.Red);
+                textcolour(ThemeManager.ErrorText);
                 write("sorry, but ");
                 textcolour(ConsoleColor.Yellow);
                 write("`" + input + "` ");
-                textcolour(ConsoleColor.Red);
+                textcolour(ThemeManager.ErrorText);
                 write("is not a command");
                 textcolour(ConsoleColor.Magenta);
                 log(ConsoleColor.Green, "");
@@ -1270,7 +1261,7 @@ namespace GoOS
 
         protected void Root()
         {
-            textcolour(ConsoleColor.Red);
+            textcolour(ThemeManager.ErrorText);
             write("GoOS Admin:");
             textcolour(ConsoleColor.Gray);
             String input = Console.ReadLine();
@@ -1289,49 +1280,49 @@ namespace GoOS
                 log(ConsoleColor.White, "GOOS.DISK.RELABEL");
                 log(ConsoleColor.White, "GOOS.DISK.SCAN");
                 log(ConsoleColor.White, "GOOS.DISK.LISTALL");
-                log(ConsoleColor.Red, "GOOS.DISK.FORMAT");
+                log(ThemeManager.ErrorText, "GOOS.DISK.FORMAT");
                 log(ConsoleColor.Yellow, "Root Settings -");
                 log(ConsoleColor.White, "GOOS.ROOT.EXIT");
             }
             else if (input.Equals("goos.root.security.password.change", StringComparison.OrdinalIgnoreCase))
             {
-                log(ConsoleColor.Red, "This feature is unavailable at the current time.");
-                log(ConsoleColor.Red, "edit passwordsystem.goplexsecure in to change passwords for now.");
+                log(ThemeManager.ErrorText, "This feature is unavailable at the current time.");
+                log(ThemeManager.ErrorText, "edit passwordsystem.goplexsecure in to change passwords for now.");
 
             }
             else if (input.Equals("goos.root.security.password.remove", StringComparison.OrdinalIgnoreCase))
             {
-                log(ConsoleColor.Red, "This feature is unavailable at the current time.");
-                log(ConsoleColor.Red, "edit passwordsystem.goplexsecure in to change passwords for now.");
+                log(ThemeManager.ErrorText, "This feature is unavailable at the current time.");
+                log(ThemeManager.ErrorText, "edit passwordsystem.goplexsecure in to change passwords for now.");
             }
             else if (input.Equals("goos.security.password.change", StringComparison.OrdinalIgnoreCase))
             {
-                log(ConsoleColor.Red, "This feature is unavailable at the current time.");
-                log(ConsoleColor.Red, "edit passwordsystem.goplexsecure in to change passwords for now.");
+                log(ThemeManager.ErrorText, "This feature is unavailable at the current time.");
+                log(ThemeManager.ErrorText, "edit passwordsystem.goplexsecure in to change passwords for now.");
             }
             else if (input.Equals("goos.security.password.remove", StringComparison.OrdinalIgnoreCase))
             {
-                log(ConsoleColor.Red, "This feature is unavailable at the current time.");
-                log(ConsoleColor.Red, "edit passwordsystem.goplexsecure in to change passwords for now.");
+                log(ThemeManager.ErrorText, "This feature is unavailable at the current time.");
+                log(ThemeManager.ErrorText, "edit passwordsystem.goplexsecure in to change passwords for now.");
             }
             else if (input.Equals("goos.security.password", StringComparison.OrdinalIgnoreCase))
             {
-                log(ConsoleColor.Red, "Requesting data.");
+                log(ThemeManager.ErrorText, "Requesting data.");
                 //var grabpass = password;
-                log(ConsoleColor.Red, "Data Recieved.");
+                log(ThemeManager.ErrorText, "Data Recieved.");
                 //print(grabpass);
             }
             else if (input.Equals("goos.disk.relabel", StringComparison.OrdinalIgnoreCase))
             {
                 if (!adminconsoledisk)
                 {
-                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                    log(ThemeManager.ErrorText, "GoOS Admin: There is currently no disk loaded to the system.");
                 }
                 if (adminconsoledisk)
                 {
                     var label = FS.GetFileSystemLabel(@"0:\");
-                    log(ConsoleColor.Red, "GoOS Admin: Relabel disk");
-                    log(ConsoleColor.Red, "GoOS Admin: Press ENTER to leave the label as \"" + label + "\"");
+                    log(ThemeManager.ErrorText, "GoOS Admin: Relabel disk");
+                    log(ThemeManager.ErrorText, "GoOS Admin: Press ENTER to leave the label as \"" + label + "\"");
                     textcolour(ConsoleColor.Yellow);
                     write("New Label for 0:\\: ");
                     String inputamana = Console.ReadLine();
@@ -1346,8 +1337,8 @@ namespace GoOS
                     }
                     catch (Exception e)
                     {
-                        log(ConsoleColor.Red, "Please send the following to GoOS Developers");
-                        log(ConsoleColor.Red, e.ToString());
+                        log(ThemeManager.ErrorText, "Please send the following to GoOS Developers");
+                        log(ThemeManager.ErrorText, e.ToString());
                     }
                 }
             }
@@ -1355,26 +1346,26 @@ namespace GoOS
             {
                 if (!adminconsoledisk)
                 {
-                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                    log(ThemeManager.ErrorText, "GoOS Admin: There is currently no disk loaded to the system.");
                 }
                 if (adminconsoledisk)
                 {
                     try
                     {
-                        log(ConsoleColor.Red, "GoOS Admin: Showing Disk Information for 0:\\");
+                        log(ThemeManager.ErrorText, "GoOS Admin: Showing Disk Information for 0:\\");
                         var available_space = FS.GetAvailableFreeSpace(@"0:\");
                         var total_space = FS.GetTotalSize(@"0:\");
                         var label = FS.GetFileSystemLabel(@"0:\");
                         var fs_type = FS.GetFileSystemType(@"0:\");
-                        log(ConsoleColor.Red, "Available Free Space: " + available_space + "(" + (available_space / 1e+9) + "GiB)");
-                        log(ConsoleColor.Red, "Total Space on disk: " + total_space + "(" + (total_space / 1e+9) + "GiB)");
-                        log(ConsoleColor.Red, "Disk Label: " + label);
-                        log(ConsoleColor.Red, "File System Type: " + fs_type);
+                        log(ThemeManager.ErrorText, "Available Free Space: " + available_space + "(" + (available_space / 1e+9) + "GiB)");
+                        log(ThemeManager.ErrorText, "Total Space on disk: " + total_space + "(" + (total_space / 1e+9) + "GiB)");
+                        log(ThemeManager.ErrorText, "Disk Label: " + label);
+                        log(ThemeManager.ErrorText, "File System Type: " + fs_type);
                     }
                     catch (Exception e)
                     {
-                        log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
-                        log(ConsoleColor.Red, "GoOS Admin: For system security, we have disabled all Drive functions.");
+                        log(ThemeManager.ErrorText, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                        log(ThemeManager.ErrorText, "GoOS Admin: For system security, we have disabled all Drive functions.");
                         adminconsoledisk = false;
                     }
                 }
@@ -1383,7 +1374,7 @@ namespace GoOS
             {
                 if (!adminconsoledisk)
                 {
-                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                    log(ThemeManager.ErrorText, "GoOS Admin: There is currently no disk loaded to the system.");
                 }
                 if (adminconsoledisk)
                 {
@@ -1392,18 +1383,18 @@ namespace GoOS
                         var directory_list_directories = Directory.GetDirectories(@"0:\");
                         foreach (var folder in directory_list_directories)
                         {
-                            log(ConsoleColor.Red, folder);
+                            log(ThemeManager.ErrorText, folder);
                         }
                         var directory_list = Directory.GetFiles(@"0:\");
                         foreach (var file in directory_list)
                         {
-                            log(ConsoleColor.Red, file);
+                            log(ThemeManager.ErrorText, file);
                         }
                     }
                     catch (Exception e)
                     {
-                        log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
-                        log(ConsoleColor.Red, "GoOS Admin: For system security, we have disabled all Drive functions.");
+                        log(ThemeManager.ErrorText, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                        log(ThemeManager.ErrorText, "GoOS Admin: For system security, we have disabled all Drive functions.");
                         adminconsoledisk = false;
                     }
                 }
@@ -1412,7 +1403,7 @@ namespace GoOS
             {
                 if (!adminconsoledisk)
                 {
-                    log(ConsoleColor.Red, "GoOS Admin: There is currently no disk loaded to the system.");
+                    log(ThemeManager.ErrorText, "GoOS Admin: There is currently no disk loaded to the system.");
                 }
                 if (adminconsoledisk)
                 {
@@ -1426,7 +1417,7 @@ namespace GoOS
                             string inputer = Console.ReadLine();
                             if (inputer.Equals("yes", StringComparison.OrdinalIgnoreCase))
                             {
-                                log(ConsoleColor.Red, "ARE YOU SURE?");
+                                log(ThemeManager.ErrorText, "ARE YOU SURE?");
                                 string inputer2 = Console.ReadLine();
                                 if (inputer2.Equals("yes", StringComparison.OrdinalIgnoreCase))
                                 {
@@ -1458,16 +1449,16 @@ namespace GoOS
                             }
                             catch (Exception e)
                             {
-                                log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
-                                log(ConsoleColor.Red, "GoOS Admin: For system security, we have disabled all Drive functions.");
+                                log(ThemeManager.ErrorText, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                                log(ThemeManager.ErrorText, "GoOS Admin: For system security, we have disabled all Drive functions.");
                                 adminconsoledisk = false;
                             }
                         }
                     }
                     catch (Exception e)
                     {
-                        log(ConsoleColor.Red, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
-                        log(ConsoleColor.Red, "GoOS Admin: For system security, we have disabled all Drive functions.");
+                        log(ThemeManager.ErrorText, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                        log(ThemeManager.ErrorText, "GoOS Admin: For system security, we have disabled all Drive functions.");
                         adminconsoledisk = false;
                     }
                 }

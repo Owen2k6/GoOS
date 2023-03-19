@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using GoOS.Themes;
 
 namespace GoOS.Commands
 {
@@ -42,20 +43,20 @@ namespace GoOS.Commands
             int page = 1;
             while (true)
             {
-                
+                textcolour(ThemeManager.WindowBorder);
                 Console.WriteLine($"Page {page}:");
                 switch (page)
                 {
                     case 1:
-                        log(ConsoleColor.White, "HELP - Shows this exact page.");
-                        log(ConsoleColor.White, "RUN - Run a goexe file."); // Useless comment, ignore me or your family goes away.
-                        log(ConsoleColor.White, "delfile - Delete a file");
-                        log(ConsoleColor.White, "deldir - Delete a directory");
-                        log(ConsoleColor.White, "mkfile - Make a file");
-                        log(ConsoleColor.White, "mkdir - Make a Directory");
+                        log(ThemeManager.WindowText, "HELP - Shows this exact page.");
+                        log(ThemeManager.WindowText, "RUN - Run a goexe file."); // Useless comment, ignore me or your family goes away.
+                        log(ThemeManager.WindowText, "delfile - Delete a file");
+                        log(ThemeManager.WindowText, "deldir - Delete a directory");
+                        log(ThemeManager.WindowText, "mkfile - Make a file");
+                        log(ThemeManager.WindowText, "mkdir - Make a Directory");
                         break;
                     default:
-                        log(ConsoleColor.White, "Invalid page number.");
+                        log(ThemeManager.ErrorText, "Invalid page number.");
                         break;
                 }
 
