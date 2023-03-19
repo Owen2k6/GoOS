@@ -51,15 +51,15 @@ namespace GoOS.Commands
                 var directory_list = Directory.GetFiles(cdir3003);
                 var directory2_list = Directory.GetDirectories(cdir3003);
                 log(ConsoleColor.Gray, "\nDirectory listing at " + cdir3003 + "\n");
-                foreach (var file in directory_list)
-                {
-                    log(ConsoleColor.Gray, "<File> " + file);
-                    filecount++;
-                }
                 foreach (var directory in directory2_list)
                 {
                     log(ConsoleColor.Gray, "<Dir> " + directory);
                     foldercount++;
+                }
+                foreach (var file in directory_list)
+                {
+                    log(ConsoleColor.Gray, "<File> " + file);
+                    filecount++;
                 }
                 log(ConsoleColor.Gray, $"\nListed {filecount} files and {foldercount} folders in this directory.\n");
             }
