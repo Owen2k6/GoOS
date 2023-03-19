@@ -1,6 +1,6 @@
 # GoOS - by Goplex Studios
 
-GoOS is a simple operating system (OS) built from scratch using goCosmos (https://github.com/CosmosOS/Cosmos).
+GoOS is a simple operating system (OS) built from scratch using Cosmos (https://github.com/CosmosOS/Cosmos).
 ## Features
 
     Simple command-line interface
