@@ -419,19 +419,6 @@ namespace GoOS
                 case "settings":
                     GoOS.ControlPanel.ControlPanel.Open();
                     break;
-                case "vm":
-                    if (args.Length > 2)
-                    {
-                        log(ConsoleColor.Red, "Too many arguments");
-                        break;
-                    }
-                    if (args.Length == 1)
-                    {
-                        log(ConsoleColor.Red, "Missing arguments");
-                        break;
-                    }
-                    GoOS.Commands.Vm.command(args[1]);
-                    break;
                 case "clear":
                     Console.Clear();
                     break;
