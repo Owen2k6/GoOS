@@ -113,42 +113,46 @@ namespace GoOS
 
         #endregion
 
+        static bool running = true;
         static string usrn, cprn;
 
         public static void Open()
         {
-            DrawPage(0);
-            Console.ReadKey(true);
-            DrawPage(1);
-            DrawPage(2);
-            Sys.FileSystem.VFS.VFSManager.CreateFile(@"0:\content\sys\setup.gms");
-            var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
-            var setupstream = setupcontent.GetFileStream();
-            if (setupstream.CanWrite)
+            while (running)
             {
-                byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {usrn}\ncomputername: {cprn}");
-                setupstream.Write(textToWrite, 0, textToWrite.Length);
-                MessageBox();
-            }else
-            {
-                CP737Console.Write("╔════════════════════════ Info ════════════════════════╗", 24, 10);
-                CP737Console.Write("║                                                      ║", 24, 11);
-                CP737Console.Write("║ A serious error has occoured, setup can not continue ║", 24, 12);
-                CP737Console.Write("║                                                      ║", 24, 13);
-                CP737Console.Write("╚══════════════════════════════════════════════════════╝", 24, 14);
-                Console.ReadKey();
-                Console.Clear();
+                DrawPage(0);
+                DrawPage(1);
+                DrawPage(2);
+                Sys.FileSystem.VFS.VFSManager.CreateFile(@"0:\content\sys\setup.gms");
+                var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
+                var setupstream = setupcontent.GetFileStream();
+                if (setupstream.CanWrite)
+                {
+                    MessageBox(0);
+                    byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {usrn}\ncomputername: {cprn}");
+                    setupstream.Write(textToWrite, 0, textToWrite.Length);
+                    MessageBox(1);
+                    MessageBox(2);
+                }
+                else
+                {
+                    MessageBox(2);
+                }
             }
         }
 
+        /// <summary>
+        /// Draws the frame.
+        /// </summary>
         private static void DrawFrame()
         {
+            // Do not touch. I know what I'm doing.
             Console.Clear();
             try
             {
                 Console.BackgroundColor = Black;
-                Console.ForegroundColor = Red;
-                CP737Console.Write("╔═══════════════════════════════ GoplexOS Setup ═══════════════════════════════╗\n" +
+                Console.ForegroundColor = DarkRed;
+                CP737Console.Write("╔══════════════════════════════════════════════════════════════════════════════╗\n" +
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
@@ -172,7 +176,7 @@ namespace GoOS
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
-                                   "╚═════[ENTER - Continue]═══════════════════════════════════════════════════════");
+                                   "╚══════════════════════════════════════════════════════════════════════════════");
                 if (CP737Console.unicodeToCP737.TryGetValue('╝', out byte mapped))
                 {
                     CP737Console.console.mText[79, 24] = mapped;
@@ -181,15 +185,52 @@ namespace GoOS
             catch { }
         }
 
+        /// <summary>
+        /// Writes a title to the top of the frame.
+        /// </summary>
+        /// <param name="Title">The title to be written.</param>
+        private static void DrawTitle(string Title, int Y)
+        {
+            int OldX = Console.CursorLeft; int OldY = Console.CursorTop;
+
+            Console.SetCursorPosition(40 - (Title.Length / 2), Y);
+            Console.ForegroundColor = Red;
+            Console.Write(Title);
+            Console.SetCursorPosition(OldX, OldY);
+        }
+
+        /// <summary>
+        /// Write some controls to the bottom of the screen.
+        /// </summary>
+        /// <param name="Controls">The controls to be written.</param>
+        private static void DrawControls(string Controls)
+        {
+            int OldX = Console.CursorLeft; int OldY = Console.CursorTop;
+            Console.SetCursorPosition(6, 24);
+            foreach (char c in Controls)
+            {
+                if (c == '═')
+                {
+                    Console.CursorLeft++;
+                }
+                else
+                {
+                    Console.Write(c);
+                }
+            }
+        }
+
         private static void DrawPage(int page)
         {
             if (page == 0)
             {
                 DrawFrame();
+                DrawTitle(" GoOS Setup ", 0);
+                DrawControls("[ENTER - Continue]═══[ESC - Exit]");
                 int screenWidth = 80;
                 string welcomeText = "Welcome to GoOS";
                 string setupText = "We have some things to set up and get sorted!";
-                string continueText = "Press any key to continue...";
+                string continueText = "Press enter to continue, otherwise press escape to exit setup.";
 
                 int welcomePosition = (screenWidth / 2) - (welcomeText.Length / 2);
                 int setupPosition = (screenWidth / 2) - (setupText.Length / 2);
@@ -201,12 +242,25 @@ namespace GoOS
                 Console.SetCursorPosition(setupPosition, 3);
                 Console.Write(setupText);
 
-                Console.SetCursorPosition(continuePosition, 22);
                 Console.Write(continueText);
+
+                ConsoleKeyInfo key = Console.ReadKey(true);
+
+                while (key.Key != ConsoleKey.Enter)
+                {
+                    switch (key.Key)
+                    {
+                        case ConsoleKey.Escape:
+                            running = false;
+                            Console.Clear();
+                            break;
+                    }
+                }
             }
             else if (page == 1)
             {
                 DrawFrame();
+                DrawTitle(" Usage Agreements - GoOS Setup ", 0);
                 int screenWidth = 80;
                 string title = "Usage Agreements";
                 string q = "While nobody reads them, we want you to know some basic guidelines.";
@@ -250,18 +304,18 @@ namespace GoOS
             }
             else if (page == 2)
             {
-
                 DrawFrame();
+                DrawTitle(" Accounts - GoOS Setup ", 0);
                 int screenWidth = 80;
                 string title = "Your Account";
-                string q = "There is more planned in the future, however";
-                string w = "We only need 2 things from you. Username and Computername.";
+                string q = "There is more planned in the future, however we only";
+                string w = "need 2 things from you. Your name and your computer's name.";
                 string e = "";
                 string r = "";
                 string t = "";
                 string y = "";
-                string u = "Username:";
-                string i = "Computer Name:";
+                string u = "Username: ";
+                string i = "Computer Name: ";
 
                 int titlePos = (screenWidth / 2) - (title.Length / 2);
                 int qPos = (screenWidth / 2) - (q.Length / 2);
@@ -279,28 +333,68 @@ namespace GoOS
                 Console.Write(q);
                 Console.SetCursorPosition (wPos, 4);
                 Console.Write(w);
-                Console.SetCursorPosition (30, 6);
+
+
+                Console.SetCursorPosition (wPos, 6);
                 Console.Write(u);
-                Console.SetCursorPosition (25, 6);
+                Console.SetCursorPosition(wPos, 8);
                 Console.Write(i);
-                Console.SetCursorPosition(30, 12);
-                Console.Write("Username: ");
+
+                Console.ForegroundColor = Gray;
+                Console.SetCursorPosition(wPos + 10, 6);
                 usrn = Console.ReadLine();
-                Console.SetCursorPosition(25, 13);
-                Console.Write("Computer Name: ");
+                Console.SetCursorPosition(wPos + 15, 8);
                 cprn = Console.ReadLine();
             }
         }
 
-        private static void MessageBox()
+        private static void MessageBox(int message)
         {
-            CP737Console.Write("╔════════════════════════ Info ════════════════════════╗", 24, 10);
-            CP737Console.Write("║                                                      ║", 24, 11);
-            CP737Console.Write("║ GoplexOS has saved all of your settings to the disk. ║", 24, 12);
-            CP737Console.Write("║                                                      ║", 24, 13);
-            CP737Console.Write("╚══════════════════════════════════════════════════════╝", 24, 14);
-            Console.ReadKey();
-            Console.Clear();
+            Console.ForegroundColor = DarkRed;
+
+            if (message == 0)
+            {
+                CP737Console.Write("╔════════════════════╗", 29, 10);
+                CP737Console.Write("║                    ║", 29, 11);
+                CP737Console.Write("║                    ║", 29, 12);
+                CP737Console.Write("║                    ║", 29, 13);
+                CP737Console.Write("╚════════════════════╝", 29, 14);
+
+                Console.ForegroundColor = Red;
+                DrawTitle(" Info ", 10);
+                Console.SetCursorPosition(31, 12);
+                Console.Write("Saving settings...");
+            }
+            else if (message == 1)
+            {
+                CP737Console.Write("╔════════════════════════════════════════╗", 19, 10);
+                CP737Console.Write("║                                        ║", 19, 11);
+                CP737Console.Write("║                                        ║", 19, 12);
+                CP737Console.Write("║                                        ║", 19, 13);
+                CP737Console.Write("╚════════════════════════════════════════╝", 19, 14);
+
+                Console.ForegroundColor = Red;
+                DrawTitle(" Info ", 10);
+                Console.SetCursorPosition(21, 12);
+                Console.Write("Settings have been saved successfully!");
+                Console.ReadKey();
+                Console.Clear();
+            }
+            else if (message == 2)
+            {
+                CP737Console.Write("╔══════════════════════════════════════════════════════╗", 12, 10);
+                CP737Console.Write("║                                                      ║", 12, 11);
+                CP737Console.Write("║                                                      ║", 12, 12);
+                CP737Console.Write("║                                                      ║", 12, 13);
+                CP737Console.Write("╚══════════════════════════════════════════════════════╝", 12, 14);
+
+                Console.ForegroundColor = Red;
+                DrawTitle(" Info ", 10);
+                Console.SetCursorPosition(14, 12);
+                Console.Write("A serious error has occoured, setup cannot continue.");
+                Console.ReadKey();
+                Console.Clear();
+            }
         }
     }
 }
