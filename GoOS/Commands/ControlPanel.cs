@@ -255,7 +255,7 @@ namespace GoOS.ControlPanel
             Console.SetCursorPosition(40 - (w.Length / 2), 4);
             Console.Write(w);
 
-            MkButton("Change Computer Name", 15, 11, Cyan, Gray);
+            MkButton("Change Computer Name", 15, 11, Cyan, Black);
             MkButton("Change Username", 44, 11, Black, Cyan);
             MkButton("Reset System", 33, 14, Black, Cyan);
         }
