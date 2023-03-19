@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using static System.ConsoleColor;
 using Sys = Cosmos.System;
 using GoOS.Virtualisation;
-using static ChaOS.Core;
+using Cosmos.System.FileSystem.VFS;
 
 namespace GoOS.Virtualisation
 {
@@ -19,35 +19,9 @@ namespace GoOS.Virtualisation
     internal class Interface
     {
         public static bool runmode = false;
-
-        public const string ver = "Release 1.2";
-        public const string copyright = "Copyright (c) 2022 Goplex Studios";
-
-        public static string username = "usr";
-
-        public static string input;
-        public static string inputBeforeLower;
-        public static string inputCapitalized;
-
         public static void boot(string rootpath)
         {
             //BeforeRun bullshit goes here
-            try
-            {
-                //log("Starting up ChaOS...");
-                //InitFS(fs);
-                //LoadSettings();
-
-                Console.Clear();
-                log("Welcome to...\n");
-                clog("  ______   __                   ______    ______  \n /      \\ |  \\                 /      \\  /      \\ \n|  $$$$$$\\| $$____    ______  |  $$$$$$\\|  $$$$$$\\\n| $$   \\$$| $$    \\  |      \\ | $$  | $$| $$___\\$$\n| $$      | $$$$$$$\\  \\$$$$$$\\| $$  | $$ \\$$    \\ \n| $$   __ | $$  | $$ /      $$| $$  | $$ _\\$$$$$$\\\n| $$__/  \\| $$  | $$|  $$$$$$$| $$__/ $$|  \\__| $$\n \\$$    $$| $$  | $$ \\$$    $$ \\$$    $$ \\$$    $$\n  \\$$$$$$  \\$$   \\$$  \\$$$$$$$  \\$$$$$$   \\$$$$$$ ", DarkGreen);
-                log("\n" + ver + "\n" + copyright + "\nType \"help\" to get started!");
-                //if (!disk) log("No hard drive detected, ChaOS will continue without disk support.");
-                log();
-            }
-            catch (Exception ex) { Crash(ex, true); }
-            runmode = true;
-            run(rootpath);
         }
         public static void run(string rtp) {
             
