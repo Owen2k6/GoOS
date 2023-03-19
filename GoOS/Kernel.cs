@@ -1,4 +1,4 @@
-﻿using Cosmos.HAL;
+using Cosmos.HAL;
 using Cosmos.System.Graphics;
 using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4;
