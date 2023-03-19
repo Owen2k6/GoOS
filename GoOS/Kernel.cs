@@ -149,7 +149,14 @@ namespace GoOS
             }
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {
-                Sys.FileSystem.VFS.VFSManager.CreateFile(@"0:\content\sys\version.gms");
+                Console.WriteLine("GoOS is performing first boot...");
+                Console.WriteLine("initialising file system...");
+                Console.WriteLine("This may take some time.");
+                System.IO.File.Create(@"0:\content\sys\version.gms");
+                System.IO.File.Create(@"0:\content\sys\userinfo.gms");
+                System.IO.File.Create(@"0:\content\sys\option-showprotectedfiles.gms");
+                System.IO.File.Create(@"0:\content\sys\option-editprotectedfiles.gms");
+                System.IO.File.Create(@"0:\content\sys\option-deleteprotectedfiles.gms");
                 var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\version.gms");
                 var setupstream = setupcontent.GetFileStream();
                 if (setupstream.CanWrite)
@@ -180,9 +187,7 @@ namespace GoOS
                 textcolour(ConsoleColor.White);
                 if (!File.Exists(@"0:\content\sys\setup.gms"))
                 {
-                    Console.WriteLine("GoOS is performing first boot...");
-                    Console.WriteLine("initialising file system...");
-                    Console.WriteLine("This may take some time.");
+                    
                     OOBE.Open();
 
 
@@ -405,6 +410,14 @@ namespace GoOS
                     Directory.SetCurrentDirectory(roota);
                     break;
                 case "dir":
+                    if (args.Length > 1)
+                    {
+                        log(ConsoleColor.Red, "Too many arguments");
+                        break;
+                    }
+                    GoOS.Commands.Dir.Run();
+                    break;
+                case "ls":
                     if (args.Length > 1)
                     {
                         log(ConsoleColor.Red, "Too many arguments");

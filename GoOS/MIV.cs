@@ -276,6 +276,9 @@ namespace GoOS
             Console.WriteLine("Enter file's filename to open:");
             Console.WriteLine("If the specified file does not exist, it will be created.");
             Kernel.file = Console.ReadLine();
+            if ( Kernel.file.EndsWith(".gms")) {
+                return;
+            }
             try
             {
                 if (File.Exists(cdir + @"\" + Kernel.file))
