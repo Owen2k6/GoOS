@@ -6,6 +6,8 @@ using Sys = Cosmos.System;
 using Console = System.Console;
 using static GoOS.Themes.ThemeManager;
 using Cosmos.System.FileSystem;
+using Cosmos.System;
+using System.Threading;
 
 namespace GoOS.Settings
 {
@@ -159,6 +161,7 @@ namespace GoOS.Settings
             Run();
         }
 
+        public static bool DontTouch = true;
         /// <summary>
         /// Draws the frame.
         /// </summary>
@@ -170,31 +173,46 @@ namespace GoOS.Settings
             {
                 Console.BackgroundColor = Black;
                 Console.ForegroundColor = WindowBorder;
-                CP737Console.Write("╔══════════════════════════════════════════════════════════════════════════════╗\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
+                CP737Console.Write("╔════════════╦═════════════════════════════════════════════════════════════════╗\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "║            ║                                                                 ║\n" +
+                                   "╠════════════╩═════════════════════════════════════════════════════════════════╣\n" +
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
                                    "║                                                                              ║\n" +
                                    "╚══════════════════════════════════════════════════════════════════════════════");
+                Console.SetCursorPosition(2, 19);
+                Console.ForegroundColor = Yellow;
+                //Console.Write("Arrow keys");
+                Console.SetCursorPosition(2, 22);
+                if (DontTouch)
+                {
+                    MkButton("General", 2, 22, Cyan, Black);
+                    MkButton("Personalisation", 10, 22, Black, Cyan);
+                    MkButton("Advanced", 26, 22, Black, Cyan);
+                    MkButton("About", 2, 1, Cyan, Black);
+                    MkButton("Support", 2, 2, Black, Cyan);
+                    DontTouch = false;
+                }
+                //Console.Write("Tab");
+
                 if (CP737Console.unicodeToCP737.TryGetValue('╝', out byte mapped))
                 {
                     CP737Console.console.mText[79, 24] = mapped;
@@ -244,21 +262,21 @@ namespace GoOS.Settings
         private static void DrawMainText()
         {
             Console.ForegroundColor = WindowText;
-            string title = "System information:";
-            string q = "Total Storage (mb): " + (int)Kernel.FS.GetTotalSize(@"0:\") / 1e6;
-            string w = "Total Memory (mb): " + Cosmos.Core.CPU.GetAmountOfRAM();
+            //string title = "System information:";
+            //string q = "Total Storage (mb): " + (int)Kernel.FS.GetTotalSize(@"0:\") / 1e6;
+            //string w = "Total Memory (mb): " + Cosmos.Core.CPU.GetAmountOfRAM();
 
             // We already know that screenWidth is going to be 40, so we set it directly so its faster.
-            Console.SetCursorPosition(40 - title.Length / 2, 2);
-            Console.Write(title);
-            Console.SetCursorPosition(40 - q.Length / 2, 3);
-            Console.Write(q);
-            Console.SetCursorPosition(40 - w.Length / 2, 4);
-            Console.Write(w);
+            //Console.SetCursorPosition(40 - title.Length / 2, 2);
+            //Console.Write(title);
+            //Console.SetCursorPosition(40 - q.Length / 2, 3);
+            //Console.Write(q);
+            //Console.SetCursorPosition(40 - w.Length / 2, 4);
+            //Console.Write(w);
 
-            MkButton("Change Computer Name", 15, 11, WindowText, Default);
-            MkButton("Change Username", 44, 11, Black, WindowText);
-            MkButton("Reset System", 33, 14, Black, WindowText);
+            //MkButton("Change Computer Name", 15, 11, WindowText, Default);
+            //MkButton("Change Username", 44, 11, Black, WindowText);
+            //MkButton("Reset System", 33, 14, Black, WindowText);
         }
 
         /// <summary>
@@ -302,8 +320,10 @@ namespace GoOS.Settings
         private static void Run()
         {
             bool running = true;
-            string menu = "main";
+            string menu = "General";
             int selected = 1;
+            int selected2 = 1;
+
 
             DrawMainText();
 
@@ -311,8 +331,8 @@ namespace GoOS.Settings
             {
                 if (menu == "main")
                 {
-                    DrawTitle(" Settings ", 0);
-                    DrawControls("[ARROWS - Selection]═══[ESC - Exit]═══[ENTER - Continue]");
+                    //DrawTitle(" Settings ", 0);
+                    //DrawControls("[ARROWS - Selection]═══[ESC - Exit]═══[ENTER - Continue]");
 
                     ConsoleKeyInfo key = Console.ReadKey(true);
 
@@ -385,6 +405,244 @@ namespace GoOS.Settings
                             break;
                         case ConsoleKey.Escape:
                             running = false;
+                            break;
+                    }
+                }
+                else if (menu == "General")
+                {
+                    // ID 4: General
+                    // ID 5: Personalisation
+                    // ID 6: Advanced
+
+
+
+                    //MkButton("General", 2, 22, Cyan, Black);
+                    //MkButton("Personalisation", 10, 22, Black, Cyan);
+                    //MkButton("Advanced", 26, 22, Black, Cyan);
+
+                    if (selected2 == 1)
+                    {
+                        MkButton("About", 2, 1, Cyan, Black);
+                        MkButton("Support", 2, 2, Black, Cyan);
+                    }
+                    else if (selected2 == 2)
+                    {
+                        MkButton("About", 2, 1, Black, Cyan);
+                        MkButton("Support", 2, 2, Cyan, Black);
+                    }
+                    Console.ForegroundColor = Black; Console.BackgroundColor = Black;
+                    Console.SetCursorPosition(1, 3);
+                    Console.Write("            ");
+                    Console.SetCursorPosition(1, 4);
+                    Console.Write("            ");
+                    Console.SetCursorPosition(1, 5);
+                    Console.Write("            ");
+                    Console.ForegroundColor = Green; Console.BackgroundColor = Black;
+                    ConsoleKeyInfo key = Console.ReadKey(true); 
+                    if (selected == 0)
+                    {
+                        selected = 1;
+                    }
+                    if (selected > 3)
+                    {
+                        selected = 3;
+                    }
+                    if (selected2 == 0)
+                    {
+                        selected2 = 1;
+                    }
+                    if (selected2 > 2)
+                    {
+                        selected2 = 2;
+                    }
+                    switch (key.Key)
+                    {
+
+                        case ConsoleKey.Tab:
+                            // xrc2. This comment is for you.
+                            // DO NOT TOUCH THE CODE DIRECLY BELOW THIS COMMENT, IF YOU DO IT WILL BREAK THE SETINGS MENU. YOU HAVE BEEN WARNED.
+                            if (selected == 1) { selected = 2; }
+                            else if (selected == 2) { selected = 3; }
+                            else if (selected == 3) { selected = 1; }
+
+                            if (selected == 1)
+                            {
+                                MkButton("General", 2, 22, Cyan, Black);
+                                MkButton("Personalisation", 10, 22, Black, Cyan);
+                                MkButton("Advanced", 26, 22, Black, Cyan);
+                                menu = "General";
+                            }
+                            if (selected == 2)
+                            {
+                                MkButton("General", 2, 22, Black, Cyan);
+                                MkButton("Personalisation", 10, 22, Cyan, Black);
+                                MkButton("Advanced", 26, 22, Black, Cyan);
+                                menu = "Personalisation";
+                            }
+                            if (selected == 3)
+                            {
+                                MkButton("General", 2, 22, Black, Cyan);
+                                MkButton("Personalisation", 10, 22, Black, Cyan);
+                                MkButton("Advanced", 26, 22, Cyan, Black);
+                                menu = "Advanced";
+                            }
+                            break;
+                        case ConsoleKey.UpArrow:
+                            if (selected2 == 1) { selected2 = 2; }
+                            else if (selected2 == 2) { selected2 = 1; }
+                            break;
+                        case ConsoleKey.DownArrow:
+                            if (selected2 == 2) { selected2 = 1; }
+                            else if (selected2 == 1) { selected2 = 2; }
+
+                            
+                            break;
+
+                    }
+
+                    if (selected2 == 1)
+                    {
+                        MkButton("About", 2, 1, Cyan, Black);
+                        MkButton("Support", 2, 2, Black, Cyan);
+                    }
+                    else if (selected2 == 2)
+                    {
+                        MkButton("About", 2, 1, Black, Cyan);
+                        MkButton("Support", 2, 2, Cyan, Black);
+                    }
+                }
+                else if (menu == "Personalisation")
+                {
+                    // ID 4: General
+                    // ID 5: Personalisation
+                    // ID 6: Advanced
+
+                    
+
+                    if (selected == 0)
+                    {
+                        selected = +1;
+                    }
+                    if (selected > 3)
+                    {
+                        selected = selected - 1;
+                    }
+
+                    //MkButton("General", 2, 22, Black, Cyan);
+                    //MkButton("Personalisation", 10, 22, Cyan, Black);
+                    //MkButton("Advanced", 26, 22, Black, Cyan);
+
+                    Console.SetCursorPosition(1, 1);
+                    Console.ForegroundColor = Black; Console.BackgroundColor = Black;
+                    Console.Write("           ");
+                    Console.SetCursorPosition(1, 2);
+                    Console.Write("           ");
+                    Console.SetCursorPosition(1, 3);
+                    Console.Write("           ");
+                    Console.SetCursorPosition(1, 4);
+                    Console.Write("           ");
+                    Console.SetCursorPosition(1, 5);
+                    Console.Write("           ");
+                    Console.ForegroundColor = Green;
+                    ConsoleKeyInfo key = Console.ReadKey(true);
+                    switch (key.Key)
+                    {
+
+                        case ConsoleKey.Tab:
+                            // xrc2. This comment is for you (again).
+                            // DO NOT TOUCH THE CODE DIRECLY BELOW THIS COMMENT, IF YOU DO IT WILL BREAK THE SETINGS MENU. YOU HAVE BEEN WARNED.
+                            if (selected == 1) { selected = 2; }
+                            else if (selected == 2) { selected = 3; }
+                            else if (selected == 3) { selected = 1; }
+
+                            if (selected == 1)
+                            {
+                                MkButton("General", 2, 22, Cyan, Black);
+                                MkButton("Personalisation", 10, 22, Black, Cyan);
+                                MkButton("Advanced", 26, 22, Black, Cyan);
+                                menu = "General";
+                            }
+                            if (selected == 2)
+                            {
+                                MkButton("General", 2, 22, Black, Cyan);
+                                MkButton("Personalisation", 10, 22, Cyan, Black);
+                                MkButton("Advanced", 26, 22, Black, Cyan);
+                                menu = "Personalisation";
+                            }
+                            if (selected == 3)
+                            {
+                                MkButton("General", 2, 22, Black, Cyan);
+                                MkButton("Personalisation", 10, 22, Black, Cyan);
+                                MkButton("Advanced", 26, 22, Cyan, Black);
+                                menu = "Advanced";
+                            }
+                            break;
+                    }
+                }
+                else if (menu == "Advanced")
+                {
+                    // ID 4: General
+                    // ID 5: Personalisation
+                    // ID 6: Advanced
+
+                    
+
+                    if (selected == 0)
+                    {
+                        selected = +1;
+                    }
+                    if (selected > 3)
+                    {
+                        selected = selected - 1;
+                    }
+
+                    //MkButton("General", 2, 22, Black, Cyan);
+                    //MkButton("Personalisation", 10, 22, Black, Cyan);
+                    //MkButton("Advanced", 26, 22, Cyan, Black);
+
+                    Console.SetCursorPosition(1, 1);
+                    Console.ForegroundColor = Black; Console.BackgroundColor = Black;
+                    Console.Write("           ");
+                    Console.SetCursorPosition(2, 2);
+                    Console.Write("           ");
+                    Console.SetCursorPosition(2, 3);
+                    Console.Write("           ");
+                    Console.SetCursorPosition(1, 4);
+                    Console.Write("           ");
+                    Console.SetCursorPosition(1, 5);
+                    Console.Write("           ");
+                    Console.ForegroundColor = Green;
+                    ConsoleKeyInfo key = Console.ReadKey(true);
+                    switch (key.Key)
+                    {
+                        case ConsoleKey.Tab:
+                            // xrc2. This comment is for you (again x2).
+                            // DO NOT TOUCH THE CODE DIRECLY BELOW THIS COMMENT, IF YOU DO IT WILL BREAK THE SETINGS MENU. YOU HAVE BEEN WARNED.
+                            if (selected == 1) { selected = 2; }
+                            else if (selected == 2) { selected = 3; }
+                            else if (selected == 3) { selected = 1; }
+
+                            if (selected == 1)
+                            {
+                                MkButton("General", 2, 22, Cyan, Black);
+                                MkButton("Personalisation", 10, 22, Black, Cyan);
+                                MkButton("Advanced", 26, 22, Black, Cyan);
+                                menu = "General";
+                            }
+                            if (selected == 2)
+                            {
+                                MkButton("General", 2, 22, Black, Cyan);
+                                MkButton("Personalisation", 10, 22, Cyan, Black);
+                                MkButton("Advanced", 26, 22, Black, Cyan);
+                                menu = "Personalisation";
+                            }
+                            if (selected == 3)
+                            {
+                                MkButton("General", 2, 22, Black, Cyan);
+                                MkButton("Personalisation", 10, 22, Black, Cyan);
+                                MkButton("Advanced", 26, 22, Cyan, Black);
+                                menu = "Advanced";
+                            }
                             break;
                     }
                 }
@@ -545,26 +803,26 @@ namespace GoOS.Settings
                             Kernel.FS.Disks[0].FormatPartition(0, "FAT32", false);
 
                             DrawFrame();
-                             screenWidth = 80;
-                             title = "System reset complete.";
-                             q = "GoOS is now back to factory default settings.";
-                             w = "The system will no longer operate until restarted.";
-                             e = "";
-                             r = "Once restarted, the GoOS setup will launch instantly.";
-                             t = "";
-                             y = "";
-                             u = "";
-                             i = "";
+                            screenWidth = 80;
+                            title = "System reset complete.";
+                            q = "GoOS is now back to factory default settings.";
+                            w = "The system will no longer operate until restarted.";
+                            e = "";
+                            r = "Once restarted, the GoOS setup will launch instantly.";
+                            t = "";
+                            y = "";
+                            u = "";
+                            i = "";
 
-                             titlePos = screenWidth / 2 - title.Length / 2;
-                             qPos = screenWidth / 2 - q.Length / 2;
-                             wPos = screenWidth / 2 - w.Length / 2;
-                             ePos = screenWidth / 2 - e.Length / 2;
-                             rPos = screenWidth / 2 - r.Length / 2;
-                             tPos = screenWidth / 2 - t.Length / 2;
-                             yPos = screenWidth / 2 - y.Length / 2;
-                             uPos = screenWidth / 2 - u.Length / 2;
-                             iPos = screenWidth / 2 - i.Length / 2;
+                            titlePos = screenWidth / 2 - title.Length / 2;
+                            qPos = screenWidth / 2 - q.Length / 2;
+                            wPos = screenWidth / 2 - w.Length / 2;
+                            ePos = screenWidth / 2 - e.Length / 2;
+                            rPos = screenWidth / 2 - r.Length / 2;
+                            tPos = screenWidth / 2 - t.Length / 2;
+                            yPos = screenWidth / 2 - y.Length / 2;
+                            uPos = screenWidth / 2 - u.Length / 2;
+                            iPos = screenWidth / 2 - i.Length / 2;
 
                             Console.SetCursorPosition(titlePos, 2);
                             Console.Write(title);
