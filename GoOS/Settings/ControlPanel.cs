@@ -204,11 +204,11 @@ namespace GoOS.Settings
                 Console.SetCursorPosition(2, 22);
                 if (DontTouch)
                 {
-                    MkButton("General", 2, 22, Cyan, Black);
-                    MkButton("Personalisation", 10, 22, Black, Cyan);
-                    MkButton("Advanced", 26, 22, Black, Cyan);
-                    MkButton("About", 2, 1, Cyan, Black);
-                    MkButton("Support", 2, 2, Black, Cyan);
+                    MkButton("General", 2, 22, WindowText, Black);
+                    MkButton("Personalisation", 10, 22, Black, WindowText);
+                    MkButton("Advanced", 26, 22, Black, WindowText);
+                    MkButton("About", 2, 1, WindowText, Black);
+                    MkButton("Support", 2, 2, Black, WindowText);
                     DontTouch = false;
                 }
                 //Console.Write("Tab");
@@ -329,7 +329,7 @@ namespace GoOS.Settings
 
             while (running)
             {
-                if (menu == "main")
+                /*if (menu == "main")
                 {
                     //DrawTitle(" Settings ", 0);
                     //DrawControls("[ARROWS - Selection]═══[ESC - Exit]═══[ENTER - Continue]");
@@ -407,8 +407,11 @@ namespace GoOS.Settings
                             running = false;
                             break;
                     }
-                }
-                else if (menu == "General")
+
+                Won't need this old code anymore
+
+                }*/
+                if (menu == "General")
                 {
                     // ID 4: General
                     // ID 5: Personalisation
@@ -416,19 +419,19 @@ namespace GoOS.Settings
 
 
 
-                    //MkButton("General", 2, 22, Cyan, Black);
-                    //MkButton("Personalisation", 10, 22, Black, Cyan);
-                    //MkButton("Advanced", 26, 22, Black, Cyan);
+                    //MkButton("General", 2, 22, WindowText, Black);
+                    //MkButton("Personalisation", 10, 22, Black, WindowText);
+                    //MkButton("Advanced", 26, 22, Black, WindowText);
 
                     if (selected2 == 1)
                     {
-                        MkButton("About", 2, 1, Cyan, Black);
-                        MkButton("Support", 2, 2, Black, Cyan);
+                        MkButton("About", 2, 1, WindowText, Black);
+                        MkButton("Support", 2, 2, Black, WindowText);
                     }
                     else if (selected2 == 2)
                     {
-                        MkButton("About", 2, 1, Black, Cyan);
-                        MkButton("Support", 2, 2, Cyan, Black);
+                        MkButton("About", 2, 1, Black, WindowText);
+                        MkButton("Support", 2, 2, WindowText, Black);
                     }
                     Console.ForegroundColor = Black; Console.BackgroundColor = Black;
                     Console.SetCursorPosition(1, 3);
@@ -437,7 +440,7 @@ namespace GoOS.Settings
                     Console.Write("            ");
                     Console.SetCursorPosition(1, 5);
                     Console.Write("            ");
-                    Console.ForegroundColor = Green; Console.BackgroundColor = Black;
+                    Console.ForegroundColor = WindowBorder; Console.BackgroundColor = Black;
                     ConsoleKeyInfo key = Console.ReadKey(true); 
                     if (selected == 0)
                     {
@@ -457,7 +460,6 @@ namespace GoOS.Settings
                     }
                     switch (key.Key)
                     {
-
                         case ConsoleKey.Tab:
                             // xrc2. This comment is for you.
                             // DO NOT TOUCH THE CODE DIRECLY BELOW THIS COMMENT, IF YOU DO IT WILL BREAK THE SETINGS MENU. YOU HAVE BEEN WARNED.
@@ -467,23 +469,23 @@ namespace GoOS.Settings
 
                             if (selected == 1)
                             {
-                                MkButton("General", 2, 22, Cyan, Black);
-                                MkButton("Personalisation", 10, 22, Black, Cyan);
-                                MkButton("Advanced", 26, 22, Black, Cyan);
+                                MkButton("General", 2, 22, WindowText, Black);
+                                MkButton("Personalisation", 10, 22, Black, WindowText);
+                                MkButton("Advanced", 26, 22, Black, WindowText);
                                 menu = "General";
                             }
                             if (selected == 2)
                             {
-                                MkButton("General", 2, 22, Black, Cyan);
-                                MkButton("Personalisation", 10, 22, Cyan, Black);
-                                MkButton("Advanced", 26, 22, Black, Cyan);
+                                MkButton("General", 2, 22, Black, WindowText);
+                                MkButton("Personalisation", 10, 22, WindowText, Black);
+                                MkButton("Advanced", 26, 22, Black, WindowText);
                                 menu = "Personalisation";
                             }
                             if (selected == 3)
                             {
-                                MkButton("General", 2, 22, Black, Cyan);
-                                MkButton("Personalisation", 10, 22, Black, Cyan);
-                                MkButton("Advanced", 26, 22, Cyan, Black);
+                                MkButton("General", 2, 22, Black, WindowText);
+                                MkButton("Personalisation", 10, 22, Black, WindowText);
+                                MkButton("Advanced", 26, 22, WindowText, Black);
                                 menu = "Advanced";
                             }
                             break;
@@ -494,21 +496,42 @@ namespace GoOS.Settings
                         case ConsoleKey.DownArrow:
                             if (selected2 == 2) { selected2 = 1; }
                             else if (selected2 == 1) { selected2 = 2; }
-
-                            
                             break;
-
                     }
 
                     if (selected2 == 1)
                     {
-                        MkButton("About", 2, 1, Cyan, Black);
-                        MkButton("Support", 2, 2, Black, Cyan);
+                        MkButton("About", 2, 2, WindowText, Black);
+                        MkButton("Support", 2, 3, Black, WindowText);
+
+                        textcolour(WindowText);
+                        highlightcolour(Black);
+                        Console.SetCursorPosition(15, 2);
+                        Console.Write("GoOS");
+                        Console.SetCursorPosition(15, 3);
+                        Console.Write("Version " + Kernel.version);
+                        Console.SetCursorPosition(15, 5);
+                        Console.Write("GoOS is a free and open source software designed with GoCosmos.");
+                        Console.SetCursorPosition(15, 6);
+                        Console.Write("If you paid for this software, you should issue a refound");
+                        Console.SetCursorPosition(15, 7);
+                        Console.Write("request or report to proper authorities.");
                     }
                     else if (selected2 == 2)
                     {
-                        MkButton("About", 2, 1, Black, Cyan);
-                        MkButton("Support", 2, 2, Cyan, Black);
+                        MkButton("About", 2, 2, Black, WindowText);
+                        MkButton("Support", 2, 3, WindowText, Black);
+
+                        textcolour(WindowText);
+                        highlightcolour(Black);
+                        Console.SetCursorPosition(15, 2);
+                        Console.Write("GoOS Suport");
+                        Console.SetCursorPosition(15, 4);
+                        Console.Write("For support, please open a ticket in the Discord server.");
+                        Console.SetCursorPosition(15, 6);
+                        Console.Write("For reporting an issue, please report the issue in the issues");
+                        Console.SetCursorPosition(15, 7);
+                        Console.Write("tab in the Github repository.");
                     }
                 }
                 else if (menu == "Personalisation")
@@ -528,9 +551,9 @@ namespace GoOS.Settings
                         selected = selected - 1;
                     }
 
-                    //MkButton("General", 2, 22, Black, Cyan);
-                    //MkButton("Personalisation", 10, 22, Cyan, Black);
-                    //MkButton("Advanced", 26, 22, Black, Cyan);
+                    //MkButton("General", 2, 22, Black, WindowText);
+                    //MkButton("Personalisation", 10, 22, WindowText, Black);
+                    //MkButton("Advanced", 26, 22, Black, WindowText);
 
                     Console.SetCursorPosition(1, 1);
                     Console.ForegroundColor = Black; Console.BackgroundColor = Black;
@@ -543,7 +566,7 @@ namespace GoOS.Settings
                     Console.Write("           ");
                     Console.SetCursorPosition(1, 5);
                     Console.Write("           ");
-                    Console.ForegroundColor = Green;
+                    Console.ForegroundColor = WindowBorder;
                     ConsoleKeyInfo key = Console.ReadKey(true);
                     switch (key.Key)
                     {
@@ -557,23 +580,23 @@ namespace GoOS.Settings
 
                             if (selected == 1)
                             {
-                                MkButton("General", 2, 22, Cyan, Black);
-                                MkButton("Personalisation", 10, 22, Black, Cyan);
-                                MkButton("Advanced", 26, 22, Black, Cyan);
+                                MkButton("General", 2, 22, WindowText, Black);
+                                MkButton("Personalisation", 10, 22, Black, WindowText);
+                                MkButton("Advanced", 26, 22, Black, WindowText);
                                 menu = "General";
                             }
                             if (selected == 2)
                             {
-                                MkButton("General", 2, 22, Black, Cyan);
-                                MkButton("Personalisation", 10, 22, Cyan, Black);
-                                MkButton("Advanced", 26, 22, Black, Cyan);
+                                MkButton("General", 2, 22, Black, WindowText);
+                                MkButton("Personalisation", 10, 22, WindowText, Black);
+                                MkButton("Advanced", 26, 22, Black, WindowText);
                                 menu = "Personalisation";
                             }
                             if (selected == 3)
                             {
-                                MkButton("General", 2, 22, Black, Cyan);
-                                MkButton("Personalisation", 10, 22, Black, Cyan);
-                                MkButton("Advanced", 26, 22, Cyan, Black);
+                                MkButton("General", 2, 22, Black, WindowText);
+                                MkButton("Personalisation", 10, 22, Black, WindowText);
+                                MkButton("Advanced", 26, 22, WindowText, Black);
                                 menu = "Advanced";
                             }
                             break;
@@ -596,9 +619,9 @@ namespace GoOS.Settings
                         selected = selected - 1;
                     }
 
-                    //MkButton("General", 2, 22, Black, Cyan);
-                    //MkButton("Personalisation", 10, 22, Black, Cyan);
-                    //MkButton("Advanced", 26, 22, Cyan, Black);
+                    //MkButton("General", 2, 22, Black, WindowText);
+                    //MkButton("Personalisation", 10, 22, Black, WindowText);
+                    //MkButton("Advanced", 26, 22, WindowText, Black);
 
                     Console.SetCursorPosition(1, 1);
                     Console.ForegroundColor = Black; Console.BackgroundColor = Black;
@@ -611,7 +634,7 @@ namespace GoOS.Settings
                     Console.Write("           ");
                     Console.SetCursorPosition(1, 5);
                     Console.Write("           ");
-                    Console.ForegroundColor = Green;
+                    Console.ForegroundColor = WindowBorder;
                     ConsoleKeyInfo key = Console.ReadKey(true);
                     switch (key.Key)
                     {
@@ -624,23 +647,23 @@ namespace GoOS.Settings
 
                             if (selected == 1)
                             {
-                                MkButton("General", 2, 22, Cyan, Black);
-                                MkButton("Personalisation", 10, 22, Black, Cyan);
-                                MkButton("Advanced", 26, 22, Black, Cyan);
+                                MkButton("General", 2, 22, WindowText, Black);
+                                MkButton("Personalisation", 10, 22, Black, WindowText);
+                                MkButton("Advanced", 26, 22, Black, WindowText);
                                 menu = "General";
                             }
                             if (selected == 2)
                             {
-                                MkButton("General", 2, 22, Black, Cyan);
-                                MkButton("Personalisation", 10, 22, Cyan, Black);
-                                MkButton("Advanced", 26, 22, Black, Cyan);
+                                MkButton("General", 2, 22, Black, WindowText);
+                                MkButton("Personalisation", 10, 22, WindowText, Black);
+                                MkButton("Advanced", 26, 22, Black, WindowText);
                                 menu = "Personalisation";
                             }
                             if (selected == 3)
                             {
-                                MkButton("General", 2, 22, Black, Cyan);
-                                MkButton("Personalisation", 10, 22, Black, Cyan);
-                                MkButton("Advanced", 26, 22, Cyan, Black);
+                                MkButton("General", 2, 22, Black, WindowText);
+                                MkButton("Personalisation", 10, 22, Black, WindowText);
+                                MkButton("Advanced", 26, 22, WindowText, Black);
                                 menu = "Advanced";
                             }
                             break;
