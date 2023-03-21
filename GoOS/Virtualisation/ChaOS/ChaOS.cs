@@ -17,6 +17,8 @@ using static GoOS.Kernel;
 using GoOS.Commands;
 using GoOS.Themes;
 using GoOS.Virtualisation.ChaOS;
+using static GoOS.Commands.Run;
+using static ChaOS.Core;
 
 namespace GoOS.Virtualisation.ChaOS
 {
@@ -78,8 +80,8 @@ namespace GoOS.Virtualisation.ChaOS
                     {
                         falsedir = truedir.Replace(@"0:\content\vrt\ChaOS\", @"0:\");
                     }
-                    if (disk) write(username + " (" + falsedir + "): ");
-                    else write(username + " > ");
+                    if (disk) Console.Write(username + " (" + falsedir + "): ");
+                    else Console.Write(username + " > ");
 
                     inputBeforeLower = Console.ReadLine();
                     /*(if (inputBeforeLower1.Contains(@"0:\"))
@@ -147,7 +149,7 @@ namespace GoOS.Virtualisation.ChaOS
                         {
                             var OldBack = Console.BackgroundColor; var OldFore = Console.ForegroundColor;
                             clog("Color list:", Green);
-                            write(" "); SetScreenColor(White, Black, false); write("black - Pure light mode, will make you blind"); SetScreenColor(OldBack, OldFore, false);
+                            Console.Write(" "); SetScreenColor(White, Black, false); Console.Write("black - Pure light mode, will make you blind"); SetScreenColor(OldBack, OldFore, false);
                             clog("\n dark blue - Dark blue with black background", DarkBlue);
                             clog(" dark green - Dark green with black background", DarkGreen);
                             clog(" dark cyan - Dark cyan with black background", DarkCyan);
@@ -186,16 +188,21 @@ namespace GoOS.Virtualisation.ChaOS
 
                     else if (input == "credits")
                     {
-                        Console.SetCursorPosition(0, 7);
+                        Console.Clear();
+                        Console.SetCursorPosition(0, 1);
                         cwrite("  ______   __                   ______    ______  \n /      \\ |  \\                 /      \\  /      \\ \n|  $$$$$$\\| $$____    ______  |  $$$$$$\\|  $$$$$$\\\n| $$   \\$$| $$    \\  |      \\ | $$  | $$| $$___\\$$\n| $$      | $$$$$$$\\  \\$$$$$$\\| $$  | $$ \\$$    \\ \n| $$   __ | $$  | $$ /      $$| $$  | $$ _\\$$$$$$\\\n| $$__/  \\| $$  | $$|  $$$$$$$| $$__/ $$|  \\__| $$\n \\$$    $$| $$  | $$ \\$$    $$ \\$$    $$ \\$$    $$\n  \\$$$$$$  \\$$   \\$$  \\$$$$$$$  \\$$$$$$   \\$$$$$$ ", DarkGreen);
-                        Console.SetCursorPosition(60, 9);
+                        Console.SetCursorPosition(55, 3);
                         cwrite("Version 1.3 GoOS VM", Yellow);
-                        Console.SetCursorPosition(62, 11);
+                        Console.SetCursorPosition(62, 5);
                         cwrite("Credits", Yellow);
-                        Console.SetCursorPosition(57, 12);
-                        write("ekeleze - Creator");
-                        Console.SetCursorPosition(53, 13);
-                        write("MrDumbrava - Contributor");
+                        Console.SetCursorPosition(57, 6);
+                        Console.Write("ekeleze - Creator");
+                        Console.SetCursorPosition(60, 7);
+                        Console.Write("xrc2 - Contributor");
+                        Console.SetCursorPosition(20, 11);
+                        Console.Write("Special thanks:");
+                        Console.SetCursorPosition(1, 13);
+                        Console.Write("Owen2k6 - For allowing ChaOS to live on through GoOS VM");
                         Console.SetCursorPosition(0, 24);
                     }
 
