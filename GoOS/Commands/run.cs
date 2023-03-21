@@ -13,6 +13,7 @@ namespace GoOS.Commands
     public class Run
     {
         static Dictionary<string, string> Strings = new Dictionary<string, string>() { };
+        static Dictionary<string, int> Integers = new Dictionary<string, int>() { };
         //GoOS Core
         public static void print(string str)
         {
@@ -159,6 +160,29 @@ namespace GoOS.Commands
                             Strings.Add(varName, varContents);
 
                         }
+                        if (line.StartsWith("int"))
+                        {
+                            int intCont = 0;
+                            string whythehellnotwork = line.Replace(@"int ", "");
+                            string varName = whythehellnotwork.Split(@" = ")[0];
+                            string varContents = whythehellnotwork.Split(@" = ")[1];
+                            try
+                            {
+                                intCont = int.Parse(varContents);
+                            } catch { Console.WriteLine(@"Integer: int " + varName + " is formatted incorrectly."); }
+
+                            string trueCont = intCont.ToString();
+
+                            if (Integers.ContainsKey(varName))
+                            {
+                                Integers.Remove(varName);
+                            }
+
+
+
+                            Strings.Add(varName, trueCont);
+
+                        }
                         if (line.StartsWith(@"print="))
                         {
                             string assSplitter = line.Replace(@"print=", "");
@@ -169,6 +193,17 @@ namespace GoOS.Commands
                                 Console.WriteLine(thighs);
                             }
                             else if (Strings.TryGetValue(assSplitter, out string what))
+                            {
+                                try
+                                {
+                                    Console.WriteLine(what);
+                                }
+                                catch
+                                {
+                                    Console.WriteLine("owen is gay");
+                                }
+                            }
+                            else if (Integers.TryGetValue(assSplitter, out int whatint))
                             {
                                 try
                                 {
@@ -216,12 +251,14 @@ namespace GoOS.Commands
                                         File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
                                         TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
                                         tw.WriteLine(strval);
+                                        tw.Write(@"type=string");
                                         tw.Close();
                                     }
                                     else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt"))
                                     {
                                         TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
                                         tw.WriteLine(strval);
+                                        tw.Write(@"type=string");
                                         tw.Close();
                                     }
                                 }
@@ -233,12 +270,54 @@ namespace GoOS.Commands
                                         File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
                                         TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
                                         tw.WriteLine(strval);
+                                        tw.Write(@"type=string");
                                         tw.Close();
                                     }
                                     else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt"))
                                     {
                                         TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
                                         tw.WriteLine(strval);
+                                        tw.Write(@"type=string");
+                                        tw.Close();
+                                    }
+                                }
+                            }
+                            else if (Integers.TryGetValue(whatvartosave, out int intval))
+                            {
+                                if (Directory.Exists(@"0:\content\prf\"))
+                                {
+                                    if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt"))
+                                    {
+                                        File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
+                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
+                                        tw.WriteLine(intval);
+                                        tw.Write(@"type=int");
+                                        tw.Close();
+                                    }
+                                    else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt"))
+                                    {
+                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
+                                        tw.WriteLine(intval);
+                                        tw.Write(@"type=int");
+                                        tw.Close();
+                                    }
+                                }
+                                else if (!Directory.Exists(@"0:\content\prf\"))
+                                {
+                                    Directory.CreateDirectory(@"0:\content\prf\");
+                                    if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt"))
+                                    {
+                                        File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
+                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
+                                        tw.WriteLine(intval);
+                                        tw.Write(@"type=int");
+                                        tw.Close();
+                                    }
+                                    else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt"))
+                                    {
+                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
+                                        tw.WriteLine(intval);
+                                        tw.Write(@"type=int");
                                         tw.Close();
                                     }
                                 }
@@ -246,22 +325,47 @@ namespace GoOS.Commands
                         }
                         if (line.StartsWith(@"load="))
                         {
+                            int intCont = 0;
                             string whatvartoload = line.Substring(5);
                             string ass = null;
+                            string assType = null;
                             if (Strings.TryGetValue(whatvartoload, out string strval))
                             {
                                 if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartoload + @".txt"))
                                 {
                                     using (StreamReader streamReader = new StreamReader(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartoload + @".txt", Encoding.UTF8))
                                     {
-                                        ass = streamReader.ReadToEnd();
-
-                                        if (Strings.ContainsKey(whatvartoload))
+                                        ass = File.ReadLines(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartoload + @".txt").Skip(0).Take(1).First();
+                                        assType = File.ReadLines(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartoload + @".txt").Skip(1).Take(1).First();
+                                        string assSplitter2 = assType.Split('=')[1];
+                                        if (assSplitter2 == "string")
                                         {
-                                            Strings.Remove(whatvartoload);
+                                            if (Strings.ContainsKey(whatvartoload))
+                                            {
+                                                Strings.Remove(whatvartoload);
+                                            }
+
+                                            Strings.Add(whatvartoload, ass);
+                                        }
+                                        if (assSplitter2 == "int")
+                                        {
+                                            try
+                                            {
+                                                intCont = int.Parse(ass);
+                                            }
+                                            catch { Console.WriteLine(@"Load: int " + whatvartoload + " is formatted incorrectly."); }
+
+                                            string trueCont = intCont.ToString();
+
+                                            if (Integers.ContainsKey(whatvartoload))
+                                            {
+                                                Integers.Remove(whatvartoload);
+                                            }
+
+                                            Integers.Add(whatvartoload, intCont);
                                         }
 
-                                        Strings.Add(whatvartoload, ass);
+                                        
                                     }
                                 }
                             }
