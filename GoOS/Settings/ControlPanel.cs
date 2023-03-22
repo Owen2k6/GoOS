@@ -645,9 +645,9 @@ namespace GoOS.Settings
                     Console.Write("New Computer Name: ");
                     string thingtosave = Console.ReadLine();
 
-                    System.IO.File.Delete(@"0:\content\sys\setup.gms");
-                    System.IO.File.Create(@"0:\content\sys\setup.gms");
-                    var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
+                    System.IO.File.Delete(@"0:\content\sys\user.gms");
+                    System.IO.File.Create(@"0:\content\sys\user.gms");
+                    var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\user.gms");
                     var setupstream = setupcontent.GetFileStream();
                     byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {Kernel.username}\ncomputername: {thingtosave}");
                     setupstream.Write(textToWrite, 0, textToWrite.Length);

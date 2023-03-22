@@ -142,13 +142,12 @@ namespace GoOS
             }
             catch (Exception e)
             {
-                log(ThemeManager.ErrorText, "GoOS Admin could not detect a disk. system will not support any apps that require a HDD to write/read from.");
-                log(ThemeManager.ErrorText, "GoOS Needs a HDD installed to use some of the cool features");
-                log(ThemeManager.ErrorText, "The GitHub releases page usually includes a disk built for GoOS");
-                log(ThemeManager.ErrorText, "Disks aren't required but they're highly reccomended.");
-                log(ThemeManager.Default, "Press any key to continue.");
-                Console.ReadKey();
-                adminconsoledisk = false;
+                log(ThemeManager.ErrorText, "GoOS requires a disk to launch.");
+                log(ThemeManager.ErrorText, "GoOS Needs a HDD installed to save user settings, application data and more.");
+                bool no = true;
+                while(no == true){
+                    //forever running to prevent launch.
+                }
             }
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {
@@ -157,7 +156,7 @@ namespace GoOS
             try
             {
                 textcolour(ThemeManager.Default);
-                var systemsetup = File.ReadAllLines(@"0:\content\sys\setup.gms");
+                var systemsetup = File.ReadAllLines(@"0:\content\sys\user.gms");
                 foreach (string line in systemsetup)
                 {
                     if (line.StartsWith("username: "))
@@ -228,7 +227,7 @@ namespace GoOS
             clog(ThemeManager.Startup18, "║═█████████████████████████████████████═══════════════════════════════════════║");
             clog(ThemeManager.Startup19, "╚═════════════════════════════════════════════════════════════════════════════╝");
             clog(ThemeManager.WindowText, "╔═════════════════════════════════════════════════════════════════════════════╗");
-            clog(ThemeManager.WindowText, "║      GoOS Beta release 1.5-pre1. Report bugs in #issues on the github!      ║");
+            clog(ThemeManager.WindowText, "║      GoOS Beta release 1.5-pre2. Report bugs in #issues on the github!      ║");
             clog(ThemeManager.WindowText, "╚═════════════════════════════════════════════════════════════════════════════╝");
 
             string roota = @"0:\";

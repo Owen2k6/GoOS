@@ -123,8 +123,9 @@ namespace GoOS
             DrawFrame();
             DrawTitle(" GoOS Setup ", 0);
             MessageBox(1);
+            VFSManager.CreateFile(@"0:\content\sys\setup.gms");
+            VFSManager.CreateFile(@"0:\content\sys\user.gms");
             VFSManager.CreateFile(@"0:\content\sys\version.gms");
-            VFSManager.CreateFile(@"0:\content\sys\userinfo.gms");
             VFSManager.CreateFile(@"0:\content\sys\option-showprotectedfiles.gms");
             VFSManager.CreateFile(@"0:\content\sys\option-editprotectedfiles.gms");
             VFSManager.CreateFile(@"0:\content\sys\option-deleteprotectedfiles.gms");
@@ -144,7 +145,7 @@ namespace GoOS
             DrawPage(2);
             MessageBox(0);
             VFSManager.CreateFile(@"0:\content\sys\setup.gms");
-            var setupcontent1 = VFSManager.GetFile(@"0:\content\sys\setup.gms");
+            var setupcontent1 = VFSManager.GetFile(@"0:\content\sys\user.gms");
             var setupstream1 = setupcontent1.GetFileStream();
             if (setupstream.CanWrite)
             {
