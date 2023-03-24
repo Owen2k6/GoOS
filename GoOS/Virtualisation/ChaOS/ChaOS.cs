@@ -94,6 +94,7 @@ namespace GoOS.Virtualisation.ChaOS
                     String[] args = inputBeforeLower.Split(' ');
                     log();
 
+
                     if (input.StartsWith("help"))
                     {
                         var us = string.Empty;
@@ -217,7 +218,7 @@ namespace GoOS.Virtualisation.ChaOS
                     }
 
                     else if (input == "notepad" && disk)
-                        MIV.StartMIV();
+                        MIV.StartMIV(args[1]);
 
                     else if (input == "shutdown" || input == "sd" || input == "stop")
                     {

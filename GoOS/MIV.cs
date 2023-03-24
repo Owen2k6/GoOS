@@ -270,12 +270,12 @@ namespace GoOS
         {
             for (int i = 0; i < time; i++) ;
         }
-        public static void StartMIV()
+        public static void StartMIV(string murder)
         {
             string cdir = Directory.GetCurrentDirectory();
-            Console.WriteLine("Enter file's filename to open:");
-            Console.WriteLine("If the specified file does not exist, it will be created.");
-            Kernel.file = Console.ReadLine();
+            //Console.WriteLine("Enter file's filename to open:");
+            //Console.WriteLine("If the specified file does not exist, it will be created.");
+            Kernel.file = murder;
             if ( Kernel.file.EndsWith(".gms")) {
                 return;
             }

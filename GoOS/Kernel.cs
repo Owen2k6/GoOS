@@ -382,8 +382,18 @@ namespace GoOS
                     Commands.Dir.Run();
                     break;
                 case "notepad":
+                    if (args.Length > 2)
+                    {
+                        log(ThemeManager.ErrorText, "Too many arguments");
+                        break;
+                    }
+                    if (args.Length == 1)
+                    {
+                        log(ThemeManager.ErrorText, "Missing arguments");
+                        break;
+                    }
                     textcolour(ThemeManager.Default);
-                    MIV.StartMIV();
+                    MIV.StartMIV(args[1]);
                     break;
                 case "settings":
                     ControlPanel.Open();
@@ -640,7 +650,7 @@ namespace GoOS
                 if (adminconsoledisk)
                 {
                     textcolour(ConsoleColor.White);
-                    MIV.StartMIV();
+                    //MIV.StartMIV();
                 }
             }
             else if (input.Equals("gostudio", StringComparison.OrdinalIgnoreCase))
