@@ -18,8 +18,6 @@ using GoOS.Commands;
 using GoOS.Themes;
 using GoOS.Virtualisation.ChaOS;
 using static GoOS.Commands.Run;
-using static ChaOS.Core;
-
 namespace GoOS.Virtualisation.ChaOS
 {
     public class ChaOS

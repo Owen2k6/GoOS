@@ -383,6 +383,9 @@ namespace GoOS.Settings
                             if (selected2 == 2) { selected2 = 1; }
                             else if (selected2 == 1) { selected2 = 2; }
                             break;
+                        case ConsoleKey.Escape:
+                            running = false;
+                            break;
                     }
 
                     if (selected2 == 1)
@@ -499,6 +502,9 @@ namespace GoOS.Settings
                             if (selected2 == 2) { selected2 = 1; }
                             else if (selected2 == 1) { selected2 = 2; }
                             break;
+                        case ConsoleKey.Escape:
+                            running = false;
+                            break;
                     }
 
                     if (selected2 == 1)
@@ -608,6 +614,9 @@ namespace GoOS.Settings
                                 MkButton("Advanced", 26, 22, WindowText, Black);
                                 menu = "Advanced";
                             }
+                            break;
+                        case ConsoleKey.Escape:
+                            running = false;
                             break;
                     }
                 }
