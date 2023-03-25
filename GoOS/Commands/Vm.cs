@@ -10,7 +10,8 @@ namespace GoOS.Commands
 {
     internal class Vm
     {
-        public static void command(string args) {
+        public static void command(string args)
+        {
             string uprootdir = @"0:\content\vrt\";
             string rootdir = @"0:\content\vrt\ChaOS\";
 

@@ -16,27 +16,33 @@ namespace GoOS.Commands
         {
             Console.WriteLine(str);
         }
+
         public static void log(System.ConsoleColor colour, string str)
         {
             Console.ForegroundColor = colour;
             Console.WriteLine(str);
         }
+
         public static void write(string str)
         {
             Console.Write(str);
         }
+
         public static void textcolour(System.ConsoleColor colour)
         {
             Console.ForegroundColor = colour;
         }
+
         public static void highlightcolour(System.ConsoleColor colour)
         {
             Console.BackgroundColor = colour;
         }
+
         public static void sleep(int time)
         {
             Thread.Sleep(time);
         }
+
         public static void Run()
         {
             int filecount = 0;
@@ -47,6 +53,7 @@ namespace GoOS.Commands
             {
                 cdir3003 = cdir3002.Replace(@"0:\\", @"0:\");
             }
+
             try
             {
                 var directory_list = Directory.GetFiles(cdir3003);
@@ -57,6 +64,7 @@ namespace GoOS.Commands
                     log(ThemeManager.Default, "<Dir> " + directory);
                     foldercount++;
                 }
+
                 foreach (var file in directory_list)
                 {
                     if (file.EndsWith(".gms"))
@@ -66,10 +74,11 @@ namespace GoOS.Commands
                     else
                     {
                         log(ThemeManager.Default, "<File> " + file);
-                        
                     }
+
                     filecount++;
                 }
+
                 log(ThemeManager.Default, $"\nListed {filecount} files and {foldercount} folders in this directory.\n");
             }
             catch (Exception e)

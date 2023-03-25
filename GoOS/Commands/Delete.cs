@@ -11,7 +11,11 @@ namespace GoOS.Commands
     {
         public static void DeleteDirectory(string args)
         {
-            if (args.Contains(@"0:\")) { args.Replace(@"0:\", ""); }
+            if (args.Contains(@"0:\"))
+            {
+                args.Replace(@"0:\", "");
+            }
+
             args = "\\" + args;
             if (Directory.Exists(Directory.GetCurrentDirectory() + @"\" + args))
                 Directory.Delete(Directory.GetCurrentDirectory() + @"\" + args, true);
@@ -21,14 +25,21 @@ namespace GoOS.Commands
             }
         }
 
-        public static void DeleteFile(string args) {
-            if (args.Contains("0:\\")) { args.Replace(@"0:\", ""); }
+        public static void DeleteFile(string args)
+        {
+            if (args.Contains("0:\\"))
+            {
+                args.Replace(@"0:\", "");
+            }
+
             if (File.Exists(Directory.GetCurrentDirectory() + @"\" + args))
                 File.Delete(Directory.GetCurrentDirectory() + @"\" + args);
             else if (!File.Exists(args))
             {
                 Console.WriteLine("File does not exist.");
-            };
+            }
+
+            ;
         }
     }
 }

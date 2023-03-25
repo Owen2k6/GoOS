@@ -13,29 +13,36 @@ namespace GoOS.Commands
     public class Run
     {
         static Dictionary<string, string> Strings = new Dictionary<string, string>() { };
+
         static Dictionary<string, int> Integers = new Dictionary<string, int>() { };
+
         //GoOS Core
         public static void print(string str)
         {
             Console.WriteLine(str);
         }
+
         public static void log(System.ConsoleColor colour, string str)
         {
             Console.ForegroundColor = colour;
             Console.WriteLine(str);
         }
+
         public static void write(string str)
         {
             Console.Write(str);
         }
+
         public static void textcolour(System.ConsoleColor colour)
         {
             Console.ForegroundColor = colour;
         }
+
         public static void highlightcolour(System.ConsoleColor colour)
         {
             Console.BackgroundColor = colour;
         }
+
         public static void sleep(int time)
         {
             Thread.Sleep(time);
@@ -54,6 +61,7 @@ namespace GoOS.Commands
                     log(ThemeManager.ErrorText, "Incompatible format.");
                     log(ThemeManager.ErrorText, "File must be .gexe");
                 }
+
                 if (inputaman.EndsWith(".goexe") || inputaman.EndsWith(".gexe"))
                 {
                     string fuckingprogramname = null;
@@ -71,18 +79,19 @@ namespace GoOS.Commands
                         //log(ConsoleColor.Magenta, "LINE FOUND: CONTENT: " + line);
                         if (line.StartsWith("#"))
                         {
-
                         }
+
                         if (line.StartsWith(""))
                         {
-
                         }
+
                         if (line.StartsWith("sleep"))
                         {
                             String howlong = line.Split("=")[1];
                             int potato = Convert.ToInt32(howlong);
                             sleep(potato);
                         }
+
                         if (line.StartsWith("input"))
                         {
                             if (line == "input=")
@@ -97,8 +106,8 @@ namespace GoOS.Commands
                                 textcolour(ConsoleColor.Blue);
                                 theysaid = Console.ReadLine();
                             }
-
                         }
+
                         if (line.StartsWith("stop"))
                         {
                             if (line == "stop=")
@@ -117,18 +126,22 @@ namespace GoOS.Commands
                                 Console.ReadKey();
                                 Console.WriteLine();
                             }
-                        }                       
+                        }
+
                         if (line.StartsWith("endmsg"))
                         {
                             endmessage = line.Replace("endmsg=", "");
                         }
+
                         if (line.StartsWith("regprog"))
                         {
                             if (hasbeenregistered)
                             {
-                                log(ThemeManager.ErrorText, "Attempted second register. Application may be attempting to reregister as another application!!!");
+                                log(ThemeManager.ErrorText,
+                                    "Attempted second register. Application may be attempting to reregister as another application!!!");
                                 break;
                             }
+
                             fuckingprogramname = line.Replace("regprog=", "");
                             hasbeenregistered = true;
                             if (!Directory.Exists(@"0:\content\prf\"))
@@ -144,6 +157,7 @@ namespace GoOS.Commands
                                 Directory.CreateDirectory(@"0:\content\prf\" + fuckingprogramname + @"\");
                             }
                         }
+
                         if (line.StartsWith("string"))
                         {
                             string whythehellnotwork = line.Replace(@"string ", "");
@@ -156,10 +170,9 @@ namespace GoOS.Commands
                             }
 
 
-
                             Strings.Add(varName, varContents);
-
                         }
+
                         if (line.StartsWith("int"))
                         {
                             int intCont = 0;
@@ -169,7 +182,11 @@ namespace GoOS.Commands
                             try
                             {
                                 intCont = int.Parse(varContents);
-                            } catch { Console.WriteLine(@"Integer: int " + varName + " is formatted incorrectly."); }
+                            }
+                            catch
+                            {
+                                Console.WriteLine(@"Integer: int " + varName + " is formatted incorrectly.");
+                            }
 
                             string trueCont = intCont.ToString();
 
@@ -179,10 +196,9 @@ namespace GoOS.Commands
                             }
 
 
-
                             Strings.Add(varName, trueCont);
-
                         }
+
                         if (line.StartsWith(@"print="))
                         {
                             string assSplitter = line.Replace(@"print=", "");
@@ -215,6 +231,7 @@ namespace GoOS.Commands
                                 }
                             }
                         }
+
                         if (line.StartsWith("if"))
                         {
                             string removeIf = line.Substring(3);
@@ -225,9 +242,9 @@ namespace GoOS.Commands
 
                                 if (equals2split1 == equals2split2)
                                 {
-
                                 }
                             }
+
                             if (removeIf.Contains("!="))
                             {
                                 string equals2split1 = removeIf.Split(@"!=")[0];
@@ -235,10 +252,10 @@ namespace GoOS.Commands
 
                                 if (equals2split1 != equals2split2)
                                 {
-
                                 }
                             }
                         }
+
                         if (line.StartsWith(@"save="))
                         {
                             string whatvartosave = line.Substring(5);
@@ -246,17 +263,22 @@ namespace GoOS.Commands
                             {
                                 if (Directory.Exists(@"0:\content\prf\"))
                                 {
-                                    if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt"))
+                                    if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
+                                                     @".txt"))
                                     {
-                                        File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
-                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
+                                        File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
+                                                    @".txt");
+                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
+                                                                         @"\" + whatvartosave + @".txt");
                                         tw.WriteLine(strval);
                                         tw.Write(@"type=string");
                                         tw.Close();
                                     }
-                                    else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt"))
+                                    else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" +
+                                                         whatvartosave + @".txt"))
                                     {
-                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
+                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
+                                                                         @"\" + whatvartosave + @".txt");
                                         tw.WriteLine(strval);
                                         tw.Write(@"type=string");
                                         tw.Close();
@@ -265,17 +287,22 @@ namespace GoOS.Commands
                                 else if (!Directory.Exists(@"0:\content\prf\"))
                                 {
                                     Directory.CreateDirectory(@"0:\content\prf\");
-                                    if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt"))
+                                    if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
+                                                     @".txt"))
                                     {
-                                        File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
-                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
+                                        File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
+                                                    @".txt");
+                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
+                                                                         @"\" + whatvartosave + @".txt");
                                         tw.WriteLine(strval);
                                         tw.Write(@"type=string");
                                         tw.Close();
                                     }
-                                    else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt"))
+                                    else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" +
+                                                         whatvartosave + @".txt"))
                                     {
-                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
+                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
+                                                                         @"\" + whatvartosave + @".txt");
                                         tw.WriteLine(strval);
                                         tw.Write(@"type=string");
                                         tw.Close();
@@ -286,17 +313,22 @@ namespace GoOS.Commands
                             {
                                 if (Directory.Exists(@"0:\content\prf\"))
                                 {
-                                    if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt"))
+                                    if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
+                                                     @".txt"))
                                     {
-                                        File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
-                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
+                                        File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
+                                                    @".txt");
+                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
+                                                                         @"\" + whatvartosave + @".txt");
                                         tw.WriteLine(intval);
                                         tw.Write(@"type=int");
                                         tw.Close();
                                     }
-                                    else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt"))
+                                    else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" +
+                                                         whatvartosave + @".txt"))
                                     {
-                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
+                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
+                                                                         @"\" + whatvartosave + @".txt");
                                         tw.WriteLine(intval);
                                         tw.Write(@"type=int");
                                         tw.Close();
@@ -305,17 +337,22 @@ namespace GoOS.Commands
                                 else if (!Directory.Exists(@"0:\content\prf\"))
                                 {
                                     Directory.CreateDirectory(@"0:\content\prf\");
-                                    if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt"))
+                                    if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
+                                                     @".txt"))
                                     {
-                                        File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
-                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
+                                        File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
+                                                    @".txt");
+                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
+                                                                         @"\" + whatvartosave + @".txt");
                                         tw.WriteLine(intval);
                                         tw.Write(@"type=int");
                                         tw.Close();
                                     }
-                                    else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt"))
+                                    else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" +
+                                                         whatvartosave + @".txt"))
                                     {
-                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave + @".txt");
+                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
+                                                                         @"\" + whatvartosave + @".txt");
                                         tw.WriteLine(intval);
                                         tw.Write(@"type=int");
                                         tw.Close();
@@ -323,6 +360,7 @@ namespace GoOS.Commands
                                 }
                             }
                         }
+
                         if (line.StartsWith(@"load="))
                         {
                             int intCont = 0;
@@ -331,12 +369,18 @@ namespace GoOS.Commands
                             string assType = null;
                             if (Strings.TryGetValue(whatvartoload, out string strval))
                             {
-                                if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartoload + @".txt"))
+                                if (File.Exists(
+                                        @"0:\content\prf\" + fuckingprogramname + @"\" + whatvartoload + @".txt"))
                                 {
-                                    using (StreamReader streamReader = new StreamReader(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartoload + @".txt", Encoding.UTF8))
+                                    using (StreamReader streamReader = new StreamReader(
+                                               @"0:\content\prf\" + fuckingprogramname + @"\" + whatvartoload + @".txt",
+                                               Encoding.UTF8))
                                     {
-                                        ass = File.ReadLines(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartoload + @".txt").Skip(0).Take(1).First();
-                                        assType = File.ReadLines(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartoload + @".txt").Skip(1).Take(1).First();
+                                        ass = File.ReadLines(@"0:\content\prf\" + fuckingprogramname + @"\" +
+                                                             whatvartoload + @".txt").Skip(0).Take(1).First();
+                                        assType = File
+                                            .ReadLines(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartoload +
+                                                       @".txt").Skip(1).Take(1).First();
                                         string assSplitter2 = assType.Split('=')[1];
                                         if (assSplitter2 == "string")
                                         {
@@ -347,13 +391,18 @@ namespace GoOS.Commands
 
                                             Strings.Add(whatvartoload, ass);
                                         }
+
                                         if (assSplitter2 == "int")
                                         {
                                             try
                                             {
                                                 intCont = int.Parse(ass);
                                             }
-                                            catch { Console.WriteLine(@"Load: int " + whatvartoload + " is formatted incorrectly."); }
+                                            catch
+                                            {
+                                                Console.WriteLine(@"Load: int " + whatvartoload +
+                                                                  " is formatted incorrectly.");
+                                            }
 
                                             string trueCont = intCont.ToString();
 
@@ -368,6 +417,7 @@ namespace GoOS.Commands
                                 }
                             }
                         }
+
                         if (line.StartsWith("frontcolor="))
                         {
                             string ass = line.Substring(11);
@@ -436,6 +486,7 @@ namespace GoOS.Commands
                                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                             }
                         }
+
                         if (line.StartsWith("backcolor="))
                         {
                             string ass = line.Substring(10);
@@ -505,10 +556,12 @@ namespace GoOS.Commands
                             }
                         }
                     }
+
                     if (endmessage != null)
                     {
                         endmessage = "Process has ended.";
                     }
+
                     log(ThemeManager.ErrorText, endmessage);
                 }
             }
@@ -519,4 +572,3 @@ namespace GoOS.Commands
         }
     }
 }
-
