@@ -43,7 +43,7 @@ using GoOS.Themes;
 //
 //This program is distributed in the hope that it will be useful,
 //but WITHOUT ANY WARRANTY; without even the implied warranty of
-//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //GNU General Public License for more details.
 //
 //You should have received a copy of the GNU General Public License
@@ -227,7 +227,7 @@ namespace GoOS
             clog(ThemeManager.Startup18, "║═█████████████████████████████████████═══════════════════════════════════════║");
             clog(ThemeManager.Startup19, "╚═════════════════════════════════════════════════════════════════════════════╝");
             clog(ThemeManager.WindowText, "╔═════════════════════════════════════════════════════════════════════════════╗");
-            clog(ThemeManager.WindowText, "║      GoOS Beta release 1.5-pre2. Report bugs in #issues on the github!      ║");
+            clog(ThemeManager.WindowText, "║    GoOS Beta release 1.5-pre2. Report bugs on the issues page on github     ║");
             clog(ThemeManager.WindowText, "╚═════════════════════════════════════════════════════════════════════════════╝");
 
             string roota = @"0:\";

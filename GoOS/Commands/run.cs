@@ -54,7 +54,7 @@ namespace GoOS.Commands
                     log(ThemeManager.ErrorText, "Incompatible format.");
                     log(ThemeManager.ErrorText, "File must be .gexe");
                 }
-                if (inputaman.EndsWith(".goexe"))
+                if (inputaman.EndsWith(".goexe") || inputaman.EndsWith(".gexe"))
                 {
                     string fuckingprogramname = null;
 
@@ -364,10 +364,144 @@ namespace GoOS.Commands
 
                                             Integers.Add(whatvartoload, intCont);
                                         }
-
-                                        
                                     }
                                 }
+                            }
+                        }
+                        if (line.StartsWith("frontcolor="))
+                        {
+                            string ass = line.Substring(11);
+                            if (ass == "white")
+                            {
+                                Console.ForegroundColor = ConsoleColor.White;
+                            }
+                            else if (ass == "blue")
+                            {
+                                Console.ForegroundColor = ConsoleColor.Blue;
+                            }
+                            else if (ass == "green")
+                            {
+                                Console.ForegroundColor = ConsoleColor.Green;
+                            }
+                            else if (ass == "yellow")
+                            {
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                            }
+                            else if (ass == "black")
+                            {
+                                Console.ForegroundColor = ConsoleColor.Black;
+                            }
+                            else if (ass == "cyan")
+                            {
+                                Console.ForegroundColor = ConsoleColor.Cyan;
+                            }
+                            else if (ass == "gray")
+                            {
+                                Console.ForegroundColor = ConsoleColor.Gray;
+                            }
+                            else if (ass == "magenta")
+                            {
+                                Console.ForegroundColor = ConsoleColor.Magenta;
+                            }
+                            else if (ass == "red")
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                            }
+                            else if (ass == "darkblue")
+                            {
+                                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                            }
+                            else if (ass == "darkcyan")
+                            {
+                                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                            }
+                            else if (ass == "darkgray")
+                            {
+                                Console.ForegroundColor = ConsoleColor.DarkGray;
+                            }
+                            else if (ass == "darkgreen")
+                            {
+                                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                            }
+                            else if (ass == "darkmageneta")
+                            {
+                                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                            }
+                            else if (ass == "darkred")
+                            {
+                                Console.ForegroundColor = ConsoleColor.DarkRed;
+                            }
+                            else if (ass == "darkyellow")
+                            {
+                                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            }
+                        }
+                        if (line.StartsWith("backcolor="))
+                        {
+                            string ass = line.Substring(10);
+                            if (ass == "white")
+                            {
+                                Console.BackgroundColor = ConsoleColor.White;
+                            }
+                            else if (ass == "blue")
+                            {
+                                Console.BackgroundColor = ConsoleColor.Blue;
+                            }
+                            else if (ass == "green")
+                            {
+                                Console.BackgroundColor = ConsoleColor.Green;
+                            }
+                            else if (ass == "yellow")
+                            {
+                                Console.BackgroundColor = ConsoleColor.Yellow;
+                            }
+                            else if (ass == "black")
+                            {
+                                Console.BackgroundColor = ConsoleColor.Black;
+                            }
+                            else if (ass == "cyan")
+                            {
+                                Console.BackgroundColor = ConsoleColor.Cyan;
+                            }
+                            else if (ass == "gray")
+                            {
+                                Console.BackgroundColor = ConsoleColor.Gray;
+                            }
+                            else if (ass == "magenta")
+                            {
+                                Console.BackgroundColor = ConsoleColor.Magenta;
+                            }
+                            else if (ass == "red")
+                            {
+                                Console.BackgroundColor = ConsoleColor.Red;
+                            }
+                            else if (ass == "darkblue")
+                            {
+                                Console.BackgroundColor = ConsoleColor.DarkBlue;
+                            }
+                            else if (ass == "darkcyan")
+                            {
+                                Console.BackgroundColor = ConsoleColor.DarkCyan;
+                            }
+                            else if (ass == "darkgray")
+                            {
+                                Console.BackgroundColor = ConsoleColor.DarkGray;
+                            }
+                            else if (ass == "darkgreen")
+                            {
+                                Console.BackgroundColor = ConsoleColor.DarkGreen;
+                            }
+                            else if (ass == "darkmageneta")
+                            {
+                                Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                            }
+                            else if (ass == "darkred")
+                            {
+                                Console.BackgroundColor = ConsoleColor.DarkRed;
+                            }
+                            else if (ass == "darkyellow")
+                            {
+                                Console.BackgroundColor = ConsoleColor.DarkYellow;
                             }
                         }
                     }
