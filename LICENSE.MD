@@ -10,7 +10,8 @@ In order to licence your software, you must be the lead repository and not of a 
 
 Modify the Copyright notice below to fit our project
 
-```Copyright (c) <year> <name of author>```
+```Copyright (c) 2023 Owen2k6```
+```Licenced under the Goplex Studios sector```
 
 Permission is hereby granted, free of charge, to any person or organization obtaining a copy of this software and associated documentation files (the "Software"), to use, copy, modify, merge, publish, distribute, sublicense, provided that the following conditions are met:
 
