@@ -19,12 +19,12 @@ namespace GoOS
             Console.WriteLine("~");
             Console.WriteLine("~");
             Console.WriteLine("~");
-            Console.WriteLine("~                               MIV - MInimalistic Vi");
+            Console.WriteLine("~                                  GoOS Notepad");
             Console.WriteLine("~");
-            Console.WriteLine("~                                  version 1.2");
-            Console.WriteLine("~                             by Denis Bartashevich");
-            Console.WriteLine("~                            Minor additions by CaveSponge");
-            Console.WriteLine("~                    MIV is open source and freely distributable");
+            Console.WriteLine("~                                  version 1.3");
+            Console.WriteLine("~                         originally by Denis Bartashevich");
+            Console.WriteLine("~");
+            Console.WriteLine("~                    ");
             Console.WriteLine("~");
             Console.WriteLine("~                     type :help<Enter>          for information");
             Console.WriteLine("~                     type :q<Enter>             to exit");
@@ -103,7 +103,6 @@ namespace GoOS
             {
                 Console.Write(countNewLine + 1 + "," + countChars);
             }
-
         }
 
         public static String miv(String start)
@@ -125,6 +124,7 @@ namespace GoOS
                 {
                     chars[i] = start[i];
                 }
+
                 printMIVScreen(chars, pos, infoBar, editMode);
             }
 
@@ -152,12 +152,12 @@ namespace GoOS
                                 {
                                     returnString += chars[i];
                                 }
+
                                 return returnString;
                             }
                             else if (infoBar == ":q")
                             {
                                 return null;
-
                             }
                             else if (infoBar == ":help")
                             {
@@ -208,17 +208,15 @@ namespace GoOS
                         {
                             continue;
                         }
+
                         printMIVScreen(chars, pos, infoBar, editMode);
-
-
-
                     } while (keyInfo.Key != ConsoleKey.Escape);
                 }
 
                 else if (keyInfo.Key == ConsoleKey.Escape)
                 {
                     editMode = false;
-                    infoBar = String.Empty;
+                    infoBar = "Type :help<enter> for a list of commands and keys.";
                     printMIVScreen(chars, pos, infoBar, editMode);
                     continue;
                 }
@@ -252,33 +250,45 @@ namespace GoOS
                     chars[pos++] = keyInfo.KeyChar;
                     printMIVScreen(chars, pos, infoBar, editMode);
                 }
-
             } while (true);
         }
 
         public static bool isForbiddenKey(ConsoleKey key)
         {
-            ConsoleKey[] forbiddenKeys = { ConsoleKey.Print, ConsoleKey.PrintScreen, ConsoleKey.Pause, ConsoleKey.Home, ConsoleKey.PageUp, ConsoleKey.PageDown, ConsoleKey.End, ConsoleKey.NumPad0, ConsoleKey.NumPad1, ConsoleKey.NumPad2, ConsoleKey.NumPad3, ConsoleKey.NumPad4, ConsoleKey.NumPad5, ConsoleKey.NumPad6, ConsoleKey.NumPad7, ConsoleKey.NumPad8, ConsoleKey.NumPad9, ConsoleKey.Insert, ConsoleKey.F1, ConsoleKey.F2, ConsoleKey.F3, ConsoleKey.F4, ConsoleKey.F5, ConsoleKey.F6, ConsoleKey.F7, ConsoleKey.F8, ConsoleKey.F9, ConsoleKey.F10, ConsoleKey.F11, ConsoleKey.F12, ConsoleKey.Add, ConsoleKey.Divide, ConsoleKey.Multiply, ConsoleKey.Subtract, ConsoleKey.LeftWindows, ConsoleKey.RightWindows };
+            ConsoleKey[] forbiddenKeys =
+            {
+                ConsoleKey.Print, ConsoleKey.PrintScreen, ConsoleKey.Pause, ConsoleKey.Home, ConsoleKey.PageUp,
+                ConsoleKey.PageDown, ConsoleKey.End, ConsoleKey.NumPad0, ConsoleKey.NumPad1, ConsoleKey.NumPad2,
+                ConsoleKey.NumPad3, ConsoleKey.NumPad4, ConsoleKey.NumPad5, ConsoleKey.NumPad6, ConsoleKey.NumPad7,
+                ConsoleKey.NumPad8, ConsoleKey.NumPad9, ConsoleKey.Insert, ConsoleKey.F1, ConsoleKey.F2, ConsoleKey.F3,
+                ConsoleKey.F4, ConsoleKey.F5, ConsoleKey.F6, ConsoleKey.F7, ConsoleKey.F8, ConsoleKey.F9,
+                ConsoleKey.F10, ConsoleKey.F11, ConsoleKey.F12, ConsoleKey.Add, ConsoleKey.Divide, ConsoleKey.Multiply,
+                ConsoleKey.Subtract, ConsoleKey.LeftWindows, ConsoleKey.RightWindows
+            };
             for (int i = 0; i < forbiddenKeys.Length; i++)
             {
                 if (key == forbiddenKeys[i]) return true;
             }
+
             return false;
         }
 
         public static void delay(int time)
         {
-            for (int i = 0; i < time; i++) ;
+            //for (int i = 0; i < time; i++) ;
         }
+
         public static void StartMIV(string murder)
         {
             string cdir = Directory.GetCurrentDirectory();
             //Console.WriteLine("Enter file's filename to open:");
             //Console.WriteLine("If the specified file does not exist, it will be created.");
             Kernel.file = murder;
-            if ( Kernel.file.EndsWith(".gms")) {
+            if (Kernel.file.EndsWith(".gms"))
+            {
                 return;
             }
+
             try
             {
                 if (File.Exists(cdir + @"\" + Kernel.file))
@@ -290,6 +300,7 @@ namespace GoOS
                     Console.WriteLine("Creating file!");
                     File.Create(cdir + @"\" + Kernel.file);
                 }
+
                 Console.Clear();
             }
             catch (Exception ex)
@@ -298,15 +309,8 @@ namespace GoOS
             }
 
             String text = String.Empty;
-            Console.WriteLine("Do you want to open " + Kernel.file + " content? (Yes/No)");
-            if (Console.ReadLine().ToLower() == "yes" || Console.ReadLine().ToLower() == "y")
-            {
-                text = miv(File.ReadAllText(cdir + @"\" + Kernel.file));
-            }
-            else
-            {
-                text = miv(null);
-            }
+            text = miv(File.ReadAllText(cdir + @"\" + Kernel.file));
+            
 
             Console.Clear();
 
@@ -315,6 +319,7 @@ namespace GoOS
                 File.WriteAllText(cdir + @"\" + Kernel.file, text);
                 Console.WriteLine("Content has been saved to " + Kernel.file);
             }
+
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey(true);
         }
