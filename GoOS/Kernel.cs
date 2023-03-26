@@ -393,7 +393,8 @@ namespace GoOS
                         break;
                     }
                     textcolour(ThemeManager.Default);
-                    MIV.StartMIV(args[1]);
+                    var editor = new TextEditor(Util.Paths.JoinPaths(currentdirfix, args[1]));
+                    editor.Start();
                     break;
                 case "settings":
                     ControlPanel.Open();
