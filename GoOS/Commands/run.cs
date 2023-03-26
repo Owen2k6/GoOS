@@ -237,21 +237,175 @@ namespace GoOS.Commands
                             string removeIf = line.Substring(3);
                             if (removeIf.Contains("=="))
                             {
-                                string equals2split1 = removeIf.Split(@"==")[0];
-                                string equals2split2 = removeIf.Split(@"==")[1];
+                                string equals2split1 = removeIf.Split(@" == ")[0];
+                                string equals2split2 = removeIf.Split(@" == ")[1];
+                                string intorstring = "unsure";
+                                string string1 = null;
+                                string string2 = null;
+                                int int1 = 0;
+                                int int2 = 0;
 
-                                if (equals2split1 == equals2split2)
+                                if (Strings.TryGetValue(equals2split1, out string strval))
                                 {
+                                    if (intorstring == "unsure")
+                                    {
+                                        intorstring = "string";
+                                    }
+                                    if (intorstring == "int")
+                                    {
+                                        
+                                    }
+                                    else if (intorstring == "string")
+                                    {
+                                        string1 = strval;
+                                    }
+                                }
+                                else if (Integers.TryGetValue(equals2split2, out int intval))
+                                {
+                                    if (intorstring == "unsure")
+                                    {
+                                        intorstring = "int";
+                                    }
+                                    if (intorstring == "string")
+                                    {
+                                        
+                                    }
+                                    else if (intorstring == "int")
+                                    {
+                                        int1 = intval;
+                                    }
+                                }
+                                if (Strings.TryGetValue(equals2split2, out string strval2))
+                                {
+                                    if (intorstring == "unsure")
+                                    {
+                                        intorstring = "string";
+                                    }
+                                    if (intorstring == "int")
+                                    {
+                                        
+                                    }
+                                    else if (intorstring == "string")
+                                    {
+                                        string2 = strval2;
+                                    }
+                                }
+                                else if (Integers.TryGetValue(equals2split2, out int intval2))
+                                {
+                                    if (intorstring == "unsure")
+                                    {
+                                        intorstring = "int";
+                                    }
+                                    if (intorstring == "string")
+                                    {
+                                        
+                                    }
+                                    else if (intorstring == "int")
+                                    {
+                                        int2 = intval2;
+                                    }
+                                }
+                                
+                                if (intorstring == "string")
+                                {
+                                    if (string1 != string2)
+                                    {
+                                        break;
+                                    }
+                                }
+                                else if (intorstring == "int")
+                                {
+                                    if (int1 != int2)
+                                    {
+                                        break;
+                                    }
                                 }
                             }
 
                             if (removeIf.Contains("!="))
                             {
-                                string equals2split1 = removeIf.Split(@"!=")[0];
-                                string equals2split2 = removeIf.Split(@"!=")[1];
+                                string equals2split1 = removeIf.Split(@" != ")[0];
+                                string equals2split2 = removeIf.Split(@" != ")[1];
+                                string intorstring = "unsure";
+                                string string1 = null;
+                                string string2 = null;
+                                int int1 = 0;
+                                int int2 = 0;
 
-                                if (equals2split1 != equals2split2)
+                                if (Strings.TryGetValue(equals2split1, out string strval))
                                 {
+                                    if (intorstring == "unsure")
+                                    {
+                                        intorstring = "string";
+                                    }
+                                    if (intorstring == "int")
+                                    {
+                                        
+                                    }
+                                    else if (intorstring == "string")
+                                    {
+                                        string1 = strval;
+                                    }
+                                }
+                                else if (Integers.TryGetValue(equals2split2, out int intval))
+                                {
+                                    if (intorstring == "unsure")
+                                    {
+                                        intorstring = "int";
+                                    }
+                                    if (intorstring == "string")
+                                    {
+                                        
+                                    }
+                                    else if (intorstring == "int")
+                                    {
+                                        int1 = intval;
+                                    }
+                                }
+                                if (Strings.TryGetValue(equals2split2, out string strval2))
+                                {
+                                    if (intorstring == "unsure")
+                                    {
+                                        intorstring = "string";
+                                    }
+                                    if (intorstring == "int")
+                                    {
+                                        
+                                    }
+                                    else if (intorstring == "string")
+                                    {
+                                        string2 = strval2;
+                                    }
+                                }
+                                else if (Integers.TryGetValue(equals2split2, out int intval2))
+                                {
+                                    if (intorstring == "unsure")
+                                    {
+                                        intorstring = "int";
+                                    }
+                                    if (intorstring == "string")
+                                    {
+                                        
+                                    }
+                                    else if (intorstring == "int")
+                                    {
+                                        int2 = intval2;
+                                    }
+                                }
+                                
+                                if (intorstring == "string")
+                                {
+                                    if (string1 == string2)
+                                    {
+                                        break;
+                                    }
+                                }
+                                else if (intorstring == "int")
+                                {
+                                    if (int1 == int2)
+                                    {
+                                        break;
+                                    }
                                 }
                             }
                         }
