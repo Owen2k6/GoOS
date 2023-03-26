@@ -61,17 +61,17 @@ namespace GoOS.Commands
                         log(ThemeManager.WindowText, "mkdir {file} - Make a Directory.");
                         break;
                     case 2:
-                        log(ThemeManager.WindowText, "cd {file} - enter a directory.");
-                        log(ThemeManager.WindowText, "cd.. - go to parent directory.");
+                        log(ThemeManager.WindowText, "cd {file} - Enter a directory.");
+                        log(ThemeManager.WindowText, "cd.. - Go to the parent directory.");
                         log(ThemeManager.WindowText, "cdr - Jump to root from anywhere.");
-                        log(ThemeManager.WindowText, "dir - list all files and folders in the current directory.");
-                        log(ThemeManager.WindowText, "vm {vmname}- Make a file.");
-                        log(ThemeManager.WindowText, "toggletheme - Make a Directory.");
+                        log(ThemeManager.WindowText, "dir - List all files and folders in the current directory.");
+                        log(ThemeManager.WindowText, "vm {vmname} - Make a file.");
+                        log(ThemeManager.WindowText, "toggletheme - Change the theme.");
                         break;
                     case 3:
-                        log(ThemeManager.WindowText, "settings - open the settings app.");
-                        log(ThemeManager.WindowText, "notepad - open the notepad app.");
-                        log(ThemeManager.WindowText, "clear - clears the terminal.");
+                        log(ThemeManager.WindowText, "settings - Open the settings app.");
+                        log(ThemeManager.WindowText, "notepad - Open the Notepad app.");
+                        log(ThemeManager.WindowText, "clear - Clears the terminal.");
                         //log(ThemeManager.WindowText, "dir - list all files and folders in the current directory.");
                         //log(ThemeManager.WindowText, "vm - Make a file");
                         //log(ThemeManager.WindowText, "toggletheme - Make a Directory");
