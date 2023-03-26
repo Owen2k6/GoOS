@@ -244,7 +244,8 @@ namespace GoOS.Commands
                                 string string2 = null;
                                 int int1 = 0;
                                 int int2 = 0;
-
+                                // this line was used for debugging // log(ConsoleColor.White, equals2split1 + "" + equals2split2);
+                                    
                                 if (Strings.TryGetValue(equals2split1, out string strval))
                                 {
                                     if (intorstring == "unsure")
@@ -331,6 +332,7 @@ namespace GoOS.Commands
                                 string string2 = null;
                                 int int1 = 0;
                                 int int2 = 0;
+                                // this line was used for debugging //    log(ConsoleColor.White, equals2split1 + "" + equals2split2);
 
                                 if (Strings.TryGetValue(equals2split1, out string strval))
                                 {
