@@ -46,3 +46,15 @@ C:\Users\User\Documents\GitHub\GoOS-GoCode-IVT\GoOS\obj\Debug\net6.0\GoOS.dll
 C:\Users\User\Documents\GitHub\GoOS-GoCode-IVT\GoOS\obj\Debug\net6.0\refint\GoOS.dll
 C:\Users\User\Documents\GitHub\GoOS-GoCode-IVT\GoOS\obj\Debug\net6.0\GoOS.pdb
 C:\Users\User\Documents\GitHub\GoOS-GoCode-IVT\GoOS\obj\Debug\net6.0\ref\GoOS.dll
+D:\Documentos\GitHub\goos\GoOS\bin\Debug\net6.0\GoOS.deps.json
+D:\Documentos\GitHub\goos\GoOS\bin\Debug\net6.0\GoOS.dll
+D:\Documentos\GitHub\goos\GoOS\bin\Debug\net6.0\GoOS.pdb
+D:\Documentos\GitHub\goos\GoOS\obj\Debug\net6.0\GoOS.csproj.AssemblyReference.cache
+D:\Documentos\GitHub\goos\GoOS\obj\Debug\net6.0\GoOS.GeneratedMSBuildEditorConfig.editorconfig
+D:\Documentos\GitHub\goos\GoOS\obj\Debug\net6.0\GoOS.AssemblyInfoInputs.cache
+D:\Documentos\GitHub\goos\GoOS\obj\Debug\net6.0\GoOS.AssemblyInfo.cs
+D:\Documentos\GitHub\goos\GoOS\obj\Debug\net6.0\GoOS.csproj.CoreCompileInputs.cache
+D:\Documentos\GitHub\goos\GoOS\obj\Debug\net6.0\GoOS.dll
+D:\Documentos\GitHub\goos\GoOS\obj\Debug\net6.0\refint\GoOS.dll
+D:\Documentos\GitHub\goos\GoOS\obj\Debug\net6.0\GoOS.pdb
+D:\Documentos\GitHub\goos\GoOS\obj\Debug\net6.0\ref\GoOS.dll

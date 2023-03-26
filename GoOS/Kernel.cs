@@ -167,6 +167,10 @@ namespace GoOS
                     {
                         computername = line.Replace("computername: ", "");
                     }
+                    if (line.StartsWith("themefile: "))
+                    {
+                        ThemeManager.SetTheme(line.Replace("themefile: ", ""));
+                    }
                 }
             }
             catch (Exception e)
@@ -415,8 +419,13 @@ namespace GoOS
                 case "clear":
                     Console.Clear();
                     break;
-                case "toggletheme":
-                    Commands.ToggleTheme.Main();
+                case "settheme":
+                    if (args.Length > 2)
+                    {
+                        log(ThemeManager.ErrorText, "Too many arguments");
+                        break;
+                    }
+                    ThemeManager.SetTheme(args[1]);
                     break;
                 default:
                     Console.WriteLine("Invalid command.");

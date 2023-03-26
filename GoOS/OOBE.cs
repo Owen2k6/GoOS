@@ -140,11 +140,14 @@ namespace GoOS
             {
                 MessageBox(2);
             }
+
+            //File.WriteAllText(@"0:\content\themes\default.gtheme", "Default = White\nStartup = DarkMagenta,Red,DarkRed\nWindowText = Cyan\nWindowBorder = Green\nErrorText = Red\nOther1 = Yellow");
+            //File.WriteAllText(@"0:\content\sys\theme.gms", @"ThemeFile = 0:\content\themes\default.gtheme");
+
             DrawPage(0);
             DrawPage(1);
             DrawPage(2);
             MessageBox(0);
-            VFSManager.CreateFile(@"0:\content\sys\setup.gms");
             var setupcontent1 = VFSManager.GetFile(@"0:\content\sys\user.gms");
             var setupstream1 = setupcontent1.GetFileStream();
             if (setupstream.CanWrite)
