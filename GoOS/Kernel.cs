@@ -133,7 +133,8 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
-            ThemeManager.SetTheme(Theme.Default);
+            ThemeManager.SetTheme(Theme.Fallback);
+            Console.WriteLine("Starting up GoOS...");
             try
             {
                 FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize(true);
@@ -169,13 +170,12 @@ namespace GoOS
                     }
                 }
 
-                Console.WriteLine("TEST");
                 foreach (string line in File.ReadAllLines(@"0:\content\sys\theme.gms"))
                 {
-                    if (line.StartsWith("themeFile = "))
+                    if (line.StartsWith("ThemeFile = "))
                     {
-                        Console.WriteLine(line + " & " + line.Split("themeFile = ")[1]);
-                        ThemeManager.SetTheme(line.Split("themeFile = ")[1]);
+                        //Console.WriteLine(line + " & " + line.Split("ThemeFile = ")[1]);
+                        ThemeManager.SetTheme(line.Split("ThemeFile = ")[1]);
                     }
                 }
             }
@@ -431,7 +431,12 @@ namespace GoOS
                         log(ThemeManager.ErrorText, "Too many arguments");
                         break;
                     }
-                    ThemeManager.SetTheme(args[1]);
+                    if (args.Length == 1)
+                    {
+                        log(ThemeManager.ErrorText, "Missing arguments");
+                        break;
+                    }
+                    ThemeManager.SetTheme(@"0:\content\themes\" + args[1]);
                     break;
                 default:
                     Console.WriteLine("Invalid command.");

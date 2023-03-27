@@ -7,14 +7,13 @@ namespace GoOS.Themes
 {
     public enum Theme
     {
-        Default = 0
+        Fallback = 0
     }
 
     public static class ThemeManager
     {
-        public static Theme CurrentTheme;
-
         public static ConsoleColor Default;
+        public static ConsoleColor Background;
         public static ConsoleColor[] Startup;
         public static ConsoleColor WindowText;
         public static ConsoleColor WindowBorder;
@@ -23,16 +22,16 @@ namespace GoOS.Themes
 
         public static void SetTheme(Theme theme)
         {
-            if (theme == Theme.Default)
+            if (theme == Theme.Fallback)
             {
                 Default = White;
+                Background = Black;
                 Startup = new ConsoleColor[3] { DarkMagenta, Red, DarkRed };
                 WindowText = Cyan;
                 WindowBorder = Green;
                 ErrorText = Red;
                 Other1 = Yellow;
             }
-            CurrentTheme = theme;
         }
 
         private static Dictionary<string, ConsoleColor> StringToConsoleColor = new Dictionary<string, ConsoleColor>()
@@ -64,6 +63,15 @@ namespace GoOS.Themes
                             if (StringToConsoleColor.TryGetValue(result, out ConsoleColor colorval))
                             {
                                 Default = colorval;
+                            }
+                        }
+                        else if (line.StartsWith("Background = "))
+                        {
+                            string result = line.Substring(13);
+
+                            if (StringToConsoleColor.TryGetValue(result, out ConsoleColor colorval))
+                            {
+                                Background = colorval;
                             }
                         }
                         else if (line.StartsWith("Startup = "))
@@ -115,6 +123,8 @@ namespace GoOS.Themes
                             }
                         }
                     }
+
+                    File.WriteAllText(@"0:\content\sys\theme.gms", @"ThemeFile = " + themeFile);
 
                     Console.ForegroundColor = ThemeManager.WindowText;
                     Console.WriteLine("Theme changed successfully!");

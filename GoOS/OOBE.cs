@@ -123,10 +123,6 @@ namespace GoOS
             DrawFrame();
             DrawTitle(" GoOS Setup ", 0);
             MessageBox(1);
-            //VFSManager.CreateFile(@"0:\content\sys\option-showprotectedfiles.gms");
-            //VFSManager.CreateFile(@"0:\content\sys\option-editprotectedfiles.gms");
-            //VFSManager.CreateFile(@"0:\content\sys\option-deleteprotectedfiles.gms");
-
             DrawPage(0);
             DrawPage(1);
             DrawPage(2);
@@ -139,7 +135,13 @@ namespace GoOS
                 File.Create(@"0:\content\sys\setup.gms");
                 File.WriteAllText(@"0:\content\sys\version.gms", $"System.Version is set to {Kernel.version} \n Note to users reading this: DO NOT ALTER. IMPORTANT IF USER DATA NEEDS CONVERTING.");
                 File.WriteAllText(@"0:\content\sys\user.gms", $"username: {usrn}\ncomputername: {cprn}");
-                File.WriteAllText(@"0:\content\themes\default.gtheme", "Default = White\nStartup = DarkMagenta,Red,DarkRed\nWindowText = Cyan\nWindowBorder = Green\nErrorText = Red\nOther1 = Yellow");
+                //File.Create(@"0:\content\sys\option-showprotectedfiles.gms");
+                //File.Create(@"0:\content\sys\option-editprotectedfiles.gms");
+                //File.Create(@"0:\content\sys\option-deleteprotectedfiles.gms");
+                File.WriteAllText(@"0:\content\themes\default.gtheme", "Default = White\nBackground = ThemeManager.Background\nStartup = DarkMagenta,Red,DarkRed\nWindowText = Cyan\nWindowBorder = Green\nErrorText = Red\nOther1 = Yellow");
+                File.WriteAllText(@"0:\content\themes\mono.gtheme", "Default = White\nBackground = ThemeManager.Background\nStartup = White,White,White\nWindowText = White\nWindowBorder = White\nErrorText = White\nOther1 = White");
+                File.WriteAllText(@"0:\content\themes\dark.gtheme", "Default = Gray\nBackground = ThemeManager.Background\nStartup = DarkGray,Gray,DarkGray\nWindowText = Gray\nWindowBorder = DarkGray\nErrorText = DarkGray\nOther1 = DarkGray");
+                File.WriteAllText(@"0:\content\themes\light.gtheme", "Default = ThemeManager.Background\nThemeManager.BackgroundWhite\nStartup = ThemeManager.Background,ThemeManager.Background,ThemeManager.Background\nWindowText = ThemeManager.Background\nWindowBorder = ThemeManager.Background\nErrorText = ThemeManager.Background\nOther1 = ThemeManager.Background");
                 File.WriteAllText(@"0:\content\sys\theme.gms", @"ThemeFile = 0:\content\themes\default.gtheme");
             }
             catch (Exception e) { Console.WriteLine(e); }
@@ -154,7 +156,7 @@ namespace GoOS
             Console.Clear();
             try
             {
-                Console.BackgroundColor = Black;
+                Console.BackgroundColor = Background;
                 Console.ForegroundColor = WindowBorder;
                 CP737Console.Write("╔══════════════════════════════════════════════════════════════════════════════╗\n" +
                                    "║                                                                              ║\n" +

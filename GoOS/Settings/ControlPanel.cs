@@ -526,8 +526,6 @@ namespace GoOS.Settings
                         Console.Write("                                                                ");
                         Console.SetCursorPosition(15, 7);
                         Console.Write("                                                                ");
-
-                        SetTheme(Theme.Default);
                     }
                     else if (selected2 == 2)
                     {
