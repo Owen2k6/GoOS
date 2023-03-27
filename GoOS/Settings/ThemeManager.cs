@@ -64,7 +64,6 @@ namespace GoOS.Themes
                             if (StringToConsoleColor.TryGetValue(result, out ConsoleColor colorval))
                             {
                                 Default = colorval;
-                                //Console.WriteLine("Default color set to " + result);
                             }
                         }
                         else if (line.StartsWith("Startup = "))
@@ -76,7 +75,6 @@ namespace GoOS.Themes
                                 if (StringToConsoleColor.TryGetValue(result[i], out ConsoleColor colorval))
                                 {
                                     Startup[i] = colorval;
-                                    //Console.WriteLine("Startup color " + i + " set to " + result[i]);
                                 }
                             }
                         }
@@ -87,7 +85,6 @@ namespace GoOS.Themes
                             if (StringToConsoleColor.TryGetValue(result, out ConsoleColor colorval))
                             {
                                 WindowText = colorval;
-                                //Console.WriteLine("WindowBorder color set to " + result);
                             }
                         }
                         else if (line.StartsWith("WindowBorder = "))
@@ -97,7 +94,6 @@ namespace GoOS.Themes
                             if (StringToConsoleColor.TryGetValue(result, out ConsoleColor colorval))
                             {
                                 WindowBorder = colorval;
-                                //Console.WriteLine("WindowBorder color set to " + result);
                             }
                         }
                         else if (line.StartsWith("ErrorText = "))
@@ -107,7 +103,6 @@ namespace GoOS.Themes
                             if (StringToConsoleColor.TryGetValue(result, out ConsoleColor colorval))
                             {
                                 ErrorText = colorval;
-                                //Console.WriteLine("ErrorText color set to " + result);
                             }
                         }
                         else if (line.StartsWith("Other1 = "))
@@ -117,20 +112,22 @@ namespace GoOS.Themes
                             if (StringToConsoleColor.TryGetValue(result, out ConsoleColor colorval))
                             {
                                 Other1 = colorval;
-                                //Console.WriteLine("Other1 color set to " + result);
                             }
                         }
                     }
 
+                    Console.ForegroundColor = ThemeManager.WindowText;
                     Console.WriteLine("Theme changed successfully!");
                 }
                 else
                 {
+                    Console.ForegroundColor = ThemeManager.ErrorText;
                     Console.WriteLine("Theme file doesn't exist or is not a Goplex Theme File!");
                 }
             }
             catch (Exception e)
             {
+                Console.ForegroundColor = ThemeManager.ErrorText;
                 Console.WriteLine("Error while setting theme!\n" + e);
             }
         }

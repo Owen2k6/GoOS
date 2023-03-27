@@ -123,42 +123,26 @@ namespace GoOS
             DrawFrame();
             DrawTitle(" GoOS Setup ", 0);
             MessageBox(1);
-            VFSManager.CreateFile(@"0:\content\sys\setup.gms");
-            VFSManager.CreateFile(@"0:\content\sys\user.gms");
-            VFSManager.CreateFile(@"0:\content\sys\version.gms");
-            VFSManager.CreateFile(@"0:\content\sys\option-showprotectedfiles.gms");
-            VFSManager.CreateFile(@"0:\content\sys\option-editprotectedfiles.gms");
-            VFSManager.CreateFile(@"0:\content\sys\option-deleteprotectedfiles.gms");
-            var setupcontent = VFSManager.GetFile(@"0:\content\sys\version.gms");
-            var setupstream = setupcontent.GetFileStream();
-            if (setupstream.CanWrite)
-            {
-                byte[] textToWrite = Encoding.ASCII.GetBytes($"System.Version is set to {Kernel.version} \n Note to users reading this: DO NOT ALTER. IMPORTANT IF USER DATA NEEDS CONVERTING.");
-                setupstream.Write(textToWrite, 0, textToWrite.Length);
-            }
-            else
-            {
-                MessageBox(2);
-            }
-
-            //File.WriteAllText(@"0:\content\themes\default.gtheme", "Default = White\nStartup = DarkMagenta,Red,DarkRed\nWindowText = Cyan\nWindowBorder = Green\nErrorText = Red\nOther1 = Yellow");
-            //File.WriteAllText(@"0:\content\sys\theme.gms", @"ThemeFile = 0:\content\themes\default.gtheme");
+            //VFSManager.CreateFile(@"0:\content\sys\option-showprotectedfiles.gms");
+            //VFSManager.CreateFile(@"0:\content\sys\option-editprotectedfiles.gms");
+            //VFSManager.CreateFile(@"0:\content\sys\option-deleteprotectedfiles.gms");
 
             DrawPage(0);
             DrawPage(1);
             DrawPage(2);
             MessageBox(0);
-            var setupcontent1 = VFSManager.GetFile(@"0:\content\sys\user.gms");
-            var setupstream1 = setupcontent1.GetFileStream();
-            if (setupstream.CanWrite)
+            try
             {
-                byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {usrn}\ncomputername: {cprn}");
-                setupstream1.Write(textToWrite, 0, textToWrite.Length);
+                Directory.CreateDirectory(@"0:\content");
+                Directory.CreateDirectory(@"0:\content\sys");
+                Directory.CreateDirectory(@"0:\content\themes");
+                File.Create(@"0:\content\sys\setup.gms");
+                File.WriteAllText(@"0:\content\sys\version.gms", $"System.Version is set to {Kernel.version} \n Note to users reading this: DO NOT ALTER. IMPORTANT IF USER DATA NEEDS CONVERTING.");
+                File.WriteAllText(@"0:\content\sys\user.gms", $"username: {usrn}\ncomputername: {cprn}");
+                File.WriteAllText(@"0:\content\themes\default.gtheme", "Default = White\nStartup = DarkMagenta,Red,DarkRed\nWindowText = Cyan\nWindowBorder = Green\nErrorText = Red\nOther1 = Yellow");
+                File.WriteAllText(@"0:\content\sys\theme.gms", @"ThemeFile = 0:\content\themes\default.gtheme");
             }
-            else
-            {
-                MessageBox(2);
-            }
+            catch (Exception e) { Console.WriteLine(e); }
         }
 
         /// <summary>

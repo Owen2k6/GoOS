@@ -167,9 +167,15 @@ namespace GoOS
                     {
                         computername = line.Replace("computername: ", "");
                     }
-                    if (line.StartsWith("themefile: "))
+                }
+
+                Console.WriteLine("TEST");
+                foreach (string line in File.ReadAllLines(@"0:\content\sys\theme.gms"))
+                {
+                    if (line.StartsWith("themeFile = "))
                     {
-                        ThemeManager.SetTheme(line.Replace("themefile: ", ""));
+                        Console.WriteLine(line + " & " + line.Split("themeFile = ")[1]);
+                        ThemeManager.SetTheme(line.Split("themeFile = ")[1]);
                     }
                 }
             }
