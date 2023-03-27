@@ -6,12 +6,15 @@ using Sys = Cosmos.System;
 using Console = System.Console;
 using GoOS.Themes;
 using static GoOS.Themes.ThemeManager;
+using Cosmos.System;
+using Cosmos.System.ScanMaps;
+using System.Drawing;
 
 namespace GoOS.Settings
 {
     public static class ControlPanel
     {
-        // Welcome to the most commented file in GoOS
+        // Welcome to the worst file in GoOS
         //agreed
         // GoOS Core
 
@@ -290,6 +293,86 @@ namespace GoOS.Settings
         }
 
         /// <summary>
+        /// Show a dialogue for changing the keyboard layout.
+        /// </summary>
+        private static void KeyboardLayoutDialogue()
+        {
+            List<(string, ScanMapBase)> scanMaps = new()
+            {
+                ("British English", new GB_Standard()),
+                ("US English", new US_Standard()),
+                ("Deutsch (German)", new DE_Standard()),
+                ("Espanol (Spanish)", new ES_Standard()),
+                ("Turkce (Turkish)", new TR_StandardQ())
+            };
+
+            Console.BackgroundColor = Black;
+            Console.ForegroundColor = WindowBorder;
+            int y = 7;
+            CP737Console.Write("╔════════════════════╗", 29, y);
+            for (int i = 0; i < scanMaps.Count; i++)
+            {
+                CP737Console.Write("║                    ║", 29, y + i + 1);
+            }
+            CP737Console.Write("╚════════════════════╝", 29, y + scanMaps.Count + 1);
+
+            int selectedScanMap = 0;
+            while (true)
+            {
+                for (int j = 0; j < scanMaps.Count; j++)
+                {
+                    Console.SetCursorPosition(30, y + j + 1);
+                    if (j == selectedScanMap)
+                    {
+                        textcolour(Black);
+                        highlightcolour(White);
+                    }
+                    else
+                    {
+                        textcolour(WindowText);
+                        highlightcolour(Black);
+                    }
+
+                    string label = scanMaps[j].Item1;
+                    Console.Write(label + new string(' ', 20 - label.Length));
+                }
+                var input = Console.ReadKey();
+                switch (input.Key)
+                {
+                    case ConsoleKey.Enter:
+                        KeyboardManager.SetKeyLayout(scanMaps[selectedScanMap].Item2);
+
+                        Console.ForegroundColor = WindowBorder;
+                        CP737Console.Write("╔════════════════════╗", 29, 10);
+                        CP737Console.Write("║                    ║", 29, 11);
+                        CP737Console.Write("║                    ║", 29, 12);
+                        CP737Console.Write("║                    ║", 29, 13);
+                        CP737Console.Write("╚════════════════════╝", 29, 14);
+
+                        Console.ForegroundColor = WindowText;
+                        DrawTitle(" Success ", 10);
+                        Console.SetCursorPosition(32, 11);
+                        Console.Write("Layout updated.");
+
+                        MkButton("OK", 39, 13, WindowText, Black);
+
+                        Console.ReadKey(true);
+                        return;
+                    case ConsoleKey.UpArrow:
+                        selectedScanMap--;
+                        if (selectedScanMap < 0) selectedScanMap = scanMaps.Count - 1;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        selectedScanMap++;
+                        if (selectedScanMap >= scanMaps.Count) selectedScanMap = 0;
+                        break;
+                    case ConsoleKey.Escape:
+                        return;
+                }
+            }
+        }
+
+        /// <summary>
         /// Something.
         /// </summary>
         private static void Run()
@@ -312,16 +395,22 @@ namespace GoOS.Settings
                     if (selected2 == 1)
                     {
                         MkButton("About", 2, 1, WindowText, Black);
-                        MkButton("Support", 2, 2, Black, WindowText);   
+                        MkButton("Support", 2, 2, Black, WindowText);
+                        MkButton("Keyboard", 2, 3, Black, WindowText);
                     }
                     else if (selected2 == 2)
                     {
                         MkButton("About", 2, 1, Black, WindowText);
                         MkButton("Support", 2, 2, WindowText, Black);
+                        MkButton("Keyboard", 2, 3, Black, WindowText);
+                    }
+                    else if (selected2 == 3)
+                    {
+                        MkButton("About", 2, 1, Black, WindowText);
+                        MkButton("Support", 2, 2, Black, WindowText);
+                        MkButton("Keyboard", 2, 3, WindowText, Black);
                     }
                     Console.ForegroundColor = Black; Console.BackgroundColor = Black;
-                    Console.SetCursorPosition(1, 3);
-                    Console.Write("            ");
                     Console.SetCursorPosition(1, 4);
                     Console.Write("            ");
                     Console.SetCursorPosition(1, 5);
@@ -340,12 +429,18 @@ namespace GoOS.Settings
                     {
                         selected2 = 1;
                     }
-                    if (selected2 > 2)
+                    if (selected2 > 3)
                     {
-                        selected2 = 2;
+                        selected2 = 3;
                     }
                     switch (key.Key)
                     {
+                        case ConsoleKey.Enter:
+                            if (selected2 == 3)
+                            {
+                                KeyboardLayoutDialogue();
+                            }
+                            break;
                         case ConsoleKey.Tab:
                             // xrc2. This comment is for you.
                             // DO NOT TOUCH THE CODE DIRECLY BELOW THIS COMMENT, IF YOU DO IT WILL BREAK THE SETINGS MENU. YOU HAVE BEEN WARNED.
@@ -376,12 +471,12 @@ namespace GoOS.Settings
                             }
                             break;
                         case ConsoleKey.UpArrow:
-                            if (selected2 == 1) { selected2 = 2; }
-                            else if (selected2 == 2) { selected2 = 1; }
+                            selected2--;
+                            if (selected2 < 1) selected2 = 3;
                             break;
                         case ConsoleKey.DownArrow:
-                            if (selected2 == 2) { selected2 = 1; }
-                            else if (selected2 == 1) { selected2 = 2; }
+                            selected2++;
+                            if (selected2 > 3) selected2 = 1;
                             break;
                         case ConsoleKey.Escape:
                             running = false;
@@ -392,6 +487,7 @@ namespace GoOS.Settings
                     {
                         MkButton("About", 2, 2, WindowText, Black);
                         MkButton("Support", 2, 3, Black, WindowText);
+                        MkButton("Keyboard", 2, 3, Black, WindowText);
 
                         textcolour(WindowText);
                         highlightcolour(Black);
@@ -402,7 +498,7 @@ namespace GoOS.Settings
                         Console.SetCursorPosition(15, 4);
                         Console.Write("                                                                ");
                         Console.SetCursorPosition(15, 5);
-                        Console.Write("GoOS is a free and open source software designed with GoCosmos. ");
+                        Console.Write("GoOS is a free and open source software designed with Cosmos.   ");
                         Console.SetCursorPosition(15, 6);
                         Console.Write("If you paid for this software, you should issue a refound       ");
                         Console.SetCursorPosition(15, 7);
@@ -412,11 +508,12 @@ namespace GoOS.Settings
                     {
                         MkButton("About", 2, 2, Black, WindowText);
                         MkButton("Support", 2, 3, WindowText, Black);
+                        MkButton("Keyboard", 2, 3, Black, WindowText);
 
                         textcolour(WindowText);
                         highlightcolour(Black);
                         Console.SetCursorPosition(15, 2);
-                        Console.Write("GoOS Suport                                                     ");
+                        Console.Write("GoOS Support                                                    ");
                         Console.SetCursorPosition(15, 3);
                         Console.Write("                                                                ");
                         Console.SetCursorPosition(15, 4);
@@ -427,6 +524,21 @@ namespace GoOS.Settings
                         Console.Write("For reporting an issue, please report the issue in the issues   ");
                         Console.SetCursorPosition(15, 7);
                         Console.Write("tab in the Github repository.                                   ");
+                    }
+                    else if (selected2 == 3)
+                    {
+                        textcolour(WindowText);
+                        highlightcolour(Black);
+                        Console.SetCursorPosition(15, 2);
+                        Console.Write("Keyboard                                                        ");
+
+                        for (int y = 3; y < 15; y++)
+                        {
+                            Console.SetCursorPosition(15, y);
+                            Console.Write("                                                                ");
+                        }
+
+                        MkButton("Change Layout", 15, 4, WindowText, Black);
                     }
                 }
                 else if (menu == "Personalisation")
@@ -495,12 +607,12 @@ namespace GoOS.Settings
                             }
                             break;
                         case ConsoleKey.UpArrow:
-                            if (selected2 == 1) { selected2 = 2; }
-                            else if (selected2 == 2) { selected2 = 1; }
+                            selected2--;
+                            if (selected2 < 1) selected2 = 3;
                             break;
                         case ConsoleKey.DownArrow:
-                            if (selected2 == 2) { selected2 = 1; }
-                            else if (selected2 == 1) { selected2 = 2; }
+                            selected2++;
+                            if (selected2 > 3) selected2 = 1;
                             break;
                         case ConsoleKey.Escape:
                             running = false;
