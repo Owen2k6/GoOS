@@ -65,6 +65,8 @@ namespace GoOS.Commands
                 if (inputaman.EndsWith(".goexe") || inputaman.EndsWith(".gexe"))
                 {
                     string fuckingprogramname = null;
+                    bool isif = false;
+                    bool badif = false;
 
                     log(ConsoleColor.Yellow, "Application.Start");
                     var content = File.ReadAllLines(@"0:\" + inputaman);
@@ -85,14 +87,14 @@ namespace GoOS.Commands
                         {
                         }
 
-                        if (line.StartsWith("sleep"))
+                        if (line.StartsWith("sleep") && badif == false)
                         {
                             String howlong = line.Split("=")[1];
                             int potato = Convert.ToInt32(howlong);
                             sleep(potato);
                         }
 
-                        if (line.StartsWith("input"))
+                        if (line.StartsWith("input") && badif == false)
                         {
                             if (line == "input=")
                             {
@@ -108,7 +110,7 @@ namespace GoOS.Commands
                             }
                         }
 
-                        if (line.StartsWith("stop"))
+                        if (line.StartsWith("stop") && badif == false)
                         {
                             if (line == "stop=")
                             {
@@ -128,12 +130,12 @@ namespace GoOS.Commands
                             }
                         }
 
-                        if (line.StartsWith("endmsg"))
+                        if (line.StartsWith("endmsg") && badif == false)
                         {
                             endmessage = line.Replace("endmsg=", "");
                         }
 
-                        if (line.StartsWith("regprog"))
+                        if (line.StartsWith("regprog") && badif == false)
                         {
                             if (hasbeenregistered)
                             {
@@ -158,7 +160,7 @@ namespace GoOS.Commands
                             }
                         }
 
-                        if (line.StartsWith("string"))
+                        if (line.StartsWith("string") && badif == false)
                         {
                             string whythehellnotwork = line.Replace(@"string ", "");
                             string varName = whythehellnotwork.Split(@" = ")[0];
@@ -173,7 +175,7 @@ namespace GoOS.Commands
                             Strings.Add(varName, varContents);
                         }
 
-                        if (line.StartsWith("int"))
+                        if (line.StartsWith("int") && badif == false)
                         {
                             int intCont = 0;
                             string whythehellnotwork = line.Replace(@"int ", "");
@@ -199,7 +201,7 @@ namespace GoOS.Commands
                             Strings.Add(varName, trueCont);
                         }
 
-                        if (line.StartsWith(@"print="))
+                        if (line.StartsWith(@"print=") && badif == false)
                         {
                             string assSplitter = line.Replace(@"print=", "");
                             // we like splitting ass round here
@@ -232,7 +234,7 @@ namespace GoOS.Commands
                             }
                         }
 
-                        if (line.StartsWith("if"))
+                        if (line.StartsWith("if") && badif == false)
                         {
                             string removeIf = line.Substring(3);
                             if (removeIf.Contains("=="))
@@ -311,14 +313,14 @@ namespace GoOS.Commands
                                 {
                                     if (string1 != string2)
                                     {
-                                        break;
+                                        badif = true;
                                     }
                                 }
                                 else if (intorstring == "int")
                                 {
                                     if (int1 != int2)
                                     {
-                                        break;
+                                        badif = true;
                                     }
                                 }
                             }
@@ -399,20 +401,27 @@ namespace GoOS.Commands
                                 {
                                     if (string1 == string2)
                                     {
-                                        break;
+                                        badif = true;
                                     }
                                 }
                                 else if (intorstring == "int")
                                 {
                                     if (int1 == int2)
                                     {
-                                        break;
+                                        badif = true;
                                     }
                                 }
                             }
                         }
+                        
+                        if (line.StartsWith("break") && badif == true && isif == true)
+                        {
+                            badif = false;
+                            isif = false;
+                            continue;
+                        }
 
-                        if (line.StartsWith(@"save="))
+                        if (line.StartsWith(@"save=") && badif == false)
                         {
                             string whatvartosave = line.Substring(5);
                             if (Strings.TryGetValue(whatvartosave, out string strval))
@@ -517,7 +526,7 @@ namespace GoOS.Commands
                             }
                         }
 
-                        if (line.StartsWith(@"load="))
+                        if (line.StartsWith(@"load=") && badif == false)
                         {
                             int intCont = 0;
                             string whatvartoload = line.Substring(5);
@@ -574,7 +583,7 @@ namespace GoOS.Commands
                             }
                         }
 
-                        if (line.StartsWith("frontcolor="))
+                        if (line.StartsWith("frontcolor=") && badif == false)
                         {
                             string ass = line.Substring(11);
                             if (ass == "white")
@@ -643,7 +652,7 @@ namespace GoOS.Commands
                             }
                         }
 
-                        if (line.StartsWith("backcolor="))
+                        if (line.StartsWith("backcolor=") && badif == false)
                         {
                             string ass = line.Substring(10);
                             if (ass == "white")
