@@ -133,7 +133,8 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
-            ThemeManager.SetTheme(Theme.Default);
+            ThemeManager.SetTheme(Theme.Fallback);
+            Console.WriteLine("Starting up GoOS...");
             try
             {
                 FS = new Sys.FileSystem.CosmosVFS(); Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS); FS.Initialize(true);
@@ -166,6 +167,15 @@ namespace GoOS
                     if (line.StartsWith("computername: "))
                     {
                         computername = line.Replace("computername: ", "");
+                    }
+                }
+
+                foreach (string line in File.ReadAllLines(@"0:\content\sys\theme.gms"))
+                {
+                    if (line.StartsWith("ThemeFile = "))
+                    {
+                        //Console.WriteLine(line + " & " + line.Split("ThemeFile = ")[1]);
+                        ThemeManager.SetTheme(line.Split("ThemeFile = ")[1]);
                     }
                 }
             }
@@ -255,11 +265,10 @@ namespace GoOS
             textcolour(ThemeManager.WindowBorder);
             write(currentdirfix);
             textcolour(ThemeManager.Default);
-            String input = Console.ReadLine();
-            String[] args = input.Split(' ');
 
+            // Commands section
 
-            //codein tiem
+            string[] args = Console.ReadLine().Split(' ');
             switch (args[0])
             {
                 case "help":
@@ -415,8 +424,18 @@ namespace GoOS
                 case "clear":
                     Console.Clear();
                     break;
-                case "toggletheme":
-                    Commands.ToggleTheme.Main();
+                case "settheme":
+                    if (args.Length > 2)
+                    {
+                        log(ThemeManager.ErrorText, "Too many arguments");
+                        break;
+                    }
+                    if (args.Length == 1)
+                    {
+                        log(ThemeManager.ErrorText, "Missing arguments");
+                        break;
+                    }
+                    ThemeManager.SetTheme(@"0:\content\themes\" + args[1]);
                     break;
                 default:
                     Console.WriteLine("Invalid command.");
