@@ -299,11 +299,12 @@ namespace GoOS.Settings
         {
             List<(string, ScanMapBase)> scanMaps = new()
             {
-                ("British English", new GB_Standard()),
-                ("US English", new US_Standard()),
-                ("Deutsch (German)", new DE_Standard()),
-                ("Espanol (Spanish)", new ES_Standard()),
-                ("Turkce (Turkish)", new TR_StandardQ())
+                ("Deutsch (German)", new DEStandardLayout()),
+                ("Espanol (Spanish)", new ESStandardLayout()),
+                ("Francais (French)", new ESStandardLayout()),
+                ("British English", new GBStandardLayout()),
+                ("Turkce (Turkish)", new TRStandardLayout()),
+                ("US English", new USStandardLayout())
             };
 
             Console.BackgroundColor = Black;
