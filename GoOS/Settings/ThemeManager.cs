@@ -72,6 +72,7 @@ namespace GoOS.Themes
                             if (StringToConsoleColor.TryGetValue(result, out ConsoleColor colorval))
                             {
                                 Background = colorval;
+                                Console.BackgroundColor = colorval;
                             }
                         }
                         else if (line.StartsWith("Startup = "))

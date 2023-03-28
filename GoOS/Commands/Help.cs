@@ -66,7 +66,7 @@ namespace GoOS.Commands
                         log(ThemeManager.WindowText, "cdr - Jump to root from anywhere.");
                         log(ThemeManager.WindowText, "dir - List all files and folders in the current directory.");
                         log(ThemeManager.WindowText, "vm {vmname} - Make a file.");
-                        log(ThemeManager.WindowText, "toggletheme - Change the theme.");
+                        log(ThemeManager.WindowText, "settheme - Change the theme.");
                         break;
                     case 3:
                         log(ThemeManager.WindowText, "settings - Open the settings app.");

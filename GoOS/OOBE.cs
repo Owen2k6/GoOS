@@ -2,9 +2,8 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Sys = Cosmos.System;
-using Cosmos.System.FileSystem.VFS;
-using static System.ConsoleColor;
 using static GoOS.Themes.ThemeManager;
 
 namespace GoOS
@@ -120,6 +119,8 @@ namespace GoOS
 
         public static void Open()
         {
+            Console.CursorVisible = false; // plz work
+
             DrawFrame();
             DrawTitle(" GoOS Setup ", 0);
             MessageBox(1);
@@ -138,10 +139,10 @@ namespace GoOS
                 //File.Create(@"0:\content\sys\option-showprotectedfiles.gms");
                 //File.Create(@"0:\content\sys\option-editprotectedfiles.gms");
                 //File.Create(@"0:\content\sys\option-deleteprotectedfiles.gms");
-                File.WriteAllText(@"0:\content\themes\default.gtheme", "Default = White\nBackground = ThemeManager.Background\nStartup = DarkMagenta,Red,DarkRed\nWindowText = Cyan\nWindowBorder = Green\nErrorText = Red\nOther1 = Yellow");
-                File.WriteAllText(@"0:\content\themes\mono.gtheme", "Default = White\nBackground = ThemeManager.Background\nStartup = White,White,White\nWindowText = White\nWindowBorder = White\nErrorText = White\nOther1 = White");
-                File.WriteAllText(@"0:\content\themes\dark.gtheme", "Default = Gray\nBackground = ThemeManager.Background\nStartup = DarkGray,Gray,DarkGray\nWindowText = Gray\nWindowBorder = DarkGray\nErrorText = DarkGray\nOther1 = DarkGray");
-                File.WriteAllText(@"0:\content\themes\light.gtheme", "Default = ThemeManager.Background\nThemeManager.BackgroundWhite\nStartup = ThemeManager.Background,ThemeManager.Background,ThemeManager.Background\nWindowText = ThemeManager.Background\nWindowBorder = ThemeManager.Background\nErrorText = ThemeManager.Background\nOther1 = ThemeManager.Background");
+                File.WriteAllText(@"0:\content\themes\default.gtheme", "Default = White\nBackground = Black\nStartup = DarkMagenta,Red,DarkRed\nWindowText = Cyan\nWindowBorder = Green\nErrorText = Red\nOther1 = Yellow");
+                File.WriteAllText(@"0:\content\themes\mono.gtheme", "Default = White\nBackground = Black\nStartup = White,White,White\nWindowText = White\nWindowBorder = White\nErrorText = White\nOther1 = White");
+                File.WriteAllText(@"0:\content\themes\dark.gtheme", "Default = Gray\nBackground = Black\nStartup = DarkGray,Gray,DarkGray\nWindowText = Gray\nWindowBorder = DarkGray\nErrorText = DarkGray\nOther1 = DarkGray");
+                File.WriteAllText(@"0:\content\themes\light.gtheme", "Default = Black\nBackground = White\nStartup = Black,Black,Black\nWindowText = Black\nWindowBorder = Black\nErrorText = Black\nOther1 = Black");
                 File.WriteAllText(@"0:\content\sys\theme.gms", @"ThemeFile = 0:\content\themes\default.gtheme");
             }
             catch (Exception e) { Console.WriteLine(e); }
@@ -236,10 +237,12 @@ namespace GoOS
                 string welcomeText = "Welcome to GoOS";
                 string setupText = "We have some things to set up and get sorted!";
                 string continueText = "Press enter to continue...";
+                string broDidntPressEnter = "Bro I said enter!";
 
                 int welcomePosition = 40 - (welcomeText.Length / 2);
                 int setupPosition = 40 - (setupText.Length / 2);
                 int continuePosition = 40 - (continueText.Length / 2);
+                int broDidntPressEnterPosition = 40 - (broDidntPressEnter.Length / 2);
 
                 Console.SetCursorPosition(welcomePosition, 2);
                 Console.Write(welcomeText);
@@ -250,12 +253,17 @@ namespace GoOS
                 Console.SetCursorPosition(continuePosition, 22);
                 Console.Write(continueText);
 
-                #region Key reading
-
+            readagain:
                 ConsoleKeyInfo key = Console.ReadKey(true);
-                while (key.Key != ConsoleKey.Enter) {}
-
-                #endregion
+                if (key.Key != ConsoleKey.Enter)
+                {
+                    Console.SetCursorPosition(broDidntPressEnterPosition, 20);
+                    Console.Write(broDidntPressEnter);
+                    Thread.Sleep(500);
+                    Console.SetCursorPosition(broDidntPressEnterPosition, 20);
+                    Console.Write("                 ");
+                    goto readagain;
+                }
             }
             else if (page == 1)
             {
@@ -271,6 +279,7 @@ namespace GoOS
                 string y = "on our Github page. Forks of our OS will not be supported";
                 string u = "by us. Keep your OS up to date to keep getting support!";
                 string i = "Press F8 to accept UA, otherwise press Escape to shut down...";
+                string broDidntPressEnter = "Bro I said F8 or escape!";
 
                 int titlePos = 40 - (title.Length / 2);
                 int qPos = 40 - (q.Length / 2);
@@ -281,6 +290,7 @@ namespace GoOS
                 int yPos = 40 - (y.Length / 2);
                 int uPos = 40 - (u.Length / 2);
                 int iPos = 40 - (i.Length / 2);
+                int broDidntPressEnterPosition = 40 - (broDidntPressEnter.Length / 2);
 
                 Console.SetCursorPosition(titlePos, 2);
                 Console.Write(title);
@@ -299,26 +309,19 @@ namespace GoOS
                 Console.SetCursorPosition(iPos, 13);
                 Console.Write(i);
 
-                #region Key reading
 
+            readagain:
                 ConsoleKeyInfo key = Console.ReadKey(true);
-                bool done = false;
-
-                while (!done)
+                if (key.Key != ConsoleKey.F8 && key.Key != ConsoleKey.Escape)
                 {
-                    switch (key.Key)
-                    {
-                        case ConsoleKey.Escape:
-                            Sys.Power.Shutdown();
-                            break;
-
-                        case ConsoleKey.F8:
-                            done = true;
-                            break;
-                    }
+                    Console.SetCursorPosition(broDidntPressEnterPosition, 20);
+                    Console.Write(broDidntPressEnter);
+                    Thread.Sleep(500);
+                    Console.SetCursorPosition(broDidntPressEnterPosition, 20);
+                    Console.Write("                        ");
+                    goto readagain;
                 }
-
-                #endregion
+                else if (key.Key == ConsoleKey.Escape) { Sys.Power.Shutdown(); }
             }
             else if (page == 2)
             {

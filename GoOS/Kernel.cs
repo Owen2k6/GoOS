@@ -265,11 +265,10 @@ namespace GoOS
             textcolour(ThemeManager.WindowBorder);
             write(currentdirfix);
             textcolour(ThemeManager.Default);
-            String input = Console.ReadLine();
-            String[] args = input.Split(' ');
 
+            // Commands section
 
-            //codein tiem
+            string[] args = Console.ReadLine().Split(' ');
             switch (args[0])
             {
                 case "help":
