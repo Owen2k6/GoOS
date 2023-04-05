@@ -32,6 +32,10 @@ using System.Runtime.InteropServices;
 using System.Reflection.Metadata;
 using GoOS.Settings;
 using GoOS.Themes;
+using IL2CPU.API.Attribs;
+using System;
+using System.Reflection.Metadata.Ecma335;
+using static Cosmos.Core.INTs;
 
 //Goplex Studios - GoOS
 //Copyright (C) 2022  Owen2k6
@@ -62,7 +66,8 @@ namespace GoOS
         public void clog(System.ConsoleColor colour, string str)
         {
             Console.ForegroundColor = colour;
-            CP737Console.Write(str + "\n");
+            CP737Console.Write(str);
+            Console.WriteLine();
         }
         public void cwrite(string str)
         {
@@ -120,6 +125,7 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
+            System.Console.SetWindowSize(90, 60);
             ThemeManager.SetTheme(Theme.Fallback);
             Console.WriteLine("Starting up GoOS...");
             try
@@ -265,6 +271,32 @@ namespace GoOS
                         break;
                     }
                     Commands.Help.Main();
+                    break;
+                case "crash":
+                    textcolour(ConsoleColor.Yellow);
+                    write("What app do you want to install: ");
+                    textcolour(ConsoleColor.White);
+                    String filetoget = Console.ReadLine();
+                    textcolour(ConsoleColor.Green);
+                    using (var xClient = new TcpClient(39482))
+                    {
+                        xClient.Connect(new Address(135, 125, 172, 225), 80);
+                        //135.125.172.225
+
+                        /** Send data **/
+                        xClient.Send(Encoding.ASCII.GetBytes("GET /" + filetoget + ".goexe HTTP/1.1\nHost: ubnserver.owen2k6.com\n\n"));
+
+                        /** Receive data **/
+                        var endpoint = new EndPoint(Address.Zero, 0);
+                        var data = xClient.Receive(ref endpoint);  //set endpoint to remote machine IP:port
+                        var data2 = xClient.NonBlockingReceive(ref endpoint); //retrieve receive buffer without waiting
+                        string bitString = BitConverter.ToString(data2);
+                        File.Create(@"0:\" + filetoget + ".goexe");
+                        File.WriteAllText(@"0:\" + filetoget + ".goexe", bitString);
+                        print(bitString);
+
+
+                    }
                     break;
                 case "run":
                     if (args.Length > 2)

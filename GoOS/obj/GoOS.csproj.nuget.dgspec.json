@@ -47,11 +47,17 @@
           "targetAlias": "net6.0",
           "dependencies": {
             "Cosmos.Build": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
-              "version": "[0.0.0-*, )",
+              "version": "[0.1.0-localbuild20230401111355, )",
               "noWarn": [
                 "NU1604"
               ]
+            },
+            "Cosmos.Core": {
+              "target": "Package",
+              "version": "[0.1.0-localbuild20230401050230, )"
             },
             "Cosmos.Debug.Kernel": {
               "target": "Package",
@@ -60,12 +66,20 @@
                 "NU1604"
               ]
             },
+            "Cosmos.HAL2": {
+              "target": "Package",
+              "version": "[0.1.0-localbuild20230401050230, )"
+            },
             "Cosmos.System2": {
               "target": "Package",
               "version": "[0.0.0-*, )",
               "noWarn": [
                 "NU1604"
               ]
+            },
+            "IL2CPU.API": {
+              "target": "Package",
+              "version": "[0.1.0-localbuild20230401111400, )"
             }
           },
           "imports": [
