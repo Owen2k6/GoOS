@@ -1,33 +1,23 @@
 {
   "version": 2,
-  "dgSpecHash": "B5aa7AvB4WvAm7YRTWqaq/UIPaPurC32XyzkKMSHtTRLYdIJp6kxEreaFp0ep8Tvxo6/KyzQjzWuNVZXgHQuuA==",
+  "dgSpecHash": "f0hZiPJa1Zy1I3XsB//PLq/cd+JY5rNVvpJTMUXgBVp0IiKlJbuV39HvE20M2BfIYsw12q8whlnZgaMB+KX4ng==",
   "success": true,
-  "projectFilePath": "C:\\Users\\User\\Documents\\GitHub\\GoOS\\GoOS\\GoOS.csproj",
+  "projectFilePath": "D:\\GitHub\\GoOS\\GoOS\\GoOS.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\User\\.nuget\\packages\\cosmos.build\\0.1.0-localbuild20230405014419\\cosmos.build.0.1.0-localbuild20230405014419.nupkg.sha512",
-    "C:\\Users\\User\\.nuget\\packages\\cosmos.common\\0.1.0-localbuild20230405014424\\cosmos.common.0.1.0-localbuild20230405014424.nupkg.sha512",
-    "C:\\Users\\User\\.nuget\\packages\\cosmos.core\\0.1.0-localbuild20230405014424\\cosmos.core.0.1.0-localbuild20230405014424.nupkg.sha512",
-    "C:\\Users\\User\\.nuget\\packages\\cosmos.debug.kernel\\0.1.0-localbuild20230405014424\\cosmos.debug.kernel.0.1.0-localbuild20230405014424.nupkg.sha512",
-    "C:\\Users\\User\\.nuget\\packages\\cosmos.hal2\\0.1.0-localbuild20230405014424\\cosmos.hal2.0.1.0-localbuild20230405014424.nupkg.sha512",
-    "C:\\Users\\User\\.nuget\\packages\\cosmos.system2\\0.1.0-localbuild20230405014424\\cosmos.system2.0.1.0-localbuild20230405014424.nupkg.sha512",
-    "C:\\Users\\User\\.nuget\\packages\\il2cpu.api\\0.1.0-localbuild20230405014424\\il2cpu.api.0.1.0-localbuild20230405014424.nupkg.sha512"
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.build\\0.1.0-localbuild20230401111355\\cosmos.build.0.1.0-localbuild20230401111355.nupkg.sha512",
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.common\\0.1.0-localbuild20230401111400\\cosmos.common.0.1.0-localbuild20230401111400.nupkg.sha512",
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.core\\0.1.0-localbuild20230401111400\\cosmos.core.0.1.0-localbuild20230401111400.nupkg.sha512",
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.debug.kernel\\0.1.0-localbuild20230401111400\\cosmos.debug.kernel.0.1.0-localbuild20230401111400.nupkg.sha512",
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.hal2\\0.1.0-localbuild20230401111400\\cosmos.hal2.0.1.0-localbuild20230401111400.nupkg.sha512",
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.system2\\0.1.0-localbuild20230401111400\\cosmos.system2.0.1.0-localbuild20230401111400.nupkg.sha512",
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\il2cpu.api\\0.1.0-localbuild20230401111400\\il2cpu.api.0.1.0-localbuild20230401111400.nupkg.sha512"
   ],
   "logs": [
     {
       "code": "NU1603",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "GoOS depends on Cosmos.Build (>= 0.1.0-localbuild20230401111355) but Cosmos.Build 0.1.0-localbuild20230401111355 was not found. An approximate best match of Cosmos.Build 0.1.0-localbuild20230405014419 was resolved.",
-      "libraryId": "Cosmos.Build",
-      "targetGraphs": [
-        "net6.0"
-      ]
-    },
-    {
-      "code": "NU1603",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "GoOS depends on Cosmos.Core (>= 0.1.0-localbuild20230401050230) but Cosmos.Core 0.1.0-localbuild20230401050230 was not found. An approximate best match of Cosmos.Core 0.1.0-localbuild20230405014424 was resolved.",
+      "message": "GoOS depends on Cosmos.Core (>= 0.1.0-localbuild20230401050230) but Cosmos.Core 0.1.0-localbuild20230401050230 was not found. An approximate best match of Cosmos.Core 0.1.0-localbuild20230401111400 was resolved.",
       "libraryId": "Cosmos.Core",
       "targetGraphs": [
         "net6.0"
@@ -37,18 +27,8 @@
       "code": "NU1603",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "GoOS depends on Cosmos.HAL2 (>= 0.1.0-localbuild20230401050230) but Cosmos.HAL2 0.1.0-localbuild20230401050230 was not found. An approximate best match of Cosmos.HAL2 0.1.0-localbuild20230405014424 was resolved.",
+      "message": "GoOS depends on Cosmos.HAL2 (>= 0.1.0-localbuild20230401050230) but Cosmos.HAL2 0.1.0-localbuild20230401050230 was not found. An approximate best match of Cosmos.HAL2 0.1.0-localbuild20230401111400 was resolved.",
       "libraryId": "Cosmos.HAL2",
-      "targetGraphs": [
-        "net6.0"
-      ]
-    },
-    {
-      "code": "NU1603",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "GoOS depends on IL2CPU.API (>= 0.1.0-localbuild20230401111400) but IL2CPU.API 0.1.0-localbuild20230401111400 was not found. An approximate best match of IL2CPU.API 0.1.0-localbuild20230405014424 was resolved.",
-      "libraryId": "IL2CPU.API",
       "targetGraphs": [
         "net6.0"
       ]

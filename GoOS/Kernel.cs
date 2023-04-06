@@ -67,14 +67,13 @@ namespace GoOS
         public void clog(System.ConsoleColor colour, string str)
         {
             Console.ForegroundColor = colour;
-            Console.Write(str);
-            Console.Write("\n");
+            CP737Console.Write(str);
+            Console.WriteLine();
         }
-        public void cwrite(System.ConsoleColor colour, string str)
+        public void cwrite(string str)
         {
-            Console.ForegroundColor = colour;
-            //CP737Console.Write(str);
-            Console.Write(str);
+            CP737Console.Write(str);
+
         }
         public void write(string str)
         {
@@ -127,7 +126,7 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
-            System.Console.SetWindowSize(90, 60);
+            System.Console.SetWindowSize(90, 30);
             Console.OutputEncoding = Cosmos.System.ExtendedASCII.CosmosEncodingProvider.Instance.GetEncoding(437);
             ThemeManager.SetTheme(Theme.Fallback);
             Console.WriteLine("Starting up GoOS...");
@@ -191,15 +190,15 @@ namespace GoOS
             }
 
             Console.Clear();
-            cwrite(ThemeManager.Startup[0], "╔═════════════════════════════════════════════════════════════════════════════╗\n");
-            cwrite(ThemeManager.Startup[1], "║═══════════════════████████████══════════════════════════════════════════════║\n");
-            cwrite(ThemeManager.Startup[2], "║══════════════██████████████████████═════════════════════════════════════════║\n");
-            cwrite(ThemeManager.Startup[0], "║═██████████═██████████████████████████═══════════════════════════════════════║\n");
-            cwrite(ThemeManager.Startup[1], "║═████████═══█████████════════██████══════════════════════════════════════════║\n");
-            cwrite(ThemeManager.Startup[2], "║═███████════█████════════════════════════════════════════════════════════════║\n");
-            cwrite(ThemeManager.Startup[0], "║═██████═════███════════════════════════════════╔═══════════════════════════╗═║\n");
+            
+            log(ThemeManager.Startup[0], "╔═════════════════════════════════════════════════════════════════════════════╗");
+            log(ThemeManager.Startup[1], "║═══════════════════████████████══════════════════════════════════════════════║");
+            log(ThemeManager.Startup[2], "║══════════════██████████████████████═════════════════════════════════════════║");
+            log(ThemeManager.Startup[0], "║═██████████═██████████████████████████═══════════════════════════════════════║");
+            log(ThemeManager.Startup[1], "║═████████═══█████████════════██████══════════════════════════════════════════║");
+            log(ThemeManager.Startup[2], "║═███████════█████════════════════════════════════════════════════════════════║");
+            log(ThemeManager.Startup[0], "║═██████═════███════════════════════════════════╔═══════════════════════════╗═║");
             //Do NOT change owen.
-            // Change it owen! Do it!
             textcolour(ThemeManager.Startup[1]);
             write("║═█████══════██═════════════════════════════════║");
             textcolour(ThemeManager.Default);
