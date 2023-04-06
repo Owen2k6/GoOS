@@ -64,17 +64,6 @@ namespace GoOS
             Console.ForegroundColor = colour;
             Console.WriteLine(str);
         }
-        public void clog(System.ConsoleColor colour, string str)
-        {
-            Console.ForegroundColor = colour;
-            CP737Console.Write(str);
-            Console.WriteLine();
-        }
-        public void cwrite(string str)
-        {
-            CP737Console.Write(str);
-
-        }
         public void write(string str)
         {
             Console.Write(str);
