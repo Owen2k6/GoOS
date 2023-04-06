@@ -35,6 +35,7 @@ using GoOS.Themes;
 using IL2CPU.API.Attribs;
 using System;
 using System.Reflection.Metadata.Ecma335;
+using GoOS.Commands;
 using static Cosmos.Core.INTs;
 
 //Goplex Studios - GoOS
@@ -125,7 +126,8 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
-            System.Console.SetWindowSize(90, 60);
+            System.Console.SetWindowSize(90, 30);
+            Console.OutputEncoding = Cosmos.System.ExtendedASCII.CosmosEncodingProvider.Instance.GetEncoding(437);
             ThemeManager.SetTheme(Theme.Fallback);
             Console.WriteLine("Starting up GoOS...");
             try
@@ -188,50 +190,51 @@ namespace GoOS
             }
 
             Console.Clear();
-            clog(ThemeManager.Startup[0], "╔═════════════════════════════════════════════════════════════════════════════╗");
-            clog(ThemeManager.Startup[1], "║═══════════════════████████████══════════════════════════════════════════════║");
-            clog(ThemeManager.Startup[2], "║══════════════██████████████████████═════════════════════════════════════════║");
-            clog(ThemeManager.Startup[0], "║═██████████═██████████████████████████═══════════════════════════════════════║");
-            clog(ThemeManager.Startup[1], "║═████████═══█████████════════██████══════════════════════════════════════════║");
-            clog(ThemeManager.Startup[2], "║═███████════█████════════════════════════════════════════════════════════════║");
-            clog(ThemeManager.Startup[0], "║═██████═════███════════════════════════════════╔═══════════════════════════╗═║");
+            
+            log(ThemeManager.Startup[0], "╔═════════════════════════════════════════════════════════════════════════════╗");
+            log(ThemeManager.Startup[1], "║═══════════════════████████████══════════════════════════════════════════════║");
+            log(ThemeManager.Startup[2], "║══════════════██████████████████████═════════════════════════════════════════║");
+            log(ThemeManager.Startup[0], "║═██████████═██████████████████████████═══════════════════════════════════════║");
+            log(ThemeManager.Startup[1], "║═████████═══█████████════════██████══════════════════════════════════════════║");
+            log(ThemeManager.Startup[2], "║═███████════█████════════════════════════════════════════════════════════════║");
+            log(ThemeManager.Startup[0], "║═██████═════███════════════════════════════════╔═══════════════════════════╗═║");
             //Do NOT change owen.
             textcolour(ThemeManager.Startup[1]);
-            cwrite("║═█████══════██═════════════════════════════════║");
+            write("║═█████══════██═════════════════════════════════║");
             textcolour(ThemeManager.Default);
-            cwrite("Goplex Studios GoOS.       ");
+            write("Goplex Studios GoOS.       ");
             textcolour(ThemeManager.Startup[1]);
-            cwrite("║═║\n");
+            write("║═║\n");
             textcolour(ThemeManager.Startup[2]);
-            cwrite("║═█████══════█════════════████████████████████══║");
+            write("║═█████══════█════════════████████████████████══║");
             textcolour(ThemeManager.Default);
-            cwrite("Copyright 2023 (c) Owen2k6.");
+            write("Copyright 2023 (c) Owen2k6.");
             textcolour(ThemeManager.Startup[2]);
-            cwrite("║═║\n");
+            write("║═║\n");
             textcolour(ThemeManager.Startup[0]);
-            cwrite("║═█████══════██═══════════███████████████████═══║");
+            write("║═█████══════██═══════════███████████████████═══║");
             textcolour(ThemeManager.Default);
-            cwrite("Version " + version + "               ");
+            write("Version " + version + "               ");
             textcolour(ThemeManager.Startup[0]);
-            cwrite(" ║═║\n");
+            write(" ║═║\n");
             textcolour(ThemeManager.Startup[1]);
-            cwrite("║═█████══════██═══════════███████████████████═══║");
+            write("║═█████══════██═══════════███████████████████═══║");
             textcolour(ThemeManager.Default);
-            cwrite("Welcome to GoOS.           ");
+            write("Welcome to GoOS.           ");
             textcolour(ThemeManager.Startup[1]);
-            cwrite("║═║\n");
+            write("║═║\n");
             //Ok now continue
-            clog(ThemeManager.Startup[2], "║═██████═════████═════════██████████████████════╚═══════════════════════════╝═║");
-            clog(ThemeManager.Startup[0], "║═███████════██████══════════════██████████═══════════════════════════════════║");
-            clog(ThemeManager.Startup[1], "║═█████████══████████████████████████████═════════════════════════════════════║");
-            clog(ThemeManager.Startup[2], "║═███████████═════════════════════════════════════════════════════════════════║");
-            clog(ThemeManager.Startup[0], "║═███████████████══════════════════████═══════════════════════════════════════║");
-            clog(ThemeManager.Startup[1], "║═█████████████████████████████████████═══════════════════════════════════════║");
-            clog(ThemeManager.Startup[2], "║═█████████████████████████████████████═══════════════════════════════════════║");
-            clog(ThemeManager.Startup[0], "╚═════════════════════════════════════════════════════════════════════════════╝");
-            clog(ThemeManager.WindowText, "╔═════════════════════════════════════════════════════════════════════════════╗");
-            clog(ThemeManager.WindowText, "║    GoOS Beta release 1.5-pre2. Report bugs on the issues page on github     ║");
-            clog(ThemeManager.WindowText, "╚═════════════════════════════════════════════════════════════════════════════╝");
+            log(ThemeManager.Startup[2], "║═██████═════████═════════██████████████████════╚═══════════════════════════╝═║");
+            log(ThemeManager.Startup[0], "║═███████════██████══════════════██████████═══════════════════════════════════║");
+            log(ThemeManager.Startup[1], "║═█████████══████████████████████████████═════════════════════════════════════║");
+            log(ThemeManager.Startup[2], "║═███████████═════════════════════════════════════════════════════════════════║");
+            log(ThemeManager.Startup[0], "║═███████████████══════════════════████═══════════════════════════════════════║");
+            log(ThemeManager.Startup[1], "║═█████████████████████████████████████═══════════════════════════════════════║");
+            log(ThemeManager.Startup[2], "║═█████████████████████████████████████═══════════════════════════════════════║");
+            log(ThemeManager.Startup[0], "╚═════════════════════════════════════════════════════════════════════════════╝");
+            log(ThemeManager.WindowText, "╔═════════════════════════════════════════════════════════════════════════════╗");
+            log(ThemeManager.WindowText, "║    GoOS Beta release 1.5-pre2. Report bugs on the issues page on github     ║");
+            log(ThemeManager.WindowText, "╚═════════════════════════════════════════════════════════════════════════════╝");
 
             string roota = @"0:\";
             Directory.SetCurrentDirectory(roota);
@@ -460,6 +463,9 @@ namespace GoOS
                         break;
                     }
                     ThemeManager.SetTheme(@"0:\content\themes\" + args[1]);
+                    break;
+                case "systest":
+                    systest.run();
                     break;
                 default:
                     Console.WriteLine("Invalid command.");

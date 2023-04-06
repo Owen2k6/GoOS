@@ -45,118 +45,14 @@ namespace GoOS.Settings
             System.Threading.Thread.Sleep(time);
         }
         #endregion
-
-        #region CP737
-
-        /// <summary>
-        /// Prints characters on the CP737 code-page.
-        /// </summary>
-        private static class CP737Console
-        {
-            public static readonly Sys.Console console = new(null);
-
-            public static readonly Dictionary<char, byte> unicodeToCP737
-                = new()
-                {
-            {  '░', 0xB0 }, {  '▒', 0xB1 },
-            {  '▓', 0xB2 }, {  '│', 0xB3 },
-            {  '┤', 0xB4 }, {  '╡', 0xB5 },
-            {  '╢', 0xB6 }, {  '╖', 0xB7 },
-            {  '╕', 0xB8 }, {  '╣', 0xB9 },
-            {  '║', 0xBA }, {  '╗', 0xBB },
-            {  '╝', 0xBC }, {  '╜', 0xBD },
-            {  '╛', 0xBE }, {  '┐', 0xBF },
-            {  '└', 0xC0 }, {  '┴', 0xC1 },
-            {  '┬', 0xC2 }, {  '├', 0xC3 },
-            {  '─', 0xC4 }, {  '┼', 0xC5 },
-            {  '╞', 0xC6 }, {  '╟', 0xC7 },
-            {  '╚', 0xC8 }, {  '╔', 0xC9 },
-            {  '╩', 0xCA }, {  '╦', 0xCB },
-            {  '╠', 0xCC }, {  '═', 0xCD },
-            {  '╬', 0xCE }, {  '╧', 0xCF },
-            {  '╨', 0xD0 }, {  '╤', 0xD1 },
-            {  '╥', 0xD2 }, {  '╙', 0xD3 },
-            {  '╘', 0xD4 }, {  '╒', 0xD5 },
-            {  '╓', 0xD6 }, {  '╫', 0xD7 },
-            {  '╪', 0xD8 }, {  '┘', 0xD9 },
-            {  '┌', 0xDA }, {  '█', 0xDB },
-            {  '▄', 0xDC }, {  '▌', 0xDD },
-            {  '▐', 0xDE }, {  '▀', 0xDF },
-            {  '■', 0xFE }
-                };
-
-            /// <summary>
-            /// Writes the given characters at the current position.
-            /// </summary>
-            /// <param name="line">The line to write.</param>
-            /// <param name="x">The X coordinate to write the text to. If set to a negative value, the current cursor position will be used.</param>
-            /// <param name="y">The Y coordinate to write the text to. If set to a negative value, the current cursor position will be used.</param>
-            public static void Write(string line, int x = -1, int y = -1)
-            {
-                console.CursorVisible = Console.CursorVisible;
-                console.Background = Console.BackgroundColor;
-                console.Foreground = Console.ForegroundColor;
-                console.X = Console.CursorLeft;
-                console.Y = Console.CursorTop;
-
-                if (x < 0) x = Console.CursorLeft;
-                if (y < 0) y = Console.CursorTop;
-
-                Span<byte> encodingBuffer = stackalloc byte[1];
-                Span<char> inputBuffer = stackalloc char[1];
-
-                for (int i = 0; i < line.Length; i++)
-                {
-                    console.X = x;
-                    console.Y = y;
-
-                    if (line[i] == '\n')
-                    {
-                        x = 0;
-                        y++;
-                        continue;
-                    }
-
-                    if (unicodeToCP737.TryGetValue(line[i], out byte mapped))
-                    {
-                        console.Write(mapped);
-                        if (console.Y > 24)
-                        {
-                            console.X = 0;
-                            console.Y = 24;
-                        }
-                    }
-                    else
-                    {
-                        inputBuffer[0] = line[i];
-                        Encoding.ASCII.GetBytes(inputBuffer, encodingBuffer);
-                        console.Write(encodingBuffer[0]);
-                    }
-
-                    x++;
-                    if (x > Console.WindowWidth)
-                    {
-                        x = 0;
-                        y++;
-                    }
-
-                    if (y > Console.WindowHeight)
-                    {
-                        // stop character printing
-                        break;
-                    }
-                }
-            }
-        }
-
-        #endregion
+        
 
         /// <summary>
         /// Opens the settings.
         /// </summary>
         public static void Open()
         {
-            CP737Console.console.CursorVisible = false;
+            Console.CursorVisible = false;
             Console.CursorVisible = false;
             DrawFrame();
             Run();
@@ -174,31 +70,35 @@ namespace GoOS.Settings
             {
                 Console.BackgroundColor = Black;
                 Console.ForegroundColor = WindowBorder;
-                CP737Console.Write("╔════════════╦═════════════════════════════════════════════════════════════════╗\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "╠════════════╩═════════════════════════════════════════════════════════════════╣\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "╚══════════════════════════════════════════════════════════════════════════════");
+                Console.Write("╔════════════╦══════════════════════════════════════════════════════════════════════════╗\n" + //1
+                                   "║            ║                                                                          ║\n" + //2
+                                   "║            ║                                                                          ║\n" + //3
+                                   "║            ║                                                                          ║\n" + //   4
+                                   "║            ║                                                                          ║\n" + //5
+                                   "║            ║                                                                          ║\n" + //6
+                                   "║            ║                                                                          ║\n" + //7
+                                   "║            ║                                                                          ║\n" + //8
+                                   "║            ║                                                                          ║\n" +//9
+                                   "║            ║                                                                          ║\n" + //10
+                                   "║            ║                                                                          ║\n" + //11
+                                   "║            ║                                                                          ║\n" +  //12
+                                   "║            ║                                                                          ║\n" +  //13
+                                   "║            ║                                                                          ║\n" +      //14
+                                   "║            ║                                                                          ║\n" +  //15
+                                   "║            ║                                                                          ║\n" +  //16
+                                   "║            ║                                                                          ║\n" +  //17
+                                   "║            ║                                                                          ║\n" +  //18
+                                   "║            ║                                                                          ║\n" +  //19
+                                   "║            ║                                                                          ║\n" +  //20
+                                   "║            ║                                                                          ║\n" +      //21
+                                   "║            ║                                                                          ║\n" +  //22
+                                   "║            ║                                                                          ║\n" +  //23
+                                   "║            ║                                                                          ║\n" +  //24
+                                   "╠════════════╩══════════════════════════════════════════════════════════════════════════╣\n" +  //25
+                                   "║                                                                                       ║\n" +  //26
+                                   "║                                                                                       ║\n" +  //27
+                                   "║                                                                                       ║\n" +  //28
+                                   "╚═══════════════════════════════════════════════════════════════════════════════════════╝");    //29
                 Console.SetCursorPosition(2, 19);
                 Console.ForegroundColor = Yellow;
                 //Console.Write("Arrow keys");
@@ -213,11 +113,7 @@ namespace GoOS.Settings
                     DontTouch = false;
                 }
                 //Console.Write("Tab");
-
-                if (CP737Console.unicodeToCP737.TryGetValue('╝', out byte mapped))
-                {
-                    CP737Console.console.mText[79, 24] = mapped;
-                }
+                
             }
             catch { }
         }
@@ -257,24 +153,6 @@ namespace GoOS.Settings
             }
         }
 
-        /// <summary>
-        /// Shows a message box.
-        /// </summary>
-        private static void MessageBox()
-        {
-            Console.ForegroundColor = WindowBorder;
-            CP737Console.Write("╔════════════════════╗", 29, 10);
-            CP737Console.Write("║                    ║", 29, 11);
-            CP737Console.Write("║                    ║", 29, 12);
-            CP737Console.Write("║                    ║", 29, 13);
-            CP737Console.Write("╚════════════════════╝", 29, 14);
-
-            Console.ForegroundColor = WindowText;
-            DrawTitle(" Info ", 10);
-            Console.SetCursorPosition(31, 12);
-            Console.Write("Saving settings...");
-            Console.Clear();
-        }
 
         /// <summary>
         /// Makes a button
@@ -310,12 +188,12 @@ namespace GoOS.Settings
             Console.BackgroundColor = Black;
             Console.ForegroundColor = WindowBorder;
             int y = 7;
-            CP737Console.Write("╔════════════════════╗", 29, y);
+            Console.Write("╔════════════════════╗", 29, y);
             for (int i = 0; i < scanMaps.Count; i++)
             {
-                CP737Console.Write("║                    ║", 29, y + i + 1);
+                Console.Write("║                    ║", 29, y + i + 1);
             }
-            CP737Console.Write("╚════════════════════╝", 29, y + scanMaps.Count + 1);
+            Console.Write("╚════════════════════╝", 29, y + scanMaps.Count + 1);
 
             int selectedScanMap = 0;
             while (true)
@@ -342,22 +220,7 @@ namespace GoOS.Settings
                 {
                     case ConsoleKey.Enter:
                         KeyboardManager.SetKeyLayout(scanMaps[selectedScanMap].Item2);
-
-                        Console.ForegroundColor = WindowBorder;
-                        CP737Console.Write("╔════════════════════╗", 29, 10);
-                        CP737Console.Write("║                    ║", 29, 11);
-                        CP737Console.Write("║                    ║", 29, 12);
-                        CP737Console.Write("║                    ║", 29, 13);
-                        CP737Console.Write("╚════════════════════╝", 29, 14);
-
-                        Console.ForegroundColor = WindowText;
-                        DrawTitle(" Success ", 10);
-                        Console.SetCursorPosition(32, 11);
-                        Console.Write("Layout updated.");
-
-                        MkButton("OK", 39, 13, WindowText, Black);
-
-                        Console.ReadKey(true);
+                        
                         return;
                     case ConsoleKey.UpArrow:
                         selectedScanMap--;
@@ -746,8 +609,7 @@ namespace GoOS.Settings
                     byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {thingtosave}\ncomputername: {Kernel.computername}");
                     setupstream.Write(textToWrite, 0, textToWrite.Length);
                     Kernel.username = thingtosave;
-
-                    MessageBox();
+                    
                     menu = "main";
                     selected = 2;
                     DrawFrame();
@@ -771,7 +633,7 @@ namespace GoOS.Settings
                     setupstream.Write(textToWrite, 0, textToWrite.Length);
                     Kernel.computername = thingtosave;
 
-                    MessageBox();
+
                     menu = "main";
                     selected = 2;
                     DrawFrame();
@@ -781,11 +643,11 @@ namespace GoOS.Settings
                 else if (menu == "reset system")
                 {
                     Console.ForegroundColor = WindowBorder;
-                    CP737Console.Write("╔════════════════════════╗", 27, 10);
-                    CP737Console.Write("║                        ║", 27, 11);
-                    CP737Console.Write("║                        ║", 27, 12);
-                    CP737Console.Write("║                        ║", 27, 13);
-                    CP737Console.Write("╚════════════════════════╝", 27, 14);
+                    Console.Write("╔════════════════════════╗", 27, 10);
+                    Console.Write("║                        ║", 27, 11);
+                    Console.Write("║                        ║", 27, 12);
+                    Console.Write("║                        ║", 27, 13);
+                    Console.Write("╚════════════════════════╝", 27, 14);
 
                     Console.ForegroundColor = WindowText;
                     DrawTitle(" Confirmation ", 10);
@@ -985,15 +847,13 @@ namespace GoOS.Settings
                     }
                     else // you dont need an elif for no. literally anything else and kick out
                     {
-                        MessageBox();
                         menu = "main";
                         selected = 2;
                         DrawFrame();
                         Console.ForegroundColor = WindowText;
                     }
 
-
-                    MessageBox();
+                    
                     menu = "main";
                     selected = 2;
                     DrawFrame();
