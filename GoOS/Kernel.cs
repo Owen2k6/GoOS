@@ -310,8 +310,15 @@ namespace GoOS
                         {
 
                             log(ConsoleColor.Red, "2");
-                            xClient.Connect(new Address(5, 39, 84, 58), 80, 1000);
-                            //5.39.84.58
+                            try
+                            {
+                                xClient.Connect(NetworkConfiguration.CurrentAddress, 500, 1000);
+                                //5.39.84.58
+                            }
+                            catch (Exception e)
+                            {
+                                log(ConsoleColor.Red, e.ToString());
+                            }
 
                             log(ConsoleColor.Red, "3");
                             /** Send data **/
@@ -340,7 +347,7 @@ namespace GoOS
                     catch (Exception e)
                     {
                         log(ConsoleColor.Red, "Internal Error:");
-                        log(ConsoleColor.White, e.Message);
+                        log(ConsoleColor.White, e.ToString());
                     }
 
                     break;
