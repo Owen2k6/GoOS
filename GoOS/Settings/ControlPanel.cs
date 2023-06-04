@@ -9,6 +9,7 @@ using static GoOS.Themes.ThemeManager;
 using Cosmos.System;
 using Cosmos.System.ScanMaps;
 using System.Drawing;
+using Cosmos.Core;
 
 namespace GoOS.Settings
 {
@@ -45,11 +46,6 @@ namespace GoOS.Settings
             System.Threading.Thread.Sleep(time);
         }
         #endregion
-        
-
-        /// <summary>
-        /// Opens the settings.
-        /// </summary>
         public static void Open()
         {
             Console.CursorVisible = false;
@@ -59,9 +55,6 @@ namespace GoOS.Settings
         }
 
         public static bool DontTouch = true;
-        /// <summary>
-        /// Draws the frame.
-        /// </summary>
         private static void DrawFrame()
         {
             // Do not touch. I know what I'm doing.
@@ -101,27 +94,20 @@ namespace GoOS.Settings
                                    "╚═══════════════════════════════════════════════════════════════════════════════════════╝");    //29
                 Console.SetCursorPosition(2, 19);
                 Console.ForegroundColor = Yellow;
-                //Console.Write("Arrow keys");
                 Console.SetCursorPosition(2, 22);
                 if (DontTouch)
                 {
-                    MkButton("General", 2, 22, WindowText, Black);
-                    MkButton("Personalisation", 10, 22, Black, WindowText);
-                    MkButton("Advanced", 26, 22, Black, WindowText);
+                    MkButton("General", 2, 26, WindowText, Black);
+                    MkButton("Personalisation", 10, 26, Black, WindowText);
+                    MkButton("Advanced", 26, 26, Black, WindowText);
                     MkButton("About", 2, 1, WindowText, Black);
                     MkButton("Support", 2, 2, Black, WindowText);
                     DontTouch = false;
                 }
-                //Console.Write("Tab");
-                
+
             }
             catch { }
         }
-
-        /// <summary>
-        /// Writes a title to the top of the frame.
-        /// </summary>
-        /// <param name="Title">The title to be written.</param>
         private static void DrawTitle(string Title, int Y)
         {
             int OldX = Console.CursorLeft; int OldY = Console.CursorTop;
@@ -131,11 +117,6 @@ namespace GoOS.Settings
             Console.Write(Title);
             Console.SetCursorPosition(OldX, OldY);
         }
-
-        /// <summary>
-        /// Write some controls to the bottom of the screen.
-        /// </summary>
-        /// <param name="Controls">The controls to be written.</param>
         private static void DrawControls(string Controls)
         {
             int OldX = Console.CursorLeft; int OldY = Console.CursorTop;
@@ -152,16 +133,6 @@ namespace GoOS.Settings
                 }
             }
         }
-
-
-        /// <summary>
-        /// Makes a button
-        /// </summary>
-        /// <param name="name">The name of the button.</param>
-        /// <param name="x">The X location of the button.</param>
-        /// <param name="y">The Y location of the button.</param>
-        /// <param name="highlight">The background color of the button</param>
-        /// <param name="colour">The foreground color of the button</param>
         private static void MkButton(string name, int x, int y, ConsoleColor highlight, ConsoleColor colour)
         {
             Console.SetCursorPosition(x, y);
@@ -169,31 +140,21 @@ namespace GoOS.Settings
             Console.ForegroundColor = colour;
             Console.Write(name);
         }
-
-        /// <summary>
-        /// Show a dialogue for changing the keyboard layout.
-        /// </summary>
         private static void KeyboardLayoutDialogue()
         {
             List<(string, ScanMapBase)> scanMaps = new()
             {
-                ("Deutsch (German)", new DEStandardLayout()),
-                ("Espanol (Spanish)", new ESStandardLayout()),
-                ("Francais (French)", new ESStandardLayout()),
-                ("British English", new GBStandardLayout()),
-                ("Turkce (Turkish)", new TRStandardLayout()),
-                ("US English", new USStandardLayout())
+                ("105GBQWERTY-GB-1.0", new GBStandardLayout()),
+                ("104USQWERTY-US-1.0", new USStandardLayout()),
+                ("105DEQWERTY-DE-1.0", new DEStandardLayout()),
+                ("105ESQWERTY-ES-1.0", new ESStandardLayout()),
+                ("105FRQWERTY-FR-1.0", new FRStandardLayout()),
+                ("105TRQWERTY-TR-1.0", new TRStandardLayout())
             };
 
             Console.BackgroundColor = Black;
             Console.ForegroundColor = WindowBorder;
             int y = 7;
-            Console.Write("╔════════════════════╗", 29, y);
-            for (int i = 0; i < scanMaps.Count; i++)
-            {
-                Console.Write("║                    ║", 29, y + i + 1);
-            }
-            Console.Write("╚════════════════════╝", 29, y + scanMaps.Count + 1);
 
             int selectedScanMap = 0;
             while (true)
@@ -235,27 +196,17 @@ namespace GoOS.Settings
                 }
             }
         }
-
-        /// <summary>
-        /// Something.
-        /// </summary>
         private static void Run()
         {
             bool running = true;
             string menu = "General";
             int selected = 1;
             int selected2 = 1;
-
             Console.ForegroundColor = WindowText;
-
             while (running)
             {
                 if (menu == "General")
                 {
-                    // ID 1: General
-                    // ID 2: Personalisation
-                    // ID 3: Advanced
-
                     if (selected2 == 1)
                     {
                         MkButton("About", 2, 1, WindowText, Black);
@@ -306,31 +257,29 @@ namespace GoOS.Settings
                             }
                             break;
                         case ConsoleKey.Tab:
-                            // xrc2. This comment is for you.
-                            // DO NOT TOUCH THE CODE DIRECLY BELOW THIS COMMENT, IF YOU DO IT WILL BREAK THE SETINGS MENU. YOU HAVE BEEN WARNED.
                             if (selected == 1) { selected = 2; }
                             else if (selected == 2) { selected = 3; }
                             else if (selected == 3) { selected = 1; }
 
                             if (selected == 1)
                             {
-                                MkButton("General", 2, 22, WindowText, Black);
-                                MkButton("Personalisation", 10, 22, Black, WindowText);
-                                MkButton("Advanced", 26, 22, Black, WindowText);
+                                MkButton("General", 2, 26, WindowText, Black);
+                                MkButton("Personalisation", 10, 26, Black, WindowText);
+                                MkButton("Advanced", 26, 26, Black, WindowText);
                                 menu = "General";
                             }
                             if (selected == 2)
                             {
-                                MkButton("General", 2, 22, Black, WindowText);
-                                MkButton("Personalisation", 10, 22, WindowText, Black);
-                                MkButton("Advanced", 26, 22, Black, WindowText);
+                                MkButton("General", 2, 26, Black, WindowText);
+                                MkButton("Personalisation", 10, 26, WindowText, Black);
+                                MkButton("Advanced", 26, 26, Black, WindowText);
                                 menu = "Personalisation";
                             }
                             if (selected == 3)
                             {
-                                MkButton("General", 2, 22, Black, WindowText);
-                                MkButton("Personalisation", 10, 22, Black, WindowText);
-                                MkButton("Advanced", 26, 22, WindowText, Black);
+                                MkButton("General", 2, 26, Black, WindowText);
+                                MkButton("Personalisation", 10, 26, Black, WindowText);
+                                MkButton("Advanced", 26, 26, WindowText, Black);
                                 menu = "Advanced";
                             }
                             break;
@@ -352,27 +301,43 @@ namespace GoOS.Settings
                         MkButton("About", 2, 2, WindowText, Black);
                         MkButton("Support", 2, 3, Black, WindowText);
                         MkButton("Keyboard", 2, 3, Black, WindowText);
+                        for (int y = 1; y <= 23; y++)
+                        {
+                            Console.SetCursorPosition(15, y);
+                            Console.Write("                                                                          ");
+                        }
+
 
                         textcolour(WindowText);
                         highlightcolour(Black);
                         Console.SetCursorPosition(15, 2);
-                        Console.Write("GoOS                                                            ");
+                        Console.Write("GoOS");
                         Console.SetCursorPosition(15, 3);
-                        Console.Write("Version " + Kernel.version + "                                                     ");
+                        Console.Write("Version " + Kernel.version);
                         Console.SetCursorPosition(15, 4);
-                        Console.Write("                                                                ");
+                        Console.Write("Available RAM (Memory): " + GCImplementation.GetAvailableRAM().ToString() + "");
                         Console.SetCursorPosition(15, 5);
-                        Console.Write("GoOS is a free and open source software designed with Cosmos.   ");
-                        Console.SetCursorPosition(15, 6);
-                        Console.Write("If you paid for this software, you should issue a refound       ");
-                        Console.SetCursorPosition(15, 7);
-                        Console.Write("request or report to proper authorities.                        ");
+                        Console.Write("Used RAM (Memory):" + GCImplementation.GetUsedRAM());
+                        Console.SetCursorPosition(15, 20);
+                        Console.Write("GoOS is a free and open source software designed with Cosmos.");
+                        Console.SetCursorPosition(15, 21);
+                        Console.Write("If you paid for this software, you should request a refund or");
+                        Console.SetCursorPosition(15, 21);
+                        Console.Write("report to proper authorities.");
+                        Console.SetCursorPosition(15, 24);
+                        Console.Write("GoOS is and always will be open-source and free.");
                     }
                     else if (selected2 == 2)
                     {
                         MkButton("About", 2, 2, Black, WindowText);
                         MkButton("Support", 2, 3, WindowText, Black);
                         MkButton("Keyboard", 2, 3, Black, WindowText);
+                        
+                        for (int y = 1; y <= 23; y++)
+                        {
+                            Console.SetCursorPosition(15, y);
+                            Console.Write("                                                                          ");
+                        }
 
                         textcolour(WindowText);
                         highlightcolour(Black);
@@ -391,6 +356,14 @@ namespace GoOS.Settings
                     }
                     else if (selected2 == 3)
                     {
+                        MkButton("About", 2, 2, Black, WindowText);
+                        MkButton("Support", 2, 3, Black, WindowText);
+                        MkButton("Keyboard", 2, 3, WindowText, Black);
+                        for (int y = 1; y <= 23; y++)
+                        {
+                            Console.SetCursorPosition(15, y);
+                            Console.Write("                                                                          ");
+                        }
                         textcolour(WindowText);
                         highlightcolour(Black);
                         Console.SetCursorPosition(15, 2);
@@ -407,12 +380,6 @@ namespace GoOS.Settings
                 }
                 else if (menu == "Personalisation")
                 {
-                    // ID 4: General
-                    // ID 5: Personalisation
-                    // ID 6: Advanced
-
-                    
-
                     if (selected == 0)
                     {
                         selected = +1;
@@ -421,11 +388,6 @@ namespace GoOS.Settings
                     {
                         selected = selected - 1;
                     }
-
-                    //MkButton("General", 2, 22, Black, WindowText);
-                    //MkButton("Personalisation", 10, 22, WindowText, Black);
-                    //MkButton("Advanced", 26, 22, Black, WindowText);
-
                     Console.SetCursorPosition(1, 1);
                     Console.ForegroundColor = Black; Console.BackgroundColor = Black;
                     Console.Write("           ");
@@ -442,31 +404,29 @@ namespace GoOS.Settings
                     switch (key.Key)
                     {
                         case ConsoleKey.Tab:
-                            // xrc2. This comment is for you (again).
-                            // DO NOT TOUCH THE CODE DIRECLY BELOW THIS COMMENT, IF YOU DO IT WILL BREAK THE SETINGS MENU. YOU HAVE BEEN WARNED.
                             if (selected == 1) { selected = 2; }
                             else if (selected == 2) { selected = 3; }
                             else if (selected == 3) { selected = 1; }
 
                             if (selected == 1)
                             {
-                                MkButton("General", 2, 22, WindowText, Black);
-                                MkButton("Personalisation", 10, 22, Black, WindowText);
-                                MkButton("Advanced", 26, 22, Black, WindowText);
+                                MkButton("General", 2, 26, WindowText, Black);
+                                MkButton("Personalisation", 10, 26, Black, WindowText);
+                                MkButton("Advanced", 26, 26, Black, WindowText);
                                 menu = "General";
                             }
                             if (selected == 2)
                             {
-                                MkButton("General", 2, 22, Black, WindowText);
-                                MkButton("Personalisation", 10, 22, WindowText, Black);
-                                MkButton("Advanced", 26, 22, Black, WindowText);
+                                MkButton("General", 2, 26, Black, WindowText);
+                                MkButton("Personalisation", 10, 26, WindowText, Black);
+                                MkButton("Advanced", 26, 26, Black, WindowText);
                                 menu = "Personalisation";
                             }
                             if (selected == 3)
                             {
-                                MkButton("General", 2, 22, Black, WindowText);
-                                MkButton("Personalisation", 10, 22, Black, WindowText);
-                                MkButton("Advanced", 26, 22, WindowText, Black);
+                                MkButton("General", 2, 26, Black, WindowText);
+                                MkButton("Personalisation", 10, 26, Black, WindowText);
+                                MkButton("Advanced", 26, 26, WindowText, Black);
                                 menu = "Advanced";
                             }
                             break;
@@ -482,7 +442,6 @@ namespace GoOS.Settings
                             running = false;
                             break;
                     }
-
                     if (selected2 == 1)
                     {
                         MkButton("Default", 2, 2, WindowText, Black);
@@ -526,10 +485,6 @@ namespace GoOS.Settings
                 }
                 else if (menu == "Advanced")
                 {
-                    // ID 4: General
-                    // ID 5: Personalisation
-                    // ID 6: Advanced
-
                     if (selected == 0)
                     {
                         selected = +1;
@@ -538,11 +493,6 @@ namespace GoOS.Settings
                     {
                         selected = selected - 1;
                     }
-
-                    //MkButton("General", 2, 22, Black, WindowText);
-                    //MkButton("Personalisation", 10, 22, Black, WindowText);
-                    //MkButton("Advanced", 26, 22, WindowText, Black);
-
                     Console.SetCursorPosition(1, 1);
                     Console.ForegroundColor = Black; Console.BackgroundColor = Black;
                     Console.Write("           ");
@@ -564,26 +514,25 @@ namespace GoOS.Settings
                             if (selected == 1) { selected = 2; }
                             else if (selected == 2) { selected = 3; }
                             else if (selected == 3) { selected = 1; }
-
                             if (selected == 1)
                             {
-                                MkButton("General", 2, 22, WindowText, Black);
-                                MkButton("Personalisation", 10, 22, Black, WindowText);
-                                MkButton("Advanced", 26, 22, Black, WindowText);
+                                MkButton("General", 2, 26, WindowText, Black);
+                                MkButton("Personalisation", 10, 26, Black, WindowText);
+                                MkButton("Advanced", 26, 26, Black, WindowText);
                                 menu = "General";
                             }
                             if (selected == 2)
                             {
-                                MkButton("General", 2, 22, Black, WindowText);
-                                MkButton("Personalisation", 10, 22, WindowText, Black);
-                                MkButton("Advanced", 26, 22, Black, WindowText);
+                                MkButton("General", 2, 26, Black, WindowText);
+                                MkButton("Personalisation", 10, 26, WindowText, Black);
+                                MkButton("Advanced", 26, 26, Black, WindowText);
                                 menu = "Personalisation";
                             }
                             if (selected == 3)
                             {
-                                MkButton("General", 2, 22, Black, WindowText);
-                                MkButton("Personalisation", 10, 22, Black, WindowText);
-                                MkButton("Advanced", 26, 22, WindowText, Black);
+                                MkButton("General", 2, 26, Black, WindowText);
+                                MkButton("Personalisation", 10, 26, Black, WindowText);
+                                MkButton("Advanced", 26, 26, WindowText, Black);
                                 menu = "Advanced";
                             }
                             break;
@@ -592,7 +541,6 @@ namespace GoOS.Settings
                             break;
                     }
                 }
-
                 else if (menu == "username")
                 {
                     DrawFrame();
@@ -601,7 +549,6 @@ namespace GoOS.Settings
                     Console.SetCursorPosition(2, 11);
                     Console.Write("New Username: ");
                     string thingtosave = Console.ReadLine();
-
                     System.IO.File.Delete(@"0:\content\sys\setup.gms");
                     System.IO.File.Create(@"0:\content\sys\setup.gms");
                     var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
@@ -609,13 +556,11 @@ namespace GoOS.Settings
                     byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {thingtosave}\ncomputername: {Kernel.computername}");
                     setupstream.Write(textToWrite, 0, textToWrite.Length);
                     Kernel.username = thingtosave;
-                    
                     menu = "main";
                     selected = 2;
                     DrawFrame();
                     Console.ForegroundColor = WindowText;
                 }
-
                 else if (menu == "computer name")
                 {
                     DrawFrame();
@@ -624,7 +569,6 @@ namespace GoOS.Settings
                     Console.SetCursorPosition(2, 11);
                     Console.Write("New Computer Name: ");
                     string thingtosave = Console.ReadLine();
-
                     System.IO.File.Delete(@"0:\content\sys\user.gms");
                     System.IO.File.Create(@"0:\content\sys\user.gms");
                     var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\user.gms");
@@ -632,34 +576,21 @@ namespace GoOS.Settings
                     byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {Kernel.username}\ncomputername: {thingtosave}");
                     setupstream.Write(textToWrite, 0, textToWrite.Length);
                     Kernel.computername = thingtosave;
-
-
                     menu = "main";
                     selected = 2;
                     DrawFrame();
                     Console.ForegroundColor = WindowText;
                 }
-
                 else if (menu == "reset system")
                 {
                     Console.ForegroundColor = WindowBorder;
-                    Console.Write("╔════════════════════════╗", 27, 10);
-                    Console.Write("║                        ║", 27, 11);
-                    Console.Write("║                        ║", 27, 12);
-                    Console.Write("║                        ║", 27, 13);
-                    Console.Write("╚════════════════════════╝", 27, 14);
-
                     Console.ForegroundColor = WindowText;
                     DrawTitle(" Confirmation ", 10);
                     Console.SetCursorPosition(29, 12);
                     Console.Write("Are you sure? (Y/N): ");
-
                     #region Key reading
-
                     string thingtosave = "n";
-
                     ConsoleKeyInfo key = Console.ReadKey(true);
-
                     switch (key.Key)
                     {
                         case ConsoleKey.Y:
@@ -672,46 +603,13 @@ namespace GoOS.Settings
                             thingtosave = "n";
                             break;
                     }
-
                     #endregion
-
-
                     Console.SetCursorPosition(2, 11);
                     Console.Write("Are you sure? (Y/N)");
-
                     if (thingtosave == "y")
                     {
-                        // note that that wont do shit
-
                         try
                         {
-                            //DONT ALTER. SOMEHOW IT WORKS
-                            //YOU ARE FRENCH IF YOU TOUCH IT
-                            // no
-                            /*
-                            System.IO.File.Delete(@"0:\content\sys\setup.gms");
-                            emptyDir(@"0:\content\prf");
-                            System.IO.Directory.Delete(@"0:\content\prf");
-                            emptyDir(@"0:\content\");
-                            System.IO.Directory.Delete(@"0:\content\");
-                            emptyDir(@"0:\");
-                            System.IO.Directory.Delete(@"0:\");
-                            System.IO.File.Delete(@"0:\content\sys\version.gms");
-                            System.IO.File.Delete(@"0:\content\sys\userinfo.gms");
-                            System.IO.File.Delete(@"0:\content\sys\option-showprotectedfiles.gms");
-                            System.IO.File.Delete(@"0:\content\sys\option-editprotectedfiles.gms");
-                            System.IO.File.Delete(@"0:\content\sys\option-deleteprotectedfiles.gms");
-                            var directory_list = System.IO.Directory.GetFiles(@"0:\");
-                            foreach (var file in directory_list)
-                            {
-                                System.IO.File.Delete(@"0:\" + file);
-                            }
-                            var directory_list3 = System.IO.Directory.GetDirectories(@"0:\");
-                            foreach (var directory in directory_list3)
-                            {
-                                System.IO.File.Delete(@"0:\" + directory);
-                            }
-                            */
                             DrawFrame();
                             int screenWidth = 80;
                             string title = "RESET IN PROGRESS";
@@ -723,7 +621,6 @@ namespace GoOS.Settings
                             string y = "";
                             string u = "";
                             string i = "";
-
                             int titlePos = screenWidth / 2 - title.Length / 2;
                             int qPos = screenWidth / 2 - q.Length / 2;
                             int wPos = screenWidth / 2 - w.Length / 2;
@@ -733,7 +630,6 @@ namespace GoOS.Settings
                             int yPos = screenWidth / 2 - y.Length / 2;
                             int uPos = screenWidth / 2 - u.Length / 2;
                             int iPos = screenWidth / 2 - i.Length / 2;
-
                             Console.SetCursorPosition(titlePos, 2);
                             Console.Write(title);
                             Console.SetCursorPosition(qPos, 3);
@@ -744,9 +640,7 @@ namespace GoOS.Settings
                             Console.Write(r);
                             Console.SetCursorPosition(rPos, 11);
                             Console.Write(t);
-
                             Kernel.FS.Disks[0].FormatPartition(0, "FAT32", false);
-
                             DrawFrame();
                             screenWidth = 80;
                             title = "System reset complete.";
@@ -758,7 +652,6 @@ namespace GoOS.Settings
                             y = "";
                             u = "";
                             i = "";
-
                             titlePos = screenWidth / 2 - title.Length / 2;
                             qPos = screenWidth / 2 - q.Length / 2;
                             wPos = screenWidth / 2 - w.Length / 2;
@@ -768,7 +661,6 @@ namespace GoOS.Settings
                             yPos = screenWidth / 2 - y.Length / 2;
                             uPos = screenWidth / 2 - u.Length / 2;
                             iPos = screenWidth / 2 - i.Length / 2;
-
                             Console.SetCursorPosition(titlePos, 2);
                             Console.Write(title);
                             Console.SetCursorPosition(qPos, 3);
@@ -781,18 +673,7 @@ namespace GoOS.Settings
                             while (pool)
                             {
                                 //The system will forever hang. this code will never end.
-                                //What why?
-                                // so the user has to restart to complete the reset
-                                // Ohhh
-                                // building test now
-                                // aight
-                                // IT WORKS
-                                // wasdfghjkloipqwerty
-                                // i take that as a pogchamp
-                                // you should add the ability to add custom commands and features to your bot somehow
                             }
-
-
                         }
                         catch (Exception monkeyballs)
                         {
@@ -832,28 +713,16 @@ namespace GoOS.Settings
                             while (pool)
                             {
                                 //The system will forever hang. this code will never end.
-                                //What why?
-                                // so the user has to restart to complete the reset
-                                // Ohhh
-                                // building test now
-                                // aight
-                                // IT WORKS
-                                // wasdfghjkloipqwerty
-                                // i take that as a pogchamp
-                                // you should add the ability to add custom commands and features to your bot somehow
                             }
                         }
-
                     }
-                    else // you dont need an elif for no. literally anything else and kick out
+                    else
                     {
                         menu = "main";
                         selected = 2;
                         DrawFrame();
                         Console.ForegroundColor = WindowText;
                     }
-
-                    
                     menu = "main";
                     selected = 2;
                     DrawFrame();
@@ -863,7 +732,6 @@ namespace GoOS.Settings
             Console.BackgroundColor = Black;
             Console.Clear();
         }
-
         private static void emptyDir(string path)
         {
             var dirtokill = System.IO.Directory.GetFiles(path);
