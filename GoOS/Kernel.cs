@@ -19,7 +19,6 @@ using Cosmos.System.FileSystem;
 using Cosmos.Core;
 using Cosmos.System.Network.IPv4.UDP;
 using System.Diagnostics;
-using GoOS;
 using Cosmos.HAL.BlockDevice.Registers;
 using System.Threading;
 using static System.Net.Mime.MediaTypeNames;
@@ -30,7 +29,6 @@ using Cosmos.HAL.BlockDevice;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Reflection.Metadata;
-using GoOS.Settings;
 using GoOS.Themes;
 using IL2CPU.API.Attribs;
 using System;
@@ -503,7 +501,7 @@ namespace GoOS
                     editor.Start();
                     break;
                 case "settings":
-                    ControlPanel.Open();
+                    Settings.Launch();
                     break;
                 case "vm":
                     if (args.Length > 2)
