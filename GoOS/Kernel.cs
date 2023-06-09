@@ -4,44 +4,15 @@ using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4;
 using Cosmos.System.Network.IPv4.TCP;
 using Cosmos.System.Network.IPv4.UDP.DHCP;
-using Cosmos.System.Network.IPv4.UDP.DNS;
 using System;
-using System.Collections.Generic;
 using Sys = Cosmos.System;
 using System.IO;
-using System.Linq.Expressions;
-using Cosmos.Core.Memory;
-using System.Drawing;
-using IL2CPU.API.Attribs;
 using System.Text;
-using Cosmos.System.FileSystem.VFS;
-using Cosmos.System.FileSystem;
-using Cosmos.Core;
-using Cosmos.System.Network.IPv4.UDP;
-using System.Diagnostics;
-using GoOS;
-using Cosmos.HAL.BlockDevice.Registers;
 using System.Threading;
-using static System.Net.Mime.MediaTypeNames;
-using Cosmos.System;
 using Console = System.Console;
-using System.Linq;
-using Cosmos.HAL.BlockDevice;
-using System.Reflection.Emit;
-using System.Runtime.InteropServices;
-using System.Reflection.Metadata;
-using GoOS.Settings;
 using GoOS.Themes;
-using IL2CPU.API.Attribs;
-using System;
-using System.Reflection.Metadata.Ecma335;
 using Cosmos.System.Network;
 using GoOS.Commands;
-using static Cosmos.Core.INTs;
-using System;
-using Cosmos.HAL;
-using Cosmos.System.Network.IPv4;
-using Cosmos.System.Network;
 
 //Goplex Studios - GoOS
 //Copyright (C) 2022  Owen2k6
@@ -53,6 +24,8 @@ namespace GoOS
         //Vars for OS
         public static string version = "1.5";
         public static string BuildType = "Beta";
+        
+        //We dont even use these 2 vars anymore
         public bool cmdm = true;
         public bool root = false;
 
@@ -62,7 +35,7 @@ namespace GoOS
             Console.WriteLine(str);
         }
 
-        public void log(System.ConsoleColor colour, string str)
+        public static void log(System.ConsoleColor colour, string str)
         {
             Console.ForegroundColor = colour;
             Console.WriteLine(str);
@@ -102,10 +75,12 @@ namespace GoOS
         private static TcpClient tcpc = new TcpClient(80);
         private static Address dns = new Address(8, 8, 8, 8);
         private static EndPoint endPoint = new EndPoint(dns, 80);
+
         public static bool ParseHeader()
         {
             return false;
         }
+
         bool isenabled = true;
         public static VGAScreen VScreen = new VGAScreen();
         public static string username = null;
@@ -295,20 +270,21 @@ namespace GoOS
                         log(ThemeManager.ErrorText, "Invalid Params");
                         break;
                     }
+
                     String filetoget = args[1];
                     try
                     {
                         log(ConsoleColor.Red, "1");
-                        using(var xClient = new DHCPClient())
+                        using (var xClient = new DHCPClient())
                         {
                             /** Send a DHCP Discover packet **/
                             //This will automatically set the IP config after DHCP response
                             xClient.SendDiscoverPacket();
-                            log(ConsoleColor.Blue,NetworkConfiguration.CurrentAddress.ToString());
+                            log(ConsoleColor.Blue, NetworkConfiguration.CurrentAddress.ToString());
                         }
+
                         using (var xClient = new TcpClient(39482))
                         {
-
                             log(ConsoleColor.Red, "2");
                             try
                             {
@@ -503,7 +479,7 @@ namespace GoOS
                     editor.Start();
                     break;
                 case "settings":
-                    ControlPanel.Open();
+                    ControlPanel.Launch();
                     break;
                 case "vm":
                     if (args.Length > 2)
@@ -544,6 +520,20 @@ namespace GoOS
                 case "whoami":
                     log(ThemeManager.ErrorText, "Showing Internet Information");
                     log(ThemeManager.ErrorText, NetworkConfiguration.CurrentAddress.ToString());
+                    break;
+                case "gui":
+                    break;
+                case "lr":
+                    if (args[1] == "get")
+                    {
+                        string app = new GoOS.Util.localRepo().GetFile(args[2]);
+                        log(ThemeManager.WindowText, app);
+                    }
+                    else
+                    {
+                        log(ThemeManager.ErrorText, "Unknown order.");
+                    }
+
                     break;
                 default:
                     Console.WriteLine("Invalid command.");
