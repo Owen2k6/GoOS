@@ -46,7 +46,7 @@ namespace GoOS.Themes
             { "Yellow", Yellow }, { "White", White },
         };
 
-        public static void SetTheme(string themeFile)
+        public static void SetTheme(string themeFile, bool echo = true)
         {
             try
             {
@@ -127,19 +127,28 @@ namespace GoOS.Themes
 
                     File.WriteAllText(@"0:\content\sys\theme.gms", @"ThemeFile = " + themeFile);
 
-                    Console.ForegroundColor = ThemeManager.WindowText;
-                    Console.WriteLine("Theme changed successfully!");
+                    if (echo)
+                    {
+                        Console.ForegroundColor = ThemeManager.WindowText;
+                        Console.WriteLine("Theme changed successfully!");
+                    }
                 }
                 else
                 {
-                    Console.ForegroundColor = ThemeManager.ErrorText;
-                    Console.WriteLine("Theme file doesn't exist or is not a Goplex Theme File!");
+                    if (echo)
+                    {
+                        Console.ForegroundColor = ThemeManager.ErrorText;
+                        Console.WriteLine("Theme file doesn't exist or is not a Goplex Theme File!");
+                    }
                 }
             }
             catch (Exception e)
             {
-                Console.ForegroundColor = ThemeManager.ErrorText;
-                Console.WriteLine("Error while setting theme!\n" + e);
+                if (echo)
+                {
+                    Console.ForegroundColor = ThemeManager.ErrorText;
+                    Console.WriteLine("Error while setting theme!\n" + e);
+                }
             }
         }
     }
