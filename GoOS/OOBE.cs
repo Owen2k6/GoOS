@@ -18,7 +18,6 @@ namespace GoOS
             Console.CursorVisible = false; // plz work
 
             DrawFrame();
-            DrawTitle(" GoOS Setup ", 0);
             MessageBox(1);
             DrawPage(0);
             DrawPage(1);
@@ -32,9 +31,9 @@ namespace GoOS
                 File.Create(@"0:\content\sys\setup.gms");
                 File.WriteAllText(@"0:\content\sys\version.gms", $"System.Version is set to {Kernel.version} \n Note to users reading this: DO NOT ALTER. IMPORTANT IF USER DATA NEEDS CONVERTING.");
                 File.WriteAllText(@"0:\content\sys\user.gms", $"username: {usrn}\ncomputername: {cprn}");
-                //File.Create(@"0:\content\sys\option-showprotectedfiles.gms");
-                //File.Create(@"0:\content\sys\option-editprotectedfiles.gms");
-                //File.Create(@"0:\content\sys\option-deleteprotectedfiles.gms");
+                File.Create(@"0:\content\sys\option-showprotectedfiles.gms");
+                File.Create(@"0:\content\sys\option-editprotectedfiles.gms");
+                File.Create(@"0:\content\sys\option-deleteprotectedfiles.gms");
                 File.WriteAllText(@"0:\content\themes\default.gtheme", "Default = White\nBackground = Black\nStartup = DarkMagenta,Red,DarkRed\nWindowText = Cyan\nWindowBorder = Green\nErrorText = Red\nOther1 = Yellow");
                 File.WriteAllText(@"0:\content\themes\mono.gtheme", "Default = White\nBackground = Black\nStartup = White,White,White\nWindowText = White\nWindowBorder = White\nErrorText = White\nOther1 = White");
                 File.WriteAllText(@"0:\content\themes\dark.gtheme", "Default = Gray\nBackground = Black\nStartup = DarkGray,Gray,DarkGray\nWindowText = Gray\nWindowBorder = DarkGray\nErrorText = DarkGray\nOther1 = DarkGray");
@@ -306,7 +305,7 @@ namespace GoOS
                 Console.ForegroundColor = WindowText;
                 DrawTitle(" Info ", 10);
                 Console.SetCursorPosition(14, 12);
-                Console.Write("A serious error has occoured, setup cannot continue.");
+                Console.Write("A serious error has occurred, setup cannot continue.");
                 while (true) { Console.ReadKey(true); } // Lock up
             }
         }

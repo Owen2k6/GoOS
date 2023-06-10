@@ -6,11 +6,11 @@ using Sys = Cosmos.System;
 using Cosmos.System.ScanMaps;
 using GoOS.Themes;
 
-// Goplex Studios - GoOS
-// Copyright (C) 2022  Owen2k6
-
 namespace GoOS
 {
+    /// <summary>
+    /// Settings app.
+    /// </summary>
     public static class ControlPanel
     {
         private static bool isRunning = true, canEnterMenu = false;
@@ -21,9 +21,8 @@ namespace GoOS
         public static void Launch()
         {
             isRunning = true;
-            // Hide the cursor while in Settings, show it back when exited
             Console.Clear();
-            Console.CursorVisible = false;
+            Console.CursorVisible = false; // Hide the cursor while in Settings, show it back when exited
             MainLoop();
             Console.CursorVisible = true;
             Console.Clear();
@@ -69,6 +68,15 @@ namespace GoOS
                         break;
                 }
 
+                if (menuSelectedButton > 2)
+                {
+                    menuSelectedButton = 0;
+                }
+                else if (menuSelectedButton < 0)
+                {
+                    menuSelectedButton = 2;
+                }
+
                 switch (menuSelectedButton)
                 {
                     case 0: // General menu
@@ -76,7 +84,7 @@ namespace GoOS
                         {
                             categorieSelectedButton = 0;
                         }
-                        if (categorieSelectedButton < 0)
+                        else if (categorieSelectedButton < 0)
                         {
                             categorieSelectedButton = 1;
                         }
@@ -87,9 +95,20 @@ namespace GoOS
                         {
                             categorieSelectedButton = 0;
                         }
-                        if (categorieSelectedButton < 0)
+                        else if (categorieSelectedButton < 0)
                         {
                             categorieSelectedButton = 0;
+                        }
+                        break;
+
+                    case 2: // Info menu
+                        if (categorieSelectedButton > 2)
+                        {
+                            categorieSelectedButton = 0;
+                        }
+                        else if (categorieSelectedButton < 0)
+                        {
+                            categorieSelectedButton = 2;
                         }
                         break;
                 }
@@ -127,11 +146,11 @@ namespace GoOS
                                       "│              │                                                                         │" +
                                       "│              │                                                                         │" +
                                       "│              │                                                                         │" +
-                                      "└──────────────┴────┤ ESC - Exit │ ARROWS - Select Item │ ENTER - Enter Menu ├───────────";
+                                      "└──────────────┴──────────────┤ ESC - Exit │ ARROWS - Select Item │ ENTER - Enter Menu ├─";
 
         private static List<string> categoryButtonsGeneralMenu = new List<string>
         {
-            // These need spaces for proper centering
+            // These need spaces for the size to be the same
             "Keyboard",
             "Themes  ",
         };
@@ -144,7 +163,7 @@ namespace GoOS
 
         private static List<string> categoryButtonsInfoMenu = new List<string>
         {
-            // These too
+            // These too x2
             "Info    ",
             "Support ",
             "Hardware"
@@ -164,7 +183,7 @@ namespace GoOS
         private static void DrawMenu()
         {
             DrawFrame();
-            DrawTitle("GoOS Control Panel");
+            DrawTitle("│ Settings │");
             DrawClock();
 
             // Draw the menu buttons
@@ -189,7 +208,7 @@ namespace GoOS
                     for (int i = 0; i < categoryButtonsGeneralMenu.Count; i++)
                     {
                         bool highlighed = i == categorieSelectedButton;
-                        DrawButton(categoryButtonsGeneralMenu[i], 3, 2 + (i * 2), highlighed); // Draw button automatically at the correct coordinates
+                        DrawButton(categoryButtonsGeneralMenu[i], 3, 2 + i * 2, highlighed); // Draw button automatically at the correct coordinates
                         if (highlighed)
                             menuToShow = categoryButtonsGeneralMenu[i];
                     }
@@ -201,7 +220,7 @@ namespace GoOS
                     for (int i = 0; i < categoryButtonsAdvancedMenu.Count; i++)
                     {
                         bool highlighed = i == categorieSelectedButton;
-                        DrawButton(categoryButtonsAdvancedMenu[i], 3, 2 + (i * 2), highlighed); // Draw button automatically at the correct coordinates
+                        DrawButton(categoryButtonsAdvancedMenu[i], 3, 2 + i * 2, highlighed); // Draw button automatically at the correct coordinates
                         if (highlighed)
                             menuToShow = categoryButtonsAdvancedMenu[i];
                     }
@@ -213,7 +232,7 @@ namespace GoOS
                     for (int i = 0; i < categoryButtonsInfoMenu.Count; i++)
                     {
                         bool highlighed = i == categorieSelectedButton;
-                        DrawButton(categoryButtonsInfoMenu[i], 3, 2 + (i * 2), highlighed); // Draw button automatically at the correct coordinates
+                        DrawButton(categoryButtonsInfoMenu[i], 3, 2 + i * 2, highlighed); // Draw button automatically at the correct coordinates
                         if (highlighed)
                             menuToShow = categoryButtonsInfoMenu[i];
                     }
@@ -251,7 +270,7 @@ namespace GoOS
         private static void DrawTitle(string title)
         {
             ClearTitle(); // No need to redraw the entire frame, this will reduce lag
-            DrawText(" " + title + " ", 45 - (title.Length / 2) - 2, 0, ThemeManager.WindowText, ThemeManager.Background); // Draw the title
+            DrawText(" " + title + " ", 45 - title.Length / 2 - 2, 0, ThemeManager.WindowText, ThemeManager.Background); // Draw the title
         }
 
         /// <summary>
@@ -271,7 +290,7 @@ namespace GoOS
             DrawTitle(message);
             Thread.Sleep(500);
             ClearTitle(); // There's a blank space at (0, 0), fix it with this
-            DrawTitle("GoOS Control Panel");
+            DrawTitle("Settings");
         }
 
         /// <summary>
@@ -360,7 +379,8 @@ namespace GoOS
                             break;
 
                         case ConsoleKey.Enter:
-                            //Cosmos.System.KeyboardManager.SetKeyLayout(scanMaps[keyboardMenuSelectedButton].Item2);
+                            Sys.KeyboardManager.SetKeyLayout(scanMaps[keyboardMenuSelectedButton].Item2);
+                            ClearMenu();
                             break;
 
                         case ConsoleKey.UpArrow:
@@ -401,8 +421,8 @@ namespace GoOS
                             newThemeFile = newThemeFile.Trim();
                             if (newThemeFile.Length > 0)
                             {
-                                //File.WriteAllText(@"0:\content\sys\theme.gms", "ThemeFile = " + newThemeFile);
-                                //ThemeManager.SetTheme(newThemeFile);
+                                File.WriteAllText(@"0:\content\sys\theme.gms", "ThemeFile = " + newThemeFile);
+                                ThemeManager.SetTheme(newThemeFile);
                                 DrawMessage("Saved as \"" + newThemeFile + "\"");
                             }
                             else
@@ -455,14 +475,21 @@ namespace GoOS
                             break;
 
                         case ConsoleKey.R:
-                            ClearMenu();
-                            DrawText("Reset in progress...", 18, 2, ThemeManager.ErrorText, ThemeManager.Background);
-                            DrawText("Please, DON'T TURN OFF YOUR COMPUTER!", 18, 23, ThemeManager.ErrorText, ThemeManager.Background);
-                            DrawText("1. Formatting drive...", 18, 4, ThemeManager.WindowText, ThemeManager.Background);
-                            //Kernel.FS.Disks[0].FormatPartition(0, "FAT32", false);
-                            Console.SetCursorPosition(18, 6);
-                            Console.Write("2. Restarting...");
-                            //Cosmos.HAL.Power.CPUReboot();
+                            Console.Clear();
+                            DrawText("Reset in progress...", 0, 0, ThemeManager.ErrorText, ThemeManager.Background);
+                            DrawText("Please, DON'T TURN OFF YOUR COMPUTER!", 0, 1, ThemeManager.ErrorText, ThemeManager.Background);
+                            DrawText("Formatting drive...", 18, 3, ThemeManager.WindowText, ThemeManager.Background);
+                            Kernel.FS.Disks[0].FormatPartition(0, "FAT32", false);
+                            Console.Clear();
+                            DrawText("Restarting in 10 seconds...", 0, 0, ThemeManager.WindowText, ThemeManager.Background);
+
+                            for (int i = 10; i > 0; i--)
+                            {
+                                DrawText(new string('█', i * 2) + new string('▒', 20 - i * 2), 0, 2, ThemeManager.WindowText, ThemeManager.Background);
+                                Thread.Sleep(1000);
+                            }
+
+                            Cosmos.HAL.Power.CPUReboot();
                             break;
 
                         default:
@@ -474,25 +501,28 @@ namespace GoOS
             {
                 if (menu == categoryButtonsInfoMenu[0])
                 {
-                    DrawText("GoOS " + Kernel.BuildType + " " + Kernel.version, 18, 2, ThemeManager.WindowText, ThemeManager.Background);
-                    DrawText("GoOS is a free and open source software built with", 18, 4, ThemeManager.WindowText, ThemeManager.Background);
+                    DrawText("Shows you info about GoOS.", 18, 23, ThemeManager.WindowText, ThemeManager.Background);
+                    DrawText("GoOS Kernel " + Kernel.BuildType + " " + Kernel.version, 18, 2, ThemeManager.WindowText, ThemeManager.Background);
+                    DrawText("GoOS is a free and open source software designed with", 18, 4, ThemeManager.WindowText, ThemeManager.Background);
                     DrawText("CosmosOS. If you paid for this software, you should request", 18, 5, ThemeManager.WindowText, ThemeManager.Background);
-                    DrawText("a refund or report to proper authorities.", 18, 6, ThemeManager.WindowText, ThemeManager.Background);
+                    DrawText("a refound or report to proper authorities.", 18, 6, ThemeManager.WindowText, ThemeManager.Background);
                     DrawText("GoOS is and always will be open-source and free.", 18, 8, ThemeManager.WindowText, ThemeManager.Background);
                 }
                 else if (menu == categoryButtonsInfoMenu[1])
                 {
+                    DrawText("Shows you info about support for GoOS.", 18, 23, ThemeManager.WindowText, ThemeManager.Background);
                     DrawText("GoOS Support", 18, 2, ThemeManager.WindowText, ThemeManager.Background);
                     DrawText("For support, open a ticket in the discord server.", 18, 4, ThemeManager.WindowText, ThemeManager.Background);
-                    DrawText("For reporting an issue, please report the issue at", 18, 6, ThemeManager.WindowText, ThemeManager.Background);
-                    DrawText("http://bugs.owen2k6.com/", 18, 7, ThemeManager.WindowText, ThemeManager.Background);
+                    DrawText("For reporting an issue, please report the issue in the", 18, 6, ThemeManager.WindowText, ThemeManager.Background);
+                    DrawText("issues tab in the Github repository.", 18, 7, ThemeManager.WindowText, ThemeManager.Background);
                 }
                 else if (menu == categoryButtonsInfoMenu[2])
                 {
-                    DrawText("GoOS " + Kernel.BuildType + " " + Kernel.version, 18, 2, ThemeManager.WindowText, ThemeManager.Background);
+                    DrawText("Shows you info about your system.", 18, 23, ThemeManager.WindowText, ThemeManager.Background);
+                    DrawText("GoOS Kernel " + Kernel.BuildType + " " + Kernel.version, 18, 2, ThemeManager.WindowText, ThemeManager.Background);
                     DrawText("CPU: " + Cosmos.Core.CPU.GetCPUBrandString(), 18, 4, ThemeManager.WindowText, ThemeManager.Background);
                     DrawText("Available RAM: " + Cosmos.Core.CPU.GetAmountOfRAM(), 18, 5, ThemeManager.WindowText, ThemeManager.Background);
-                    DrawText("Available disk space (Bytes): " + Sys.FileSystem.VFS.VFSManager.GetAvailableFreeSpace(@"0:\"), 18, 6, ThemeManager.WindowText, ThemeManager.Background);
+                    DrawText("Available disk space: " + Sys.FileSystem.VFS.VFSManager.GetAvailableFreeSpace(@"0:\"), 18, 6, ThemeManager.WindowText, ThemeManager.Background);
                 }
             }
         }
