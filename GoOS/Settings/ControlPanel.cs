@@ -188,7 +188,11 @@ namespace GoOS
             DrawFrame();
             DrawTitle("GoOS Settings");
             DrawClock();
+            DrawButtons();
+        }
 
+        private static void DrawButtons(bool quick = false)
+        {
             // Draw the menu buttons
             string categorieToShow = string.Empty, menuToShow = string.Empty;
             int nextPos = 18;
@@ -249,7 +253,8 @@ namespace GoOS
                     break;
             }
 
-            ShowMenu(menuToShow, categorieToShow);
+            if (!quick)
+                ShowMenu(menuToShow, categorieToShow);
         }
 
         /// <summary>
@@ -383,6 +388,8 @@ namespace GoOS
                         case ConsoleKey.Enter:
                             Sys.KeyboardManager.SetKeyLayout(scanMaps[keyboardMenuSelectedButton].Item2);
                             DrawMessage("Set layout to " + scanMaps[keyboardMenuSelectedButton].Item1);
+                            DrawButtons(true);
+                            DrawClock();
                             goto Refresh;
 
                         case ConsoleKey.UpArrow:
@@ -401,13 +408,13 @@ namespace GoOS
                 {
                     int themeMenuSelectedButton = 0;
 
+                Refresh:
                     DrawText("Allows you to change GoOS's theme.", 18, 23, ThemeManager.WindowText,
                         ThemeManager.Background);
                     DrawText("Available themes: ", 18, 2, ThemeManager.WindowText, ThemeManager.Background);
 
                     string[] themes = Directory.GetFiles(@"0:\content\themes\");
-
-                    Refresh:
+                    
                     if (themeMenuSelectedButton > (themes.Length - 1))
                     {
                         themeMenuSelectedButton = 0;
@@ -435,6 +442,8 @@ namespace GoOS
                                 "ThemeFile = " + themes[themeMenuSelectedButton]);
                             ThemeManager.SetTheme(@"0:\content\themes\" + themes[themeMenuSelectedButton], false);
                             DrawMessage("Theme changed successfully!");
+                            DrawButtons(true);
+                            DrawClock();
                             goto Refresh;
 
                         case ConsoleKey.UpArrow:
@@ -538,7 +547,7 @@ namespace GoOS
                         ThemeManager.Background);
                     DrawText("Available RAM: " + Cosmos.Core.CPU.GetAmountOfRAM() + "mb", 18, 5,
                         ThemeManager.WindowText, ThemeManager.Background);
-                    // vvv This freezes the vm so keep it commented out until we have a solution
+                    //This freezes the vm so keep it commented out until we have a solution
                     //DrawText("Available disk space: " + Sys.FileSystem.VFS.VFSManager.GetAvailableFreeSpace(@"0:\"), 18, 6, ThemeManager.WindowText, ThemeManager.Background);
                 }
             }
