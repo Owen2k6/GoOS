@@ -1,16 +1,14 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using Sys = Cosmos.System;
 using static GoOS.Themes.ThemeManager;
+using Console = BetterConsole;
 
 namespace GoOS
 {
     public static class OOBE
     {
-
         static string usrn, cprn;
 
         public static void Open()
@@ -270,11 +268,11 @@ namespace GoOS
 
             if (message == 0)
             {
-                Console.Write("╔════════════════════╗", 29, 10);
+                /*Console.Write("╔════════════════════╗", 29, 10);
                 Console.Write("║                    ║", 29, 11);
                 Console.Write("║                    ║", 29, 12);
                 Console.Write("║                    ║", 29, 13);
-                Console.Write("╚════════════════════╝", 29, 14);
+                Console.Write("╚════════════════════╝", 29, 14);*/
 
                 Console.ForegroundColor = WindowText;
                 DrawTitle(" Info ", 10);
@@ -283,11 +281,11 @@ namespace GoOS
             }
             else if (message == 1)
             {
-                Console.Write("╔════════════════════╗", 29, 10);
+                /*Console.Write("╔════════════════════╗", 29, 10);
                 Console.Write("║                    ║", 29, 11);
                 Console.Write("║                    ║", 29, 12);
                 Console.Write("║                    ║", 29, 13);
-                Console.Write("╚════════════════════╝", 29, 14);
+                Console.Write("╚════════════════════╝", 29, 14);*/
 
                 Console.ForegroundColor = WindowText;
                 DrawTitle(" Info ", 10);
@@ -296,11 +294,11 @@ namespace GoOS
             }
             else if (message == 2)
             {
-                Console.Write("╔══════════════════════════════════════════════════════╗", 12, 10);
+                /*Console.Write("╔══════════════════════════════════════════════════════╗", 12, 10);
                 Console.Write("║                                                      ║", 12, 11);
                 Console.Write("║                                                      ║", 12, 12);
                 Console.Write("║                                                      ║", 12, 13);
-                Console.Write("╚══════════════════════════════════════════════════════╝", 12, 14);
+                Console.Write("╚══════════════════════════════════════════════════════╝", 12, 14);*/
 
                 Console.ForegroundColor = WindowText;
                 DrawTitle(" Info ", 10);

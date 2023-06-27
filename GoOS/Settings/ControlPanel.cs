@@ -1,10 +1,13 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading;
 using System.Collections.Generic;
 using Sys = Cosmos.System;
 using Cosmos.System.ScanMaps;
 using GoOS.Themes;
+using Convert = System.Convert;
+using ConsoleKey = System.ConsoleKey;
+using Console = BetterConsole;
+using ConsoleColor = PrismAPI.Graphics.Color;
 
 namespace GoOS
 {
@@ -16,36 +19,36 @@ namespace GoOS
         private static bool isRunning = true;
 
         private static readonly string Frame =
-            "┌──────────────┬─────────────────────────────────────────────────────────────────────────┐" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "├──────────────┼─────────────────────────────────────────────────────────────────────────┤" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "│              │                                                                         │" +
-            "└──────────────┴───────────────────────────────┤ ESC - Exit / Arrow Keys - Select Item ├─";
+            "┌──────────────┬─────────────────────────────────────────────────────────────────────────┐\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "├──────────────┼─────────────────────────────────────────────────────────────────────────┤\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "│              │                                                                         │\n" +
+            "└──────────────┴───────────────────────────────┤ ESC - Exit / Arrow Keys - Select Item ├─┘";
 
         private static readonly List<string> categoryButtonsGeneralMenu = new List<string>
         {
@@ -74,12 +77,12 @@ namespace GoOS
 
         private static readonly List<(string, Sys.ScanMapBase)> scanMaps = new()
         {
-            ("105GBQWERTY-GB-1.0", new GBStandardLayout()), // 4
-            ("104USQWERTY-US-1.0", new USStandardLayout()), // 6
-            ("105DEQWERTY-DE-1.0", new DEStandardLayout()), // 8
-            ("105ESQWERTY-ES-1.0", new ESStandardLayout()), // 10
-            ("105FRQWERTY-FR-1.0", new FRStandardLayout()), // 12
-            ("105TRQWERTY-TR-1.0", new TRStandardLayout()) // 14
+            ("105GBQWERTY-GB-1.0", new GBStandardLayout()),
+            ("104USQWERTY-US-1.0", new USStandardLayout()),
+            ("105DEQWERTY-DE-1.0", new DEStandardLayout()),
+            ("105ESQWERTY-ES-1.0", new ESStandardLayout()),
+            ("105FRQWERTY-FR-1.0", new FRStandardLayout()),
+            ("105TRQWERTY-TR-1.0", new TRStandardLayout())
         };
 
         /// <summary>
@@ -88,8 +91,12 @@ namespace GoOS
         public static void Launch()
         {
             isRunning = true;
+            Console.CursorVisible = false;
+            Console.DoubleBufferedMode = false;
             Console.Clear();
             MainLoop();
+            Console.CursorVisible = true;
+            Console.DoubleBufferedMode = false;
             Console.Clear();
         }
 
@@ -104,7 +111,7 @@ namespace GoOS
             {
                 DrawMenu();
 
-                var key = Console.ReadKey(true).Key;
+                ConsoleKey key = System.Console.ReadKey(true).Key;
                 switch (key)
                 {
                     case ConsoleKey.Escape:
@@ -183,12 +190,12 @@ namespace GoOS
         /// <summary>
         /// Draws the menu.
         /// </summary>
-        private static void DrawMenu()
+        private static void DrawMenu(bool quick = false)
         {
             DrawFrame();
             DrawTitle("GoOS Settings");
             DrawClock();
-            DrawButtons();
+            DrawButtons(quick);
         }
 
         private static void DrawButtons(bool quick = false)
@@ -300,7 +307,6 @@ namespace GoOS
         /// </summary>
         private static void DrawMessage(string message)
         {
-
             DrawTitle(message);
             Thread.Sleep(500);
             ClearTitle();
@@ -388,8 +394,7 @@ namespace GoOS
                         case ConsoleKey.Enter:
                             Sys.KeyboardManager.SetKeyLayout(scanMaps[keyboardMenuSelectedButton].Item2);
                             DrawMessage("Set layout to " + scanMaps[keyboardMenuSelectedButton].Item1);
-                            DrawButtons(true);
-                            DrawClock();
+                            DrawMenu(true);
                             goto Refresh;
 
                         case ConsoleKey.UpArrow:
@@ -441,9 +446,8 @@ namespace GoOS
                             File.WriteAllText(@"0:\content\sys\theme.gms",
                                 "ThemeFile = " + themes[themeMenuSelectedButton]);
                             ThemeManager.SetTheme(@"0:\content\themes\" + themes[themeMenuSelectedButton], false);
+                            DrawMenu(true);
                             DrawMessage("Theme changed successfully!");
-                            DrawButtons(true);
-                            DrawClock();
                             goto Refresh;
 
                         case ConsoleKey.UpArrow:
@@ -464,7 +468,7 @@ namespace GoOS
             {
                 if (menu == categoryButtonsAdvancedMenu[0])
                 {
-                    DrawText("Allows you to system reset GoOS.", 18, 23, ThemeManager.WindowText,
+                    DrawText("Allows you to system reset GoOS to factory settings.", 18, 23, ThemeManager.WindowText,
                         ThemeManager.Background);
                     DrawText("Press R to reset the system, otherwise press ESC to", 18, 2, ThemeManager.WindowText,
                         ThemeManager.Background);
@@ -482,21 +486,24 @@ namespace GoOS
                             break;
 
                         case ConsoleKey.R:
-                            Console.Clear();
-                            DrawText("Reset in progress...", 0, 0, ThemeManager.ErrorText, ThemeManager.Background);
-                            DrawText("Don't turn off your computer!", 0, 1, ThemeManager.Background,
-                                ThemeManager.ErrorText);
-                            DrawText("Formatting drive...", 0, 3, ThemeManager.WindowText, ThemeManager.Background);
-                            Console.SetCursorPosition(0, 5);
-                            Kernel.FS.Disks[0].FormatPartition(0, "FAT32", false);
-                            Console.Clear();
+                            ClearMenu();
+                            DrawText("Allows you to system reset GoOS to factory settings.", 18, 23, ThemeManager.WindowText,
+                                ThemeManager.Background);
 
-                            for (int i = 40; i > 0; i--) // 125ms * 40 = 5s
+                            DrawText("RESET IN PROGRESS", 18, 2, ThemeManager.ErrorText, ThemeManager.Background);
+                            DrawText("Do not turn off your computer.", 18, 3, ThemeManager.Background,
+                                ThemeManager.ErrorText);
+                            Kernel.FS.Disks[0].FormatPartition(0, "FAT32", false);
+
+                            ClearMenu();
+                            DrawText("Allows you to system reset GoOS to factory settings.", 18, 23, ThemeManager.WindowText,
+                                ThemeManager.Background);
+
+                            for (int i = 40; i > 0; i--) // 250ms * 40 = 10s
                             {
-                                DrawText("Restarting in " + i / 4 + " seconds...", 0, 0, ThemeManager.WindowText,
+                                DrawText("Restarting in " + i / 4 + " seconds...", 18, 2, ThemeManager.WindowText,
                                     ThemeManager.Background);
-                                //DrawText(new string('█', i) + new string('▒', 40 - i), 0, 2, ThemeManager.WindowText, ThemeManager.Background);
-                                DrawText(new string('/', i) + new string('_', 40 - i), 0, 2, ThemeManager.WindowText,
+                                DrawText(new string('█', i) + new string('▒', 40 - i), 18, 4, ThemeManager.WindowText,
                                     ThemeManager.Background);
                                 Thread.Sleep(250);
                             }

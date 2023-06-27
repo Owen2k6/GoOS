@@ -1,7 +1,7 @@
-﻿using System;
-using System.IO;
-using static System.ConsoleColor;
-using Sys = Cosmos.System;
+﻿using System.IO;
+using ConsoleKeyInfo = System.ConsoleKeyInfo;
+using ConsoleKey = System.ConsoleKey;
+using Console = BetterConsole;
 
 class MIV
 {

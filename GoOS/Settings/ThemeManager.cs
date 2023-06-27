@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using static System.ConsoleColor;
+using Console = BetterConsole;
+using ConsoleColor = PrismAPI.Graphics.Color;
+using static ConsoleColorEx;
 
 namespace GoOS.Themes
 {
@@ -130,7 +132,7 @@ namespace GoOS.Themes
                     if (echo)
                     {
                         Console.ForegroundColor = ThemeManager.WindowText;
-                        Console.WriteLine("Theme changed successfully!");
+                        Console.WriteLine("ThemeManager - Theme changed successfully!");
                     }
                 }
                 else
@@ -138,7 +140,7 @@ namespace GoOS.Themes
                     if (echo)
                     {
                         Console.ForegroundColor = ThemeManager.ErrorText;
-                        Console.WriteLine("Theme file doesn't exist or is not a Goplex Theme File!");
+                        Console.WriteLine("ThemeManager - Theme file doesn't exist or is not a Goplex Theme File!");
                     }
                 }
             }
@@ -147,7 +149,7 @@ namespace GoOS.Themes
                 if (echo)
                 {
                     Console.ForegroundColor = ThemeManager.ErrorText;
-                    Console.WriteLine("Error while setting theme!\n" + e);
+                    Console.WriteLine("ThemeManager - Error while setting theme!\n" + e);
                 }
             }
         }
