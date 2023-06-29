@@ -105,11 +105,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="BetterConsole\Font_2x.btf" />
+      <None Remove="BetterConsole\Font_1x.btf" />
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="BetterConsole\Font_2x.btf" />
+      <EmbeddedResource Include="BetterConsole\Font_1x.btf" />
     </ItemGroup>
 
     <ItemGroup>

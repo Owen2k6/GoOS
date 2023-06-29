@@ -56,10 +56,10 @@ public static class BetterConsole
     /// </summary>
     /// <param name="videoWidth">The width of the canvas</param>
     /// <param name="videoHeight">The height of the canvas</param>
-    public static void Init(ushort height, ushort width)
+    public static void Init(ushort width, ushort height)
     {
         font = new Font(rawFont, charHeight);
-        Canvas = Display.GetDisplay(height, width);
+        Canvas = Display.GetDisplay(width, height);
         WindowWidth = Convert.ToUInt16(width / charWidth);
         WindowHeight = Convert.ToUInt16(height / charHeight);
     }
@@ -245,7 +245,8 @@ public static class BetterConsole
             }
             Canvas.DrawFilledRectangle(0, Canvas.Height - charHeight, Canvas.Width, charHeight, 0, Color.Black);
             CursorLeft = 0; CursorTop = (Canvas.Height / charHeight) - 1;
-            Render();
+            if (!DoubleBufferedMode)
+                Render();
         }
     }
 
