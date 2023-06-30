@@ -12,12 +12,6 @@ using GoOS.Commands;
 using Console = BetterConsole;
 using ConsoleColor = PrismAPI.Graphics.Color;
 using static GoOS.Core;
-using IL2CPU.API.Attribs;
-using PrismAPI.Graphics;
-using Cosmos.Core;
-using Cosmos.HAL.BlockDevice;
-using Cosmos.HAL.Network;
-using static Cosmos.HAL.BlockDevice.ATA_PIO;
 
 //Goplex Studios - GoOS
 //Copyright (C) 2022  Owen2k6
@@ -78,8 +72,9 @@ namespace GoOS
 
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {
+                Console.Init(720, 480);
                 OOBE.Open();
-                Console.Clear();
+                Sys.Power.Reboot();
             }
 
             try
@@ -105,8 +100,14 @@ namespace GoOS
                         ThemeManager.SetTheme(line.Split("ThemeFile = ")[1]);
                     }
                 }
+
+                byte videoMode = File.ReadAllBytes(@"0:\content\sys\resolution.gms")[0];
+                Console.Init(ControlPanel.videoModes[videoMode].Item2.Width, ControlPanel.videoModes[videoMode].Item2.Height);
             }
-            catch { }
+            catch
+            {
+                log(ThemeManager.Other1, "GoOS - Failed to load settings, continuing with default settings...");
+            }
 
             if (username == null || username == "")
             {

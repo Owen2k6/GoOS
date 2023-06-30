@@ -61,6 +61,7 @@ public static class BetterConsole
         Canvas = Display.GetDisplay(width, height);
         WindowWidth = Convert.ToUInt16(width / charWidth);
         WindowHeight = Convert.ToUInt16(height / charHeight);
+        Canvas.Clear();
     }
 
     /// <summary>
@@ -72,6 +73,7 @@ public static class BetterConsole
         CursorLeft = 0; CursorTop = 0;
         if (render || !DoubleBufferedMode)
             Render();
+        Cosmos.Core.Memory.Heap.Collect();
     }
 
     /// <summary>
@@ -245,6 +247,7 @@ public static class BetterConsole
             CursorLeft = 0; CursorTop = (Canvas.Height / charHeight) - 1;
             if (!DoubleBufferedMode)
                 Render();
+            Cosmos.Core.Memory.Heap.Collect();
         }
     }
 
