@@ -13,8 +13,6 @@ namespace GoOS
 
         public static void Open()
         {
-            Console.CursorVisible = false; // plz work
-
             DrawFrame();
             MessageBox(1);
             DrawPage(0);

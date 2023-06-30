@@ -9,6 +9,9 @@ using ConsoleKey = System.ConsoleKey;
 using Console = BetterConsole;
 using ConsoleColor = PrismAPI.Graphics.Color;
 
+// If it ain't broken, don't fix it
+// -xrc2
+
 namespace GoOS
 {
     /// <summary>
@@ -165,6 +168,7 @@ namespace GoOS
         {
             DrawFrame();
             DrawTitle("GoOS Settings");
+            DrawControls(mainMenuControls);
             DrawClock();
             DrawButtons(quick);
         }
@@ -231,13 +235,6 @@ namespace GoOS
                     break;
             }
 
-            // Draw controls
-            string controls = string.Empty;
-            for (int i = 0; i < mainMenuControls.Count; i++)
-                controls += mainMenuControls[i] + " / ";
-            controls = controls.Remove(controls.Length - 3);
-            DrawText(" " + controls + " ", Console.WindowWidth - 3 - controls.Length, Console.WindowHeight - 1, ThemeManager.WindowBorder, ThemeManager.Background);
-
             // Show menu if !quick
             if (!quick)
                 ShowMenu(menuToShow, categorieToShow);
@@ -251,10 +248,25 @@ namespace GoOS
             // Draw the frame with GUI instead of TUI
             Console.Canvas.DrawRectangle(3, 7, Convert.ToUInt16(Console.Canvas.Width - 6), Convert.ToUInt16(Console.Canvas.Height - 14), 0, ThemeManager.WindowBorder);
             Console.Canvas.DrawRectangle(4, 8, Convert.ToUInt16(Console.Canvas.Width - 6), Convert.ToUInt16(Console.Canvas.Height - 14), 0, ThemeManager.WindowBorder);
-            Console.Canvas.DrawLine(123, 5, 123, Console.Canvas.Height - 7, ThemeManager.WindowBorder); //*
-            Console.Canvas.DrawLine(124, 5, 124, Console.Canvas.Height - 7, ThemeManager.WindowBorder); //*
-            Console.Canvas.DrawLine(5, 656, Console.Canvas.Width - 5, 656, ThemeManager.WindowBorder);
-            Console.Canvas.DrawLine(6, 656, Console.Canvas.Width - 5, 656, ThemeManager.WindowBorder);
+            Console.Canvas.DrawLine(123, 5, 123, Console.Canvas.Height - 7, ThemeManager.WindowBorder);
+            Console.Canvas.DrawLine(124, 5, 124, Console.Canvas.Height - 7, ThemeManager.WindowBorder);
+            Console.Canvas.DrawLine(5, Console.Canvas.Height - 64, Console.Canvas.Width - 5, Console.Canvas.Height - 64, ThemeManager.WindowBorder);
+            Console.Canvas.DrawLine(6, Console.Canvas.Height - 64, Console.Canvas.Width - 5, Console.Canvas.Height - 64, ThemeManager.WindowBorder);
+        }
+
+        private static void DrawControls(List<string> controls)
+        {
+            // Clear controls
+            Console.Canvas.DrawFilledRectangle(8, Console.Canvas.Height - 8, Convert.ToUInt16(Console.Canvas.Width - 16), 16, 0, ThemeManager.Background);
+            Console.Canvas.DrawLine(8, Console.Canvas.Height - 7, Console.Canvas.Width - 8, Console.Canvas.Height - 7, ThemeManager.WindowBorder);
+            Console.Canvas.DrawLine(8, Console.Canvas.Height - 8, Console.Canvas.Width - 8, Console.Canvas.Height - 8, ThemeManager.WindowBorder);
+
+            // Draw controls
+            string controlsStr = string.Empty;
+            for (int i = 0; i < controls.Count; i++)
+                controlsStr += controls[i] + " / ";
+            controlsStr = controlsStr.Remove(controlsStr.Length - 3);
+            DrawText(" " + controlsStr + " ", Console.WindowWidth - 3 - controlsStr.Length, Console.WindowHeight - 1, ThemeManager.WindowBorder, ThemeManager.Background);
         }
 
         /// <summary>
@@ -274,19 +286,12 @@ namespace GoOS
         /// <param name="Y"></param>
         private static void DrawTitle(string title)
         {
-            ClearTitle(); // No need to redraw the entire frame, this will reduce lag
+            Console.Canvas.DrawFilledRectangle(8, 7, Console.Canvas.Width, 2, 0, ThemeManager.Background);
+            Console.Canvas.DrawLine(3, 7, Console.Canvas.Width - 3, 7, ThemeManager.WindowBorder);
+            Console.Canvas.DrawLine(3, 8, Console.Canvas.Width - 3, 8, ThemeManager.WindowBorder);
+
             DrawText(" " + title + " ", (Console.WindowWidth / 2) - (title.Length / 2) - 2, 0, ThemeManager.WindowText,
                 ThemeManager.Background); // Draw the title
-        }
-
-        /// <summary>
-        /// Clears the title for DrawTitle()
-        /// </summary>
-        private static void ClearTitle()
-        {
-            Console.Canvas.DrawFilledRectangle(8, 0, Convert.ToUInt16(Console.Canvas.Width - 16), 16, 0, ThemeManager.Background);
-            Console.Canvas.DrawLine(8, 7, Console.Canvas.Width - 8, 7, ThemeManager.WindowBorder);
-            Console.Canvas.DrawLine(8, 8, Console.Canvas.Width - 8, 8, ThemeManager.WindowBorder);
         }
 
         /// <summary>
@@ -296,7 +301,6 @@ namespace GoOS
         {
             DrawTitle(message);
             Thread.Sleep(500);
-            ClearTitle();
             DrawTitle("GoOS Settings");
         }
 

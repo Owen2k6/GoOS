@@ -1,5 +1,4 @@
 ﻿using System;
-using Cosmos.Core.Memory;
 using Cosmos.System;
 using IL2CPU.API.Attribs;
 using PrismAPI.Hardware.GPU;
@@ -231,7 +230,6 @@ public static class BetterConsole
         {
             CursorLeft = 0;
             CursorTop++;
-            Heap.Collect();
         }
         if (CursorTop >= Canvas.Height / charHeight)
         {
