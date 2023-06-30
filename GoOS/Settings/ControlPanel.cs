@@ -25,6 +25,7 @@ namespace GoOS
         {
             "Keyboard",
             "Themes",
+            "Display"
         };
 
         private static readonly List<string> categoryButtonsAdvancedMenu = new List<string>
@@ -54,6 +55,15 @@ namespace GoOS
             ("105ESQWERTY-ES-1.0", new ESStandardLayout()),
             ("105FRQWERTY-FR-1.0", new FRStandardLayout()),
             ("105TRQWERTY-TR-1.0", new TRStandardLayout())
+        };
+
+        public static readonly List<(string, (ushort Width, ushort Height))> videoModes = new()
+        {
+            ("720 x 480", (720, 480)),
+            ("1024 x 768", (1024, 768)),
+            ("1280 x 720", (1280, 720)),
+            ("1600 x 900", (1600, 900)),
+            ("1920 x 1080", (1920, 1080))
         };
 
         private static readonly List<string> mainMenuControls = new()
@@ -121,13 +131,13 @@ namespace GoOS
                 switch (menuSelectedButton)
                 {
                     case 0: // General menu
-                        if (categorieSelectedButton > 1)
+                        if (categorieSelectedButton > 2)
                         {
                             categorieSelectedButton = 0;
                         }
                         else if (categorieSelectedButton < 0)
                         {
-                            categorieSelectedButton = 1;
+                            categorieSelectedButton = 2;
                         }
 
                         break;
@@ -175,6 +185,9 @@ namespace GoOS
 
         private static void DrawButtons(bool quick = false)
         {
+            // Clear the buttons
+            Console.Canvas.DrawFilledRectangle(3 * 8, 2 * 16, 12 * 8, Convert.ToUInt16(Console.Canvas.Height - (6 * 16)), 0, ThemeManager.Background);
+
             // Draw the menu buttons
             string categorieToShow = string.Empty, menuToShow = string.Empty;
             int nextPos = 18;
@@ -248,8 +261,8 @@ namespace GoOS
             // Draw the frame with GUI instead of TUI
             Console.Canvas.DrawRectangle(3, 7, Convert.ToUInt16(Console.Canvas.Width - 6), Convert.ToUInt16(Console.Canvas.Height - 14), 0, ThemeManager.WindowBorder);
             Console.Canvas.DrawRectangle(4, 8, Convert.ToUInt16(Console.Canvas.Width - 6), Convert.ToUInt16(Console.Canvas.Height - 14), 0, ThemeManager.WindowBorder);
-            Console.Canvas.DrawLine(123, 5, 123, Console.Canvas.Height - 7, ThemeManager.WindowBorder);
-            Console.Canvas.DrawLine(124, 5, 124, Console.Canvas.Height - 7, ThemeManager.WindowBorder);
+            Console.Canvas.DrawLine(123, 9, 123, Console.Canvas.Height - 7, ThemeManager.WindowBorder);
+            Console.Canvas.DrawLine(124, 9, 124, Console.Canvas.Height - 7, ThemeManager.WindowBorder);
             Console.Canvas.DrawLine(5, Console.Canvas.Height - 64, Console.Canvas.Width - 5, Console.Canvas.Height - 64, ThemeManager.WindowBorder);
             Console.Canvas.DrawLine(6, Console.Canvas.Height - 64, Console.Canvas.Width - 5, Console.Canvas.Height - 64, ThemeManager.WindowBorder);
         }
@@ -286,9 +299,8 @@ namespace GoOS
         /// <param name="Y"></param>
         private static void DrawTitle(string title)
         {
-            Console.Canvas.DrawFilledRectangle(8, 7, Console.Canvas.Width, 2, 0, ThemeManager.Background);
-            Console.Canvas.DrawLine(3, 7, Console.Canvas.Width - 3, 7, ThemeManager.WindowBorder);
-            Console.Canvas.DrawLine(3, 8, Console.Canvas.Width - 3, 8, ThemeManager.WindowBorder);
+            Console.Canvas.DrawFilledRectangle(0, 0, Console.Canvas.Width, 16, 0, ThemeManager.Background);
+            DrawFrame();
 
             DrawText(" " + title + " ", (Console.WindowWidth / 2) - (title.Length / 2) - 2, 0, ThemeManager.WindowText,
                 ThemeManager.Background); // Draw the title
@@ -456,6 +468,64 @@ namespace GoOS
 
                     }
                 }
+                else if (menu == categoryButtonsGeneralMenu[2])
+                {
+                    int displayMenuSelectedButton = 0;
+
+                Refresh:
+                    if (displayMenuSelectedButton > videoModes.Count - 1)
+                    {
+                        displayMenuSelectedButton = 0;
+                    }
+                    else if (displayMenuSelectedButton < 0)
+                    {
+                        displayMenuSelectedButton = videoModes.Count - 1;
+                    }
+
+                    Console.ForegroundColor = ThemeManager.WindowText;
+                    Console.BackgroundColor = ThemeManager.Background;
+
+                    DrawText("Allows you to change your video card's resolution.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                        ThemeManager.Background);
+                    DrawText("Available resolutions:", 18, 2, ThemeManager.WindowText,
+                        ThemeManager.Background);
+
+                    for (int i = 0; i < videoModes.Count; i++)
+                    {
+                        DrawButton(videoModes[i].Item1, 18, 4 + i,
+                            i == displayMenuSelectedButton); // Draw button automatically at the correct coordinates
+                    }
+
+                    var key = Console.ReadKey(true).Key;
+                    switch (key)
+                    {
+                        case ConsoleKey.Escape:
+                            ClearMenu();
+                            break;
+
+                        case ConsoleKey.Enter:
+                            Console.Init(videoModes[displayMenuSelectedButton].Item2.Width, videoModes[displayMenuSelectedButton].Item2.Height);
+                            DrawMessage("Creating file...");
+                            File.Create(@"0:\content\sys\resolution.gms");
+                            DrawMessage("Saving mode...");
+                            File.WriteAllBytes(@"0:\content\sys\resolution.gms", new byte[] { (byte)displayMenuSelectedButton });
+                            DrawMenu(true);
+                            DrawMessage("Set video mode to " + scanMaps[displayMenuSelectedButton].Item1);
+                            DrawMenu(true);
+                            goto Refresh;
+
+                        case ConsoleKey.UpArrow:
+                            displayMenuSelectedButton--;
+                            goto Refresh;
+
+                        case ConsoleKey.DownArrow:
+                            displayMenuSelectedButton++;
+                            goto Refresh;
+
+                        default:
+                            goto Refresh;
+                    }
+                }
             }
             else if (category == menuButtons[1])
             {
@@ -557,7 +627,6 @@ namespace GoOS
         private static void ClearMenu()
         {
             // Clear the menu with GUI instead of TUI
-            Console.Canvas.DrawFilledRectangle(3 * 8, 2 * 16, 12 * 8, Convert.ToUInt16(Console.Canvas.Height - (6 * 16)), 0, ThemeManager.Background);
             Console.Canvas.DrawFilledRectangle(18 * 8, 2 * 16, Convert.ToUInt16(Console.Canvas.Width - (20 * 8)), Convert.ToUInt16(Console.Canvas.Height - (6 * 16)), 0, ThemeManager.Background);
             Console.Render();
         }
