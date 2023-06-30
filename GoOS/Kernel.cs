@@ -188,11 +188,13 @@ namespace GoOS
             Directory.SetCurrentDirectory(roota);
         }
 
-        protected override void Run()
+        public static string currentdirfix = string.Empty;
+
+        public static void DrawPrompt()
         {
             textcolour(ThemeManager.WindowText);
             string currentdir = Directory.GetCurrentDirectory() + @"\";
-            string currentdirfix = @"0:\";
+            currentdirfix = @"0:\";
             if (currentdir.Contains(@"0:\\"))
             {
                 currentdirfix = currentdir.Replace(@"0:\\", @"0:\");
@@ -210,6 +212,11 @@ namespace GoOS
             textcolour(ThemeManager.WindowBorder);
             write(currentdirfix);
             textcolour(ThemeManager.Default);
+        }
+
+        protected override void Run()
+        {
+            DrawPrompt();
 
             // Commands section
 

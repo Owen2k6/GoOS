@@ -1,21 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cosmos.System;
 using IL2CPU.API.Attribs;
 using PrismAPI.Hardware.GPU;
 using PrismAPI.Graphics;
 using PrismAPI.Graphics.Fonts;
+using GoOS.Themes;
+using static GoOS.Core;
 
 /// <summary>
 /// <see cref="BetterConsole"/> class
 /// </summary>
 public static class BetterConsole
 {
-    #region Graphics variables
     [ManifestResourceStream(ResourceName = "GoOS.BetterConsole.Font_1x.btf")] private static byte[] rawFont;
+
     private static Font font;
+
     public static Display Canvas;
+
     private static ushort charWidth = 8, charHeight = 16;
-    #endregion
+
+    private static List<string> menuOptions = new()
+    {
+        "Launch Settings",
+        "Reboot"
+    };
 
     /// <summary>
     /// The X position of the cursor
@@ -178,17 +188,76 @@ public static class BetterConsole
                     break;
 
                 default:
-                    if (KeyboardManager.ControlPressed && key.Key == ConsoleKeyEx.L)
+                    if (KeyboardManager.ControlPressed)
                     {
-                        Clear();
-                        returnValue = string.Empty;
-                        reading = false;
-                    }
-                    else if (KeyboardManager.ControlPressed)
-                    {
-                        if (KeyboardManager.AltPressed)
-                            if (key.Key == ConsoleKeyEx.Delete)
-                                Cosmos.Core.CPU.Reboot();
+                        if (key.Key == ConsoleKeyEx.L)
+                        {
+                            Clear();
+                            returnValue = string.Empty;
+                            reading = false;
+                        }
+                        else if (KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
+                        {
+                            int selected = 0;
+
+                            Clear();
+                            Canvas.DrawRectangle((Canvas.Width / 2) - (144 / 2) + 0, (Canvas.Height / 2) - ((menuOptions.Count + 4) * 16 / 2) + 0, 144, Convert.ToUInt16((menuOptions.Count + 4) * 16), 0, ThemeManager.WindowBorder);
+                            Canvas.DrawRectangle((Canvas.Width / 2) - (144 / 2) + 1, (Canvas.Height / 2) - ((menuOptions.Count + 4) * 16 / 2) + 1, 144, Convert.ToUInt16((menuOptions.Count + 4) * 16), 0, ThemeManager.WindowBorder);
+
+                        Refresh:
+                            if (selected > menuOptions.Count - 1)
+                            {
+                                selected = 0;
+                            }
+                            if (selected < 0)
+                            {
+                                selected = menuOptions.Count - 1;
+                            }
+
+                            for (int i = 0; i < menuOptions.Count; i++)
+                            {
+                                SetCursorPosition((WindowWidth / 2) - (15 / 2) - 1, (WindowHeight / 2) - 1 + (i * 2));
+                                if (i == selected)
+                                {
+                                    ForegroundColor = ThemeManager.Background;
+                                    BackgroundColor = ThemeManager.WindowText;
+                                }
+                                else
+                                {
+                                    ForegroundColor = ThemeManager.WindowText;
+                                    BackgroundColor = ThemeManager.Background;
+                                }
+                                Write(menuOptions[i]);
+                            }
+
+                            var key2 = KeyboardManager.ReadKey();
+                            switch (key2.Key)
+                            {
+                                case ConsoleKeyEx.Escape:
+                                    break;
+
+                                case ConsoleKeyEx.Enter:
+                                    if (menuOptions[selected] == menuOptions[0])
+                                        GoOS.ControlPanel.Launch();
+                                    else if (menuOptions[selected] == menuOptions[1])
+                                        Power.Reboot();
+                                    break;
+
+                                case ConsoleKeyEx.UpArrow:
+                                    selected--;
+                                    goto Refresh;
+
+                                case ConsoleKeyEx.DownArrow:
+                                    selected++;
+                                    goto Refresh;
+
+                                default:
+                                    goto Refresh;
+                            }
+
+                            Clear();
+                            GoOS.Kernel.DrawPrompt();
+                        }
                     }
                     else
                     {
