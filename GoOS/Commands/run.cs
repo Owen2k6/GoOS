@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using GoOS.Themes;
+using Console = BetterConsole;
+using static ConsoleColorEx;
+using static GoOS.Core;
 
 namespace GoOS.Commands
 {
@@ -16,38 +16,6 @@ namespace GoOS.Commands
 
         static Dictionary<string, int> Integers = new Dictionary<string, int>() { };
 
-        //GoOS Core
-        public static void print(string str)
-        {
-            Console.WriteLine(str);
-        }
-
-        public static void log(System.ConsoleColor colour, string str)
-        {
-            Console.ForegroundColor = colour;
-            Console.WriteLine(str);
-        }
-
-        public static void write(string str)
-        {
-            Console.Write(str);
-        }
-
-        public static void textcolour(System.ConsoleColor colour)
-        {
-            Console.ForegroundColor = colour;
-        }
-
-        public static void highlightcolour(System.ConsoleColor colour)
-        {
-            Console.BackgroundColor = colour;
-        }
-
-        public static void sleep(int time)
-        {
-            Thread.Sleep(time);
-        }
-
         public static void Main(string run)
         {
             String inputaman = run;
@@ -55,7 +23,7 @@ namespace GoOS.Commands
 
             try
             {
-                //log(ConsoleColor.Blue, "GoOS Admin: Attempting to run " + inputaman);
+                //log(Blue, "GoOS Admin: Attempting to run " + inputaman);
                 if (!inputaman.EndsWith(".gexe") && !inputaman.EndsWith(".goexe"))
                 {
                     log(ThemeManager.ErrorText, "Incompatible format.");
@@ -68,7 +36,7 @@ namespace GoOS.Commands
                     bool isif = false;
                     bool badif = false;
 
-                    log(ConsoleColor.Yellow, "Application.Start");
+                    log(Yellow, "Application.Start");
                     var content = File.ReadAllLines(@"0:\" + inputaman);
                     string theysaid = null;
                     ConsoleKey keypressed = ConsoleKey.O;
@@ -78,7 +46,7 @@ namespace GoOS.Commands
                     foreach (string line in content)
                     {
                         count = count + 1;
-                        //log(ConsoleColor.Magenta, "LINE FOUND: CONTENT: " + line);
+                        //log(Magenta, "LINE FOUND: CONTENT: " + line);
                         if (line.StartsWith("#"))
                         {
                         }
@@ -98,14 +66,14 @@ namespace GoOS.Commands
                         {
                             if (line == "input=")
                             {
-                                textcolour(ConsoleColor.Blue);
+                                textcolour(Blue);
                                 theysaid = Console.ReadLine();
                             }
                             else
                             {
                                 String addon = line.Replace("input=", "");
                                 write(addon);
-                                textcolour(ConsoleColor.Blue);
+                                textcolour(Blue);
                                 theysaid = Console.ReadLine();
                             }
                         }
@@ -114,17 +82,17 @@ namespace GoOS.Commands
                         {
                             if (line == "stop=")
                             {
-                                textcolour(ConsoleColor.Blue);
-                                log(ConsoleColor.Green, "Press any key to continue...");
+                                textcolour(Blue);
+                                log(Green, "Press any key to continue...");
                                 Console.ReadKey();
                                 Console.WriteLine();
                             }
                             else
                             {
                                 String addon = line.Replace("stop=", "");
-                                textcolour(ConsoleColor.DarkRed);
+                                textcolour(DarkRed);
                                 write(addon);
-                                textcolour(ConsoleColor.Blue);
+                                textcolour(Blue);
                                 Console.ReadKey();
                                 Console.WriteLine();
                             }
@@ -246,7 +214,7 @@ namespace GoOS.Commands
                                 string string2 = null;
                                 int int1 = 0;
                                 int int2 = 0;
-                                // this line was used for debugging // log(ConsoleColor.White, equals2split1 + "" + equals2split2);
+                                // this line was used for debugging // log(White, equals2split1 + "" + equals2split2);
                                     
                                 if (Strings.TryGetValue(equals2split1, out string strval))
                                 {
@@ -334,7 +302,7 @@ namespace GoOS.Commands
                                 string string2 = null;
                                 int int1 = 0;
                                 int int2 = 0;
-                                // this line was used for debugging //    log(ConsoleColor.White, equals2split1 + "" + equals2split2);
+                                // this line was used for debugging //    log(White, equals2split1 + "" + equals2split2);
 
                                 if (Strings.TryGetValue(equals2split1, out string strval))
                                 {
@@ -588,67 +556,67 @@ namespace GoOS.Commands
                             string ass = line.Substring(11);
                             if (ass == "white")
                             {
-                                Console.ForegroundColor = ConsoleColor.White;
+                                Console.ForegroundColor = White;
                             }
                             else if (ass == "blue")
                             {
-                                Console.ForegroundColor = ConsoleColor.Blue;
+                                Console.ForegroundColor = Blue;
                             }
                             else if (ass == "green")
                             {
-                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.ForegroundColor = Green;
                             }
                             else if (ass == "yellow")
                             {
-                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.ForegroundColor = Yellow;
                             }
                             else if (ass == "black")
                             {
-                                Console.ForegroundColor = ConsoleColor.Black;
+                                Console.ForegroundColor = Black;
                             }
                             else if (ass == "cyan")
                             {
-                                Console.ForegroundColor = ConsoleColor.Cyan;
+                                Console.ForegroundColor = Cyan;
                             }
                             else if (ass == "gray")
                             {
-                                Console.ForegroundColor = ConsoleColor.Gray;
+                                Console.ForegroundColor = Gray;
                             }
                             else if (ass == "magenta")
                             {
-                                Console.ForegroundColor = ConsoleColor.Magenta;
+                                Console.ForegroundColor = Magenta;
                             }
                             else if (ass == "red")
                             {
-                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.ForegroundColor = Red;
                             }
                             else if (ass == "darkblue")
                             {
-                                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                                Console.ForegroundColor = DarkBlue;
                             }
                             else if (ass == "darkcyan")
                             {
-                                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                                Console.ForegroundColor = DarkCyan;
                             }
                             else if (ass == "darkgray")
                             {
-                                Console.ForegroundColor = ConsoleColor.DarkGray;
+                                Console.ForegroundColor = DarkGray;
                             }
                             else if (ass == "darkgreen")
                             {
-                                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                                Console.ForegroundColor = DarkGreen;
                             }
                             else if (ass == "darkmageneta")
                             {
-                                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                                Console.ForegroundColor = DarkMagenta;
                             }
                             else if (ass == "darkred")
                             {
-                                Console.ForegroundColor = ConsoleColor.DarkRed;
+                                Console.ForegroundColor = DarkRed;
                             }
                             else if (ass == "darkyellow")
                             {
-                                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                Console.ForegroundColor = DarkYellow;
                             }
                         }
 
@@ -657,67 +625,67 @@ namespace GoOS.Commands
                             string ass = line.Substring(10);
                             if (ass == "white")
                             {
-                                Console.BackgroundColor = ConsoleColor.White;
+                                Console.BackgroundColor = White;
                             }
                             else if (ass == "blue")
                             {
-                                Console.BackgroundColor = ConsoleColor.Blue;
+                                Console.BackgroundColor = Blue;
                             }
                             else if (ass == "green")
                             {
-                                Console.BackgroundColor = ConsoleColor.Green;
+                                Console.BackgroundColor = Green;
                             }
                             else if (ass == "yellow")
                             {
-                                Console.BackgroundColor = ConsoleColor.Yellow;
+                                Console.BackgroundColor = Yellow;
                             }
                             else if (ass == "black")
                             {
-                                Console.BackgroundColor = ConsoleColor.Black;
+                                Console.BackgroundColor = Black;
                             }
                             else if (ass == "cyan")
                             {
-                                Console.BackgroundColor = ConsoleColor.Cyan;
+                                Console.BackgroundColor = Cyan;
                             }
                             else if (ass == "gray")
                             {
-                                Console.BackgroundColor = ConsoleColor.Gray;
+                                Console.BackgroundColor = Gray;
                             }
                             else if (ass == "magenta")
                             {
-                                Console.BackgroundColor = ConsoleColor.Magenta;
+                                Console.BackgroundColor = Magenta;
                             }
                             else if (ass == "red")
                             {
-                                Console.BackgroundColor = ConsoleColor.Red;
+                                Console.BackgroundColor = Red;
                             }
                             else if (ass == "darkblue")
                             {
-                                Console.BackgroundColor = ConsoleColor.DarkBlue;
+                                Console.BackgroundColor = DarkBlue;
                             }
                             else if (ass == "darkcyan")
                             {
-                                Console.BackgroundColor = ConsoleColor.DarkCyan;
+                                Console.BackgroundColor = DarkCyan;
                             }
                             else if (ass == "darkgray")
                             {
-                                Console.BackgroundColor = ConsoleColor.DarkGray;
+                                Console.BackgroundColor = DarkGray;
                             }
                             else if (ass == "darkgreen")
                             {
-                                Console.BackgroundColor = ConsoleColor.DarkGreen;
+                                Console.BackgroundColor = DarkGreen;
                             }
                             else if (ass == "darkmageneta")
                             {
-                                Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                                Console.BackgroundColor = DarkMagenta;
                             }
                             else if (ass == "darkred")
                             {
-                                Console.BackgroundColor = ConsoleColor.DarkRed;
+                                Console.BackgroundColor = DarkRed;
                             }
                             else if (ass == "darkyellow")
                             {
-                                Console.BackgroundColor = ConsoleColor.DarkYellow;
+                                Console.BackgroundColor = DarkYellow;
                             }
                         }
                     }

@@ -1,6 +1,7 @@
 ﻿using System;
-using static System.ConsoleColor;
-using Sys = Cosmos.System;
+using Console = BetterConsole;
+using ConsoleColor = PrismAPI.Graphics.Color;
+using static ConsoleColorEx;
 
 namespace ChaOS
 {

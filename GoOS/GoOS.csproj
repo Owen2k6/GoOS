@@ -101,6 +101,22 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Virtualisation\Interface.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="BetterConsole\Font_1x.btf" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="BetterConsole\Font_1x.btf" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="Virtualisation\Interface.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Cosmos.Build" Version="0.1.0-*" NoWarn="NU1604">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -110,6 +126,12 @@
         <PackageReference Include="Cosmos.HAL2" Version="0.1.0-*" />
         <PackageReference Include="Cosmos.System2" Version="0-*" NoWarn="NU1604" />
         <PackageReference Include="IL2CPU.API" Version="0.1.0-*" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="PrismAPI">
+        <HintPath>..\..\..\Prism-OS\PrismAPI\bin\Debug\net6.0\PrismAPI.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

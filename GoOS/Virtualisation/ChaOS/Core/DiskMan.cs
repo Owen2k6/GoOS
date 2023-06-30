@@ -1,10 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Cosmos.System.FileSystem;
 using Cosmos.System.FileSystem.VFS;
 using static ChaOS.Core;
-using static System.ConsoleColor;
-using Sys = Cosmos.System;
+using Console = BetterConsole;
+using static ConsoleColorEx;
 
 namespace ChaOS
 {
@@ -34,7 +33,7 @@ namespace ChaOS
                 if (Directory.Exists(systempath))
                 {
                     if (File.Exists(Files.userfile)) GoOS.Kernel.username = File.ReadAllText(Files.userfile);
-                    if (File.Exists(Files.colorfile)) SetScreenColor((ConsoleColor)File.ReadAllBytes(Files.colorfile)[0], (ConsoleColor)File.ReadAllBytes(Files.colorfile)[1], false);
+                    //if (File.Exists(Files.colorfile)) SetScreenColor((ConsoleColor)File.ReadAllBytes(Files.colorfile)[0], (ConsoleColor)File.ReadAllBytes(Files.colorfile)[1], false);
                 }
             }
         }
@@ -44,7 +43,7 @@ namespace ChaOS
             clog("Writing changes to disk...", Gray);
             Directory.CreateDirectory(systempath);
             File.WriteAllText(Files.userfile, GoOS.Kernel.username);
-            File.WriteAllBytes(Files.colorfile, new byte[] { (byte)Console.BackgroundColor, (byte)Console.ForegroundColor });
+            //File.WriteAllBytes(Files.colorfile, new byte[] { (byte)Console.BackgroundColor, (byte)Console.ForegroundColor });
         }
     }
 }

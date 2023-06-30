@@ -1,23 +1,13 @@
-﻿using Cosmos.System.FileSystem;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using static System.ConsoleColor;
-using Sys = Cosmos.System;
-using GoOS.Virtualisation;
 using static ChaOS.Core;
 using static ChaOS.DiskManager;
 using Cosmos.System.FileSystem.VFS;
-using System.Runtime.ConstrainedExecution;
 using static GoOS.Kernel;
-using GoOS.Commands;
-using GoOS.Themes;
-using GoOS.Virtualisation.ChaOS;
-using static GoOS.Commands.Run;
+using Console = BetterConsole;
+using static ConsoleColorEx;
+using static GoOS.Core;
+
 namespace GoOS.Virtualisation.ChaOS
 {
     public class ChaOS

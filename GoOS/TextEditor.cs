@@ -8,6 +8,8 @@ using GoOS.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Console = BetterConsole;
+using ConsoleColor = PrismAPI.Graphics.Color;
 
 namespace GoOS
 {
