@@ -56,7 +56,9 @@ namespace GoOS
 
         public static readonly List<(string, (ushort Width, ushort Height))> videoModes = new()
         {
+            ("640 x 480", (640, 480)),
             ("720 x 480", (720, 480)),
+            ("800 x 600", (800, 600)),
             ("1024 x 768", (1024, 768)),
             ("1280 x 720", (1280, 720)),
             ("1600 x 900", (1600, 900)),

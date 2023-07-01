@@ -6,14 +6,14 @@ using PrismAPI.Hardware.GPU;
 using PrismAPI.Graphics;
 using PrismAPI.Graphics.Fonts;
 using GoOS.Themes;
-using static GoOS.Core;
+using Cosmos.Core.Memory;
 
 /// <summary>
 /// <see cref="BetterConsole"/> class
 /// </summary>
 public static class BetterConsole
 {
-    [ManifestResourceStream(ResourceName = "GoOS.BetterConsole.Font_1x1.btf")] private static byte[] rawFont;
+    [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_1x.btf")] private static byte[] rawFont;
 
     private static Font font;
 
@@ -83,7 +83,6 @@ public static class BetterConsole
         CursorLeft = 0; CursorTop = 0;
         if (render || !DoubleBufferedMode)
             Render();
-        Cosmos.Core.Memory.Heap.Collect();
     }
 
     /// <summary>
@@ -190,7 +189,11 @@ public static class BetterConsole
                 default:
                     if (KeyboardManager.ControlPressed)
                     {
-                        if (key.Key == ConsoleKeyEx.L)
+                        if (key.Key == ConsoleKeyEx.G)
+                        {
+                            Heap.Collect();
+                        }
+                        else if (key.Key == ConsoleKeyEx.L)
                         {
                             Clear();
                             returnValue = string.Empty;
@@ -316,11 +319,10 @@ public static class BetterConsole
             CursorLeft = 0; CursorTop = (Canvas.Height / charHeight) - 1;
             if (!DoubleBufferedMode)
                 Render();
-            Cosmos.Core.Memory.Heap.Collect();
         }
     }
 
-    private static void PutChar(char c, int CursorLeft, int y, bool quick = false)
+    public static void PutChar(char c, int CursorLeft, int y, bool quick = false)
     {
         if (!quick)
             Canvas.DrawFilledRectangle(CursorLeft * charWidth, y * charHeight, Convert.ToUInt16(charWidth + (charWidth / 8)), charHeight, 0, BackgroundColor); //yes this is correct

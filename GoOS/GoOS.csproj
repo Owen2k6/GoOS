@@ -13,7 +13,7 @@
         <DebugEnabled>False</DebugEnabled>
         <DebugMode>Source</DebugMode>
         <IgnoreDebugStubAttribute>False</IgnoreDebugStubAttribute>
-        <ISOFile>bin\Debug\net5.0\GoOS.iso</ISOFile>
+        <ISOFile>bin\Debug\net6.0\GoOS.iso</ISOFile>
         <CompileVBEMultiboot>False</CompileVBEMultiboot>
         <VBEResolution>1024x768x32</VBEResolution>
         <ExtractMapFile>False</ExtractMapFile>
@@ -32,7 +32,7 @@
         <VMware_VMwareEdition>Workstation</VMware_VMwareEdition>
         <VMware_EnableGDB>True</VMware_EnableGDB>
         <VMware_StartCosmosGDB>True</VMware_StartCosmosGDB>
-        <VMware_ISOFile>bin\Debug\net5.0\GoOS.iso</VMware_ISOFile>
+        <VMware_ISOFile>bin\Debug\net6.0\GoOS.iso</VMware_ISOFile>
         <VMware_CompileVBEMultiboot>False</VMware_CompileVBEMultiboot>
         <VMware_ExtractMapFile>False</VMware_ExtractMapFile>
         <ISO_StackCorruptionDetectionEnabled>True</ISO_StackCorruptionDetectionEnabled>
@@ -49,7 +49,7 @@
         <ISO_VMwareEdition>Player</ISO_VMwareEdition>
         <ISO_EnableGDB>False</ISO_EnableGDB>
         <ISO_StartCosmosGDB>False</ISO_StartCosmosGDB>
-        <ISO_ISOFile>bin\Debug\net5.0\GoOS.iso</ISO_ISOFile>
+        <ISO_ISOFile>bin\Debug\net6.0\GoOS.iso</ISO_ISOFile>
         <ISO_CompileVBEMultiboot>False</ISO_CompileVBEMultiboot>
         <ISO_ExtractMapFile>False</ISO_ExtractMapFile>
         <IntelEdison_StackCorruptionDetectionEnabled>True</IntelEdison_StackCorruptionDetectionEnabled>
@@ -66,7 +66,7 @@
         <IntelEdison_VMwareEdition>Workstation</IntelEdison_VMwareEdition>
         <IntelEdison_EnableGDB>True</IntelEdison_EnableGDB>
         <IntelEdison_StartCosmosGDB>True</IntelEdison_StartCosmosGDB>
-        <IntelEdison_ISOFile>bin\Debug\net5.0\GoOS.iso</IntelEdison_ISOFile>
+        <IntelEdison_ISOFile>bin\Debug\net6.0\GoOS.iso</IntelEdison_ISOFile>
         <IntelEdison_CompileVBEMultiboot>False</IntelEdison_CompileVBEMultiboot>
         <IntelEdison_ExtractMapFile>False</IntelEdison_ExtractMapFile>
     </PropertyGroup>
@@ -105,6 +105,18 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="BetterConsole\Font_1x_2.btf" />
+      <None Remove="Resources\Font_1x.btf" />
+      <None Remove="Resources\GoOS_Intro.bmp" />
+      <None Remove="test.bmp" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Resources\Font_1x.btf" />
+      <EmbeddedResource Include="Resources\GoOS_Intro.bmp" />
+    </ItemGroup>
+
+    <ItemGroup>
       <None Include="Virtualisation\Interface.cs" />
     </ItemGroup>
 
@@ -125,13 +137,5 @@
         <HintPath>..\..\..\Prism-OS\PrismAPI\bin\Debug\net6.0\PrismAPI.dll</HintPath>
       </Reference>
     </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="BetterConsole\Font_1x.btf" />
-      <None Remove="BetterConsole\ComicSansMSCustomCharset16.btf" />
-      <EmbeddedResource Include="BetterConsole\ComicSansMSCustomCharset16.btf" />
-      <None Remove="BetterConsole\Font_1x1.btf" />
-      <EmbeddedResource Include="BetterConsole\Font_1x1.btf" />
-    </ItemGroup>
-
+	
 </Project>
