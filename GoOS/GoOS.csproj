@@ -140,6 +140,8 @@
       <EmbeddedResource Include="Resources\OOBE\setupua.bmp" />
       <EmbeddedResource Include="Resources\OOBE\setupuser.bmp" />
       <EmbeddedResource Include="Resources\OOBE\setupwelcome.bmp" />
+      <None Remove="Resources\MSUIGothicCustomCharset16.btf" />
+      <EmbeddedResource Include="Resources\MSUIGothicCustomCharset16.btf" />
     </ItemGroup>
 
     <ItemGroup>
