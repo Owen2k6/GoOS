@@ -32,7 +32,6 @@ namespace GoOS
         public bool root = false;
 
         public static string olddir = @"0:\";
-        private Boolean adminconsoledisk = false;
 
         public static Sys.FileSystem.CosmosVFS FS;
         public static string file;
@@ -48,7 +47,6 @@ namespace GoOS
             return false;
         }
 
-        bool isenabled = true;
         public static string username = null;
         public static string computername = null;
 
@@ -65,7 +63,6 @@ namespace GoOS
                 Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS);
                 FS.Initialize(true);
                 var total_space = FS.GetTotalSize(@"0:\");
-                adminconsoledisk = true;
             }
             catch
             {
