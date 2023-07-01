@@ -225,8 +225,10 @@ namespace GoOS
                     break;
 
                 case 9:
+                    balls:
                     try
                     {
+                        
                         Directory.CreateDirectory(@"0:\content");
                         Directory.CreateDirectory(@"0:\content\sys");
                         Directory.CreateDirectory(@"0:\content\themes");
@@ -254,6 +256,7 @@ namespace GoOS
                     {
                         Console.SetCursorPosition(0,0);
                         Console.WriteLine(e);
+                        goto balls;
                     }
 
                     Console.Canvas.DrawImage(0, 0, setupFinal, false);
