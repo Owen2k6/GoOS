@@ -33,20 +33,26 @@ namespace GoOS.Commands
                 if (inputaman.EndsWith(".goexe") || inputaman.EndsWith(".gexe"))
                 {
                     string fuckingprogramname = null;
-                    bool isif = false;
-                    bool badif = false;
-
                     log(Yellow, "Application.Start");
                     var content = File.ReadAllLines(@"0:\" + inputaman);
                     string theysaid = null;
                     ConsoleKey keypressed = ConsoleKey.O;
-                    int count = 1;
                     String endmessage = "Process has ended.";
                     Boolean hasbeenregistered = false;
-                    foreach (string line in content)
+
+                    bool poo = false;
+                    
+                    for (int i = 0; i < content.Length; i++)
                     {
-                        count = count + 1;
+                        string line = content[i];
+                        if (poo)
+                        {
+                            line = line.Split(": ")[1].Trim();
+                            poo = false;
+                        }
+                        
                         //log(Magenta, "LINE FOUND: CONTENT: " + line);
+                        
                         if (line.StartsWith("#"))
                         {
                         }
@@ -55,14 +61,21 @@ namespace GoOS.Commands
                         {
                         }
 
-                        if (line.StartsWith("sleep") && badif == false)
+                        if (line.StartsWith("goto"))
+                        {
+                            String howlong = line.Split("=")[1];
+                            int potato = Convert.ToInt32(howlong);
+                            i = potato;
+                        }
+
+                        if (line.StartsWith("sleep"))
                         {
                             String howlong = line.Split("=")[1];
                             int potato = Convert.ToInt32(howlong);
                             sleep(potato);
                         }
 
-                        if (line.StartsWith("input") && badif == false)
+                        if (line.StartsWith("input"))
                         {
                             if (line == "input=")
                             {
@@ -78,7 +91,7 @@ namespace GoOS.Commands
                             }
                         }
 
-                        if (line.StartsWith("stop") && badif == false)
+                        if (line.StartsWith("stop"))
                         {
                             if (line == "stop=")
                             {
@@ -98,12 +111,12 @@ namespace GoOS.Commands
                             }
                         }
 
-                        if (line.StartsWith("endmsg") && badif == false)
+                        if (line.StartsWith("endmsg"))
                         {
                             endmessage = line.Replace("endmsg=", "");
                         }
 
-                        if (line.StartsWith("regprog") && badif == false)
+                        if (line.StartsWith("regprog"))
                         {
                             if (hasbeenregistered)
                             {
@@ -128,7 +141,7 @@ namespace GoOS.Commands
                             }
                         }
 
-                        if (line.StartsWith("string") && badif == false)
+                        if (line.StartsWith("string"))
                         {
                             string whythehellnotwork = line.Replace(@"string ", "");
                             string varName = whythehellnotwork.Split(@" = ")[0];
@@ -143,7 +156,7 @@ namespace GoOS.Commands
                             Strings.Add(varName, varContents);
                         }
 
-                        if (line.StartsWith("int") && badif == false)
+                        if (line.StartsWith("int"))
                         {
                             int intCont = 0;
                             string whythehellnotwork = line.Replace(@"int ", "");
@@ -169,7 +182,7 @@ namespace GoOS.Commands
                             Strings.Add(varName, trueCont);
                         }
 
-                        if (line.StartsWith(@"print=") && badif == false)
+                        if (line.StartsWith(@"print="))
                         {
                             string assSplitter = line.Replace(@"print=", "");
                             // we like splitting ass round here
@@ -202,194 +215,30 @@ namespace GoOS.Commands
                             }
                         }
 
-                        if (line.StartsWith("if") && badif == false)
+                        if (line.StartsWith("if"))
                         {
-                            string removeIf = line.Substring(3);
-                            if (removeIf.Contains("=="))
-                            {
-                                string equals2split1 = removeIf.Split(@" == ")[0];
-                                string equals2split2 = removeIf.Split(@" == ")[1];
-                                string intorstring = "unsure";
-                                string string1 = null;
-                                string string2 = null;
-                                int int1 = 0;
-                                int int2 = 0;
-                                // this line was used for debugging // log(White, equals2split1 + "" + equals2split2);
-                                    
-                                if (Strings.TryGetValue(equals2split1, out string strval))
-                                {
-                                    if (intorstring == "unsure")
-                                    {
-                                        intorstring = "string";
-                                    }
-                                    if (intorstring == "int")
-                                    {
-                                        
-                                    }
-                                    else if (intorstring == "string")
-                                    {
-                                        string1 = strval;
-                                    }
-                                }
-                                else if (Integers.TryGetValue(equals2split2, out int intval))
-                                {
-                                    if (intorstring == "unsure")
-                                    {
-                                        intorstring = "int";
-                                    }
-                                    if (intorstring == "string")
-                                    {
-                                        
-                                    }
-                                    else if (intorstring == "int")
-                                    {
-                                        int1 = intval;
-                                    }
-                                }
-                                if (Strings.TryGetValue(equals2split2, out string strval2))
-                                {
-                                    if (intorstring == "unsure")
-                                    {
-                                        intorstring = "string";
-                                    }
-                                    if (intorstring == "int")
-                                    {
-                                        
-                                    }
-                                    else if (intorstring == "string")
-                                    {
-                                        string2 = strval2;
-                                    }
-                                }
-                                else if (Integers.TryGetValue(equals2split2, out int intval2))
-                                {
-                                    if (intorstring == "unsure")
-                                    {
-                                        intorstring = "int";
-                                    }
-                                    if (intorstring == "string")
-                                    {
-                                        
-                                    }
-                                    else if (intorstring == "int")
-                                    {
-                                        int2 = intval2;
-                                    }
-                                }
-                                
-                                if (intorstring == "string")
-                                {
-                                    if (string1 != string2)
-                                    {
-                                        badif = true;
-                                    }
-                                }
-                                else if (intorstring == "int")
-                                {
-                                    if (int1 != int2)
-                                    {
-                                        badif = true;
-                                    }
-                                }
-                            }
+                            string[] args = line.Split(" ");
 
-                            if (removeIf.Contains("!="))
+                            if (args[2] == " == ")
                             {
-                                string equals2split1 = removeIf.Split(@" != ")[0];
-                                string equals2split2 = removeIf.Split(@" != ")[1];
-                                string intorstring = "unsure";
-                                string string1 = null;
-                                string string2 = null;
-                                int int1 = 0;
-                                int int2 = 0;
-                                // this line was used for debugging //    log(White, equals2split1 + "" + equals2split2);
-
-                                if (Strings.TryGetValue(equals2split1, out string strval))
+                                if (Strings.TryGetValue(args[1].Trim(), out string strval))
                                 {
-                                    if (intorstring == "unsure")
+                                    if (strval == args[4])
                                     {
-                                        intorstring = "string";
+                                        poo = true;
+                                        i--;
+                                        continue;
                                     }
-                                    if (intorstring == "int")
+                                    else
                                     {
-                                        
-                                    }
-                                    else if (intorstring == "string")
-                                    {
-                                        string1 = strval;
-                                    }
-                                }
-                                else if (Integers.TryGetValue(equals2split2, out int intval))
-                                {
-                                    if (intorstring == "unsure")
-                                    {
-                                        intorstring = "int";
-                                    }
-                                    if (intorstring == "string")
-                                    {
-                                        
-                                    }
-                                    else if (intorstring == "int")
-                                    {
-                                        int1 = intval;
-                                    }
-                                }
-                                if (Strings.TryGetValue(equals2split2, out string strval2))
-                                {
-                                    if (intorstring == "unsure")
-                                    {
-                                        intorstring = "string";
-                                    }
-                                    if (intorstring == "int")
-                                    {
-                                        
-                                    }
-                                    else if (intorstring == "string")
-                                    {
-                                        string2 = strval2;
-                                    }
-                                }
-                                else if (Integers.TryGetValue(equals2split2, out int intval2))
-                                {
-                                    if (intorstring == "unsure")
-                                    {
-                                        intorstring = "int";
-                                    }
-                                    if (intorstring == "string")
-                                    {
-                                        
-                                    }
-                                    else if (intorstring == "int")
-                                    {
-                                        int2 = intval2;
-                                    }
-                                }
-                                
-                                if (intorstring == "string")
-                                {
-                                    if (string1 == string2)
-                                    {
-                                        badif = true;
-                                    }
-                                }
-                                else if (intorstring == "int")
-                                {
-                                    if (int1 == int2)
-                                    {
-                                        badif = true;
+                                        poo = false;
+                                        continue;
                                     }
                                 }
                             }
                         }
-                        
-                        if (line.StartsWith("break") && badif == true && isif == true)
-                        {
-                            badif = false;
-                            isif = false;
-                            continue;
-                        }
 
-                        if (line.StartsWith(@"save=") && badif == false)
+                        if (line.StartsWith(@"save="))
                         {
                             string whatvartosave = line.Substring(5);
                             if (Strings.TryGetValue(whatvartosave, out string strval))
@@ -494,7 +343,7 @@ namespace GoOS.Commands
                             }
                         }
 
-                        if (line.StartsWith(@"load=") && badif == false)
+                        if (line.StartsWith(@"load="))
                         {
                             int intCont = 0;
                             string whatvartoload = line.Substring(5);
@@ -551,7 +400,7 @@ namespace GoOS.Commands
                             }
                         }
 
-                        if (line.StartsWith("frontcolor=") && badif == false)
+                        if (line.StartsWith("frontcolor="))
                         {
                             string ass = line.Substring(11);
                             if (ass == "white")
@@ -620,7 +469,7 @@ namespace GoOS.Commands
                             }
                         }
 
-                        if (line.StartsWith("backcolor=") && badif == false)
+                        if (line.StartsWith("backcolor="))
                         {
                             string ass = line.Substring(10);
                             if (ass == "white")
