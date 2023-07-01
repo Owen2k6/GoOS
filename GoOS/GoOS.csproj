@@ -114,6 +114,8 @@
     <ItemGroup>
       <EmbeddedResource Include="Resources\Font_1x.btf" />
       <EmbeddedResource Include="Resources\GoOS_Intro.bmp" />
+      <None Remove="Resources\MSUIGothicCustomCharset16.btf" />
+      <EmbeddedResource Include="Resources\MSUIGothicCustomCharset16.btf" />
     </ItemGroup>
 
     <ItemGroup>
