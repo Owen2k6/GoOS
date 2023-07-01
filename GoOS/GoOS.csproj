@@ -105,14 +105,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="BetterConsole\Font_1x.btf" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Include="BetterConsole\Font_1x.btf" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Include="Virtualisation\Interface.cs" />
     </ItemGroup>
 
