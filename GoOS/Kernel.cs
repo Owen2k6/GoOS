@@ -75,6 +75,7 @@ namespace GoOS
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {
                 Console.Init(800, 600);
+                Console.WriteLine("First boot... This may take awhile...");
                 OOBE.Launch();
             }
 
