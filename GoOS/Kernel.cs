@@ -74,9 +74,8 @@ namespace GoOS
 
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {
-                Console.Init(720, 480);
-                OOBE.Open();
-                Sys.Power.Reboot();
+                Console.Init(800, 600);
+                OOBE.Launch();
             }
 
             try
@@ -108,7 +107,7 @@ namespace GoOS
             }
             catch
             {
-                log(ThemeManager.Other1, "GoOS - Failed to load settings, continuing with default settings...");
+                log(ThemeManager.Other1, "GoOS - Failed to load settings, continuing with default values...");
             }
 
             if (username == null || username == "")
@@ -127,71 +126,7 @@ namespace GoOS
             Console.Canvas.DrawImage(0, 0, cv, false);
             Console.SetCursorPosition(0, 12);
 
-            /*log(ThemeManager.Startup[0],
-                "╔═══════════════════════════════════════════════════════════════════════════════════════╗");
-            log(ThemeManager.Startup[1],
-                "║═══════════════════████████████════════════════════════════════════════════════════════║");
-            log(ThemeManager.Startup[2],
-                "║══════════════██████████████████████═══════════════════════════════════════════════════║");
-            log(ThemeManager.Startup[0],
-                "║═██████████═██████████████████████████═════════════════════════════════════════════════║");
-            log(ThemeManager.Startup[1],
-                "║═████████═══█████████════════██████════════════════════════════════════════════════════║");
-            log(ThemeManager.Startup[2],
-                "║═███████════█████══════════════════════════════════════════════════════════════════════║");
-            log(ThemeManager.Startup[0],
-                "║═██████═════███══════════════════════════════════════════╔═══════════════════════════╗═║");
-            //Do NOT change owen.
-            textcolour(ThemeManager.Startup[1]);
-            write("║═█████══════██═══════════════════════════════════════════║");
-            textcolour(ThemeManager.Default);
-            write("Goplex Studios GoOS.       ");
-            textcolour(ThemeManager.Startup[1]);
-            write("║═║\n");
-            textcolour(ThemeManager.Startup[2]);
-            write("║═█████══════█════════════████████████████████════════════║");
-            textcolour(ThemeManager.Default);
-            write("Copyright 2023 (c) Owen2k6.");
-            textcolour(ThemeManager.Startup[2]);
-            write("║═║\n");
-            textcolour(ThemeManager.Startup[0]);
-            write("║═█████══════██═══════════███████████████████═════════════║");
-            textcolour(ThemeManager.Default);
-            write("Version " + version + "               ");
-            textcolour(ThemeManager.Startup[0]);
-            write(" ║═║\n");
-            textcolour(ThemeManager.Startup[1]);
-            write("║═█████══════██═══════════███████████████████═════════════║");
-            textcolour(ThemeManager.Default);
-            write("Welcome to GoOS.           ");
-            textcolour(ThemeManager.Startup[1]);
-            write("║═║\n");
-            //Ok now continue
-            log(ThemeManager.Startup[2],
-                "║═██████═════████═════════██████████████████══════════════╚═══════════════════════════╝═║");
-            log(ThemeManager.Startup[0],
-                "║═███████════██████══════════════██████████═════════════════════════════════════════════║");
-            log(ThemeManager.Startup[1],
-                "║═█████████══████████████████████████████═══════════════════════════════════════════════║");
-            log(ThemeManager.Startup[2],
-                "║═███████████═══════════════════════════════════════════════════════════════════════════║");
-            log(ThemeManager.Startup[0],
-                "║═███████████████══════════════════████═════════════════════════════════════════════════║");
-            log(ThemeManager.Startup[1],
-                "║═█████████████████████████████████████═════════════════════════════════════════════════║");
-            log(ThemeManager.Startup[2],
-                "║═█████████████████████████████████████═════════════════════════════════════════════════║");
-            log(ThemeManager.Startup[0],
-                "╚═══════════════════════════════════════════════════════════════════════════════════════╝");
-            log(ThemeManager.WindowText,
-                "╔═══════════════════════════════════════════════════════════════════════════════════════╗");
-            log(ThemeManager.WindowText,
-                "║         GoOS Beta release 1.5-pre2. Report bugs on the issues page on github!         ║");
-            log(ThemeManager.WindowText,
-                "╚═══════════════════════════════════════════════════════════════════════════════════════╝");*/
-
-            string roota = @"0:\";
-            Directory.SetCurrentDirectory(roota);
+            Directory.SetCurrentDirectory(@"0:\");
         }
 
         public static string currentdirfix = string.Empty;
@@ -399,7 +334,17 @@ namespace GoOS
                         break;
                     }
 
-                    Directory.SetCurrentDirectory(olddir);
+                    // do it the ChaOS way, it works so dont touch else you're gay
+                    try
+                    {
+                        Directory.SetCurrentDirectory(Directory.GetCurrentDirectory().TrimEnd('\\').Remove(Directory.GetCurrentDirectory().LastIndexOf('\\') + 1));
+                        Directory.SetCurrentDirectory(Directory.GetCurrentDirectory().Remove(Directory.GetCurrentDirectory().Length - 1));
+                    }
+                    catch { }
+                    if (!Directory.GetCurrentDirectory().StartsWith(@"0:\"))
+                    {
+                        Directory.SetCurrentDirectory(@"0:\"); // Directory error correction
+                    }
                     break;
                 case "cdr":
                     if (args.Length > 1)
@@ -526,12 +471,12 @@ namespace GoOS
                     log(ThemeManager.WindowText, "1");
                     PrismAPI.Network.NetworkManager.Init();
                     log(ThemeManager.WindowText, "2");
-                    PrismAPI.Network.HTTP.HTTPClient client = new();
+                    PrismAPI.Network.HTTP.HTTPClient client = new("http://apps.goos.owen2k6.com/test.goexe");
+                    //log(ThemeManager.WindowText, "3");
+                    //client.URL = new();
                     log(ThemeManager.WindowText, "3");
-                    client.URL = new("http://apps.goos.owen2k6.com/test.goexe");
-                    log(ThemeManager.WindowText, "4");
                     byte[] test = client.Get();
-                    log(ThemeManager.WindowText, "5");
+                    log(ThemeManager.WindowText, "4");
                     Console.WriteLine(Encoding.ASCII.GetString(test));
                     break;
                 default:

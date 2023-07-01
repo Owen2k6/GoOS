@@ -5,12 +5,236 @@ using Sys = Cosmos.System;
 using static GoOS.Themes.ThemeManager;
 using Console = BetterConsole;
 using GoOS.Themes;
+using IL2CPU.API.Attribs;
+using PrismAPI.Graphics;
+using System.Collections.Generic;
 
 namespace GoOS
 {
     public static class OOBE
     {
-        static string usrn, cprn;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupwelcome.bmp")]  private static byte[] setupWelcomeRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupTOU.bmp")]      private static byte[] setupTOURaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupua.bmp")]       private static byte[] setupUARaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupsupport.bmp")]  private static byte[] setupSupportRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupuser.bmp")]     private static byte[] setupUserRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupcomputer.bmp")] private static byte[] setupComputerRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupthm.bmp")]      private static byte[] setupThemeRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupres.bmp")]      private static byte[] setupResRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupfinal.bmp")]    private static byte[] setupFinalRaw;
+
+        private static Canvas setupWelcome   = Image.FromBitmap(setupWelcomeRaw, false);
+        private static Canvas setupTOU       = Image.FromBitmap(setupTOURaw, false);
+        private static Canvas setupUA        = Image.FromBitmap(setupUARaw, false);
+        private static Canvas setupSupport   = Image.FromBitmap(setupSupportRaw, false);
+        private static Canvas setupUser      = Image.FromBitmap(setupUserRaw, false);
+        private static Canvas setupComputer  = Image.FromBitmap(setupComputerRaw, false);
+        private static Canvas setupTheme     = Image.FromBitmap(setupThemeRaw, false);
+        private static Canvas setupRes       = Image.FromBitmap(setupResRaw, false);
+        private static Canvas setupFinal     = Image.FromBitmap(setupFinalRaw, false);
+
+        private static string username, computerName, theme;
+        private static byte videoMode;
+
+        public static void Launch()
+        {
+            for (int i = 0; i < 9; i++)
+                ShowPage(i + 1);
+            
+            //Sys.Power.Reboot();
+        }
+
+        public static void ShowPage(int page)
+        {
+            switch (page)
+            {
+                case 1:
+                    Console.Canvas.DrawImage(0, 0, setupWelcome, false);
+                    Console.Canvas.Update();
+
+                ReadAgain1:
+                    var key1 = Console.ReadKey(true);
+                    if (key1.Key != ConsoleKey.Enter) goto ReadAgain1;
+
+                    break;
+
+                case 2:
+                    Console.Canvas.DrawImage(0, 0, setupTOU, false);
+                    Console.Canvas.Update();
+
+                ReadAgain2:
+                    var key2 = Console.ReadKey(true);
+                    if (key2.Key != ConsoleKey.F8) goto ReadAgain2;
+                    break;
+
+                case 3:
+                    Console.Canvas.DrawImage(0, 0, setupUA, false);
+                    Console.Canvas.Update();
+
+                ReadAgain3:
+                    var key3 = Console.ReadKey(true);
+                    if (key3.Key != ConsoleKey.F9) goto ReadAgain3;
+                    break;
+
+                case 4:
+                    Console.Canvas.DrawImage(0, 0, setupSupport, false);
+                    Console.Canvas.Update();
+
+                ReadAgain4:
+                    var key4 = Console.ReadKey(true);
+                    if (key4.Key != ConsoleKey.Enter) goto ReadAgain4;
+                    break;
+
+                case 5:
+                    Console.Canvas.DrawImage(0, 0, setupUser, false);
+                    Console.Canvas.Update();
+
+                    Console.SetCursorPosition(14, 8);
+                    Console.Write("Username: ");
+                    username = Console.ReadLine();
+                    break;
+
+                case 6:
+                    Console.Canvas.DrawImage(0, 0, setupComputer, false);
+                    Console.Canvas.Update();
+
+                    Console.SetCursorPosition(14, 7);
+                    Console.Write("Computer Name: ");
+                    computerName = Console.ReadLine();
+                    break;
+
+                case 7:
+                    Console.Canvas.DrawImage(0, 0, setupTheme, false);
+                    Console.Canvas.Update();
+
+                    int themeMenuSelectedButton = 0;
+
+                Refresh7:
+                    string[] themes =
+                    {
+                        "default",
+                        "mono",
+                        "dark",
+                        "light"
+                    };
+
+                    if (themeMenuSelectedButton > (themes.Length - 1))
+                    {
+                        themeMenuSelectedButton = 0;
+                    }
+                    else if (themeMenuSelectedButton < 0)
+                    {
+                        themeMenuSelectedButton = themes.Length - 1;
+                    }
+
+                    for (int i = 0; i < themes.Length; i++)
+                    {
+                        ControlPanel.DrawButton(themes[i], 14, 6 + i, i == themeMenuSelectedButton); // Draw button automatically at the correct coordinates
+                    }
+
+                    var key7 = Console.ReadKey(true).Key;
+                    switch (key7)
+                    {
+                        case ConsoleKey.Enter:
+                            theme = "ThemeFile = " + @"0:\content\themes\" + themes[themeMenuSelectedButton] + ".gtheme";
+                            break;
+
+                        case ConsoleKey.UpArrow:
+                            themeMenuSelectedButton--;
+                            goto Refresh7;
+
+                        case ConsoleKey.DownArrow:
+                            themeMenuSelectedButton++;
+                            goto Refresh7;
+
+                        default:
+                            goto Refresh7;
+                    }
+                    break;
+
+                case 8:
+                    Console.Canvas.DrawImage(0, 0, setupRes, false);
+                    Console.Canvas.Update();
+
+                    List<(string, (ushort Width, ushort Height))> videoModes = new()
+                    {
+                        ("800 x 600", (800, 600)),
+                        ("1280 x 720", (1280, 720)),
+                        ("1920 x 1080", (1920, 1080))
+                    };
+
+                    int displayMenuSelectedButton = 0;
+
+                Refresh8:
+                    if (displayMenuSelectedButton > videoModes.Count - 1)
+                    {
+                        displayMenuSelectedButton = 0;
+                    }
+                    else if (displayMenuSelectedButton < 0)
+                    {
+                        displayMenuSelectedButton = videoModes.Count - 1;
+                    }
+
+                    for (int i = 0; i < ControlPanel.videoModes.Count; i++)
+                    {
+                        ControlPanel.DrawButton(videoModes[i].Item1, 14, 5 + i,
+                            i == displayMenuSelectedButton); // Draw button automatically at the correct coordinates
+                    }
+
+                    var key = Console.ReadKey(true).Key;
+                    switch (key)
+                    {
+                        case ConsoleKey.Enter:
+                            if (videoModes[displayMenuSelectedButton].Item1 == "800 x 600") videoMode = 2;
+                            if (videoModes[displayMenuSelectedButton].Item1 == "1280 x 720") videoMode = 4;
+                            if (videoModes[displayMenuSelectedButton].Item1 == "1920 x 1080") videoMode = 6;
+                            break;
+
+                        case ConsoleKey.UpArrow:
+                            displayMenuSelectedButton--;
+                            goto Refresh8;
+
+                        case ConsoleKey.DownArrow:
+                            displayMenuSelectedButton++;
+                            goto Refresh8;
+
+                        default:
+                            goto Refresh8;
+                    }
+                    break;
+
+                case 9:
+                    try
+                    {
+                        Directory.CreateDirectory(@"0:\content");
+                        Directory.CreateDirectory(@"0:\content\sys");
+                        Directory.CreateDirectory(@"0:\content\themes");
+                        File.Create(@"0:\content\sys\setup.gms");
+                        File.WriteAllText(@"0:\content\sys\version.gms", $"System.Version is set to {Kernel.version} \n Note to users reading this: DO NOT ALTER. IMPORTANT IF USER DATA NEEDS CONVERTING.");
+                        File.WriteAllText(@"0:\content\sys\user.gms", $"username: {username}\ncomputername: {computerName}");
+                        File.WriteAllBytes(@"0:\content\sys\resolution.gms", new byte[] { videoMode }); // Video mode 2: 1280x720
+                        File.Create(@"0:\content\sys\option-showprotectedfiles.gms");
+                        File.Create(@"0:\content\sys\option-editprotectedfiles.gms");
+                        File.Create(@"0:\content\sys\option-deleteprotectedfiles.gms");
+                        File.WriteAllText(@"0:\content\themes\default.gtheme", "Default = White\nBackground = Black\nStartup = DarkMagenta,Red,DarkRed\nWindowText = Cyan\nWindowBorder = Green\nErrorText = Red\nOther1 = Yellow");
+                        File.WriteAllText(@"0:\content\themes\mono.gtheme", "Default = White\nBackground = Black\nStartup = White,White,White\nWindowText = White\nWindowBorder = White\nErrorText = White\nOther1 = White");
+                        File.WriteAllText(@"0:\content\themes\dark.gtheme", "Default = Gray\nBackground = Black\nStartup = DarkGray,Gray,DarkGray\nWindowText = Gray\nWindowBorder = DarkGray\nErrorText = DarkGray\nOther1 = DarkGray");
+                        File.WriteAllText(@"0:\content\themes\light.gtheme", "Default = Black\nBackground = White\nStartup = Black,Black,Black\nWindowText = Black\nWindowBorder = Black\nErrorText = Black\nOther1 = Black");
+                        File.WriteAllText(@"0:\content\sys\theme.gms", @"ThemeFile = " + theme);
+                    }
+                    catch (Exception e) { Console.WriteLine(e); }
+
+                    Console.Canvas.DrawImage(0, 0, setupFinal, false);
+                    Console.Canvas.Update();
+
+                ReadAgain9:
+                    var key9 = Console.ReadKey(true);
+                    if (key9.Key != ConsoleKey.Enter) goto ReadAgain9;
+                    break;
+            }
+        }
+
+        /*static string usrn, cprn;
 
         public static void Open()
         {
@@ -233,11 +457,11 @@ namespace GoOS
 
             if (message == 0)
             {
-                /*Console.Write("╔════════════════════╗", 29, 10);
+                Console.Write("╔════════════════════╗", 29, 10);
                 Console.Write("║                    ║", 29, 11);
                 Console.Write("║                    ║", 29, 12);
                 Console.Write("║                    ║", 29, 13);
-                Console.Write("╚════════════════════╝", 29, 14);*/
+                Console.Write("╚════════════════════╝", 29, 14);
 
                 Console.ForegroundColor = WindowText;
                 DrawTitle(" Info ", 10);
@@ -246,11 +470,11 @@ namespace GoOS
             }
             else if (message == 1)
             {
-                /*Console.Write("╔════════════════════╗", 29, 10);
+                Console.Write("╔════════════════════╗", 29, 10);
                 Console.Write("║                    ║", 29, 11);
                 Console.Write("║                    ║", 29, 12);
                 Console.Write("║                    ║", 29, 13);
-                Console.Write("╚════════════════════╝", 29, 14);*/
+                Console.Write("╚════════════════════╝", 29, 14);
 
                 Console.ForegroundColor = WindowText;
                 DrawTitle(" Info ", 10);
@@ -259,11 +483,11 @@ namespace GoOS
             }
             else if (message == 2)
             {
-                /*Console.Write("╔══════════════════════════════════════════════════════╗", 12, 10);
+                Console.Write("╔══════════════════════════════════════════════════════╗", 12, 10);
                 Console.Write("║                                                      ║", 12, 11);
                 Console.Write("║                                                      ║", 12, 12);
                 Console.Write("║                                                      ║", 12, 13);
-                Console.Write("╚══════════════════════════════════════════════════════╝", 12, 14);*/
+                Console.Write("╚══════════════════════════════════════════════════════╝", 12, 14);
 
                 Console.ForegroundColor = WindowText;
                 DrawTitle(" Info ", 10);
@@ -271,6 +495,6 @@ namespace GoOS
                 Console.Write("A serious error has occurred, setup cannot continue.");
                 while (true) { Console.ReadKey(true); } // Lock up
             }
-        }
+        }*/
     }
 }
