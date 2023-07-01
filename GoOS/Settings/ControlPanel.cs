@@ -9,9 +9,6 @@ using ConsoleKey = System.ConsoleKey;
 using Console = BetterConsole;
 using ConsoleColor = PrismAPI.Graphics.Color;
 
-// If it ain't broken, don't fix it
-// -xrc2
-
 namespace GoOS
 {
     /// <summary>
@@ -81,6 +78,8 @@ namespace GoOS
             isRunning = true;
             Console.Clear();
             MainLoop();
+            Console.ForegroundColor = ThemeManager.WindowText;
+            Console.BackgroundColor = ThemeManager.Background;
             Console.Clear();
         }
 
@@ -100,6 +99,10 @@ namespace GoOS
                 {
                     case ConsoleKey.Escape:
                         isRunning = false;
+                        break;
+
+                    case ConsoleKey.Enter:
+                        ShowMenu(menuToShow, categorieToShow);
                         break;
 
                     case ConsoleKey.UpArrow:
@@ -180,16 +183,17 @@ namespace GoOS
             DrawTitle("GoOS Settings");
             DrawControls(mainMenuControls);
             DrawClock();
-            DrawButtons(quick);
+            DrawButtons();
         }
 
-        private static void DrawButtons(bool quick = false)
+        private static string categorieToShow = string.Empty, menuToShow = string.Empty;
+
+        private static void DrawButtons()
         {
             // Clear the buttons
             Console.Canvas.DrawFilledRectangle(3 * 8, 2 * 16, 12 * 8, Convert.ToUInt16(Console.Canvas.Height - (6 * 16)), 0, ThemeManager.Background);
 
             // Draw the menu buttons
-            string categorieToShow = string.Empty, menuToShow = string.Empty;
             int nextPos = 18;
             for (int i = 0; i < menuButtons.Count; i++)
             {
@@ -247,10 +251,6 @@ namespace GoOS
 
                     break;
             }
-
-            // Show menu if !quick
-            if (!quick)
-                ShowMenu(menuToShow, categorieToShow);
         }
 
         /// <summary>
@@ -505,9 +505,7 @@ namespace GoOS
 
                         case ConsoleKey.Enter:
                             Console.Init(videoModes[displayMenuSelectedButton].Item2.Width, videoModes[displayMenuSelectedButton].Item2.Height);
-                            DrawMessage("Creating file...");
                             File.Create(@"0:\content\sys\resolution.gms");
-                            DrawMessage("Saving mode...");
                             File.WriteAllBytes(@"0:\content\sys\resolution.gms", new byte[] { (byte)displayMenuSelectedButton });
                             DrawMenu(true);
                             DrawMessage("Set video mode to " + scanMaps[displayMenuSelectedButton].Item1);
