@@ -51,7 +51,7 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
-            Console.Init(1280, 720);
+            Console.Init(800, 600);
             ThemeManager.SetTheme(Theme.Fallback);
             log(ThemeManager.WindowText, "GoOS - Starting GoOS...");
             try

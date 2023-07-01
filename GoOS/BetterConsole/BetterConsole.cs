@@ -13,13 +13,13 @@ using static GoOS.Core;
 /// </summary>
 public static class BetterConsole
 {
-    [ManifestResourceStream(ResourceName = "GoOS.BetterConsole.Font_1x.btf")] private static byte[] rawFont;
+    [ManifestResourceStream(ResourceName = "GoOS.BetterConsole.ComicSansMSCustomCharset16.btf")] private static byte[] rawFont;
 
     private static Font font;
 
     public static Display Canvas;
 
-    private static ushort charWidth = 8, charHeight = 16;
+    private static ushort charWidth = 16, charHeight = 16;
 
     private static List<string> menuOptions = new()
     {

@@ -126,4 +126,11 @@
       </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="BetterConsole\Font_1x.btf" />
+      <EmbeddedResource Include="BetterConsole\Font_1x.btf" />
+      <None Remove="BetterConsole\ComicSansMSCustomCharset16.btf" />
+      <EmbeddedResource Include="BetterConsole\ComicSansMSCustomCharset16.btf" />
+    </ItemGroup>
+
 </Project>
