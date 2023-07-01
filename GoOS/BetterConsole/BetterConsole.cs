@@ -14,6 +14,7 @@ using Cosmos.Core.Memory;
 public static class BetterConsole
 {
     [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_1x.btf")] private static byte[] rawFont;
+    [ManifestResourceStream(ResourceName = "GoOS.Resources.Credits05.bmp")] private static byte[] easterEgg;
 
     private static Font font;
 
@@ -198,6 +199,23 @@ public static class BetterConsole
                             Clear();
                             returnValue = string.Empty;
                             reading = false;
+                        }
+                        else if (KeyboardManager.ShiftPressed && key.Key == ConsoleKeyEx.E)
+                        {
+                            Write("> ");
+                            string input = ReadLine();
+                            if (input == "e015")
+                            {
+                                Clear();
+                                Canvas cv = Image.FromBitmap(GoOS.Kernel.rawBootLogo, false);
+                                Canvas.DrawImage(0, 0, cv, false);
+                                ReadKey(true);
+                                Clear();
+                            }
+                            else
+                            {
+                                Write("Nope");
+                            }
                         }
                         else if (KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
                         {

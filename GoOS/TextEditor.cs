@@ -130,10 +130,7 @@ namespace GoOS
                         string line = lines[i].Substring(scrollX, Math.Min(Console.WindowWidth, lines[i].Length - scrollX));
                         // Print the line, and pad it with spaces to clear the rest of the line.
                         // if you get an indexoutofrangeexception it's likely this (REMOVE THIS COMMENT)
-                        foreach (char c in line + new string(' ', Math.Max(0, Console.WindowWidth - line.Length)))
-                        {
-                            Console.Write(c.ToString() + '_');
-                        }
+                        Console.Write(line + new string(' ', Math.Max(0, Console.WindowWidth - line.Length)));
                     }
                 }
 
