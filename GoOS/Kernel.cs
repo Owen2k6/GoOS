@@ -12,6 +12,9 @@ using GoOS.Commands;
 using Console = BetterConsole;
 using ConsoleColor = PrismAPI.Graphics.Color;
 using static GoOS.Core;
+using System.Threading;
+using PrismAPI.Graphics;
+using IL2CPU.API.Attribs;
 
 //Goplex Studios - GoOS
 //Copyright (C) 2022  Owen2k6
@@ -48,6 +51,8 @@ namespace GoOS
         bool isenabled = true;
         public static string username = null;
         public static string computername = null;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GoOS_Intro.bmp")] static byte[] rawBootLogo;
 
         protected override void BeforeRun()
         {
@@ -121,7 +126,11 @@ namespace GoOS
 
             Console.Clear();
 
-            log(ThemeManager.Startup[0],
+            Canvas cv = Image.FromBitmap(rawBootLogo, false);
+            Console.Canvas.DrawImage(0, 0, cv, false);
+            Console.SetCursorPosition(0, 12);
+
+            /*log(ThemeManager.Startup[0],
                 "╔═══════════════════════════════════════════════════════════════════════════════════════╗");
             log(ThemeManager.Startup[1],
                 "║═══════════════════████████████════════════════════════════════════════════════════════║");
@@ -182,7 +191,7 @@ namespace GoOS
             log(ThemeManager.WindowText,
                 "║         GoOS Beta release 1.5-pre2. Report bugs on the issues page on github!         ║");
             log(ThemeManager.WindowText,
-                "╚═══════════════════════════════════════════════════════════════════════════════════════╝");
+                "╚═══════════════════════════════════════════════════════════════════════════════════════╝");*/
 
             string roota = @"0:\";
             Directory.SetCurrentDirectory(roota);
@@ -220,7 +229,8 @@ namespace GoOS
 
             // Commands section
 
-            string[] args = Console.ReadLine().Split(' ');
+            string[] args = Console.ReadLine().Trim().Split(' ');
+
             switch (args[0])
             {
                 case "help":
@@ -501,7 +511,6 @@ namespace GoOS
                     {
                         log(ThemeManager.ErrorText, "Unknown order.");
                     }
-
                     break;
                 case "mode":
                     if (args.Length > 3)
@@ -515,6 +524,18 @@ namespace GoOS
                         break;
                     }
                     Console.Init(Convert.ToUInt16(args[1]), Convert.ToUInt16(args[2]));
+                    break;
+                case "floppy":
+                    log(ThemeManager.WindowText, "1");
+                    PrismAPI.Network.NetworkManager.Init();
+                    log(ThemeManager.WindowText, "2");
+                    PrismAPI.Network.HTTP.HTTPClient client = new();
+                    log(ThemeManager.WindowText, "3");
+                    client.URL = new("http://apps.goos.owen2k6.com/test.goexe");
+                    log(ThemeManager.WindowText, "4");
+                    byte[] test = client.Get();
+                    log(ThemeManager.WindowText, "5");
+                    Console.WriteLine(Encoding.ASCII.GetString(test));
                     break;
                 default:
                     Console.WriteLine("Invalid command.");

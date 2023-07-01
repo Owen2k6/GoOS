@@ -4,6 +4,7 @@ using System.Threading;
 using Sys = Cosmos.System;
 using static GoOS.Themes.ThemeManager;
 using Console = BetterConsole;
+using GoOS.Themes;
 
 namespace GoOS
 {
@@ -45,45 +46,10 @@ namespace GoOS
         /// </summary>
         private static void DrawFrame()
         {
-            // Do not touch. I know what I'm doing.
-            // Sorry i touched it -Owen2k6
+            // Draw the frame with GUI instead of TUI
             Console.Clear();
-            try
-            {
-                Console.BackgroundColor = Background;
-                Console.ForegroundColor = WindowBorder;
-                     Console.Write("╔═══════════════════════════════════════════════════════════════════════════════════════╗\n" + //1
-                                   "║                                                                                       ║\n" + //2
-                                   "║                                                                                       ║\n" + //3
-                                   "║                                                                                       ║\n" + //   4
-                                   "║                                                                                       ║\n" + //5
-                                   "║                                                                                       ║\n" + //6
-                                   "║                                                                                       ║\n" + //7
-                                   "║                                                                                       ║\n" + //8
-                                   "║                                                                                       ║\n" +//9
-                                   "║                                                                                       ║\n" + //10
-                                   "║                                                                                       ║\n" + //11
-                                   "║                                                                                       ║\n" +  //12
-                                   "║                                                                                       ║\n" +  //13
-                                   "║                                                                                       ║\n" +      //14
-                                   "║                                                                                       ║\n" +  //15
-                                   "║                                                                                       ║\n" +  //16
-                                   "║                                                                                       ║\n" +  //17
-                                   "║                                                                                       ║\n" +  //18
-                                   "║                                                                                       ║\n" +  //19
-                                   "║                                                                                       ║\n" +  //20
-                                   "║                                                                                       ║\n" +      //21
-                                   "║                                                                                       ║\n" +  //22
-                                   "║                                                                                       ║\n" +  //23
-                                   "║                                                                                       ║\n" +  //24
-                                   "║                                                                                       ║\n" +  //25
-                                   "║                                                                                       ║\n" +  //26
-                                   "║                                                                                       ║\n" +  //27
-                                   "║                                                                                       ║\n" +  //28
-                                   "╚═══════════════════════════════════════════════════════════════════════════════════════╝");    //29
-
-            }
-            catch { }
+            Console.Canvas.DrawRectangle(3, 7, Convert.ToUInt16(Console.Canvas.Width - 6), Convert.ToUInt16(Console.Canvas.Height - 14), 0, ThemeManager.WindowBorder);
+            Console.Canvas.DrawRectangle(4, 8, Convert.ToUInt16(Console.Canvas.Width - 6), Convert.ToUInt16(Console.Canvas.Height - 14), 0, ThemeManager.WindowBorder);
         }
 
         /// <summary>
@@ -95,7 +61,7 @@ namespace GoOS
             int OldX = Console.CursorLeft; int OldY = Console.CursorTop;
 
             Console.SetCursorPosition(40 - (Title.Length / 2), Y);
-            Console.ForegroundColor = WindowText;
+            Console.ForegroundColor = ThemeManager.WindowText;
             Console.Write(Title);
             Console.SetCursorPosition(OldX, OldY);
         }
