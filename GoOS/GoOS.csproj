@@ -106,12 +106,14 @@
 
     <ItemGroup>
       <None Remove="BetterConsole\Font_1x_2.btf" />
+      <None Remove="Resources\credits05.bmp" />
       <None Remove="Resources\Font_1x.btf" />
       <None Remove="Resources\GoOS_Intro.bmp" />
       <None Remove="test.bmp" />
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Include="Resources\Credits05.bmp" />
       <EmbeddedResource Include="Resources\Font_1x.btf" />
       <EmbeddedResource Include="Resources\GoOS_Intro.bmp" />
       <None Remove="Resources\MSUIGothicCustomCharset16.btf" />
