@@ -319,6 +319,7 @@ public static class BetterConsole
             CursorLeft = 0; CursorTop = (Canvas.Height / charHeight) - 1;
             if (!DoubleBufferedMode)
                 Render();
+            Heap.Collect();
         }
     }
 
