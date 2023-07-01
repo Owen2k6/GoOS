@@ -8,6 +8,7 @@ using GoOS.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using static System.Net.Mime.MediaTypeNames;
 using Console = BetterConsole;
 using ConsoleColor = PrismAPI.Graphics.Color;
 
@@ -61,6 +62,8 @@ namespace GoOS
         };
 
         string? pendingNotification;
+
+        private bool infoToggle = false;
 
         public TextEditor(string value, bool isPath = true)
         {
@@ -135,6 +138,9 @@ namespace GoOS
                 updatedLinesStart = null;
                 updatedLinesEnd = null;
             }
+
+            if (infoToggle)
+                ShowInfo();
 
             //Console.CursorVisible = true;
             Console.SetCursorPosition(linePos - scrollX, currentLine + TITLEBAR_HEIGHT - scrollY);
@@ -298,6 +304,14 @@ namespace GoOS
             Console.ForegroundColor = ConsoleColor.Black;
             Console.SetCursorPosition((Console.WindowWidth - text.Length) / 2, Console.WindowHeight - SHORTCUT_BAR_HEIGHT - 1);
             Console.Write($" {text} ");
+        }
+
+        private void ClearNotification()
+        {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.SetCursorPosition(0, Console.WindowHeight - SHORTCUT_BAR_HEIGHT - 1);
+            Console.Write(new string(' ', Console.WindowWidth));
         }
 
         // Render a prompt.
@@ -496,7 +510,8 @@ namespace GoOS
                             Save(true);
                             break;
                         case ConsoleKey.I:
-                            ShowInfo();
+                            infoToggle = !infoToggle;
+                            if (!infoToggle) ClearNotification();
                             break;
                         case ConsoleKey.K:
                             CutLine();
