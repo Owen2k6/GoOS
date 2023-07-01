@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Cosmos.HAL;
 using GoOS.Themes;
 using Console = BetterConsole;
 using static ConsoleColorEx;
@@ -63,16 +64,27 @@ namespace GoOS.Commands
 
                         if (line.StartsWith("goto"))
                         {
-                            String howlong = line.Split("=")[1];
-                            int potato = Convert.ToInt32(howlong);
-                            i = potato;
+                            try
+                            {
+                                String howlong = line.Split("=")[1];
+                                int potato = Convert.ToInt32(howlong);
+                                i = potato;
+                            }
+                            catch (Exception)
+                            {
+                                Console.WriteLine("owen caused 9/11");
+                            }
+                            
                         }
 
                         if (line.StartsWith("sleep"))
                         {
                             String howlong = line.Split("=")[1];
                             int potato = Convert.ToInt32(howlong);
-                            sleep(potato);
+                            while (true)
+                            {
+                                Console.WriteLine("Haha you've been fooled!");
+                            }
                         }
 
                         if (line.StartsWith("input"))
