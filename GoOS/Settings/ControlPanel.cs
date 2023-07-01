@@ -334,7 +334,7 @@ namespace GoOS
         /// <param name="x">X coordinate of the button.</param>
         /// <param name="y">Y coordinate of the button.</param>
         /// <param name="highlighted">Makes the button highlighted or not.</param>
-        private static void DrawButton(string text, int x, int y, bool highlighted)
+        public static void DrawButton(string text, int x, int y, bool highlighted)
         {
             switch (highlighted)
             {
@@ -354,7 +354,7 @@ namespace GoOS
         /// <param name="text">The text to be drawn.</param>
         /// <param name="x">X coordinate of the text.</param>
         /// <param name="y">Y coordinate of the text.</param>
-        private static void DrawText(string text, int x, int y, ConsoleColor foreColor, ConsoleColor backColor)
+        public static void DrawText(string text, int x, int y, ConsoleColor foreColor, ConsoleColor backColor)
         {
             Console.ForegroundColor = foreColor;
             Console.BackgroundColor = backColor;

@@ -109,13 +109,37 @@
       <None Remove="Resources\credits05.bmp" />
       <None Remove="Resources\Font_1x.btf" />
       <None Remove="Resources\GoOS_Intro.bmp" />
+      <None Remove="Resources\OOBE\setupcomputer.bmp" />
+      <None Remove="Resources\OOBE\setupfinal.bmp" />
+      <None Remove="Resources\OOBE\setupres.bmp" />
+      <None Remove="Resources\OOBE\setupsupport.bmp" />
+      <None Remove="Resources\OOBE\setupthm.bmp" />
+      <None Remove="Resources\OOBE\setupTOU.bmp" />
+      <None Remove="Resources\OOBE\setupua.bmp" />
+      <None Remove="Resources\OOBE\setupuser.bmp" />
+      <None Remove="Resources\OOBE\setupwelcome.bmp" />
       <None Remove="test.bmp" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Resources\OOBE\setupsupport.bmp" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Resources\OOBE\setupfinal.bmp" />
     </ItemGroup>
 
     <ItemGroup>
       <EmbeddedResource Include="Resources\Credits05.bmp" />
       <EmbeddedResource Include="Resources\Font_1x.btf" />
       <EmbeddedResource Include="Resources\GoOS_Intro.bmp" />
+      <EmbeddedResource Include="Resources\OOBE\setupcomputer.bmp" />
+      <EmbeddedResource Include="Resources\OOBE\setupres.bmp" />
+      <EmbeddedResource Include="Resources\OOBE\setupthm.bmp" />
+      <EmbeddedResource Include="Resources\OOBE\setupTOU.bmp" />
+      <EmbeddedResource Include="Resources\OOBE\setupua.bmp" />
+      <EmbeddedResource Include="Resources\OOBE\setupuser.bmp" />
+      <EmbeddedResource Include="Resources\OOBE\setupwelcome.bmp" />
       <None Remove="Resources\MSUIGothicCustomCharset16.btf" />
       <EmbeddedResource Include="Resources\MSUIGothicCustomCharset16.btf" />
     </ItemGroup>

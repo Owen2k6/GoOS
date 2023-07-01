@@ -207,8 +207,8 @@ public static class BetterConsole
                             if (input == "e015")
                             {
                                 Clear();
-                                Canvas cv = Image.FromBitmap(GoOS.Kernel.rawBootLogo, false);
-                                Canvas.DrawImage(0, 0, cv, false);
+                                Canvas.DrawImage(0, 0, Image.FromBitmap(easterEgg, false), false);
+                                Canvas.Update();
                                 ReadKey(true);
                                 Clear();
                             }
