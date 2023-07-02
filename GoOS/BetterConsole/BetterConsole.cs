@@ -7,6 +7,7 @@ using PrismAPI.Graphics;
 using PrismAPI.Graphics.Fonts;
 using GoOS.Themes;
 using Cosmos.Core.Memory;
+using GoOS;
 
 /// <summary>
 /// <see cref="BetterConsole"/> class
@@ -192,7 +193,12 @@ public static class BetterConsole
                     {
                         if (key.Key == ConsoleKeyEx.G)
                         {
-                            Heap.Collect();
+                            string collected = Heap.Collect() + " items collected";
+                            Init(Canvas.Width, Canvas.Height);
+                            Canvas.DrawString(Canvas.Width - (collected.Length * 8) - 8, Canvas.Height - 32, collected, font, ThemeManager.WindowText);
+                            SetCursorPosition(0, 0);
+                            GoOS.Kernel.DrawPrompt();
+                            Write(returnValue);
                         }
                         else if (key.Key == ConsoleKeyEx.L)
                         {
