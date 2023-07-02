@@ -62,7 +62,8 @@ namespace GoOS
         }
 
         public static void ShowPage(int page)
-        {
+        {   int tries = 0;
+            
             switch (page)
             {
                 case 1:
@@ -225,10 +226,12 @@ namespace GoOS
                     break;
 
                 case 9:
+                    
+                    
                     balls:
                     try
                     {
-                        
+                        tries++;
                         Directory.CreateDirectory(@"0:\content");
                         Directory.CreateDirectory(@"0:\content\sys");
                         Directory.CreateDirectory(@"0:\content\themes");
@@ -253,10 +256,28 @@ namespace GoOS
                         File.WriteAllText(@"0:\content\sys\theme.gms", @"ThemeFile = " + theme);
                     }
                     catch (Exception e)
-                    {
+                    {               
                         Console.SetCursorPosition(0,0);
                         Console.WriteLine(e);
-                        goto balls;
+                        
+                        if (tries < 10)
+                        {
+                            goto balls;
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine(e);
+                            Console.WriteLine(e);
+                            Console.WriteLine(e);
+                            Console.WriteLine(e);
+                            Console.WriteLine(e);
+                            Console.WriteLine(e);
+                            Console.WriteLine(e);
+                            Console.WriteLine("Press any key to shutdown.");
+                            Console.ReadKey(true);
+                            Sys.Power.Shutdown();
+                        }
                     }
 
                     Console.Canvas.DrawImage(0, 0, setupFinal, false);
