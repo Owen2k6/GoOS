@@ -124,6 +124,7 @@ namespace GoOS
                     Console.Canvas.DrawImage(0, 0, setupTheme, false);
                     Console.Canvas.Update();
 
+                    // yes this code is stolen from settings, don't ask
                     int themeMenuSelectedButton = 0;
 
                     Refresh7:
@@ -154,6 +155,7 @@ namespace GoOS
                     switch (key7)
                     {
                         case ConsoleKey.Enter:
+                            // Set theme.gms' contents for later
                             theme = "ThemeFile = " + @"0:\content\themes\" + themes[themeMenuSelectedButton] +
                                     ".gtheme";
                             break;
@@ -176,6 +178,7 @@ namespace GoOS
                     Console.Canvas.DrawImage(0, 0, setupRes, false);
                     Console.Canvas.Update();
 
+                    // Not the complete set for modes until user finishes OOBE and enters Settings
                     List<(string, (ushort Width, ushort Height))> videoModes = new()
                     {
                         ("800 x 600", (800, 600)),
@@ -183,6 +186,7 @@ namespace GoOS
                         ("1920 x 1080", (1920, 1080))
                     };
 
+                    // same thing here lmao
                     int displayMenuSelectedButton = 0;
 
                     Refresh8:
@@ -205,6 +209,7 @@ namespace GoOS
                     switch (key)
                     {
                         case ConsoleKey.Enter:
+                            // We only allow 3 modes, which are not in order, so we have to check & set the modes manually respectively
                             if (videoModes[displayMenuSelectedButton].Item1 == "800 x 600") videoMode = 2;
                             if (videoModes[displayMenuSelectedButton].Item1 == "1280 x 720") videoMode = 4;
                             if (videoModes[displayMenuSelectedButton].Item1 == "1920 x 1080") videoMode = 6;
@@ -241,7 +246,7 @@ namespace GoOS
                         File.WriteAllText(@"0:\content\sys\user.gms",
                             $"username: {username}\ncomputername: {computerName}");
                         File.WriteAllBytes(@"0:\content\sys\resolution.gms",
-                            new byte[] { videoMode }); // Video mode 2: 1280x720
+                            new byte[] { videoMode });
                         File.WriteAllText(@"0:\content\themes\default.gtheme",
                             "Default = White\nBackground = Black\nStartup = DarkMagenta,Red,DarkRed\nWindowText = Cyan\nWindowBorder = Green\nErrorText = Red\nOther1 = Yellow");
                         File.WriteAllText(@"0:\content\themes\mono.gtheme",
