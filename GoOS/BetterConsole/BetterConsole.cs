@@ -192,7 +192,7 @@ public static class BetterConsole
                     {
                         if (key.Key == ConsoleKeyEx.G)
                         {
-                            Heap.Collect();
+                            GoOS.Core.log(ThemeManager.WindowText, "\nFreed " + Heap.Collect().ToString() + " object(s)");
                         }
                         else if (key.Key == ConsoleKeyEx.L)
                         {
@@ -202,7 +202,8 @@ public static class BetterConsole
                         }
                         else if (KeyboardManager.ShiftPressed && key.Key == ConsoleKeyEx.E)
                         {
-                            Write("> ");
+                            // Easter egg console
+                            Write(" > ");
                             string input = ReadLine();
                             if (input == "e015")
                             {
@@ -322,6 +323,8 @@ public static class BetterConsole
         {
             CursorLeft = 0;
             CursorTop++;
+            if (GoOS.Kernel.autoHeapCollect)
+                Heap.Collect();
         }
         if (CursorTop >= Canvas.Height / charHeight)
         {
@@ -337,7 +340,6 @@ public static class BetterConsole
             CursorLeft = 0; CursorTop = (Canvas.Height / charHeight) - 1;
             if (!DoubleBufferedMode)
                 Render();
-            Heap.Collect();
         }
     }
 

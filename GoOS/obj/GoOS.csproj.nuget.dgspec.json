@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Eric\\Documents\\GitHub\\Cosmos\\GoOS-Fork\\GoOS\\GoOS.csproj": {}
+    "C:\\Users\\Eric\\Documents\\GitHub\\GoOS-Fork\\GoOS\\GoOS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Eric\\Documents\\GitHub\\Cosmos\\GoOS-Fork\\GoOS\\GoOS.csproj": {
+    "C:\\Users\\Eric\\Documents\\GitHub\\GoOS-Fork\\GoOS\\GoOS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Eric\\Documents\\GitHub\\Cosmos\\GoOS-Fork\\GoOS\\GoOS.csproj",
+        "projectUniqueName": "C:\\Users\\Eric\\Documents\\GitHub\\GoOS-Fork\\GoOS\\GoOS.csproj",
         "projectName": "GoOS",
-        "projectPath": "C:\\Users\\Eric\\Documents\\GitHub\\Cosmos\\GoOS-Fork\\GoOS\\GoOS.csproj",
+        "projectPath": "C:\\Users\\Eric\\Documents\\GitHub\\GoOS-Fork\\GoOS\\GoOS.csproj",
         "packagesPath": "C:\\Users\\Eric\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Eric\\Documents\\GitHub\\Cosmos\\GoOS-Fork\\GoOS\\obj\\",
+        "outputPath": "C:\\Users\\Eric\\Documents\\GitHub\\GoOS-Fork\\GoOS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -98,7 +98,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
         }
       }
     }

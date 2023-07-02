@@ -8,6 +8,7 @@ using Convert = System.Convert;
 using ConsoleKey = System.ConsoleKey;
 using Console = BetterConsole;
 using ConsoleColor = PrismAPI.Graphics.Color;
+using Cosmos.Core.Memory;
 
 namespace GoOS
 {
@@ -28,6 +29,7 @@ namespace GoOS
         private static readonly List<string> categoryButtonsAdvancedMenu = new List<string>
         {
             "Format",
+            "Memory"
         };
 
         private static readonly List<string> categoryButtonsInfoMenu = new List<string>
@@ -101,6 +103,8 @@ namespace GoOS
                 DrawMenu();
                 ShowMenu(menuToShow, categorieToShow, true);
                 Console.Render();
+                if (Kernel.autoHeapCollect)
+                    Heap.Collect();
 
                 ConsoleKey key = System.Console.ReadKey(true).Key;
                 switch (key)
@@ -154,13 +158,13 @@ namespace GoOS
                         break;
 
                     case 1: // Advanced menu
-                        if (categorieSelectedButton > 0)
+                        if (categorieSelectedButton > 1)
                         {
                             categorieSelectedButton = 0;
                         }
                         else if (categorieSelectedButton < 0)
                         {
-                            categorieSelectedButton = 0;
+                            categorieSelectedButton = 1;
                         }
 
                         break;
@@ -643,6 +647,50 @@ namespace GoOS
                                 }
 
                                 Cosmos.HAL.Power.CPUReboot();
+                                break;
+
+                            default:
+                                goto Refresh;
+                        }
+                    }
+                }
+                if (menu == categoryButtonsAdvancedMenu[1])
+                {
+                    if (preview)
+                    {
+                        DrawText("Memory related settings.", 18, Console.WindowHeight - 7, ThemeManager.WindowText, ThemeManager.Background);
+                        DrawText("Automatic Heap Collection", 18, 2, ThemeManager.Background, ThemeManager.WindowText);
+                        DrawText("< This option is broken! >", 46, 2, ThemeManager.ErrorText, ThemeManager.Background);
+
+                        if (Kernel.autoHeapCollect)
+                            DrawText("√", 44, 2, ThemeManager.WindowText, ThemeManager.Background);
+                        else
+                            DrawText(" ", 44, 2, ThemeManager.WindowText, ThemeManager.Background);
+                        Console.Render();
+                    }
+                    else
+                    {
+                    Refresh:
+                        DrawText("Memory related settings.", 18, Console.WindowHeight - 7, ThemeManager.WindowText, ThemeManager.Background);
+                        DrawText("Automatic Heap Collection", 18, 2, ThemeManager.Background, ThemeManager.WindowText);
+                        DrawText("< This option is broken! >", 46, 2, ThemeManager.ErrorText, ThemeManager.Background);
+
+                        if (Kernel.autoHeapCollect)
+                            DrawText("√", 44, 2, ThemeManager.WindowText, ThemeManager.Background);
+                        else
+                            DrawText(" ", 44, 2, ThemeManager.WindowText, ThemeManager.Background);
+                        Console.Render();
+
+                        var key = Console.ReadKey(true).Key;
+                        switch (key)
+                        {
+                            case ConsoleKey.Escape:
+                                ClearMenu();
+                                break;
+
+                            case ConsoleKey.Enter:
+                                Kernel.autoHeapCollect = !Kernel.autoHeapCollect;
+                                File.WriteAllBytes(@"0:\content\sys\autoheapcollect.gms", new byte[1] { (byte)(Kernel.autoHeapCollect ? 1 : 0) });
                                 break;
 
                             default:

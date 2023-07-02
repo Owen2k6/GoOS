@@ -15,6 +15,7 @@ using static GoOS.Core;
 using System.Threading;
 using PrismAPI.Graphics;
 using IL2CPU.API.Attribs;
+using Cosmos.Core.Memory;
 
 //Goplex Studios - GoOS
 //Copyright (C) 2022  Owen2k6
@@ -50,6 +51,8 @@ namespace GoOS
 
         public static string username = null;
         public static string computername = null;
+
+        public static bool autoHeapCollect = false;
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GoOS_Intro.bmp")] public static byte[] rawBootLogo;
 
@@ -106,6 +109,8 @@ namespace GoOS
 
                 byte videoMode = File.ReadAllBytes(@"0:\content\sys\resolution.gms")[0];
                 Console.Init(ControlPanel.videoModes[videoMode].Item2.Width, ControlPanel.videoModes[videoMode].Item2.Height);
+
+                //autoHeapCollect = File.ReadAllBytes(@"0:\content\sys\autoheapcollect.gms")[0] != 0;
             }
             catch
             {
@@ -126,7 +131,7 @@ namespace GoOS
 
             Canvas cv = Image.FromBitmap(rawBootLogo, false);
             Console.Canvas.DrawImage(0, 0, cv, false);
-            Console.SetCursorPosition(0, 12);
+            Console.SetCursorPosition(0, 13);
 
             Directory.SetCurrentDirectory(@"0:\");
         }
@@ -499,6 +504,9 @@ namespace GoOS
                     Console.WriteLine("Invalid command.");
                     break;
             }
+
+            if (autoHeapCollect)
+                Heap.Collect();
         }
     }
 }
