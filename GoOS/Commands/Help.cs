@@ -45,7 +45,7 @@ namespace GoOS.Commands
                         break;
                 }
 
-                Console.WriteLine("Press Enter to continue or Q to quit.");
+                log(ThemeManager.WindowBorder, "Press Enter to continue or Q to quit.");
 
                 ConsoleKeyInfo input = Console.ReadKey(true);
                 if (input.KeyChar == 'Q' || input.KeyChar == 'q')

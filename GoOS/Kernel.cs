@@ -28,6 +28,7 @@ namespace GoOS
         public static string BuildType = "Beta";
         
         //We dont even use these 2 vars anymore
+        // Who cares -ekeleze
         public bool cmdm = true;
         public bool root = false;
 
@@ -170,7 +171,6 @@ namespace GoOS
                     if (args.Length > 1)
                     {
                         log(ThemeManager.ErrorText, "Too many arguments");
-                        break;
                     }
 
                     Commands.Help.Main();
@@ -312,6 +312,21 @@ namespace GoOS
                     }
 
                     Commands.Delete.DeleteFile(args[1]);
+                    break;
+                case "del":
+                    if (args.Length > 2)
+                    {
+                        log(ThemeManager.ErrorText, "Too many arguments");
+                        break;
+                    }
+
+                    if (args.Length == 1)
+                    {
+                        log(ThemeManager.ErrorText, "Missing arguments");
+                        break;
+                    }
+
+                    Delete.UniveralDelete(args[1]);
                     break;
                 case "cd":
                     if (args.Length > 2)

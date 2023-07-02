@@ -439,7 +439,7 @@ namespace GoOS
         // Show information about the document.
         private void ShowInfo()
         {
-            ShowNotification($"Ln {currentLine + 1}, Col {linePos + 1}");
+            ShowNotification($"Ln {currentLine}, Col {linePos + 1}");
         }
 
         // Cut the current line.
