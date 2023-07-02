@@ -171,6 +171,9 @@ namespace GoOS
 
             string[] args = Console.ReadLine().Trim().Split(' ');
 
+            uint TotalRamUINT = Cosmos.Core.CPU.GetAmountOfRAM();
+            int TotalRam = Convert.ToInt32(TotalRamUINT);
+
             switch (args[0])
             {
                 case "help":
@@ -397,6 +400,12 @@ namespace GoOS
                     Commands.Dir.Run();
                     break;
                 case "notepad":
+                    if (TotalRam < 1000)
+                    {
+                        log(ThemeManager.ErrorText, "This program has been disabled due to low ram.");
+                        break;
+                    }
+                    
                     if (args.Length > 2)
                     {
                         log(ThemeManager.ErrorText, "Too many arguments");
