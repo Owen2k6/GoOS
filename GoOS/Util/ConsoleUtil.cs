@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using Console = BetterConsole;
 
 namespace GoOS.Util
 {
@@ -149,7 +150,11 @@ namespace GoOS.Util
                     SetCursorPosWrap(Console.GetCursorPosition().Left - (chars.Count - currentCount) - 1, Console.GetCursorPosition().Top);
                     currentCount++;
                 }
+                Console.Write("_");
+                Console.CursorLeft--;
             }
+            Console.Write(" ");
+            Console.CursorLeft--;
             Console.WriteLine();
 
             char[] final = chars.ToArray();

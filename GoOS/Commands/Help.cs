@@ -1,48 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using GoOS.Themes;
+using static GoOS.Core;
+using Console = BetterConsole;
 
 namespace GoOS.Commands
 {
     public class Help
     {
-        //GoOS Core
-        public static void print(string str)
-        {
-            Console.WriteLine(str);
-        }
-
-        public static void log(System.ConsoleColor colour, string str)
-        {
-            Console.ForegroundColor = colour;
-            Console.WriteLine(str);
-        }
-
-        public static void write(string str)
-        {
-            Console.Write(str);
-        }
-
-        public static void textcolour(System.ConsoleColor colour)
-        {
-            Console.ForegroundColor = colour;
-        }
-
-        public static void highlightcolour(System.ConsoleColor colour)
-        {
-            Console.BackgroundColor = colour;
-        }
-
-        public static void sleep(int time)
-        {
-            Thread.Sleep(time);
-        }
-
         public static void Main()
         {
             int page = 1;
@@ -81,9 +45,9 @@ namespace GoOS.Commands
                         break;
                 }
 
-                Console.WriteLine("Press Enter to continue or Q to quit.");
+                log(ThemeManager.WindowBorder, "Press Enter to continue or Q to quit.");
 
-                ConsoleKeyInfo input = Console.ReadKey();
+                ConsoleKeyInfo input = Console.ReadKey(true);
                 if (input.KeyChar == 'Q' || input.KeyChar == 'q')
                 {
                     break;

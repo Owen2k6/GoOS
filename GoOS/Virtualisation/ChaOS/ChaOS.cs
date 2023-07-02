@@ -1,30 +1,20 @@
-﻿using Cosmos.System.FileSystem;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using static System.ConsoleColor;
-using Sys = Cosmos.System;
-using GoOS.Virtualisation;
 using static ChaOS.Core;
 using static ChaOS.DiskManager;
 using Cosmos.System.FileSystem.VFS;
-using System.Runtime.ConstrainedExecution;
 using static GoOS.Kernel;
-using GoOS.Commands;
-using GoOS.Themes;
-using GoOS.Virtualisation.ChaOS;
-using static GoOS.Commands.Run;
+using Console = BetterConsole;
+using static ConsoleColorEx;
+using static GoOS.Core;
+
 namespace GoOS.Virtualisation.ChaOS
 {
     public class ChaOS
     {
         public static bool runmode = false;
 
-        public const string ver = "Version 1.3 GoOS VM";
+        public const string ver = "Version 1.3";
         public const string copyright = "Copyright (c) 2022 Goplex Studios";
 
         public static string username = "usr";
@@ -191,7 +181,7 @@ namespace GoOS.Virtualisation.ChaOS
                         Console.SetCursorPosition(0, 1);
                         cwrite("  ______   __                   ______    ______  \n /      \\ |  \\                 /      \\  /      \\ \n|  $$$$$$\\| $$____    ______  |  $$$$$$\\|  $$$$$$\\\n| $$   \\$$| $$    \\  |      \\ | $$  | $$| $$___\\$$\n| $$      | $$$$$$$\\  \\$$$$$$\\| $$  | $$ \\$$    \\ \n| $$   __ | $$  | $$ /      $$| $$  | $$ _\\$$$$$$\\\n| $$__/  \\| $$  | $$|  $$$$$$$| $$__/ $$|  \\__| $$\n \\$$    $$| $$  | $$ \\$$    $$ \\$$    $$ \\$$    $$\n  \\$$$$$$  \\$$   \\$$  \\$$$$$$$  \\$$$$$$   \\$$$$$$ ", DarkGreen);
                         Console.SetCursorPosition(55, 3);
-                        cwrite("Version 1.3 GoOS VM", Yellow);
+                        cwrite("Version 1.3", Yellow);
                         Console.SetCursorPosition(62, 5);
                         cwrite("Credits", Yellow);
                         Console.SetCursorPosition(57, 6);
@@ -201,7 +191,7 @@ namespace GoOS.Virtualisation.ChaOS
                         Console.SetCursorPosition(20, 11);
                         Console.Write("Special thanks:");
                         Console.SetCursorPosition(1, 13);
-                        Console.Write("Owen2k6 - For allowing ChaOS to live on through GoOS VM");
+                        Console.Write("Owen2k6 - For allowing ChaOS to live on");
                         Console.SetCursorPosition(0, 24);
                     }
 
@@ -252,7 +242,7 @@ namespace GoOS.Virtualisation.ChaOS
                         clog("System info:", DarkGreen);
                         log(" CPU: " + Cosmos.Core.CPU.GetCPUBrandString());
                         log(" CPU speed: " + Cosmos.Core.CPU.GetCPUCycleSpeed() / 1e6 + "MHz");
-                        log(" System RAM: " + Cosmos.Core.CPU.GetAmountOfRAM() + "MiB used out of " + Cosmos.Core.GCImplementation.GetAvailableRAM() + "\n");
+                        log(" System RAM: " + Cosmos.Core.GCImplementation.GetAvailableRAM() + "MiB used out of " + Cosmos.Core.CPU.GetAmountOfRAM() + "\n");
                     }
 
                     else if (input == "diskinfo")

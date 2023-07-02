@@ -1,1016 +1,712 @@
-﻿using System;
+﻿using System.IO;
+using System.Threading;
 using System.Collections.Generic;
-using System.Text;
-using static System.ConsoleColor;
 using Sys = Cosmos.System;
-using Console = System.Console;
-using GoOS.Themes;
-using static GoOS.Themes.ThemeManager;
-using Cosmos.System;
 using Cosmos.System.ScanMaps;
-using System.Drawing;
+using GoOS.Themes;
+using Convert = System.Convert;
+using ConsoleKey = System.ConsoleKey;
+using Console = BetterConsole;
+using ConsoleColor = PrismAPI.Graphics.Color;
+using Cosmos.Core.Memory;
 
-namespace GoOS.Settings
+namespace GoOS
 {
+    /// <summary>
+    /// Settings app.
+    /// </summary>
     public static class ControlPanel
     {
-        // Welcome to the worst file in GoOS
-        //agreed
-        // GoOS Core
+        private static bool isRunning = true;
 
-        #region GoOS Core
-        public static void print(string str)
+        private static readonly List<string> categoryButtonsGeneralMenu = new List<string>
         {
-            Console.WriteLine(str);
-        }
-        public static void log(ConsoleColor colour, string str)
-        {
-            Console.ForegroundColor = colour;
-            Console.WriteLine(str);
-        }
-        public static void write(string str)
-        {
-            Console.Write(str);
-        }
-        public static void textcolour(ConsoleColor colour)
-        {
-            Console.ForegroundColor = colour;
-        }
-        public static void highlightcolour(ConsoleColor colour)
-        {
-            Console.BackgroundColor = colour;
-        }
-        public static void sleep(int time)
-        {
-            System.Threading.Thread.Sleep(time);
-        }
-        #endregion
+            "Keyboard",
+            "Themes",
+            "Display"
+        };
 
-        #region CP737
+        private static readonly List<string> categoryButtonsAdvancedMenu = new List<string>
+        {
+            "Format",
+        };
+
+        private static readonly List<string> categoryButtonsInfoMenu = new List<string>
+        {
+            "Info",
+            "Support",
+            "Hardware"
+        };
+
+        private static readonly List<string> menuButtons = new List<string>
+        {
+            "General",
+            "Advanced",
+            "Info"
+        };
+
+        private static readonly List<(string, Sys.ScanMapBase)> scanMaps = new()
+        {
+            ("105GBQWERTY-GB-1.0", new GBStandardLayout()),
+            ("104USQWERTY-US-1.0", new USStandardLayout()),
+            ("105DEQWERTY-DE-1.0", new DEStandardLayout()),
+            ("105ESQWERTY-ES-1.0", new ESStandardLayout()),
+            ("105FRQWERTY-FR-1.0", new FRStandardLayout()),
+            ("105TRQWERTY-TR-1.0", new TRStandardLayout())
+        };
+
+        public static readonly List<(string, (ushort Width, ushort Height))> videoModes = new()
+        {
+            ("640 x 480", (640, 480)), //0 ++1
+            ("720 x 480", (720, 480)), //1 ++2
+            ("800 x 600", (800, 600)), //2 ++3
+            ("1024 x 768", (1024, 768)), //3 ++4
+            ("1280 x 720", (1280, 720)), //4 ++5
+            ("1600 x 900", (1600, 900)), //5 ++6
+            ("1920 x 1080", (1920, 1080)) //6 ++7
+        };
+
+        private static readonly List<string> mainMenuControls = new()
+        {
+            "Escape - Return to console",
+            "Arrow Keys - Select item",
+            "Return - Enter menu"
+        };
 
         /// <summary>
-        /// Prints characters on the CP737 code-page.
+        /// Launches Settings.
         /// </summary>
-        private static class CP737Console
+        public static void Launch()
         {
-            public static readonly Sys.Console console = new(null);
+            isRunning = true;
+            menuToShow = categoryButtonsGeneralMenu[0];
+            categorieToShow = menuButtons[0];
+            Console.DoubleBufferedMode = true;
+            Console.Clear();
+            MainLoop();
+            Console.ForegroundColor = ThemeManager.WindowText;
+            Console.BackgroundColor = ThemeManager.Background;
+            Console.DoubleBufferedMode = false;
+            Console.Clear();
+        }
 
-            public static readonly Dictionary<char, byte> unicodeToCP737
-                = new()
-                {
-            {  '░', 0xB0 }, {  '▒', 0xB1 },
-            {  '▓', 0xB2 }, {  '│', 0xB3 },
-            {  '┤', 0xB4 }, {  '╡', 0xB5 },
-            {  '╢', 0xB6 }, {  '╖', 0xB7 },
-            {  '╕', 0xB8 }, {  '╣', 0xB9 },
-            {  '║', 0xBA }, {  '╗', 0xBB },
-            {  '╝', 0xBC }, {  '╜', 0xBD },
-            {  '╛', 0xBE }, {  '┐', 0xBF },
-            {  '└', 0xC0 }, {  '┴', 0xC1 },
-            {  '┬', 0xC2 }, {  '├', 0xC3 },
-            {  '─', 0xC4 }, {  '┼', 0xC5 },
-            {  '╞', 0xC6 }, {  '╟', 0xC7 },
-            {  '╚', 0xC8 }, {  '╔', 0xC9 },
-            {  '╩', 0xCA }, {  '╦', 0xCB },
-            {  '╠', 0xCC }, {  '═', 0xCD },
-            {  '╬', 0xCE }, {  '╧', 0xCF },
-            {  '╨', 0xD0 }, {  '╤', 0xD1 },
-            {  '╥', 0xD2 }, {  '╙', 0xD3 },
-            {  '╘', 0xD4 }, {  '╒', 0xD5 },
-            {  '╓', 0xD6 }, {  '╫', 0xD7 },
-            {  '╪', 0xD8 }, {  '┘', 0xD9 },
-            {  '┌', 0xDA }, {  '█', 0xDB },
-            {  '▄', 0xDC }, {  '▌', 0xDD },
-            {  '▐', 0xDE }, {  '▀', 0xDF },
-            {  '■', 0xFE }
-                };
+        private static int categorieSelectedButton = 0, menuSelectedButton = 0;
 
-            /// <summary>
-            /// Writes the given characters at the current position.
-            /// </summary>
-            /// <param name="line">The line to write.</param>
-            /// <param name="x">The X coordinate to write the text to. If set to a negative value, the current cursor position will be used.</param>
-            /// <param name="y">The Y coordinate to write the text to. If set to a negative value, the current cursor position will be used.</param>
-            public static void Write(string line, int x = -1, int y = -1)
+        /// <summary>
+        /// Main loop for Settings.
+        /// </summary>
+        private static void MainLoop()
+        {
+            while (isRunning)
             {
-                console.CursorVisible = Console.CursorVisible;
-                console.Background = Console.BackgroundColor;
-                console.Foreground = Console.ForegroundColor;
-                console.X = Console.CursorLeft;
-                console.Y = Console.CursorTop;
+                DrawMenu();
+                ShowMenu(menuToShow, categorieToShow, true);
+                Console.Render();
 
-                if (x < 0) x = Console.CursorLeft;
-                if (y < 0) y = Console.CursorTop;
-
-                Span<byte> encodingBuffer = stackalloc byte[1];
-                Span<char> inputBuffer = stackalloc char[1];
-
-                for (int i = 0; i < line.Length; i++)
+                ConsoleKey key = System.Console.ReadKey(true).Key;
+                switch (key)
                 {
-                    console.X = x;
-                    console.Y = y;
-
-                    if (line[i] == '\n')
-                    {
-                        x = 0;
-                        y++;
-                        continue;
-                    }
-
-                    if (unicodeToCP737.TryGetValue(line[i], out byte mapped))
-                    {
-                        console.Write(mapped);
-                        if (console.Y > 24)
-                        {
-                            console.X = 0;
-                            console.Y = 24;
-                        }
-                    }
-                    else
-                    {
-                        inputBuffer[0] = line[i];
-                        Encoding.ASCII.GetBytes(inputBuffer, encodingBuffer);
-                        console.Write(encodingBuffer[0]);
-                    }
-
-                    x++;
-                    if (x > Console.WindowWidth)
-                    {
-                        x = 0;
-                        y++;
-                    }
-
-                    if (y > Console.WindowHeight)
-                    {
-                        // stop character printing
+                    case ConsoleKey.Escape:
+                        isRunning = false;
                         break;
-                    }
+
+                    case ConsoleKey.Enter:
+                        ShowMenu(menuToShow, categorieToShow, false);
+                        break;
+
+                    case ConsoleKey.UpArrow:
+                        categorieSelectedButton--;
+                        break;
+
+                    case ConsoleKey.DownArrow:
+                        categorieSelectedButton++;
+                        break;
+
+                    case ConsoleKey.LeftArrow:
+                        menuSelectedButton--;
+                        break;
+
+                    case ConsoleKey.RightArrow:
+                        menuSelectedButton++;
+                        break;
                 }
+
+                if (menuSelectedButton > 2)
+                {
+                    menuSelectedButton = 0;
+                }
+                else if (menuSelectedButton < 0)
+                {
+                    menuSelectedButton = 2;
+                }
+
+                switch (menuSelectedButton)
+                {
+                    case 0: // General menu
+                        if (categorieSelectedButton > 2)
+                        {
+                            categorieSelectedButton = 0;
+                        }
+                        else if (categorieSelectedButton < 0)
+                        {
+                            categorieSelectedButton = 2;
+                        }
+
+                        break;
+
+                    case 1: // Advanced menu
+                        if (categorieSelectedButton > 0)
+                        {
+                            categorieSelectedButton = 0;
+                        }
+                        else if (categorieSelectedButton < 0)
+                        {
+                            categorieSelectedButton = 0;
+                        }
+
+                        break;
+
+                    case 2: // Info menu
+                        if (categorieSelectedButton > 2)
+                        {
+                            categorieSelectedButton = 0;
+                        }
+                        else if (categorieSelectedButton < 0)
+                        {
+                            categorieSelectedButton = 2;
+                        }
+
+                        break;
+                }
+
+                Console.SetCursorPosition(0, 0); // Do this instead of clearing the screen, will remove flickering
             }
         }
 
-        #endregion
-
         /// <summary>
-        /// Opens the settings.
+        /// Draws the menu.
         /// </summary>
-        public static void Open()
+        private static void DrawMenu(bool quick = false)
         {
-            CP737Console.console.CursorVisible = false;
-            Console.CursorVisible = false;
+            Heap.Collect();
             DrawFrame();
-            Run();
+            DrawTitle("GoOS Settings");
+            DrawControls(mainMenuControls);
+            DrawClock();
+            DrawButtons();
+            Console.Render();
         }
 
-        public static bool DontTouch = true;
+        private static string categorieToShow = string.Empty, menuToShow = string.Empty;
+
+        private static void DrawButtons()
+        {
+            // Clear the buttons
+            Console.Canvas.DrawFilledRectangle(3 * 8, 2 * 16, 12 * 8, Convert.ToUInt16(Console.Canvas.Height - (6 * 16)), 0, ThemeManager.Background);
+
+            // Draw the menu buttons
+            int nextPos = 18;
+            for (int i = 0; i < menuButtons.Count; i++)
+            {
+                bool highlighed = i == menuSelectedButton;
+                DrawButton(menuButtons[i], nextPos, Console.WindowHeight - 3,
+                    highlighed); // Draw button automatically at the correct coordinates
+                if (highlighed)
+                    categorieToShow = menuButtons[i];
+
+                nextPos += menuButtons[i].Length + 4;
+            }
+
+            // Draw the sidebar buttons
+            switch (menuSelectedButton)
+            {
+                case 0:
+                    // Draw the sidebar buttons for the General category
+
+                    for (int i = 0; i < categoryButtonsGeneralMenu.Count; i++)
+                    {
+                        bool highlighed = i == categorieSelectedButton;
+                        DrawButton(categoryButtonsGeneralMenu[i], 3, 2 + i * 2,
+                            highlighed); // Draw button automatically at the correct coordinates
+                        if (highlighed)
+                            menuToShow = categoryButtonsGeneralMenu[i];
+                    }
+
+                    break;
+
+                case 1:
+                    // Draw the sidebar buttons for the Advanced category
+
+                    for (int i = 0; i < categoryButtonsAdvancedMenu.Count; i++)
+                    {
+                        bool highlighed = i == categorieSelectedButton;
+                        DrawButton(categoryButtonsAdvancedMenu[i], 3, 2 + i * 2,
+                            highlighed); // Draw button automatically at the correct coordinates
+                        if (highlighed)
+                            menuToShow = categoryButtonsAdvancedMenu[i];
+                    }
+
+                    break;
+
+                case 2:
+                    // Draw the sidebar buttons for the Advanced category
+
+                    for (int i = 0; i < categoryButtonsInfoMenu.Count; i++)
+                    {
+                        bool highlighed = i == categorieSelectedButton;
+                        DrawButton(categoryButtonsInfoMenu[i], 3, 2 + i * 2,
+                            highlighed); // Draw button automatically at the correct coordinates
+                        if (highlighed)
+                            menuToShow = categoryButtonsInfoMenu[i];
+                    }
+
+                    break;
+            }
+        }
+
         /// <summary>
         /// Draws the frame.
         /// </summary>
         private static void DrawFrame()
         {
-            // Do not touch. I know what I'm doing.
-            Console.Clear();
-            try
-            {
-                Console.BackgroundColor = Black;
-                Console.ForegroundColor = WindowBorder;
-                CP737Console.Write("╔════════════╦═════════════════════════════════════════════════════════════════╗\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "║            ║                                                                 ║\n" +
-                                   "╠════════════╩═════════════════════════════════════════════════════════════════╣\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "║                                                                              ║\n" +
-                                   "╚══════════════════════════════════════════════════════════════════════════════");
-                Console.SetCursorPosition(2, 19);
-                Console.ForegroundColor = Yellow;
-                //Console.Write("Arrow keys");
-                Console.SetCursorPosition(2, 22);
-                if (DontTouch)
-                {
-                    MkButton("General", 2, 22, WindowText, Black);
-                    MkButton("Personalisation", 10, 22, Black, WindowText);
-                    MkButton("Advanced", 26, 22, Black, WindowText);
-                    MkButton("About", 2, 1, WindowText, Black);
-                    MkButton("Support", 2, 2, Black, WindowText);
-                    DontTouch = false;
-                }
-                //Console.Write("Tab");
+            // Draw the frame with GUI instead of TUI
+            Console.Canvas.DrawRectangle(3, 7, Convert.ToUInt16(Console.Canvas.Width - 6), Convert.ToUInt16(Console.Canvas.Height - 14), 0, ThemeManager.WindowBorder);
+            Console.Canvas.DrawRectangle(4, 8, Convert.ToUInt16(Console.Canvas.Width - 6), Convert.ToUInt16(Console.Canvas.Height - 14), 0, ThemeManager.WindowBorder);
+            Console.Canvas.DrawLine(123, 9, 123, Console.Canvas.Height - 7, ThemeManager.WindowBorder);
+            Console.Canvas.DrawLine(124, 9, 124, Console.Canvas.Height - 7, ThemeManager.WindowBorder);
+            Console.Canvas.DrawLine(5, Console.Canvas.Height - 64, Console.Canvas.Width - 5, Console.Canvas.Height - 64, ThemeManager.WindowBorder);
+            Console.Canvas.DrawLine(6, Console.Canvas.Height - 64, Console.Canvas.Width - 5, Console.Canvas.Height - 64, ThemeManager.WindowBorder);
+        }
 
-                if (CP737Console.unicodeToCP737.TryGetValue('╝', out byte mapped))
-                {
-                    CP737Console.console.mText[79, 24] = mapped;
-                }
-            }
-            catch { }
+        private static void DrawControls(List<string> controls)
+        {
+            // Clear controls
+            Console.Canvas.DrawFilledRectangle(8, Console.Canvas.Height - 8, Convert.ToUInt16(Console.Canvas.Width - 16), 16, 0, ThemeManager.Background);
+            Console.Canvas.DrawLine(8, Console.Canvas.Height - 7, Console.Canvas.Width - 8, Console.Canvas.Height - 7, ThemeManager.WindowBorder);
+            Console.Canvas.DrawLine(8, Console.Canvas.Height - 8, Console.Canvas.Width - 8, Console.Canvas.Height - 8, ThemeManager.WindowBorder);
+
+            // Draw controls
+            string controlsStr = string.Empty;
+            for (int i = 0; i < controls.Count; i++)
+                controlsStr += controls[i] + " / ";
+            controlsStr = controlsStr.Remove(controlsStr.Length - 3);
+            DrawText(" " + controlsStr + " ", Console.WindowWidth - 3 - controlsStr.Length, Console.WindowHeight - 1, ThemeManager.WindowBorder, ThemeManager.Background);
         }
 
         /// <summary>
-        /// Writes a title to the top of the frame.
+        /// Draws the clock.
         /// </summary>
-        /// <param name="Title">The title to be written.</param>
-        private static void DrawTitle(string Title, int Y)
+        private static void DrawClock()
         {
-            int OldX = Console.CursorLeft; int OldY = Console.CursorTop;
-
-            Console.SetCursorPosition(40 - Title.Length / 2, Y);
-            Console.ForegroundColor = WindowText;
-            Console.Write(Title);
-            Console.SetCursorPosition(OldX, OldY);
+            string Hour = Cosmos.HAL.RTC.Hour.ToString(), Minute = Cosmos.HAL.RTC.Minute.ToString();
+            if (Minute.Length < 2) Minute = "0" + Minute;
+            DrawButton(Hour + ":" + Minute, 5, Console.WindowHeight - 3, true);
         }
 
         /// <summary>
-        /// Write some controls to the bottom of the screen.
+        /// Draws a title at the top center of the screen.
         /// </summary>
-        /// <param name="Controls">The controls to be written.</param>
-        private static void DrawControls(string Controls)
+        /// <param name="Title"></param>
+        /// <param name="Y"></param>
+        private static void DrawTitle(string title)
         {
-            int OldX = Console.CursorLeft; int OldY = Console.CursorTop;
-            Console.SetCursorPosition(6, 24);
-            foreach (char c in Controls)
+            Console.Canvas.DrawFilledRectangle(0, 0, Console.Canvas.Width, 16, 0, ThemeManager.Background);
+            DrawFrame();
+
+            DrawText(" " + title + " ", (Console.WindowWidth / 2) - (title.Length / 2) - 2, 0, ThemeManager.WindowText,
+                ThemeManager.Background); // Draw the title
+        }
+
+        /// <summary>
+        /// Draws a message where the title is for a brief moment, then draws the old title
+        /// </summary>
+        private static void DrawMessage(string message)
+        {
+            DrawTitle(message);
+            Console.Render();
+            Thread.Sleep(500);
+            DrawTitle("GoOS Settings");
+            Console.Render();
+        }
+
+        /// <summary>
+        /// Draws a button.
+        /// </summary>
+        /// <param name="text">The text of the button.</param>
+        /// <param name="x">X coordinate of the button.</param>
+        /// <param name="y">Y coordinate of the button.</param>
+        /// <param name="highlighted">Makes the button highlighted or not.</param>
+        public static void DrawButton(string text, int x, int y, bool highlighted)
+        {
+            switch (highlighted)
             {
-                if (c == '═')
-                {
-                    Console.CursorLeft++;
-                }
-                else
-                {
-                    Console.Write(c);
-                }
+                case true:
+                    DrawText(" " + text + " ", x, y, ThemeManager.Background, ThemeManager.WindowText);
+                    break;
+
+                case false:
+                    DrawText(" " + text + " ", x, y, ThemeManager.WindowText, ThemeManager.Background);
+                    break;
             }
         }
 
         /// <summary>
-        /// Shows a message box.
+        /// Draws some text.
         /// </summary>
-        private static void MessageBox()
+        /// <param name="text">The text to be drawn.</param>
+        /// <param name="x">X coordinate of the text.</param>
+        /// <param name="y">Y coordinate of the text.</param>
+        public static void DrawText(string text, int x, int y, ConsoleColor foreColor, ConsoleColor backColor)
         {
-            Console.ForegroundColor = WindowBorder;
-            CP737Console.Write("╔════════════════════╗", 29, 10);
-            CP737Console.Write("║                    ║", 29, 11);
-            CP737Console.Write("║                    ║", 29, 12);
-            CP737Console.Write("║                    ║", 29, 13);
-            CP737Console.Write("╚════════════════════╝", 29, 14);
-
-            Console.ForegroundColor = WindowText;
-            DrawTitle(" Info ", 10);
-            Console.SetCursorPosition(31, 12);
-            Console.Write("Saving settings...");
-            Console.Clear();
+            Console.ForegroundColor = foreColor;
+            Console.BackgroundColor = backColor;
+            Console.SetCursorPosition(x, y); // Set the cursor to the desired coordinate
+            Console.Write(text); // Draw the text
         }
 
         /// <summary>
-        /// Makes a button
+        /// Shows a menu.
         /// </summary>
-        /// <param name="name">The name of the button.</param>
-        /// <param name="x">The X location of the button.</param>
-        /// <param name="y">The Y location of the button.</param>
-        /// <param name="highlight">The background color of the button</param>
-        /// <param name="colour">The foreground color of the button</param>
-        private static void MkButton(string name, int x, int y, ConsoleColor highlight, ConsoleColor colour)
+        /// <param name="menu">The menu to show.</param>
+        /// <param name="category">The category to show.</param>
+        private static void ShowMenu(string menu, string category, bool preview)
         {
-            Console.SetCursorPosition(x, y);
-            Console.BackgroundColor = highlight;
-            Console.ForegroundColor = colour;
-            Console.Write(name);
-        }
-
-        /// <summary>
-        /// Show a dialogue for changing the keyboard layout.
-        /// </summary>
-        private static void KeyboardLayoutDialogue()
-        {
-            List<(string, ScanMapBase)> scanMaps = new()
+            ClearMenu();
+            if (category == menuButtons[0]) // General category
             {
-                ("Deutsch (German)", new DEStandardLayout()),
-                ("Espanol (Spanish)", new ESStandardLayout()),
-                ("Francais (French)", new ESStandardLayout()),
-                ("British English", new GBStandardLayout()),
-                ("Turkce (Turkish)", new TRStandardLayout()),
-                ("US English", new USStandardLayout())
-            };
-
-            Console.BackgroundColor = Black;
-            Console.ForegroundColor = WindowBorder;
-            int y = 7;
-            CP737Console.Write("╔════════════════════╗", 29, y);
-            for (int i = 0; i < scanMaps.Count; i++)
-            {
-                CP737Console.Write("║                    ║", 29, y + i + 1);
-            }
-            CP737Console.Write("╚════════════════════╝", 29, y + scanMaps.Count + 1);
-
-            int selectedScanMap = 0;
-            while (true)
-            {
-                for (int j = 0; j < scanMaps.Count; j++)
+                if (menu == categoryButtonsGeneralMenu[0])
                 {
-                    Console.SetCursorPosition(30, y + j + 1);
-                    if (j == selectedScanMap)
+                    if (preview)
                     {
-                        textcolour(Black);
-                        highlightcolour(White);
+                        DrawText("Allows you to change your keyboard distribution.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                            ThemeManager.Background);
+                        DrawText("Available keyboard distributions:", 18, 2, ThemeManager.WindowText,
+                            ThemeManager.Background);
+                        for (int i = 0; i < scanMaps.Count; i++)
+                        {
+                            DrawButton(scanMaps[i].Item1, 18, 4 + i, false); // Draw button automatically at the correct coordinates
+                        }
                     }
                     else
                     {
-                        textcolour(WindowText);
-                        highlightcolour(Black);
+                        int keyboardMenuSelectedButton = 0;
+
+                    Refresh:
+                        if (keyboardMenuSelectedButton > 5)
+                        {
+                            keyboardMenuSelectedButton = 0;
+                        }
+                        else if (keyboardMenuSelectedButton < 0)
+                        {
+                            keyboardMenuSelectedButton = 5;
+                        }
+
+                        Console.ForegroundColor = ThemeManager.WindowText;
+                        Console.BackgroundColor = ThemeManager.Background;
+
+                        DrawText("Allows you to change your keyboard distribution.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                            ThemeManager.Background);
+                        DrawText("Available keyboard distributions:", 18, 2, ThemeManager.WindowText,
+                            ThemeManager.Background);
+                        for (int i = 0; i < scanMaps.Count; i++)
+                        {
+                            DrawButton(scanMaps[i].Item1, 18, 4 + i,
+                                i == keyboardMenuSelectedButton); // Draw button automatically at the correct coordinates
+                        }
+                        Console.Render();
+
+                        var key = Console.ReadKey(true).Key;
+                        switch (key)
+                        {
+                            case ConsoleKey.Escape:
+                                ClearMenu();
+                                break;
+
+                            case ConsoleKey.Enter:
+                                Sys.KeyboardManager.SetKeyLayout(scanMaps[keyboardMenuSelectedButton].Item2);
+                                DrawMessage("Set layout to " + scanMaps[keyboardMenuSelectedButton].Item1);
+                                //DrawMenu();
+                                goto Refresh;
+
+                            case ConsoleKey.UpArrow:
+                                keyboardMenuSelectedButton--;
+                                goto Refresh;
+
+                            case ConsoleKey.DownArrow:
+                                keyboardMenuSelectedButton++;
+                                goto Refresh;
+
+                            default:
+                                goto Refresh;
+                        }
                     }
-
-                    string label = scanMaps[j].Item1;
-                    Console.Write(label + new string(' ', 20 - label.Length));
                 }
-                var input = Console.ReadKey();
-                switch (input.Key)
+                else if (menu == categoryButtonsGeneralMenu[1])
                 {
-                    case ConsoleKey.Enter:
-                        KeyboardManager.SetKeyLayout(scanMaps[selectedScanMap].Item2);
+                    if (preview)
+                    {
+                        DrawText("Allows you to change GoOS's theme.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                            ThemeManager.Background);
+                        DrawText("Available themes: ", 18, 2, ThemeManager.WindowText, ThemeManager.Background);
 
-                        Console.ForegroundColor = WindowBorder;
-                        CP737Console.Write("╔════════════════════╗", 29, 10);
-                        CP737Console.Write("║                    ║", 29, 11);
-                        CP737Console.Write("║                    ║", 29, 12);
-                        CP737Console.Write("║                    ║", 29, 13);
-                        CP737Console.Write("╚════════════════════╝", 29, 14);
+                        string[] themes = Directory.GetFiles(@"0:\content\themes\");
+                        for (int i = 0; i < themes.Length; i++)
+                        {
+                            DrawButton(themes[i].Replace(".gtheme", ""), 18, 4 + i, false); // Draw button automatically at the correct coordinates
+                        }
+                    }
+                    else
+                    {
+                        int themeMenuSelectedButton = 0;
 
-                        Console.ForegroundColor = WindowText;
-                        DrawTitle(" Success ", 10);
-                        Console.SetCursorPosition(32, 11);
-                        Console.Write("Layout updated.");
+                    Refresh:
+                        DrawText("Allows you to change GoOS's theme.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                            ThemeManager.Background);
+                        DrawText("Available themes: ", 18, 2, ThemeManager.WindowText, ThemeManager.Background);
 
-                        MkButton("OK", 39, 13, WindowText, Black);
+                        string[] themes = Directory.GetFiles(@"0:\content\themes\");
 
-                        Console.ReadKey(true);
-                        return;
-                    case ConsoleKey.UpArrow:
-                        selectedScanMap--;
-                        if (selectedScanMap < 0) selectedScanMap = scanMaps.Count - 1;
-                        break;
-                    case ConsoleKey.DownArrow:
-                        selectedScanMap++;
-                        if (selectedScanMap >= scanMaps.Count) selectedScanMap = 0;
-                        break;
-                    case ConsoleKey.Escape:
-                        return;
+                        if (themeMenuSelectedButton > (themes.Length - 1))
+                        {
+                            themeMenuSelectedButton = 0;
+                        }
+                        else if (themeMenuSelectedButton < 0)
+                        {
+                            themeMenuSelectedButton = themes.Length - 1;
+                        }
+
+                        for (int i = 0; i < themes.Length; i++)
+                        {
+                            DrawButton(themes[i].Replace(".gtheme", ""), 18, 4 + i,
+                                i == themeMenuSelectedButton); // Draw button automatically at the correct coordinates
+                        }
+                        Console.Render();
+
+                        var key = Console.ReadKey(true).Key;
+                        switch (key)
+                        {
+                            case ConsoleKey.Escape:
+                                ClearMenu();
+                                break;
+
+                            case ConsoleKey.Enter:
+                                File.WriteAllText(@"0:\content\sys\theme.gms",
+                                    "ThemeFile = " + themes[themeMenuSelectedButton]);
+                                ThemeManager.SetTheme(@"0:\content\themes\" + themes[themeMenuSelectedButton], false);
+                                //DrawMenu();
+                                DrawMessage("Theme changed successfully!");
+                                goto Refresh;
+
+                            case ConsoleKey.UpArrow:
+                                themeMenuSelectedButton--;
+                                goto Refresh;
+
+                            case ConsoleKey.DownArrow:
+                                themeMenuSelectedButton++;
+                                goto Refresh;
+
+                            default:
+                                goto Refresh;
+
+                        }
+                    }
+                }
+                else if (menu == categoryButtonsGeneralMenu[2])
+                {
+                    if (preview)
+                    {
+                        DrawText("Allows you to change your video card's resolution.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                            ThemeManager.Background);
+                        DrawText("Available resolutions:", 18, 2, ThemeManager.WindowText,
+                            ThemeManager.Background);
+
+                        for (int i = 0; i < videoModes.Count; i++)
+                        {
+                            DrawButton(videoModes[i].Item1, 18, 4 + i, false); // Draw button automatically at the correct coordinates
+                        }
+                    }
+                    else
+                    {
+                        int displayMenuSelectedButton = 0;
+
+                    Refresh:
+                        if (displayMenuSelectedButton > videoModes.Count - 1)
+                        {
+                            displayMenuSelectedButton = 0;
+                        }
+                        else if (displayMenuSelectedButton < 0)
+                        {
+                            displayMenuSelectedButton = videoModes.Count - 1;
+                        }
+
+                        Console.ForegroundColor = ThemeManager.WindowText;
+                        Console.BackgroundColor = ThemeManager.Background;
+
+                        DrawText("Allows you to change your video card's resolution.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                            ThemeManager.Background);
+                        DrawText("Available resolutions:", 18, 2, ThemeManager.WindowText,
+                            ThemeManager.Background);
+
+                        for (int i = 0; i < videoModes.Count; i++)
+                        {
+                            DrawButton(videoModes[i].Item1, 18, 4 + i,
+                                i == displayMenuSelectedButton); // Draw button automatically at the correct coordinates
+                        }
+                        Console.Render();
+
+                        var key = Console.ReadKey(true).Key;
+                        switch (key)
+                        {
+                            case ConsoleKey.Escape:
+                                ClearMenu();
+                                break;
+
+                            case ConsoleKey.Enter:
+                                Console.Init(videoModes[displayMenuSelectedButton].Item2.Width, videoModes[displayMenuSelectedButton].Item2.Height);
+                                File.Create(@"0:\content\sys\resolution.gms");
+                                File.WriteAllBytes(@"0:\content\sys\resolution.gms", new byte[] { (byte)displayMenuSelectedButton });
+                                DrawMenu();
+                                DrawMessage("Set video mode to " + scanMaps[displayMenuSelectedButton].Item1);
+                                //DrawMenu();
+                                goto Refresh;
+
+                            case ConsoleKey.UpArrow:
+                                displayMenuSelectedButton--;
+                                goto Refresh;
+
+                            case ConsoleKey.DownArrow:
+                                displayMenuSelectedButton++;
+                                goto Refresh;
+
+                            default:
+                                goto Refresh;
+                        }
+                    }
                 }
             }
+            else if (category == menuButtons[1])
+            {
+                if (menu == categoryButtonsAdvancedMenu[0])
+                {
+                    if (preview)
+                    {
+                        DrawText("Allows you to system reset GoOS to factory settings.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                        ThemeManager.Background);
+                        DrawText("Press R to reset the system, otherwise press ESC to", 18, 2, ThemeManager.WindowText,
+                            ThemeManager.Background);
+                        DrawText("exit this menu.", 18, 3, ThemeManager.WindowText, ThemeManager.Background);
+                        DrawText("WARNING: This will erase all the data in your hard disk", 18, 5, ThemeManager.ErrorText,
+                            ThemeManager.Background);
+                        DrawText("drive!", 18, 6, ThemeManager.ErrorText, ThemeManager.Background);
+                    }
+                    else
+                    {
+                        DrawText("Allows you to system reset GoOS to factory settings.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                        ThemeManager.Background);
+                        DrawText("Press R to reset the system, otherwise press ESC to", 18, 2, ThemeManager.WindowText,
+                            ThemeManager.Background);
+                        DrawText("exit this menu.", 18, 3, ThemeManager.WindowText, ThemeManager.Background);
+                        DrawText("WARNING: This will erase all the data in your hard disk", 18, 5, ThemeManager.ErrorText,
+                            ThemeManager.Background);
+                        DrawText("drive!", 18, 6, ThemeManager.ErrorText, ThemeManager.Background);
+                        Console.Render();
+
+                    Refresh:
+                        var key = Console.ReadKey(true).Key;
+                        switch (key)
+                        {
+                            case ConsoleKey.Escape:
+                                ClearMenu();
+                                break;
+
+                            case ConsoleKey.R:
+                                ClearMenu();
+                                DrawText("Allows you to system reset GoOS to factory settings.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                                    ThemeManager.Background);
+
+                                DrawText("RESET IN PROGRESS", 18, 2, ThemeManager.ErrorText, ThemeManager.Background);
+                                DrawText("Do not turn off your computer.", 18, 3, ThemeManager.Background,
+                                    ThemeManager.ErrorText);
+                                Console.Render();
+                                Kernel.FS.Disks[0].FormatPartition(0, "FAT32", false);
+
+                                ClearMenu();
+                                DrawText("Allows you to system reset GoOS to factory settings.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                                    ThemeManager.Background);
+
+                                for (int i = 40; i > 0; i--) // 250ms * 40 = 10s
+                                {
+                                    DrawText("Restarting in " + i / 4 + " seconds...", 18, 2, ThemeManager.WindowText,
+                                        ThemeManager.Background);
+                                    DrawText(new string('█', i) + new string('▒', 40 - i), 18, 4, ThemeManager.WindowText,
+                                        ThemeManager.Background);
+                                    Console.Render();
+                                    Thread.Sleep(250);
+                                }
+
+                                Cosmos.HAL.Power.CPUReboot();
+                                break;
+
+                            default:
+                                goto Refresh;
+                        }
+                    }
+                }
+            }
+            else if (category == menuButtons[2])
+            {
+                if (menu == categoryButtonsInfoMenu[0])
+                {
+                    DrawText("Shows you info about GoOS.", 18, Console.WindowHeight - 7, ThemeManager.WindowText, ThemeManager.Background);
+                    DrawText("GoOS Kernel " + Kernel.BuildType + " " + Kernel.version, 18, 2, ThemeManager.WindowText,
+                        ThemeManager.Background);
+                    DrawText("GoOS is a free and open source software designed with", 18, 4, ThemeManager.WindowText,
+                        ThemeManager.Background);
+                    DrawText("CosmosOS. If you paid for this software, you should request", 18, 5,
+                        ThemeManager.WindowText, ThemeManager.Background);
+                    DrawText("a refund or report to proper authorities.", 18, 6, ThemeManager.WindowText,
+                        ThemeManager.Background);
+                    DrawText("GoOS is and always will be open-source and free.", 18, 8, ThemeManager.WindowText,
+                        ThemeManager.Background);
+                    Console.Render();
+                }
+                else if (menu == categoryButtonsInfoMenu[1])
+                {
+                    DrawText("Shows you info about support for GoOS.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                        ThemeManager.Background);
+                    DrawText("GoOS Support", 18, 2, ThemeManager.WindowText, ThemeManager.Background);
+                    DrawText("For support, open a ticket in the discord server.", 18, 4, ThemeManager.WindowText,
+                        ThemeManager.Background);
+                    DrawText("For reporting an issue, please report the issue in the", 18, 6, ThemeManager.WindowText,
+                        ThemeManager.Background);
+                    DrawText("issues tab in the Github repository.", 18, 7, ThemeManager.WindowText,
+                        ThemeManager.Background);
+                    Console.Render();
+                }
+                else if (menu == categoryButtonsInfoMenu[2])
+                {
+                    DrawText("Shows you info about your system.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                        ThemeManager.Background);
+                    DrawText("GoOS Kernel " + Kernel.BuildType + " " + Kernel.version, 18, 2, ThemeManager.WindowText,
+                        ThemeManager.Background);
+                    DrawText("CPU: " + Cosmos.Core.CPU.GetCPUBrandString(), 18, 4, ThemeManager.WindowText,
+                        ThemeManager.Background);
+                    DrawText("Available RAM: " + Cosmos.Core.CPU.GetAmountOfRAM() + "mb", 18, 5,
+                        ThemeManager.WindowText, ThemeManager.Background);
+                    Console.Render();
+                }
+            }
+            Console.DoubleBufferedMode = true;
         }
 
         /// <summary>
-        /// Something.
+        /// Clear the space for menus.
         /// </summary>
-        private static void Run()
+        private static void ClearMenu()
         {
-            bool running = true;
-            string menu = "General";
-            int selected = 1;
-            int selected2 = 1;
-
-            Console.ForegroundColor = WindowText;
-
-            while (running)
-            {
-                if (menu == "General")
-                {
-                    // ID 1: General
-                    // ID 2: Personalisation
-                    // ID 3: Advanced
-
-                    if (selected2 == 1)
-                    {
-                        MkButton("About", 2, 1, WindowText, Black);
-                        MkButton("Support", 2, 2, Black, WindowText);
-                        MkButton("Keyboard", 2, 3, Black, WindowText);
-                    }
-                    else if (selected2 == 2)
-                    {
-                        MkButton("About", 2, 1, Black, WindowText);
-                        MkButton("Support", 2, 2, WindowText, Black);
-                        MkButton("Keyboard", 2, 3, Black, WindowText);
-                    }
-                    else if (selected2 == 3)
-                    {
-                        MkButton("About", 2, 1, Black, WindowText);
-                        MkButton("Support", 2, 2, Black, WindowText);
-                        MkButton("Keyboard", 2, 3, WindowText, Black);
-                    }
-                    Console.ForegroundColor = Black; Console.BackgroundColor = Black;
-                    Console.SetCursorPosition(1, 4);
-                    Console.Write("            ");
-                    Console.SetCursorPosition(1, 5);
-                    Console.Write("            ");
-                    Console.ForegroundColor = WindowBorder; Console.BackgroundColor = Black;
-                    ConsoleKeyInfo key = Console.ReadKey(true); 
-                    if (selected == 0)
-                    {
-                        selected = 1;
-                    }
-                    if (selected > 3)
-                    {
-                        selected = 3;
-                    }
-                    if (selected2 == 0)
-                    {
-                        selected2 = 1;
-                    }
-                    if (selected2 > 3)
-                    {
-                        selected2 = 3;
-                    }
-                    switch (key.Key)
-                    {
-                        case ConsoleKey.Enter:
-                            if (selected2 == 3)
-                            {
-                                KeyboardLayoutDialogue();
-                            }
-                            break;
-                        case ConsoleKey.Tab:
-                            // xrc2. This comment is for you.
-                            // DO NOT TOUCH THE CODE DIRECLY BELOW THIS COMMENT, IF YOU DO IT WILL BREAK THE SETINGS MENU. YOU HAVE BEEN WARNED.
-                            if (selected == 1) { selected = 2; }
-                            else if (selected == 2) { selected = 3; }
-                            else if (selected == 3) { selected = 1; }
-
-                            if (selected == 1)
-                            {
-                                MkButton("General", 2, 22, WindowText, Black);
-                                MkButton("Personalisation", 10, 22, Black, WindowText);
-                                MkButton("Advanced", 26, 22, Black, WindowText);
-                                menu = "General";
-                            }
-                            if (selected == 2)
-                            {
-                                MkButton("General", 2, 22, Black, WindowText);
-                                MkButton("Personalisation", 10, 22, WindowText, Black);
-                                MkButton("Advanced", 26, 22, Black, WindowText);
-                                menu = "Personalisation";
-                            }
-                            if (selected == 3)
-                            {
-                                MkButton("General", 2, 22, Black, WindowText);
-                                MkButton("Personalisation", 10, 22, Black, WindowText);
-                                MkButton("Advanced", 26, 22, WindowText, Black);
-                                menu = "Advanced";
-                            }
-                            break;
-                        case ConsoleKey.UpArrow:
-                            selected2--;
-                            if (selected2 < 1) selected2 = 3;
-                            break;
-                        case ConsoleKey.DownArrow:
-                            selected2++;
-                            if (selected2 > 3) selected2 = 1;
-                            break;
-                        case ConsoleKey.Escape:
-                            running = false;
-                            break;
-                    }
-
-                    if (selected2 == 1)
-                    {
-                        MkButton("About", 2, 2, WindowText, Black);
-                        MkButton("Support", 2, 3, Black, WindowText);
-                        MkButton("Keyboard", 2, 3, Black, WindowText);
-
-                        textcolour(WindowText);
-                        highlightcolour(Black);
-                        Console.SetCursorPosition(15, 2);
-                        Console.Write("GoOS                                                            ");
-                        Console.SetCursorPosition(15, 3);
-                        Console.Write("Version " + Kernel.version + "                                                     ");
-                        Console.SetCursorPosition(15, 4);
-                        Console.Write("                                                                ");
-                        Console.SetCursorPosition(15, 5);
-                        Console.Write("GoOS is a free and open source software designed with Cosmos.   ");
-                        Console.SetCursorPosition(15, 6);
-                        Console.Write("If you paid for this software, you should issue a refound       ");
-                        Console.SetCursorPosition(15, 7);
-                        Console.Write("request or report to proper authorities.                        ");
-                    }
-                    else if (selected2 == 2)
-                    {
-                        MkButton("About", 2, 2, Black, WindowText);
-                        MkButton("Support", 2, 3, WindowText, Black);
-                        MkButton("Keyboard", 2, 3, Black, WindowText);
-
-                        textcolour(WindowText);
-                        highlightcolour(Black);
-                        Console.SetCursorPosition(15, 2);
-                        Console.Write("GoOS Support                                                    ");
-                        Console.SetCursorPosition(15, 3);
-                        Console.Write("                                                                ");
-                        Console.SetCursorPosition(15, 4);
-                        Console.Write("For support, please open a ticket in the Discord server.        ");
-                        Console.SetCursorPosition(15, 5);
-                        Console.Write("                                                                ");
-                        Console.SetCursorPosition(15, 6);
-                        Console.Write("For reporting an issue, please report the issue in the issues   ");
-                        Console.SetCursorPosition(15, 7);
-                        Console.Write("tab in the Github repository.                                   ");
-                    }
-                    else if (selected2 == 3)
-                    {
-                        textcolour(WindowText);
-                        highlightcolour(Black);
-                        Console.SetCursorPosition(15, 2);
-                        Console.Write("Keyboard                                                        ");
-
-                        for (int y = 3; y < 15; y++)
-                        {
-                            Console.SetCursorPosition(15, y);
-                            Console.Write("                                                                ");
-                        }
-
-                        MkButton("Change Layout", 15, 4, WindowText, Black);
-                    }
-                }
-                else if (menu == "Personalisation")
-                {
-                    // ID 4: General
-                    // ID 5: Personalisation
-                    // ID 6: Advanced
-
-                    
-
-                    if (selected == 0)
-                    {
-                        selected = +1;
-                    }
-                    if (selected > 3)
-                    {
-                        selected = selected - 1;
-                    }
-
-                    //MkButton("General", 2, 22, Black, WindowText);
-                    //MkButton("Personalisation", 10, 22, WindowText, Black);
-                    //MkButton("Advanced", 26, 22, Black, WindowText);
-
-                    Console.SetCursorPosition(1, 1);
-                    Console.ForegroundColor = Black; Console.BackgroundColor = Black;
-                    Console.Write("           ");
-                    Console.SetCursorPosition(1, 2);
-                    Console.Write("           ");
-                    Console.SetCursorPosition(1, 3);
-                    Console.Write("           ");
-                    Console.SetCursorPosition(1, 4);
-                    Console.Write("           ");
-                    Console.SetCursorPosition(1, 5);
-                    Console.Write("           ");
-                    Console.ForegroundColor = WindowBorder;
-                    ConsoleKeyInfo key = Console.ReadKey(true);
-                    switch (key.Key)
-                    {
-                        case ConsoleKey.Tab:
-                            // xrc2. This comment is for you (again).
-                            // DO NOT TOUCH THE CODE DIRECLY BELOW THIS COMMENT, IF YOU DO IT WILL BREAK THE SETINGS MENU. YOU HAVE BEEN WARNED.
-                            if (selected == 1) { selected = 2; }
-                            else if (selected == 2) { selected = 3; }
-                            else if (selected == 3) { selected = 1; }
-
-                            if (selected == 1)
-                            {
-                                MkButton("General", 2, 22, WindowText, Black);
-                                MkButton("Personalisation", 10, 22, Black, WindowText);
-                                MkButton("Advanced", 26, 22, Black, WindowText);
-                                menu = "General";
-                            }
-                            if (selected == 2)
-                            {
-                                MkButton("General", 2, 22, Black, WindowText);
-                                MkButton("Personalisation", 10, 22, WindowText, Black);
-                                MkButton("Advanced", 26, 22, Black, WindowText);
-                                menu = "Personalisation";
-                            }
-                            if (selected == 3)
-                            {
-                                MkButton("General", 2, 22, Black, WindowText);
-                                MkButton("Personalisation", 10, 22, Black, WindowText);
-                                MkButton("Advanced", 26, 22, WindowText, Black);
-                                menu = "Advanced";
-                            }
-                            break;
-                        case ConsoleKey.UpArrow:
-                            selected2--;
-                            if (selected2 < 1) selected2 = 3;
-                            break;
-                        case ConsoleKey.DownArrow:
-                            selected2++;
-                            if (selected2 > 3) selected2 = 1;
-                            break;
-                        case ConsoleKey.Escape:
-                            running = false;
-                            break;
-                    }
-
-                    if (selected2 == 1)
-                    {
-                        MkButton("Default", 2, 2, WindowText, Black);
-                        MkButton("Mono", 2, 3, Black, WindowText);
-
-                        textcolour(WindowText);
-                        highlightcolour(Black);
-                        Console.SetCursorPosition(15, 2);
-                        Console.Write("                                                                ");
-                        Console.SetCursorPosition(15, 3);
-                        Console.Write("                                                                ");
-                        Console.SetCursorPosition(15, 4);
-                        Console.Write("                                                                ");
-                        Console.SetCursorPosition(15, 5);
-                        Console.Write("                                                                ");
-                        Console.SetCursorPosition(15, 6);
-                        Console.Write("                                                                ");
-                        Console.SetCursorPosition(15, 7);
-                        Console.Write("                                                                ");
-                    }
-                    else if (selected2 == 2)
-                    {
-                        MkButton("Default", 2, 2, Black, WindowText);
-                        MkButton("Mono", 2, 3, WindowText, Black);
-
-                        textcolour(WindowText);
-                        highlightcolour(Black);
-                        Console.SetCursorPosition(15, 2);
-                        Console.Write("                                                                ");
-                        Console.SetCursorPosition(15, 3);
-                        Console.Write("                                                                ");
-                        Console.SetCursorPosition(15, 4);
-                        Console.Write("                                                                ");
-                        Console.SetCursorPosition(15, 5);
-                        Console.Write("                                                                ");
-                        Console.SetCursorPosition(15, 6);
-                        Console.Write("                                                                ");
-                        Console.SetCursorPosition(15, 7);
-                        Console.Write("                                                                ");
-                    }
-                }
-                else if (menu == "Advanced")
-                {
-                    // ID 4: General
-                    // ID 5: Personalisation
-                    // ID 6: Advanced
-
-                    if (selected == 0)
-                    {
-                        selected = +1;
-                    }
-                    if (selected > 3)
-                    {
-                        selected = selected - 1;
-                    }
-
-                    //MkButton("General", 2, 22, Black, WindowText);
-                    //MkButton("Personalisation", 10, 22, Black, WindowText);
-                    //MkButton("Advanced", 26, 22, WindowText, Black);
-
-                    Console.SetCursorPosition(1, 1);
-                    Console.ForegroundColor = Black; Console.BackgroundColor = Black;
-                    Console.Write("           ");
-                    Console.SetCursorPosition(2, 2);
-                    Console.Write("           ");
-                    Console.SetCursorPosition(2, 3);
-                    Console.Write("           ");
-                    Console.SetCursorPosition(1, 4);
-                    Console.Write("           ");
-                    Console.SetCursorPosition(1, 5);
-                    Console.Write("           ");
-                    Console.ForegroundColor = WindowBorder;
-                    ConsoleKeyInfo key = Console.ReadKey(true);
-                    switch (key.Key)
-                    {
-                        case ConsoleKey.Tab:
-                            // xrc2. This comment is for you (again x2).
-                            // DO NOT TOUCH THE CODE DIRECLY BELOW THIS COMMENT, IF YOU DO IT WILL BREAK THE SETINGS MENU. YOU HAVE BEEN WARNED.
-                            if (selected == 1) { selected = 2; }
-                            else if (selected == 2) { selected = 3; }
-                            else if (selected == 3) { selected = 1; }
-
-                            if (selected == 1)
-                            {
-                                MkButton("General", 2, 22, WindowText, Black);
-                                MkButton("Personalisation", 10, 22, Black, WindowText);
-                                MkButton("Advanced", 26, 22, Black, WindowText);
-                                menu = "General";
-                            }
-                            if (selected == 2)
-                            {
-                                MkButton("General", 2, 22, Black, WindowText);
-                                MkButton("Personalisation", 10, 22, WindowText, Black);
-                                MkButton("Advanced", 26, 22, Black, WindowText);
-                                menu = "Personalisation";
-                            }
-                            if (selected == 3)
-                            {
-                                MkButton("General", 2, 22, Black, WindowText);
-                                MkButton("Personalisation", 10, 22, Black, WindowText);
-                                MkButton("Advanced", 26, 22, WindowText, Black);
-                                menu = "Advanced";
-                            }
-                            break;
-                        case ConsoleKey.Escape:
-                            running = false;
-                            break;
-                    }
-                }
-
-                else if (menu == "username")
-                {
-                    DrawFrame();
-                    DrawTitle(" Change Username - Settings ", 0); // Do not remove spaces!
-                    DrawControls("[ENTER - Save]");
-                    Console.SetCursorPosition(2, 11);
-                    Console.Write("New Username: ");
-                    string thingtosave = Console.ReadLine();
-
-                    System.IO.File.Delete(@"0:\content\sys\setup.gms");
-                    System.IO.File.Create(@"0:\content\sys\setup.gms");
-                    var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\setup.gms");
-                    var setupstream = setupcontent.GetFileStream();
-                    byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {thingtosave}\ncomputername: {Kernel.computername}");
-                    setupstream.Write(textToWrite, 0, textToWrite.Length);
-                    Kernel.username = thingtosave;
-
-                    MessageBox();
-                    menu = "main";
-                    selected = 2;
-                    DrawFrame();
-                    Console.ForegroundColor = WindowText;
-                }
-
-                else if (menu == "computer name")
-                {
-                    DrawFrame();
-                    DrawTitle(" Change Computer Name - Settings ", 0); // Do not remove spaces!
-                    DrawControls("[ENTER - Save]");
-                    Console.SetCursorPosition(2, 11);
-                    Console.Write("New Computer Name: ");
-                    string thingtosave = Console.ReadLine();
-
-                    System.IO.File.Delete(@"0:\content\sys\user.gms");
-                    System.IO.File.Create(@"0:\content\sys\user.gms");
-                    var setupcontent = Sys.FileSystem.VFS.VFSManager.GetFile(@"0:\content\sys\user.gms");
-                    var setupstream = setupcontent.GetFileStream();
-                    byte[] textToWrite = Encoding.ASCII.GetBytes($"username: {Kernel.username}\ncomputername: {thingtosave}");
-                    setupstream.Write(textToWrite, 0, textToWrite.Length);
-                    Kernel.computername = thingtosave;
-
-                    MessageBox();
-                    menu = "main";
-                    selected = 2;
-                    DrawFrame();
-                    Console.ForegroundColor = WindowText;
-                }
-
-                else if (menu == "reset system")
-                {
-                    Console.ForegroundColor = WindowBorder;
-                    CP737Console.Write("╔════════════════════════╗", 27, 10);
-                    CP737Console.Write("║                        ║", 27, 11);
-                    CP737Console.Write("║                        ║", 27, 12);
-                    CP737Console.Write("║                        ║", 27, 13);
-                    CP737Console.Write("╚════════════════════════╝", 27, 14);
-
-                    Console.ForegroundColor = WindowText;
-                    DrawTitle(" Confirmation ", 10);
-                    Console.SetCursorPosition(29, 12);
-                    Console.Write("Are you sure? (Y/N): ");
-
-                    #region Key reading
-
-                    string thingtosave = "n";
-
-                    ConsoleKeyInfo key = Console.ReadKey(true);
-
-                    switch (key.Key)
-                    {
-                        case ConsoleKey.Y:
-                            Console.Write("Y");
-                            thingtosave = "y";
-                            break;
-
-                        case ConsoleKey.N:
-                            Console.Write("N");
-                            thingtosave = "n";
-                            break;
-                    }
-
-                    #endregion
-
-
-                    Console.SetCursorPosition(2, 11);
-                    Console.Write("Are you sure? (Y/N)");
-
-                    if (thingtosave == "y")
-                    {
-                        // note that that wont do shit
-
-                        try
-                        {
-                            //DONT ALTER. SOMEHOW IT WORKS
-                            //YOU ARE FRENCH IF YOU TOUCH IT
-                            // no
-                            /*
-                            System.IO.File.Delete(@"0:\content\sys\setup.gms");
-                            emptyDir(@"0:\content\prf");
-                            System.IO.Directory.Delete(@"0:\content\prf");
-                            emptyDir(@"0:\content\");
-                            System.IO.Directory.Delete(@"0:\content\");
-                            emptyDir(@"0:\");
-                            System.IO.Directory.Delete(@"0:\");
-                            System.IO.File.Delete(@"0:\content\sys\version.gms");
-                            System.IO.File.Delete(@"0:\content\sys\userinfo.gms");
-                            System.IO.File.Delete(@"0:\content\sys\option-showprotectedfiles.gms");
-                            System.IO.File.Delete(@"0:\content\sys\option-editprotectedfiles.gms");
-                            System.IO.File.Delete(@"0:\content\sys\option-deleteprotectedfiles.gms");
-                            var directory_list = System.IO.Directory.GetFiles(@"0:\");
-                            foreach (var file in directory_list)
-                            {
-                                System.IO.File.Delete(@"0:\" + file);
-                            }
-                            var directory_list3 = System.IO.Directory.GetDirectories(@"0:\");
-                            foreach (var directory in directory_list3)
-                            {
-                                System.IO.File.Delete(@"0:\" + directory);
-                            }
-                            */
-                            DrawFrame();
-                            int screenWidth = 80;
-                            string title = "RESET IN PROGRESS";
-                            string q = @"GoOS is performing a full format on drive 0:\";
-                            string w = "Do not turn off your computer.";
-                            string e = "";
-                            string r = "This process will take up to a few minutes";
-                            string t = "depending on your Disk size.";
-                            string y = "";
-                            string u = "";
-                            string i = "";
-
-                            int titlePos = screenWidth / 2 - title.Length / 2;
-                            int qPos = screenWidth / 2 - q.Length / 2;
-                            int wPos = screenWidth / 2 - w.Length / 2;
-                            int ePos = screenWidth / 2 - e.Length / 2;
-                            int rPos = screenWidth / 2 - r.Length / 2;
-                            int tPos = screenWidth / 2 - t.Length / 2;
-                            int yPos = screenWidth / 2 - y.Length / 2;
-                            int uPos = screenWidth / 2 - u.Length / 2;
-                            int iPos = screenWidth / 2 - i.Length / 2;
-
-                            Console.SetCursorPosition(titlePos, 2);
-                            Console.Write(title);
-                            Console.SetCursorPosition(qPos, 3);
-                            Console.Write(q);
-                            Console.SetCursorPosition(wPos, 4);
-                            Console.Write(w);
-                            Console.SetCursorPosition(rPos, 10);
-                            Console.Write(r);
-                            Console.SetCursorPosition(rPos, 11);
-                            Console.Write(t);
-
-                            Kernel.FS.Disks[0].FormatPartition(0, "FAT32", false);
-
-                            DrawFrame();
-                            screenWidth = 80;
-                            title = "System reset complete.";
-                            q = "GoOS is now back to factory default settings.";
-                            w = "The system will no longer operate until restarted.";
-                            e = "";
-                            r = "Once restarted, the GoOS setup will launch instantly.";
-                            t = "";
-                            y = "";
-                            u = "";
-                            i = "";
-
-                            titlePos = screenWidth / 2 - title.Length / 2;
-                            qPos = screenWidth / 2 - q.Length / 2;
-                            wPos = screenWidth / 2 - w.Length / 2;
-                            ePos = screenWidth / 2 - e.Length / 2;
-                            rPos = screenWidth / 2 - r.Length / 2;
-                            tPos = screenWidth / 2 - t.Length / 2;
-                            yPos = screenWidth / 2 - y.Length / 2;
-                            uPos = screenWidth / 2 - u.Length / 2;
-                            iPos = screenWidth / 2 - i.Length / 2;
-
-                            Console.SetCursorPosition(titlePos, 2);
-                            Console.Write(title);
-                            Console.SetCursorPosition(qPos, 3);
-                            Console.Write(q);
-                            Console.SetCursorPosition(wPos, 4);
-                            Console.Write(w);
-                            Console.SetCursorPosition(rPos, 10);
-                            Console.Write(r);
-                            bool pool = true;
-                            while (pool)
-                            {
-                                //The system will forever hang. this code will never end.
-                                //What why?
-                                // so the user has to restart to complete the reset
-                                // Ohhh
-                                // building test now
-                                // aight
-                                // IT WORKS
-                                // wasdfghjkloipqwerty
-                                // i take that as a pogchamp
-                                // you should add the ability to add custom commands and features to your bot somehow
-                            }
-
-
-                        }
-                        catch (Exception monkeyballs)
-                        {
-                            DrawFrame();
-                            int screenWidth = 80;
-                            string title = "error";
-                            string q = @"error";
-                            string w = "error";
-                            string e = "";
-                            string r = "error";
-                            string t = monkeyballs.ToString();
-                            string y = "";
-                            string u = "";
-                            string i = "";
-
-                            int titlePos = screenWidth / 2 - title.Length / 2;
-                            int qPos = screenWidth / 2 - q.Length / 2;
-                            int wPos = screenWidth / 2 - w.Length / 2;
-                            int ePos = screenWidth / 2 - e.Length / 2;
-                            int rPos = screenWidth / 2 - r.Length / 2;
-                            int tPos = screenWidth / 2 - t.Length / 2;
-                            int yPos = screenWidth / 2 - y.Length / 2;
-                            int uPos = screenWidth / 2 - u.Length / 2;
-                            int iPos = screenWidth / 2 - i.Length / 2;
-
-                            Console.SetCursorPosition(titlePos, 2);
-                            Console.Write(title);
-                            Console.SetCursorPosition(qPos, 3);
-                            Console.Write(q);
-                            Console.SetCursorPosition(wPos, 4);
-                            Console.Write(w);
-                            Console.SetCursorPosition(rPos, 10);
-                            Console.Write(r);
-                            Console.SetCursorPosition(rPos, 11);
-                            Console.Write(t);
-                            bool pool = true;
-                            while (pool)
-                            {
-                                //The system will forever hang. this code will never end.
-                                //What why?
-                                // so the user has to restart to complete the reset
-                                // Ohhh
-                                // building test now
-                                // aight
-                                // IT WORKS
-                                // wasdfghjkloipqwerty
-                                // i take that as a pogchamp
-                                // you should add the ability to add custom commands and features to your bot somehow
-                            }
-                        }
-
-                    }
-                    else // you dont need an elif for no. literally anything else and kick out
-                    {
-                        MessageBox();
-                        menu = "main";
-                        selected = 2;
-                        DrawFrame();
-                        Console.ForegroundColor = WindowText;
-                    }
-
-
-                    MessageBox();
-                    menu = "main";
-                    selected = 2;
-                    DrawFrame();
-                    Console.ForegroundColor = WindowText;
-                }
-            }
-            Console.BackgroundColor = Black;
-            Console.Clear();
-        }
-
-        private static void emptyDir(string path)
-        {
-            var dirtokill = System.IO.Directory.GetFiles(path);
-            foreach (var files in dirtokill)
-            {
-                System.IO.File.Delete(@"0:\" + files);
-            }
+            // Clear the menu with GUI instead of TUI
+            Console.Canvas.DrawFilledRectangle(18 * 8, 2 * 16, Convert.ToUInt16(Console.Canvas.Width - (20 * 8)), Convert.ToUInt16(Console.Canvas.Height - (6 * 16)), 0, ThemeManager.Background);
+            //Console.Render();
         }
     }
 }

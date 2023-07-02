@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace GoOS.Commands
 {
@@ -26,6 +21,11 @@ namespace GoOS.Commands
             if (args.Contains(@"0:\"))
             {
                 args.Replace(@"0:\", "");
+            }
+
+            if (args.Contains(@"if"))
+            {
+                args.Replace(@"if", "THAT NAME IS FORBIDDEN");
             }
 
             //potato2 = potato2.Split("mkfile ")[1];

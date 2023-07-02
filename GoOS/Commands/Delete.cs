@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Console = BetterConsole;
 
 namespace GoOS.Commands
 {
@@ -40,6 +41,25 @@ namespace GoOS.Commands
             }
 
             ;
+        }
+        
+        public static void UniveralDelete(string args)
+        {
+            if (args.Contains("0:\\"))
+            {
+                args.Replace(@"0:\", "");
+            }
+        
+            String DirArgs = "\\" + args;
+        
+            if (File.Exists(Directory.GetCurrentDirectory() + @"\" + args))
+                File.Delete(Directory.GetCurrentDirectory() + @"\" + args);
+            else if (Directory.Exists(Directory.GetCurrentDirectory() + @"\" + args))
+                Directory.Delete(Directory.GetCurrentDirectory() + @"\" + args, true);
+            else
+            {
+                Console.WriteLine("File or Directory not found!");
+            }
         }
     }
 }
