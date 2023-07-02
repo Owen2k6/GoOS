@@ -258,7 +258,7 @@ namespace GoOS
                     catch (Exception e)
                     {               
                         Console.SetCursorPosition(0,0);
-                        Console.WriteLine(e);
+                        //Console.WriteLine(e);
                         
                         if (tries < 10)
                         {
