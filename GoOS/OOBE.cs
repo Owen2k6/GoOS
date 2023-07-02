@@ -273,7 +273,6 @@ namespace GoOS
                             Console.WriteLine(e);
                             Console.WriteLine(e);
                             Console.WriteLine(e);
-                            Console.WriteLine(e);
                             Console.WriteLine("Press any key to shutdown.");
                             Console.ReadKey(true);
                             Sys.Power.Shutdown();
