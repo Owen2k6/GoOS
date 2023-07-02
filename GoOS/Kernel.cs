@@ -36,6 +36,7 @@ namespace GoOS
         // Who cares -ekeleze
         public bool cmdm = true;
         public bool root = false;
+        // i do! - nobody
 
         public static string olddir = @"0:\";
 
