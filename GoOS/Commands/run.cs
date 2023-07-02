@@ -35,14 +35,14 @@ namespace GoOS.Commands
                 {
                     string fuckingprogramname = null;
                     log(Yellow, "Application.Start");
-                    var content = File.ReadAllLines(@"0:\" + inputaman);
+                    var content = File.ReadAllLines(Directory.GetCurrentDirectory() + "\\" + inputaman);
                     string theysaid = null;
                     ConsoleKey keypressed = ConsoleKey.O;
                     String endmessage = "Process has ended.";
                     Boolean hasbeenregistered = false;
 
                     bool poo = false;
-                    
+
                     for (int i = 0; i < content.Length; i++)
                     {
                         string line = content[i];
@@ -51,9 +51,9 @@ namespace GoOS.Commands
                             line = line.Split(": ")[1].Trim();
                             poo = false;
                         }
-                        
+
                         //log(Magenta, "LINE FOUND: CONTENT: " + line);
-                        
+
                         if (line.StartsWith("#"))
                         {
                         }
@@ -74,17 +74,18 @@ namespace GoOS.Commands
                             {
                                 Console.WriteLine("owen caused 9/11");
                             }
-                            
                         }
 
                         if (line.StartsWith("sleep"))
                         {
                             String howlong = line.Split("=")[1];
                             int potato = Convert.ToInt32(howlong);
-                            while (true)
-                            {
-                                Console.WriteLine("Haha you've been fooled!");
-                            }
+                            //while (true)
+                            //{
+                            //    Console.WriteLine("Haha you've been fooled!");
+                            //}
+
+                            System.Threading.Thread.Sleep(potato);
                         }
 
                         if (line.StartsWith("input"))
@@ -198,33 +199,108 @@ namespace GoOS.Commands
                         {
                             string assSplitter = line.Replace(@"print=", "");
                             // we like splitting ass round here
-                            if (assSplitter.Contains("\""))
+
+                            string[] ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN = assSplitter.Split(" + ");
+
+                            foreach (var ASS in ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN)
                             {
-                                string thighs = assSplitter.Replace("\"", "");
-                                Console.WriteLine(thighs);
+                                if (ASS.Contains("\""))
+                                {
+                                    string thighs = ASS.Replace("\"", "");
+                                    string AccountingForNewline = thighs;
+
+                                    if (thighs.Contains("\\n"))
+                                    {
+                                        AccountingForNewline = thighs.Replace("\\n", "\n");
+                                    }
+
+                                    /////////////////////////////////////// Trying to make \n work ////////////////////////////////////////
+                                    // Input: "Hi!\nHello."                                                                              //
+                                    // What I want it to output: "Hi!\n" "Hello."                                                        //
+                                    // (and actually make a new line)                                                                    //
+                                    // Just that the code itself has the quotes removed, I had to use them to show the separate strings. //
+                                    ///////////////////////////////////////////////////////////////////////////////////////////////////////
+                                    
+                                    Console.Write(AccountingForNewline);
+                                }
+                                else if (Strings.TryGetValue(ASS, out string what))
+                                {
+                                    try
+                                    {
+                                        Console.Write(what);
+                                    }
+                                    catch
+                                    {
+                                        Console.Write("owen is gay");
+                                    }
+                                }
+                                else if (Integers.TryGetValue(ASS, out int whatint))
+                                {
+                                    try
+                                    {
+                                        Console.Write(what);
+                                    }
+                                    catch
+                                    {
+                                        Console.WriteLine("owen is gay");
+                                    }
+                                }
                             }
-                            else if (Strings.TryGetValue(assSplitter, out string what))
+                        }
+                        
+                        if (line.StartsWith(@"println="))
+                        {
+                            string assSplitter = line.Replace(@"println=", "");
+                            // we like splitting ass round here
+
+                            string[] ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN = assSplitter.Split(" + ");
+
+                            for (int e = 0; e < ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN.Length; e++)
                             {
-                                try
+                                if (ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN[e].Contains("\""))
                                 {
-                                    Console.WriteLine(what);
+                                    string thighs = ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN[e].Replace("\"", "");
+                                    string AccountingForNewline = thighs;
+
+                                    if (thighs.Contains("\\n"))
+                                    {
+                                        AccountingForNewline = thighs.Replace("\\n", "\n");
+                                    }
+
+                                    /////////////////////////////////////// Trying to make \n work ////////////////////////////////////////
+                                    // Input: "Hi!\nHello."                                                                              //
+                                    // What I want it to output: "Hi!\n" "Hello."                                                        //
+                                    // (and actually make a new line)                                                                    //
+                                    // Just that the code itself has the quotes removed, I had to use them to show the separate strings. //
+                                    ///////////////////////////////////////////////////////////////////////////////////////////////////////
+                                    
+                                    Console.Write(AccountingForNewline);
                                 }
-                                catch
+                                else if (Strings.TryGetValue(ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN[e], out string what))
                                 {
-                                    Console.WriteLine("owen is gay");
+                                    try
+                                    {
+                                        Console.Write(what);
+                                    }
+                                    catch
+                                    {
+                                        Console.Write("owen is gay");
+                                    }
+                                }
+                                else if (Integers.TryGetValue(ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN[e], out int whatint))
+                                {
+                                    try
+                                    {
+                                        Console.Write(what);
+                                    }
+                                    catch
+                                    {
+                                        Console.WriteLine("owen is gay");
+                                    }
                                 }
                             }
-                            else if (Integers.TryGetValue(assSplitter, out int whatint))
-                            {
-                                try
-                                {
-                                    Console.WriteLine(what);
-                                }
-                                catch
-                                {
-                                    Console.WriteLine("owen is gay");
-                                }
-                            }
+                            
+                            Console.WriteLine();
                         }
 
                         if (line.StartsWith("if"))
