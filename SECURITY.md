@@ -8,10 +8,8 @@ Goto https://discord.owen2k6.com/ and open a staff help ticket, otherwise use th
 
 | Version | Supported          | Support ends |
 | ------- | ------------------ | ------------ |
-| 1.4.1-beta4   | :white_check_mark: | On next release.|
-| 1.4.1-beta3  | :x: | Ended on beta4 release.|
-| 1.4.1-beta2         | :x:     | Ended on beta3 release.|
-| 1.4.1-beta1   | :x: | Ended on beta2 release.|
+| 1.5-pre2 | :white_check_mark: | On next release. |
+| 1.5-pre1| :x: | Ended on pre2 release. |
 | 1.4           | :x:     | Ended 11/10/2022|
 | 1.3    | :x: | Ended 16/10/2021  |
 | 1.2     | :x: | Ended 03/10/2021  |
