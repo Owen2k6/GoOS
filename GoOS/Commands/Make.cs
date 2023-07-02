@@ -23,6 +23,11 @@ namespace GoOS.Commands
                 args.Replace(@"0:\", "");
             }
 
+            if (args.Contains(@"if"))
+            {
+                args.Replace(@"if", "THAT NAME IS FORBIDDEN");
+            }
+
             //potato2 = potato2.Split("mkfile ")[1];
             if (!File.Exists(args))
                 File.Create(Directory.GetCurrentDirectory() + @"\" + args);

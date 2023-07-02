@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Cosmos.Core;
 using Cosmos.HAL;
 using GoOS.Themes;
 using Console = BetterConsole;
@@ -20,7 +21,6 @@ namespace GoOS.Commands
         public static void Main(string run)
         {
             String inputaman = run;
-
 
             try
             {
@@ -46,6 +46,7 @@ namespace GoOS.Commands
                     for (int i = 0; i < content.Length; i++)
                     {
                         string line = content[i];
+                        
                         if (poo)
                         {
                             line = line.Split(": ")[1].Trim();
@@ -80,6 +81,7 @@ namespace GoOS.Commands
                         {
                             String howlong = line.Split("=")[1];
                             int potato = Convert.ToInt32(howlong);
+                            
                             //while (true)
                             //{
                             //    Console.WriteLine("Haha you've been fooled!");
@@ -164,8 +166,7 @@ namespace GoOS.Commands
                             {
                                 Strings.Remove(varName);
                             }
-
-
+                            
                             Strings.Add(varName, varContents);
                         }
 

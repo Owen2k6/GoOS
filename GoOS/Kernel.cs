@@ -1,3 +1,8 @@
+
+    /////// ekeleze ///////
+    // I hate xrc2 code. // 
+    ///////////////////////
+
 using Cosmos.HAL;
 using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4;
@@ -16,8 +21,8 @@ using System.Threading;
 using PrismAPI.Graphics;
 using IL2CPU.API.Attribs;
 
-//Goplex Studios - GoOS
-//Copyright (C) 2022  Owen2k6
+// Goplex Studios - GoOS
+// Copyright (C) 2022  Owen2k6
 
 namespace GoOS
 {
