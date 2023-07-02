@@ -1,6 +1,6 @@
 # GoOS - by Goplex Studios
 
-GoOS is a simple operating system (OS) built from scratch using goCosmos (https://github.com/CosmosOS/Cosmos).
+GoOS is an operating system (OS) built from scratch using goCosmos (https://github.com/CosmosOS/Cosmos).
 ## Features
 
     Simple command-line interface
@@ -10,10 +10,11 @@ GoOS is a simple operating system (OS) built from scratch using goCosmos (https:
 
 ## Requirements
 
-  - 128MB ram or more
+  - 256MBs of ram or more
   - 1GB HDD Preformatted as FAT32 (vhd provided on any release)
-  - 8MB Video Memory or more
+  - 12MB Video Memory or more
   - PS/2 Keyboard
+  - (optional) PS/2 Mouse
   - VGA Display (hdmi will work if onboard)
 
 
