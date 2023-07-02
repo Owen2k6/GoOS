@@ -68,7 +68,7 @@ namespace GoOS
             {
                 case 1:
                     Console.Canvas.DrawImage(0, 0, setupWelcome, false);
-                    Console.Canvas.Update();
+                    Console.Render();
 
                     ReadAgain1:
                     var key1 = Console.ReadKey(true);
@@ -78,7 +78,7 @@ namespace GoOS
 
                 case 2:
                     Console.Canvas.DrawImage(0, 0, setupTOU, false);
-                    Console.Canvas.Update();
+                    Console.Render();
 
                     ReadAgain2:
                     var key2 = Console.ReadKey(true);
@@ -87,7 +87,7 @@ namespace GoOS
 
                 case 3:
                     Console.Canvas.DrawImage(0, 0, setupUA, false);
-                    Console.Canvas.Update();
+                    Console.Render();
 
                     ReadAgain3:
                     var key3 = Console.ReadKey(true);
@@ -96,7 +96,7 @@ namespace GoOS
 
                 case 4:
                     Console.Canvas.DrawImage(0, 0, setupSupport, false);
-                    Console.Canvas.Update();
+                    Console.Render();
 
                     ReadAgain4:
                     var key4 = Console.ReadKey(true);
@@ -105,7 +105,7 @@ namespace GoOS
 
                 case 5:
                     Console.Canvas.DrawImage(0, 0, setupUser, false);
-                    Console.Canvas.Update();
+                    Console.Render();
 
                     Console.SetCursorPosition(14, 8);
                     Console.Write("Username: ");
@@ -114,7 +114,7 @@ namespace GoOS
 
                 case 6:
                     Console.Canvas.DrawImage(0, 0, setupComputer, false);
-                    Console.Canvas.Update();
+                    Console.Render();
 
                     Console.SetCursorPosition(14, 7);
                     Console.Write("Computer Name: ");
@@ -123,7 +123,7 @@ namespace GoOS
 
                 case 7:
                     Console.Canvas.DrawImage(0, 0, setupTheme, false);
-                    Console.Canvas.Update();
+                    Console.Render();
 
                     int themeMenuSelectedButton = 0;
 
@@ -175,7 +175,7 @@ namespace GoOS
 
                 case 8:
                     Console.Canvas.DrawImage(0, 0, setupRes, false);
-                    Console.Canvas.Update();
+                    Console.Render();
 
                     List<(string, (ushort Width, ushort Height))> videoModes = new()
                     {
@@ -280,7 +280,7 @@ namespace GoOS
                     }
 
                     Console.Canvas.DrawImage(0, 0, setupFinal, false);
-                    Console.Canvas.Update();
+                    Console.Render();
 
                     ReadAgain9:
                     var key9 = Console.ReadKey(true);
