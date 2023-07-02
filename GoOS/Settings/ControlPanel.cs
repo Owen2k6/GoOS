@@ -8,6 +8,7 @@ using Convert = System.Convert;
 using ConsoleKey = System.ConsoleKey;
 using Console = BetterConsole;
 using ConsoleColor = PrismAPI.Graphics.Color;
+using Cosmos.Core.Memory;
 
 namespace GoOS
 {
@@ -187,6 +188,7 @@ namespace GoOS
         /// </summary>
         private static void DrawMenu(bool quick = false)
         {
+            Heap.Collect();
             DrawFrame();
             DrawTitle("GoOS Settings");
             DrawControls(mainMenuControls);
