@@ -193,18 +193,17 @@ public static class BetterConsole
                     {
                         if (key.Key == ConsoleKeyEx.G)
                         {
-                            string collected = Heap.Collect() + " items collected";
+                            Canvas prevDriver = Canvas;
+                            Heap.Collect();
+                            
                             Init(Canvas.Width, Canvas.Height);
-                            Canvas.DrawString(Canvas.Width - (collected.Length * 8) - 8, Canvas.Height - 32, collected, font, ThemeManager.WindowText);
-                            SetCursorPosition(0, 0);
-                            GoOS.Kernel.DrawPrompt();
-                            Write(returnValue);
+                            Canvas.DrawImage(0, 0, prevDriver, false);
                         }
                         else if (key.Key == ConsoleKeyEx.L)
                         {
                             Clear();
-                            returnValue = string.Empty;
-                            reading = false;
+                            GoOS.Kernel.DrawPrompt();
+                            Write(returnValue);
                         }
                         else if (KeyboardManager.ShiftPressed && key.Key == ConsoleKeyEx.E)
                         {
@@ -212,15 +211,10 @@ public static class BetterConsole
                             string input = ReadLine();
                             if (input == "e015")
                             {
-                                Clear();
                                 Canvas.DrawImage(0, 0, Image.FromBitmap(easterEgg, false), false);
                                 Canvas.Update();
                                 ReadKey(true);
                                 Clear();
-                            }
-                            else
-                            {
-                                Write("Nope");
                             }
                         }
                         else if (KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
@@ -265,7 +259,7 @@ public static class BetterConsole
 
                                 case ConsoleKeyEx.Enter:
                                     if (menuOptions[selected] == menuOptions[0])
-                                        GoOS.ControlPanel.Launch();
+                                        ControlPanel.Launch();
                                     else if (menuOptions[selected] == menuOptions[1])
                                         Power.Reboot();
                                     break;

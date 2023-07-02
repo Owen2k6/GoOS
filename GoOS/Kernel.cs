@@ -81,8 +81,7 @@ namespace GoOS
 
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {
-                Console.Init(800, 600);
-                Console.WriteLine("First boot... This may take awhile...");
+                Console.WriteLine("GoOS - Preparing first time setup...");
                 OOBE.Launch();
             }
 
@@ -129,11 +128,8 @@ namespace GoOS
             }
 
             Console.Clear();
-
-            Canvas cv = Image.FromBitmap(rawBootLogo, false);
-            Console.Canvas.DrawImage(0, 0, cv, false);
-            Console.SetCursorPosition(0, 12);
-
+            Console.Canvas.DrawImage(0, 0, Image.FromBitmap(rawBootLogo, false), false);
+            Console.SetCursorPosition(0, 13);
             Directory.SetCurrentDirectory(@"0:\");
         }
 
