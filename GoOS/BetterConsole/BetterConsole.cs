@@ -8,6 +8,7 @@ using PrismAPI.Graphics.Fonts;
 using GoOS.Themes;
 using Cosmos.Core.Memory;
 using GoOS;
+using GoOS.GUI;
 
 /// <summary>
 /// <see cref="BetterConsole"/> class
@@ -17,9 +18,9 @@ public static class BetterConsole
     [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_1x.btf")] private static byte[] rawFont;
     [ManifestResourceStream(ResourceName = "GoOS.Resources.Credits05.bmp")] private static byte[] easterEgg;
 
-    private static Font font;
+    public static Font font;
 
-    public static Display Canvas;
+    public static Canvas Canvas;
 
     private static ushort charWidth = 8, charHeight = 16;
 
@@ -28,6 +29,10 @@ public static class BetterConsole
         "Launch Settings",
         "Reboot"
     };
+
+    public static int WindowLeft = 50;
+    public static int WindowTop = 50;
+    public static bool Visible = true;
 
     /// <summary>
     /// The X position of the cursor
@@ -70,7 +75,8 @@ public static class BetterConsole
     public static void Init(ushort width, ushort height)
     {
         font = new Font(rawFont, charHeight);
-        Canvas = Display.GetDisplay(width, height);
+        //Canvas = Display.GetDisplay(width, height);
+        Canvas = new Canvas(width, height);
         WindowWidth = Convert.ToUInt16(width / charWidth);
         WindowHeight = Convert.ToUInt16(height / charHeight);
         Canvas.Clear();
@@ -90,7 +96,10 @@ public static class BetterConsole
     /// <summary>
     /// Renders the <see cref="BetterConsole">
     /// </summary>
-    public static void Render() => Canvas.Update();
+    public static void Render()
+    {
+        WindowManager.Update();
+    }
 
     /// <summary>
     /// Writes a string to the <see cref="BetterConsole"/>
@@ -126,13 +135,31 @@ public static class BetterConsole
     /// <summary>
     /// Reads input from the user
     /// </summary>
-    /// <param name="intercept">Print the key that the user pressed</param>
-    /// <returns>The key that the user pressed</returns>
-    public static ConsoleKeyInfo ReadKey(bool intercept = false)
+    /// <param name="intercept">Print the key pressed</param>
+    /// <returns>The key pressed</returns>
+    public static ConsoleKeyInfo ReadKey(bool intercept = true)
     {
-        ConsoleKeyInfo key = System.Console.ReadKey();
-        if (!intercept) Write(key.KeyChar);
-        return key;
+        while (true)
+        {
+            var keyPressed = KeyboardManager.TryReadKey(out var key);
+            if (keyPressed)
+            {
+                if (intercept == false && key.KeyChar != '\0')
+                {
+                    Write(key.KeyChar);
+                }
+
+                bool xShift = (key.Modifiers & ConsoleModifiers.Shift) == ConsoleModifiers.Shift;
+                bool xAlt = (key.Modifiers & ConsoleModifiers.Alt) == ConsoleModifiers.Alt;
+                bool xControl = (key.Modifiers & ConsoleModifiers.Control) == ConsoleModifiers.Control;
+
+                return new ConsoleKeyInfo(key.KeyChar, key.Key.ToConsoleKey(), xShift, xAlt, xControl);
+            }
+            else
+            {
+                WindowManager.Update();
+            }
+        }
     }
 
     /// <summary>
@@ -153,32 +180,142 @@ public static class BetterConsole
                 Render();
             }
 
-            var key = KeyboardManager.ReadKey();
-            switch (key.Key)
+            var keyPressed = KeyboardManager.TryReadKey(out var key);
+            if (keyPressed)
             {
-                case ConsoleKeyEx.Enter:
-                    PutChar(' ', CursorLeft, CursorTop);
-                    CursorLeft = 0; CursorTop++;
-                    Newline();
-                    reading = false;
-                    break;
+                switch (key.Key)
+                {
+                    case ConsoleKeyEx.Enter:
+                        PutChar(' ', CursorLeft, CursorTop);
+                        CursorLeft = 0; CursorTop++;
+                        Newline();
+                        reading = false;
+                        break;
 
-                case ConsoleKeyEx.Backspace:
-                    if (!(CursorLeft == startCursorLeft && CursorTop == startY))
-                    {
-                        if (CursorLeft == 0)
+                    case ConsoleKeyEx.Backspace:
+                        if (!(CursorLeft == startCursorLeft && CursorTop == startY))
                         {
-                            PutChar(' ', CursorLeft, CursorTop); // Erase the cursor
-                            CursorTop--;
-                            CursorLeft = Canvas.Width / charWidth - 1;
-                            PutChar(' ', CursorLeft, CursorTop); // Erase the actual character
+                            if (CursorLeft == 0)
+                            {
+                                PutChar(' ', CursorLeft, CursorTop); // Erase the cursor
+                                CursorTop--;
+                                CursorLeft = Canvas.Width / charWidth - 1;
+                                PutChar(' ', CursorLeft, CursorTop); // Erase the actual character
+                            }
+                            else
+                            {
+                                PutChar(' ', CursorLeft, CursorTop); // Erase the cursor
+                                CursorLeft--;
+                                PutChar(' ', CursorLeft, CursorTop); // Erase the actual character
+                            }
+                            returnValue = returnValue.Remove(returnValue.Length - 1); // Remove the last character of the string
+                        }
+                        break;
+
+                    case ConsoleKeyEx.Tab:
+                        Write(new string(' ', 4));
+                        returnValue += new string(' ', 4);
+                        break;
+
+                    default:
+                        if (KeyboardManager.ControlPressed)
+                        {
+                            if (key.Key == ConsoleKeyEx.G)
+                            {
+                                Heap.Collect();
+                                Init(Canvas.Width, Canvas.Height);
+                                Clear();
+                                GoOS.Kernel.DrawPrompt();
+                                Write(returnValue);
+                            }
+                            else if (key.Key == ConsoleKeyEx.L)
+                            {
+                                Clear();
+                                GoOS.Kernel.DrawPrompt();
+                                Write(returnValue);
+                            }
+                            else if (KeyboardManager.ShiftPressed && key.Key == ConsoleKeyEx.E)
+                            {
+                                ForegroundColor = ThemeManager.WindowText;
+                                string input = ReadLine();
+                                if (input == "e015")
+                                {
+                                    Canvas.DrawImage(0, 0, Image.FromBitmap(easterEgg, false), false);
+                                    Render();
+                                    ReadKey(true);
+                                    Clear();
+                                }
+                            }
+                            else if (KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
+                            {
+                                int selected = 0;
+
+                                Clear();
+                                Canvas.DrawRectangle((Canvas.Width / 2) - (144 / 2) + 0, (Canvas.Height / 2) - ((menuOptions.Count + 4) * 16 / 2) + 0, 144, Convert.ToUInt16((menuOptions.Count + 4) * 16), 0, ThemeManager.WindowBorder);
+                                Canvas.DrawRectangle((Canvas.Width / 2) - (144 / 2) + 1, (Canvas.Height / 2) - ((menuOptions.Count + 4) * 16 / 2) + 1, 144, Convert.ToUInt16((menuOptions.Count + 4) * 16), 0, ThemeManager.WindowBorder);
+
+                            Refresh:
+                                if (selected > menuOptions.Count - 1)
+                                {
+                                    selected = 0;
+                                }
+                                if (selected < 0)
+                                {
+                                    selected = menuOptions.Count - 1;
+                                }
+
+                                for (int i = 0; i < menuOptions.Count; i++)
+                                {
+                                    SetCursorPosition((WindowWidth / 2) - (15 / 2) - 1, (WindowHeight / 2) - 1 + (i * 2));
+                                    if (i == selected)
+                                    {
+                                        ForegroundColor = ThemeManager.Background;
+                                        BackgroundColor = ThemeManager.WindowText;
+                                    }
+                                    else
+                                    {
+                                        ForegroundColor = ThemeManager.WindowText;
+                                        BackgroundColor = ThemeManager.Background;
+                                    }
+                                    Write(menuOptions[i]);
+                                }
+
+                                var key2 = KeyboardManager.ReadKey();
+                                switch (key2.Key)
+                                {
+                                    case ConsoleKeyEx.Escape:
+                                        break;
+
+                                    case ConsoleKeyEx.Enter:
+                                        if (menuOptions[selected] == menuOptions[0])
+                                            ControlPanel.Launch();
+                                        else if (menuOptions[selected] == menuOptions[1])
+                                            Power.Reboot();
+                                        break;
+
+                                    case ConsoleKeyEx.UpArrow:
+                                        selected--;
+                                        goto Refresh;
+
+                                    case ConsoleKeyEx.DownArrow:
+                                        selected++;
+                                        goto Refresh;
+
+                                    default:
+                                        goto Refresh;
+                                }
+
+                                Clear();
+                                GoOS.Kernel.DrawPrompt();
+                            }
                         }
                         else
                         {
-                            PutChar(' ', CursorLeft, CursorTop); // Erase the cursor
-                            CursorLeft--;
-                            PutChar(' ', CursorLeft, CursorTop); // Erase the actual character
+                            Write(key.KeyChar.ToString());
+                            Newline();
+                            returnValue += key.KeyChar;
                         }
+<<<<<<< Updated upstream
                         returnValue = returnValue.Remove(returnValue.Length - 1); // Remove the last character of the string
                     }
                     break;
@@ -193,17 +330,18 @@ public static class BetterConsole
                     {
                         if (key.Key == ConsoleKeyEx.G)
                         {
-                            Canvas prevDriver = Canvas;
-                            Heap.Collect();
-                            
+                            string collected = Heap.Collect() + " items collected";
                             Init(Canvas.Width, Canvas.Height);
-                            Canvas.DrawImage(0, 0, prevDriver, false);
+                            Canvas.DrawString(Canvas.Width - (collected.Length * 8) - 8, Canvas.Height - 32, collected, font, ThemeManager.WindowText);
+                            SetCursorPosition(0, 0);
+                            GoOS.Kernel.DrawPrompt();
+                            Write(returnValue);
                         }
                         else if (key.Key == ConsoleKeyEx.L)
                         {
                             Clear();
-                            GoOS.Kernel.DrawPrompt();
-                            Write(returnValue);
+                            returnValue = string.Empty;
+                            reading = false;
                         }
                         else if (KeyboardManager.ShiftPressed && key.Key == ConsoleKeyEx.E)
                         {
@@ -211,10 +349,15 @@ public static class BetterConsole
                             string input = ReadLine();
                             if (input == "e015")
                             {
+                                Clear();
                                 Canvas.DrawImage(0, 0, Image.FromBitmap(easterEgg, false), false);
                                 Canvas.Update();
                                 ReadKey(true);
                                 Clear();
+                            }
+                            else
+                            {
+                                Write("Nope");
                             }
                         }
                         else if (KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
@@ -259,7 +402,7 @@ public static class BetterConsole
 
                                 case ConsoleKeyEx.Enter:
                                     if (menuOptions[selected] == menuOptions[0])
-                                        ControlPanel.Launch();
+                                        GoOS.ControlPanel.Launch();
                                     else if (menuOptions[selected] == menuOptions[1])
                                         Power.Reboot();
                                     break;
@@ -287,8 +430,16 @@ public static class BetterConsole
                         returnValue += key.KeyChar;
                     }
                     break;
+=======
+                        break;
+                }
+                Render();
             }
-            Render();
+            else
+            {
+                WindowManager.Update();
+>>>>>>> Stashed changes
+            }
         }
 
         return returnValue;

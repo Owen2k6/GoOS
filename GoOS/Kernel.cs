@@ -20,6 +20,9 @@ using static GoOS.Core;
 using System.Threading;
 using PrismAPI.Graphics;
 using IL2CPU.API.Attribs;
+using PrismAPI.Hardware.GPU;
+using GoOS.GUI;
+using GoOS.GUI.Apps;
 
 // Goplex Studios - GoOS
 // Copyright (C) 2022  Owen2k6
@@ -61,7 +64,12 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
+            WindowManager.Canvas = Display.GetDisplay(1280, 720);
             Console.Init(800, 600);
+
+            //WindowManager.Windows.Add(new GTerm());
+            WindowManager.Windows.Add(new Demo());
+
             ThemeManager.SetTheme(Theme.Fallback);
             log(ThemeManager.WindowText, "GoOS - Starting GoOS...");
             try
@@ -81,7 +89,8 @@ namespace GoOS
 
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {
-                Console.WriteLine("GoOS - Preparing first time setup...");
+                Console.Init(800, 600);
+                Console.WriteLine("First boot... This may take awhile...");
                 OOBE.Launch();
             }
 
@@ -109,8 +118,8 @@ namespace GoOS
                     }
                 }
 
-                byte videoMode = File.ReadAllBytes(@"0:\content\sys\resolution.gms")[0];
-                Console.Init(ControlPanel.videoModes[videoMode].Item2.Width, ControlPanel.videoModes[videoMode].Item2.Height);
+                //byte videoMode = File.ReadAllBytes(@"0:\content\sys\resolution.gms")[0];
+                //Console.Init(ControlPanel.videoModes[videoMode].Item2.Width, ControlPanel.videoModes[videoMode].Item2.Height);
             }
             catch
             {
@@ -127,9 +136,22 @@ namespace GoOS
                 computername = "GoOS";
             }
 
+            Canvas testWindow = new Canvas(200, 200);
+            testWindow.Clear(Color.Blue);
+            testWindow.DrawCircle(100, 100, 50, Color.White);
+
+            /*WindowList.canvas[1] = testWindow;
+            WindowList.title[1] = "Circle";
+            WindowList.X[1] = 500;
+            WindowList.Y[1] = 100;
+            WindowList.visible[1] = true;*/
+
             Console.Clear();
-            Console.Canvas.DrawImage(0, 0, Image.FromBitmap(rawBootLogo, false), false);
-            Console.SetCursorPosition(0, 13);
+
+            Canvas cv = Image.FromBitmap(rawBootLogo, false);
+            Console.Canvas.DrawImage(0, 0, cv, false);
+            Console.SetCursorPosition(0, 12);
+
             Directory.SetCurrentDirectory(@"0:\");
         }
 
@@ -166,6 +188,9 @@ namespace GoOS
             // Commands section
 
             string[] args = Console.ReadLine().Trim().Split(' ');
+
+            uint TotalRamUINT = Cosmos.Core.CPU.GetAmountOfRAM();
+            int TotalRam = Convert.ToInt32(TotalRamUINT);
 
             switch (args[0])
             {
@@ -393,6 +418,12 @@ namespace GoOS
                     Commands.Dir.Run();
                     break;
                 case "notepad":
+                    if (TotalRam < 1000)
+                    {
+                        log(ThemeManager.ErrorText, "This program has been disabled due to low ram.");
+                        break;
+                    }
+                    
                     if (args.Length > 2)
                     {
                         log(ThemeManager.ErrorText, "Too many arguments");
@@ -458,8 +489,6 @@ namespace GoOS
                 case "whoami":
                     log(ThemeManager.ErrorText, "Showing Internet Information");
                     log(ThemeManager.ErrorText, NetworkConfiguration.CurrentAddress.ToString());
-                    break;
-                case "gui":
                     break;
                 case "lr":
                     if (args[1] == "get")
