@@ -28,7 +28,7 @@ namespace GoOS
 
         private static readonly List<string> categoryButtonsAdvancedMenu = new List<string>
         {
-            "Format",
+            "Format"
         };
 
         private static readonly List<string> categoryButtonsInfoMenu = new List<string>

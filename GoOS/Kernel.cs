@@ -9,6 +9,7 @@ using Cosmos.System.Network.IPv4;
 using Cosmos.System.Network.IPv4.TCP;
 using Cosmos.System.Network.IPv4.UDP.DHCP;
 using System;
+using System.Collections.Generic;
 using Sys = Cosmos.System;
 using System.IO;
 using System.Text;
@@ -31,6 +32,11 @@ namespace GoOS
 {
     public class Kernel : Sys.Kernel
     {
+        
+        public static Dictionary<string, string> InstalledPrograms = new Dictionary<string, string>() { };
+        
+        public static bool isGCIenabled = false;
+        
         //Vars for OS
         public static string version = "1.5";
         public static string BuildType = "Beta";
@@ -93,7 +99,26 @@ namespace GoOS
                 Console.WriteLine("First boot... This may take awhile...");
                 OOBE.Launch();
             }
+            
+            
 
+            
+            
+            if (!Directory.Exists(@"0:\content\GCI\"))
+            {
+                try
+                {
+                    Directory.CreateDirectory(@"0:\content\GCI\");
+                }
+                catch (Exception)
+                {
+                    if (File.Exists(@"0:\content\sys\GCI.gms"))
+                    {
+                        File.Delete(@"0:\content\sys\GCI.gms");
+                    }
+                }
+            }
+            
             try
             {
                 var systemsetup = File.ReadAllLines(@"0:\content\sys\user.gms");
@@ -181,8 +206,17 @@ namespace GoOS
             textcolour(ThemeManager.Default);
         }
 
+        
+        
         protected override void Run()
         {
+            isGCIenabled = File.Exists(@"0:\content\sys\GCI.gms");
+            
+            if (isGCIenabled)
+            {
+                GoCodeInstaller.CheckForInstalledPrograms();
+            }
+            
             DrawPrompt();
 
             // Commands section
@@ -194,6 +228,63 @@ namespace GoOS
 
             switch (args[0])
             {
+                case "install":
+                    if (args.Length < 2)
+                    {
+                        log(ThemeManager.ErrorText, "Missing arguments!");
+                        break;
+                    }
+                    if (args.Length > 2)
+                    {
+                        log(ThemeManager.ErrorText, "Too many arguments!");
+                        break;
+                    }
+                    
+                    GoCodeInstaller.Install(args[1]);
+                    break;
+                
+                case "movefile":
+                    if (args.Length < 3)
+                    {
+                        log(ThemeManager.ErrorText, "Missing arguments!");
+                        break;
+                    }
+                    if (args.Length > 3)
+                    {
+                        log(ThemeManager.ErrorText, "Too many arguments!");
+                        break;
+                    }
+                    try
+                    {
+                        ExtendedFilesystem.MoveFile(args[1], args[2]);
+                    }
+                    catch (Exception e)
+                    {
+                        System.Console.WriteLine("Error whilst trying to move file: " + e);
+                        break;
+                    }
+                    break;
+                case "copyfile":
+                    if (args.Length < 3)
+                    {
+                        log(ThemeManager.ErrorText, "Missing arguments!");
+                        break;
+                    }
+                    if (args.Length > 3)
+                    {
+                        log(ThemeManager.ErrorText, "Too many arguments!");
+                        break;
+                    }
+                    try
+                    {
+                        ExtendedFilesystem.CopyFile(args[1], args[2]);
+                    }
+                    catch (Exception e)
+                    {
+                        System.Console.WriteLine("Error whilst trying to copy file: " + e);
+                        break;
+                    }
+                    break;
                 case "help":
                     if (args.Length > 1)
                     {
@@ -527,6 +618,29 @@ namespace GoOS
                     Console.WriteLine(Encoding.ASCII.GetString(test));
                     break;
                 default:
+                    if (isGCIenabled)
+                        GoCodeInstaller.CheckForInstalledPrograms();
+
+                    if (InstalledPrograms.ContainsKey(args[0]))
+                    {
+                        
+                        
+                        string rootass = @"0:\";
+                        
+
+                        InstalledPrograms.TryGetValue(args[0], out string locat);
+
+                        string TrueLocat = locat;
+                        
+                        if (locat.Contains(@"0:\"))
+                        {
+                            TrueLocat = TrueLocat.Replace(@"0:\", "");
+                        }
+                        
+                        Commands.Run.Main(TrueLocat);
+                        break;
+                    }
+
                     Console.WriteLine("Invalid command.");
                     break;
             }
