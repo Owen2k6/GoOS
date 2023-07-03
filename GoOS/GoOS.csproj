@@ -109,6 +109,7 @@
       <None Remove="Resources\credits05.bmp" />
       <None Remove="Resources\Font_1x.btf" />
       <None Remove="Resources\GoOS_Intro.bmp" />
+      <None Remove="Resources\GUI\clock.bmp" />
       <None Remove="Resources\GUI\closebutton.bmp" />
       <None Remove="Resources\GUI\drum.bmp" />
       <None Remove="Resources\GUI\folder.bmp" />
@@ -128,6 +129,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Include="Resources\GUI\clock.bmp" />
       <EmbeddedResource Include="Resources\GUI\closebutton.bmp" />
       <EmbeddedResource Include="Resources\GUI\drum.bmp" />
       <EmbeddedResource Include="Resources\GUI\folder.bmp" />
