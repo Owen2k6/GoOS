@@ -97,7 +97,9 @@ namespace GoOS
             }
 
             loadingDialogue.Closing = true;
+            WindowManager.AddWindow(new Taskbar());
             WindowManager.AddWindow(new Welcome());
+            
 
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {
