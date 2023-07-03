@@ -3,33 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
 
 namespace GoOS.GUI.Apps
 {
     public class AppManager : Window
     {
-        Button GTerm;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.gterm.bmp")] private static byte[] gtermIconRaw;
+        private static Canvas gtermIcon = Image.FromBitmap(gtermIconRaw, false);
+
+        Button gtermButton;
 
         public AppManager()
         {
-            this.Contents = new Canvas(200, 150);
-            this.Contents.Clear(Color.White);
-            this.X = 830;
-            this.Y = 100;
-            this.Title = "GoOS App Manager";
-            this.Visible = true;
-            this.Closeable = false;
+            Contents = new Canvas(400, 400);
+            Contents.Clear(Color.White);
+            X = 830;
+            Y = 100;
+            Title = "GoOS App Manager";
+            Visible = true;
+            Closable = true;
 
-            GTerm = new Button(Convert.ToUInt16(X + 10), Convert.ToUInt16(Y + 16 + 10), 50, 16, "GTerm", true);
-            this.Contents.DrawImage(GTerm.X - X, GTerm.Y - Y - 16, GTerm.Contents, false);
+            gtermButton = new Button(this, 10, 10, 64, 80, "GTerm")
+            {
+                BackgroundColour = Color.White,
+                TextColour = Color.Black,
+
+                Image = gtermIcon
+            };
+            
+            gtermButton.Clicked = OpenGTerm;
+
+            gtermButton.Render();
         }
 
-        public override void Update()
+        private static void OpenGTerm()
         {
-            GTerm.X = Convert.ToUInt16(X + 10);
-            GTerm.Y = Convert.ToUInt16(Y + 16 + 10);
-            GTerm.Handle();
+            WindowManager.AddWindow(new Apps.GTerm());
         }
     }
 }

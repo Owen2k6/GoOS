@@ -1,7 +1,7 @@
 
-    /////// ekeleze ///////
-    // I hate xrc2 code. // 
-    ///////////////////////
+/////// ekeleze ///////
+// I hate xrc2 code. // 
+///////////////////////
 
 using Cosmos.HAL;
 using Cosmos.System.Network.Config;
@@ -32,15 +32,15 @@ namespace GoOS
 {
     public class Kernel : Sys.Kernel
     {
-        
+
         public static Dictionary<string, string> InstalledPrograms = new Dictionary<string, string>() { };
-        
+
         public static bool isGCIenabled = false;
-        
+
         //Vars for OS
         public static string version = "1.5";
         public static string BuildType = "Beta";
-        
+
         //We dont even use these 2 vars anymore
         // Who cares -ekeleze
         public bool cmdm = true;
@@ -74,7 +74,7 @@ namespace GoOS
             Console.Init(800, 600);
 
             //WindowManager.Windows.Add(new GTerm());
-            WindowManager.Windows.Add(new AppManager());
+            WindowManager.AddWindow(new DesktopIcons());
 
             ThemeManager.SetTheme(Theme.Fallback);
             log(ThemeManager.WindowText, "GoOS - Starting GoOS...");
@@ -99,11 +99,11 @@ namespace GoOS
                 Console.WriteLine("First boot... This may take awhile...");
                 OOBE.Launch();
             }
-            
-            
 
-            
-            
+
+
+
+
             if (!Directory.Exists(@"0:\content\GCI\"))
             {
                 try
@@ -118,7 +118,7 @@ namespace GoOS
                     }
                 }
             }
-            
+
             try
             {
                 var systemsetup = File.ReadAllLines(@"0:\content\sys\user.gms");
@@ -206,17 +206,17 @@ namespace GoOS
             textcolour(ThemeManager.Default);
         }
 
-        
-        
+
+
         protected override void Run()
         {
             isGCIenabled = File.Exists(@"0:\content\sys\GCI.gms");
-            
+
             if (isGCIenabled)
             {
                 GoCodeInstaller.CheckForInstalledPrograms();
             }
-            
+
             DrawPrompt();
 
             // Commands section
@@ -239,7 +239,7 @@ namespace GoOS
                         log(ThemeManager.ErrorText, "Too many arguments!");
                         break;
                     }
-                    
+
                     GoCodeInstaller.Install(args[1]);
                     break;
                 case "uninstall":
@@ -253,7 +253,7 @@ namespace GoOS
                         log(ThemeManager.ErrorText, "Too many arguments!");
                         break;
                     }
-                    
+
                     GoCodeInstaller.Uninstall(args[1]);
                     break;
                 case "movefile":
@@ -527,7 +527,7 @@ namespace GoOS
                         log(ThemeManager.ErrorText, "This program has been disabled due to low ram.");
                         break;
                     }
-                    
+
                     if (args.Length > 2)
                     {
                         log(ThemeManager.ErrorText, "Too many arguments");
@@ -642,20 +642,20 @@ namespace GoOS
                         string rootass = @"0:\";
 
                         string currentDIRRRRRR = Directory.GetCurrentDirectory();
-                        
+
                         Directory.SetCurrentDirectory(rootass);
-                        
+
                         InstalledPrograms.TryGetValue(args[0], out string locat);
 
                         string TrueLocat = locat;
-                        
+
                         if (locat.Contains(@"0:\"))
                         {
                             TrueLocat = TrueLocat.Replace(@"0:\", "");
                         }
-                        
+
                         Commands.Run.Main(TrueLocat);
-                        
+
                         Directory.SetCurrentDirectory(currentDIRRRRRR);
                         break;
                     }

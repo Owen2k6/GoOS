@@ -110,6 +110,8 @@
       <None Remove="Resources\Font_1x.btf" />
       <None Remove="Resources\GoOS_Intro.bmp" />
       <None Remove="Resources\GUI\closebutton.bmp" />
+      <None Remove="Resources\GUI\folder.bmp" />
+      <None Remove="Resources\GUI\gterm.bmp" />
       <None Remove="Resources\GUI\mouse.bmp" />
       <None Remove="Resources\OOBE\setupcomputer.bmp" />
       <None Remove="Resources\OOBE\setupfinal.bmp" />
@@ -125,6 +127,8 @@
 
     <ItemGroup>
       <EmbeddedResource Include="Resources\GUI\closebutton.bmp" />
+      <EmbeddedResource Include="Resources\GUI\folder.bmp" />
+      <EmbeddedResource Include="Resources\GUI\gterm.bmp" />
       <EmbeddedResource Include="Resources\GUI\mouse.bmp" />
       <EmbeddedResource Include="Resources\OOBE\setupsupport.bmp" />
     </ItemGroup>

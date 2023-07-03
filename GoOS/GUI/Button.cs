@@ -1,42 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sys = Cosmos.System;
-using PrismAPI.Graphics;
+﻿using PrismAPI.Graphics;
+using System.ComponentModel;
 
 namespace GoOS.GUI
 {
-    public class Button
+    public class Button : Control
     {
-        public Canvas Contents;
-        public ushort X, Y;
         public string Title;
-        public bool Visible;
 
-        public Button(ushort X, ushort Y, ushort Width, ushort Height, string Title, bool Visible)
+        /// <summary>
+        /// Optional image.
+        /// </summary>
+        public Canvas Image;
+
+        public Color BackgroundColour = new Color(12, 12, 12);
+
+        public Color TextColour = Color.White;
+
+        public Button(Window parent, ushort x, ushort y, ushort width, ushort height, string title)
+            : base(parent, x, y, width, height)
         {
-            this.Contents = new Canvas(Width, Height);
-            this.Contents.DrawFilledRectangle(0, 0, Width, Height, 3, new Color(12, 12, 12));
-            this.Contents.DrawString(0, 0, Title, BetterConsole.font, Color.White);
-            this.X = X;
-            this.Y = Y;
-            this.Title = Title;
-            this.Visible = Visible;
+            Title = title;
         }
 
-        public void Handle()
+        public override void Render()
         {
-            if (Sys.MouseManager.MouseState == Sys.MouseState.Left)
+            // Background.
+            Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, BackgroundColour);
+
+            if (Image != null)
             {
-                if (Sys.MouseManager.X > X && Sys.MouseManager.X < X + Contents.Width && Sys.MouseManager.Y > Y && Sys.MouseManager.Y < Y + Contents.Height)
-                {
-                    if (Title == "GTerm") {
-                        WindowManager.Windows.Add(new Apps.GTerm());
-                    }
-                }
+                Contents.DrawImage((Contents.Width - Image.Width) / 2, 0, Image, true);
             }
+
+            // Title.
+            int textY = Image != null ? Image.Height + 8 : 0;
+            Contents.DrawString(Contents.Width / 2, textY, Title, BetterConsole.font, TextColour, true);
+
+            Parent.RenderControls();
         }
     }
 }
