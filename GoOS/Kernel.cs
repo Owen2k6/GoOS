@@ -66,7 +66,7 @@ namespace GoOS
         public static string username = null;
         public static string computername = null;
 
-        [ManifestResourceStream(ResourceName = "GoOS.Res.GoOS_Intro.bmp")] public static byte[] rawBootLogo;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GoOS_Intro.bmp")] public static byte[] rawBootLogo;
 
         protected override void BeforeRun()
         {
