@@ -25,9 +25,9 @@ namespace GoOS.GUI.Apps
             Visible = true;
             Closable = true;
             
-            Contents.DrawString(10, 5, "GoOS Administrative Applications", BetterConsole.font, Color.Black);
+            Contents.DrawString(10, 5, "GoOS System Applications", BetterConsole.font, Color.Black);
 
-            gtermButton = new Button(this, 10, 15, 64, 80, "GTerm")
+            gtermButton = new Button(this, 10, 20, 64, 80, "GTerm")
             {
                 UseSystemStyle = false,
                 BackgroundColour = Color.White,
