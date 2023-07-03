@@ -148,16 +148,16 @@ namespace GoOS.GUI
             if (HasTitlebar)
             {
                 // Title bar.
-                cv.DrawFilledRectangle(X, Y, Contents.Width, 16, 0, Color.DeepGray);
-                cv.DrawString(X + 1, Y, Title, BetterConsole.font, Color.White);
+                cv.DrawFilledRectangle(X, Y, Contents.Width, 19, 0, Color.DeepGray);
+                cv.DrawString(X + 2, Y, Title, BetterConsole.font, Color.White);
 
                 // Close button.
                 if (Closable)
-                    cv.DrawImage(X + Contents.Width - 14, Y + 2, closeButton);
+                    cv.DrawImage(X + Contents.Width - 18, Y + 3, closeButton);
             }
 
             // Window contents.
-            cv.DrawImage(X, Y + (HasTitlebar ? 16 : 0), Contents, false);
+            cv.DrawImage(X, Y + (HasTitlebar ? 19 : 0), Contents, false);
         }
     }
 }
