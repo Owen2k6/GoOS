@@ -8,6 +8,7 @@ using PrismAPI.Graphics;
 using IL2CPU.API.Attribs;
 using Cosmos.System;
 using PrismAPI.Graphics.Animation;
+using PrismAPI.UI;
 
 namespace GoOS.GUI
 {
