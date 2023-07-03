@@ -5,64 +5,158 @@ using System.Text;
 using System.Threading.Tasks;
 using Sys = Cosmos.System;
 using PrismAPI.Graphics;
+using IL2CPU.API.Attribs;
+using Cosmos.System;
+using PrismAPI.Graphics.Animation;
 
 namespace GoOS.GUI
 {
     public abstract class Window
     {
-        private bool mouseClicked = false;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton.bmp")] private static byte[] closeButtonRaw;
+        private static Canvas closeButton = Image.FromBitmap(closeButtonRaw, false);
 
         public Canvas Contents;
-        public int X, Y; //This doesnt have to be a UInt16
+
+        public int X, Y;
         public string Title;
         public bool Visible;
-        public bool Closeable;
-        public bool Moving;
+        public bool Closable;
+        public bool Dragging;
+        public bool Closing;
+        public bool HasTitlebar = true;
 
-        public abstract void Update();
+        public List<Control> Controls = new();
 
-        internal bool MouseOnTop()
+        private int DragStartX;
+        private int DragStartY;
+        private int DragStartMouseX;
+        private int DragStartMouseY;
+
+        private MouseState previousMouseState = MouseState.None;
+
+        public virtual void Update() { }
+
+        public virtual void RenderControls()
         {
-            if (Sys.MouseManager.X > this.X && Sys.MouseManager.X < this.X + this.Contents.Width && Sys.MouseManager.Y > this.Y + 16 && Sys.MouseManager.Y < this.Y + this.Contents.Height)
-                return true;
-            else
-                return false;
+            foreach (Control control in Controls)
+            {
+                Contents.DrawImage(control.X, control.Y, control.Contents, false);
+            }
         }
 
-        internal void InternalFullUpdate()
+        internal bool IsMouseOver
         {
-            if (Sys.MouseManager.MouseState == Sys.MouseState.Left)
+            get
             {
-                if (mouseClicked)
+                return MouseManager.X >= X                          &&
+                       MouseManager.X <  X + Contents.Width         &&
+                       MouseManager.Y >= Y + (HasTitlebar ? 16 : 0) &&
+                       MouseManager.Y <  Y + Contents.Height;
+            }
+        }
+
+        internal bool IsMouseOverTitleBar
+        {
+            get
+            {
+                if (!HasTitlebar)
                 {
-                    if (Sys.MouseManager.X > this.X && Sys.MouseManager.X < this.X + this.Contents.Width - 16 && Sys.MouseManager.Y > this.Y - (this.Contents.Height / 2) && Sys.MouseManager.Y < this.Y + this.Contents.Height)
-                    {
-                        this.X = (int)Sys.MouseManager.X - (this.Contents.Width / 2);
-                        this.Y = (int)Sys.MouseManager.Y - 8;
-                    }
-                }
-                else
-                {
-                    if (Sys.MouseManager.X > this.X && Sys.MouseManager.X < this.X + this.Contents.Width - 16 && Sys.MouseManager.Y > this.Y && Sys.MouseManager.Y < this.Y + 16)
-                    {
-                        this.X = (int)Sys.MouseManager.X - (this.Contents.Width / 2);
-                        this.Y = (int)Sys.MouseManager.Y - 8;
-                        mouseClicked = true;
-                    }
+                    return false;
                 }
 
-                if (this.Closeable)
+                return MouseManager.X >= X                  &&
+                       MouseManager.X <  X + Contents.Width &&
+                       MouseManager.Y >= Y                  &&
+                       MouseManager.Y <  Y + 16;
+            }
+        }
+
+        internal bool IsMouseOverCloseButton
+        {
+            get
+            {
+                return IsMouseOverTitleBar &&
+                       MouseManager.X >= X + Contents.Width - 16;
+            }
+        }
+
+        internal void InternalHandle()
+        {
+            if (Closable                                   &&
+                IsMouseOverCloseButton                     &&
+                MouseManager.MouseState == MouseState.None &&
+                previousMouseState      == MouseState.Left)
+            {
+                // Close the window.
+
+                Closing = true;
+            }
+
+            if (IsMouseOverTitleBar                         &&
+                !IsMouseOverCloseButton                     &&
+                MouseManager.MouseState == MouseState.Left  &&
+                previousMouseState      == MouseState.None)
+            {
+                // Start dragging the window.
+
+                DragStartX = X;
+                DragStartY = Y;
+                DragStartMouseX = (int)MouseManager.X;
+                DragStartMouseY = (int)MouseManager.Y;
+
+                Dragging = true;
+            }
+
+            if (MouseManager.MouseState == MouseState.None)
+            {
+                // Stop dragging the window.
+
+                Dragging = false;
+            }
+
+            if (Dragging)
+            {
+                // Do the drag operation.
+
+                X = (int)(DragStartX + (MouseManager.X - DragStartMouseX));
+                Y = (int)(DragStartY + (MouseManager.Y - DragStartMouseY));
+            }
+
+            if (IsMouseOver                                 &&
+                MouseManager.MouseState == MouseState.None  &&
+                previousMouseState      == MouseState.Left)
+            {
+                foreach (Control control in Controls)
                 {
-                    if (Sys.MouseManager.X > this.X + this.Contents.Width - 14 && Sys.MouseManager.X < this.X + this.Contents.Width - 2 && Sys.MouseManager.Y > this.Y + 2 && Sys.MouseManager.Y < this.Y + 14)
+                    if (MouseManager.X >= X + control.X                          &&
+                        MouseManager.X <  X + control.X + control.Contents.Width &&
+                        MouseManager.Y >= Y + control.Y                          &&
+                        MouseManager.Y <  Y + control.Y + control.Contents.Height)
                     {
-                        this.Visible = false;
+                        control.Clicked?.Invoke();
                     }
                 }
             }
-            else
+
+            previousMouseState = MouseManager.MouseState;
+        }
+
+        public void DrawWindow(Canvas cv)
+        {
+            if (HasTitlebar)
             {
-                mouseClicked = false;
+                // Title bar.
+                cv.DrawFilledRectangle(X, Y, Contents.Width, 16, 0, Color.DeepGray);
+                cv.DrawString(X + 1, Y, Title, BetterConsole.font, Color.White);
+
+                // Close button.
+                if (Closable)
+                    cv.DrawImage(X + Contents.Width - 14, Y + 2, closeButton);
             }
+
+            // Window contents.
+            cv.DrawImage(X, Y + (HasTitlebar ? 16 : 0), Contents, false);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace GoOS.GUI.Apps
             this.Y = 50;
             this.Title = "GTerm";
             this.Visible = true;
-            this.Closeable = true;
+            this.Closable = true;
         }
 
         public override void Update()
