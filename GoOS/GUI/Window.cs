@@ -10,9 +10,11 @@ namespace GoOS.GUI
     public abstract class Window
     {
         public Canvas Contents;
-        public ushort X, Y;
+        public int X, Y; //This doesnt have to be a UInt16
         public string Title;
         public bool Visible;
+        public bool Closeable;
+        public bool Moving;
 
         public abstract void Update();
     }

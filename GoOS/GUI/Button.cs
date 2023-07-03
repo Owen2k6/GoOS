@@ -32,7 +32,9 @@ namespace GoOS.GUI
             {
                 if (Sys.MouseManager.X > X && Sys.MouseManager.X < X + Contents.Width && Sys.MouseManager.Y > Y && Sys.MouseManager.Y < Y + Contents.Height)
                 {
-                    WindowManager.Windows.Add(new Apps.GTerm());
+                    if (Title == "GTerm") {
+                        WindowManager.Windows.Add(new Apps.GTerm());
+                    }
                 }
             }
         }

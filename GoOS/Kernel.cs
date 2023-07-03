@@ -68,7 +68,7 @@ namespace GoOS
             Console.Init(800, 600);
 
             //WindowManager.Windows.Add(new GTerm());
-            WindowManager.Windows.Add(new Demo());
+            WindowManager.Windows.Add(new AppManager());
 
             ThemeManager.SetTheme(Theme.Fallback);
             log(ThemeManager.WindowText, "GoOS - Starting GoOS...");
