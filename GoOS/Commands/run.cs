@@ -18,6 +18,8 @@ namespace GoOS.Commands
 
         static Dictionary<string, int> Integers = new Dictionary<string, int>() { };
 
+        public static string[] InstallLines;
+
         public static void Main(string run)
         {
             String inputaman = run;
@@ -43,587 +45,635 @@ namespace GoOS.Commands
 
                     bool poo = false;
 
+                    bool installMode = false;
+                    string installName = "blank";
+                    
                     for (int i = 0; i < content.Length; i++)
                     {
                         string line = content[i];
+
+                        if (line.TrimStart().StartsWith("install"))
+                        {
+                            installName = line.Split('=')[1];
+                            installMode = true;
+                        }
                         
-                        if (poo)
+                        if (installMode)
                         {
-                            line = line.Split(": ")[1].Trim();
-                            poo = false;
+                            if (!line.TrimStart().StartsWith("end"))
+                            {
+                                InstallLines.Append(line);
+                            }
+                            else
+                            {
+                                InstallLines.Append("end");
+                                
+                                Make.MakeFile(@"0:\content\GMI\" + installName);
+                            }
                         }
-
-                        //log(Magenta, "LINE FOUND: CONTENT: " + line);
-
-                        if (line.StartsWith("#"))
+                        else if (!installMode)
                         {
-                        }
+                            if (poo)
+                            {
+                                line = line.Split(": ")[1].Trim();
+                                poo = false;
+                            }
 
-                        if (line.StartsWith(""))
-                        {
-                        }
+                            //log(Magenta, "LINE FOUND: CONTENT: " + line);
 
-                        if (line.StartsWith("goto"))
-                        {
-                            try
+                            if (line.StartsWith("#"))
+                            {
+                            }
+
+                            if (line.StartsWith(""))
+                            {
+                            }
+
+                            if (line.StartsWith("goto"))
+                            {
+                                try
+                                {
+                                    String howlong = line.Split("=")[1];
+                                    int potato = Convert.ToInt32(howlong);
+                                    i = potato;
+                                }
+                                catch (Exception)
+                                {
+                                    Console.WriteLine("owen caused 9/11");
+                                }
+                            }
+
+                            if (line.StartsWith("sleep"))
                             {
                                 String howlong = line.Split("=")[1];
                                 int potato = Convert.ToInt32(howlong);
-                                i = potato;
-                            }
-                            catch (Exception)
-                            {
-                                Console.WriteLine("owen caused 9/11");
-                            }
-                        }
 
-                        if (line.StartsWith("sleep"))
-                        {
-                            String howlong = line.Split("=")[1];
-                            int potato = Convert.ToInt32(howlong);
-                            
-                            //while (true)
-                            //{
-                            //    Console.WriteLine("Haha you've been fooled!");
-                            //}
+                                //while (true)
+                                //{
+                                //    Console.WriteLine("Haha you've been fooled!");
+                                //}
 
-                            System.Threading.Thread.Sleep(potato);
-                        }
-
-                        if (line.StartsWith("input"))
-                        {
-                            if (line == "input=")
-                            {
-                                textcolour(Blue);
-                                theysaid = Console.ReadLine();
-                            }
-                            else
-                            {
-                                String addon = line.Replace("input=", "");
-                                write(addon);
-                                textcolour(Blue);
-                                theysaid = Console.ReadLine();
-                            }
-                        }
-
-                        if (line.StartsWith("stop"))
-                        {
-                            if (line == "stop=")
-                            {
-                                textcolour(Blue);
-                                log(Green, "Press any key to continue...");
-                                Console.ReadKey();
-                                Console.WriteLine();
-                            }
-                            else
-                            {
-                                String addon = line.Replace("stop=", "");
-                                textcolour(DarkRed);
-                                write(addon);
-                                textcolour(Blue);
-                                Console.ReadKey();
-                                Console.WriteLine();
-                            }
-                        }
-
-                        if (line.StartsWith("endmsg"))
-                        {
-                            endmessage = line.Replace("endmsg=", "");
-                        }
-
-                        if (line.StartsWith("regprog"))
-                        {
-                            if (hasbeenregistered)
-                            {
-                                log(ThemeManager.ErrorText,
-                                    "Attempted second register. Application may be attempting to reregister as another application!!!");
-                                break;
+                                System.Threading.Thread.Sleep(potato);
                             }
 
-                            fuckingprogramname = line.Replace("regprog=", "");
-                            hasbeenregistered = true;
-                            if (!Directory.Exists(@"0:\content\prf\"))
+                            if (line.StartsWith("input"))
                             {
-                                Directory.CreateDirectory(@"0:\content\prf\");
-                                if (!Directory.Exists(@"0:\content\prf\" + fuckingprogramname + @"\"))
+                                if (line == "input=")
+                                {
+                                    textcolour(Blue);
+                                    theysaid = Console.ReadLine();
+                                }
+                                else
+                                {
+                                    String addon = line.Replace("input=", "");
+                                    write(addon);
+                                    textcolour(Blue);
+                                    theysaid = Console.ReadLine();
+                                }
+                            }
+
+                            if (line.StartsWith("stop"))
+                            {
+                                if (line == "stop=")
+                                {
+                                    textcolour(Blue);
+                                    log(Green, "Press any key to continue...");
+                                    Console.ReadKey();
+                                    Console.WriteLine();
+                                }
+                                else
+                                {
+                                    String addon = line.Replace("stop=", "");
+                                    textcolour(DarkRed);
+                                    write(addon);
+                                    textcolour(Blue);
+                                    Console.ReadKey();
+                                    Console.WriteLine();
+                                }
+                            }
+
+                            if (line.StartsWith("endmsg"))
+                            {
+                                endmessage = line.Replace("endmsg=", "");
+                            }
+
+                            if (line.StartsWith("regprog"))
+                            {
+                                if (hasbeenregistered)
+                                {
+                                    log(ThemeManager.ErrorText,
+                                        "Attempted second register. Application may be attempting to reregister as another application!!!");
+                                    break;
+                                }
+
+                                fuckingprogramname = line.Replace("regprog=", "");
+                                hasbeenregistered = true;
+                                if (!Directory.Exists(@"0:\content\prf\"))
+                                {
+                                    Directory.CreateDirectory(@"0:\content\prf\");
+                                    if (!Directory.Exists(@"0:\content\prf\" + fuckingprogramname + @"\"))
+                                    {
+                                        Directory.CreateDirectory(@"0:\content\prf\" + fuckingprogramname + @"\");
+                                    }
+                                }
+                                else if (!Directory.Exists(@"0:\content\prf\" + fuckingprogramname + @"\"))
                                 {
                                     Directory.CreateDirectory(@"0:\content\prf\" + fuckingprogramname + @"\");
                                 }
                             }
-                            else if (!Directory.Exists(@"0:\content\prf\" + fuckingprogramname + @"\"))
-                            {
-                                Directory.CreateDirectory(@"0:\content\prf\" + fuckingprogramname + @"\");
-                            }
-                        }
 
-                        if (line.StartsWith("string"))
-                        {
-                            string whythehellnotwork = line.Replace(@"string ", "");
-                            string varName = whythehellnotwork.Split(@" = ")[0];
-                            string varContents = whythehellnotwork.Split(@" = ")[1];
+                            if (line.StartsWith("string"))
+                            {
+                                string whythehellnotwork = line.Replace(@"string ", "");
+                                string varName = whythehellnotwork.Split(@" = ")[0];
+                                string varContents = whythehellnotwork.Split(@" = ")[1];
 
-                            if (Strings.ContainsKey(varName))
-                            {
-                                Strings.Remove(varName);
-                            }
-                            
-                            Strings.Add(varName, varContents);
-                        }
+                                if (Strings.ContainsKey(varName))
+                                {
+                                    Strings.Remove(varName);
+                                }
 
-                        if (line.StartsWith("int"))
-                        {
-                            int intCont = 0;
-                            string whythehellnotwork = line.Replace(@"int ", "");
-                            string varName = whythehellnotwork.Split(@" = ")[0];
-                            string varContents = whythehellnotwork.Split(@" = ")[1];
-                            try
-                            {
-                                intCont = int.Parse(varContents);
-                            }
-                            catch
-                            {
-                                Console.WriteLine(@"Integer: int " + varName + " is formatted incorrectly.");
+                                Strings.Add(varName, varContents);
                             }
 
-                            string trueCont = intCont.ToString();
-
-                            if (Integers.ContainsKey(varName))
+                            if (line.StartsWith("int"))
                             {
-                                Integers.Remove(varName);
+                                int intCont = 0;
+                                string whythehellnotwork = line.Replace(@"int ", "");
+                                string varName = whythehellnotwork.Split(@" = ")[0];
+                                string varContents = whythehellnotwork.Split(@" = ")[1];
+                                try
+                                {
+                                    intCont = int.Parse(varContents);
+                                }
+                                catch
+                                {
+                                    Console.WriteLine(@"Integer: int " + varName + " is formatted incorrectly.");
+                                }
+
+                                string trueCont = intCont.ToString();
+
+                                if (Integers.ContainsKey(varName))
+                                {
+                                    Integers.Remove(varName);
+                                }
+
+
+                                Strings.Add(varName, trueCont);
                             }
 
-
-                            Strings.Add(varName, trueCont);
-                        }
-
-                        if (line.StartsWith(@"print="))
-                        {
-                            string assSplitter = line.Replace(@"print=", "");
-                            // we like splitting ass round here
-
-                            string[] ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN = assSplitter.Split(" + ");
-
-                            foreach (var ASS in ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN)
+                            if (line.StartsWith(@"print="))
                             {
-                                if (ASS.Contains("\""))
-                                {
-                                    string thighs = ASS.Replace("\"", "");
-                                    string AccountingForNewline = thighs;
+                                string assSplitter = line.Replace(@"print=", "");
+                                // we like splitting ass round here
 
-                                    if (thighs.Contains("\\n"))
-                                    {
-                                        AccountingForNewline = thighs.Replace("\\n", "\n");
-                                    }
+                                string[]
+                                    ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN =
+                                        assSplitter.Split(" + ");
 
-                                    /////////////////////////////////////// Trying to make \n work ////////////////////////////////////////
-                                    // Input: "Hi!\nHello."                                                                              //
-                                    // What I want it to output: "Hi!\n" "Hello."                                                        //
-                                    // (and actually make a new line)                                                                    //
-                                    // Just that the code itself has the quotes removed, I had to use them to show the separate strings. //
-                                    ///////////////////////////////////////////////////////////////////////////////////////////////////////
-                                    
-                                    Console.Write(AccountingForNewline);
-                                }
-                                else if (Strings.TryGetValue(ASS, out string what))
+                                foreach (var ASS in
+                                         ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN)
                                 {
-                                    try
+                                    if (ASS.Contains("\""))
                                     {
-                                        Console.Write(what);
-                                    }
-                                    catch
-                                    {
-                                        Console.Write("owen is gay");
-                                    }
-                                }
-                                else if (Integers.TryGetValue(ASS, out int whatint))
-                                {
-                                    try
-                                    {
-                                        Console.Write(what);
-                                    }
-                                    catch
-                                    {
-                                        Console.WriteLine("owen is gay");
-                                    }
-                                }
-                            }
-                        }
-                        
-                        if (line.StartsWith(@"println="))
-                        {
-                            string assSplitter = line.Replace(@"println=", "");
-                            // we like splitting ass round here
+                                        string thighs = ASS.Replace("\"", "");
+                                        string AccountingForNewline = thighs;
 
-                            string[] ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN = assSplitter.Split(" + ");
-
-                            for (int e = 0; e < ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN.Length; e++)
-                            {
-                                if (ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN[e].Contains("\""))
-                                {
-                                    string thighs = ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN[e].Replace("\"", "");
-                                    string AccountingForNewline = thighs;
-
-                                    if (thighs.Contains("\\n"))
-                                    {
-                                        AccountingForNewline = thighs.Replace("\\n", "\n");
-                                    }
-
-                                    /////////////////////////////////////// Trying to make \n work ////////////////////////////////////////
-                                    // Input: "Hi!\nHello."                                                                              //
-                                    // What I want it to output: "Hi!\n" "Hello."                                                        //
-                                    // (and actually make a new line)                                                                    //
-                                    // Just that the code itself has the quotes removed, I had to use them to show the separate strings. //
-                                    ///////////////////////////////////////////////////////////////////////////////////////////////////////
-                                    
-                                    Console.Write(AccountingForNewline);
-                                }
-                                else if (Strings.TryGetValue(ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN[e], out string what))
-                                {
-                                    try
-                                    {
-                                        Console.Write(what);
-                                    }
-                                    catch
-                                    {
-                                        Console.Write("owen is gay");
-                                    }
-                                }
-                                else if (Integers.TryGetValue(ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN[e], out int whatint))
-                                {
-                                    try
-                                    {
-                                        Console.Write(what);
-                                    }
-                                    catch
-                                    {
-                                        Console.WriteLine("owen is gay");
-                                    }
-                                }
-                            }
-                            
-                            Console.WriteLine();
-                        }
-
-                        if (line.StartsWith("if"))
-                        {
-                            string[] args = line.Split(" ");
-
-                            if (args[2] == " == ")
-                            {
-                                if (Strings.TryGetValue(args[1].Trim(), out string strval))
-                                {
-                                    if (strval == args[4])
-                                    {
-                                        poo = true;
-                                        i--;
-                                        continue;
-                                    }
-                                    else
-                                    {
-                                        poo = false;
-                                        continue;
-                                    }
-                                }
-                            }
-                        }
-
-                        if (line.StartsWith(@"save="))
-                        {
-                            string whatvartosave = line.Substring(5);
-                            if (Strings.TryGetValue(whatvartosave, out string strval))
-                            {
-                                if (Directory.Exists(@"0:\content\prf\"))
-                                {
-                                    if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
-                                                     @".txt"))
-                                    {
-                                        File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
-                                                    @".txt");
-                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
-                                                                         @"\" + whatvartosave + @".txt");
-                                        tw.WriteLine(strval);
-                                        tw.Write(@"type=string");
-                                        tw.Close();
-                                    }
-                                    else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" +
-                                                         whatvartosave + @".txt"))
-                                    {
-                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
-                                                                         @"\" + whatvartosave + @".txt");
-                                        tw.WriteLine(strval);
-                                        tw.Write(@"type=string");
-                                        tw.Close();
-                                    }
-                                }
-                                else if (!Directory.Exists(@"0:\content\prf\"))
-                                {
-                                    Directory.CreateDirectory(@"0:\content\prf\");
-                                    if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
-                                                     @".txt"))
-                                    {
-                                        File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
-                                                    @".txt");
-                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
-                                                                         @"\" + whatvartosave + @".txt");
-                                        tw.WriteLine(strval);
-                                        tw.Write(@"type=string");
-                                        tw.Close();
-                                    }
-                                    else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" +
-                                                         whatvartosave + @".txt"))
-                                    {
-                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
-                                                                         @"\" + whatvartosave + @".txt");
-                                        tw.WriteLine(strval);
-                                        tw.Write(@"type=string");
-                                        tw.Close();
-                                    }
-                                }
-                            }
-                            else if (Integers.TryGetValue(whatvartosave, out int intval))
-                            {
-                                if (Directory.Exists(@"0:\content\prf\"))
-                                {
-                                    if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
-                                                     @".txt"))
-                                    {
-                                        File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
-                                                    @".txt");
-                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
-                                                                         @"\" + whatvartosave + @".txt");
-                                        tw.WriteLine(intval);
-                                        tw.Write(@"type=int");
-                                        tw.Close();
-                                    }
-                                    else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" +
-                                                         whatvartosave + @".txt"))
-                                    {
-                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
-                                                                         @"\" + whatvartosave + @".txt");
-                                        tw.WriteLine(intval);
-                                        tw.Write(@"type=int");
-                                        tw.Close();
-                                    }
-                                }
-                                else if (!Directory.Exists(@"0:\content\prf\"))
-                                {
-                                    Directory.CreateDirectory(@"0:\content\prf\");
-                                    if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
-                                                     @".txt"))
-                                    {
-                                        File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
-                                                    @".txt");
-                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
-                                                                         @"\" + whatvartosave + @".txt");
-                                        tw.WriteLine(intval);
-                                        tw.Write(@"type=int");
-                                        tw.Close();
-                                    }
-                                    else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" +
-                                                         whatvartosave + @".txt"))
-                                    {
-                                        TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
-                                                                         @"\" + whatvartosave + @".txt");
-                                        tw.WriteLine(intval);
-                                        tw.Write(@"type=int");
-                                        tw.Close();
-                                    }
-                                }
-                            }
-                        }
-
-                        if (line.StartsWith(@"load="))
-                        {
-                            int intCont = 0;
-                            string whatvartoload = line.Substring(5);
-                            string ass = null;
-                            string assType = null;
-                            if (Strings.TryGetValue(whatvartoload, out string strval))
-                            {
-                                if (File.Exists(
-                                        @"0:\content\prf\" + fuckingprogramname + @"\" + whatvartoload + @".txt"))
-                                {
-                                    using (StreamReader streamReader = new StreamReader(
-                                               @"0:\content\prf\" + fuckingprogramname + @"\" + whatvartoload + @".txt",
-                                               Encoding.UTF8))
-                                    {
-                                        ass = File.ReadLines(@"0:\content\prf\" + fuckingprogramname + @"\" +
-                                                             whatvartoload + @".txt").Skip(0).Take(1).First();
-                                        assType = File
-                                            .ReadLines(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartoload +
-                                                       @".txt").Skip(1).Take(1).First();
-                                        string assSplitter2 = assType.Split('=')[1];
-                                        if (assSplitter2 == "string")
+                                        if (thighs.Contains("\\n"))
                                         {
-                                            if (Strings.ContainsKey(whatvartoload))
-                                            {
-                                                Strings.Remove(whatvartoload);
-                                            }
-
-                                            Strings.Add(whatvartoload, ass);
+                                            AccountingForNewline = thighs.Replace("\\n", "\n");
                                         }
 
-                                        if (assSplitter2 == "int")
+                                        /////////////////////////////////////// Trying to make \n work ////////////////////////////////////////
+                                        // Input: "Hi!\nHello."                                                                              //
+                                        // What I want it to output: "Hi!\n" "Hello."                                                        //
+                                        // (and actually make a new line)                                                                    //
+                                        // Just that the code itself has the quotes removed, I had to use them to show the separate strings. //
+                                        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                                        Console.Write(AccountingForNewline);
+                                    }
+                                    else if (Strings.TryGetValue(ASS, out string what))
+                                    {
+                                        try
                                         {
-                                            try
-                                            {
-                                                intCont = int.Parse(ass);
-                                            }
-                                            catch
-                                            {
-                                                Console.WriteLine(@"Load: int " + whatvartoload +
-                                                                  " is formatted incorrectly.");
-                                            }
-
-                                            string trueCont = intCont.ToString();
-
-                                            if (Integers.ContainsKey(whatvartoload))
-                                            {
-                                                Integers.Remove(whatvartoload);
-                                            }
-
-                                            Integers.Add(whatvartoload, intCont);
+                                            Console.Write(what);
+                                        }
+                                        catch
+                                        {
+                                            Console.Write("owen is gay");
+                                        }
+                                    }
+                                    else if (Integers.TryGetValue(ASS, out int whatint))
+                                    {
+                                        try
+                                        {
+                                            Console.Write(what);
+                                        }
+                                        catch
+                                        {
+                                            Console.WriteLine("owen is gay");
                                         }
                                     }
                                 }
                             }
-                        }
 
-                        if (line.StartsWith("frontcolor="))
-                        {
-                            string ass = line.Substring(11);
-                            if (ass == "white")
+                            if (line.StartsWith(@"println="))
                             {
-                                Console.ForegroundColor = White;
-                            }
-                            else if (ass == "blue")
-                            {
-                                Console.ForegroundColor = Blue;
-                            }
-                            else if (ass == "green")
-                            {
-                                Console.ForegroundColor = Green;
-                            }
-                            else if (ass == "yellow")
-                            {
-                                Console.ForegroundColor = Yellow;
-                            }
-                            else if (ass == "black")
-                            {
-                                Console.ForegroundColor = Black;
-                            }
-                            else if (ass == "cyan")
-                            {
-                                Console.ForegroundColor = Cyan;
-                            }
-                            else if (ass == "gray")
-                            {
-                                Console.ForegroundColor = Gray;
-                            }
-                            else if (ass == "magenta")
-                            {
-                                Console.ForegroundColor = Magenta;
-                            }
-                            else if (ass == "red")
-                            {
-                                Console.ForegroundColor = Red;
-                            }
-                            else if (ass == "darkblue")
-                            {
-                                Console.ForegroundColor = DarkBlue;
-                            }
-                            else if (ass == "darkcyan")
-                            {
-                                Console.ForegroundColor = DarkCyan;
-                            }
-                            else if (ass == "darkgray")
-                            {
-                                Console.ForegroundColor = DarkGray;
-                            }
-                            else if (ass == "darkgreen")
-                            {
-                                Console.ForegroundColor = DarkGreen;
-                            }
-                            else if (ass == "darkmageneta")
-                            {
-                                Console.ForegroundColor = DarkMagenta;
-                            }
-                            else if (ass == "darkred")
-                            {
-                                Console.ForegroundColor = DarkRed;
-                            }
-                            else if (ass == "darkyellow")
-                            {
-                                Console.ForegroundColor = DarkYellow;
-                            }
-                        }
+                                string assSplitter = line.Replace(@"println=", "");
+                                // we like splitting ass round here
 
-                        if (line.StartsWith("backcolor="))
-                        {
-                            string ass = line.Substring(10);
-                            if (ass == "white")
-                            {
-                                Console.BackgroundColor = White;
+                                string[]
+                                    ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN =
+                                        assSplitter.Split(" + ");
+
+                                for (int e = 0;
+                                     e <
+                                     ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN
+                                         .Length;
+                                     e++)
+                                {
+                                    if
+                                        (ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN
+                                             [e].Contains("\""))
+                                    {
+                                        string thighs =
+                                            ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN
+                                                [e].Replace("\"", "");
+                                        string AccountingForNewline = thighs;
+
+                                        if (thighs.Contains("\\n"))
+                                        {
+                                            AccountingForNewline = thighs.Replace("\\n", "\n");
+                                        }
+
+                                        /////////////////////////////////////// Trying to make \n work ////////////////////////////////////////
+                                        // Input: "Hi!\nHello."                                                                              //
+                                        // What I want it to output: "Hi!\n" "Hello."                                                        //
+                                        // (and actually make a new line)                                                                    //
+                                        // Just that the code itself has the quotes removed, I had to use them to show the separate strings. //
+                                        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                                        Console.Write(AccountingForNewline);
+                                    }
+                                    else if (Strings.TryGetValue(
+                                                 ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN
+                                                     [e], out string what))
+                                    {
+                                        try
+                                        {
+                                            Console.Write(what);
+                                        }
+                                        catch
+                                        {
+                                            Console.Write("owen is gay");
+                                        }
+                                    }
+                                    else if (Integers.TryGetValue(
+                                                 ARE_YOU_GONNA_SINK_OR_SWIM_IN_questionMark_FIGHTING_FOR_MY_ATTENTION_questionMark_ONE_LOOK_GOT_YOU_LIMPING_comma_ANNY_GOT_YOU_SIMPIN
+                                                     [e], out int whatint))
+                                    {
+                                        try
+                                        {
+                                            Console.Write(what);
+                                        }
+                                        catch
+                                        {
+                                            Console.WriteLine("owen is gay");
+                                        }
+                                    }
+                                }
+
+                                Console.WriteLine();
                             }
-                            else if (ass == "blue")
+
+                            if (line.StartsWith("if"))
                             {
-                                Console.BackgroundColor = Blue;
+                                string[] args = line.Split(" ");
+
+                                if (args[2] == " == ")
+                                {
+                                    if (Strings.TryGetValue(args[1].Trim(), out string strval))
+                                    {
+                                        if (strval == args[4])
+                                        {
+                                            poo = true;
+                                            i--;
+                                            continue;
+                                        }
+                                        else
+                                        {
+                                            poo = false;
+                                            continue;
+                                        }
+                                    }
+                                }
                             }
-                            else if (ass == "green")
+
+                            if (line.StartsWith(@"save="))
                             {
-                                Console.BackgroundColor = Green;
+                                string whatvartosave = line.Substring(5);
+                                if (Strings.TryGetValue(whatvartosave, out string strval))
+                                {
+                                    if (Directory.Exists(@"0:\content\prf\"))
+                                    {
+                                        if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" +
+                                                         whatvartosave +
+                                                         @".txt"))
+                                        {
+                                            File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
+                                                        @".txt");
+                                            TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
+                                                                             @"\" + whatvartosave + @".txt");
+                                            tw.WriteLine(strval);
+                                            tw.Write(@"type=string");
+                                            tw.Close();
+                                        }
+                                        else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" +
+                                                             whatvartosave + @".txt"))
+                                        {
+                                            TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
+                                                                             @"\" + whatvartosave + @".txt");
+                                            tw.WriteLine(strval);
+                                            tw.Write(@"type=string");
+                                            tw.Close();
+                                        }
+                                    }
+                                    else if (!Directory.Exists(@"0:\content\prf\"))
+                                    {
+                                        Directory.CreateDirectory(@"0:\content\prf\");
+                                        if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" +
+                                                         whatvartosave +
+                                                         @".txt"))
+                                        {
+                                            File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
+                                                        @".txt");
+                                            TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
+                                                                             @"\" + whatvartosave + @".txt");
+                                            tw.WriteLine(strval);
+                                            tw.Write(@"type=string");
+                                            tw.Close();
+                                        }
+                                        else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" +
+                                                             whatvartosave + @".txt"))
+                                        {
+                                            TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
+                                                                             @"\" + whatvartosave + @".txt");
+                                            tw.WriteLine(strval);
+                                            tw.Write(@"type=string");
+                                            tw.Close();
+                                        }
+                                    }
+                                }
+                                else if (Integers.TryGetValue(whatvartosave, out int intval))
+                                {
+                                    if (Directory.Exists(@"0:\content\prf\"))
+                                    {
+                                        if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" +
+                                                         whatvartosave +
+                                                         @".txt"))
+                                        {
+                                            File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
+                                                        @".txt");
+                                            TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
+                                                                             @"\" + whatvartosave + @".txt");
+                                            tw.WriteLine(intval);
+                                            tw.Write(@"type=int");
+                                            tw.Close();
+                                        }
+                                        else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" +
+                                                             whatvartosave + @".txt"))
+                                        {
+                                            TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
+                                                                             @"\" + whatvartosave + @".txt");
+                                            tw.WriteLine(intval);
+                                            tw.Write(@"type=int");
+                                            tw.Close();
+                                        }
+                                    }
+                                    else if (!Directory.Exists(@"0:\content\prf\"))
+                                    {
+                                        Directory.CreateDirectory(@"0:\content\prf\");
+                                        if (!File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" +
+                                                         whatvartosave +
+                                                         @".txt"))
+                                        {
+                                            File.Create(@"0:\content\prf\" + fuckingprogramname + @"\" + whatvartosave +
+                                                        @".txt");
+                                            TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
+                                                                             @"\" + whatvartosave + @".txt");
+                                            tw.WriteLine(intval);
+                                            tw.Write(@"type=int");
+                                            tw.Close();
+                                        }
+                                        else if (File.Exists(@"0:\content\prf\" + fuckingprogramname + @"\" +
+                                                             whatvartosave + @".txt"))
+                                        {
+                                            TextWriter tw = new StreamWriter(@"0:\content\prf\" + fuckingprogramname +
+                                                                             @"\" + whatvartosave + @".txt");
+                                            tw.WriteLine(intval);
+                                            tw.Write(@"type=int");
+                                            tw.Close();
+                                        }
+                                    }
+                                }
                             }
-                            else if (ass == "yellow")
+
+                            if (line.StartsWith(@"load="))
                             {
-                                Console.BackgroundColor = Yellow;
+                                int intCont = 0;
+                                string whatvartoload = line.Substring(5);
+                                string ass = null;
+                                string assType = null;
+                                if (Strings.TryGetValue(whatvartoload, out string strval))
+                                {
+                                    if (File.Exists(
+                                            @"0:\content\prf\" + fuckingprogramname + @"\" + whatvartoload + @".txt"))
+                                    {
+                                        using (StreamReader streamReader = new StreamReader(
+                                                   @"0:\content\prf\" + fuckingprogramname + @"\" + whatvartoload +
+                                                   @".txt",
+                                                   Encoding.UTF8))
+                                        {
+                                            ass = File.ReadLines(@"0:\content\prf\" + fuckingprogramname + @"\" +
+                                                                 whatvartoload + @".txt").Skip(0).Take(1).First();
+                                            assType = File
+                                                .ReadLines(@"0:\content\prf\" + fuckingprogramname + @"\" +
+                                                           whatvartoload +
+                                                           @".txt").Skip(1).Take(1).First();
+                                            string assSplitter2 = assType.Split('=')[1];
+                                            if (assSplitter2 == "string")
+                                            {
+                                                if (Strings.ContainsKey(whatvartoload))
+                                                {
+                                                    Strings.Remove(whatvartoload);
+                                                }
+
+                                                Strings.Add(whatvartoload, ass);
+                                            }
+
+                                            if (assSplitter2 == "int")
+                                            {
+                                                try
+                                                {
+                                                    intCont = int.Parse(ass);
+                                                }
+                                                catch
+                                                {
+                                                    Console.WriteLine(@"Load: int " + whatvartoload +
+                                                                      " is formatted incorrectly.");
+                                                }
+
+                                                string trueCont = intCont.ToString();
+
+                                                if (Integers.ContainsKey(whatvartoload))
+                                                {
+                                                    Integers.Remove(whatvartoload);
+                                                }
+
+                                                Integers.Add(whatvartoload, intCont);
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                            else if (ass == "black")
+
+                            if (line.StartsWith("frontcolor="))
                             {
-                                Console.BackgroundColor = Black;
+                                string ass = line.Substring(11);
+                                if (ass == "white")
+                                {
+                                    Console.ForegroundColor = White;
+                                }
+                                else if (ass == "blue")
+                                {
+                                    Console.ForegroundColor = Blue;
+                                }
+                                else if (ass == "green")
+                                {
+                                    Console.ForegroundColor = Green;
+                                }
+                                else if (ass == "yellow")
+                                {
+                                    Console.ForegroundColor = Yellow;
+                                }
+                                else if (ass == "black")
+                                {
+                                    Console.ForegroundColor = Black;
+                                }
+                                else if (ass == "cyan")
+                                {
+                                    Console.ForegroundColor = Cyan;
+                                }
+                                else if (ass == "gray")
+                                {
+                                    Console.ForegroundColor = Gray;
+                                }
+                                else if (ass == "magenta")
+                                {
+                                    Console.ForegroundColor = Magenta;
+                                }
+                                else if (ass == "red")
+                                {
+                                    Console.ForegroundColor = Red;
+                                }
+                                else if (ass == "darkblue")
+                                {
+                                    Console.ForegroundColor = DarkBlue;
+                                }
+                                else if (ass == "darkcyan")
+                                {
+                                    Console.ForegroundColor = DarkCyan;
+                                }
+                                else if (ass == "darkgray")
+                                {
+                                    Console.ForegroundColor = DarkGray;
+                                }
+                                else if (ass == "darkgreen")
+                                {
+                                    Console.ForegroundColor = DarkGreen;
+                                }
+                                else if (ass == "darkmageneta")
+                                {
+                                    Console.ForegroundColor = DarkMagenta;
+                                }
+                                else if (ass == "darkred")
+                                {
+                                    Console.ForegroundColor = DarkRed;
+                                }
+                                else if (ass == "darkyellow")
+                                {
+                                    Console.ForegroundColor = DarkYellow;
+                                }
                             }
-                            else if (ass == "cyan")
+
+                            if (line.StartsWith("backcolor="))
                             {
-                                Console.BackgroundColor = Cyan;
-                            }
-                            else if (ass == "gray")
-                            {
-                                Console.BackgroundColor = Gray;
-                            }
-                            else if (ass == "magenta")
-                            {
-                                Console.BackgroundColor = Magenta;
-                            }
-                            else if (ass == "red")
-                            {
-                                Console.BackgroundColor = Red;
-                            }
-                            else if (ass == "darkblue")
-                            {
-                                Console.BackgroundColor = DarkBlue;
-                            }
-                            else if (ass == "darkcyan")
-                            {
-                                Console.BackgroundColor = DarkCyan;
-                            }
-                            else if (ass == "darkgray")
-                            {
-                                Console.BackgroundColor = DarkGray;
-                            }
-                            else if (ass == "darkgreen")
-                            {
-                                Console.BackgroundColor = DarkGreen;
-                            }
-                            else if (ass == "darkmageneta")
-                            {
-                                Console.BackgroundColor = DarkMagenta;
-                            }
-                            else if (ass == "darkred")
-                            {
-                                Console.BackgroundColor = DarkRed;
-                            }
-                            else if (ass == "darkyellow")
-                            {
-                                Console.BackgroundColor = DarkYellow;
+                                string ass = line.Substring(10);
+                                if (ass == "white")
+                                {
+                                    Console.BackgroundColor = White;
+                                }
+                                else if (ass == "blue")
+                                {
+                                    Console.BackgroundColor = Blue;
+                                }
+                                else if (ass == "green")
+                                {
+                                    Console.BackgroundColor = Green;
+                                }
+                                else if (ass == "yellow")
+                                {
+                                    Console.BackgroundColor = Yellow;
+                                }
+                                else if (ass == "black")
+                                {
+                                    Console.BackgroundColor = Black;
+                                }
+                                else if (ass == "cyan")
+                                {
+                                    Console.BackgroundColor = Cyan;
+                                }
+                                else if (ass == "gray")
+                                {
+                                    Console.BackgroundColor = Gray;
+                                }
+                                else if (ass == "magenta")
+                                {
+                                    Console.BackgroundColor = Magenta;
+                                }
+                                else if (ass == "red")
+                                {
+                                    Console.BackgroundColor = Red;
+                                }
+                                else if (ass == "darkblue")
+                                {
+                                    Console.BackgroundColor = DarkBlue;
+                                }
+                                else if (ass == "darkcyan")
+                                {
+                                    Console.BackgroundColor = DarkCyan;
+                                }
+                                else if (ass == "darkgray")
+                                {
+                                    Console.BackgroundColor = DarkGray;
+                                }
+                                else if (ass == "darkgreen")
+                                {
+                                    Console.BackgroundColor = DarkGreen;
+                                }
+                                else if (ass == "darkmageneta")
+                                {
+                                    Console.BackgroundColor = DarkMagenta;
+                                }
+                                else if (ass == "darkred")
+                                {
+                                    Console.BackgroundColor = DarkRed;
+                                }
+                                else if (ass == "darkyellow")
+                                {
+                                    Console.BackgroundColor = DarkYellow;
+                                }
                             }
                         }
                     }

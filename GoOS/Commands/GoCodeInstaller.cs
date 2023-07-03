@@ -91,30 +91,54 @@ public class GoCodeInstaller
             foreach (var file in directory_list)
             {
                 if (file.EndsWith(".gexe"))
-                {
+                {   
                     string name = file.Replace(".gexe", "");
-
+                    
                     string location = @"0:\content\GCI\" + file;
 
-                    Kernel.InstalledPrograms.Add(name, location);
+                    if (!Kernel.InstalledPrograms.ContainsKey(name))
+                        Kernel.InstalledPrograms.Add(name, location);
                 }
                 else if (file.EndsWith(".goexe"))
                 {
                     string name = file.Replace(".goexe", "");
-
+                    
                     string location = @"0:\content\GCI\" + file;
 
-                    Kernel.InstalledPrograms.Add(name, location);
-                }
-                else
-                {
-                    
+                    if (!Kernel.InstalledPrograms.ContainsKey(name))
+                        Kernel.InstalledPrograms.Add(name, location);
                 }
             }
         }
         catch (Exception e)
         {
-            log(ThemeManager.ErrorText, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+            log(ThemeManager.ErrorText, "Error whilst trying to detect installed programs: " + e);
+        }
+    }
+
+    public static void Uninstall(string name)
+    {
+        if (Kernel.InstalledPrograms.ContainsKey(name))
+        {
+            string rootass = @"0:\";
+
+            string currentDIRRRRRR = Directory.GetCurrentDirectory();
+                        
+            Directory.SetCurrentDirectory(rootass);
+                        
+            Kernel.InstalledPrograms.TryGetValue(name, out string locat);
+
+            string TrueLocat = locat;
+                        
+            if (locat.Contains(@"0:\"))
+            {
+                TrueLocat = TrueLocat.Replace(@"0:\", "");
+            }
+                        
+            File.Delete(TrueLocat);
+            Kernel.InstalledPrograms.Remove(name);
+                        
+            Directory.SetCurrentDirectory(currentDIRRRRRR);
         }
     }
 }

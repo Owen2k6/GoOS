@@ -66,7 +66,7 @@ namespace GoOS
         public static string username = null;
         public static string computername = null;
 
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GoOS_Intro.bmp")] public static byte[] rawBootLogo;
+        [ManifestResourceStream(ResourceName = "GoOS.Res.GoOS_Intro.bmp")] public static byte[] rawBootLogo;
 
         protected override void BeforeRun()
         {
@@ -242,7 +242,20 @@ namespace GoOS
                     
                     GoCodeInstaller.Install(args[1]);
                     break;
-                
+                case "uninstall":
+                    if (args.Length < 2)
+                    {
+                        log(ThemeManager.ErrorText, "Missing arguments!");
+                        break;
+                    }
+                    if (args.Length > 2)
+                    {
+                        log(ThemeManager.ErrorText, "Too many arguments!");
+                        break;
+                    }
+                    
+                    GoCodeInstaller.Uninstall(args[1]);
+                    break;
                 case "movefile":
                     if (args.Length < 3)
                     {
@@ -619,15 +632,19 @@ namespace GoOS
                     break;
                 default:
                     if (isGCIenabled)
+                    {
                         GoCodeInstaller.CheckForInstalledPrograms();
+                    }
 
                     if (InstalledPrograms.ContainsKey(args[0]))
                     {
-                        
-                        
-                        string rootass = @"0:\";
-                        
 
+                        string rootass = @"0:\";
+
+                        string currentDIRRRRRR = Directory.GetCurrentDirectory();
+                        
+                        Directory.SetCurrentDirectory(rootass);
+                        
                         InstalledPrograms.TryGetValue(args[0], out string locat);
 
                         string TrueLocat = locat;
@@ -638,6 +655,8 @@ namespace GoOS
                         }
                         
                         Commands.Run.Main(TrueLocat);
+                        
+                        Directory.SetCurrentDirectory(currentDIRRRRRR);
                         break;
                     }
 
