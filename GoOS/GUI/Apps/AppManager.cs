@@ -21,11 +21,13 @@ namespace GoOS.GUI.Apps
             Contents.Clear(Color.White);
             X = 830;
             Y = 100;
-            Title = "GoOS App Manager";
+            Title = "GoOS Applications";
             Visible = true;
             Closable = true;
+            
+            Contents.DrawString(10, 5, "GoOS Administrative Applications", BetterConsole.font, Color.Black);
 
-            gtermButton = new Button(this, 10, 10, 64, 80, "GTerm")
+            gtermButton = new Button(this, 10, 15, 64, 80, "GTerm")
             {
                 UseSystemStyle = false,
                 BackgroundColour = Color.White,

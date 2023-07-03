@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Sys = Cosmos.System;
 using IL2CPU.API.Attribs;
 using PrismAPI.Hardware.GPU;
 using PrismAPI.Graphics;
 using Cosmos.Core.Memory;
 using PrismAPI.UI;
+using Cosmos.System;
 
 namespace GoOS.GUI
 {
@@ -18,6 +18,9 @@ namespace GoOS.GUI
         private static Canvas mouse = Image.FromBitmap(mouseRaw, false);
 
         private static bool initialised = false;
+        private static int framesToHeapCollect = 10;
+
+        private static MouseState previousMouseState = MouseState.None;
 
         private static readonly List<Window> windows = new List<Window>(10);
 
@@ -53,7 +56,8 @@ namespace GoOS.GUI
                 if (i != windows.Count - 1 && !areWindowsAlreadyMoving)
                 {
                     if (windows[i].IsMouseOver &&
-                    Sys.MouseManager.MouseState == Sys.MouseState.Left)
+                    MouseManager.MouseState == MouseState.None &&
+                    previousMouseState == MouseState.Left)
                     {
                         MoveWindowToFront(windows[i]);
                         break;
@@ -64,15 +68,15 @@ namespace GoOS.GUI
 
         private static void DrawMouse()
         {
-            Canvas.DrawImage((int)Sys.MouseManager.X, (int)Sys.MouseManager.Y, mouse, true);
+            Canvas.DrawImage((int)MouseManager.X, (int)MouseManager.Y, mouse, true);
         }
 
         public static void Update()
         {
             if (!initialised)
             {
-                Sys.MouseManager.ScreenWidth = 1280;
-                Sys.MouseManager.ScreenHeight = 720;
+                MouseManager.ScreenWidth = 1280;
+                MouseManager.ScreenHeight = 720;
                 initialised = true;
             }
 
@@ -114,7 +118,14 @@ namespace GoOS.GUI
 
             Canvas.Update();
 
-            Heap.Collect();
+            previousMouseState = MouseManager.MouseState;
+
+            if (framesToHeapCollect == 0)
+            {
+                Heap.Collect();
+                framesToHeapCollect = 10;
+            }
+            framesToHeapCollect--;
         }
     }
 }
