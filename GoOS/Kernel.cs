@@ -76,6 +76,9 @@ namespace GoOS
             //WindowManager.Windows.Add(new GTerm());
             WindowManager.AddWindow(new DesktopIcons());
 
+            var loadingDialogue = new LoadingDialogue();
+            WindowManager.AddWindow(loadingDialogue);
+
             ThemeManager.SetTheme(Theme.Fallback);
             log(ThemeManager.WindowText, "GoOS - Starting GoOS...");
             try
@@ -92,6 +95,9 @@ namespace GoOS
                 log(ThemeManager.ErrorText, "GoOS - Please verify that your hard disk is plugged in correctly.");
                 while (true) { }
             }
+
+            loadingDialogue.Closing = true;
+            WindowManager.AddWindow(new Welcome());
 
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {

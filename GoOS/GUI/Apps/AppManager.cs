@@ -29,12 +29,13 @@ namespace GoOS.GUI.Apps
 
             gtermButton = new Button(this, 10, 15, 64, 80, "GTerm")
             {
+                UseSystemStyle = false,
                 BackgroundColour = Color.White,
                 TextColour = Color.Black,
 
                 Image = gtermIcon
             };
-            
+
             gtermButton.Clicked = OpenGTerm;
 
             gtermButton.Render();

@@ -27,6 +27,7 @@ namespace GoOS.GUI.Apps
 
             folderButton = new Button(this, 10, 10, 64, 80, "Apps")
             {
+                UseSystemStyle = false,
                 BackgroundColour = Color.UbuntuPurple,
                 TextColour = Color.White,
 
