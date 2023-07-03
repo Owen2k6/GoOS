@@ -19,7 +19,7 @@ namespace GoOS.GUI
         private static Canvas closeButton = Image.FromBitmap(closeButtonRaw, false);
 
         private static bool runOnce = true;
-        private static int TopWindow =
+        private static int TopWindow;
 
         public static Display Canvas;
         public static List<Window> Windows = new List<Window>(10);
