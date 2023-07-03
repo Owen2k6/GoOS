@@ -8,6 +8,7 @@ using IL2CPU.API.Attribs;
 using PrismAPI.Hardware.GPU;
 using PrismAPI.Graphics;
 using Cosmos.Core.Memory;
+using PrismAPI.UI;
 
 namespace GoOS.GUI
 {
@@ -20,11 +21,45 @@ namespace GoOS.GUI
 
         private static readonly List<Window> windows = new List<Window>(10);
 
+        private static bool areWindowsAlreadyMoving
+        {
+            get
+            {
+                bool returnValue = false;
+                foreach (Window w in windows)
+                    if (w.Dragging)
+                        returnValue = true;
+                return returnValue;
+            }
+        }
+
         public static Display Canvas;
 
         public static void AddWindow(Window window)
         {
             windows.Add(window);
+        }
+
+        private static void MoveWindowToFront(Window window)
+        {
+            windows.Add(window);
+            windows.Remove(window);
+        }
+
+        private static void CheckWindowHover()
+        {
+            for (int i = windows.Count - 1; i >= 0; i--)
+            {
+                if (i != windows.Count - 1 && !areWindowsAlreadyMoving)
+                {
+                    if (windows[i].IsMouseOver &&
+                    Sys.MouseManager.MouseState == Sys.MouseState.Left)
+                    {
+                        MoveWindowToFront(windows[i]);
+                        break;
+                    }
+                }
+            }
         }
 
         private static void DrawMouse()
@@ -62,6 +97,8 @@ namespace GoOS.GUI
 
                 lastWindowShown = window;
             }
+
+            CheckWindowHover();
 
             if (lastWindowShown != null)
             {
