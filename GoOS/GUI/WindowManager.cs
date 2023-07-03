@@ -19,10 +19,10 @@ namespace GoOS.GUI
         private static Canvas closeButton = Image.FromBitmap(closeButtonRaw, false);
 
         private static bool runOnce = true;
+        private static int TopWindow =
 
         public static Display Canvas;
         public static List<Window> Windows = new List<Window>(10);
-        public static List<Window> Taskbar = new List<Window>(10);
 
         public static void Update()
         {
@@ -35,34 +35,27 @@ namespace GoOS.GUI
 
             Canvas.Clear(Color.UbuntuPurple);
 
+            int lastWindowShown = 0;
+
             for (int i = 0; i < Windows.Count; i++)
             {
                 if (Windows[i] != null)
                 {
-                    if (Sys.MouseManager.MouseState == Sys.MouseState.Left)
+                    if (Windows[i].MouseOnTop())
                     {
-                        if (Windows[i].Closeable)
-                        {
-                            if (Sys.MouseManager.X > Windows[i].X + Windows[i].Contents.Width - 14 &&
-                                Sys.MouseManager.X < Windows[i].X + Windows[i].Contents.Width - 2 &&
-                                Sys.MouseManager.Y > Windows[i].Y + 2 && Sys.MouseManager.Y < Windows[i].Y + 14)
-                            {
-                                Windows[i].Visible = false;
-                                continue;
-                            }
-                        }
-
-                        if (Sys.MouseManager.X > Windows[i].X && Sys.MouseManager.X < Windows[i].X + Windows[i].Contents.Width && Sys.MouseManager.Y > Windows[i].Y && Sys.MouseManager.Y < Windows[i].Y + 16)
-                        {
-                            Windows[i].X = (int)Sys.MouseManager.X - (Windows[i].Contents.Width / 2);
-                            Windows[i].Y = (int)Sys.MouseManager.Y - 8;
-                        }
                     }
 
-                    DrawWindow(Windows[i].Contents, Windows[i].X, Windows[i].Y, Windows[i].Title, Windows[i].Closeable);
-                    Windows[i].Update();
+                    if (Windows[i].Visible)
+                        DrawWindow(Windows[i].Contents, Windows[i].X, Windows[i].Y, Windows[i].Title, Windows[i].Closeable);
+                    else
+                        Windows[i] = null;
+
+                    lastWindowShown = i;
                 }
             }
+
+            Windows[lastWindowShown].InternalFullUpdate();
+            Windows[lastWindowShown].Update();
 
             Canvas.DrawString(128, Canvas.Height - 32,
                 Canvas.GetFPS() + "fps / " + Cosmos.Core.GCImplementation.GetAvailableRAM() + "mb", BetterConsole.font,
