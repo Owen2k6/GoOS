@@ -75,6 +75,7 @@ namespace GoOS
 
             //WindowManager.Windows.Add(new GTerm());
             WindowManager.AddWindow(new DesktopIcons());
+            WindowManager.AddWindow(new StartMenu());
 
             ThemeManager.SetTheme(Theme.Fallback);
             log(ThemeManager.WindowText, "GoOS - Starting GoOS...");
