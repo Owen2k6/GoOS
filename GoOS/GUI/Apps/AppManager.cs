@@ -9,11 +9,11 @@ namespace GoOS.GUI.Apps
 {
     public class AppManager : Window
     {
-        Button test;
+        Button GTerm;
 
         public AppManager()
         {
-            this.Contents = new Canvas(400, 400);
+            this.Contents = new Canvas(200, 150);
             this.Contents.Clear(Color.White);
             this.X = 830;
             this.Y = 100;
@@ -21,13 +21,15 @@ namespace GoOS.GUI.Apps
             this.Visible = true;
             this.Closeable = false;
 
-            test = new Button(Convert.ToUInt16(X + 10), Convert.ToUInt16(Y + 16 + 10), 50, 16, "GTerm", true);
-            this.Contents.DrawImage(test.X - X, test.Y - Y - 16, test.Contents, false);
+            GTerm = new Button(Convert.ToUInt16(X + 10), Convert.ToUInt16(Y + 16 + 10), 50, 16, "GTerm", true);
+            this.Contents.DrawImage(GTerm.X - X, GTerm.Y - Y - 16, GTerm.Contents, false);
         }
 
         public override void Update()
         {
-            test.Handle();
+            GTerm.X = Convert.ToUInt16(X + 10);
+            GTerm.Y = Convert.ToUInt16(Y + 16 + 10);
+            GTerm.Handle();
         }
     }
 }
