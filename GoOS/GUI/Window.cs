@@ -124,16 +124,14 @@ namespace GoOS.GUI
                 Y = (int)(DragStartY + (MouseManager.Y - DragStartMouseY));
             }
 
-            if (IsMouseOver                                 &&
-                MouseManager.MouseState == MouseState.None  &&
-                previousMouseState      == MouseState.Left)
+            foreach (Control control in Controls)
             {
-                foreach (Control control in Controls)
+                if (MouseManager.X >= X + control.X                            &&
+                    MouseManager.X <  X + control.X + control.Contents.Width   &&
+                    MouseManager.Y >= Y + control.Y                            &&
+                    MouseManager.Y <  Y + control.Y + control.Contents.Height)
                 {
-                    if (MouseManager.X >= X + control.X                          &&
-                        MouseManager.X <  X + control.X + control.Contents.Width &&
-                        MouseManager.Y >= Y + control.Y                          &&
-                        MouseManager.Y <  Y + control.Y + control.Contents.Height)
+                    if (MouseManager.MouseState == MouseState.None && previousMouseState == MouseState.Left)
                     {
                         control.Clicked?.Invoke();
                     }

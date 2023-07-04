@@ -638,6 +638,9 @@ namespace GoOS
                     log(ThemeManager.WindowText, "4");
                     Console.WriteLine(Encoding.ASCII.GetString(test));
                     break;
+                case "dtest":
+                    Dialogue.Show("Message", "Hello world!!!");
+                    break;
                 default:
                     if (isGCIenabled)
                     {

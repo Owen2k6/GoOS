@@ -21,6 +21,8 @@ namespace GoOS.GUI
         public bool Visible = true;
 
         public Action Clicked;
+        public Action MouseDown;
+        public Action MouseUp;
 
         public Window Parent;
 

@@ -114,6 +114,7 @@
       <None Remove="Resources\GUI\drum.bmp" />
       <None Remove="Resources\GUI\folder.bmp" />
       <None Remove="Resources\GUI\gterm.bmp" />
+      <None Remove="Resources\GUI\info.bmp" />
       <None Remove="Resources\GUI\mouse.bmp" />
       <None Remove="Resources\OOBE\setupcomputer.bmp" />
       <None Remove="Resources\OOBE\setupfinal.bmp" />
@@ -134,6 +135,7 @@
       <EmbeddedResource Include="Resources\GUI\drum.bmp" />
       <EmbeddedResource Include="Resources\GUI\folder.bmp" />
       <EmbeddedResource Include="Resources\GUI\gterm.bmp" />
+      <EmbeddedResource Include="Resources\GUI\info.bmp" />
       <EmbeddedResource Include="Resources\GUI\mouse.bmp" />
       <EmbeddedResource Include="Resources\OOBE\setupsupport.bmp" />
     </ItemGroup>

@@ -16,7 +16,7 @@ namespace GoOS.GUI
     {
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse.bmp")] private static byte[] mouseRaw;
         private static Canvas mouse = Image.FromBitmap(mouseRaw, false);
-
+        
         private static bool initialised = false;
         private static int framesToHeapCollect = 10;
 
