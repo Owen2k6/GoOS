@@ -109,9 +109,12 @@
       <None Remove="Resources\credits05.bmp" />
       <None Remove="Resources\Font_1x.btf" />
       <None Remove="Resources\GoOS_Intro.bmp" />
+      <None Remove="Resources\GUI\clock.bmp" />
       <None Remove="Resources\GUI\closebutton.bmp" />
+      <None Remove="Resources\GUI\drum.bmp" />
       <None Remove="Resources\GUI\folder.bmp" />
       <None Remove="Resources\GUI\gterm.bmp" />
+      <None Remove="Resources\GUI\info.bmp" />
       <None Remove="Resources\GUI\mouse.bmp" />
       <None Remove="Resources\OOBE\setupcomputer.bmp" />
       <None Remove="Resources\OOBE\setupfinal.bmp" />
@@ -122,13 +125,17 @@
       <None Remove="Resources\OOBE\setupua.bmp" />
       <None Remove="Resources\OOBE\setupuser.bmp" />
       <None Remove="Resources\OOBE\setupwelcome.bmp" />
+      <None Remove="Resources\Welcome.bmp" />
       <None Remove="test.bmp" />
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Include="Resources\GUI\clock.bmp" />
       <EmbeddedResource Include="Resources\GUI\closebutton.bmp" />
+      <EmbeddedResource Include="Resources\GUI\drum.bmp" />
       <EmbeddedResource Include="Resources\GUI\folder.bmp" />
       <EmbeddedResource Include="Resources\GUI\gterm.bmp" />
+      <EmbeddedResource Include="Resources\GUI\info.bmp" />
       <EmbeddedResource Include="Resources\GUI\mouse.bmp" />
       <EmbeddedResource Include="Resources\OOBE\setupsupport.bmp" />
     </ItemGroup>
@@ -150,6 +157,7 @@
       <EmbeddedResource Include="Resources\OOBE\setupwelcome.bmp" />
       <None Remove="Resources\MSUIGothicCustomCharset16.btf" />
       <EmbeddedResource Include="Resources\MSUIGothicCustomCharset16.btf" />
+      <EmbeddedResource Include="Resources\Welcome.bmp" />
     </ItemGroup>
 
     <ItemGroup>

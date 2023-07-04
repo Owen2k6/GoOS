@@ -70,12 +70,15 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
-            WindowManager.Canvas = Display.GetDisplay(1280, 720);
+            WindowManager.Canvas = Display.GetDisplay(1280, 720); //TODO: Not have this hard coded >:^(
             Console.Init(800, 600);
 
             //WindowManager.Windows.Add(new GTerm());
             WindowManager.AddWindow(new DesktopIcons());
             WindowManager.AddWindow(new StartMenu());
+
+            var loadingDialogue = new LoadingDialogue();
+            WindowManager.AddWindow(loadingDialogue);
 
             ThemeManager.SetTheme(Theme.Fallback);
             log(ThemeManager.WindowText, "GoOS - Starting GoOS...");
@@ -93,6 +96,11 @@ namespace GoOS
                 log(ThemeManager.ErrorText, "GoOS - Please verify that your hard disk is plugged in correctly.");
                 while (true) { }
             }
+
+            loadingDialogue.Closing = true;
+            WindowManager.AddWindow(new Taskbar());
+            WindowManager.AddWindow(new Welcome());
+            
 
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {
@@ -630,6 +638,9 @@ namespace GoOS
                     byte[] test = client.Get();
                     log(ThemeManager.WindowText, "4");
                     Console.WriteLine(Encoding.ASCII.GetString(test));
+                    break;
+                case "dtest":
+                    Dialogue.Show("Message", "Hello world!!!");
                     break;
                 default:
                     if (isGCIenabled)
