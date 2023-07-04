@@ -18,6 +18,8 @@ namespace GoOS.GUI
 
         public Color TextColour = Color.White;
 
+        public bool pressed = false;
+
         public Button(Window parent, ushort x, ushort y, ushort width, ushort height, string title)
             : base(parent, x, y, width, height)
         {
@@ -28,20 +30,40 @@ namespace GoOS.GUI
         {
             if (UseSystemStyle)
             {
-                // Background.
-                Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, new Color(191, 191, 191));
+                if (pressed)
+                {
+                    // Background.
+                    Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, new Color(191, 191, 191));
 
-                // Highlight.
-                Contents.DrawLine(0, 0, Contents.Width - 1, 0, Color.White);
-                Contents.DrawLine(0, 0, 0, Contents.Height - 1, Color.White);
+                    // Dark shadow.
+                    Contents.DrawLine(0, 0, Contents.Width - 1, 0, Color.Black);
+                    Contents.DrawLine(0, 0, 0, Contents.Height - 1, Color.Black);
 
-                // Light shadow.
-                Contents.DrawLine(1, Contents.Height - 2, Contents.Width - 2, Contents.Height - 2, new Color(127, 127, 127));
-                Contents.DrawLine(Contents.Width - 2, 1, Contents.Width - 2, Contents.Height - 1, new Color(127, 127, 127));
+                    // Highlight.
+                    Contents.DrawLine(1, Contents.Height - 2, Contents.Width - 2, Contents.Height - 2, new Color(216, 216, 216));
+                    Contents.DrawLine(Contents.Width - 2, 1, Contents.Width - 2, Contents.Height - 1, new Color(216, 216, 216));
 
-                // Dark shadow.
-                Contents.DrawLine(0, Contents.Height - 1, Contents.Width, Contents.Height - 1, Color.Black);
-                Contents.DrawLine(Contents.Width - 1, 0, Contents.Width - 1, Contents.Height - 1, Color.Black);
+                    // Light highlight.
+                    Contents.DrawLine(0, Contents.Height - 1, Contents.Width, Contents.Height - 1, Color.White);
+                    Contents.DrawLine(Contents.Width - 1, 0, Contents.Width - 1, Contents.Height - 1, Color.White);
+                }
+                else
+                {
+                    // Background.
+                    Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, new Color(191, 191, 191));
+
+                    // Highlight.
+                    Contents.DrawLine(0, 0, Contents.Width - 1, 0, Color.White);
+                    Contents.DrawLine(0, 0, 0, Contents.Height - 1, Color.White);
+
+                    // Light shadow.
+                    Contents.DrawLine(1, Contents.Height - 2, Contents.Width - 2, Contents.Height - 2, new Color(127, 127, 127));
+                    Contents.DrawLine(Contents.Width - 2, 1, Contents.Width - 2, Contents.Height - 1, new Color(127, 127, 127));
+
+                    // Dark shadow.
+                    Contents.DrawLine(0, Contents.Height - 1, Contents.Width, Contents.Height - 1, Color.Black);
+                    Contents.DrawLine(Contents.Width - 1, 0, Contents.Width - 1, Contents.Height - 1, Color.Black);
+                }
             }
             else
             {
@@ -59,6 +81,20 @@ namespace GoOS.GUI
             Color textColour = UseSystemStyle ? Color.Black : TextColour;
             Contents.DrawString(Contents.Width / 2, textY, Title, BetterConsole.font, textColour, true);
 
+            Parent.RenderControls();
+        }
+
+        internal override void HandleDown()
+        {
+            pressed = true;
+            Render();
+            Parent.RenderControls();
+        }
+
+        internal override void HandleRelease()
+        {
+            pressed = false;
+            Render();
             Parent.RenderControls();
         }
     }

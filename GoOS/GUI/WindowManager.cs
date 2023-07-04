@@ -16,25 +16,14 @@ namespace GoOS.GUI
     {
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse.bmp")] private static byte[] mouseRaw;
         private static Canvas mouse = Image.FromBitmap(mouseRaw, false);
-        
-        private static bool initialised = false;
+
+        // private static bool initialised = false;
+
         private static int framesToHeapCollect = 10;
 
         private static MouseState previousMouseState = MouseState.None;
 
         private static readonly List<Window> windows = new List<Window>(10);
-
-        private static bool areWindowsAlreadyMoving
-        {
-            get
-            {
-                bool returnValue = false;
-                foreach (Window w in windows)
-                    if (w.Dragging)
-                        returnValue = true;
-                return returnValue;
-            }
-        }
 
         public static Display Canvas;
 
@@ -49,21 +38,30 @@ namespace GoOS.GUI
             windows.Remove(window);
         }
 
-        private static void CheckWindowHover()
+        private static int GetHoveredWindow()
         {
             for (int i = windows.Count - 1; i >= 0; i--)
             {
-                if (i != windows.Count - 1 && !areWindowsAlreadyMoving)
+                if (windows[i].IsMouseOver)
                 {
-                    if (windows[i].IsMouseOver &&
-                    MouseManager.MouseState == MouseState.None &&
-                    previousMouseState == MouseState.Left)
-                    {
-                        MoveWindowToFront(windows[i]);
-                        break;
-                    }
+                    return i;
                 }
             }
+
+            return -1;
+        }
+
+        private static Window GetDraggingWindow()
+        {
+            foreach (Window window in windows)
+            {
+                if (window.Dragging)
+                {
+                    return window;
+                }
+            }
+
+            return null;
         }
 
         private static void DrawMouse()
@@ -71,23 +69,49 @@ namespace GoOS.GUI
             Canvas.DrawImage((int)MouseManager.X, (int)MouseManager.Y, mouse, true);
         }
 
+        private static void DoInput()
+        {
+            Window draggingWindow = GetDraggingWindow();
+            if (draggingWindow != null)
+            {
+                if (windows.IndexOf(draggingWindow) != windows.Count - 1)
+                {
+                    MoveWindowToFront(draggingWindow);
+                }
+
+                draggingWindow.HandleMouseInput();
+
+                return;
+            }
+
+            int hoveredWindowIdx = GetHoveredWindow();
+            if (hoveredWindowIdx != -1)
+            {
+                windows[hoveredWindowIdx].HandleMouseInput();
+
+                if (hoveredWindowIdx        != windows.Count - 1 &&
+                    MouseManager.MouseState != MouseState.None)
+                {
+                    MoveWindowToFront(windows[hoveredWindowIdx]);
+                }
+            }
+        }
+
         public static void Update()
         {
             if (!BetterConsole.ConsoleMode)
             {
-                /*if (!initialised)
+                if (MouseManager.ScreenWidth  != Canvas.Width ||
+                    MouseManager.ScreenHeight != Canvas.Height)
                 {
                     MouseManager.ScreenWidth = Canvas.Width;
                     MouseManager.ScreenHeight = Canvas.Height;
-                    initialised = true;
-                }*/
+                }
 
-                MouseManager.ScreenWidth = Canvas.Width; // make it like this, cosmos is sometimes weird and makes your code not work
-                MouseManager.ScreenHeight = Canvas.Height;
+                // MouseManager.ScreenWidth = Canvas.Width; // make it like this, cosmos is sometimes weird and makes your code not work
+                // MouseManager.ScreenHeight = Canvas.Height;
 
                 Canvas.Clear(Color.UbuntuPurple);
-
-                Window lastWindowShown = null;
 
                 for (int i = windows.Count - 1; i >= 0; i--)
                 {
@@ -97,22 +121,16 @@ namespace GoOS.GUI
                     }
                 }
 
+                DoInput();
+
                 foreach (Window window in windows)
                 {
+                    window.HandleRun();
+
                     if (window.Visible)
                     {
                         window.DrawWindow(Canvas);
                     }
-
-                    lastWindowShown = window;
-                }
-
-                CheckWindowHover();
-
-                if (lastWindowShown != null)
-                {
-                    lastWindowShown.InternalHandle();
-                    lastWindowShown.Update();
                 }
 
                 string fps = Canvas.GetFPS() + "fps";

@@ -72,8 +72,9 @@ namespace GoOS.GUI.Apps
             RenderHand(originX, originY, (int)(radius * 0.5f), hourRad, Color.Black);
         }
 
-        public override void Update()
+        public override void HandleRun()
         {
+            base.HandleRun();
             byte second = Cosmos.HAL.RTC.Second;
             if (second != lastSecond)
             {

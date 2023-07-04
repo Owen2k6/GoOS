@@ -1,6 +1,7 @@
 ﻿using GoOS.GUI.Models;
 using PrismAPI.Graphics;
 using System;
+using Cosmos.System;
 
 namespace GoOS.GUI
 {
@@ -21,11 +22,24 @@ namespace GoOS.GUI
         public bool Visible = true;
 
         public Action Clicked;
-        public Action MouseDown;
-        public Action MouseUp;
 
         public Window Parent;
 
+        public bool IsMouseOver
+        {
+            get
+            {
+                return MouseManager.X >= Parent.X + X                                                     &&
+                   MouseManager.X     < Parent.X  + X + Contents.Width                                    &&
+                   MouseManager.Y     >= Parent.Y + Y + (Parent.HasTitlebar ? 19 : 0)                     &&
+                   MouseManager.Y     < Parent.Y  + Y + Contents.Height + (Parent.HasTitlebar ? 19 : 0);
+            }
+        }
+
         public abstract void Render();
+
+        internal virtual void HandleDown() { }
+
+        internal virtual void HandleRelease() { }
     }
 }
