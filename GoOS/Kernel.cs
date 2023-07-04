@@ -70,7 +70,7 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
-            WindowManager.Canvas = Display.GetDisplay(1280, 720);
+            WindowManager.Canvas = Display.GetDisplay(1280, 720); //TODO: Not have this hard coded >:^(
             Console.Init(800, 600);
 
             //WindowManager.Windows.Add(new GTerm());

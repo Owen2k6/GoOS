@@ -11,10 +11,10 @@ namespace GoOS.GUI.Apps;
 
 public class Taskbar : Window
 {
+    Button startButton;
     public Taskbar()
     {
         Contents = new Canvas(WindowManager.Canvas.Width, 28);
-        Contents.Clear(new Color(191, 191, 191));
         //so it displays at the bottom of the screen
         X = 0;
         Y = WindowManager.Canvas.Height - 28;
@@ -24,5 +24,13 @@ public class Taskbar : Window
         HasTitlebar = false;
         Contents.Clear(Color.DeepGray);;
         Contents.DrawFilledRectangle(0,0 , WindowManager.Canvas.Width, 3,0, Color.LightGray);
+        startButton = new Button(this, 3, 6, 50, 20, "Start");
+        startButton.Clicked = StartClicked;
+        startButton.Render();
+    }
+    
+    private void StartClicked()
+    {
+        
     }
 }

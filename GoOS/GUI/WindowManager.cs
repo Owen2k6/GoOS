@@ -75,8 +75,8 @@ namespace GoOS.GUI
         {
             if (!initialised)
             {
-                MouseManager.ScreenWidth = 1280;
-                MouseManager.ScreenHeight = 720;
+                MouseManager.ScreenWidth = Canvas.Width;
+                MouseManager.ScreenHeight = Canvas.Height;
                 initialised = true;
             }
 
@@ -110,9 +110,13 @@ namespace GoOS.GUI
                 lastWindowShown.Update();
             }
 
-            Canvas.DrawString(128, Canvas.Height - 32,
+            Canvas.DrawString(128, Canvas.Height - 37,
                 Canvas.GetFPS() + "fps / " + Cosmos.Core.GCImplementation.GetAvailableRAM() + "mb", BetterConsole.font,
                 Color.White, true); // debug
+            
+            string Hour = Cosmos.HAL.RTC.Hour.ToString(), Minute = Cosmos.HAL.RTC.Minute.ToString();
+            if (Minute.Length < 2) Minute = "0" + Minute;
+            Canvas.DrawString(Canvas.Width - 30, Canvas.Height - 12,Hour + ":" + Minute , BetterConsole.font, Color.White, true);
 
             DrawMouse();
 
