@@ -22,7 +22,7 @@ public class Taskbar : Window
         Visible = true;
         Closable = false;
         HasTitlebar = false;
-        Contents.Clear(Color.DeepGray);;
+        Contents.Clear(Color.DeepGray);
         Contents.DrawFilledRectangle(0,0 , WindowManager.Canvas.Width, 3,0, Color.LightGray);
         startButton = new Button(this, 3, 6, 50, 20, "Start");
         startButton.Clicked = StartClicked;
@@ -31,6 +31,6 @@ public class Taskbar : Window
     
     private void StartClicked()
     {
-        Dialogue.Show("Developers Note", "Start is not finished.");
+        WindowManager.AddWindow(new StartMenu());
     }
 }

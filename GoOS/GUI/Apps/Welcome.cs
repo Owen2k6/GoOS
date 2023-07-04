@@ -27,14 +27,9 @@ namespace GoOS.GUI.Apps
             Contents.DrawImage(0, 0, welcomeImage, true);
 
             closeButton = new Button(this, 315, 270, 80, 25, "Close");
-            closeButton.Clicked = Close;
+            closeButton.Clicked = Dispose;
 
             closeButton.Render();
-        }
-
-        private void Close()
-        {
-            Closing = true;
         }
     }
 }

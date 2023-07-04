@@ -280,7 +280,7 @@ public static class BetterConsole
                                     (Canvas.Height / 2) - ((menuOptions.Count + 4) * 16 / 2) + 1, 144,
                                     Convert.ToUInt16((menuOptions.Count + 4) * 16), 0, ThemeManager.WindowBorder);
 
-                                Refresh:
+                             Refresh:
                                 if (selected > menuOptions.Count - 1)
                                 {
                                     selected = 0;
@@ -317,7 +317,7 @@ public static class BetterConsole
 
                                     case ConsoleKeyEx.Enter:
                                         if (menuOptions[selected] == menuOptions[0])
-                                            GoOS.ControlPanel.Launch();
+                                            ControlPanel.Launch();
                                         else if (menuOptions[selected] == menuOptions[1])
                                             Power.Reboot();
                                         break;
