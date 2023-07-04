@@ -76,7 +76,6 @@ namespace GoOS
 
             //WindowManager.Windows.Add(new GTerm());
             WindowManager.AddWindow(new DesktopIcons());
-            WindowManager.AddWindow(new StartMenu());
 
             var loadingDialogue = new LoadingDialogue();
             WindowManager.AddWindow(loadingDialogue);

@@ -157,5 +157,10 @@ namespace GoOS.GUI
             // Window contents.
             cv.DrawImage(X, Y + (HasTitlebar ? 19 : 0), Contents, false);
         }
+
+        internal void Dispose()
+        {
+            Closing = true;
+        }
     }
 }
