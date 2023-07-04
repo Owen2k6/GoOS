@@ -309,29 +309,31 @@ public static class BetterConsole
                                     Write(menuOptions[i]);
                                 }
 
-                                var key2 = KeyboardManager.ReadKey();
-                                switch (key2.Key)
+                                if (KeyboardManager.TryReadKey(out var key2))
                                 {
-                                    case ConsoleKeyEx.Escape:
-                                        break;
+                                    switch (key2.Key)
+                                    {
+                                        case ConsoleKeyEx.Escape:
+                                            break;
 
-                                    case ConsoleKeyEx.Enter:
-                                        if (menuOptions[selected] == menuOptions[0])
-                                            GoOS.ControlPanel.Launch();
-                                        else if (menuOptions[selected] == menuOptions[1])
-                                            Power.Reboot();
-                                        break;
+                                        case ConsoleKeyEx.Enter:
+                                            if (menuOptions[selected] == menuOptions[0])
+                                                ControlPanel.Launch();
+                                            else if (menuOptions[selected] == menuOptions[1])
+                                                Power.Reboot();
+                                            break;
 
-                                    case ConsoleKeyEx.UpArrow:
-                                        selected--;
-                                        goto Refresh;
+                                        case ConsoleKeyEx.UpArrow:
+                                            selected--;
+                                            goto Refresh;
 
-                                    case ConsoleKeyEx.DownArrow:
-                                        selected++;
-                                        goto Refresh;
+                                        case ConsoleKeyEx.DownArrow:
+                                            selected++;
+                                            goto Refresh;
 
-                                    default:
-                                        goto Refresh;
+                                        default:
+                                            goto Refresh;
+                                    }
                                 }
 
                                 Clear();
