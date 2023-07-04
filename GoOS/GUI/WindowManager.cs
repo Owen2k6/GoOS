@@ -73,56 +73,67 @@ namespace GoOS.GUI
 
         public static void Update()
         {
-            if (!initialised)
+            if (!BetterConsole.ConsoleMode)
             {
-                MouseManager.ScreenWidth = Canvas.Width;
+                /*if (!initialised)
+                {
+                    MouseManager.ScreenWidth = Canvas.Width;
+                    MouseManager.ScreenHeight = Canvas.Height;
+                    initialised = true;
+                }*/
+
+                MouseManager.ScreenWidth = Canvas.Width; // make it like this, cosmos is sometimes weird and makes your code not work
                 MouseManager.ScreenHeight = Canvas.Height;
-                initialised = true;
-            }
 
-            Canvas.Clear(Color.UbuntuPurple);
+                Canvas.Clear(Color.UbuntuPurple);
 
-            Window lastWindowShown = null;
+                Window lastWindowShown = null;
 
-            for (int i = windows.Count - 1; i >= 0; i--)
-            {
-                if (windows[i].Closing)
+                for (int i = windows.Count - 1; i >= 0; i--)
                 {
-                    windows.RemoveAt(i);
-                }
-            }
-
-            foreach (Window window in windows)
-            {
-                if (window.Visible)
-                {
-                    window.DrawWindow(Canvas);
+                    if (windows[i].Closing)
+                    {
+                        windows.RemoveAt(i);
+                    }
                 }
 
-                lastWindowShown = window;
+                foreach (Window window in windows)
+                {
+                    if (window.Visible)
+                    {
+                        window.DrawWindow(Canvas);
+                    }
+
+                    lastWindowShown = window;
+                }
+
+                CheckWindowHover();
+
+                if (lastWindowShown != null)
+                {
+                    lastWindowShown.InternalHandle();
+                    lastWindowShown.Update();
+                }
+
+                string fps = Canvas.GetFPS() + "fps";
+
+                Canvas.DrawString(Canvas.Width - 85, Canvas.Height - 12, fps, BetterConsole.font, Color.White, true);
+
+                string Hour = Cosmos.HAL.RTC.Hour.ToString(), Minute = Cosmos.HAL.RTC.Minute.ToString();
+                if (Minute.Length < 2) Minute = "0" + Minute;
+                Canvas.DrawString(Canvas.Width - 30, Canvas.Height - 12, Hour + ":" + Minute, BetterConsole.font, Color.White, true);
+
+                DrawMouse();
+
+                Canvas.Update();
+
+                previousMouseState = MouseManager.MouseState;
             }
-
-            CheckWindowHover();
-
-            if (lastWindowShown != null)
+            else
             {
-                lastWindowShown.InternalHandle();
-                lastWindowShown.Update();
+                Canvas.DrawImage(0, 0, BetterConsole.Canvas, false);
+                Canvas.Update();
             }
-
-            Canvas.DrawString(128, Canvas.Height - 37,
-                Canvas.GetFPS() + "fps / " + Cosmos.Core.GCImplementation.GetAvailableRAM() + "mb", BetterConsole.font,
-                Color.White, true); // debug
-            
-            string Hour = Cosmos.HAL.RTC.Hour.ToString(), Minute = Cosmos.HAL.RTC.Minute.ToString();
-            if (Minute.Length < 2) Minute = "0" + Minute;
-            Canvas.DrawString(Canvas.Width - 30, Canvas.Height - 12,Hour + ":" + Minute , BetterConsole.font, Color.White, true);
-
-            DrawMouse();
-
-            Canvas.Update();
-
-            previousMouseState = MouseManager.MouseState;
 
             if (framesToHeapCollect == 0)
             {

@@ -17,8 +17,8 @@ namespace GoOS.GUI.Apps
         {
             Contents = new Canvas(320, 128);
             Contents.Clear(new Color(191, 191, 191));
-            X = 480;
-            Y = 296;
+            X = 240;
+            Y = 236;
             Title = "GoOS";
             Visible = true;
             Closable = true;
