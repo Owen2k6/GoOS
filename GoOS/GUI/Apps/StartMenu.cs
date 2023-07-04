@@ -18,7 +18,7 @@ namespace GoOS.GUI.Apps
 
         public StartMenu()
         {
-            Contents = new Canvas(100, 300);
+            Contents = new Canvas(380, 500);
             Contents.Clear(Color.DeepGray);
             X = 0;
             Y = WindowManager.Canvas.Height - 28 - Contents.Height;
@@ -29,10 +29,10 @@ namespace GoOS.GUI.Apps
             Contents.DrawString(40, 16, Kernel.username, BetterConsole.font, Color.White);
 
             apps = new Button[2];
-            apps[0] = new Button(this, 8, 48, 84, 16, "GTerm");
+            apps[0] = new Button(this, 8, 48, 134, 16, "GTerm");
             apps[0].Clicked = GTerm_Click;
 
-            apps[1] = new Button(this, 8, 80, 84, 16, "Clock");
+            apps[1] = new Button(this, 8, 80, 134, 16, "Clock");
             apps[1].Clicked = Clock_Click;
 
             foreach (var app in apps)

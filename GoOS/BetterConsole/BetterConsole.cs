@@ -33,9 +33,9 @@ public static class BetterConsole
         "Reboot"
     };
 
-    public static int WindowLeft = 50;
-    public static int WindowTop = 50;
-    public static bool Visible = true;
+    public static bool ConsoleMode = false;
+
+    public static bool Visible = false;
 
     /// <summary>
     /// The X position of the cursor

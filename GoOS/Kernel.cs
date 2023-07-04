@@ -71,11 +71,8 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
-            WindowManager.Canvas = Display.GetDisplay(1280, 720); //TODO: Not have this hard coded >:^(
+            WindowManager.Canvas = Display.GetDisplay(800, 600); //TODO: Not have this hard coded >:^(
             Console.Init(800, 600);
-
-            //WindowManager.Windows.Add(new GTerm());
-            WindowManager.AddWindow(new DesktopIcons());
 
             var loadingDialogue = new LoadingDialogue();
             WindowManager.AddWindow(loadingDialogue);
@@ -96,22 +93,15 @@ namespace GoOS
                 log(ThemeManager.ErrorText, "GoOS - Please verify that your hard disk is plugged in correctly.");
                 while (true) { }
             }
-
-            loadingDialogue.Closing = true;
-            WindowManager.AddWindow(new Taskbar());
-            WindowManager.AddWindow(new Welcome());
             
 
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {
-                Console.Init(800, 600);
+                Console.ConsoleMode = true;
+                WindowManager.AddWindow(new GTerm());
                 Console.WriteLine("First boot... This may take awhile...");
                 OOBE.Launch();
             }
-
-
-
-
 
             if (!Directory.Exists(@"0:\content\GCI\"))
             {
@@ -170,15 +160,11 @@ namespace GoOS
                 computername = "GoOS";
             }
 
-            Canvas testWindow = new Canvas(200, 200);
-            testWindow.Clear(Color.Blue);
-            testWindow.DrawCircle(100, 100, 50, Color.White);
-
-            /*WindowList.canvas[1] = testWindow;
-            WindowList.title[1] = "Circle";
-            WindowList.X[1] = 500;
-            WindowList.Y[1] = 100;
-            WindowList.visible[1] = true;*/
+            loadingDialogue.Closing = true;
+            WindowManager.Canvas = Display.GetDisplay(1280, 720);
+            WindowManager.AddWindow(new Taskbar());
+            WindowManager.AddWindow(new DesktopIcons());
+            WindowManager.AddWindow(new Welcome());
 
             Console.Clear();
 
@@ -237,6 +223,9 @@ namespace GoOS
 
             switch (args[0])
             {
+                case "exit":
+                    Console.Visible = false;
+                    break;
                 case "ping":
                     Ping.Run();
                     break;
