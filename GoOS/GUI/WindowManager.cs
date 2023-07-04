@@ -16,8 +16,9 @@ namespace GoOS.GUI
     {
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse.bmp")] private static byte[] mouseRaw;
         private static Canvas mouse = Image.FromBitmap(mouseRaw, false);
-        
-        private static bool initialised = false;
+
+        // private static bool initialised = false;
+
         private static int framesToHeapCollect = 10;
 
         private static MouseState previousMouseState = MouseState.None;
@@ -73,7 +74,13 @@ namespace GoOS.GUI
             Window draggingWindow = GetDraggingWindow();
             if (draggingWindow != null)
             {
+                if (windows.IndexOf(draggingWindow) != windows.Count - 1)
+                {
+                    MoveWindowToFront(draggingWindow);
+                }
+
                 draggingWindow.HandleMouseInput();
+
                 return;
             }
 
@@ -82,9 +89,8 @@ namespace GoOS.GUI
             {
                 windows[hoveredWindowIdx].HandleMouseInput();
 
-                if (hoveredWindowIdx != windows.Count - 1 &&
-                    MouseManager.MouseState == MouseState.None &&
-                    previousMouseState != MouseState.None)
+                if (hoveredWindowIdx        != windows.Count - 1 &&
+                    MouseManager.MouseState != MouseState.None)
                 {
                     MoveWindowToFront(windows[hoveredWindowIdx]);
                 }
@@ -95,37 +101,37 @@ namespace GoOS.GUI
         {
             if (!BetterConsole.ConsoleMode)
             {
-                /*if (!initialised)
+                if (MouseManager.ScreenWidth  != Canvas.Width ||
+                    MouseManager.ScreenHeight != Canvas.Height)
                 {
                     MouseManager.ScreenWidth = Canvas.Width;
                     MouseManager.ScreenHeight = Canvas.Height;
-                    initialised = true;
-                }*/
+                }
 
-                MouseManager.ScreenWidth = Canvas.Width; // make it like this, cosmos is sometimes weird and makes your code not work
-                MouseManager.ScreenHeight = Canvas.Height;
+                // MouseManager.ScreenWidth = Canvas.Width; // make it like this, cosmos is sometimes weird and makes your code not work
+                // MouseManager.ScreenHeight = Canvas.Height;
 
                 Canvas.Clear(Color.UbuntuPurple);
 
-            for (int i = windows.Count - 1; i >= 0; i--)
-            {
-                if (windows[i].Closing)
+                for (int i = windows.Count - 1; i >= 0; i--)
                 {
-                    windows.RemoveAt(i);
+                    if (windows[i].Closing)
+                    {
+                        windows.RemoveAt(i);
+                    }
                 }
-            }
 
-            DoInput();
+                DoInput();
 
-            foreach (Window window in windows)
-            {
-                window.HandleRun();
-
-                if (window.Visible)
+                foreach (Window window in windows)
                 {
-                    window.DrawWindow(Canvas);
+                    window.HandleRun();
+
+                    if (window.Visible)
+                    {
+                        window.DrawWindow(Canvas);
+                    }
                 }
-            }
 
                 string fps = Canvas.GetFPS() + "fps";
 
