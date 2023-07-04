@@ -116,6 +116,7 @@
       <None Remove="Resources\GUI\gterm.bmp" />
       <None Remove="Resources\GUI\info.bmp" />
       <None Remove="Resources\GUI\mouse.bmp" />
+      <None Remove="Resources\GUI\shutdown.bmp" />
       <None Remove="Resources\GUI\user.bmp" />
       <None Remove="Resources\OOBE\setupcomputer.bmp" />
       <None Remove="Resources\OOBE\setupfinal.bmp" />
@@ -138,6 +139,7 @@
       <EmbeddedResource Include="Resources\GUI\gterm.bmp" />
       <EmbeddedResource Include="Resources\GUI\info.bmp" />
       <EmbeddedResource Include="Resources\GUI\mouse.bmp" />
+      <EmbeddedResource Include="Resources\GUI\shutdown.bmp" />
       <EmbeddedResource Include="Resources\GUI\user.bmp" />
       <EmbeddedResource Include="Resources\OOBE\setupsupport.bmp" />
     </ItemGroup>

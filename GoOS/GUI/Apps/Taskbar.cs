@@ -12,6 +12,9 @@ namespace GoOS.GUI.Apps;
 public class Taskbar : Window
 {
     Button startButton;
+
+    StartMenu startMenu;
+
     public Taskbar()
     {
         Contents = new Canvas(WindowManager.Canvas.Width, 28);
@@ -22,6 +25,10 @@ public class Taskbar : Window
         Visible = true;
         Closable = false;
         HasTitlebar = false;
+
+        startMenu = new StartMenu();
+        WindowManager.AddWindow(startMenu);
+
         Contents.Clear(Color.DeepGray);
         Contents.DrawFilledRectangle(0,0 , WindowManager.Canvas.Width, 3,0, Color.LightGray);
         startButton = new Button(this, 3, 6, 50, 20, "Start");
@@ -31,6 +38,6 @@ public class Taskbar : Window
     
     private void StartClicked()
     {
-        WindowManager.AddWindow(new StartMenu());
+        startMenu.Visible = !startMenu.Visible;
     }
 }

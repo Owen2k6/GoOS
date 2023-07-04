@@ -32,6 +32,19 @@ namespace GoOS.GUI
             windows.Add(window);
         }
 
+        public static Window GetWindowByType<T>()
+        {
+            foreach (Window window in windows)
+            {
+                if (window is T winOfT)
+                {
+                    return window;
+                }
+            }
+
+            return null;
+        }
+
         private static void MoveWindowToFront(Window window)
         {
             windows.Add(window);
