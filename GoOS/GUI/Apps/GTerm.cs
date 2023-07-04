@@ -16,6 +16,15 @@ namespace GoOS.GUI.Apps
             Title = "GTerm";
             Visible = true;
             Closable = true;
+            BetterConsole.Visible = true;
+        }
+
+        public override void HandleRun()
+        {
+            if (!BetterConsole.Visible)
+            {
+                Closing = true;
+            }
         }
     }
 }

@@ -93,14 +93,19 @@ namespace GoOS.GUI
 
         public static void Update()
         {
-            if (!initialised)
+            if (!BetterConsole.ConsoleMode)
             {
-                MouseManager.ScreenWidth = Canvas.Width;
-                MouseManager.ScreenHeight = Canvas.Height;
-                initialised = true;
-            }
+                /*if (!initialised)
+                {
+                    MouseManager.ScreenWidth = Canvas.Width;
+                    MouseManager.ScreenHeight = Canvas.Height;
+                    initialised = true;
+                }*/
 
-            Canvas.Clear(Color.UbuntuPurple);
+                MouseManager.ScreenWidth = Canvas.Width; // make it like this, cosmos is sometimes weird and makes your code not work
+                MouseManager.ScreenHeight = Canvas.Height;
+
+                Canvas.Clear(Color.UbuntuPurple);
 
             for (int i = windows.Count - 1; i >= 0; i--)
             {
@@ -122,19 +127,25 @@ namespace GoOS.GUI
                 }
             }
 
-            Canvas.DrawString(128, Canvas.Height - 37,
-                Canvas.GetFPS() + "fps / " + Cosmos.Core.GCImplementation.GetAvailableRAM() + "mb", BetterConsole.font,
-                Color.White, true); // debug
-            
-            string Hour = Cosmos.HAL.RTC.Hour.ToString(), Minute = Cosmos.HAL.RTC.Minute.ToString();
-            if (Minute.Length < 2) Minute = "0" + Minute;
-            Canvas.DrawString(Canvas.Width - 30, Canvas.Height - 12,Hour + ":" + Minute , BetterConsole.font, Color.White, true);
+                string fps = Canvas.GetFPS() + "fps";
 
-            DrawMouse();
+                Canvas.DrawString(Canvas.Width - 85, Canvas.Height - 12, fps, BetterConsole.font, Color.White, true);
 
-            Canvas.Update();
+                string Hour = Cosmos.HAL.RTC.Hour.ToString(), Minute = Cosmos.HAL.RTC.Minute.ToString();
+                if (Minute.Length < 2) Minute = "0" + Minute;
+                Canvas.DrawString(Canvas.Width - 30, Canvas.Height - 12, Hour + ":" + Minute, BetterConsole.font, Color.White, true);
 
-            previousMouseState = MouseManager.MouseState;
+                DrawMouse();
+
+                Canvas.Update();
+
+                previousMouseState = MouseManager.MouseState;
+            }
+            else
+            {
+                Canvas.DrawImage(0, 0, BetterConsole.Canvas, false);
+                Canvas.Update();
+            }
 
             if (framesToHeapCollect == 0)
             {

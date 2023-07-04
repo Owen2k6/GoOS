@@ -261,5 +261,10 @@ namespace GoOS.GUI
         /// </summary>
         /// <param name="e">The arguments of the event. MouseState will contain the previous state, not <see cref="MouseState.None"/>.</param>
         public virtual void HandleRelease(MouseEventArgs e) { }
+
+        internal void Dispose()
+        {
+            Closing = true;
+        }
     }
 }
