@@ -280,7 +280,7 @@ public static class BetterConsole
                                     (Canvas.Height / 2) - ((menuOptions.Count + 4) * 16 / 2) + 1, 144,
                                     Convert.ToUInt16((menuOptions.Count + 4) * 16), 0, ThemeManager.WindowBorder);
 
-                                Refresh:
+                             Refresh:
                                 if (selected > menuOptions.Count - 1)
                                 {
                                     selected = 0;
@@ -309,31 +309,29 @@ public static class BetterConsole
                                     Write(menuOptions[i]);
                                 }
 
-                                if (KeyboardManager.TryReadKey(out var key2))
+                                var key2 = KeyboardManager.ReadKey();
+                                switch (key2.Key)
                                 {
-                                    switch (key2.Key)
-                                    {
-                                        case ConsoleKeyEx.Escape:
-                                            break;
+                                    case ConsoleKeyEx.Escape:
+                                        break;
 
-                                        case ConsoleKeyEx.Enter:
-                                            if (menuOptions[selected] == menuOptions[0])
-                                                ControlPanel.Launch();
-                                            else if (menuOptions[selected] == menuOptions[1])
-                                                Power.Reboot();
-                                            break;
+                                    case ConsoleKeyEx.Enter:
+                                        if (menuOptions[selected] == menuOptions[0])
+                                            ControlPanel.Launch();
+                                        else if (menuOptions[selected] == menuOptions[1])
+                                            Power.Reboot();
+                                        break;
 
-                                        case ConsoleKeyEx.UpArrow:
-                                            selected--;
-                                            goto Refresh;
+                                    case ConsoleKeyEx.UpArrow:
+                                        selected--;
+                                        goto Refresh;
 
-                                        case ConsoleKeyEx.DownArrow:
-                                            selected++;
-                                            goto Refresh;
+                                    case ConsoleKeyEx.DownArrow:
+                                        selected++;
+                                        goto Refresh;
 
-                                        default:
-                                            goto Refresh;
-                                    }
+                                    default:
+                                        goto Refresh;
                                 }
 
                                 Clear();
