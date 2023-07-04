@@ -24,6 +24,7 @@ using IL2CPU.API.Attribs;
 using PrismAPI.Hardware.GPU;
 using GoOS.GUI;
 using GoOS.GUI.Apps;
+using GoOS.Networking;
 
 // Goplex Studios - GoOS
 // Copyright (C) 2022  Owen2k6
@@ -236,6 +237,9 @@ namespace GoOS
 
             switch (args[0])
             {
+                case "ping":
+                    Ping.Run();
+                    break;
                 case "install":
                     if (args.Length < 2)
                     {
@@ -348,8 +352,7 @@ namespace GoOS
 
                             log(ConsoleColor.Red, "3");
                             /** Send data **/
-                            xClient.Send(Encoding.ASCII.GetBytes("GET /" + filetoget +
-                                                                 ".goexe HTTP/1.1\nHost: apps.goos.owen2k6.com\n\n"));
+                            xClient.Send(Encoding.ASCII.GetBytes("GET /" + filetoget + ".goexe HTTP/1.1\nHost: apps.goos.owen2k6.com\n\n"));
 
                             /** Receive data **/
                             log(ConsoleColor.Red, "4");
