@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cosmos.System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,11 @@ namespace GoOS.GUI.Apps
             {
                 Closing = true;
             }
+        }
+
+        public override void HandleKey(KeyEvent key)
+        {
+            BetterConsole.KeyBuffer.Enqueue(key);
         }
     }
 }

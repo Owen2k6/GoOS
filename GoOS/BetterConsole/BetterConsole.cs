@@ -78,6 +78,11 @@ public static class BetterConsole
     public static bool DoubleBufferedMode = false;
 
     /// <summary>
+    /// The queue of key events to send to the <see cref="BetterConsole"/>
+    /// </summary>
+    public static Queue<KeyEvent> KeyBuffer = new Queue<KeyEvent>();
+
+    /// <summary>
     /// Initializes the <see cref="BetterConsole">
     /// </summary>
     /// <param name="videoWidth">The width of the canvas</param>
@@ -153,7 +158,7 @@ public static class BetterConsole
     {
         while (true)
         {
-            var keyPressed = KeyboardManager.TryReadKey(out var key);
+            var keyPressed = KeyBuffer.TryDequeue(out var key);
             if (keyPressed)
             {
                 if (intercept == false && key.KeyChar != '\0')
@@ -192,7 +197,7 @@ public static class BetterConsole
                 Render();
             }
 
-            var keyPressed = KeyboardManager.TryReadKey(out var key);
+            var keyPressed = KeyBuffer.TryDequeue(out var key);
             if (keyPressed)
             {
                 switch (key.Key)

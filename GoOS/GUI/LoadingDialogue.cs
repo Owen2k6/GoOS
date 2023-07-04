@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
 
-namespace GoOS.GUI.Apps
+namespace GoOS.GUI
 {
     public class LoadingDialogue : Window
     {
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.drum.bmp")] private static byte[] drumIconRaw;
         private static Canvas drumIcon = Image.FromBitmap(drumIconRaw, false);
 
-        public LoadingDialogue()
+        public LoadingDialogue(string message)
         {
             Contents = new Canvas(320, 128);
-            Contents.Clear(new Color(191, 191, 191));
+            RenderOutsetWindowBackground();
             X = 240;
             Y = 236;
             Title = "GoOS";
@@ -25,7 +25,7 @@ namespace GoOS.GUI.Apps
 
             Contents.DrawImage(20, 20, drumIcon, true);
 
-            Contents.DrawString(80, 20, "GoOS is starting\nPlease wait...", BetterConsole.font, Color.Black);
+            Contents.DrawString(80, 20, message, BetterConsole.font, Color.Black);
         }
     }
 }

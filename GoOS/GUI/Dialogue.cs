@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
 
-namespace GoOS.GUI.Apps
+namespace GoOS.GUI
 {
     public struct DialogueButton
     {
@@ -52,7 +52,7 @@ namespace GoOS.GUI.Apps
             }
 
             Contents = new Canvas(320, 128);
-            Contents.Clear(new Color(191, 191, 191));
+            RenderOutsetWindowBackground();
             X = 480;
             Y = 296;
             Title = title;

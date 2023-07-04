@@ -18,6 +18,12 @@ namespace GoOS.GUI
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton.bmp")] private static byte[] closeButtonRaw;
         private static Canvas closeButton = Image.FromBitmap(closeButtonRaw, false);
 
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton_hover.bmp")] private static byte[] closeButtonHoverRaw;
+        private static Canvas closeButtonHover = Image.FromBitmap(closeButtonHoverRaw, false);
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton_pressed.bmp")] private static byte[] closeButtonPressedRaw;
+        private static Canvas closeButtonPressed = Image.FromBitmap(closeButtonPressedRaw, false);
+
         public Canvas Contents;
 
         public int X, Y;
@@ -129,7 +135,7 @@ namespace GoOS.GUI
             get
             {
                 return IsMouseOverTitleBar &&
-                       MouseManager.X >= X + Contents.Width - 16;
+                       MouseManager.X >= X + Contents.Width - 19;
             }
         }
 
@@ -228,17 +234,28 @@ namespace GoOS.GUI
             previousMouseState = MouseManager.MouseState;
         }
 
-        public void DrawWindow(Canvas cv)
+        public void DrawWindow(Canvas cv, bool focused)
         {
             if (HasTitlebar)
             {
                 // Title bar.
-                cv.DrawFilledRectangle(X, Y, Contents.Width, 19, 0, Color.DeepGray);
+                cv.DrawFilledRectangle(X, Y, Contents.Width, 19, 0, 
+                    focused ? Color.LighterBlack : Color.DeepGray);
+
                 cv.DrawString(X + 2, Y, Title, BetterConsole.font, Color.White);
 
                 // Close button.
                 if (Closable)
-                    cv.DrawImage(X + Contents.Width - 18, Y + 3, closeButton);
+                {
+                    Canvas closeButtonImage = closeButton;
+                    if (IsMouseOverCloseButton)
+                    {
+                        closeButtonImage = MouseManager.MouseState == MouseState.Left ?
+                            closeButtonPressed : closeButtonHover;
+                    }
+
+                    cv.DrawImage(X + Contents.Width - 21, Y + 3, closeButtonImage);
+                }
             }
 
             // Window contents.
@@ -262,9 +279,32 @@ namespace GoOS.GUI
         /// <param name="e">The arguments of the event. MouseState will contain the previous state, not <see cref="MouseState.None"/>.</param>
         public virtual void HandleRelease(MouseEventArgs e) { }
 
-        internal void Dispose()
+        /// <summary>
+        /// User function to handle a key being pressed. Only routed to the focused window.
+        /// </summary>
+        public virtual void HandleKey(KeyEvent key) { }
+
+        public void Dispose()
         {
             Closing = true;
+        }
+
+        public void RenderOutsetWindowBackground()
+        {
+            // Background.
+            Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, new Color(191, 191, 191));
+
+            // Highlight.
+            Contents.DrawLine(0, 0, Contents.Width - 1, 0, Color.White);
+            Contents.DrawLine(0, 0, 0, Contents.Height - 1, Color.White);
+
+            // Light shadow.
+            Contents.DrawLine(1, Contents.Height - 2, Contents.Width - 2, Contents.Height - 2, new Color(127, 127, 127));
+            Contents.DrawLine(Contents.Width - 2, 1, Contents.Width - 2, Contents.Height - 1, new Color(127, 127, 127));
+
+            // Dark shadow.
+            Contents.DrawLine(0, Contents.Height - 1, Contents.Width, Contents.Height - 1, Color.Black);
+            Contents.DrawLine(Contents.Width - 1, 0, Contents.Width - 1, Contents.Height - 1, Color.Black);
         }
     }
 }
