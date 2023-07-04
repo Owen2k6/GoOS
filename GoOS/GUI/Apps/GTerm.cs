@@ -10,17 +10,12 @@ namespace GoOS.GUI.Apps
     {
         public GTerm()
         {
-            this.Contents = BetterConsole.Canvas;
-            this.X = 20;
-            this.Y = 50;
-            this.Title = "GTerm";
-            this.Visible = true;
-            this.Closable = true;
-        }
-
-        public override void Update()
-        {
-
+            Contents = BetterConsole.Canvas;
+            X = 20;
+            Y = 50;
+            Title = "GTerm";
+            Visible = true;
+            Closable = true;
         }
     }
 }

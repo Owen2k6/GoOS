@@ -9,6 +9,7 @@ using IL2CPU.API.Attribs;
 using Cosmos.System;
 using PrismAPI.Graphics.Animation;
 using PrismAPI.UI;
+using GoOS.GUI.Models;
 
 namespace GoOS.GUI
 {
@@ -35,8 +36,31 @@ namespace GoOS.GUI
         private int DragStartMouseY;
 
         private MouseState previousMouseState = MouseState.None;
+        private bool wasDown = false;
+        private Control downOnControl = null;
 
-        public virtual void Update() { }
+        /// <summary>
+        /// Runs every cycle, regardless of focus.
+        /// You must call the base if you override this function.
+        /// </summary>
+        public virtual void HandleRun()
+        {
+            if (wasDown && MouseManager.MouseState == MouseState.None)
+            {
+                wasDown = false;
+
+                HandleRelease(new MouseEventArgs()
+                {
+                    X = RelativeMouseX,
+                    Y = RelativeMouseY,
+                    MouseState = previousMouseState
+                });
+
+                downOnControl?.HandleRelease();
+
+                downOnControl = null;
+            }
+        }
 
         public virtual void RenderControls()
         {
@@ -46,18 +70,45 @@ namespace GoOS.GUI
             }
         }
 
-        internal bool IsMouseOver
+        public int RelativeMouseX
         {
             get
             {
-                return MouseManager.X >= X                          &&
-                       MouseManager.X <  X + Contents.Width         &&
-                       MouseManager.Y >= Y + (HasTitlebar ? 16 : 0) &&
-                       MouseManager.Y <  Y + Contents.Height;
+                return (int)(MouseManager.X - X);
             }
         }
 
-        internal bool IsMouseOverTitleBar
+        public int RelativeMouseY
+        {
+            get
+            {
+                return (int)(MouseManager.Y - Y - (HasTitlebar ? 19 : 0));
+            }
+        }
+
+        public bool IsMouseOver
+        {
+            get
+            {
+                return MouseManager.X >= X                                             &&
+                       MouseManager.X <  X + Contents.Width                            &&
+                       MouseManager.Y >= Y                                             &&
+                       MouseManager.Y <  Y + Contents.Height + (HasTitlebar ? 19 : 0);
+            }
+        }
+
+        public bool IsMouseOverContent
+        {
+            get
+            {
+                return MouseManager.X >= X                                             &&
+                       MouseManager.X <  X + Contents.Width                            &&
+                       MouseManager.Y >= Y + (HasTitlebar ? 19 : 0)                    &&
+                       MouseManager.Y <  Y + (HasTitlebar ? 19 : 0) + Contents.Height;
+            }
+        }
+
+        public bool IsMouseOverTitleBar
         {
             get
             {
@@ -69,11 +120,11 @@ namespace GoOS.GUI
                 return MouseManager.X >= X                  &&
                        MouseManager.X <  X + Contents.Width &&
                        MouseManager.Y >= Y                  &&
-                       MouseManager.Y <  Y + 16;
+                       MouseManager.Y <  Y + 19;
             }
         }
 
-        internal bool IsMouseOverCloseButton
+        public bool IsMouseOverCloseButton
         {
             get
             {
@@ -82,7 +133,20 @@ namespace GoOS.GUI
             }
         }
 
-        internal void InternalHandle()
+        private Control GetHoveredControl()
+        {
+            foreach (Control control in Controls)
+            {
+                if (control.IsMouseOver)
+                {
+                    return control;
+                }
+            }
+
+            return null;
+        }
+
+        internal void HandleMouseInput()
         {
             if (Closable                                   &&
                 IsMouseOverCloseButton                     &&
@@ -124,17 +188,40 @@ namespace GoOS.GUI
                 Y = (int)(DragStartY + (MouseManager.Y - DragStartMouseY));
             }
 
-            foreach (Control control in Controls)
+            Control hoveredControl = GetHoveredControl();
+
+            // Down, any button.
+            if (MouseManager.MouseState != MouseState.None && previousMouseState == MouseState.None)
             {
-                if (MouseManager.X >= X + control.X                            &&
-                    MouseManager.X <  X + control.X + control.Contents.Width   &&
-                    MouseManager.Y >= Y + control.Y                            &&
-                    MouseManager.Y <  Y + control.Y + control.Contents.Height)
+                wasDown = true;
+                downOnControl = hoveredControl;
+
+                HandleDown(new MouseEventArgs()
                 {
-                    if (MouseManager.MouseState == MouseState.None && previousMouseState == MouseState.Left)
-                    {
-                        control.Clicked?.Invoke();
-                    }
+                    X = RelativeMouseX,
+                    Y = RelativeMouseY,
+                    MouseState = MouseManager.MouseState
+                });
+
+                if (MouseManager.MouseState == MouseState.Left)
+                {
+                    hoveredControl?.HandleDown();
+                }
+            }
+
+            // Click, any button.
+            if (MouseManager.MouseState == MouseState.None && previousMouseState != MouseState.None)
+            {
+                HandleClick(new MouseEventArgs()
+                {
+                    X = RelativeMouseX,
+                    Y = RelativeMouseY,
+                    MouseState = previousMouseState
+                });
+
+                if (previousMouseState == MouseState.Left)
+                {
+                    hoveredControl?.Clicked?.Invoke();
                 }
             }
 
@@ -157,5 +244,22 @@ namespace GoOS.GUI
             // Window contents.
             cv.DrawImage(X, Y + (HasTitlebar ? 19 : 0), Contents, false);
         }
+
+        /// <summary>
+        /// User function to handle a mouse click, which is defined as a mouse being held down on the window then released.
+        /// </summary>
+        public virtual void HandleClick(MouseEventArgs e) { }
+
+        /// <summary>
+        /// User function to handle a mouse down, which is defined as a mouse being held down on the window then released.
+        /// </summary>
+        public virtual void HandleDown(MouseEventArgs e) { }
+
+        /// <summary>
+        /// User function to handle a mouse release, which is defined as a mouse being held down on the window then released.
+        /// This is different to a click, in that it will fire even if the mouse is pressed and then leaves the window before being released.
+        /// </summary>
+        /// <param name="e">The arguments of the event. MouseState will contain the previous state, not <see cref="MouseState.None"/>.</param>
+        public virtual void HandleRelease(MouseEventArgs e) { }
     }
 }

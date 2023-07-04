@@ -24,18 +24,6 @@ namespace GoOS.GUI
 
         private static readonly List<Window> windows = new List<Window>(10);
 
-        private static bool areWindowsAlreadyMoving
-        {
-            get
-            {
-                bool returnValue = false;
-                foreach (Window w in windows)
-                    if (w.Dragging)
-                        returnValue = true;
-                return returnValue;
-            }
-        }
-
         public static Display Canvas;
 
         public static void AddWindow(Window window)
@@ -49,26 +37,58 @@ namespace GoOS.GUI
             windows.Remove(window);
         }
 
-        private static void CheckWindowHover()
+        private static int GetHoveredWindow()
         {
             for (int i = windows.Count - 1; i >= 0; i--)
             {
-                if (i != windows.Count - 1 && !areWindowsAlreadyMoving)
+                if (windows[i].IsMouseOver)
                 {
-                    if (windows[i].IsMouseOver &&
-                    MouseManager.MouseState == MouseState.None &&
-                    previousMouseState == MouseState.Left)
-                    {
-                        MoveWindowToFront(windows[i]);
-                        break;
-                    }
+                    return i;
                 }
             }
+
+            return -1;
+        }
+
+        private static Window GetDraggingWindow()
+        {
+            foreach (Window window in windows)
+            {
+                if (window.Dragging)
+                {
+                    return window;
+                }
+            }
+
+            return null;
         }
 
         private static void DrawMouse()
         {
             Canvas.DrawImage((int)MouseManager.X, (int)MouseManager.Y, mouse, true);
+        }
+
+        private static void DoInput()
+        {
+            Window draggingWindow = GetDraggingWindow();
+            if (draggingWindow != null)
+            {
+                draggingWindow.HandleMouseInput();
+                return;
+            }
+
+            int hoveredWindowIdx = GetHoveredWindow();
+            if (hoveredWindowIdx != -1)
+            {
+                windows[hoveredWindowIdx].HandleMouseInput();
+
+                if (hoveredWindowIdx != windows.Count - 1 &&
+                    MouseManager.MouseState == MouseState.None &&
+                    previousMouseState != MouseState.None)
+                {
+                    MoveWindowToFront(windows[hoveredWindowIdx]);
+                }
+            }
         }
 
         public static void Update()
@@ -82,8 +102,6 @@ namespace GoOS.GUI
 
             Canvas.Clear(Color.UbuntuPurple);
 
-            Window lastWindowShown = null;
-
             for (int i = windows.Count - 1; i >= 0; i--)
             {
                 if (windows[i].Closing)
@@ -92,22 +110,16 @@ namespace GoOS.GUI
                 }
             }
 
+            DoInput();
+
             foreach (Window window in windows)
             {
+                window.HandleRun();
+
                 if (window.Visible)
                 {
                     window.DrawWindow(Canvas);
                 }
-
-                lastWindowShown = window;
-            }
-
-            CheckWindowHover();
-
-            if (lastWindowShown != null)
-            {
-                lastWindowShown.InternalHandle();
-                lastWindowShown.Update();
             }
 
             Canvas.DrawString(128, Canvas.Height - 37,
