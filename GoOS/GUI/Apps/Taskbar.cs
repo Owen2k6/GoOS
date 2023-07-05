@@ -39,5 +39,9 @@ public class Taskbar : Window
     private void StartClicked()
     {
         startMenu.Visible = !startMenu.Visible;
+        if (startMenu.Visible)
+        {
+            WindowManager.MoveWindowToFront(startMenu);
+        }
     }
 }

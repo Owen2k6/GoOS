@@ -20,6 +20,8 @@ namespace GoOS.GUI
 
         public bool pressed = false;
 
+        private const int PUSH_DEPTH = 1;
+
         public Button(Window parent, ushort x, ushort y, ushort width, ushort height, string title)
             : base(parent, x, y, width, height)
         {
@@ -73,13 +75,31 @@ namespace GoOS.GUI
 
             if (Image != null)
             {
-                Contents.DrawImage((Contents.Width - Image.Width) / 2, 0, Image, true);
+                int imageX = (Contents.Width - Image.Width) / 2;
+                int imageY = 0;
+
+                if (pressed && UseSystemStyle)
+                {
+                    imageX += PUSH_DEPTH;
+                    imageY += PUSH_DEPTH;
+                }
+
+                Contents.DrawImage(imageX, imageY, Image, true);
             }
 
             // Title.
+            int textX = Contents.Width / 2;
             int textY = Image != null ? Image.Height + 12 : Contents.Height / 2;
+
+            if (pressed && UseSystemStyle)
+            {
+                textX += PUSH_DEPTH;
+                textY += PUSH_DEPTH;
+            }
+
             Color textColour = UseSystemStyle ? Color.Black : TextColour;
-            Contents.DrawString(Contents.Width / 2, textY, Title, BetterConsole.font, textColour, true);
+
+            Contents.DrawString(textX, textY, Title, BetterConsole.font, textColour, true);
 
             Parent.RenderControls();
         }

@@ -9,6 +9,7 @@ using PrismAPI.Graphics;
 using Cosmos.Core.Memory;
 using PrismAPI.UI;
 using Cosmos.System;
+using GoOS.GUI.Apps;
 
 namespace GoOS.GUI
 {
@@ -25,6 +26,8 @@ namespace GoOS.GUI
 
         private static readonly List<Window> windows = new List<Window>(10);
 
+        private static int altTabIndex;
+
         public static Display Canvas;
 
         public static void AddWindow(Window window)
@@ -32,20 +35,20 @@ namespace GoOS.GUI
             windows.Add(window);
         }
 
-        public static Window GetWindowByType<T>()
+        public static T GetWindowByType<T>()
         {
             foreach (Window window in windows)
             {
                 if (window is T winOfT)
                 {
-                    return window;
+                    return winOfT;
                 }
             }
 
-            return null;
+            return default; // null
         }
 
-        private static void MoveWindowToFront(Window window)
+        public static void MoveWindowToFront(Window window)
         {
             windows.Add(window);
             windows.Remove(window);
@@ -55,7 +58,7 @@ namespace GoOS.GUI
         {
             for (int i = windows.Count - 1; i >= 0; i--)
             {
-                if (windows[i].IsMouseOver)
+                if (windows[i].IsMouseOver && windows[i].Visible)
                 {
                     return i;
                 }
@@ -82,8 +85,50 @@ namespace GoOS.GUI
             Canvas.DrawImage((int)MouseManager.X, (int)MouseManager.Y, mouse, true);
         }
 
+        private static void AltTab()
+        {
+            List<Window> tabbableWindows = new List<Window>();
+            foreach (Window window in windows)
+            {
+                if (window.HasTitlebar)
+                {
+                    tabbableWindows.Add(window);
+                }
+            }
+
+            if (tabbableWindows.Count < 2)
+            {
+                return;
+            }
+
+            int tabIndex = tabbableWindows.IndexOf(windows[^1]);
+            if (tabIndex == -1)
+            {
+                tabIndex = 0;
+            }
+            tabIndex = (tabIndex + 1) % tabbableWindows.Count;
+
+            MoveWindowToFront(tabbableWindows[tabIndex]);
+        }
+
+        private static void ToggleStartMenu()
+        {
+            StartMenu startMenu = GetWindowByType<StartMenu>();
+
+            startMenu.Visible = !startMenu.Visible;
+            if (startMenu.Visible)
+            {
+                MoveWindowToFront(startMenu);
+            }
+        }
+
         private static void DoInput()
         {
+            if (windows.Count == 0)
+            {
+                return;
+            }
+
             Window draggingWindow = GetDraggingWindow();
             if (draggingWindow != null)
             {
@@ -108,6 +153,33 @@ namespace GoOS.GUI
                     MoveWindowToFront(windows[hoveredWindowIdx]);
                 }
             }
+
+            Window focusedWindow = windows[windows.Count - 1];
+
+            bool keyPressed = KeyboardManager.TryReadKey(out var key);
+            if (keyPressed)
+            {
+                if ((key.Modifiers & ConsoleModifiers.Alt) == ConsoleModifiers.Alt &&
+                    key.Key == ConsoleKeyEx.Tab)
+                {
+                    AltTab();
+                    return;
+                }
+
+                if (key.Key == ConsoleKeyEx.LWin ||
+                    key.Key == ConsoleKeyEx.RWin)
+                {
+                    ToggleStartMenu();
+                    return;
+                }
+
+                focusedWindow.HandleKey(key);
+            }
+        }
+
+        public static void CloseAll()
+        {
+            windows.Clear();
         }
 
         public static void Update()
@@ -121,9 +193,6 @@ namespace GoOS.GUI
                     MouseManager.ScreenHeight = Canvas.Height;
                 }
 
-                // MouseManager.ScreenWidth = Canvas.Width; // make it like this, cosmos is sometimes weird and makes your code not work
-                // MouseManager.ScreenHeight = Canvas.Height;
-
                 Canvas.Clear(Color.UbuntuPurple);
 
                 for (int i = windows.Count - 1; i >= 0; i--)
@@ -136,13 +205,16 @@ namespace GoOS.GUI
 
                 DoInput();
 
-                foreach (Window window in windows)
+                for (int i = 0; i <= windows.Count - 1; i++)
                 {
+                    Window window = windows[i];
+                    bool focused = i == windows.Count - 1;
+
                     window.HandleRun();
 
                     if (window.Visible)
                     {
-                        window.DrawWindow(Canvas);
+                        window.DrawWindow(Canvas, focused);
                     }
                 }
 
@@ -159,9 +231,17 @@ namespace GoOS.GUI
                 Canvas.Update();
 
                 previousMouseState = MouseManager.MouseState;
+
+                MemoryWatch.Watch();
             }
             else
             {
+                bool keyPressed = KeyboardManager.TryReadKey(out var key);
+                if (keyPressed)
+                {
+                    BetterConsole.KeyBuffer.Enqueue(key);
+                }
+
                 Canvas.DrawImage(0, 0, BetterConsole.Canvas, false);
                 Canvas.Update();
             }

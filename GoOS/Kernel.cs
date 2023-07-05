@@ -74,7 +74,7 @@ namespace GoOS
             WindowManager.Canvas = Display.GetDisplay(800, 600); //TODO: Not have this hard coded >:^(
             Console.Init(800, 600);
 
-            var loadingDialogue = new LoadingDialogue();
+            var loadingDialogue = new LoadingDialogue("GoOS is starting\nPlease wait...");
             WindowManager.AddWindow(loadingDialogue);
 
             ThemeManager.SetTheme(Theme.Fallback);
