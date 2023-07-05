@@ -60,7 +60,7 @@ namespace GoOS.GUI.Apps
                 (ushort)(Contents.Height - 64 - 8),
                 96,
                 64,
-                "Shut Down"
+                "Power..."
             );
 
             button.Image = shutdownIcon;

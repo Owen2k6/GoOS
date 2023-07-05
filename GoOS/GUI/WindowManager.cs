@@ -9,6 +9,7 @@ using PrismAPI.Graphics;
 using Cosmos.Core.Memory;
 using PrismAPI.UI;
 using Cosmos.System;
+using GoOS.GUI.Apps;
 
 namespace GoOS.GUI
 {
@@ -34,17 +35,17 @@ namespace GoOS.GUI
             windows.Add(window);
         }
 
-        public static Window GetWindowByType<T>()
+        public static T GetWindowByType<T>()
         {
             foreach (Window window in windows)
             {
                 if (window is T winOfT)
                 {
-                    return window;
+                    return winOfT;
                 }
             }
 
-            return null;
+            return default; // null
         }
 
         public static void MoveWindowToFront(Window window)
@@ -110,6 +111,17 @@ namespace GoOS.GUI
             MoveWindowToFront(tabbableWindows[tabIndex]);
         }
 
+        private static void ToggleStartMenu()
+        {
+            StartMenu startMenu = GetWindowByType<StartMenu>();
+
+            startMenu.Visible = !startMenu.Visible;
+            if (startMenu.Visible)
+            {
+                MoveWindowToFront(startMenu);
+            }
+        }
+
         private static void DoInput()
         {
             if (windows.Count == 0)
@@ -151,6 +163,13 @@ namespace GoOS.GUI
                     key.Key == ConsoleKeyEx.Tab)
                 {
                     AltTab();
+                    return;
+                }
+
+                if (key.Key == ConsoleKeyEx.LWin ||
+                    key.Key == ConsoleKeyEx.RWin)
+                {
+                    ToggleStartMenu();
                     return;
                 }
 
@@ -217,6 +236,12 @@ namespace GoOS.GUI
             }
             else
             {
+                bool keyPressed = KeyboardManager.TryReadKey(out var key);
+                if (keyPressed)
+                {
+                    BetterConsole.KeyBuffer.Enqueue(key);
+                }
+
                 Canvas.DrawImage(0, 0, BetterConsole.Canvas, false);
                 Canvas.Update();
             }
