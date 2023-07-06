@@ -10,6 +10,7 @@ using Cosmos.Core.Memory;
 using PrismAPI.UI;
 using Cosmos.System;
 using GoOS.GUI.Apps;
+using PrismAPI.Runtime.SystemCall;
 
 namespace GoOS.GUI
 {
@@ -30,9 +31,15 @@ namespace GoOS.GUI
 
         public static Display Canvas;
 
+        internal static Action<Window> TaskbarWindowAddedHook;
+
+        internal static Action<Window> TaskbarWindowRemovedHook;
+
         public static void AddWindow(Window window)
         {
             windows.Add(window);
+
+            TaskbarWindowAddedHook?.Invoke(window);
         }
 
         public static T GetWindowByType<T>()
@@ -199,6 +206,8 @@ namespace GoOS.GUI
                 {
                     if (windows[i].Closing)
                     {
+                        TaskbarWindowRemovedHook?.Invoke(windows[i]);
+
                         windows.RemoveAt(i);
                     }
                 }
@@ -220,11 +229,13 @@ namespace GoOS.GUI
 
                 string fps = Canvas.GetFPS() + "fps";
 
-                Canvas.DrawString(Canvas.Width - 85, Canvas.Height - 12, fps, BetterConsole.font, Color.White, true);
+                Canvas.DrawString(Canvas.Width - 85, Canvas.Height - 13, fps, BetterConsole.font, Color.Black, true);
+
+                // Todo, move this clock to the taskbar for perf. reasons
 
                 string Hour = Cosmos.HAL.RTC.Hour.ToString(), Minute = Cosmos.HAL.RTC.Minute.ToString();
                 if (Minute.Length < 2) Minute = "0" + Minute;
-                Canvas.DrawString(Canvas.Width - 30, Canvas.Height - 12, Hour + ":" + Minute, BetterConsole.font, Color.White, true);
+                Canvas.DrawString(Canvas.Width - 30, Canvas.Height - 13, Hour + ":" + Minute, BetterConsole.font, Color.Black, true);
 
                 DrawMouse();
 

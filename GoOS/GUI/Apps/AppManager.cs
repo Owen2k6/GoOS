@@ -53,6 +53,9 @@ namespace GoOS.GUI.Apps
             };
             clockButton.Clicked = OpenClock;
 
+            Input input = new Input(this, 10, 250, 150, 20, "Type here...");
+            input.Render();
+
             foreach (Control control in Controls)
             {
                 control.Render();

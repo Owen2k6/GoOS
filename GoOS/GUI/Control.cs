@@ -38,8 +38,12 @@ namespace GoOS.GUI
 
         public abstract void Render();
 
-        internal virtual void HandleDown() { }
+        internal virtual void HandleDown(MouseEventArgs args) { }
 
         internal virtual void HandleRelease() { }
+
+        internal virtual void HandleUnfocus() { }
+
+        internal virtual void HandleKey(KeyEvent key) { }
     }
 }
