@@ -45,6 +45,8 @@ namespace GoOS.GUI
         private bool wasDown = false;
         private Control downOnControl = null;
 
+        public Control FocusedControl = null;
+
         /// <summary>
         /// Runs every cycle, regardless of focus.
         /// You must call the base if you override this function.
@@ -211,7 +213,14 @@ namespace GoOS.GUI
 
                 if (MouseManager.MouseState == MouseState.Left)
                 {
-                    hoveredControl?.HandleDown();
+                    FocusedControl = hoveredControl;
+
+                    hoveredControl?.HandleDown(new MouseEventArgs()
+                    {
+                        X = RelativeMouseX - hoveredControl.X,
+                        Y = RelativeMouseY - hoveredControl.Y,
+                        MouseState = MouseManager.MouseState
+                    });
                 }
             }
 
@@ -228,6 +237,14 @@ namespace GoOS.GUI
                 if (previousMouseState == MouseState.Left)
                 {
                     hoveredControl?.Clicked?.Invoke();
+                }
+
+                foreach (Control control in Controls)
+                {
+                    if (control != hoveredControl)
+                    {
+                        control.HandleUnfocus();
+                    }
                 }
             }
 
@@ -282,7 +299,16 @@ namespace GoOS.GUI
         /// <summary>
         /// User function to handle a key being pressed. Only routed to the focused window.
         /// </summary>
-        public virtual void HandleKey(KeyEvent key) { }
+        public virtual void HandleKey(KeyEvent key)
+        {
+            foreach (Control control in Controls)
+            {
+                if (control == FocusedControl)
+                {
+                    control.HandleKey(key);
+                }
+            }
+        }
 
         public void Dispose()
         {

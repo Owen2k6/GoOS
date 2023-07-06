@@ -1,4 +1,5 @@
-﻿using PrismAPI.Graphics;
+﻿using GoOS.GUI.Models;
+using PrismAPI.Graphics;
 using System.ComponentModel;
 
 namespace GoOS.GUI
@@ -104,7 +105,7 @@ namespace GoOS.GUI
             Parent.RenderControls();
         }
 
-        internal override void HandleDown()
+        internal override void HandleDown(MouseEventArgs _args)
         {
             pressed = true;
             Render();
