@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sys = Cosmos.System;
-using PrismAPI.Graphics;
-using IL2CPU.API.Attribs;
+﻿using System.Collections.Generic;
 using Cosmos.System;
-using PrismAPI.Graphics.Animation;
-using PrismAPI.UI;
 using GoOS.GUI.Models;
+using IL2CPU.API.Attribs;
+using PrismAPI.Graphics;
 
 namespace GoOS.GUI
 {
@@ -98,10 +91,10 @@ namespace GoOS.GUI
         {
             get
             {
-                return MouseManager.X >= X                                             &&
-                       MouseManager.X <  X + Contents.Width                            &&
-                       MouseManager.Y >= Y                                             &&
-                       MouseManager.Y <  Y + Contents.Height + (HasTitlebar ? 19 : 0);
+                return MouseManager.X >= X &&
+                       MouseManager.X < X + Contents.Width &&
+                       MouseManager.Y >= Y &&
+                       MouseManager.Y < Y + Contents.Height + (HasTitlebar ? 19 : 0);
             }
         }
 
@@ -109,10 +102,10 @@ namespace GoOS.GUI
         {
             get
             {
-                return MouseManager.X >= X                                             &&
-                       MouseManager.X <  X + Contents.Width                            &&
-                       MouseManager.Y >= Y + (HasTitlebar ? 19 : 0)                    &&
-                       MouseManager.Y <  Y + (HasTitlebar ? 19 : 0) + Contents.Height;
+                return MouseManager.X >= X &&
+                       MouseManager.X < X + Contents.Width &&
+                       MouseManager.Y >= Y + (HasTitlebar ? 19 : 0) &&
+                       MouseManager.Y < Y + (HasTitlebar ? 19 : 0) + Contents.Height;
             }
         }
 
@@ -125,10 +118,10 @@ namespace GoOS.GUI
                     return false;
                 }
 
-                return MouseManager.X >= X                  &&
-                       MouseManager.X <  X + Contents.Width &&
-                       MouseManager.Y >= Y                  &&
-                       MouseManager.Y <  Y + 19;
+                return MouseManager.X >= X &&
+                       MouseManager.X < X + Contents.Width &&
+                       MouseManager.Y >= Y &&
+                       MouseManager.Y < Y + 19;
             }
         }
 
@@ -156,20 +149,20 @@ namespace GoOS.GUI
 
         internal void HandleMouseInput()
         {
-            if (Closable                                   &&
-                IsMouseOverCloseButton                     &&
+            if (Closable &&
+                IsMouseOverCloseButton &&
                 MouseManager.MouseState == MouseState.None &&
-                previousMouseState      == MouseState.Left)
+                previousMouseState == MouseState.Left)
             {
                 // Close the window.
 
                 Closing = true;
             }
 
-            if (IsMouseOverTitleBar                         &&
-                !IsMouseOverCloseButton                     &&
-                MouseManager.MouseState == MouseState.Left  &&
-                previousMouseState      == MouseState.None)
+            if (IsMouseOverTitleBar &&
+                !IsMouseOverCloseButton &&
+                MouseManager.MouseState == MouseState.Left &&
+                previousMouseState == MouseState.None)
             {
                 // Start dragging the window.
 
@@ -256,7 +249,7 @@ namespace GoOS.GUI
             if (HasTitlebar)
             {
                 // Title bar.
-                cv.DrawFilledRectangle(X, Y, Contents.Width, 19, 0, 
+                cv.DrawFilledRectangle(X, Y, Contents.Width, 19, 0,
                     focused ? Color.LighterBlack : Color.DeepGray);
 
                 cv.DrawString(X + 2, Y, Title, BetterConsole.font, Color.White);

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Cosmos.HAL.Drivers.Video;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
+using GoOS.GUI;
 
 namespace GoOS.GUI.Apps;
 
@@ -48,7 +49,7 @@ public class Taskbar : Window
     {
         // Contents.Clear(Color.DeepGray);
         // Contents.DrawFilledRectangle(0, 0, WindowManager.Canvas.Width, 3, 0, Color.LightGray);
-
+        
         RenderOutsetWindowBackground(); // 3d
 
         RenderControls();
@@ -56,10 +57,13 @@ public class Taskbar : Window
     
     private void StartClicked()
     {
-        startMenu.Visible = !startMenu.Visible;
-        if (startMenu.Visible)
+        if (!WindowManager.Dimmed)
         {
-            WindowManager.MoveWindowToFront(startMenu);
+            startMenu.Visible = !startMenu.Visible;
+            if (startMenu.Visible)
+            {
+                WindowManager.MoveWindowToFront(startMenu);
+            }
         }
     }
 

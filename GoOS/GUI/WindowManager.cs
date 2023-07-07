@@ -31,6 +31,8 @@ namespace GoOS.GUI
 
         public static Display Canvas;
 
+        public static bool Dimmed = false;
+
         internal static Action<Window> TaskbarWindowAddedHook;
 
         internal static Action<Window> TaskbarWindowRemovedHook;
@@ -120,12 +122,15 @@ namespace GoOS.GUI
 
         private static void ToggleStartMenu()
         {
-            StartMenu startMenu = GetWindowByType<StartMenu>();
-
-            startMenu.Visible = !startMenu.Visible;
-            if (startMenu.Visible)
+            if (!Dimmed)
             {
-                MoveWindowToFront(startMenu);
+                StartMenu startMenu = GetWindowByType<StartMenu>();
+
+                startMenu.Visible = !startMenu.Visible;
+                if (startMenu.Visible)
+                {
+                    MoveWindowToFront(startMenu);
+                }
             }
         }
 
@@ -139,7 +144,8 @@ namespace GoOS.GUI
             Window draggingWindow = GetDraggingWindow();
             if (draggingWindow != null)
             {
-                if (windows.IndexOf(draggingWindow) != windows.Count - 1)
+                if (!Dimmed &&
+                    windows.IndexOf(draggingWindow) != windows.Count - 1)
                 {
                     MoveWindowToFront(draggingWindow);
                 }
@@ -155,7 +161,8 @@ namespace GoOS.GUI
                 windows[hoveredWindowIdx].HandleMouseInput();
 
                 if (hoveredWindowIdx        != windows.Count - 1 &&
-                    MouseManager.MouseState != MouseState.None)
+                    MouseManager.MouseState != MouseState.None &&
+                    !Dimmed)
                 {
                     MoveWindowToFront(windows[hoveredWindowIdx]);
                 }
@@ -167,7 +174,8 @@ namespace GoOS.GUI
             if (keyPressed)
             {
                 if ((key.Modifiers & ConsoleModifiers.Alt) == ConsoleModifiers.Alt &&
-                    key.Key == ConsoleKeyEx.Tab)
+                    key.Key == ConsoleKeyEx.Tab &&
+                    !Dimmed)
                 {
                     AltTab();
                     return;
@@ -208,6 +216,9 @@ namespace GoOS.GUI
                     {
                         TaskbarWindowRemovedHook?.Invoke(windows[i]);
 
+                        if (windows[i].Title == "GoOS")
+                            Dimmed = false;
+
                         windows.RemoveAt(i);
                     }
                 }
@@ -220,6 +231,9 @@ namespace GoOS.GUI
                     bool focused = i == windows.Count - 1;
 
                     window.HandleRun();
+
+                    if (focused && Dimmed)
+                        DimBackground();
 
                     if (window.Visible)
                     {
@@ -263,6 +277,30 @@ namespace GoOS.GUI
                 framesToHeapCollect = 10;
             }
             framesToHeapCollect--;
+        }
+
+        private static void DimBackground()
+        {
+            for (int y = 0; y < WindowManager.Canvas.Height - 1; y++)
+            {
+                for (int x = 0; x < WindowManager.Canvas.Width - 1; x++)
+                {
+                    if ((y % 2) == 0)
+                    {
+                        if ((x % 2) == 0)
+                        {
+                            WindowManager.Canvas[x, y] = Color.Black;
+                        }
+                    }
+                    else
+                    {
+                        if ((x % 2) == 0)
+                        {
+                            WindowManager.Canvas[x + 1, y] = Color.Black;
+                        }
+                    }
+                }
+            }
         }
     }
 }
