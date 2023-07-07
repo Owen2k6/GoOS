@@ -41,7 +41,8 @@ namespace GoOS.GUI.Apps
 
         private static void FolderClicked()
         {
-            WindowManager.AddWindow(new Apps.AppManager());
+            if (!WindowManager.Dimmed)
+                WindowManager.AddWindow(new Apps.AppManager());
         }
     }
 }

@@ -110,6 +110,7 @@ namespace GoOS.GUI.Apps
 
         private void ExitGui_Click()
         {
+            WindowManager.Dimmed = true;
             Dialogue.Show(
                 "GoOS",
                 "Exit to the console?",
@@ -117,6 +118,8 @@ namespace GoOS.GUI.Apps
                 {
                     new() { Text = "Exit", Callback = () =>
                     {
+                        WindowManager.Dimmed = false;
+
                         WindowManager.CloseAll();
 
                         BetterConsole.ConsoleMode = true;
@@ -127,6 +130,8 @@ namespace GoOS.GUI.Apps
                         );
                         
                         // ^ TODO not hardcode.
+
+                        WindowManager.AddWindow(new GTerm());
                     }},
 
                     new() { Text = "Cancel" }
@@ -139,6 +144,7 @@ namespace GoOS.GUI.Apps
 
         private void Power_Click()
         {
+            WindowManager.Dimmed = true;
             Dialogue.Show(
                 "GoOS",
                 "What would you like to do?",

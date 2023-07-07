@@ -170,7 +170,7 @@ namespace GoOS
 
             Canvas cv = Image.FromBitmap(rawBootLogo, false);
             Console.Canvas.DrawImage(0, 0, cv, false);
-            Console.SetCursorPosition(0, 12);
+            Console.SetCursorPosition(0, 13);
 
             Directory.SetCurrentDirectory(@"0:\");
         }
@@ -201,8 +201,6 @@ namespace GoOS
             textcolour(ThemeManager.Default);
         }
 
-
-
         protected override void Run()
         {
             isGCIenabled = File.Exists(@"0:\content\sys\GCI.gms");
@@ -223,6 +221,13 @@ namespace GoOS
 
             switch (args[0])
             {
+                case "gui":
+                    Console.ConsoleMode = false;
+                    WindowManager.Canvas = Display.GetDisplay(1280, 720);
+                    WindowManager.AddWindow(new Taskbar());
+                    WindowManager.AddWindow(new DesktopIcons());
+                    WindowManager.AddWindow(new Welcome());
+                    break;
                 case "exit":
                     Console.Visible = false;
                     break;
