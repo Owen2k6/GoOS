@@ -41,28 +41,9 @@ namespace GoOS
         //Vars for OS
         public static string version = "1.5";
         public static string BuildType = "Beta";
-
-        //We dont even use these 2 vars anymore
-        // Who cares -ekeleze
-        public bool cmdm = true;
-        public bool root = false;
-        // i do! - nobody
-
         public static string olddir = @"0:\";
 
         public static Sys.FileSystem.CosmosVFS FS;
-        public static string file;
-
-        NetworkDevice nic = NetworkDevice.GetDeviceByName("eth0");
-        private static string request = string.Empty;
-        private static TcpClient tcpc = new TcpClient(80);
-        private static Address dns = new Address(8, 8, 8, 8);
-        private static EndPoint endPoint = new EndPoint(dns, 80);
-
-        public static bool ParseHeader()
-        {
-            return false;
-        }
 
         public static string username = null;
         public static string computername = null;
