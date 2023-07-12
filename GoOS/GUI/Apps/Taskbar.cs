@@ -27,7 +27,7 @@ public class Taskbar : Window
         //so it displays at the bottom of the screen
         X = 0;
         Y = WindowManager.Canvas.Height - 28;
-        Title = "GoOS";
+        Title = nameof(Taskbar);
         Visible = true;
         Closable = false;
         HasTitlebar = false;

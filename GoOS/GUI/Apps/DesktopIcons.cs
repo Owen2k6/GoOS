@@ -21,6 +21,7 @@ namespace GoOS.GUI.Apps
             Contents.Clear(Color.UbuntuPurple);
             X = 10;
             Y = 10;
+            Title = nameof(DesktopIcons);
             Visible = true;
             Closable = false;
             HasTitlebar = false;

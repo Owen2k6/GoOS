@@ -1,37 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cosmos.Core.Memory;
 using Cosmos.System;
+using GoOS.GUI;
+using GoOS.Themes;
 using IL2CPU.API.Attribs;
-using PrismAPI.Hardware.GPU;
 using PrismAPI.Graphics;
 using PrismAPI.Graphics.Fonts;
-using GoOS.Themes;
-using Cosmos.Core.Memory;
-using GoOS;
-using GoOS.GUI;
 
 /// <summary>
 /// <see cref="BetterConsole"/> class
 /// </summary>
 public static class BetterConsole
 {
+    /* The raw global font */
     [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_1x.btf")]
-    private static byte[] rawFont;
+    public static byte[] rawFont;
 
+    /* The credits easter egg */
     [ManifestResourceStream(ResourceName = "GoOS.Resources.Credits05.bmp")]
     private static byte[] easterEgg;
 
+    /* The global font */
     public static Font font;
 
+    /* The canvas for the console */
     public static Canvas Canvas;
 
-    private static ushort charWidth = 8, charHeight = 16;
+    /* Character width and height */
+    public static ushort charWidth = 8, charHeight = 16;
 
-    private static List<string> menuOptions = new()
+    /*private static List<string> menuOptions = new()
     {
         "Launch Settings",
         "Reboot"
-    };
+    };*/
 
     public static bool ConsoleMode = false;
 
@@ -273,7 +276,7 @@ public static class BetterConsole
                                     Write("Nope");
                                 }
                             }
-                            else if (KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
+                            /*else if (KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
                             {
                                 int selected = 0;
 
@@ -341,7 +344,7 @@ public static class BetterConsole
 
                                 Clear();
                                 GoOS.Kernel.DrawPrompt();
-                            }
+                            }*/
                         }
                         else
                         {

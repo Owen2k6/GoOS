@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IL2CPU.API.Attribs;
-using PrismAPI.Hardware.GPU;
-using PrismAPI.Graphics;
 using Cosmos.Core.Memory;
-using PrismAPI.UI;
 using Cosmos.System;
 using GoOS.GUI.Apps;
-using PrismAPI.Runtime.SystemCall;
+using IL2CPU.API.Attribs;
+using PrismAPI.Graphics;
+using PrismAPI.Graphics.Fonts;
+using PrismAPI.Hardware.GPU;
 
 namespace GoOS.GUI
 {
@@ -19,15 +15,9 @@ namespace GoOS.GUI
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse.bmp")] private static byte[] mouseRaw;
         private static Canvas mouse = Image.FromBitmap(mouseRaw, false);
 
-        // private static bool initialised = false;
-
         private static int framesToHeapCollect = 10;
 
-        private static MouseState previousMouseState = MouseState.None;
-
-        private static readonly List<Window> windows = new List<Window>(10);
-
-        private static int altTabIndex;
+        public static readonly List<Window> windows = new List<Window>(10);
 
         public static Display Canvas;
 
@@ -36,6 +26,17 @@ namespace GoOS.GUI
         internal static Action<Window> TaskbarWindowAddedHook;
 
         internal static Action<Window> TaskbarWindowRemovedHook;
+
+        public static void RemoveWindowByTitle(string wnd)
+        {
+            foreach (Window w in windows)
+            {
+                if (w.Title == wnd)
+                {
+                    w.Dispose();
+                }
+            }
+        }
 
         public static void AddWindow(Window window)
         {
@@ -160,7 +161,7 @@ namespace GoOS.GUI
             {
                 windows[hoveredWindowIdx].HandleMouseInput();
 
-                if (hoveredWindowIdx        != windows.Count - 1 &&
+                if (hoveredWindowIdx != windows.Count - 1 &&
                     MouseManager.MouseState != MouseState.None &&
                     !Dimmed)
                 {
@@ -181,11 +182,26 @@ namespace GoOS.GUI
                     return;
                 }
 
-                if (key.Key == ConsoleKeyEx.LWin ||
+                else if (key.Key == ConsoleKeyEx.LWin ||
                     key.Key == ConsoleKeyEx.RWin)
                 {
                     ToggleStartMenu();
                     return;
+                }
+
+                else if (KeyboardManager.ControlPressed && key.Key == ConsoleKeyEx.G)
+                {
+                    BetterConsole.font = new Font(BetterConsole.rawFont, BetterConsole.charHeight);
+                    Dialogue.Show(
+                        nameof(WindowManager),
+                        $"Regenerated font",
+                        null
+                    );
+                }
+
+                else if (KeyboardManager.ControlPressed && KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
+                {
+                    AddWindow(new TaskManager());
                 }
 
                 focusedWindow.HandleKey(key);
@@ -197,86 +213,107 @@ namespace GoOS.GUI
             windows.Clear();
         }
 
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.warning.bmp")] private static byte[] warningIconRaw;
+        private static Canvas warningIcon = Image.FromBitmap(warningIconRaw, false);
+
         public static void Update()
         {
-            if (!BetterConsole.ConsoleMode)
+            try
             {
-                if (MouseManager.ScreenWidth  != Canvas.Width ||
-                    MouseManager.ScreenHeight != Canvas.Height)
+                if (!BetterConsole.ConsoleMode)
                 {
-                    MouseManager.ScreenWidth = Canvas.Width;
-                    MouseManager.ScreenHeight = Canvas.Height;
-                }
-
-                Canvas.Clear(Color.UbuntuPurple);
-
-                for (int i = windows.Count - 1; i >= 0; i--)
-                {
-                    if (windows[i].Closing)
+                    if (MouseManager.ScreenWidth != Canvas.Width ||
+                        MouseManager.ScreenHeight != Canvas.Height)
                     {
-                        TaskbarWindowRemovedHook?.Invoke(windows[i]);
-
-                        if (windows[i].Title == "GoOS")
-                            Dimmed = false;
-
-                        windows.RemoveAt(i);
+                        MouseManager.ScreenWidth = Canvas.Width;
+                        MouseManager.ScreenHeight = Canvas.Height;
                     }
-                }
 
-                DoInput();
+                    Canvas.Clear(Color.UbuntuPurple);
 
-                for (int i = 0; i <= windows.Count - 1; i++)
-                {
-                    Window window = windows[i];
-                    bool focused = i == windows.Count - 1;
-
-                    window.HandleRun();
-
-                    if (focused && Dimmed)
-                        DimBackground();
-
-                    if (window.Visible)
+                    for (int i = windows.Count - 1; i >= 0; i--)
                     {
-                        window.DrawWindow(Canvas, focused);
+                        if (windows[i].Closing)
+                        {
+                            TaskbarWindowRemovedHook?.Invoke(windows[i]);
+
+                            if (windows[i].Title == "GoOS")
+                                Dimmed = false;
+
+                            windows.RemoveAt(i);
+                        }
                     }
+
+                    DoInput();
+
+                    if (KeyboardManager.TryReadKey(out var key))
+                    {
+                        if (KeyboardManager.ControlPressed && KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
+                        {
+                            AddWindow(new TaskManager());
+                        }
+                    }
+
+                    for (int i = 0; i <= windows.Count - 1; i++)
+                    {
+                        Window window = windows[i];
+                        bool focused = i == windows.Count - 1;
+
+                        window.HandleRun();
+
+                        if (focused && Dimmed)
+                            DimBackground();
+
+                        if (window.Visible)
+                        {
+                            window.DrawWindow(Canvas, focused);
+                        }
+                    }
+
+                    string fps = Canvas.GetFPS() + "fps";
+
+                    Canvas.DrawString(Canvas.Width - 85, Canvas.Height - 13, fps, BetterConsole.font, Color.Black, true);
+
+                    // Todo, move this clock to the taskbar for perf. reasons
+
+                    string Hour = Cosmos.HAL.RTC.Hour.ToString(), Minute = Cosmos.HAL.RTC.Minute.ToString();
+                    if (Minute.Length < 2) Minute = "0" + Minute;
+                    Canvas.DrawString(Canvas.Width - 30, Canvas.Height - 13, Hour + ":" + Minute, BetterConsole.font, Color.Black, true);
+
+                    DrawMouse();
+
+                    Canvas.Update();
+
+                    MemoryWatch.Watch();
                 }
-
-                string fps = Canvas.GetFPS() + "fps";
-
-                Canvas.DrawString(Canvas.Width - 85, Canvas.Height - 13, fps, BetterConsole.font, Color.Black, true);
-
-                // Todo, move this clock to the taskbar for perf. reasons
-
-                string Hour = Cosmos.HAL.RTC.Hour.ToString(), Minute = Cosmos.HAL.RTC.Minute.ToString();
-                if (Minute.Length < 2) Minute = "0" + Minute;
-                Canvas.DrawString(Canvas.Width - 30, Canvas.Height - 13, Hour + ":" + Minute, BetterConsole.font, Color.Black, true);
-
-                DrawMouse();
-
-                Canvas.Update();
-
-                previousMouseState = MouseManager.MouseState;
-
-                MemoryWatch.Watch();
-            }
-            else
-            {
-                bool keyPressed = KeyboardManager.TryReadKey(out var key);
-                if (keyPressed)
+                else
                 {
-                    BetterConsole.KeyBuffer.Enqueue(key);
+                    bool keyPressed = KeyboardManager.TryReadKey(out var key);
+                    if (keyPressed)
+                    {
+                        BetterConsole.KeyBuffer.Enqueue(key);
+                    }
+
+                    Canvas.DrawImage(0, 0, BetterConsole.Canvas, false);
+                    Canvas.Update();
                 }
 
-                Canvas.DrawImage(0, 0, BetterConsole.Canvas, false);
-                Canvas.Update();
+                if (framesToHeapCollect == 0)
+                {
+                    Heap.Collect();
+                    framesToHeapCollect = 10;
+                }
+                framesToHeapCollect--;
             }
-
-            if (framesToHeapCollect == 0)
+            catch (Exception ex)
             {
-                Heap.Collect();
-                framesToHeapCollect = 10;
+                Dialogue.Show(
+                    "Error",
+                    $"{ex.Message}",
+                    null, // default buttons
+                    warningIcon
+                );
             }
-            framesToHeapCollect--;
         }
 
         private static void DimBackground()

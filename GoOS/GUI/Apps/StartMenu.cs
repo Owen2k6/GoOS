@@ -50,6 +50,12 @@ namespace GoOS.GUI.Apps
                 WindowManager.AddWindow(new Clock());
                 Visible = false;
             });
+
+            AddAppButton("Task Manager", () =>
+            {
+                WindowManager.AddWindow(new TaskManager());
+                Visible = false;
+            });
         }
 
         private void AddPowerButton()
@@ -90,6 +96,7 @@ namespace GoOS.GUI.Apps
             Contents.Clear(Color.DeepGray);
             X = 0;
             Y = WindowManager.Canvas.Height - 28 - Contents.Height;
+            Title = nameof(StartMenu);
             HasTitlebar = false;
             Visible = false;
 
