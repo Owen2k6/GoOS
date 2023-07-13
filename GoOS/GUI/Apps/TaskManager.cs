@@ -1,72 +1,68 @@
 ﻿using System;
-using Cosmos.System;
 using PrismAPI.Graphics;
 
 namespace GoOS.GUI.Apps
 {
     public class TaskManager : Window
     {
-        Button UpdateButton;
-        Input  WindowToKill;
+        Button EndButton;
+        Button AboutButton;
+        List Windows;
 
         public TaskManager()
         {
-            Contents = new Canvas(200, Convert.ToUInt16(60 + WindowManager.windows.Count * 20));
-            X        = 200;
-            Y        = 100;
-            Title    = "Task Manager";
-            Visible  = true;
+            Contents = new Canvas(270, 310);
+            X = 200;
+            Y = 100;
+            Title = "Task Manager";
+            Visible = true;
             Closable = true;
 
-            UpdateButton = new Button(this, Convert.ToUInt16(Contents.Width - 22), Convert.ToUInt16(Contents.Height - 22), 20, 20, "X") { Clicked = KillButton_Click };
-            WindowToKill = new Input (this, 2, Convert.ToUInt16(Contents.Height - 21), Convert.ToUInt16(Contents.Width - 25), 20, "Window to kill");
+            EndButton = new Button(this, Convert.ToUInt16(Contents.Width - 90), Convert.ToUInt16(Contents.Height - 30), 80, 20, " End task ") { Clicked = EndButton_Click };
+            AboutButton = new Button(this, Convert.ToUInt16(Contents.Width - 124), Convert.ToUInt16(Contents.Height - 30), 24, 20, "?") { Clicked = AboutButton_Click };
+            Windows = new List(this, 10, 10, Convert.ToUInt16(Contents.Width - 20), Convert.ToUInt16(Contents.Height - 60), "Processes", Array.Empty<string>());
 
-            RenderWindowList();
-        }
+            WindowManager.TaskmanHook = Update;
 
-        public override void HandleKey(KeyEvent key)
-        {
-            base.HandleKey(key);
-
-            switch (key.Key)
-            {
-                case ConsoleKeyEx.F5:
-                    Refresh();
-                    break;
-
-                case ConsoleKeyEx.Enter:
-                    KillButton_Click();
-                    break;
-            }
-        }
-
-        private void KillButton_Click()
-        {
-            WindowManager.windows[Convert.ToInt32(WindowToKill.Text) - 1].Closing = true; /* Start from 1 instead of 0 */
-            Refresh();
-        }
-
-        private void Refresh()
-        {
-            Dispose();
-            WindowManager.AddWindow(new TaskManager());
-        }
-
-        private void RenderWindowList()
-        {
+            // Render the buttons.
             Contents.Clear(Color.White);
-            Contents.DrawString(2, 2, "Active Windows:", BetterConsole.font, Color.Black);
+            RenderSystemStyleBorder();
+            Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4), 38, 0, new Color(234, 234, 234));
+            AboutButton.Render();
+            EndButton.Render();
+        }
 
-            for (int i = 0; i < WindowManager.windows.Count; i++)
+        private void Update()
+        {
+            Windows.Items = new string[WindowManager.windows.Count]; // Reallocate array size.
+            for (int i = 0; i < Windows.Items.Length; i++)
+                Windows.Items[i] = WindowManager.windows[i].Title; // Copy the title from the windows array to the items array.
+
+            Windows.Render(); // Render the window list.
+        }
+
+        private void EndButton_Click()
+        {
+            if (WindowManager.windows[Windows.Selected].Unkillable)
             {
-                if (WindowManager.windows[i] != null)
-                {
-                    Contents.DrawString(2, Convert.ToUInt16(20 + (i * 20)), $"{i + 1 /* Same thing here */}. {WindowManager.windows[i].Title.Trim()}", BetterConsole.font, Color.Black);
-                }
+                Dialogue.Show(
+                    "Warning",
+                    "System processes are not\nendable.",
+                    null,
+                    WindowManager.warningIcon);
             }
+            else
+            {
+                WindowManager.windows[Windows.Selected].Closing = true; // Close the window.
+            }
+        }
 
-            UpdateButton.Render();
-            WindowToKill.Render();
+        private void AboutButton_Click()
+        {
+            Dialogue.Show(
+                "About Task Manager",
+                $"GoOS Task Manager v{Kernel.version}\n\nCopyright (c) 2023 Owen2k6\nAll rights reserved.",
+                null);
         }
     }
 }

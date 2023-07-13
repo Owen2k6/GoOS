@@ -31,8 +31,8 @@ namespace GoOS.GUI
             {
                 return MouseManager.X >= Parent.X + X                                                     &&
                    MouseManager.X     < Parent.X  + X + Contents.Width                                    &&
-                   MouseManager.Y     >= Parent.Y + Y + (Parent.HasTitlebar ? 19 : 0)                     &&
-                   MouseManager.Y     < Parent.Y  + Y + Contents.Height + (Parent.HasTitlebar ? 19 : 0);
+                   MouseManager.Y     >= Parent.Y + Y + (Parent.HasTitlebar ? Window.TITLE_BAR_HEIGHT : 0)                     &&
+                   MouseManager.Y     < Parent.Y  + Y + Contents.Height + (Parent.HasTitlebar ? Window.TITLE_BAR_HEIGHT : 0);
             }
         }
 

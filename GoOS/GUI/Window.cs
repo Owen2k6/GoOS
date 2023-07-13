@@ -26,6 +26,7 @@ namespace GoOS.GUI
         public bool Dragging;
         public bool Closing;
         public bool HasTitlebar = true;
+        public bool Unkillable = false;
 
         public List<Control> Controls = new();
 
@@ -39,6 +40,8 @@ namespace GoOS.GUI
         private Control downOnControl = null;
 
         public Control FocusedControl = null;
+
+        public const int TITLE_BAR_HEIGHT = 19;
 
         /// <summary>
         /// Runs every cycle, regardless of focus.
@@ -83,7 +86,7 @@ namespace GoOS.GUI
         {
             get
             {
-                return (int)(MouseManager.Y - Y - (HasTitlebar ? 19 : 0));
+                return (int)(MouseManager.Y - Y - (HasTitlebar ? TITLE_BAR_HEIGHT : 0));
             }
         }
 
@@ -94,7 +97,7 @@ namespace GoOS.GUI
                 return MouseManager.X >= X &&
                        MouseManager.X < X + Contents.Width &&
                        MouseManager.Y >= Y &&
-                       MouseManager.Y < Y + Contents.Height + (HasTitlebar ? 19 : 0);
+                       MouseManager.Y < Y + Contents.Height + (HasTitlebar ? TITLE_BAR_HEIGHT : 0);
             }
         }
 
@@ -104,8 +107,8 @@ namespace GoOS.GUI
             {
                 return MouseManager.X >= X &&
                        MouseManager.X < X + Contents.Width &&
-                       MouseManager.Y >= Y + (HasTitlebar ? 19 : 0) &&
-                       MouseManager.Y < Y + (HasTitlebar ? 19 : 0) + Contents.Height;
+                       MouseManager.Y >= Y + (HasTitlebar ? TITLE_BAR_HEIGHT : 0) &&
+                       MouseManager.Y < Y + (HasTitlebar ? TITLE_BAR_HEIGHT : 0) + Contents.Height;
             }
         }
 
@@ -121,7 +124,7 @@ namespace GoOS.GUI
                 return MouseManager.X >= X &&
                        MouseManager.X < X + Contents.Width &&
                        MouseManager.Y >= Y &&
-                       MouseManager.Y < Y + 19;
+                       MouseManager.Y < Y + TITLE_BAR_HEIGHT;
             }
         }
 
@@ -130,7 +133,7 @@ namespace GoOS.GUI
             get
             {
                 return IsMouseOverTitleBar &&
-                       MouseManager.X >= X + Contents.Width - 19;
+                       MouseManager.X >= X + Contents.Width - TITLE_BAR_HEIGHT;
             }
         }
 
@@ -249,7 +252,7 @@ namespace GoOS.GUI
             if (HasTitlebar)
             {
                 // Title bar.
-                cv.DrawFilledRectangle(X, Y, Contents.Width, 19, 0,
+                cv.DrawFilledRectangle(X, Y, Contents.Width, TITLE_BAR_HEIGHT, 0,
                     focused ? Color.LighterBlack : Color.DeepGray);
 
                 cv.DrawString(X + 2, Y, Title, BetterConsole.font, Color.White);
@@ -269,7 +272,7 @@ namespace GoOS.GUI
             }
 
             // Window contents.
-            cv.DrawImage(X, Y + (HasTitlebar ? 19 : 0), Contents, false);
+            cv.DrawImage(X, Y + (HasTitlebar ? TITLE_BAR_HEIGHT : 0), Contents, false);
         }
 
         /// <summary>
@@ -313,6 +316,12 @@ namespace GoOS.GUI
             // Background.
             Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, new Color(191, 191, 191));
 
+            // Border.
+            RenderSystemStyleBorder();
+        }
+
+        public void RenderSystemStyleBorder()
+        {
             // Highlight.
             Contents.DrawLine(0, 0, Contents.Width - 1, 0, Color.White);
             Contents.DrawLine(0, 0, 0, Contents.Height - 1, Color.White);

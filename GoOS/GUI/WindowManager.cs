@@ -27,6 +27,8 @@ namespace GoOS.GUI
 
         internal static Action<Window> TaskbarWindowRemovedHook;
 
+        internal static Action TaskmanHook;
+
         public static void RemoveWindowByTitle(string wnd)
         {
             foreach (Window w in windows)
@@ -42,6 +44,7 @@ namespace GoOS.GUI
         {
             windows.Add(window);
 
+            TaskmanHook?.Invoke();
             TaskbarWindowAddedHook?.Invoke(window);
         }
 
@@ -62,6 +65,8 @@ namespace GoOS.GUI
         {
             windows.Add(window);
             windows.Remove(window);
+
+            TaskmanHook?.Invoke();
         }
 
         private static int GetHoveredWindow()
@@ -194,7 +199,7 @@ namespace GoOS.GUI
                     BetterConsole.font = new Font(BetterConsole.rawFont, BetterConsole.charHeight);
                     Dialogue.Show(
                         nameof(WindowManager),
-                        $"Regenerated font",
+                        $"Regenerated font.",
                         null
                     );
                 }
@@ -214,7 +219,7 @@ namespace GoOS.GUI
         }
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.warning.bmp")] private static byte[] warningIconRaw;
-        private static Canvas warningIcon = Image.FromBitmap(warningIconRaw, false);
+        public static Canvas warningIcon = Image.FromBitmap(warningIconRaw, false);
 
         public static void Update()
         {
@@ -241,6 +246,8 @@ namespace GoOS.GUI
                                 Dimmed = false;
 
                             windows.RemoveAt(i);
+
+                            TaskmanHook?.Invoke();
                         }
                     }
 

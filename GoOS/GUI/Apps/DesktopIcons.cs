@@ -25,6 +25,7 @@ namespace GoOS.GUI.Apps
             Visible = true;
             Closable = false;
             HasTitlebar = false;
+            Unkillable = true;
 
             folderButton = new Button(this, 10, 10, 64, 80, "Apps")
             {

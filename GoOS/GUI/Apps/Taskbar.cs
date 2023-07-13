@@ -31,6 +31,7 @@ public class Taskbar : Window
         Visible = true;
         Closable = false;
         HasTitlebar = false;
+        Unkillable = true;
 
         startMenu = new StartMenu();
         WindowManager.AddWindow(startMenu);

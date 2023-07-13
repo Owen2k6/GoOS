@@ -99,6 +99,7 @@ namespace GoOS.GUI.Apps
             Title = nameof(StartMenu);
             HasTitlebar = false;
             Visible = false;
+            Unkillable = true;
 
             Contents.DrawImage(8, 8, userImage);
             Contents.DrawString(40, 16, Kernel.username, BetterConsole.font, Color.White);
