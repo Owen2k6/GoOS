@@ -553,7 +553,7 @@ namespace GoOS
                         break;
                     }
 
-                    Commands.Vm.command(args[1]);
+                    VM.Run(args[1]);
                     break;
                 case "clear":
                     Console.Clear();

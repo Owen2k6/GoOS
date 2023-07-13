@@ -1,28 +1,25 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace GoOS.Commands
 {
-    internal class Vm
+    public class VM
     {
-        public static void command(string args)
+        public static void Run(string args)
         {
-            string uprootdir = @"0:\content\vrt\";
-            string rootdir = @"0:\content\vrt\ChaOS\";
+            if (!Directory.Exists(@"0:\content\vrt\"))
+                Directory.CreateDirectory(@"0:\content\vrt\");
 
-            if (!Directory.Exists(uprootdir))
+            if (!Directory.Exists(@"0:\content\vrt\ChaOS\"))
+                Directory.CreateDirectory(@"0:\content\vrt\ChaOS\");
+            
+            if (args.Equals("ChaOS", StringComparison.OrdinalIgnoreCase))
             {
-                Directory.CreateDirectory(uprootdir);
-                if (!Directory.Exists(rootdir))
-                {
-                    Directory.CreateDirectory(rootdir);
-                }
-            }
-            else if (!Directory.Exists(rootdir))
-            {
-                Directory.CreateDirectory(rootdir);
-            }
+                Virtualisation.ChaOS.Kernel Kernel = new Virtualisation.ChaOS.Kernel();
+                Kernel.Start();
 
-            GoOS.Virtualisation.ChaOS.ChaOS.boot(@"0:\content\vrt\ChaOS\");
+                Kernel = null;
+            }
         }
     }
 }

@@ -101,10 +101,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="Virtualisation\Interface.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Remove="BetterConsole\Font_1x_2.btf" />
       <None Remove="Resources\credits05.bmp" />
       <None Remove="Resources\Font_1x.btf" />
@@ -167,10 +163,6 @@
       <EmbeddedResource Include="Resources\GUI\closebutton_hover.bmp" />
       <EmbeddedResource Include="Resources\MSUIGothicCustomCharset16.btf" />
       <EmbeddedResource Include="Resources\Welcome.bmp" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Include="Virtualisation\Interface.cs" />
     </ItemGroup>
 
     <ItemGroup>

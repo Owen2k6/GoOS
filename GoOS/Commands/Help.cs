@@ -29,7 +29,7 @@ namespace GoOS.Commands
                         log(ThemeManager.WindowText, "cd.. - Go to the parent directory.");
                         log(ThemeManager.WindowText, "cdr - Jump to root from anywhere.");
                         log(ThemeManager.WindowText, "dir - List all files and folders in the current directory.");
-                        log(ThemeManager.WindowText, "vm {vmname} - Make a file.");
+                        log(ThemeManager.WindowText, "vm {vmname} - Launches a \"VM\".");
                         log(ThemeManager.WindowText, "settheme - Change the theme.");
                         break;
                     case 3:
