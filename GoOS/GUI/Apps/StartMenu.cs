@@ -56,6 +56,12 @@ namespace GoOS.GUI.Apps
                 WindowManager.AddWindow(new TaskManager());
                 Visible = false;
             });
+
+            AddAppButton("Paint", () =>
+            {
+                WindowManager.AddWindow(new Paintbrush());
+                Visible = false;
+            });
         }
 
         private void AddPowerButton()

@@ -74,6 +74,14 @@ namespace GoOS.GUI
             }
         }
 
+        public bool Focused
+        {
+            get
+            {
+                return WindowManager.windows[WindowManager.windows.Count - 1] == this;
+            }
+        }
+
         public int RelativeMouseX
         {
             get
@@ -333,6 +341,14 @@ namespace GoOS.GUI
             // Dark shadow.
             Contents.DrawLine(0, Contents.Height - 1, Contents.Width, Contents.Height - 1, Color.Black);
             Contents.DrawLine(Contents.Width - 1, 0, Contents.Width - 1, Contents.Height - 1, Color.Black);
+        }
+
+        protected void ShowAboutDialog()
+        {
+            Dialogue.Show(
+                $"About {Title}",
+                $"GoOS {Title} v{Kernel.version}\n\nCopyright (c) 2023 Owen2k6\nAll rights reserved.",
+                null);
         }
     }
 }

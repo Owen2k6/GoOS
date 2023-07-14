@@ -1,4 +1,5 @@
 ﻿using System;
+using Cosmos.System;
 using PrismAPI.Graphics;
 
 namespace GoOS.GUI.Apps
@@ -17,9 +18,10 @@ namespace GoOS.GUI.Apps
             Title = "Task Manager";
             Visible = true;
             Closable = true;
+            Unkillable = true;
 
             EndButton = new Button(this, Convert.ToUInt16(Contents.Width - 90), Convert.ToUInt16(Contents.Height - 30), 80, 20, " End task ") { Clicked = EndButton_Click };
-            AboutButton = new Button(this, Convert.ToUInt16(Contents.Width - 124), Convert.ToUInt16(Contents.Height - 30), 24, 20, "?") { Clicked = AboutButton_Click };
+            AboutButton = new Button(this, Convert.ToUInt16(Contents.Width - 124), Convert.ToUInt16(Contents.Height - 30), 24, 20, "?") { Clicked = ShowAboutDialog };
             Windows = new List(this, 10, 10, Convert.ToUInt16(Contents.Width - 20), Convert.ToUInt16(Contents.Height - 60), "Processes", Array.Empty<string>());
 
             WindowManager.TaskmanHook = Update;
@@ -30,6 +32,20 @@ namespace GoOS.GUI.Apps
             Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4), 38, 0, new Color(234, 234, 234));
             AboutButton.Render();
             EndButton.Render();
+        }
+
+        public override void HandleKey(KeyEvent key)
+        {
+            switch (key.Key)
+            {
+                case ConsoleKeyEx.F1:
+                    ShowAboutDialog();
+                    break;
+
+                case ConsoleKeyEx.F5:
+                    Update();
+                    break;
+            }
         }
 
         private void Update()
@@ -46,23 +62,15 @@ namespace GoOS.GUI.Apps
             if (WindowManager.windows[Windows.Selected].Unkillable)
             {
                 Dialogue.Show(
-                    "Warning",
+                    "Error",
                     "System processes are not\nendable.",
                     null,
-                    WindowManager.warningIcon);
+                    WindowManager.errorIcon);
             }
             else
             {
                 WindowManager.windows[Windows.Selected].Closing = true; // Close the window.
             }
-        }
-
-        private void AboutButton_Click()
-        {
-            Dialogue.Show(
-                "About Task Manager",
-                $"GoOS Task Manager v{Kernel.version}\n\nCopyright (c) 2023 Owen2k6\nAll rights reserved.",
-                null);
         }
     }
 }

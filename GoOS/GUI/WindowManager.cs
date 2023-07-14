@@ -82,7 +82,7 @@ namespace GoOS.GUI
             return -1;
         }
 
-        private static Window GetDraggingWindow()
+        public static Window GetDraggingWindow()
         {
             foreach (Window window in windows)
             {
@@ -93,6 +93,14 @@ namespace GoOS.GUI
             }
 
             return null;
+        }
+
+        public static bool AreThereDraggingWindows
+        {
+            get
+            {
+                return GetDraggingWindow() != null;
+            }
         }
 
         private static void DrawMouse()
@@ -218,8 +226,8 @@ namespace GoOS.GUI
             windows.Clear();
         }
 
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.warning.bmp")] private static byte[] warningIconRaw;
-        public static Canvas warningIcon = Image.FromBitmap(warningIconRaw, false);
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.error.bmp")] private static byte[] errorIconRaw;
+        public static Canvas errorIcon = Image.FromBitmap(errorIconRaw, false);
 
         public static void Update()
         {
@@ -318,8 +326,7 @@ namespace GoOS.GUI
                     "Error",
                     $"{ex.Message}",
                     null, // default buttons
-                    warningIcon
-                );
+                    errorIcon);
             }
         }
 
