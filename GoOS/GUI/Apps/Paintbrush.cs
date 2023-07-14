@@ -9,7 +9,8 @@ namespace GoOS.GUI.Apps
     public enum PaintTools
     {
         Brush = 0,
-        Bucket = 1
+        Bucket = 1,
+        Text = 2
     }
 
     public class Paintbrush : Window
@@ -23,8 +24,18 @@ namespace GoOS.GUI.Apps
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.bucket.bmp")] private static byte[] bucketRaw;
         private static Canvas bucket = Image.FromBitmap(bucketRaw, false);
 
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.text.bmp")] private static byte[] textRaw;
+        private static Canvas text = Image.FromBitmap(textRaw, false);
+
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.question.bmp")] private static byte[] questionRaw;
         private static Canvas question = Image.FromBitmap(questionRaw, false);
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse_text.bmp")] private static byte[] mouse_textRaw;
+        private static Canvas mouse_text = Image.FromBitmap(mouse_textRaw, false);
+
+        private bool IsOverColorTable { get { return MouseManager.X > X + 54 && MouseManager.X < X + 278 && MouseManager.Y > Y + Convert.ToUInt16(Contents.Height - 26) && MouseManager.Y < Y + Convert.ToUInt16(Contents.Height + 6); } }
+
+        private bool IsOverPaintableArea { get { return MouseManager.X > X && MouseManager.X < X + Contents.Width - BrushSize && MouseManager.Y > Y + TITLE_BAR_HEIGHT && MouseManager.Y < Y + Convert.ToUInt16(Contents.Height - 36); } }
 
         private Color SelectedColor = Color.Black;
 
@@ -32,19 +43,15 @@ namespace GoOS.GUI.Apps
 
         private Button[] Utilities;
 
+        private Input Dialog_TextBox;
+
         private PaintTools Utility;
-
-        private bool IsOverColorTable { get { return MouseManager.X > X + 54 && MouseManager.X < X + 278 && MouseManager.Y > Y + Convert.ToUInt16(Contents.Height - 26) && MouseManager.Y < Y + Convert.ToUInt16(Contents.Height + 6); } }
-
-        private bool IsOverPaintableArea { get { return MouseManager.X > X && MouseManager.X < X + Contents.Width - BrushSize && MouseManager.Y > Y && MouseManager.Y < Y + Convert.ToUInt16(Contents.Height - 36); } }
 
         private int OldX, OldY;
 
         private int BrushSize = 1;
 
-        private Dialogue PencilDialogue;
-
-        private Input PencilDialoge_InputSize;
+        private int TextX, TextY;
 
         public Paintbrush()
         {
@@ -69,7 +76,11 @@ namespace GoOS.GUI.Apps
                     Image = bucket,
                     Clicked = Bucket_Click
                 },
-                new Button(this, 12, Convert.ToUInt16(Contents.Height - 26), 16, 16, string.Empty),
+                new Button(this, 12, Convert.ToUInt16(Contents.Height - 26), 16, 16, string.Empty)
+                {
+                    Image = text,
+                    Clicked = Text_Click
+                },
                 new Button(this, 28, Convert.ToUInt16(Contents.Height - 26), 16, 16, string.Empty),
             };
 
@@ -88,9 +99,9 @@ namespace GoOS.GUI.Apps
         {
             Utility = PaintTools.Brush;
 
-            PencilDialogue = new Dialogue(
+            Dialogue pencilDialogue = new Dialogue(
                 "Brush size",
-                "Please enter a brush size:",
+                "Please input brush size:",
                 new System.Collections.Generic.List<DialogueButton>()
                 {
                     new DialogueButton()
@@ -105,16 +116,16 @@ namespace GoOS.GUI.Apps
                 },
                 question);
 
-            PencilDialoge_InputSize = new Input(PencilDialogue, 80, 52, 232, 20, BrushSize.ToString());
+            Dialog_TextBox = new Input(pencilDialogue, 80, 52, 232, 20, BrushSize.ToString());
 
-            WindowManager.AddWindow(PencilDialogue);
+            WindowManager.AddWindow(pencilDialogue);
         }
 
         private void Pencil_Handler()
         {
-            int value = Convert.ToInt32(PencilDialoge_InputSize.Text.Trim());
+            int value = Convert.ToInt32(Dialog_TextBox.Text.Trim());
 
-            if (PencilDialoge_InputSize.Text.Trim().Length == 0 || value < 1)
+            if (Dialog_TextBox.Text.Trim().Length == 0 || value < 1)
             {
                 BrushSize = 1;
                 throw new Exception("You must input a valid brush size");
@@ -128,29 +139,93 @@ namespace GoOS.GUI.Apps
             Utility = PaintTools.Bucket;
         }
 
+        private void Text_Click()
+        {
+            Utility = PaintTools.Text;
+        }
+
+        private void Text_Handler()
+        {
+            Contents.DrawString(TextX, TextY, Dialog_TextBox.Text, BetterConsole.font, SelectedColor);
+        }
+
         public override void HandleRun()
         {
-            if (!WindowManager.AreThereDraggingWindows && Focused)
+            if (!WindowManager.AreThereDraggingWindows && Focused && IsMouseOver && IsOverPaintableArea)
             {
+                switch (Utility)
+                {
+                    case PaintTools.Brush:
+                        WindowManager.MouseToDraw = brush;
+                        WindowManager.MouseOffsetX = 4;
+                        WindowManager.MouseOffsetY = 14;
+                        break;
+
+                    case PaintTools.Bucket:
+                        WindowManager.MouseToDraw = bucket;
+                        break;
+
+                    case PaintTools.Text:
+                        WindowManager.MouseToDraw = mouse_text;
+                        break;
+                }
+
                 if (MouseManager.LastMouseState == MouseState.None)
                 {
                     OldX = (int)MouseManager.X;
                     OldY = (int)MouseManager.Y;
                 }
 
-                if (MouseManager.MouseState == MouseState.Left && (OldX != MouseManager.X || OldY != MouseManager.Y) && IsOverPaintableArea && Utility == PaintTools.Brush)
+                if (MouseManager.MouseState == MouseState.Left && (OldX != MouseManager.X || OldY != MouseManager.Y))
                 {
-                    DrawLine(OldX - X - 1, OldY - Y - 19, (int)MouseManager.X - X - 1, (int)MouseManager.Y - Y - 19, (ushort)BrushSize);
-                    OldX = (int)MouseManager.X;
-                    OldY = (int)MouseManager.Y;
+                    if (Utility == PaintTools.Brush)
+                    {
+                        DrawLine(OldX - X - 1, OldY - Y - 19, (int)MouseManager.X - X - 1, (int)MouseManager.Y - Y - 19, (ushort)BrushSize);
+                        OldX = (int)MouseManager.X;
+                        OldY = (int)MouseManager.Y;
+                    }
                 }
             }
         }
 
         public override void HandleClick(MouseEventArgs e)
         {
-            if (IsOverPaintableArea && Utility == PaintTools.Bucket)
-                Contents.DrawFilledRectangle(0, 0, Convert.ToUInt16(Contents.Width - 2), Convert.ToUInt16(Contents.Height - 52), 0, SelectedColor);
+            if (IsOverPaintableArea)
+            {
+                switch (Utility)
+                {
+                    case PaintTools.Bucket:
+                        Contents.DrawFilledRectangle(0, 0, Convert.ToUInt16(Contents.Width - 2), Convert.ToUInt16(Contents.Height - 52), 0, SelectedColor);
+                        break;
+
+                    case PaintTools.Text:
+                        TextX = (int)MouseManager.X - X - 1;
+                        TextY = (int)MouseManager.Y - Y - 1;
+
+                        Dialogue pencilDialogue = new Dialogue(
+                            "Label text",
+                            "Please input label text:",
+                            new System.Collections.Generic.List<DialogueButton>()
+                            {
+                                new DialogueButton()
+                                {
+                                    Text = "OK",
+                                    Callback = Text_Handler
+                                },
+                                new DialogueButton()
+                                {
+                                    Text = "Cancel",
+                                }
+                            },
+                            question);
+
+                        Dialog_TextBox = new Input(pencilDialogue, 80, 52, 232, 20, string.Empty);
+
+                        WindowManager.AddWindow(pencilDialogue);
+                        break;
+                }
+            }
+                
             if (IsOverColorTable)
                 SelectedColor = Contents[(int)MouseManager.X - X - 1, (int)MouseManager.Y - Y - 19];
 

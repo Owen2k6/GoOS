@@ -17,6 +17,12 @@ namespace GoOS.GUI
 
         private static int framesToHeapCollect = 10;
 
+        private static bool MouseDrawn = false;
+
+        public static Canvas MouseToDraw = mouse;
+
+        public static int MouseOffsetX = 0, MouseOffsetY = 0;
+
         public static readonly List<Window> windows = new List<Window>(10);
 
         public static Display Canvas;
@@ -105,7 +111,7 @@ namespace GoOS.GUI
 
         private static void DrawMouse()
         {
-            Canvas.DrawImage((int)MouseManager.X, (int)MouseManager.Y, mouse, true);
+            Canvas.DrawImage((int)MouseManager.X - MouseOffsetX, (int)MouseManager.Y - MouseOffsetY, MouseToDraw, true);
         }
 
         private static void AltTab()
@@ -296,6 +302,10 @@ namespace GoOS.GUI
                     Canvas.DrawString(Canvas.Width - 30, Canvas.Height - 13, Hour + ":" + Minute, BetterConsole.font, Color.Black, true);
 
                     DrawMouse();
+
+                    MouseToDraw = mouse;
+                    MouseOffsetX = 0;
+                    MouseOffsetY = 0;
 
                     Canvas.Update();
 
