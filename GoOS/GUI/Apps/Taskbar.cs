@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Cosmos.HAL.Drivers.Video;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
-using GoOS.GUI;
 
 namespace GoOS.GUI.Apps;
 
@@ -21,17 +20,18 @@ public class Taskbar : Window
     private const int windowButtonSpacing = 10;
     private const int windowButtonPadding = 10;
 
+    private byte lastSecond = Cosmos.HAL.RTC.Second;
+
     public Taskbar()
     {
         Contents = new Canvas(WindowManager.Canvas.Width, 28);
         //so it displays at the bottom of the screen
         X = 0;
         Y = WindowManager.Canvas.Height - 28;
-        Title = nameof(Taskbar);
+        Title = "GoOS";
         Visible = true;
         Closable = false;
         HasTitlebar = false;
-        Unkillable = true;
 
         startMenu = new StartMenu();
         WindowManager.AddWindow(startMenu);
@@ -44,28 +44,25 @@ public class Taskbar : Window
 
         WindowManager.TaskbarWindowAddedHook = WindowAdded;
         WindowManager.TaskbarWindowRemovedHook = WindowRemoved;
+
+        WindowManager.TaskbarFocusChangedHook = UpdateFocusIndication;
     }
 
     private void RenderWindow()
     {
         // Contents.Clear(Color.DeepGray);
         // Contents.DrawFilledRectangle(0, 0, WindowManager.Canvas.Width, 3, 0, Color.LightGray);
-        
+
         RenderOutsetWindowBackground(); // 3d
 
         RenderControls();
+
+        RenderInformation();
     }
-    
+
     private void StartClicked()
     {
-        if (!WindowManager.Dimmed)
-        {
-            startMenu.Visible = !startMenu.Visible;
-            if (startMenu.Visible)
-            {
-                WindowManager.MoveWindowToFront(startMenu);
-            }
-        }
+        startMenu.ToggleStartMenu();
     }
 
     private void WindowRemoved(Window window)
@@ -90,8 +87,21 @@ public class Taskbar : Window
             }
         }
 
+        UpdateFocusIndication();
+
         // refresh
         RenderWindow();
+    }
+
+    private void UpdateFocusIndication()
+    {
+        Window focusedWindow = WindowManager.FocusedWindow;
+
+        foreach (var item in windowButtons)
+        {
+            item.button.AppearPressed = focusedWindow == item.window;
+            item.button.Render();
+        }
     }
 
     private void WindowAdded(Window window)
@@ -119,12 +129,52 @@ public class Taskbar : Window
         Button button = new Button(this, (ushort)x, 4, (ushort)width, 20, window.Title);
         button.Render();
 
+        windowButtons.Add((window, button));
+
         button.Clicked = () =>
         {
             WindowManager.MoveWindowToFront(window);
         };
 
+        UpdateFocusIndication();
+
         // refresh
         RenderWindow();
+    }
+
+    public void HandleStartMenuOpen()
+    {
+        startButton.AppearPressed = true;
+        startButton.Render();
+        RenderControls();
+    }
+
+    public void HandleStartMenuClose()
+    {
+        startButton.AppearPressed = false;
+        startButton.Render();
+        RenderControls();
+    }
+
+    private void RenderInformation()
+    {
+        string timeString = DateTime.Now.ToString("HH:mm");
+        int timeWidth = BetterConsole.font.MeasureString(timeString);
+        Contents.DrawString(Contents.Width - timeWidth - 3, 13, timeString, BetterConsole.font, Color.Black, true);
+
+        string fpsString = $"{WindowManager.Canvas.GetFPS()} fps";
+        int fpsWidth = BetterConsole.font.MeasureString(fpsString);
+        Contents.DrawString(Contents.Width - timeWidth - fpsWidth - 12, 13, fpsString, BetterConsole.font, Color.Black, true);
+    }
+
+    public override void HandleRun()
+    {
+        base.HandleRun();
+        byte second = Cosmos.HAL.RTC.Second;
+        if (second != lastSecond)
+        {
+            lastSecond = second;
+            RenderWindow();
+        }
     }
 }
