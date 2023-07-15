@@ -28,10 +28,11 @@ public class Taskbar : Window
         //so it displays at the bottom of the screen
         X = 0;
         Y = WindowManager.Canvas.Height - 28;
-        Title = "GoOS";
+        Title = nameof(Taskbar);
         Visible = true;
         Closable = false;
         HasTitlebar = false;
+        Unkillable = true;
 
         startMenu = new StartMenu();
         WindowManager.AddWindow(startMenu);
@@ -62,7 +63,10 @@ public class Taskbar : Window
 
     private void StartClicked()
     {
-        startMenu.ToggleStartMenu();
+        if (!WindowManager.Dimmed)
+        {
+            startMenu.ToggleStartMenu();
+        }
     }
 
     private void WindowRemoved(Window window)
