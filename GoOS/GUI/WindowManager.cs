@@ -35,6 +35,21 @@ namespace GoOS.GUI
 
         internal static Action TaskmanHook;
 
+        internal static Action TaskbarFocusChangedHook;
+
+        public static Window FocusedWindow
+        {
+            get
+            {
+                if (windows.Count < 1)
+                {
+                    return null;
+                }
+
+                return windows[^1];
+            }
+        }
+
         public static void RemoveWindowByTitle(string wnd)
         {
             foreach (Window w in windows)
@@ -73,6 +88,7 @@ namespace GoOS.GUI
             windows.Remove(window);
 
             TaskmanHook?.Invoke();
+            TaskbarFocusChangedHook?.Invoke();
         }
 
         private static int GetHoveredWindow()
@@ -146,11 +162,7 @@ namespace GoOS.GUI
             {
                 StartMenu startMenu = GetWindowByType<StartMenu>();
 
-                startMenu.Visible = !startMenu.Visible;
-                if (startMenu.Visible)
-                {
-                    MoveWindowToFront(startMenu);
-                }
+                startMenu.ToggleStartMenu();
             }
         }
 
@@ -291,16 +303,6 @@ namespace GoOS.GUI
                         }
                     }
 
-                    string fps = Canvas.GetFPS() + "fps";
-
-                    Canvas.DrawString(Canvas.Width - 85, Canvas.Height - 13, fps, BetterConsole.font, Color.Black, true);
-
-                    // Todo, move this clock to the taskbar for perf. reasons
-
-                    string Hour = Cosmos.HAL.RTC.Hour.ToString(), Minute = Cosmos.HAL.RTC.Minute.ToString();
-                    if (Minute.Length < 2) Minute = "0" + Minute;
-                    Canvas.DrawString(Canvas.Width - 30, Canvas.Height - 13, Hour + ":" + Minute, BetterConsole.font, Color.Black, true);
-
                     DrawMouse();
 
                     MouseToDraw = mouse;
@@ -334,7 +336,7 @@ namespace GoOS.GUI
             {
                 Dialogue.Show(
                     "Error",
-                    $"{ex.Message}",
+                    ex.Message,
                     null, // default buttons
                     errorIcon);
             }

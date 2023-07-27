@@ -37,30 +37,30 @@ namespace GoOS.GUI.Apps
         {
             AddAppButton("GoOS Applications", () => {
                 WindowManager.AddWindow(new AppManager());
-                Visible = false;
+                CloseStartMenu();
             });
 
             AddAppButton("GTerm", () => {
                 WindowManager.AddWindow(new GTerm());
-                Visible = false;
+                CloseStartMenu();
             });
 
             AddAppButton("Clock", () =>
             {
                 WindowManager.AddWindow(new Clock());
-                Visible = false;
+                CloseStartMenu();
             });
 
             AddAppButton("Task Manager", () =>
             {
                 WindowManager.AddWindow(new TaskManager());
-                Visible = false;
+                CloseStartMenu();
             });
 
             AddAppButton("Paint", () =>
             {
                 WindowManager.AddWindow(new Paintbrush());
-                Visible = false;
+                CloseStartMenu();
             });
         }
 
@@ -178,6 +178,34 @@ namespace GoOS.GUI.Apps
             );
 
             Visible = false;
+        }
+
+        private void OpenStartMenu()
+        {
+            Visible = true;
+
+            WindowManager.MoveWindowToFront(this);
+
+            WindowManager.GetWindowByType<Taskbar>().HandleStartMenuOpen();
+        }
+
+        private void CloseStartMenu()
+        {
+            Visible = false;
+
+            WindowManager.GetWindowByType<Taskbar>().HandleStartMenuClose();
+        }
+
+        public void ToggleStartMenu()
+        {
+            if (Visible)
+            {
+                CloseStartMenu();
+            }
+            else
+            {
+                OpenStartMenu();
+            }
         }
     }
 }
