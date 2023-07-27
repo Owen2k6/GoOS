@@ -13,12 +13,11 @@ namespace GoOS.GUI.Apps
         public TaskManager()
         {
             Contents = new Canvas(270, 310);
-            X = 200;
-            Y = 100;
             Title = "Task Manager";
             Visible = true;
             Closable = true;
             Unkillable = true;
+            SetDock(WindowDock.Auto);
 
             EndButton = new Button(this, Convert.ToUInt16(Contents.Width - 90), Convert.ToUInt16(Contents.Height - 30), 80, 20, " End task ") { Clicked = EndButton_Click };
             AboutButton = new Button(this, Convert.ToUInt16(Contents.Width - 124), Convert.ToUInt16(Contents.Height - 30), 24, 20, "?") { Clicked = ShowAboutDialog };

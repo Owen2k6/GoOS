@@ -8,11 +8,10 @@ namespace GoOS.GUI.Apps
         public GTerm()
         {
             Contents = BetterConsole.Canvas;
-            X = 20;
-            Y = 50;
             Title = "GTerm";
             Visible = true;
             Closable = true;
+            SetDock(WindowDock.Auto);
             BetterConsole.font = new Font(BetterConsole.rawFont, BetterConsole.charHeight);
             BetterConsole.Visible = true;
         }

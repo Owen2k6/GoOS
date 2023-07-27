@@ -57,11 +57,10 @@ namespace GoOS.GUI.Apps
         {
             Contents = new Canvas(324, 300);
             Contents.Clear(Color.White);
-            X = 50;
-            Y = 50;
             Title = "Paintbrush";
             Visible = true;
             Closable = true;
+            SetDock(WindowDock.Auto);
 
             AboutButton = new Button(this, Convert.ToUInt16(Contents.Width - 36), Convert.ToUInt16(Contents.Height - 38), 24, 20, "?") { Clicked = ShowAboutDialog };
             Utilities = new Button[4]

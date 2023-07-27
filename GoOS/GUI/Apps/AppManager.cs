@@ -23,11 +23,10 @@ namespace GoOS.GUI.Apps
         {
             Contents = new Canvas(400, 400);
             Contents.Clear(Color.White);
-            X = 830;
-            Y = 100;
             Title = "GoOS Applications";
             Visible = true;
             Closable = true;
+            SetDock(WindowDock.Auto);
 
             Contents.DrawString(10, 5, "GoOS System Applications", BetterConsole.font, Color.Black);
 

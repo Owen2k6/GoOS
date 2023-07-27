@@ -81,11 +81,13 @@ namespace GoOS
             isRunning = true;
             menuToShow = categoryButtonsGeneralMenu[0];
             categorieToShow = menuButtons[0];
+            Console.CursorVisible = false;
             Console.DoubleBufferedMode = true;
             Console.Clear();
             MainLoop();
             Console.ForegroundColor = ThemeManager.WindowText;
             Console.BackgroundColor = ThemeManager.Background;
+            Console.CursorVisible = true;
             Console.DoubleBufferedMode = false;
             Console.Clear();
         }

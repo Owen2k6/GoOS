@@ -50,6 +50,21 @@ namespace GoOS.GUI
             }
         }
 
+        public static int GetAmountOfWindowsByTitle(string wnd)
+        {
+            int count = 0;
+
+            foreach (Window w in windows)
+            {
+                if (w.Title == wnd)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
         public static void RemoveWindowByTitle(string wnd)
         {
             foreach (Window w in windows)

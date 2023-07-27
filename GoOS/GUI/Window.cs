@@ -19,7 +19,7 @@ namespace GoOS.GUI
 
         public Canvas Contents;
 
-        public int X, Y;
+        public int X = 50, Y = 50;
         public string Title;
         public bool Visible;
         public bool Closable;
@@ -349,6 +349,25 @@ namespace GoOS.GUI
                 $"About {Title}",
                 $"GoOS {Title} v{Kernel.version}\n\nCopyright (c) 2023 Owen2k6\nAll rights reserved.",
                 null);
+        }
+
+        protected void SetDock(WindowDock dock)
+        {
+            switch (dock)
+            {
+                case WindowDock.None:
+                    break;
+
+                case WindowDock.Auto:
+                    X = 50 + (WindowManager.GetAmountOfWindowsByTitle(Title) * 50);
+                    Y = 50 + (WindowManager.GetAmountOfWindowsByTitle(Title) * 50);
+                    break;
+
+                case WindowDock.Center:
+                    X = (WindowManager.Canvas.Width / 2) - (Contents.Width / 2);
+                    Y = (WindowManager.Canvas.Height / 2) - (Contents.Height / 2);
+                    break;
+            }
         }
     }
 }

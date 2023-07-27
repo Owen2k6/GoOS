@@ -52,6 +52,16 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
+            if (Cosmos.Core.CPU.GetAmountOfRAM() < 150)
+            {
+                System.Console.ForegroundColor = System.ConsoleColor.Red;
+                System.Console.WriteLine();
+                System.Console.Write("GoOS - Not enough ram to boot GoOS. Please increase the amount of RAM of your VM");
+                System.Console.Write("GoOS - Or if you are running this on real hardware (you shouldn't), buy more RAM");
+
+                while (true) { }
+            }
+
             WindowManager.Canvas = Display.GetDisplay(800, 600); //TODO: Not have this hard coded >:^(
             Console.Init(800, 600);
 

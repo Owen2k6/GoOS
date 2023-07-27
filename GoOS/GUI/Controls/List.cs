@@ -25,6 +25,15 @@ namespace GoOS.GUI
 
         public override void Render()
         {
+            if (Selected < 0)
+            {
+                Selected = 0;
+            }
+            else if (Selected > Items.Length)
+            {
+                Selected = Items.Length - 1;
+            }
+
             Contents.Clear(BackgroundColor);
 
             // Background.
@@ -37,14 +46,17 @@ namespace GoOS.GUI
             // Highlight.
             Contents.DrawLine(1, Contents.Height - 2, Contents.Width - 2, Contents.Height - 2, new Color(216, 216, 216));
             Contents.DrawLine(Contents.Width - 2, 1, Contents.Width - 2, Contents.Height - 1, new Color(216, 216, 216));
-            Contents.DrawLine(1, 19, Contents.Width - 2, 19, new Color(216, 216, 216));
 
             // Light highlight.
             Contents.DrawLine(0, Contents.Height - 1, Contents.Width, Contents.Height - 1, Color.White);
             Contents.DrawLine(Contents.Width - 1, 0, Contents.Width - 1, Contents.Height - 1, Color.White);
 
-            // Title
-            Contents.DrawString(2, 2, Title, BetterConsole.font, ForegroundColor);
+            if (Title != "")
+            {
+                // Title
+                Contents.DrawLine(1, 19, Contents.Width - 2, 19, new Color(216, 216, 216));
+                Contents.DrawString(2, 2, Title, BetterConsole.font, ForegroundColor);
+            }
 
             // Items
             for (int i = 0; i < Items.Length; i++)
@@ -64,12 +76,7 @@ namespace GoOS.GUI
         {
             if (IsMouseOver)
             {
-                int newSelected = ((int)MouseManager.Y - Parent.Y + Window.TITLE_BAR_HEIGHT + Y) / 20 - 4;
-
-                if (newSelected > -1 && newSelected < Items.Length)
-                {
-                    Selected = newSelected;
-                }
+                Selected = ((int)MouseManager.Y - Parent.Y + Window.TITLE_BAR_HEIGHT + Y) / 20 - 4;
             }
 
             Render();

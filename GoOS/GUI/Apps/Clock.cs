@@ -17,11 +17,10 @@ namespace GoOS.GUI.Apps
         {
             Contents = new Canvas(192, 192);
             Contents.Clear(Color.White);
-            X = 200;
-            Y = 100;
             Title = "Clock";
             Visible = true;
             Closable = true;
+            SetDock(WindowDock.Auto);
 
             RenderClock();
         }

@@ -18,11 +18,10 @@ namespace GoOS.GUI.Apps
         public Welcome()
         {
             Contents = new Canvas(400, 300);
-            X = 440;
-            Y = 210;
             Title = "Welcome";
             Visible = true;
             Closable = true;
+            SetDock(WindowDock.Center);
 
             Contents.DrawImage(0, 0, welcomeImage, true);
 
