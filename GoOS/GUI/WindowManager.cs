@@ -262,6 +262,8 @@ namespace GoOS.GUI
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.error.bmp")] private static byte[] errorIconRaw;
         public static Canvas errorIcon = Image.FromBitmap(errorIconRaw, false);
 
+        //private static uint LastCursorX, LastCursorY;
+
         public static void Update()
         {
             try
@@ -275,7 +277,7 @@ namespace GoOS.GUI
                         MouseManager.ScreenHeight = Canvas.Height;
                     }
 
-                    Canvas.Clear(Color.UbuntuPurple);
+                    //Canvas.Clear(Color.UbuntuPurple);
 
                     for (int i = windows.Count - 1; i >= 0; i--)
                     {
@@ -327,6 +329,9 @@ namespace GoOS.GUI
                     Canvas.Update();
 
                     MemoryWatch.Watch();
+
+                    //LastCursorX = MouseManager.X;
+                    //LastCursorY = MouseManager.Y;
                 }
                 else
                 {

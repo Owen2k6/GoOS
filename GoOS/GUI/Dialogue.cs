@@ -26,8 +26,10 @@ namespace GoOS.GUI
         /// <summary>
         /// Show a system dialogue.
         /// </summary>
-        public static Dialogue Show(string title, string message, List<DialogueButton> buttons = null, Canvas icon = null)
+        public static Dialogue Show(string title, string message, List<DialogueButton> buttons = null, Canvas icon = null, int widthOverride = -1, int heightOverride = -1)
         {
+            // TODO: finish overrides
+
             var dialogue = new Dialogue(title, message, buttons, icon);
             WindowManager.AddWindow(dialogue);
             return dialogue;

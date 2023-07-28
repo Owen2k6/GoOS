@@ -348,7 +348,8 @@ namespace GoOS.GUI
             Dialogue.Show(
                 $"About {Title}",
                 $"GoOS {Title} v{Kernel.version}\n\nCopyright (c) 2023 Owen2k6\nAll rights reserved.",
-                null);
+                null,
+                heightOverride: 144);
         }
 
         protected void SetDock(WindowDock dock)
@@ -356,6 +357,8 @@ namespace GoOS.GUI
             switch (dock)
             {
                 case WindowDock.None:
+                    X = 0;
+                    Y = 0;
                     break;
 
                 case WindowDock.Auto:

@@ -154,7 +154,7 @@ namespace GoOS
             loadingDialogue.Closing = true;
             WindowManager.Canvas = Display.GetDisplay(1280, 720);
             WindowManager.AddWindow(new Taskbar());
-            WindowManager.AddWindow(new DesktopIcons());
+            WindowManager.AddWindow(new Desktop());
             WindowManager.AddWindow(new Welcome());
 
             Console.Clear();
@@ -216,7 +216,7 @@ namespace GoOS
                     Console.ConsoleMode = false;
                     WindowManager.Canvas = Display.GetDisplay(1280, 720);
                     WindowManager.AddWindow(new Taskbar());
-                    WindowManager.AddWindow(new DesktopIcons());
+                    WindowManager.AddWindow(new Desktop());
                     WindowManager.AddWindow(new Welcome());
                     break;
                 case "exit":
