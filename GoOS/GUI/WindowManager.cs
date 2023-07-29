@@ -17,6 +17,12 @@ namespace GoOS.GUI
 
         private static int framesToHeapCollect = 10;
 
+        private static bool MouseDrawn = false;
+
+        public static Canvas MouseToDraw = mouse;
+
+        public static int MouseOffsetX = 0, MouseOffsetY = 0;
+
         public static readonly List<Window> windows = new List<Window>(10);
 
         public static Display Canvas;
@@ -26,6 +32,38 @@ namespace GoOS.GUI
         internal static Action<Window> TaskbarWindowAddedHook;
 
         internal static Action<Window> TaskbarWindowRemovedHook;
+
+        internal static Action TaskmanHook;
+
+        internal static Action TaskbarFocusChangedHook;
+
+        public static Window FocusedWindow
+        {
+            get
+            {
+                if (windows.Count < 1)
+                {
+                    return null;
+                }
+
+                return windows[^1];
+            }
+        }
+
+        public static int GetAmountOfWindowsByTitle(string wnd)
+        {
+            int count = 0;
+
+            foreach (Window w in windows)
+            {
+                if (w.Title == wnd)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
 
         public static void RemoveWindowByTitle(string wnd)
         {
@@ -42,6 +80,7 @@ namespace GoOS.GUI
         {
             windows.Add(window);
 
+            TaskmanHook?.Invoke();
             TaskbarWindowAddedHook?.Invoke(window);
         }
 
@@ -62,6 +101,9 @@ namespace GoOS.GUI
         {
             windows.Add(window);
             windows.Remove(window);
+
+            TaskmanHook?.Invoke();
+            TaskbarFocusChangedHook?.Invoke();
         }
 
         private static int GetHoveredWindow()
@@ -77,7 +119,7 @@ namespace GoOS.GUI
             return -1;
         }
 
-        private static Window GetDraggingWindow()
+        public static Window GetDraggingWindow()
         {
             foreach (Window window in windows)
             {
@@ -90,9 +132,17 @@ namespace GoOS.GUI
             return null;
         }
 
+        public static bool AreThereDraggingWindows
+        {
+            get
+            {
+                return GetDraggingWindow() != null;
+            }
+        }
+
         private static void DrawMouse()
         {
-            Canvas.DrawImage((int)MouseManager.X, (int)MouseManager.Y, mouse, true);
+            Canvas.DrawImage((int)MouseManager.X - MouseOffsetX, (int)MouseManager.Y - MouseOffsetY, MouseToDraw, true);
         }
 
         private static void AltTab()
@@ -127,11 +177,7 @@ namespace GoOS.GUI
             {
                 StartMenu startMenu = GetWindowByType<StartMenu>();
 
-                startMenu.Visible = !startMenu.Visible;
-                if (startMenu.Visible)
-                {
-                    MoveWindowToFront(startMenu);
-                }
+                startMenu.ToggleStartMenu();
             }
         }
 
@@ -194,7 +240,7 @@ namespace GoOS.GUI
                     BetterConsole.font = new Font(BetterConsole.rawFont, BetterConsole.charHeight);
                     Dialogue.Show(
                         nameof(WindowManager),
-                        $"Regenerated font",
+                        $"Regenerated font.",
                         null
                     );
                 }
@@ -213,8 +259,10 @@ namespace GoOS.GUI
             windows.Clear();
         }
 
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.warning.bmp")] private static byte[] warningIconRaw;
-        private static Canvas warningIcon = Image.FromBitmap(warningIconRaw, false);
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.error.bmp")] private static byte[] errorIconRaw;
+        public static Canvas errorIcon = Image.FromBitmap(errorIconRaw, false);
+
+        //private static uint LastCursorX, LastCursorY;
 
         public static void Update()
         {
@@ -229,7 +277,7 @@ namespace GoOS.GUI
                         MouseManager.ScreenHeight = Canvas.Height;
                     }
 
-                    Canvas.Clear(Color.UbuntuPurple);
+                    //Canvas.Clear(Color.UbuntuPurple);
 
                     for (int i = windows.Count - 1; i >= 0; i--)
                     {
@@ -241,6 +289,8 @@ namespace GoOS.GUI
                                 Dimmed = false;
 
                             windows.RemoveAt(i);
+
+                            TaskmanHook?.Invoke();
                         }
                     }
 
@@ -270,21 +320,18 @@ namespace GoOS.GUI
                         }
                     }
 
-                    string fps = Canvas.GetFPS() + "fps";
-
-                    Canvas.DrawString(Canvas.Width - 85, Canvas.Height - 13, fps, BetterConsole.font, Color.Black, true);
-
-                    // Todo, move this clock to the taskbar for perf. reasons
-
-                    string Hour = Cosmos.HAL.RTC.Hour.ToString(), Minute = Cosmos.HAL.RTC.Minute.ToString();
-                    if (Minute.Length < 2) Minute = "0" + Minute;
-                    Canvas.DrawString(Canvas.Width - 30, Canvas.Height - 13, Hour + ":" + Minute, BetterConsole.font, Color.Black, true);
-
                     DrawMouse();
+
+                    MouseToDraw = mouse;
+                    MouseOffsetX = 0;
+                    MouseOffsetY = 0;
 
                     Canvas.Update();
 
                     MemoryWatch.Watch();
+
+                    //LastCursorX = MouseManager.X;
+                    //LastCursorY = MouseManager.Y;
                 }
                 else
                 {
@@ -309,10 +356,9 @@ namespace GoOS.GUI
             {
                 Dialogue.Show(
                     "Error",
-                    $"{ex.Message}",
+                    ex.Message,
                     null, // default buttons
-                    warningIcon
-                );
+                    errorIcon);
             }
         }
 

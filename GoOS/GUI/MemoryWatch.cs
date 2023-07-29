@@ -28,7 +28,7 @@ namespace GoOS.GUI
             uint memFree = memTotal - memUsed;
             uint memPercentUsed = (uint)(((float)memUsed / (float)memTotal) * 100f);
 
-            if (memFree <= 64)
+            if (memFree <= WARNING_THRESHOLD)
             {
                 if (warningDialogue != null)
                 {

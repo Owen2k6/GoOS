@@ -101,23 +101,26 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="Virtualisation\Interface.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Remove="BetterConsole\Font_1x_2.btf" />
       <None Remove="Resources\credits05.bmp" />
       <None Remove="Resources\Font_1x.btf" />
       <None Remove="Resources\GoOS_Intro.bmp" />
+      <None Remove="Resources\GUI\error.bmp" />
+      <None Remove="Resources\GUI\mouse_text.bmp" />
+      <None Remove="Resources\GUI\Paint\brush.bmp" />
+      <None Remove="Resources\GUI\Paint\bucket.bmp" />
       <None Remove="Resources\GUI\clock.bmp" />
       <None Remove="Resources\GUI\closebutton.bmp" />
       <None Remove="Resources\GUI\closebutton_hover.bmp" />
       <None Remove="Resources\GUI\closebutton_pressed.bmp" />
+      <None Remove="Resources\GUI\colors.bmp" />
       <None Remove="Resources\GUI\drum.bmp" />
       <None Remove="Resources\GUI\folder.bmp" />
       <None Remove="Resources\GUI\gterm.bmp" />
       <None Remove="Resources\GUI\info.bmp" />
       <None Remove="Resources\GUI\mouse.bmp" />
+      <None Remove="Resources\GUI\Paint\text.bmp" />
+      <None Remove="Resources\GUI\question.bmp" />
       <None Remove="Resources\GUI\shutdown.bmp" />
       <None Remove="Resources\GUI\user.bmp" />
       <None Remove="Resources\GUI\warning.bmp" />
@@ -135,14 +138,20 @@
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Include="Resources\GUI\error.bmp" />
+      <EmbeddedResource Include="Resources\GUI\mouse_text.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Paint\brush.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Paint\bucket.bmp" />
       <EmbeddedResource Include="Resources\GUI\clock.bmp" />
       <EmbeddedResource Include="Resources\GUI\closebutton.bmp" />
       <EmbeddedResource Include="Resources\GUI\closebutton_pressed.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Paint\colors.bmp" />
       <EmbeddedResource Include="Resources\GUI\drum.bmp" />
       <EmbeddedResource Include="Resources\GUI\folder.bmp" />
       <EmbeddedResource Include="Resources\GUI\gterm.bmp" />
       <EmbeddedResource Include="Resources\GUI\info.bmp" />
       <EmbeddedResource Include="Resources\GUI\mouse.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Paint\text.bmp" />
       <EmbeddedResource Include="Resources\GUI\shutdown.bmp" />
       <EmbeddedResource Include="Resources\GUI\user.bmp" />
       <EmbeddedResource Include="Resources\OOBE\setupsupport.bmp" />
@@ -164,13 +173,10 @@
       <EmbeddedResource Include="Resources\OOBE\setupuser.bmp" />
       <EmbeddedResource Include="Resources\OOBE\setupwelcome.bmp" />
       <None Remove="Resources\MSUIGothicCustomCharset16.btf" />
+      <EmbeddedResource Include="Resources\GUI\question.bmp" />
       <EmbeddedResource Include="Resources\GUI\closebutton_hover.bmp" />
       <EmbeddedResource Include="Resources\MSUIGothicCustomCharset16.btf" />
       <EmbeddedResource Include="Resources\Welcome.bmp" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Include="Virtualisation\Interface.cs" />
     </ItemGroup>
 
     <ItemGroup>

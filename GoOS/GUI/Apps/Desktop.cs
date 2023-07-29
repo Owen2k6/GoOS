@@ -8,25 +8,25 @@ using PrismAPI.Graphics;
 
 namespace GoOS.GUI.Apps
 {
-    public class DesktopIcons : Window
+    public class Desktop : Window
     {
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.folder.bmp")] private static byte[] folderIconRaw;
         private static Canvas folderIcon = Image.FromBitmap(folderIconRaw, false);
 
         Button folderButton;
 
-        public DesktopIcons()
+        public Desktop()
         {
-            Contents = new Canvas(64, 80);
+            Contents = new Canvas(WindowManager.Canvas.Width, Convert.ToUInt16(WindowManager.Canvas.Height - 28));
             Contents.Clear(Color.UbuntuPurple);
-            X = 10;
-            Y = 10;
-            Title = nameof(DesktopIcons);
+            Title = nameof(Desktop);
             Visible = true;
             Closable = false;
             HasTitlebar = false;
+            Unkillable = true;
+            SetDock(WindowDock.None);
 
-            folderButton = new Button(this, 10, 10, 64, 80, "Apps")
+            folderButton = new Button(this, 20, 20, 64, 80, "Apps")
             {
                 UseSystemStyle = false,
                 BackgroundColour = Color.UbuntuPurple,
@@ -43,7 +43,7 @@ namespace GoOS.GUI.Apps
         private static void FolderClicked()
         {
             if (!WindowManager.Dimmed)
-                WindowManager.AddWindow(new Apps.AppManager());
+                WindowManager.AddWindow(new AppManager());
         }
     }
 }

@@ -52,6 +52,16 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
+            if (Cosmos.Core.CPU.GetAmountOfRAM() < 150)
+            {
+                System.Console.ForegroundColor = System.ConsoleColor.Red;
+                System.Console.WriteLine();
+                System.Console.Write("GoOS - Not enough ram to boot GoOS. Please increase the amount of RAM of your VM");
+                System.Console.Write("GoOS - Or if you are running this on real hardware (you shouldn't), buy more RAM");
+
+                while (true) { }
+            }
+
             WindowManager.Canvas = Display.GetDisplay(800, 600); //TODO: Not have this hard coded >:^(
             Console.Init(800, 600);
 
@@ -144,7 +154,7 @@ namespace GoOS
             loadingDialogue.Closing = true;
             WindowManager.Canvas = Display.GetDisplay(1280, 720);
             WindowManager.AddWindow(new Taskbar());
-            WindowManager.AddWindow(new DesktopIcons());
+            WindowManager.AddWindow(new Desktop());
             WindowManager.AddWindow(new Welcome());
 
             Console.Clear();
@@ -206,7 +216,7 @@ namespace GoOS
                     Console.ConsoleMode = false;
                     WindowManager.Canvas = Display.GetDisplay(1280, 720);
                     WindowManager.AddWindow(new Taskbar());
-                    WindowManager.AddWindow(new DesktopIcons());
+                    WindowManager.AddWindow(new Desktop());
                     WindowManager.AddWindow(new Welcome());
                     break;
                 case "exit":
@@ -553,7 +563,7 @@ namespace GoOS
                         break;
                     }
 
-                    Commands.Vm.command(args[1]);
+                    VM.Run(args[1]);
                     break;
                 case "clear":
                     Console.Clear();

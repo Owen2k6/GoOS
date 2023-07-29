@@ -161,10 +161,15 @@ public static class BetterConsole
     {
         while (true)
         {
+            if (CursorVisible)
+            {
+                Canvas.DrawString(CursorLeft * charWidth, CursorTop * charHeight, '_'.ToString(), font, ForegroundColor);
+            }
+
             var keyPressed = KeyBuffer.TryDequeue(out var key);
             if (keyPressed)
             {
-                if (intercept == false && key.KeyChar != '\0')
+                if (intercept == false)
                 {
                     Write(key.KeyChar);
                 }
@@ -178,6 +183,13 @@ public static class BetterConsole
             else
             {
                 WindowManager.Update();
+            }
+
+            if (CursorVisible)
+            {
+                // Just to be safe
+                Canvas.DrawString((CursorLeft - 1) * charWidth, CursorTop * charHeight, '_'.ToString(), font, Color.Black);
+                Canvas.DrawString((CursorLeft + 1) * charWidth, CursorTop * charHeight, '_'.ToString(), font, Color.Black);
             }
         }
     }
@@ -196,7 +208,7 @@ public static class BetterConsole
         {
             if (CursorVisible)
             {
-                PutChar('_', CursorLeft, CursorTop);
+                PutChar('_', CursorLeft, CursorTop, true);
                 Render();
             }
 

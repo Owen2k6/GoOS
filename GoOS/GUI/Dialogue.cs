@@ -26,11 +26,28 @@ namespace GoOS.GUI
         /// <summary>
         /// Show a system dialogue.
         /// </summary>
-        public static Dialogue Show(string title, string message, List<DialogueButton> buttons = null, Canvas icon = null)
+        public static Dialogue Show(string title, string message, List<DialogueButton> buttons = null, Canvas icon = null, int widthOverride = -1, int heightOverride = -1)
         {
+            // TODO: finish overrides
+
             var dialogue = new Dialogue(title, message, buttons, icon);
             WindowManager.AddWindow(dialogue);
             return dialogue;
+        }
+
+        private static int GetLongestLineWidth(string str)
+        {
+            int len = 0;
+
+            foreach (var line in str.Split('\n'))
+            {
+                len = Math.Max(
+                    len,
+                    BetterConsole.font.MeasureString(line)
+                );
+            }
+
+            return len;
         }
 
         public Dialogue(string title, string message, List<DialogueButton> buttons = null, Canvas icon = null)
@@ -51,7 +68,10 @@ namespace GoOS.GUI
                 };
             }
 
-            Contents = new Canvas(320, 128);
+            Contents = new Canvas(
+                Width: (ushort)(100 + GetLongestLineWidth(message)),
+                Height: 128
+            );
             RenderOutsetWindowBackground();
             X = 480;
             Y = 296;

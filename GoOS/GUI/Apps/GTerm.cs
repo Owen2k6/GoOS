@@ -1,9 +1,5 @@
 ﻿using Cosmos.System;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PrismAPI.Graphics.Fonts;
 
 namespace GoOS.GUI.Apps
 {
@@ -12,11 +8,11 @@ namespace GoOS.GUI.Apps
         public GTerm()
         {
             Contents = BetterConsole.Canvas;
-            X = 20;
-            Y = 50;
             Title = "GTerm";
             Visible = true;
             Closable = true;
+            SetDock(WindowDock.Auto);
+            BetterConsole.font = new Font(BetterConsole.rawFont, BetterConsole.charHeight);
             BetterConsole.Visible = true;
         }
 

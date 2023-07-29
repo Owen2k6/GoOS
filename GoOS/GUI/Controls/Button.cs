@@ -21,6 +21,8 @@ namespace GoOS.GUI
 
         public bool pressed = false;
 
+        public bool AppearPressed = false;
+
         private const int PUSH_DEPTH = 1;
 
         public Button(Window parent, ushort x, ushort y, ushort width, ushort height, string title)
@@ -33,7 +35,7 @@ namespace GoOS.GUI
         {
             if (UseSystemStyle)
             {
-                if (pressed)
+                if (AppearPressed || pressed)
                 {
                     // Background.
                     Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, new Color(191, 191, 191));
@@ -79,7 +81,7 @@ namespace GoOS.GUI
                 int imageX = (Contents.Width - Image.Width) / 2;
                 int imageY = 0;
 
-                if (pressed && UseSystemStyle)
+                if ((AppearPressed || pressed) && UseSystemStyle)
                 {
                     imageX += PUSH_DEPTH;
                     imageY += PUSH_DEPTH;
@@ -92,7 +94,7 @@ namespace GoOS.GUI
             int textX = Contents.Width / 2;
             int textY = Image != null ? Image.Height + 12 : Contents.Height / 2;
 
-            if (pressed && UseSystemStyle)
+            if ((AppearPressed || pressed) && UseSystemStyle)
             {
                 textX += PUSH_DEPTH;
                 textY += PUSH_DEPTH;
