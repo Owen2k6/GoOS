@@ -59,7 +59,7 @@ public class ChaOS_VM : Window
             SetDock(WindowDock.Auto);
             VMTERM.Visible = true;
 
-            GoOS.Commands.VM.Run("chaos");
+            //GoOS.Commands.VM.Run("chaos");
         }
         catch (Exception eee)
         {

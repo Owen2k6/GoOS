@@ -235,6 +235,7 @@ namespace GoOS
                         Directory.CreateDirectory(@"0:\content");
                         Directory.CreateDirectory(@"0:\content\sys");
                         Directory.CreateDirectory(@"0:\content\themes");
+                        Directory.CreateDirectory(@"0:\framework");
                         File.Create(@"0:\content\sys\option-showprotectedfiles.gms");
                         File.Create(@"0:\content\sys\option-editprotectedfiles.gms");
                         File.Create(@"0:\content\sys\option-deleteprotectedfiles.gms");

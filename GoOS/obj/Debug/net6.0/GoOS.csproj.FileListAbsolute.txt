@@ -128,3 +128,6 @@ C:\Users\Eric\Documents\GitHub\GoOS-Fork\GoOS\obj\Debug\net6.0\GoOS.dll
 C:\Users\Eric\Documents\GitHub\GoOS-Fork\GoOS\obj\Debug\net6.0\refint\GoOS.dll
 C:\Users\Eric\Documents\GitHub\GoOS-Fork\GoOS\obj\Debug\net6.0\GoOS.pdb
 C:\Users\Eric\Documents\GitHub\GoOS-Fork\GoOS\obj\Debug\net6.0\ref\GoOS.dll
+D:\GitHub\GoOS\GoOS\bin\Debug\net6.0\DotNetClr.dll
+D:\GitHub\GoOS\GoOS\bin\Debug\net6.0\DotNetParser.dll
+D:\GitHub\GoOS\GoOS\bin\Debug\net6.0\LibDotNetParser.dll

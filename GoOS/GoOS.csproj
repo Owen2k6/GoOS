@@ -196,6 +196,15 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Reference Include="DotNetClr">
+        <HintPath>DotNetClr.dll</HintPath>
+      </Reference>
+      <Reference Include="DotNetParser">
+        <HintPath>DotNetParser.dll</HintPath>
+      </Reference>
+      <Reference Include="LibDotNetParser">
+        <HintPath>LibDotNetParser.dll</HintPath>
+      </Reference>
       <Reference Include="PrismAPI">
         <HintPath>..\..\..\Prism-OS\PrismAPI\bin\Debug\net6.0\PrismAPI.dll</HintPath>
       </Reference>

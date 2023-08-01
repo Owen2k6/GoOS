@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using Cosmos.Core;
 using Cosmos.HAL;
+using GoOS.GUI;
+using GoOS.GUI.Apps;
 using GoOS.Themes;
 using Console = BetterConsole;
 using static ConsoleColorEx;
@@ -19,6 +21,15 @@ namespace GoOS.Commands
         static Dictionary<string, int> Integers = new Dictionary<string, int>() { };
 
         public static string[] InstallLines;
+        
+        public static string[] splitit = null;
+        
+        public static Window window = null;
+
+        public static Boolean windowed = false;
+        
+        public static ushort windowwidth = 0;
+        public static ushort windowheight = 0;
 
         public static void Main(string run)
         {
@@ -675,6 +686,73 @@ namespace GoOS.Commands
                                     Console.BackgroundColor = DarkYellow;
                                 }
                             }
+                        }
+                        // Window production center
+                        if (line.StartsWith("size window width = "))
+                        {
+                            splitit = line.Split("= ");
+                            if (splitit.Length < 2 || splitit.Length > 2)
+                            {
+                                Console.WriteLine("Invalid parameters for sizing window. Ref Documentation");
+                                break;
+                            }
+
+                            windowwidth = ushort.Parse(splitit[1]);
+
+                        }
+                        if (line.StartsWith("size window height = "))
+                        {
+                            splitit = line.Split("= ");
+                            if (splitit.Length < 2 || splitit.Length > 2)
+                            {
+                                Console.WriteLine("Invalid parameters for sizing window. Ref Documentation");
+                                break;
+                            }
+
+                            windowheight = ushort.Parse(splitit[1]);
+
+                        }
+
+                        if (line.StartsWith("produce window ="))
+                        {
+                            if (windowheight == null || windowwidth == null || windowwidth == 0 || windowheight == 0)
+                            {
+                                Console.WriteLine("Window size has not been set. Please set it before producing a window.");
+                                break;
+                            }
+                            splitit = line.Split("=");
+                            if (splitit.Length < 2 || splitit[1].Equals(""))
+                            {
+                                Console.WriteLine("This window has not been issued a name. It will use the registered program title.");
+                                if (hasbeenregistered == false)
+                                {
+                                    Console.WriteLine("Unregistered application. Will not allow access to WindowManager");
+                                    break;
+                                }
+
+                                window = new CustomInterface(fuckingprogramname, windowwidth, windowheight);
+                                WindowManager.AddWindow(window);
+                                windowed = true;
+                                Console.WriteLine("TIP: Window created. Any drawing on the window must be done prior to loading another.");
+                            }
+                            else
+                            {
+                                window = new CustomInterface(splitit[1], windowwidth, windowheight);
+                                WindowManager.AddWindow(window);
+                                windowed = true;
+                                Console.WriteLine("TIP: Window created. Any drawing on the window must be done prior to loading another.");
+                            }
+                        }
+
+                        if (line.StartsWith("produce wstring = "))
+                        {
+                            splitit = line.Split(" = ");
+                            if(splitit.Length < 4 || splitit.Length > 4)
+                            {
+                                Console.WriteLine("Invalid parameters for producing a wstring. Ref Documentation");
+                                break;
+                            }
+                            CustomInterface.AddString(window, splitit[1], int.Parse(splitit[2]), int.Parse(splitit[3]));
                         }
                     }
 

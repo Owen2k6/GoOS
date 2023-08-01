@@ -25,6 +25,7 @@ using PrismAPI.Hardware.GPU;
 using GoOS.GUI;
 using GoOS.GUI.Apps;
 using GoOS.Networking;
+using LibDotNetParser.CILApi;
 
 // Goplex Studios - GoOS
 // Copyright (C) 2022  Owen2k6
@@ -628,6 +629,11 @@ namespace GoOS
                     break;
                 case "dtest":
                     Dialogue.Show("Message", "Hello world!!!");
+                    break;
+                case "dotnet":
+                    var fl = new DotNetFile(Directory.GetCurrentDirectory()+args[1]);
+                    DotNetClr.DotNetClr clr = new DotNetClr.DotNetClr(fl, @"0:\framework");
+                    clr.Start();
                     break;
                 default:
                     if (isGCIenabled)
