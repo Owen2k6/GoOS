@@ -16,8 +16,12 @@ namespace GoOS.GUI.Apps
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.clock.bmp")] private static byte[] clockIconRaw;
         private static Canvas clockIcon = Image.FromBitmap(clockIconRaw, false);
 
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskManager.bmp")] private static byte[] taskmanIconRaw;
+        private static Canvas taskmanIcon = Image.FromBitmap(taskmanIconRaw, false);
+
         Button gtermButton;
         Button clockButton;
+        Button taskmanButton;
 
         public AppManager()
         {
@@ -38,7 +42,18 @@ namespace GoOS.GUI.Apps
 
                 Image = gtermIcon
             };
+
+            taskmanButton = new Button(this, 90, 30, 90, 60, "TaskManager")
+            {
+                UseSystemStyle = false,
+                BackgroundColour = Color.White,
+                TextColour = Color.Black,
+
+                Image = taskmanIcon
+            };
+            
             gtermButton.Clicked = OpenGTerm;
+            taskmanButton.Clicked = OpenTaskman;
 
             Contents.DrawString(10, 100, "GoOS Accessories", BetterConsole.font, Color.Black);
 
@@ -61,6 +76,11 @@ namespace GoOS.GUI.Apps
         private static void OpenGTerm()
         {
             WindowManager.AddWindow(new Apps.GTerm());
+        }
+
+        private static void OpenTaskman()
+        {
+            WindowManager.AddWindow(new Apps.TaskManager());
         }
 
         private static void OpenClock()
