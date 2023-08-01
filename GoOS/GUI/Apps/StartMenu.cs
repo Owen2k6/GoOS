@@ -62,6 +62,12 @@ namespace GoOS.GUI.Apps
                 WindowManager.AddWindow(new Paintbrush());
                 CloseStartMenu();
             });
+            
+            AddAppButton("GoVM Manager", () =>
+            {
+                WindowManager.AddWindow(new GoVM());
+                CloseStartMenu();
+            });
         }
 
         private void AddPowerButton()

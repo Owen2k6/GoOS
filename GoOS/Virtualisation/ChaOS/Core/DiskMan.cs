@@ -43,7 +43,7 @@ namespace ChaOS
             clog("Writing changes to disk...", Gray);
             Directory.CreateDirectory(systempath);
             File.WriteAllText(Files.userfile, GoOS.Kernel.username);
-            //File.WriteAllBytes(Files.colorfile, new byte[] { (byte)Console.BackgroundColor, (byte)Console.ForegroundColor });
+            //File.WriteAllBytes(Files.colorfile, new byte[] { (byte)GoOS.GUI.Apps.ChaOS_VM.VMTERM.BackgroundColor, (byte)GoOS.GUI.Apps.ChaOS_VM.VMTERM.ForegroundColor });
         }
     }
 }
