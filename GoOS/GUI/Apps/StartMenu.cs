@@ -23,7 +23,7 @@ namespace GoOS.GUI.Apps
 
         List<Button> appButtons = new();
 
-        private const int buttonHeight = 32;
+        private const int buttonHeight = 24;
 
         private void AddAppButton(string name, Action clickedAction)
         {
@@ -40,23 +40,6 @@ namespace GoOS.GUI.Apps
                 CloseStartMenu();
             });
 
-            AddAppButton("GTerm", () => {
-                WindowManager.AddWindow(new GTerm());
-                CloseStartMenu();
-            });
-
-            AddAppButton("Clock", () =>
-            {
-                WindowManager.AddWindow(new Clock());
-                CloseStartMenu();
-            });
-
-            AddAppButton("Task Manager", () =>
-            {
-                WindowManager.AddWindow(new TaskManager());
-                CloseStartMenu();
-            });
-
             AddAppButton("Paint", () =>
             {
                 WindowManager.AddWindow(new Paintbrush());
@@ -66,6 +49,12 @@ namespace GoOS.GUI.Apps
             AddAppButton("GoVM Manager", () =>
             {
                 WindowManager.AddWindow(new GoVM());
+                CloseStartMenu();
+            });
+            
+            AddAppButton("GCLauncher", () =>
+            {
+                WindowManager.AddWindow(new GCLauncher());
                 CloseStartMenu();
             });
         }
