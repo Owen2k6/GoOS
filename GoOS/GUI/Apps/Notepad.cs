@@ -158,8 +158,7 @@ public class NotepadSaveAs : Window
             Dialogue.Show(
                 "Saved!",
                 "Your file has been saved.",
-                null, // default buttons
-                WindowManager.errorIcon);
+                null);
         }
         catch (Exception e)
         {
