@@ -52,6 +52,8 @@ namespace GoOS
         public static string username = null;
         public static string computername = null;
 
+        public static string cutStatus = "Disabled"; 
+
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GoOS_Intro.bmp")] public static byte[] rawBootLogo;
 
         protected override void BeforeRun()
@@ -203,6 +205,16 @@ namespace GoOS
             if (isGCIenabled)
             {
                 GoCodeInstaller.CheckForInstalledPrograms();
+            }
+
+            if (cutStatus == "FULL")
+            {
+                
+            }
+            
+            if (cutStatus == "Single") 
+            {
+                
             }
 
             DrawPrompt();

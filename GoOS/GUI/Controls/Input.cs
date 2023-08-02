@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Cosmos.System.Graphics.Fonts;
 using PrismAPI.Graphics;
 using GoOS.GUI.Models;
 
@@ -65,7 +66,7 @@ namespace GoOS.GUI
         public bool ReadOnly { get; set; } = false;
 
         // Todo.
-        // public bool MultiLine { get; set; } = false;
+        public bool MultiLine { get; set; } = false;
 
         public bool Shield { get; set; } = false;
 
@@ -110,18 +111,19 @@ namespace GoOS.GUI
         {
             if (caretLine == -1) return;
 
-            // if (scrollY + Height < (caretLine + 1) * fontHeight)
-            // {
-            //     // Scroll up.
-            //     scrollY = ((caretLine + 1) * fontHeight) - Height;
-            //     MarkAllLines();
-            // }
-            // if (caretLine * fontHeight < scrollY)
-            // {
-            //     // Scroll down.
-            //     scrollY = caretLine * fontHeight;
-            //     MarkAllLines();
-            // }
+            if (scrollY + Contents.Height < (caretLine + 1) * 20)
+            {
+                 // Scroll up.
+                 scrollY = ((caretLine + 1) * 20) - Contents.Height;
+                 //MarkAllLines();
+            } 
+            
+            if (caretLine * 20 < scrollY)
+            {
+                // Scroll down.
+                scrollY = caretLine * 20; 
+                //MarkAllLines();
+            }
 
             if (scrollX + Contents.Width < GetEndXAtCol(caretCol))
             {
@@ -178,24 +180,24 @@ namespace GoOS.GUI
                     caretCol = Math.Min(lines[caretLine].Length, caretCol);
                     break;
                 case ConsoleKeyEx.Enter:
-                    // if (!MultiLine)
-                    // {
+                    if (!MultiLine)
+                    {
                         Submitted?.Invoke();
 
                         caretLine = -1;
                         caretCol = 0;
                         
                         break;
-                    // }
+                    }
+                     
+                    lines.Insert(caretLine + 1, lines[caretLine].Substring(caretCol));
+                    lines[caretLine] = lines[caretLine].Substring(0, caretCol);
                     // 
-                    // lines.Insert(caretLine + 1, lines[caretLine].Substring(caretCol));
-                    // lines[caretLine] = lines[caretLine].Substring(0, caretCol);
+                    caretLine++;
+                    caretCol = 0;
                     // 
-                    // caretLine++;
-                    // caretCol = 0;
-                    // 
-                    // Changed?.Invoke();
-                    // break;
+                    Changed?.Invoke();
+                    break;
                 case ConsoleKeyEx.Backspace:
                     if (caretCol == 0)
                     {
@@ -230,7 +232,7 @@ namespace GoOS.GUI
 
         private List<string> lines = new List<string>() { string.Empty };
 
-        private int caretLine = -1;
+        private int caretLine = 0;
         private int caretCol = 0;
 
         private int scrollX = 0;
@@ -263,19 +265,22 @@ namespace GoOS.GUI
                 if (caretLine == 0)
                 {
                     int caretX = 1;
-                    Contents.DrawLine(caretX, padding, caretX, Contents.Height - padding, Color.Black);
+                    Contents.DrawLine(caretX, padding, caretX, 20 - padding, Color.Black);
                 }
 
                 Parent.RenderControls();
                 return;
             }
 
-            Contents.DrawString(-scrollX, 0, Shield ? new string('*', lines[0].Length) : lines[0], BetterConsole.font, Color.Black);
+            for (var i = 0; i < lines.Count; i++)
+            {
+                Contents.DrawString(-scrollX, i*14, Shield ? new string('*', lines[i].Length) : lines[i], BetterConsole.font, Color.Black);
+            }
 
             if (caretLine == 0)
             {
                 int caretX = GetEndXAtCol(caretCol);
-                Contents.DrawLine(caretX, padding, caretX, Contents.Height - padding, Color.Black);
+                Contents.DrawLine(caretX, padding, caretX, 20 - padding, Color.Black);
             }
 
             Parent.RenderControls();

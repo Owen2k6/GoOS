@@ -163,6 +163,8 @@
       <EmbeddedResource Include="Resources\GUI\Notepad\PASTE.bmp" />
       <None Remove="Resources\GUI\Notepad\COPY.bmp" />
       <EmbeddedResource Include="Resources\GUI\Notepad\COPY.bmp" />
+      <None Remove="Resources\GUI\Notepad\CUT.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Notepad\CUT.bmp" />
     </ItemGroup>
 
     <ItemGroup>
