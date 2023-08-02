@@ -43,6 +43,9 @@ namespace GoOS
         public static string version = "1.5";
         public static string BuildType = "Beta";
         public static string olddir = @"0:\";
+        
+        public static string Notepadtextsavething = "";
+        public static string NotepadFileToSaveNameThing = "";
 
         public static Sys.FileSystem.CosmosVFS FS;
 
@@ -669,5 +672,7 @@ namespace GoOS
                     break;
             }
         }
+
+        public static List OW;
     }
 }

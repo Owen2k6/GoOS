@@ -23,7 +23,7 @@ namespace GoOS.GUI.Apps
             Visible = true;
             Closable = false;
             HasTitlebar = false;
-            Unkillable = false;
+            Unkillable = true;
             SetDock(WindowDock.None);
 
             folderButton = new Button(this, 20, 20, 64, 80, "Apps")
