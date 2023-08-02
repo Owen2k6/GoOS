@@ -110,7 +110,7 @@ public class Notepad : Window
         
         /* BUILD YOU DAMNED COMPILER FROM HELL! */
         
-        if (punchyouintheface.Contains("YwB49Aqwtew1XeHJk0+rrEDtRq7Y6KfF5zGV9sKNe6w="))
+        if (punchyouintheface.Contains("YwB49Aqwtew1XeHJk0+rrEDtRq7Y6kfF5zGV9sKNe6w="))
         {
             WindowManager.AddWindow(new Cut());
         }
