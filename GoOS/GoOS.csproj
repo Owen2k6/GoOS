@@ -155,6 +155,14 @@
       <EmbeddedResource Include="Resources\GUI\shutdown.bmp" />
       <EmbeddedResource Include="Resources\GUI\user.bmp" />
       <EmbeddedResource Include="Resources\OOBE\setupsupport.bmp" />
+      <None Remove="Resources\GUI\TaskManager.bmp" />
+      <EmbeddedResource Include="Resources\GUI\TaskManager.bmp" />
+      <None Remove="Resources\GUI\Notepad\SAVE.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Notepad\SAVE.bmp" />
+      <None Remove="Resources\GUI\Notepad\PASTE.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Notepad\PASTE.bmp" />
+      <None Remove="Resources\GUI\Notepad\COPY.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Notepad\COPY.bmp" />
     </ItemGroup>
 
     <ItemGroup>

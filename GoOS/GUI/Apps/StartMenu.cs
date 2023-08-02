@@ -63,9 +63,9 @@ namespace GoOS.GUI.Apps
                 CloseStartMenu();
             });
             
-            AddAppButton("GoVM Manager", () =>
+            AddAppButton("Notepad", () =>
             {
-                WindowManager.AddWindow(new GoVM());
+                WindowManager.AddWindow(new Notepad());
                 CloseStartMenu();
             });
         }
