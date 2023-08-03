@@ -338,9 +338,18 @@ namespace GoOS.GUI
                         if (focused && Dimmed)
                             DimBackground();
 
-                        if (window.Visible)
+                        if (window.Visible && window.Title != nameof(Taskbar))
                         {
                             window.DrawWindow(Canvas, focused);
+                        }
+                    }
+
+                    // Special windows (hard coded)
+                    for (int i = 0; i < windows.Count; i++)
+                    {
+                        if (windows[i].Title == nameof(Taskbar))
+                        {
+                            windows[i].DrawWindow(Canvas, i == windows.Count - 1);
                         }
                     }
 

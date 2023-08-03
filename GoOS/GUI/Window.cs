@@ -197,7 +197,8 @@ namespace GoOS.GUI
                 // Do the drag operation.
 
                 X = (int)(DragStartX + (MouseManager.X - DragStartMouseX));
-                Y = (int)(DragStartY + (MouseManager.Y - DragStartMouseY));
+                if ((int)(DragStartY + (MouseManager.Y - DragStartMouseY)) < WindowManager.Canvas.Height - 28)
+                    Y = (int)(DragStartY + (MouseManager.Y - DragStartMouseY));
             }
 
             Control hoveredControl = GetHoveredControl();
