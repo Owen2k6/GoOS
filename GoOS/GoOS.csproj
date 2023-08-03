@@ -183,6 +183,8 @@
       <EmbeddedResource Include="Resources\GUI\Gosplorer\PARENT.bmp" />
       <None Remove="Resources\GUI\Gosplorer\NEW.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\NEW.bmp" />
+      <None Remove="Resources\GUI\Gosplorer\REFRESH.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Gosplorer\REFRESH.bmp" />
     </ItemGroup>
 
     <ItemGroup>

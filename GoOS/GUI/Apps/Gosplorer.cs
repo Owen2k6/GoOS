@@ -32,6 +32,9 @@ public class Gosplorer : Window
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.PASTE.bmp")]
     private static byte[] pasteIconRaw;
     
+    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.REFRESH.bmp")]
+    private static byte[] refIconRaw;
+    
     private static Canvas newIcon = Image.FromBitmap(NewIconRaw, false);
     private static Canvas binIcon = Image.FromBitmap(BinIconRaw, false);
     private static Canvas childIcon = Image.FromBitmap(ChildIconRaw, false);
@@ -39,6 +42,7 @@ public class Gosplorer : Window
     private static Canvas moveIcon = Image.FromBitmap(MoveIconRaw, false);
     private static Canvas copyIcon = Image.FromBitmap(copyIconRaw, false);
     private static Canvas pasteIcon = Image.FromBitmap(pasteIconRaw, false);
+    private static Canvas refIcon = Image.FromBitmap(refIconRaw, false);
 
     List DAF;
     Button Parent;
@@ -46,6 +50,8 @@ public class Gosplorer : Window
     Button Move;
     Button Bin;
     Button New;
+    Button Ref;
+    private Input cdirdis;
 
     // TODO: Implement copy & paste.
     Button Copy;
@@ -71,6 +77,16 @@ public class Gosplorer : Window
 
             Image = newIcon,
             Clicked = NewClick
+        };
+        
+        Ref = new Button(this, 105, 5, 15, 15, "")
+        {
+            //UseSystemStyle = false,
+            BackgroundColour = Color.White,
+            TextColour = Color.Black,
+
+            Image = refIcon,
+            Clicked = RefClick
         };
         
         Bin = new Button(this, 25, 5, 15, 15, "")
@@ -112,8 +128,10 @@ public class Gosplorer : Window
             Image = moveIcon,
             Clicked = MoveClick
         };
-
-        DAF = new List(this, 5, 25, Convert.ToUInt16(Contents.Width - 10), Convert.ToUInt16(Contents.Height - 60),
+        
+        // FFS build
+        
+        DAF = new List(this, 5, 25, Convert.ToUInt16(Contents.Width - 10), Convert.ToUInt16(310 - 50),
             "Directory Listing", Array.Empty<string>());
 
         // Render the buttons.
@@ -125,7 +143,8 @@ public class Gosplorer : Window
         Child.Render();
         Move.Render();
         New.Render();
-
+        Ref.Render();
+        
         Update(true);
     }
 
@@ -155,9 +174,21 @@ public class Gosplorer : Window
             DAF.Selected = 0;
         }
         
+        cdirdis = new Input(this, 5, 310-20, 500-10, 15, " " + cdir5000)
+        {
+            //UseSystemStyle = false,
+            ReadOnly = true
+        };
+        
+        cdirdis.Render();
         DAF.Render();
     }
 
+    private void RefClick()
+    {
+        Update(false);
+    }
+    
     private void BinClick()
     {
         string cdir3003 = cdir5000;
@@ -204,9 +235,7 @@ public class Gosplorer : Window
     {
         string cdir3003 = cdir5000;
 
-        var directory_list = Directory.GetDirectories(cdir3003);
-
-        if (directory_list.Contains(DAF.Items[DAF.Selected]))
+        if (!DAF.Items[DAF.Selected].Contains('.'))
         {
             cdir5000 = cdir3003 + @"\" + DAF.Items[DAF.Selected];
             Update(true);
