@@ -37,6 +37,8 @@ namespace GoOS
 
         public static bool isGCIenabled = false;
 
+        public static string gcdir = @"0:\";
+
         //Vars for OS
         public static string version = "1.5";
         public static string BuildType = "Beta";

@@ -181,6 +181,8 @@
       <EmbeddedResource Include="Resources\GUI\Gosplorer\MOVE.bmp" />
       <None Remove="Resources\GUI\Gosplorer\PARENT.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\PARENT.bmp" />
+      <None Remove="Resources\GUI\Gosplorer\NEW.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Gosplorer\NEW.bmp" />
     </ItemGroup>
 
     <ItemGroup>
