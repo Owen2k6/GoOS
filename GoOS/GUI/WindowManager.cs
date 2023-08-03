@@ -50,6 +50,19 @@ namespace GoOS.GUI
             }
         }
 
+        private static bool AreThereWindowsInRange(int StartX, int StartY, int EndX, int EndY)
+        {
+            foreach (Window w in windows)
+            {
+                if (w.X > StartX && w.X < EndX && w.Y > StartY && w.Y < EndY)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public static int GetAmountOfWindowsByTitle(string wnd)
         {
             int count = 0;
@@ -202,14 +215,25 @@ namespace GoOS.GUI
                 return;
             }
 
+            for (int i = 0; i < windows.Count; i++)
+            {
+                if (windows[i].Title == nameof(Desktop) && !AreThereWindowsInRange(20, 20, 84, 100))
+                {
+                    windows[i].HandleMouseInput();
+                    break;
+                }
+            }
+
             int hoveredWindowIdx = GetHoveredWindow();
             if (hoveredWindowIdx != -1)
             {
-                windows[hoveredWindowIdx].HandleMouseInput();
+                if (windows[hoveredWindowIdx].Title != nameof(Desktop))
+                    windows[hoveredWindowIdx].HandleMouseInput();
 
                 if (hoveredWindowIdx != windows.Count - 1 &&
                     MouseManager.MouseState != MouseState.None &&
-                    !Dimmed)
+                    !Dimmed &&
+                    windows[hoveredWindowIdx].Title != nameof(Desktop))
                 {
                     MoveWindowToFront(windows[hoveredWindowIdx]);
                 }
