@@ -57,6 +57,12 @@ namespace GoOS.GUI.Apps
                 WindowManager.AddWindow(new GCLauncher());
                 CloseStartMenu();
             });
+            
+            AddAppButton("Gosplorer", () =>
+            {
+                WindowManager.AddWindow(new Gosplorer());
+                CloseStartMenu();
+            });
         }
 
         private void AddPowerButton()
