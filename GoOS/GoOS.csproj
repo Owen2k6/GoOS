@@ -173,6 +173,14 @@
       <EmbeddedResource Include="Resources\GUI\Minimize_Hovered.bmp" />
       <None Remove="Resources\GUI\Minimize_Pressed.bmp" />
       <EmbeddedResource Include="Resources\GUI\Minimize_Pressed.bmp" />
+      <None Remove="Resources\GUI\Gosplorer\BIN.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Gosplorer\BIN.bmp" />
+      <None Remove="Resources\GUI\Gosplorer\CHILD.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Gosplorer\CHILD.bmp" />
+      <None Remove="Resources\GUI\Gosplorer\MOVE.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Gosplorer\MOVE.bmp" />
+      <None Remove="Resources\GUI\Gosplorer\PARENT.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Gosplorer\PARENT.bmp" />
     </ItemGroup>
 
     <ItemGroup>
