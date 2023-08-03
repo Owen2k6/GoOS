@@ -84,7 +84,7 @@ namespace GoOS.GUI
         {
             if (IsMouseOver)
             {
-                Selected = ((int)MouseManager.Y - Parent.Y + Window.TITLE_BAR_HEIGHT + Y) / 20 - 4;
+                Selected = ((int)MouseManager.Y - Parent.Y + Window.TITLE_BAR_HEIGHT + Y - 2) / 20 - 5;
             }
 
             Render();
