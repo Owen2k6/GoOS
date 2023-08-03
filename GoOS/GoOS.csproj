@@ -165,6 +165,14 @@
       <EmbeddedResource Include="Resources\GUI\Notepad\COPY.bmp" />
       <None Remove="Resources\GUI\Notepad\CUT.bmp" />
       <EmbeddedResource Include="Resources\GUI\Notepad\CUT.bmp" />
+      <None Remove="Resources\GUI\Maximize.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Maximize.bmp" />
+      <None Remove="Resources\GUI\Minimize.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Minimize.bmp" />
+      <None Remove="Resources\GUI\Minimize_Hovered.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Minimize_Hovered.bmp" />
+      <None Remove="Resources\GUI\Minimize_Pressed.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Minimize_Pressed.bmp" />
     </ItemGroup>
 
     <ItemGroup>
