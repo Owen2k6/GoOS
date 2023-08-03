@@ -16,6 +16,16 @@ namespace GoOS.GUI
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton_pressed.bmp")] private static byte[] closeButtonPressedRaw;
         private static Canvas closeButtonPressed = Image.FromBitmap(closeButtonPressedRaw, false);
+        
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Maximize.bmp")] private static byte[] maximiseRaw;
+        private static Canvas maximize = Image.FromBitmap(maximiseRaw, false);
+        
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize.bmp")] private static byte[] minimiseRaw;
+        private static Canvas minimise = Image.FromBitmap(minimiseRaw, false);
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Hovered.bmp")] private static byte[] minimiseHoverRaw;
+        private static Canvas minimiseHover = Image.FromBitmap(minimiseHoverRaw, false);
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Pressed.bmp")] private static byte[] minimisePressedRaw;
+        private static Canvas minimisePressed = Image.FromBitmap(minimisePressedRaw, false);
 
         public Canvas Contents;
 
@@ -276,7 +286,9 @@ namespace GoOS.GUI
                             closeButtonPressed : closeButtonHover;
                     }
 
-                    cv.DrawImage(X + Contents.Width - 21, Y + 3, closeButtonImage);
+                    cv.DrawImage(X + Contents.Width - 21, Y +1, closeButtonImage);
+                    cv.DrawImage(X + Contents.Width - 39, Y +1, maximize);
+                    cv.DrawImage(X + Contents.Width - 57, Y +1, minimise);
                 }
             }
 
