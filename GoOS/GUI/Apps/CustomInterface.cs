@@ -20,7 +20,7 @@ namespace GoOS.GUI.Apps
                 Name = "Unnamed application";
             }
             Contents = new Canvas(width, height);
-            Contents.Clear(Color.White);
+            Contents.Clear(Color.LightGray);
             Title = Name;
             Visible = true; //Any non OS application must always be visible and closable. No exceptions.
             Closable = true;

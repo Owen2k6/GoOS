@@ -16,7 +16,7 @@ namespace GoOS.GUI.Apps
         public Clock()
         {
             Contents = new Canvas(192, 192);
-            Contents.Clear(Color.White);
+            Contents.Clear(Color.LightGray);
             Title = "Clock";
             Visible = true;
             Closable = true;

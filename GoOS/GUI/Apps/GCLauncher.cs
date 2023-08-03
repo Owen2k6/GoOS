@@ -24,7 +24,7 @@ namespace GoOS.GUI.Apps
             Closable = true;
             SetDock(WindowDock.Center);
             
-            WhatToLaunch = new Input(this,5,5,390,20, "Please provide a valid path to your gexe file. (\\path\\to\\file.gexe)");
+            WhatToLaunch = new Input(this,5,5,390,20, "Provide a path to your gexe file. (\\path\\to\\file.gexe)");
             WhatToLaunch.Render();
             LaunchButton = new Button(this, 5, 30, 390, 20, "Launch"){
                 Clicked = GCVM_Click

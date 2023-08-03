@@ -56,7 +56,7 @@ namespace GoOS.GUI.Apps
         public Paintbrush()
         {
             Contents = new Canvas(324, 300);
-            Contents.Clear(Color.White);
+            Contents.Clear(Color.LightGray);
             Title = "Paintbrush";
             Visible = true;
             Closable = true;
@@ -92,6 +92,7 @@ namespace GoOS.GUI.Apps
                 ShowAboutDialog();
 
             // TODO: implement ctrl + z
+            // What about a fucking eraser? - Owen2k6
         }
 
         private void Pencil_Click()

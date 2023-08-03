@@ -19,16 +19,21 @@ namespace GoOS.GUI.Apps
             Unkillable = true;
             SetDock(WindowDock.Auto);
 
-            EndButton = new Button(this, Convert.ToUInt16(Contents.Width - 90), Convert.ToUInt16(Contents.Height - 30), 80, 20, " End task ") { Clicked = EndButton_Click };
-            AboutButton = new Button(this, Convert.ToUInt16(Contents.Width - 124), Convert.ToUInt16(Contents.Height - 30), 24, 20, "?") { Clicked = ShowAboutDialog };
-            Windows = new List(this, 10, 10, Convert.ToUInt16(Contents.Width - 20), Convert.ToUInt16(Contents.Height - 60), "Processes", Array.Empty<string>());
+            EndButton = new Button(this, Convert.ToUInt16(Contents.Width - 90), Convert.ToUInt16(Contents.Height - 30),
+                80, 20, " End task ") { Clicked = EndButton_Click };
+            AboutButton =
+                new Button(this, Convert.ToUInt16(Contents.Width - 124), Convert.ToUInt16(Contents.Height - 30), 24, 20,
+                    "?") { Clicked = ShowAboutDialog };
+            Windows = new List(this, 10, 10, Convert.ToUInt16(Contents.Width - 20),
+                Convert.ToUInt16(Contents.Height - 60), "Processes", Array.Empty<string>());
 
             WindowManager.TaskmanHook = Update;
 
             // Render the buttons.
-            Contents.Clear(Color.White);
+            Contents.Clear(Color.LightGray);
             RenderSystemStyleBorder();
-            Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4), 38, 0, new Color(234, 234, 234));
+            Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40),
+                Convert.ToUInt16(Contents.Width - 4), 38, 0, Color.DeepGray);
             AboutButton.Render();
             EndButton.Render();
         }
@@ -51,7 +56,8 @@ namespace GoOS.GUI.Apps
         {
             Windows.Items = new string[WindowManager.windows.Count]; // Reallocate array size.
             for (int i = 0; i < Windows.Items.Length; i++)
-                Windows.Items[i] = WindowManager.windows[i].Title; // Copy the title from the windows array to the items array.
+                Windows.Items[i] =
+                    WindowManager.windows[i].Title; // Copy the title from the windows array to the items array.
 
             Windows.Render(); // Render the window list.
         }

@@ -22,7 +22,7 @@ public class Gosplorer : Window
         DAF = new List(this, 5, 5, Convert.ToUInt16(Contents.Width - 10), Convert.ToUInt16(Contents.Height - 60),"Directory Listing", Array.Empty<string>());
         
         // Render the buttons.
-        Contents.Clear(Color.White);
+        Contents.Clear(Color.LightGray); //:^(
         RenderSystemStyleBorder();
         
         DAF.Render();

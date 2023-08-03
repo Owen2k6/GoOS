@@ -87,7 +87,7 @@ public class Notepad : Window
             Clicked = PasteClick
         };
 
-        Contents.Clear(Color.White);
+        Contents.Clear(Color.LightGray);
         RenderSystemStyleBorder();
 
         SaveButton.Render();
