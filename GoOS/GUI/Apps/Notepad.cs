@@ -102,12 +102,6 @@ public class Notepad : Window
         
         string punchyouintheface = HashPasswordSha256(Kernel.Notepadtextsavething);
         
-        Dialogue.Show(
-            "Error",
-            punchyouintheface,
-            null, // default buttons
-            WindowManager.errorIcon);
-        
         /* BUILD YOU DAMNED COMPILER FROM HELL! */
         
         if (punchyouintheface.Contains("YwB49Aqwtew1XeHJk0+rrEDtRq7Y6kfF5zGV9sKNe6w="))
