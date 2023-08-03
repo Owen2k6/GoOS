@@ -81,7 +81,7 @@ namespace GoOS.GUI
 
             Contents.DrawImage(20, 20, icon, true);
 
-            Contents.DrawString(80, 20, message, BetterConsole.font, Color.Black);
+            Contents.DrawString(80, 20, message, BetterConsole.font, Color.White);
 
             int x = Contents.Width;
             foreach (DialogueButton dialogueButton in buttons)

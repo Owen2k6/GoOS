@@ -67,14 +67,14 @@ namespace GoOS.GUI
             {
                 if (i == Selected)
                 {
-                    Contents.DrawFilledRectangle(1, 20 + (i * 20), Convert.ToUInt16(Contents.Width - 3), 18, 0, new Color(120, 120, 120));
+                    Contents.DrawFilledRectangle(1, 20 + (i * 20), Convert.ToUInt16(Contents.Width - 3), 18, 0, new Color(130, 130, 130));
                     //TODO: XRC you fucking dumbass label areas where you force color changes.
                     //TODO: For example, you could just simply put //Creates a WHITE rectangle.
                     //TODO: This fucked up my theme changing work just cus you made it unnoticeable.
                     //-Owen2k6 >:^(
+                    Contents.DrawString(2, 21 + (i * 20), Items[i], BetterConsole.font, Color.Black);
                 }
-
-                Contents.DrawString(2, 21 + (i * 20), Items[i], BetterConsole.font, ForegroundColor);
+                else Contents.DrawString(2, 21 + (i * 20), Items[i], BetterConsole.font, ForegroundColor);
             }
 
             Parent.RenderControls();
