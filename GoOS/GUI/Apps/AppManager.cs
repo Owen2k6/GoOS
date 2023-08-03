@@ -26,19 +26,19 @@ namespace GoOS.GUI.Apps
         public AppManager()
         {
             Contents = new Canvas(400, 400);
-            Contents.Clear(Color.White);
+            Contents.Clear(Color.LightGray);
             Title = "GoOS Applications";
             Visible = true;
             Closable = true;
             SetDock(WindowDock.Auto);
 
-            Contents.DrawString(10, 5, "GoOS System Applications", BetterConsole.font, Color.Black);
+            Contents.DrawString(10, 5, "GoOS System Applications", BetterConsole.font, Color.White);
 
             gtermButton = new Button(this, 10, 20, 64, 80, "GTerm")
             {
                 UseSystemStyle = false,
-                BackgroundColour = Color.White,
-                TextColour = Color.Black,
+                BackgroundColour = Color.LightGray,
+                TextColour = Color.White,
 
                 Image = gtermIcon
             };
@@ -46,8 +46,8 @@ namespace GoOS.GUI.Apps
             taskmanButton = new Button(this, 90, 30, 90, 60, "TaskManager")
             {
                 UseSystemStyle = false,
-                BackgroundColour = Color.White,
-                TextColour = Color.Black,
+                BackgroundColour = Color.LightGray,
+                TextColour = Color.White,
 
                 Image = taskmanIcon
             };
@@ -55,13 +55,13 @@ namespace GoOS.GUI.Apps
             gtermButton.Clicked = OpenGTerm;
             taskmanButton.Clicked = OpenTaskman;
 
-            Contents.DrawString(10, 100, "GoOS Accessories", BetterConsole.font, Color.Black);
+            Contents.DrawString(10, 100, "GoOS Accessories", BetterConsole.font, Color.White);
 
             clockButton = new Button(this, 10, 120, 64, 80, "Clock")
             {
                 UseSystemStyle = false,
-                BackgroundColour = Color.White,
-                TextColour = Color.Black,
+                BackgroundColour = Color.LightGray,
+                TextColour = Color.White,
 
                 Image = clockIcon
             };

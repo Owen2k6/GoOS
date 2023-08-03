@@ -17,7 +17,7 @@ namespace GoOS.GUI.Apps
         {
             if (Name == null)
             {
-                Name = "Unnamed application. To name this application, please use CustomInterface(string Name)";
+                Name = "Unnamed application";
             }
             Contents = new Canvas(width, height);
             Contents.Clear(Color.White);

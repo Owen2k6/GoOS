@@ -164,11 +164,11 @@ public class Taskbar : Window
     {
         string timeString = DateTime.Now.ToString("HH:mm");
         int timeWidth = BetterConsole.font.MeasureString(timeString);
-        Contents.DrawString(Contents.Width - timeWidth - 3, 13, timeString, BetterConsole.font, Color.Black, true);
+        Contents.DrawString(Contents.Width - timeWidth - 3, 13, timeString, BetterConsole.font, Color.White, true);
 
         string fpsString = $"{WindowManager.Canvas.GetFPS()} fps";
         int fpsWidth = BetterConsole.font.MeasureString(fpsString);
-        Contents.DrawString(Contents.Width - timeWidth - fpsWidth - 12, 13, fpsString, BetterConsole.font, Color.Black, true);
+        Contents.DrawString(Contents.Width - timeWidth - fpsWidth - 12, 13, fpsString, BetterConsole.font, Color.White, true);
     }
 
     public override void HandleRun()

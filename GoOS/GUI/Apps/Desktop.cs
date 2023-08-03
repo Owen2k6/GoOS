@@ -18,7 +18,7 @@ namespace GoOS.GUI.Apps
         public Desktop()
         {
             Contents = new Canvas(WindowManager.Canvas.Width, Convert.ToUInt16(WindowManager.Canvas.Height - 28));
-            Contents.Clear(Color.UbuntuPurple);
+            Contents.Clear(Kernel.DesktopColour);
             Title = nameof(Desktop);
             Visible = true;
             Closable = false;
@@ -29,7 +29,7 @@ namespace GoOS.GUI.Apps
             folderButton = new Button(this, 20, 20, 64, 80, "Apps")
             {
                 UseSystemStyle = false,
-                BackgroundColour = Color.UbuntuPurple,
+                BackgroundColour = Kernel.DesktopColour,
                 TextColour = Color.White,
 
                 Image = folderIcon

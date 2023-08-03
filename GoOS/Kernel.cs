@@ -1,4 +1,3 @@
-
 /////// ekeleze ///////
 // I hate xrc2 code. // 
 ///////////////////////
@@ -34,7 +33,6 @@ namespace GoOS
 {
     public class Kernel : Sys.Kernel
     {
-
         public static Dictionary<string, string> InstalledPrograms = new Dictionary<string, string>() { };
 
         public static bool isGCIenabled = false;
@@ -43,7 +41,7 @@ namespace GoOS
         public static string version = "1.5";
         public static string BuildType = "Beta";
         public static string olddir = @"0:\";
-        
+
         public static string Notepadtextsavething = "";
         public static string NotepadFileToSaveNameThing = "";
 
@@ -52,9 +50,11 @@ namespace GoOS
         public static string username = null;
         public static string computername = null;
 
-        public static string cutStatus = "Disabled"; 
+        public static string cutStatus = "Disabled";
+        public static Color DesktopColour = Color.ClassicBlue;
 
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GoOS_Intro.bmp")] public static byte[] rawBootLogo;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GoOS_Intro.bmp")]
+        public static byte[] rawBootLogo;
 
         protected override void BeforeRun()
         {
@@ -62,10 +62,14 @@ namespace GoOS
             {
                 System.Console.ForegroundColor = System.ConsoleColor.Red;
                 System.Console.WriteLine();
-                System.Console.Write("GoOS - Not enough ram to boot GoOS. Please increase the amount of RAM of your VM");
-                System.Console.Write("GoOS - Or if you are running this on real hardware (you shouldn't), buy more RAM");
+                System.Console.Write(
+                    "GoOS - Not enough ram to boot GoOS. Please increase the amount of RAM of your VM");
+                System.Console.Write(
+                    "GoOS - Or if you are running this on real hardware (you shouldn't), buy more RAM");
 
-                while (true) { }
+                while (true)
+                {
+                }
             }
 
             WindowManager.Canvas = Display.GetDisplay(800, 600); //TODO: Not have this hard coded >:^(
@@ -86,12 +90,14 @@ namespace GoOS
             catch
             {
                 log(ThemeManager.ErrorText, "GoOS - Failed to initialize filesystem.\n");
-                log(ThemeManager.ErrorText, "GoOS - GoOS Needs a HDD installed to save user settings, application data and more.\n");
+                log(ThemeManager.ErrorText,
+                    "GoOS - GoOS Needs a HDD installed to save user settings, application data and more.\n");
                 log(ThemeManager.ErrorText, "GoOS - Please verify that your hard disk is plugged in correctly.");
-                while (true) { }
+                while (true)
+                {
+                }
             }
             
-
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {
                 Console.ConsoleMode = true;
@@ -99,6 +105,92 @@ namespace GoOS
                 Console.WriteLine("First boot... This may take awhile...");
                 OOBE.Launch();
             }
+            //
+            // try
+            // {
+            //     if (!File.Exists(@"0:\content\sys\desktopcolour.gms"))
+            //     {
+            //         File.Create(@"0:\content\sys\desktopcolour.gms");
+            //         File.WriteAllText(@"0:\content\sys\desktopcolour.gms", "C=ClassicBlue");
+            //         DesktopColour = Color.ClassicBlue;
+            //     }
+            //     if (File.Exists(@"0:\content\sys\desktopcolour.gms"))
+            //     {
+            //         foreach (string line in File.ReadAllLines(@"0:\content\sys\desktopcolour.gms"))
+            //         {
+            //             if (line.StartsWith("C="))
+            //             {
+            //                 if (line.Replace("C=", "").Equals("ClassicBlue"))
+            //                 {
+            //                     DesktopColour = Color.ClassicBlue;
+            //                     break;
+            //                 }
+            //                 else if (line.Replace("C=", "").Equals("UbuntuPurple"))
+            //                 {
+            //                     DesktopColour = Color.UbuntuPurple;
+            //                     break;
+            //                 }
+            //                 else if (line.Replace("C=", "").Equals("SuperOrange"))
+            //                 {
+            //                     DesktopColour = Color.SuperOrange;
+            //                     break;
+            //                 }
+            //                 else if (line.Replace("C=", "").Equals("Red"))
+            //                 {
+            //                     DesktopColour = Color.Red;
+            //                     break;
+            //                 }
+            //                 else if (line.Replace("C=", "").Equals("Green"))
+            //                 {
+            //                     DesktopColour = Color.Green;
+            //                     break;
+            //                 }
+            //                 else if (line.Replace("C=", "").Equals("Blue"))
+            //                 {
+            //                     DesktopColour = Color.Blue;
+            //                     break;
+            //                 }
+            //                 else if (line.Replace("C=", "").Equals("Yellow"))
+            //                 {
+            //                     DesktopColour = Color.Yellow;
+            //                     break;
+            //                 }
+            //                 else if (line.Replace("C=", "").Equals("Purple"))
+            //                 {
+            //                     DesktopColour = Color.Magenta;
+            //                     break;
+            //                 }
+            //                 else if (line.Replace("C=", "").Equals("Cyan"))
+            //                 {
+            //                     DesktopColour = Color.Cyan;
+            //                     break;
+            //                 }
+            //                 else if (line.Replace("C=", "").Equals("White"))
+            //                 {
+            //                     DesktopColour = Color.White;
+            //                     break;
+            //                 }
+            //
+            //                 else if (line.Replace("C=", "").Equals("Black"))
+            //                 {
+            //                     DesktopColour = Color.Black;
+            //                     break;
+            //                 }
+            //                 else
+            //                 {
+            //                     DesktopColour = Color.ClassicBlue;
+            //                     break;
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+            // catch (Exception)
+            // {
+            //     DesktopColour = Color.ClassicBlue;
+            //     //Dialogue.Show("Error", "GoOS - Failed to load desktop colour",
+            //         //null);
+            // }
 
             if (!Directory.Exists(@"0:\content\GCI\"))
             {
@@ -209,12 +301,10 @@ namespace GoOS
 
             if (cutStatus == "FULL")
             {
-                
             }
-            
-            if (cutStatus == "Single") 
+
+            if (cutStatus == "Single")
             {
-                
             }
 
             DrawPrompt();
@@ -247,6 +337,7 @@ namespace GoOS
                         log(ThemeManager.ErrorText, "Missing arguments!");
                         break;
                     }
+
                     if (args.Length > 2)
                     {
                         log(ThemeManager.ErrorText, "Too many arguments!");
@@ -261,6 +352,7 @@ namespace GoOS
                         log(ThemeManager.ErrorText, "Missing arguments!");
                         break;
                     }
+
                     if (args.Length > 2)
                     {
                         log(ThemeManager.ErrorText, "Too many arguments!");
@@ -275,11 +367,13 @@ namespace GoOS
                         log(ThemeManager.ErrorText, "Missing arguments!");
                         break;
                     }
+
                     if (args.Length > 3)
                     {
                         log(ThemeManager.ErrorText, "Too many arguments!");
                         break;
                     }
+
                     try
                     {
                         ExtendedFilesystem.MoveFile(args[1], args[2]);
@@ -289,6 +383,7 @@ namespace GoOS
                         System.Console.WriteLine("Error whilst trying to move file: " + e);
                         break;
                     }
+
                     break;
                 case "copyfile":
                     if (args.Length < 3)
@@ -296,11 +391,13 @@ namespace GoOS
                         log(ThemeManager.ErrorText, "Missing arguments!");
                         break;
                     }
+
                     if (args.Length > 3)
                     {
                         log(ThemeManager.ErrorText, "Too many arguments!");
                         break;
                     }
+
                     try
                     {
                         ExtendedFilesystem.CopyFile(args[1], args[2]);
@@ -310,6 +407,7 @@ namespace GoOS
                         System.Console.WriteLine("Error whilst trying to copy file: " + e);
                         break;
                     }
+
                     break;
                 case "help":
                     if (args.Length > 1)
@@ -353,7 +451,8 @@ namespace GoOS
 
                             log(ConsoleColor.Red, "3");
                             /** Send data **/
-                            xClient.Send(Encoding.ASCII.GetBytes("GET /" + filetoget + ".goexe HTTP/1.1\nHost: apps.goos.owen2k6.com\n\n"));
+                            xClient.Send(Encoding.ASCII.GetBytes("GET /" + filetoget +
+                                                                 ".goexe HTTP/1.1\nHost: apps.goos.owen2k6.com\n\n"));
 
                             /** Receive data **/
                             log(ConsoleColor.Red, "4");
@@ -496,14 +595,20 @@ namespace GoOS
                     // do it the ChaOS way, it works so dont touch else you're gay
                     try
                     {
-                        Directory.SetCurrentDirectory(Directory.GetCurrentDirectory().TrimEnd('\\').Remove(Directory.GetCurrentDirectory().LastIndexOf('\\') + 1));
-                        Directory.SetCurrentDirectory(Directory.GetCurrentDirectory().Remove(Directory.GetCurrentDirectory().Length - 1));
+                        Directory.SetCurrentDirectory(Directory.GetCurrentDirectory().TrimEnd('\\')
+                            .Remove(Directory.GetCurrentDirectory().LastIndexOf('\\') + 1));
+                        Directory.SetCurrentDirectory(Directory.GetCurrentDirectory()
+                            .Remove(Directory.GetCurrentDirectory().Length - 1));
                     }
-                    catch { }
+                    catch
+                    {
+                    }
+
                     if (!Directory.GetCurrentDirectory().StartsWith(@"0:\"))
                     {
                         Directory.SetCurrentDirectory(@"0:\"); // Directory error correction
                     }
+
                     break;
                 case "cdr":
                     if (args.Length > 1)
@@ -616,6 +721,7 @@ namespace GoOS
                     {
                         log(ThemeManager.ErrorText, "Unknown order.");
                     }
+
                     break;
                 case "mode":
                     if (args.Length > 3)
@@ -623,11 +729,13 @@ namespace GoOS
                         log(ThemeManager.ErrorText, "Too many arguments");
                         break;
                     }
+
                     if (args.Length == 1)
                     {
                         log(ThemeManager.ErrorText, "Missing arguments");
                         break;
                     }
+
                     Console.Init(Convert.ToUInt16(args[1]), Convert.ToUInt16(args[2]));
                     break;
                 case "floppy":
@@ -646,7 +754,7 @@ namespace GoOS
                     Dialogue.Show("Message", "Hello world!!!");
                     break;
                 case "dotnet":
-                    var fl = new DotNetFile(Directory.GetCurrentDirectory()+args[1]);
+                    var fl = new DotNetFile(Directory.GetCurrentDirectory() + args[1]);
                     DotNetClr.DotNetClr clr = new DotNetClr.DotNetClr(fl, @"0:\framework");
                     clr.Start();
                     break;
@@ -658,7 +766,6 @@ namespace GoOS
 
                     if (InstalledPrograms.ContainsKey(args[0]))
                     {
-
                         string rootass = @"0:\";
 
                         string currentDIRRRRRR = Directory.GetCurrentDirectory();

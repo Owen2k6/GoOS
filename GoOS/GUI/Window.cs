@@ -322,7 +322,7 @@ namespace GoOS.GUI
         public void RenderOutsetWindowBackground()
         {
             // Background.
-            Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, new Color(191, 191, 191));
+            Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, new Color(71, 71, 71));
 
             // Border.
             RenderSystemStyleBorder();
@@ -331,12 +331,12 @@ namespace GoOS.GUI
         public void RenderSystemStyleBorder()
         {
             // Highlight.
-            Contents.DrawLine(0, 0, Contents.Width - 1, 0, Color.White);
-            Contents.DrawLine(0, 0, 0, Contents.Height - 1, Color.White);
+            Contents.DrawLine(0, 0, Contents.Width - 1, 0, new Color(80, 80, 80));
+            Contents.DrawLine(0, 0, 0, Contents.Height - 1, new Color(80, 80, 80));
 
             // Light shadow.
-            Contents.DrawLine(1, Contents.Height - 2, Contents.Width - 2, Contents.Height - 2, new Color(127, 127, 127));
-            Contents.DrawLine(Contents.Width - 2, 1, Contents.Width - 2, Contents.Height - 1, new Color(127, 127, 127));
+            Contents.DrawLine(1, Contents.Height - 2, Contents.Width - 2, Contents.Height - 2, new Color(89, 89, 89));
+            Contents.DrawLine(Contents.Width - 2, 1, Contents.Width - 2, Contents.Height - 1, new Color(89, 89, 89));
 
             // Dark shadow.
             Contents.DrawLine(0, Contents.Height - 1, Contents.Width, Contents.Height - 1, Color.Black);
