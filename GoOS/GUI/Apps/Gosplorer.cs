@@ -26,18 +26,7 @@ public class Gosplorer : Window
         RenderSystemStyleBorder();
         
         DAF.Render();
-        try
-        {
-            Update();
-        }
-        catch(Exception e)
-        {
-            Dialogue.Show(
-                "Error",
-                e.Message,
-                null, // default buttons
-                WindowManager.errorIcon);
-        }
+        Update();
     }
 
     private void Update()
