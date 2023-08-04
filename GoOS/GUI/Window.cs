@@ -242,6 +242,11 @@ namespace GoOS.GUI
             // Click, any button.
             if (MouseManager.MouseState == MouseState.None && previousMouseState != MouseState.None)
             {
+                if (previousMouseState == MouseState.Right)
+                {
+                    ShowContextMenu();
+                }
+
                 HandleClick(new MouseEventArgs()
                 {
                     X = RelativeMouseX,
@@ -326,6 +331,11 @@ namespace GoOS.GUI
                 }
             }
         }
+
+        /// <summary>
+        /// User function to handle context menus.
+        /// </summary>
+        public virtual void ShowContextMenu() { }
 
         public void Dispose()
         {
