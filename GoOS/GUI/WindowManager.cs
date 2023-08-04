@@ -50,6 +50,20 @@ namespace GoOS.GUI
             }
         }
 
+        public static Window GetWindowByTitle(string wnd)
+        {
+            foreach (Window w in windows)
+            {
+                if (w.Title == wnd)
+                {
+                    return w;
+                }
+            }
+            return null;
+        }
+
+        public static Action MouseMove;
+
         private static bool AreThereWindowsInRange(int StartX, int StartY, int EndX, int EndY)
         {
             foreach (Window w in windows)
@@ -77,6 +91,8 @@ namespace GoOS.GUI
 
             return count;
         }
+
+        public static bool ContainsWindowByTitle(string wnd) => GetAmountOfWindowsByTitle(wnd) > 0;
 
         public static void RemoveWindowByTitle(string wnd)
         {
@@ -219,8 +235,20 @@ namespace GoOS.GUI
             {
                 if (windows[i].Title == nameof(Desktop) && !AreThereWindowsInRange(20, 20, 84, 100))
                 {
-                    windows[i].HandleMouseInput();
-                    break;
+                    var w = GetWindowByTitle(nameof(ContextMenu));
+                    if (w != null)
+                    {
+                        if (!AreThereWindowsInRange(w.X, w.Y, w.X + w.Contents.Width, w.Y + w.Contents.Height))
+                        {
+                            windows[i].HandleMouseInput();
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        windows[i].HandleMouseInput();
+                        break;
+                    }
                 }
             }
 
@@ -286,7 +314,7 @@ namespace GoOS.GUI
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.error.bmp")] private static byte[] errorIconRaw;
         public static Canvas errorIcon = Image.FromBitmap(errorIconRaw, false);
 
-        //private static uint LastCursorX, LastCursorY;
+        private static uint LastCursorX, LastCursorY;
 
         public static void Update()
         {
@@ -302,6 +330,11 @@ namespace GoOS.GUI
                     }
 
                     //Canvas.Clear(Color.UbuntuPurple);
+
+                    if (MouseManager.X != LastCursorX || MouseManager.Y != LastCursorY)
+                    {
+                        MouseMove?.Invoke();
+                    }
 
                     for (int i = windows.Count - 1; i >= 0; i--)
                     {
@@ -363,8 +396,8 @@ namespace GoOS.GUI
 
                     MemoryWatch.Watch();
 
-                    //LastCursorX = MouseManager.X;
-                    //LastCursorY = MouseManager.Y;
+                    LastCursorX = MouseManager.X;
+                    LastCursorY = MouseManager.Y;
                 }
                 else
                 {
