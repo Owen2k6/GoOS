@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cosmos.System;
+using GoOS.GUI.Models;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
 
@@ -14,6 +16,7 @@ namespace GoOS.GUI.Apps
         private static Canvas folderIcon = Image.FromBitmap(folderIconRaw, false);
 
         Button folderButton;
+        ContextMenu context;
 
         public Desktop()
         {
@@ -38,6 +41,27 @@ namespace GoOS.GUI.Apps
             folderButton.Clicked = FolderClicked;
 
             folderButton.Render();
+        }
+
+        string[] test =
+        {
+            "Item 1",
+            "Item 2"
+        };
+
+        // xrc2, listen closely. PULL before doing anything you idiot
+
+        public override void ShowContextMenu()
+        {
+            ContextMenu.Show(test, 80, ContextMenu_Handle);
+        }
+
+        private void ContextMenu_Handle(string item)
+        {
+            Dialogue.Show(
+                    "Debug",
+                    item,
+                    null);
         }
 
         private static void FolderClicked()
