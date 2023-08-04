@@ -8,7 +8,7 @@ namespace GoOS.GUI.Apps
         public GTerm()
         {
             Contents = BetterConsole.Canvas;
-            Title = "GTerm";
+            Title = BetterConsole.Title;
             Visible = true;
             Closable = true;
             SetDock(WindowDock.Auto);

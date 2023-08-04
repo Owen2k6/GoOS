@@ -757,6 +757,21 @@ namespace GoOS
                     DotNetClr.DotNetClr clr = new DotNetClr.DotNetClr(fl, @"0:\framework");
                     clr.Start();
                     break;
+                case "9xcode":
+                    if (args.Length > 2)
+                    {
+                        log(ThemeManager.ErrorText, "Too many arguments");
+                        break;
+                    }
+
+                    if (args.Length == 1)
+                    {
+                        log(ThemeManager.ErrorText, "Missing arguments");
+                        break;
+                    }
+
+                    _9xCode.Interpreter.Run(Directory.GetCurrentDirectory() + args[1]);
+                    break;
                 default:
                     if (isGCIenabled)
                     {
