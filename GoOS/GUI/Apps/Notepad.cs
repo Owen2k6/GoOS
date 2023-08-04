@@ -44,7 +44,7 @@ public class Notepad : Window
     private Input Dialog_TextBox;
 
 
-    public Notepad()
+    public Notepad(bool openFile, string fileToOpen)
     {
         Contents = new Canvas(500, 300);
         Title = "GoOS Notepad";
@@ -93,8 +93,32 @@ public class Notepad : Window
         SaveButton.Render();
         CopyButton.Render();
         PasteButton.Render();
+        //AttemptOne.Render();
+
+        if (openFile)
+        {
+            LoadFile(fileToOpen);
+        }
+        else
+        {
+            AttemptOne.Render();
+        }
     }
 
+    private void LoadFile(string filefile)
+    {
+        string toreturn = "";
+        string[] lines = File.ReadAllLines(filefile);
+        foreach (var line in lines)
+        {
+            toreturn = toreturn + line + "\n";
+        }
+
+        AttemptOne.Text = toreturn;
+
+        AttemptOne.Render();
+    }
+    
     private void SaveClick()
     {
         string shittosave = AttemptOne.Text;
@@ -112,7 +136,6 @@ public class Notepad : Window
         {
             WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());
         }
-        
         
         WindowManager.AddWindow(new NotepadSaveAs());
     }
@@ -141,46 +164,42 @@ public class NotepadSaveAs : Window
     private Button SaveButton;
     private Button CancelButton;
     private Input AttemptOne;
-    private Input text;
 
     public NotepadSaveAs()
     {
-        Contents = new Canvas(300, 100);
+        Contents = new Canvas(300, 80);
         Title = "Save - GoOS Notepad";
         Visible = true;
-        Closable = true;
+        Closable = false;
         SetDock(WindowDock.Auto);
 
-        SaveButton = new Button(this, 5, 45, 60, 20, "Save")
+        SaveButton = new Button(this, 5, 50, 60, 20, "Save")
         {
             Clicked = SaveClick
         };
 
-        CancelButton = new Button(this, 300 - 60, 45, 60, 20, "Cancel")
+        CancelButton = new Button(this, 300 - 65, 50, 60, 20, "Cancel")
         {
             Clicked = Dispose
-        };
-
-        text = new Input(this, 5, 5, 300 - 10, 20, "Input the filename below:")
-        {
-            ReadOnly = true
         };
 
         AttemptOne = new Input(this, 5, 25, 300 - 10, 20, "")
         {
         };
 
-        Contents.Clear(Color.White);
+        Contents.Clear(Color.LightGray);
         RenderSystemStyleBorder();
-
+        
+        Contents.DrawString(5,5,"Please input file name below:", BetterConsole.font, Color.White);
+        
         SaveButton.Render();
         CancelButton.Render();
-        text.Render();
         AttemptOne.Render();
     }
 
     private void SaveClick()
     {
+        Kernel.NotepadFileToSaveNameThing = AttemptOne.Text;
         
         try
         {
@@ -190,78 +209,16 @@ public class NotepadSaveAs : Window
                 "Saved!",
                 "Your file has been saved.",
                 null);
+            
+            Dispose();
         }
         catch (Exception e)
         {
             Dialogue.Show(
                 "Error",
-                "Your file has not been saved.",
+                e.Message,
                 null, // default buttons
                 WindowManager.errorIcon);
         }
     }
 }
-
-// TODO: implement the overwrite confirm-er. I didn't because apparently C# doesnt like the idea of launching a window from a window from a window.
-public class NotepadOverwriteConfirm : Window
-{
-    private Button YesButton;
-    private Button NoButton;
-    private Input text;
-
-    public NotepadOverwriteConfirm()
-    {
-        Contents = new Canvas(300, 100);
-        Title = "Overwrite - GoOS Notepad";
-        Visible = true;
-        Closable = true;
-        SetDock(WindowDock.Auto);
-
-        YesButton = new Button(this, 5, 15, 60, 20, "Yes")
-        {
-            Clicked = YesClick
-        };
-
-        NoButton = new Button(this, 200 - 60, 15, 60, 20, "No")
-        {
-            Clicked = Dispose
-        };
-
-        text = new Input(this, 5, 5, 200 - 10, 20, "Overwrite the existing file?")
-        {
-            ReadOnly = true
-        };
-
-        Contents.Clear(Color.White);
-        RenderSystemStyleBorder();
-
-        YesButton.Render();
-        NoButton.Render();
-        text.Render();
-    }
-
-    private void YesClick()
-    {
-        try
-        {
-            Commands.Make.MakeFile(Kernel.NotepadFileToSaveNameThing);
-            File.WriteAllText(Kernel.NotepadFileToSaveNameThing, Kernel.Notepadtextsavething);
-            Dialogue.Show(
-                "Saved!",
-                "Your file has been saved.",
-                null, // default buttons
-                WindowManager.errorIcon);
-        }
-        catch (Exception e)
-        {
-            Dialogue.Show(
-                "Error",
-                "Your file has not been saved.",
-                null, // default buttons
-                WindowManager.errorIcon);
-        }
-    }
-}
-
-
-

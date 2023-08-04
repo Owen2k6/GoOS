@@ -185,6 +185,8 @@
       <EmbeddedResource Include="Resources\GUI\Gosplorer\NEW.bmp" />
       <None Remove="Resources\GUI\Gosplorer\REFRESH.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\REFRESH.bmp" />
+      <None Remove="Resources\GUI\Gosplorer\LOADINNOTEPAD.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Gosplorer\LOADINNOTEPAD.bmp" />
     </ItemGroup>
 
     <ItemGroup>

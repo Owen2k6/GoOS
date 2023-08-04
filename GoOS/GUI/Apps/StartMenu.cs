@@ -48,7 +48,7 @@ namespace GoOS.GUI.Apps
             
             AddAppButton("Notepad", () =>
             {
-                WindowManager.AddWindow(new Notepad());
+                WindowManager.AddWindow(new Notepad(false, ""));
                 CloseStartMenu();
             });
             

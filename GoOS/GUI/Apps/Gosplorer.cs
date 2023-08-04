@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Cosmos.System;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
@@ -35,6 +36,9 @@ public class Gosplorer : Window
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.REFRESH.bmp")]
     private static byte[] refIconRaw;
     
+    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.LOADINNOTEPAD.bmp")]
+    private static byte[] linIconRaw;
+    
     private static Canvas newIcon = Image.FromBitmap(NewIconRaw, false);
     private static Canvas binIcon = Image.FromBitmap(BinIconRaw, false);
     private static Canvas childIcon = Image.FromBitmap(ChildIconRaw, false);
@@ -43,6 +47,7 @@ public class Gosplorer : Window
     private static Canvas copyIcon = Image.FromBitmap(copyIconRaw, false);
     private static Canvas pasteIcon = Image.FromBitmap(pasteIconRaw, false);
     private static Canvas refIcon = Image.FromBitmap(refIconRaw, false);
+    private static Canvas linIcon = Image.FromBitmap(linIconRaw, false);
 
     List DAF;
     Button Parent;
@@ -51,6 +56,7 @@ public class Gosplorer : Window
     Button Bin;
     Button New;
     Button Ref;
+    Button Lin;
     private Input cdirdis;
 
     // TODO: Implement copy & paste.
@@ -58,6 +64,9 @@ public class Gosplorer : Window
     Button Paste;
 
     private string cdir5000 = @"0:\";
+
+    private string clickcounter = "";
+    private int ccnum = 0;
 
     public Gosplorer()
     {
@@ -77,6 +86,16 @@ public class Gosplorer : Window
 
             Image = newIcon,
             Clicked = NewClick
+        };
+        
+        Lin = new Button(this, 125, 5, 15, 15, "")
+        {
+            //UseSystemStyle = false,
+            BackgroundColour = Color.White,
+            TextColour = Color.Black,
+
+            Image =  linIcon,
+            Clicked = LinClick
         };
         
         Ref = new Button(this, 105, 5, 15, 15, "")
@@ -131,8 +150,10 @@ public class Gosplorer : Window
         
         // FFS build
         
-        DAF = new List(this, 5, 25, Convert.ToUInt16(Contents.Width - 10), Convert.ToUInt16(310 - 50),
-            "Directory Listing", Array.Empty<string>());
+        DAF = new List(this, 5, 25, Convert.ToUInt16(Contents.Width - 10), Convert.ToUInt16(310 - 50),"Directory Listing", Array.Empty<string>())
+        {
+            Clicked = ListClick
+        };
 
         // Render the buttons.
         Contents.Clear(Color.LightGray); // >:^(
@@ -144,6 +165,7 @@ public class Gosplorer : Window
         Move.Render();
         New.Render();
         Ref.Render();
+        Lin.Render();
         
         Update(true);
     }
@@ -174,7 +196,7 @@ public class Gosplorer : Window
             DAF.Selected = 0;
         }
         
-        cdirdis = new Input(this, 5, 310-20, 500-10, 15, " " + cdir5000)
+        cdirdis = new Input(this, 5, 310-20, 500-10, 15, " " + cdir3003)
         {
             //UseSystemStyle = false,
             ReadOnly = true
@@ -184,9 +206,51 @@ public class Gosplorer : Window
         DAF.Render();
     }
 
+    private void ListClick()
+    {
+        string WhatWasClicked = DAF.Items[DAF.Selected];
+        
+        if (clickcounter == WhatWasClicked)
+        {
+            ccnum++;
+            if (ccnum >= 2)
+            {
+                DoubleHandler(WhatWasClicked);
+            }
+        }
+        else
+        {
+            clickcounter = WhatWasClicked;
+            ccnum = 1;
+        }
+    }
+
+    private void DoubleHandler(string Item)
+    {
+        if (Item.Contains('.'))
+        {
+            string filefigured = cdir5000 + @"\" + Item;
+            WindowManager.AddWindow(new Notepad(true, filefigured));
+        }
+        else
+        {
+            cdir5000 = cdir5000 + @"\" + Item;
+            Update(true);
+        }
+    }
+    
     private void RefClick()
     {
         Update(false);
+    }
+    
+    private void LinClick()
+    {
+        if (DAF.Items[DAF.Selected].Contains('.'))
+        {
+            string filefigured = cdir5000 + @"\" + DAF.Items[DAF.Selected];
+            WindowManager.AddWindow(new Notepad(true, filefigured));
+        }
     }
     
     private void BinClick()
@@ -244,6 +308,8 @@ public class Gosplorer : Window
 
     private void MoveClick()
     {
+        Kernel.gcdir = cdir5000;
+        WindowManager.AddWindow(new MoveFWindow());
     }
     
     private void NewClick()
@@ -288,6 +354,7 @@ public class NewFDWindow : Window
         Canel.Render();
         Filename.Render();
         
+        
         Contents.DrawString(5,5,"Please input file name below:", BetterConsole.font, Color.White);
     }
 
@@ -316,6 +383,78 @@ public class NewFDWindow : Window
             
             Dispose();
         }
+    }
+    
+    private void CancelClick()
+    {
+        Dispose();
+    }
+}
+
+public class MoveFWindow : Window
+{
+    private Button OK;
+    private Button Canel;
+    private Input Filename;
+    
+    public MoveFWindow()
+    {
+        BetterConsole.font = new Font(BetterConsole.rawFont, BetterConsole.charHeight);
+        Contents = new Canvas(300, 80);
+        Title = "Move - Gosplorer";
+        Visible = true;
+        Closable = false;
+        Unkillable = false;
+        SetDock(WindowDock.Auto);
+        
+        OK = new Button(this, 5, 50, 60, 20, "Ok")
+        {
+            Clicked = OKClick
+        };
+        Canel = new Button(this, 300-65, 50, 60, 20, "Cancel")
+        {
+            Clicked = CancelClick
+        };
+        Filename = new Input(this, 5, 25, 300 - 10, 20, "")
+        {
+        };
+        
+        Contents.Clear(Color.LightGray); // >:^(
+        RenderSystemStyleBorder();
+        
+        OK.Render();
+        Canel.Render();
+        Filename.Render();
+        
+        
+        Contents.DrawString(5,5,"Please input new file path below:", BetterConsole.font, Color.White);
+    }
+
+    private void OKClick()
+    {
+        string to = Filename.Text;
+
+        string[] testes = to.Split('\\');
+
+        int ltu = testes.Length - 1;
+
+        string stufftoremove = "";
+        
+        for (int i = 0; i < ltu; i++)
+        {
+            stufftoremove = stufftoremove + testes[i];
+        }
+
+        string frommfilename = to.Replace(stufftoremove, "");
+        
+        if (frommfilename.Contains('\\'))
+        {
+            frommfilename = frommfilename.Replace("\\", "");
+        }
+
+        string from = Kernel.gcdir + "\\" + frommfilename;
+        
+        GoOS.Commands.ExtendedFilesystem.MoveFile(from, to);
     }
     
     private void CancelClick()
