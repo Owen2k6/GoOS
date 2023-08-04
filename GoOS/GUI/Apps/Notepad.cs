@@ -33,8 +33,7 @@ public class Notepad : Window
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.question.bmp")]
     private static byte[] questionRaw;
 
-    
-    
+
     private static Canvas question = Image.FromBitmap(questionRaw, false);
 
     private Button SaveButton;
@@ -43,9 +42,13 @@ public class Notepad : Window
     private Input AttemptOne;
     private Input Dialog_TextBox;
 
+    private string infi = "";
+
 
     public Notepad(bool openFile, string fileToOpen)
     {
+        string infi = fileToOpen;
+
         Contents = new Canvas(500, 300);
         Title = "GoOS Notepad";
         Visible = true;
@@ -107,6 +110,8 @@ public class Notepad : Window
 
     private void LoadFile(string filefile)
     {
+        string infi = filefile;    
+        
         string toreturn = "";
         string[] lines = File.ReadAllLines(filefile);
         foreach (var line in lines)
@@ -118,28 +123,176 @@ public class Notepad : Window
 
         AttemptOne.Render();
     }
-    
+
     private void SaveClick()
     {
         string shittosave = AttemptOne.Text;
-        Kernel.Notepadtextsavething = shittosave;
-        
-        string punchyouintheface = HashPasswordSha256(Kernel.Notepadtextsavething);
-        
+
+        string punchyouintheface = HashPasswordSha256(shittosave);
+
         /* BUILD YOU DAMNED COMPILER FROM HELL! */
-        
+
         if (punchyouintheface.Contains("YwB49Aqwtew1XeHJk0+rrEDtRq7Y6kfF5zGV9sKNe6w="))
         {
             WindowManager.AddWindow(new Cut());
         }
         else if (punchyouintheface.Contains("P0LqY7Fbr9GbGncLcBkxKhGheiV72MIE5oTrAQSnaSI="))
         {
-            WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
+            WindowManager.AddWindow(new Cut());
         }
-        
-        WindowManager.AddWindow(new NotepadSaveAs());
+
+
+        WindowManager.AddWindow(new NotepadSaveAs(infi, shittosave));
     }
-    
+
     internal static string HashPasswordSha256(string hellomario)
     {
         Sha256 sha256 = new Sha256();
@@ -149,7 +302,7 @@ public class Notepad : Window
 
         return Convert.ToBase64String(sha256.GetHash());
     }
-    
+
     private void CopyClick()
     {
     }
@@ -165,8 +318,12 @@ public class NotepadSaveAs : Window
     private Button CancelButton;
     private Input AttemptOne;
 
-    public NotepadSaveAs()
+    private string sts = "";
+    
+    public NotepadSaveAs(string placetheholderofthetextplease, string stufftosave)
     {
+        sts = stufftosave;
+        
         Contents = new Canvas(300, 80);
         Title = "Save - GoOS Notepad";
         Visible = true;
@@ -189,27 +346,48 @@ public class NotepadSaveAs : Window
 
         Contents.Clear(Color.LightGray);
         RenderSystemStyleBorder();
+
+        Contents.DrawString(5, 5, "Please input file name below:", BetterConsole.font, Color.White);
         
-        Contents.DrawString(5,5,"Please input file name below:", BetterConsole.font, Color.White);
+        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;  
         
         SaveButton.Render();
         CancelButton.Render();
         AttemptOne.Render();
+
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;  
     }
 
     private void SaveClick()
     {
-        Kernel.NotepadFileToSaveNameThing = AttemptOne.Text;
-        
         try
         {
-            Commands.Make.MakeFile(Kernel.NotepadFileToSaveNameThing);
-            File.WriteAllText(Kernel.NotepadFileToSaveNameThing, Kernel.Notepadtextsavething);
+            Commands.Make.MakeFile(AttemptOne.Text);
+            File.WriteAllText(AttemptOne.Text, sts);
             Dialogue.Show(
                 "Saved!",
                 "Your file has been saved.",
                 null);
-            
+
             Dispose();
         }
         catch (Exception e)
