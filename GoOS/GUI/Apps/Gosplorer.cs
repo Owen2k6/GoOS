@@ -308,14 +308,12 @@ public class Gosplorer : Window
 
     private void MoveClick()
     {
-        Kernel.gcdir = cdir5000;
-        WindowManager.AddWindow(new MoveFWindow());
+        WindowManager.AddWindow(new MoveFWindow(DAF.Items[DAF.Selected], cdir5000));
     }
     
     private void NewClick()
     {
-        Kernel.gcdir = cdir5000;
-        WindowManager.AddWindow(new NewFDWindow());
+        WindowManager.AddWindow(new NewFDWindow(DAF.Items[DAF.Selected], cdir5000));
     }
 }
 
@@ -324,9 +322,17 @@ public class NewFDWindow : Window
     private Button OK;
     private Button Canel;
     private Input Filename;
+
+    private string cdir = "";
+
+    private string gsel = "";
     
-    public NewFDWindow()
+    
+    public NewFDWindow(string selected, string lcdir)
     {
+        cdir = lcdir;
+        gsel = selected;
+        
         BetterConsole.font = new Font(BetterConsole.rawFont, BetterConsole.charHeight);
         Contents = new Canvas(300, 80);
         Title = "New - Gosplorer";
@@ -354,7 +360,6 @@ public class NewFDWindow : Window
         Canel.Render();
         Filename.Render();
         
-        
         Contents.DrawString(5,5,"Please input file name below:", BetterConsole.font, Color.White);
     }
 
@@ -366,7 +371,7 @@ public class NewFDWindow : Window
         if (!fn.Contains('.'))
         {
             if (!Directory.Exists(args))
-                Directory.CreateDirectory(Kernel.gcdir + @"\" + args);
+                Directory.CreateDirectory(cdir + @"\" + args);
             
             Dispose();
         }
@@ -379,7 +384,7 @@ public class NewFDWindow : Window
 
             //potato2 = potato2.Split("mkfile ")[1];
             if (!File.Exists(args))
-                File.Create(Kernel.gcdir + @"\" + args);
+                File.Create(cdir + @"\" + args);
             
             Dispose();
         }
@@ -396,9 +401,16 @@ public class MoveFWindow : Window
     private Button OK;
     private Button Canel;
     private Input Filename;
+
+    private string gsel = "";
+
+    private string cdir = "";
     
-    public MoveFWindow()
+    public MoveFWindow(string selected, string lcdir)
     {
+        gsel = selected;
+        cdir = lcdir;
+        
         BetterConsole.font = new Font(BetterConsole.rawFont, BetterConsole.charHeight);
         Contents = new Canvas(300, 80);
         Title = "Move - Gosplorer";
@@ -426,33 +438,14 @@ public class MoveFWindow : Window
         Canel.Render();
         Filename.Render();
         
-        
-        Contents.DrawString(5,5,"Please input new file path below:", BetterConsole.font, Color.White);
+        Contents.DrawString(5,5,"Please input new location below:", BetterConsole.font, Color.White);
     }
 
     private void OKClick()
     {
-        string to = Filename.Text;
+        string from = cdir + "\\" + gsel;
 
-        string[] testes = to.Split('\\');
-
-        int ltu = testes.Length - 1;
-
-        string stufftoremove = "";
-        
-        for (int i = 0; i < ltu; i++)
-        {
-            stufftoremove = stufftoremove + testes[i];
-        }
-
-        string frommfilename = to.Replace(stufftoremove, "");
-        
-        if (frommfilename.Contains('\\'))
-        {
-            frommfilename = frommfilename.Replace("\\", "");
-        }
-
-        string from = Kernel.gcdir + "\\" + frommfilename;
+        string to = Filename.Text + "\\" + gsel;
         
         GoOS.Commands.ExtendedFilesystem.MoveFile(from, to);
     }
