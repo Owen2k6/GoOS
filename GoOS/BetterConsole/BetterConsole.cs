@@ -85,6 +85,8 @@ public static class BetterConsole
     /// </summary>
     public static Queue<KeyEvent> KeyBuffer = new Queue<KeyEvent>();
 
+    public static string Title = "GTerm";
+
     /// <summary>
     /// Initializes the <see cref="BetterConsole">
     /// </summary>
