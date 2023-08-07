@@ -1,16 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "l7RJNtwShOgvm5j44EzluzdZYU+PgRTslu6z9CuE94GIXI9TRo1qyHbAcby4l7NjdL7v0SV4CBcGkhTuuTNsqQ==",
+  "dgSpecHash": "FY7A5ThYatFTAcuvqHrDYGGPg9DnjgRp9d9y1NP2AzQ+0SSbRyDt4Sekn9Txvte50V2XVJ3QWBhyAilFDIJOjg==",
   "success": true,
-  "projectFilePath": "D:\\GitHub\\GoOS\\GoOS\\GoOS.csproj",
+  "projectFilePath": "D:\\Documentos\\GitHub\\GoOS\\GoOS\\GoOS.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.build\\0.1.0-localbuild20230802113003\\cosmos.build.0.1.0-localbuild20230802113003.nupkg.sha512",
-    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.common\\0.1.0-localbuild20230802113016\\cosmos.common.0.1.0-localbuild20230802113016.nupkg.sha512",
-    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.core\\0.1.0-localbuild20230802113016\\cosmos.core.0.1.0-localbuild20230802113016.nupkg.sha512",
-    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.debug.kernel\\0.1.0-localbuild20230802113016\\cosmos.debug.kernel.0.1.0-localbuild20230802113016.nupkg.sha512",
-    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.hal2\\0.1.0-localbuild20230802113016\\cosmos.hal2.0.1.0-localbuild20230802113016.nupkg.sha512",
-    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.system2\\0.1.0-localbuild20230802113016\\cosmos.system2.0.1.0-localbuild20230802113016.nupkg.sha512",
-    "C:\\Users\\Owen2k6\\.nuget\\packages\\il2cpu.api\\0.1.0-localbuild20230802113016\\il2cpu.api.0.1.0-localbuild20230802113016.nupkg.sha512"
+    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.build\\0.1.0-localbuild20230802123431\\cosmos.build.0.1.0-localbuild20230802123431.nupkg.sha512",
+    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.common\\0.1.0-localbuild20230802123444\\cosmos.common.0.1.0-localbuild20230802123444.nupkg.sha512",
+    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.core\\0.1.0-localbuild20230802123444\\cosmos.core.0.1.0-localbuild20230802123444.nupkg.sha512",
+    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.debug.kernel\\0.1.0-localbuild20230802123444\\cosmos.debug.kernel.0.1.0-localbuild20230802123444.nupkg.sha512",
+    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.hal2\\0.1.0-localbuild20230802123444\\cosmos.hal2.0.1.0-localbuild20230802123444.nupkg.sha512",
+    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.system2\\0.1.0-localbuild20230802123444\\cosmos.system2.0.1.0-localbuild20230802123444.nupkg.sha512",
+    "C:\\Users\\Eric\\.nuget\\packages\\il2cpu.api\\0.1.0-localbuild20230802123444\\il2cpu.api.0.1.0-localbuild20230802123444.nupkg.sha512"
   ],
   "logs": []
 }
