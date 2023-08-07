@@ -39,7 +39,7 @@ public class Notepad : Window
     private Button SaveButton;
     private Button CopyButton;
     private Button PasteButton;
-    private Input AttemptOne;
+    private InputNUMBERS AttemptOne;
     private Input Dialog_TextBox;
 
     private string infi = "";
@@ -55,7 +55,7 @@ public class Notepad : Window
         Closable = true;
         SetDock(WindowDock.Auto);
 
-        AttemptOne = new Input(this, 5, 25, 500 - 10, 300 - 30, "")
+        AttemptOne = new InputNUMBERS(this, 5, 25, 500 - 10, 300 - 30, "")
         {
             MultiLine = true
         };

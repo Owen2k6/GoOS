@@ -10,9 +10,9 @@ using GoOS.GUI.Models;
 
 namespace GoOS.GUI
 {
-    public class Input : Control
+    public class InputNUMBERS : Control
     {
-        public Input(Window parent, ushort x, ushort y, ushort width, ushort height, string placeholder)
+        public InputNUMBERS(Window parent, ushort x, ushort y, ushort width, ushort height, string placeholder)
             : base(parent, x, y, width, height)
         {
             PlaceholderText = placeholder;
@@ -266,24 +266,35 @@ namespace GoOS.GUI
                 Contents.DrawRectangle(0, 0, Contents.Width, Contents.Height, 0, Color.DeepGray);
                 Contents.DrawString(0, 0, PlaceholderText, BetterConsole.font, Color.LightGray);
 
-                int care = GetEndXAtCol(caretCol);
-                Contents.DrawLine(care, caretLine * 16, care, caretLine * 16 + 16, Color.Black);
 
+                Contents.DrawLine(34, caretLine * 14, 34, caretLine * 14 + 14, Color.Black);
+                
+                Contents.DrawFilledRectangle(0, 0, 32, Contents.Height, 0, Color.LightGray);
+
+                for (int i = 0; i < Contents.Height / 14; i++)
+                {
+                    Contents.DrawString(4, i * 14, (caretLine + i + 1).ToString(), BetterConsole.font, Color.LighterBlack);
+                }
+                
                 Parent.RenderControls();
                 return;
             }
 
             for (var i = 0; i < lines.Count; i++)
             {
-                Contents.DrawString(-scrollX, i * 14, Shield ? new string('*', lines[i].Length) : lines[i],
-                    BetterConsole.font, Color.Black);
+                Contents.DrawString(32 + (-scrollX), i*14, Shield ? new string('*', lines[i].Length) : lines[i], BetterConsole.font, Color.Black);
             }
 
+            int caretTwitter = GetEndXAtCol(caretCol) + 34;
+            Contents.DrawLine(caretTwitter, caretLine * 14, caretTwitter, caretLine * 14 + 14, Color.Black);
+            
+            Contents.DrawFilledRectangle(0, 0, 32, Contents.Height, 0, Color.LightGray);
 
-            int caretTwitter = GetEndXAtCol(caretCol);
-            Contents.DrawLine(caretTwitter, caretLine * 16, caretTwitter, caretLine * 16 + 16, Color.Black);
-
-
+            for (int i = 0; i < Contents.Height / 14; i++)
+            {
+                Contents.DrawString(4, i * 14, (caretLine + i + 1).ToString(), BetterConsole.font, Color.LighterBlack);
+            }
+            
             Parent.RenderControls();
         }
     }

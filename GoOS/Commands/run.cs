@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Cosmos.Core;
 using Cosmos.HAL;
+using Cosmos.System;
 using GoOS.GUI;
 using GoOS.GUI.Apps;
 using GoOS.Themes;
@@ -47,22 +48,31 @@ namespace GoOS.Commands
                 if (inputaman.EndsWith(".goexe") || inputaman.EndsWith(".gexe"))
                 {
                     string fuckingprogramname = null;
-                    log(Yellow, "Application.Start");
+                    //log(Yellow, "Application.Start");
                     var content = File.ReadAllLines(Directory.GetCurrentDirectory() + "\\" + inputaman);
                     string theysaid = null;
                     ConsoleKey keypressed = ConsoleKey.O;
                     String endmessage = "Process has ended.";
                     Boolean hasbeenregistered = false;
 
+                    int lengthOverride = 0; 
+                    
                     bool poo = false;
 
                     bool installMode = false;
                     string installName = "blank";
                     
-                    for (int i = 0; i < content.Length; i++)
-                    {
+                    for (int i = 0; i < content.Length + lengthOverride; i++) {
                         string line = content[i];
 
+                        if (Cosmos.System.KeyboardManager.TryReadKey(out var key))
+                        {
+                            if (key.Key == ConsoleKeyEx.Escape)
+                            {
+                                i = content.Length;
+                            }
+                        }
+                        
                         if (line.TrimStart().StartsWith("install"))
                         {
                             installName = line.Split('=')[1];
@@ -86,7 +96,11 @@ namespace GoOS.Commands
                         {
                             if (poo)
                             {
-                                line = line.Split(": ")[1].Trim();
+                                line = line.Split(">")[1].Trim();
+                                
+                                // > goto=5
+                                //[0] [1]
+                                
                                 poo = false;
                             }
 
@@ -106,7 +120,7 @@ namespace GoOS.Commands
                                 {
                                     String howlong = line.Split("=")[1];
                                     int potato = Convert.ToInt32(howlong);
-                                    i = potato;
+                                    i = potato - 2;
                                 }
                                 catch (Exception)
                                 {
@@ -362,11 +376,11 @@ namespace GoOS.Commands
                             {
                                 string[] args = line.Split(" ");
 
-                                if (args[2] == " == ")
+                                if (args[2] == "==")
                                 {
                                     if (Strings.TryGetValue(args[1].Trim(), out string strval))
                                     {
-                                        if (strval == args[4])
+                                        if (strval == args[3])
                                         {
                                             poo = true;
                                             i--;
