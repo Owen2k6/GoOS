@@ -106,6 +106,7 @@
       <None Remove="Resources\Font_1x.btf" />
       <None Remove="Resources\GoOS_Intro.bmp" />
       <None Remove="Resources\GUI\error.bmp" />
+      <None Remove="Resources\GUI\mouse_click.bmp" />
       <None Remove="Resources\GUI\mouse_text.bmp" />
       <None Remove="Resources\GUI\Paint\brush.bmp" />
       <None Remove="Resources\GUI\Paint\bucket.bmp" />
@@ -139,6 +140,7 @@
 
     <ItemGroup>
       <EmbeddedResource Include="Resources\GUI\error.bmp" />
+      <EmbeddedResource Include="Resources\GUI\mouse_click.bmp" />
       <EmbeddedResource Include="Resources\GUI\mouse_text.bmp" />
       <EmbeddedResource Include="Resources\GUI\Paint\brush.bmp" />
       <EmbeddedResource Include="Resources\GUI\Paint\bucket.bmp" />
