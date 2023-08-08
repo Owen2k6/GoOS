@@ -1,11 +1,14 @@
 ﻿using GoOS.GUI.Models;
 using PrismAPI.Graphics;
-using System.ComponentModel;
+using IL2CPU.API.Attribs;
 
 namespace GoOS.GUI
 {
     public class Button : Control
     {
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse_click.bmp")] private static byte[] mouseClickRaw;
+        private static Canvas mouseClick = PrismAPI.Graphics.Image.FromBitmap(mouseClickRaw);
+
         public string Title;
 
         /// <summary>
@@ -105,6 +108,14 @@ namespace GoOS.GUI
             Contents.DrawString(textX, textY, Title, BetterConsole.font, textColour, true);
 
             Parent.RenderControls();
+        }
+
+        public override void Update()
+        {
+            if (IsMouseOver)
+            {
+                WindowManager.MouseToDraw = mouseClick;
+            }
         }
 
         internal override void HandleDown(MouseEventArgs _args)

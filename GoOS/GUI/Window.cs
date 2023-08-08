@@ -59,6 +59,11 @@ namespace GoOS.GUI
         /// </summary>
         public virtual void HandleRun()
         {
+            foreach (Control control in Controls)
+            {
+                control.Update();
+            }
+
             if (wasDown && MouseManager.MouseState == MouseState.None)
             {
                 wasDown = false;

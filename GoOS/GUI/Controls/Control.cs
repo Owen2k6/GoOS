@@ -45,5 +45,7 @@ namespace GoOS.GUI
         internal virtual void HandleUnfocus() { }
 
         internal virtual void HandleKey(KeyEvent key) { }
+
+        public virtual void Update() { }
     }
 }
