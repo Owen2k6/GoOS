@@ -21,7 +21,11 @@ namespace GoOS.GUI
         public Action Submitted;
         public Action Changed;
 
+        private int lineOffset = 0;
+
         private const int padding = 3;
+
+        private bool scrollMode = false;
 
         public string Text
         {
@@ -147,7 +151,7 @@ namespace GoOS.GUI
                     {
                         if (caretLine == 0) return;
                         caretLine--;
-                        caretCol = lines[caretLine].Length;
+                        caretCol = lines[caretLine + lineOffset].Length;
                     }
                     else
                     {
@@ -156,7 +160,7 @@ namespace GoOS.GUI
 
                     break;
                 case ConsoleKeyEx.RightArrow:
-                    if (caretCol == lines[caretLine].Length)
+                    if (caretCol == lines[caretLine + lineOffset].Length)
                     {
                         if (caretLine == lines.Count - 1) return;
                         caretLine++;
@@ -170,16 +174,60 @@ namespace GoOS.GUI
 
                     break;
                 case ConsoleKeyEx.UpArrow:
-                    if (caretLine == 0) return;
+                    if (!scrollMode)
+                    {
+                        if (caretLine == 0) return;
 
-                    caretLine--;
-                    caretCol = Math.Min(lines[caretLine].Length, caretCol);
+                        caretLine--;
+                        caretCol = Math.Min(lines[caretLine + lineOffset].Length, caretCol);
+
+                        if (caretLine <= 1 && lineOffset >= 1)
+                        {
+                            lineOffset--;
+                            caretLine = 1;
+                            caretCol = Math.Min(lines[caretLine + lineOffset].Length, caretCol);
+                        }
+
+                        break;
+                    }
+                    
+                    if (lineOffset >= 1)
+                    {
+                        lineOffset--;
+                        caretLine = 1;
+                        caretCol = Math.Min(lines[caretLine + lineOffset].Length, caretCol);
+                    }
+
                     break;
                 case ConsoleKeyEx.DownArrow:
-                    if (caretLine == lines.Count - 1) return;
+                    if (!scrollMode)
+                    {
+                        if (caretLine == lines.Count - 1) return;
 
-                    caretLine++;
-                    caretCol = Math.Min(lines[caretLine].Length, caretCol);
+                        caretLine++;
+                        caretCol = Math.Min(lines[caretLine + lineOffset].Length, caretCol);
+
+                        if (caretLine >= Contents.Height / 14)
+                        {
+                            lineOffset++;
+                            caretLine--;
+                            caretCol = Math.Min(lines[caretLine + lineOffset].Length, caretCol);
+                        }
+
+                        break;
+                    }
+
+                    lineOffset++;
+                    caretLine--;
+                    caretCol = Math.Min(lines[caretLine + lineOffset].Length, caretCol);
+
+                    break;
+
+                case ConsoleKeyEx.RCtrl:
+                    if (scrollMode)
+                        scrollMode = false;
+                    else
+                        scrollMode = true;
                     break;
                 case ConsoleKeyEx.Enter:
                     if (!MultiLine)
@@ -192,11 +240,19 @@ namespace GoOS.GUI
                         break;
                     }
 
-                    lines.Insert(caretLine + 1, lines[caretLine].Substring(caretCol));
-                    lines[caretLine] = lines[caretLine].Substring(0, caretCol);
+                    lines.Insert(caretLine + 1 + lineOffset, lines[caretLine + lineOffset].Substring(caretCol));
+                    lines[caretLine + lineOffset] = lines[caretLine + lineOffset].Substring(0, caretCol);
                     // 
                     caretLine++;
                     caretCol = 0;
+
+                    if (caretLine >= Contents.Height / 14)
+                    {
+                        lineOffset++;
+                        caretLine--;
+                        caretCol = Math.Min(lines[caretLine + lineOffset].Length, caretCol);
+                    }
+
                     // 
                     Changed?.Invoke();
                     break;
@@ -206,16 +262,16 @@ namespace GoOS.GUI
                         if (caretLine == 0) return;
 
                         caretLine--;
-                        caretCol = lines[caretLine].Length;
+                        caretCol = lines[caretLine + lineOffset].Length;
 
-                        lines[caretLine] += lines[caretLine + 1];
-                        lines.RemoveAt(caretLine + 1);
+                        lines[caretLine + lineOffset] += lines[caretLine + lineOffset + 1];
+                        lines.RemoveAt(caretLine + lineOffset + 1);
 
                         Changed?.Invoke();
                     }
                     else
                     {
-                        lines[caretLine] = lines[caretLine].Remove(caretCol - 1, 1);
+                        lines[caretLine + lineOffset] = lines[caretLine + lineOffset].Remove(caretCol - 1, 1);
                         caretCol--;
 
                         Changed?.Invoke();
@@ -223,7 +279,7 @@ namespace GoOS.GUI
 
                     break;
                 default:
-                    lines[caretLine] = lines[caretLine].Insert(caretCol, key.KeyChar.ToString());
+                    lines[caretLine + lineOffset] = lines[caretLine + lineOffset].Insert(caretCol, key.KeyChar.ToString());
                     caretCol++;
 
                     Changed?.Invoke();
@@ -266,35 +322,37 @@ namespace GoOS.GUI
                 Contents.DrawRectangle(0, 0, Contents.Width, Contents.Height, 0, Color.DeepGray);
                 Contents.DrawString(0, 0, PlaceholderText, BetterConsole.font, Color.LightGray);
 
-
                 Contents.DrawLine(34, caretLine * 14, 34, caretLine * 14 + 14, Color.Black);
-                
+
                 Contents.DrawFilledRectangle(0, 0, 32, Contents.Height, 0, Color.LightGray);
 
                 for (int i = 0; i < Contents.Height / 14; i++)
                 {
-                    Contents.DrawString(4, i * 14, (caretLine + i + 1).ToString(), BetterConsole.font, Color.LighterBlack);
+                    Contents.DrawString(4, i * 14, (i + 1 + lineOffset).ToString(), BetterConsole.font,
+                        Color.LighterBlack);
                 }
-                
+
                 Parent.RenderControls();
                 return;
             }
 
-            for (var i = 0; i < lines.Count; i++)
+            for (var i = 0; i + lineOffset < lines.Count; i++)
             {
-                Contents.DrawString(32 + (-scrollX), i*14, Shield ? new string('*', lines[i].Length) : lines[i], BetterConsole.font, Color.Black);
+                Contents.DrawString(32 + (-scrollX), i * 14,
+                    Shield ? new string('*', lines[i + lineOffset].Length) : lines[i + lineOffset], BetterConsole.font,
+                    Color.Black);
             }
 
             int caretTwitter = GetEndXAtCol(caretCol) + 34;
             Contents.DrawLine(caretTwitter, caretLine * 14, caretTwitter, caretLine * 14 + 14, Color.Black);
-            
+
             Contents.DrawFilledRectangle(0, 0, 32, Contents.Height, 0, Color.LightGray);
 
             for (int i = 0; i < Contents.Height / 14; i++)
             {
-                Contents.DrawString(4, i * 14, (caretLine + i + 1).ToString(), BetterConsole.font, Color.LighterBlack);
+                Contents.DrawString(4, i * 14, (i + 1 + lineOffset).ToString(), BetterConsole.font, Color.LighterBlack);
             }
-            
+
             Parent.RenderControls();
         }
     }
