@@ -45,9 +45,12 @@ namespace GoOS.GUI
             }
             set
             {
-                lines = value.Split('\n').ToList();
+                var cunt = value.Split('\n').ToList();
+                lines = new List<string>(cunt.Count);
+                lines = cunt;
 
-                caretLine = -1;
+                //work you fucking shit from saturn
+                caretLine = 0;
                 caretCol = 0;
 
                 Render();
@@ -324,7 +327,7 @@ namespace GoOS.GUI
 
                 Contents.DrawLine(34, caretLine * 14, 34, caretLine * 14 + 14, Color.Black);
 
-                Contents.DrawFilledRectangle(0, 0, 32, Contents.Height, 0, Color.LightGray);
+                Contents.DrawFilledRectangle(0, 0, 32, Convert.ToUInt16(Contents.Height), 0, Color.LightGray);
 
                 for (int i = 0; i < Contents.Height / 14; i++)
                 {
@@ -346,7 +349,7 @@ namespace GoOS.GUI
             int caretTwitter = GetEndXAtCol(caretCol) + 34;
             Contents.DrawLine(caretTwitter, caretLine * 14, caretTwitter, caretLine * 14 + 14, Color.Black);
 
-            Contents.DrawFilledRectangle(0, 0, 32, Contents.Height, 0, Color.LightGray);
+            Contents.DrawFilledRectangle(0, 0, 32, Convert.ToUInt16(Contents.Height), 0, Color.LightGray);
 
             for (int i = 0; i < Contents.Height / 14; i++)
             {

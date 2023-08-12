@@ -19,9 +19,13 @@ namespace GoOS.GUI.Apps
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskManager.bmp")] private static byte[] taskmanIconRaw;
         private static Canvas taskmanIcon = Image.FromBitmap(taskmanIconRaw, false);
 
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoIDE.gca.bmp")] private static byte[] ideIconRaw;
+        private static Canvas ideIcon = Image.FromBitmap(ideIconRaw, false);
+
         Button gtermButton;
         Button clockButton;
         Button taskmanButton;
+        Button ideButton;
 
         public AppManager()
         {
@@ -67,10 +71,25 @@ namespace GoOS.GUI.Apps
             };
             clockButton.Clicked = OpenClock;
 
+            ideButton = new Button(this, 90, 130, 64, 80, "IDE")
+            {
+                UseSystemStyle = false,
+                BackgroundColour = Color.LightGray,
+                TextColour = Color.White,
+
+                Image = ideIcon
+            };
+            ideButton.Clicked = OpenIDE;
+
             foreach (Control control in Controls)
             {
                 control.Render();
             }
+        }
+
+        void OpenIDE()
+        {
+            WindowManager.AddWindow(new Apps.GoIDE.NewProjectFrame());
         }
 
         private static void OpenGTerm()
