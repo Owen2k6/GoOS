@@ -34,11 +34,15 @@ namespace GoOS._9xCode
         {
             Interpreting = true;
 
+            Console.ForegroundColor = Cyan;
+            Console.WriteLine("Mobren 9xCode Interpreter Version b3.0\n");
+            Console.ForegroundColor = White;
+
             bool SysLib = false, ConsoleLib = false, IOLib = false, TimeLib = false, _9xGLLib = false;
 
             Dictionary<string, bool> Booleans = new Dictionary<string, bool>() { };
             Dictionary<string, int> Integers = new Dictionary<string, int>() { };
-            Dictionary<string, string> Strings = new Dictionary<string, string>() { { "Version", "b2.2" } };
+            Dictionary<string, string> Strings = new Dictionary<string, string>() { { "Version", "b3.0" } };
             Dictionary<string, ConsoleColor> Colors = new Dictionary<string, ConsoleColor>() { };
             Dictionary<string, Window> Windows = new Dictionary<string, Window>();
 

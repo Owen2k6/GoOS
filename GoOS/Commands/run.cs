@@ -32,13 +32,14 @@ namespace GoOS.Commands
         public static ushort windowwidth = 0;
         public static ushort windowheight = 0;
 
-        public static void Main(string run)
+        public static void Main(string run, bool usecurrentdir = true)
         {
             String inputaman = run;
 
             try
             {
-                //log(Blue, "GoOS Admin: Attempting to run " + inputaman);
+                log(Cyan, "Goplex Studios GoOS GoCode Interpreter\n");
+
                 if (!inputaman.EndsWith(".gexe") && !inputaman.EndsWith(".goexe"))
                 {
                     log(ThemeManager.ErrorText, "Incompatible format.");
@@ -49,7 +50,15 @@ namespace GoOS.Commands
                 {
                     string fuckingprogramname = null;
                     //log(Yellow, "Application.Start");
-                    var content = File.ReadAllLines(Directory.GetCurrentDirectory() + "\\" + inputaman);
+                    string[] content;
+                    if (usecurrentdir)
+                    {
+                        content = File.ReadAllLines(Directory.GetCurrentDirectory() + "\\" + inputaman);
+                    }
+                    else
+                    {
+                        content = File.ReadAllLines(inputaman);
+                    }
                     string theysaid = null;
                     ConsoleKey keypressed = ConsoleKey.O;
                     String endmessage = "Process has ended.";

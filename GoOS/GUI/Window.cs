@@ -297,8 +297,11 @@ namespace GoOS.GUI
                     }
 
                     cv.DrawImage(X + Contents.Width - 21, Y +1, closeButtonImage);
-                    cv.DrawImage(X + Contents.Width - 39, Y +1, maximize);
-                    cv.DrawImage(X + Contents.Width - 57, Y +1, minimise);
+                    
+                    // TODO: Maximize and minimize
+
+                    /*cv.DrawImage(X + Contents.Width - 39, Y +1, maximize);
+                    cv.DrawImage(X + Contents.Width - 57, Y +1, minimise);*/
                 }
             }
 

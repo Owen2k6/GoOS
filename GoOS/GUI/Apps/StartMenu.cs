@@ -63,6 +63,12 @@ namespace GoOS.GUI.Apps
                 WindowManager.AddWindow(new Gosplorer());
                 CloseStartMenu();
             });
+
+            AddAppButton("GoIDE", () =>
+            {
+                WindowManager.AddWindow(new GoIDE.NewProjectFrame());
+                CloseStartMenu();
+            });
         }
 
         private void AddPowerButton()

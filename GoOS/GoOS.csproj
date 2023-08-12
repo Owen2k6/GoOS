@@ -104,8 +104,11 @@
       <None Remove="BetterConsole\Font_1x_2.btf" />
       <None Remove="Resources\credits05.bmp" />
       <None Remove="Resources\Font_1x.btf" />
+      <None Remove="Resources\Font_2x.btf" />
       <None Remove="Resources\GoOS_Intro.bmp" />
       <None Remove="Resources\GUI\error.bmp" />
+      <None Remove="Resources\GUI\GoIDE\gca.bmp" />
+      <None Remove="Resources\GUI\GoIDE\run.bmp" />
       <None Remove="Resources\GUI\mouse_click.bmp" />
       <None Remove="Resources\GUI\mouse_text.bmp" />
       <None Remove="Resources\GUI\Paint\brush.bmp" />
@@ -139,7 +142,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Include="Resources\Font_2x.btf" />
       <EmbeddedResource Include="Resources\GUI\error.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoIDE\gca.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoIDE\run.bmp" />
       <EmbeddedResource Include="Resources\GUI\mouse_click.bmp" />
       <EmbeddedResource Include="Resources\GUI\mouse_text.bmp" />
       <EmbeddedResource Include="Resources\GUI\Paint\brush.bmp" />
