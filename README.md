@@ -1,22 +1,32 @@
-# GoOS - by Goplex Studios
+# GoOS
 
-GoOS is a simple operating system (OS) built from scratch using goCosmos (https://github.com/CosmosOS/Cosmos).
+GoOS (GoplexOS) is a simple operating system (OS) built from scratch using [CosmosOS](https://github.com/CosmosOS/Cosmos).
+
 ## Features
+- Simple command line interface, has commands for common tasks (ex: creating files and running programs)
+- TUI & GUI (GUI is very WIP)
+- Basic file system support (FAT32)
+- Runs on both virtual machines and real hardware (NOT RECOMMENDED ON REAL HARDWARE)
 
-    Simple command-line interface
-    Basic file system support (FAT32)
-    Command-line commands for common tasks, such as creating directories and files, and running programs
-    Runs on both virtual machines and real hardware (NOT RECOMENDED ON REAL HARDWARE)
+## Minimum requirements
+- 150MB RAM or more
+- 8MB HDD or bigger preformatted as FAT32
+- PS/2 Keyboard & Mouse
+- VGA Display (HDMI will work if onboard)
 
-## Requirements
-
-  - 128MB ram or more
-  - 1GB HDD Preformatted as FAT32 (vhd provided on any release)
-  - 8MB Video Memory or more
-  - PS/2 Keyboard
-  - VGA Display (hdmi will work if onboard)
-
+## Recommended requirements
+- 1GB RAM or more
+- 1GB HDD or bigger preformatted as FAT32 (VHD provided on any release)
+- 128MB VRAM or more
+- PS/2 Keyboard & Mouse
+- VGA Display (HDMI will work if onboard)
 
 ## Contributing
+If you're interested in contributing to GoOS, we'd love to have your help! Please see the [CONTRIBUTING.md](https://github.com/Owen2k6/GoOS/blob/Development/CONTRIBUTING.md) file for more information on how to contribute.
 
-If you're interested in contributing to GoOS, we'd love to have your help! Please see the CONTRIBUTING.md file for more information on how to contribute.
+## Screenshots
+GUI Interface
+![](https://github.com/Owen2k6/GoOS/blob/Development/Art/Screenshot1.png)
+
+Console Interface
+![](https://github.com/Owen2k6/GoOS/blob/Development/Art/Screenshot2.png)
