@@ -26,7 +26,9 @@ If you're interested in contributing to GoOS, we'd love to have your help! Pleas
 
 ## Screenshots
 GUI Interface
-![](https://github.com/Owen2k6/GoOS/blob/Development/Art/Screenshot1.png)
+
+![Screenshot1](https://github.com/9xbt/GoOS/assets/109512837/bc014550-b466-4082-bd91-104d06a59371)
 
 Console Interface
-![](https://github.com/Owen2k6/GoOS/blob/Development/Art/Screenshot2.png)
+
+![Screenshot2](https://github.com/9xbt/GoOS/assets/109512837/b9e15b57-a363-45b3-8108-b518fbe947b3)
