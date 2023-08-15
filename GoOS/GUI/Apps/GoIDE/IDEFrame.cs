@@ -36,7 +36,7 @@ namespace GoOS.GUI.Apps.GoIDE
 
                 // Initialize the controls.
                 SaveButton = new Button(this, 2, 2, 48, 18, "Save") { Clicked = SaveButton_Click, UseSystemStyle = false, BackgroundColour = Color.LightGray };
-                RunButton = new Button(this, Convert.ToUInt16(Contents.Width - 50), 2, 40, 18, "Run") { Clicked = RunButton_Click, UseSystemStyle = false, BackgroundColour = Color.LightGray };
+                RunButton = new Button(this, Convert.ToUInt16(Contents.Width - 42), 2, 40, 18, "Run") { Clicked = RunButton_Click, UseSystemStyle = false, BackgroundColour = Color.LightGray };
                 Code = new InputNUMBERS(this, 2, 20, Convert.ToUInt16(Contents.Width - 4), Convert.ToUInt16(Contents.Height - 43), string.Empty) { MultiLine = true };
                 Code.Text = File.ReadAllText(projectPath);
 
@@ -53,17 +53,11 @@ namespace GoOS.GUI.Apps.GoIDE
         {
             Contents.Clear(Color.LightGray);
             RenderSystemStyleBorder();
-            Contents.DrawImage(Contents.Width - 70, 0, RunImage);
+            Contents.DrawImage(Contents.Width - 62, 0, RunImage);
             SaveButton.Render();
             RunButton.Render();
             Code.Render();
-            RenderStatus(status);
-        }
-
-        void RenderStatus(string status)
-        {
-            Contents.DrawString(4, Contents.Height - 20, status, BetterConsole.font, Color.LighterBlack);
-            Contents.DrawString(Contents.Width - 130, Contents.Height - 20, "(c) 2023 Owen2k6", BetterConsole.font, Color.LighterBlack);
+            Contents.DrawString(4, Contents.Height - 20, status, Fonts.Font_1x, Color.LighterBlack);
         }
 
         bool Debugging = false;
@@ -82,7 +76,8 @@ namespace GoOS.GUI.Apps.GoIDE
 
                 File.WriteAllText(ProjectPath, Code.Text);
                 BetterConsole.Clear();
-                WindowManager.AddWindow(new GTerm());
+                BetterConsole.Title = "Terminal - GoIDE";
+                WindowManager.AddWindow(new GTerm(false));
 
                 if (!Is9xCode)
                     GoCode.Main(ProjectPath, false);

@@ -80,7 +80,7 @@ namespace GoOS.GUI
         {
             if (caretLine == line && caretCol == col) return;
             caretLine = Math.Clamp(line, 0, lines.Count - 1);
-            caretCol = Math.Clamp(col, 0, lines[caretLine].Length);
+            caretCol = Math.Clamp(col, 0, lines[caretLine].Length + 1);
             Render();
         }
 
@@ -96,7 +96,7 @@ namespace GoOS.GUI
             for (int i = 0; i < lines[caretLine].Length; i++)
             {
                 string here = lines[caretLine].Substring(0, i);
-                int hereWidth = BetterConsole.font.MeasureString(here);
+                int hereWidth = BetterConsole.font.MeasureString(here) + 32;
                 if (args.X <= hereWidth)
                 {
                     MoveCaret(0, i);
@@ -325,7 +325,7 @@ namespace GoOS.GUI
                 Contents.DrawRectangle(0, 0, Contents.Width, Contents.Height, 0, Color.DeepGray);
                 Contents.DrawString(0, 0, PlaceholderText, BetterConsole.font, Color.LightGray);
 
-                Contents.DrawLine(34, caretLine * 14, 34, caretLine * 14 + 14, Color.Black);
+                Contents.DrawLine(34, caretLine * 14, 34, caretLine * 14 + 16, Color.Black);
 
                 Contents.DrawFilledRectangle(0, 0, 32, Convert.ToUInt16(Contents.Height), 0, Color.LightGray);
 
@@ -346,8 +346,8 @@ namespace GoOS.GUI
                     Color.Black);
             }
 
-            int caretTwitter = GetEndXAtCol(caretCol) + 34;
-            Contents.DrawLine(caretTwitter, caretLine * 14, caretTwitter, caretLine * 14 + 14, Color.Black);
+            int caretTwitter = GetEndXAtCol(caretCol) + 32;
+            Contents.DrawLine(caretTwitter, caretLine * 14, caretTwitter, caretLine * 14 + 16, Color.Black);
 
             Contents.DrawFilledRectangle(0, 0, 32, Convert.ToUInt16(Contents.Height), 0, Color.LightGray);
 

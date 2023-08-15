@@ -52,13 +52,14 @@ namespace GoOS.GUI
             Contents.DrawLine(Contents.Width - 1, 0, Contents.Width - 1, Contents.Height - 1, Color.White);
             
             //So much for saying your code is "dry". this is from Button.cs - Owen2k6 :^(
-
+            //That was atmo's :skull: nmf
+             
             if (Title != "")
             {
                 // Title
                 Contents.DrawLine(0, 19, Contents.Width - 2, 19, new Color(216, 216, 216));
-                Contents.DrawLine(0, 20, Contents.Width - 2, 19, new Color(216, 216, 216));
-                Contents.DrawLine(0, 21, Contents.Width - 2, 19, new Color(216, 216, 216)); // enjoy
+                /*Contents.DrawLine(0, 20, Contents.Width - 2, 19, new Color(216, 216, 216));
+                Contents.DrawLine(0, 21, Contents.Width - 2, 19, new Color(216, 216, 216)); // fuck you owen*/
                 Contents.DrawString(2, 2, Title, BetterConsole.font, ForegroundColor);
             }
 
@@ -84,7 +85,7 @@ namespace GoOS.GUI
         {
             if (IsMouseOver)
             {
-                Selected = ((int)MouseManager.Y - Parent.Y + Window.TITLE_BAR_HEIGHT + Y - 2) / 20 - 5;
+                Selected = (((int)MouseManager.Y - Parent.Y - Window.TITLE_BAR_HEIGHT - Y) / 20) - 1;
             }
 
             Render();
