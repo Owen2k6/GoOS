@@ -262,6 +262,7 @@ namespace GoOS.GUI
                 if (previousMouseState == MouseState.Left)
                 {
                     hoveredControl?.Clicked?.Invoke();
+                    hoveredControl?.ClickedAlt?.Invoke(hoveredControl?.Name);
                 }
 
                 foreach (Control control in Controls)

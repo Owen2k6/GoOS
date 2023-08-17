@@ -1,6 +1,7 @@
 ﻿using GoOS.GUI.Models;
 using PrismAPI.Graphics;
 using IL2CPU.API.Attribs;
+using Cosmos.System;
 
 namespace GoOS.GUI
 {
@@ -19,6 +20,10 @@ namespace GoOS.GUI
         public bool UseSystemStyle = true;
 
         public Color BackgroundColour = new Color(12, 12, 12);
+
+        public Color SelectionColour = new Color(12, 12, 12);
+
+        public bool HasSelectionColour = false;
 
         public Color TextColour = Color.White;
 
@@ -75,8 +80,16 @@ namespace GoOS.GUI
             }
             else
             {
-                // Background.
-                Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, BackgroundColour);
+                if (IsMouseOver && HasSelectionColour)
+                {
+                    // Selection.
+                    Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, SelectionColour);
+                }
+                else
+                {
+                    // Background.
+                    Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, BackgroundColour);
+                }
             }
 
             if (Image != null)
@@ -110,12 +123,25 @@ namespace GoOS.GUI
             Parent.RenderControls();
         }
 
+        private uint lastMouseX, lastMouseY;
+
         public override void Update()
         {
             if (IsMouseOver)
             {
                 WindowManager.MouseToDraw = mouseClick;
             }
+
+            if (lastMouseX != MouseManager.X  || lastMouseY != MouseManager.Y)
+            {
+                if (!UseSystemStyle && HasSelectionColour)
+                {
+                    Render();
+                }
+            }
+
+            lastMouseX = MouseManager.X;
+            lastMouseY = MouseManager.Y;
         }
 
         internal override void HandleDown(MouseEventArgs _args)

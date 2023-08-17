@@ -88,11 +88,21 @@ namespace GoOS.GUI.Apps
 
         public override void HandleKey(KeyEvent key)
         {
-            if (key.Key == ConsoleKeyEx.F1)
-                ShowAboutDialog();
+            switch (key.Key)
+            {
+                case ConsoleKeyEx.F1:
+                    ShowAboutDialog();
+                    break;
+
+                case ConsoleKeyEx.F2:
+                    WindowManager.AddWindow(new BrownGhost());
+                    break;
+            }
+                
 
             // TODO: implement ctrl + z
             // What about a fucking eraser? - Owen2k6
+            // you got a pencil that has a rubber on the other side - xrc2
         }
 
         private void Pencil_Click()

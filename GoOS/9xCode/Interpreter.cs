@@ -627,7 +627,6 @@ namespace GoOS._9xCode
                                 }
                                 else
                                 {
-                                    Console.WriteLine(true);
                                     Console.Write(sub);
                                 }
                             }
