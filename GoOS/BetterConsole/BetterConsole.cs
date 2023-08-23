@@ -196,6 +196,8 @@ public static class BetterConsole
         }
     }
 
+    private static string lastInput = string.Empty;
+
     /// <summary>
     /// Gets input from the user
     /// </summary>
@@ -224,6 +226,7 @@ public static class BetterConsole
                         CursorLeft = 0;
                         CursorTop++;
                         Newline();
+                        lastInput = returnValue;
                         reading = false;
                         break;
 
@@ -252,6 +255,14 @@ public static class BetterConsole
                     case ConsoleKeyEx.Tab:
                         Write(new string(' ', 4));
                         returnValue += new string(' ', 4);
+                        break;
+
+                    case ConsoleKeyEx.UpArrow:
+                        SetCursorPosition(startCursorLeft, startY);
+                        Write(new string(' ', returnValue.Length));
+                        SetCursorPosition(startCursorLeft, startY);
+                        Write(lastInput);
+                        returnValue = lastInput;
                         break;
 
                     default:

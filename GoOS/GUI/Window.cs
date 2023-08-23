@@ -6,7 +6,7 @@ using PrismAPI.Graphics;
 
 namespace GoOS.GUI
 {
-    public abstract class Window
+    public class Window
     {
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton.bmp")] private static byte[] closeButtonRaw;
         private static Canvas closeButton = Image.FromBitmap(closeButtonRaw, false);
@@ -37,6 +37,7 @@ namespace GoOS.GUI
         public bool Closing;
         public bool HasTitlebar = true;
         public bool Unkillable = false;
+        public bool Sizable = false;
 
         public List<Control> Controls = new();
 
@@ -404,5 +405,10 @@ namespace GoOS.GUI
                     break;
             }
         }
+
+        /// <summary>
+        /// Paint the window. Required for resizing.
+        /// </summary>
+        public virtual void Paint() { }
     }
 }
