@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
 using GoOS.GUI;
+using PrismAPI.Graphics;
 using static ConsoleColorEx;
 using Console = BetterConsole;
 using ConsoleColor = PrismAPI.Graphics.Color;
 
-// Beta 2.2
+// 9xCode Beta 3.0
 // Licensed under the MIT license
+// Use permitted in GoOS
 
 namespace GoOS._9xCode
 {
@@ -52,6 +53,8 @@ namespace GoOS._9xCode
                 {
                     try
                     {
+                        WindowManager.Update(); // Don't lock the WM
+
                         string line = code[i].Trim().Replace("\\n", "\n");
 
                         #region Globals
@@ -181,7 +184,7 @@ namespace GoOS._9xCode
                             if (line.Contains('='))
                             {
                                 string key = line.Substring(5, line.IndexOf(" =") - 5);
-                                string sub = line.Substring(line.IndexOf("= ") + 2);
+                                string sub = line.Substring(line.IndexOf("= ") + 2).ToLower();
 
                                 #region Console library
 
@@ -364,6 +367,40 @@ namespace GoOS._9xCode
                                 }
                                 continue;
                             }
+                            else if (line.Contains("++"))
+                            {
+                                string key = line.Substring(4, line.IndexOf("++") - 4);
+
+                                if (!Integers.TryGetValue(key, out int intval))
+                                {
+                                    HandleError("Error", "Unknown variable.");
+                                    break;
+                                }
+
+                                if (Integers.ContainsKey(key))
+                                {
+                                    Integers.Remove(key);
+                                }
+
+                                Integers.Add(key, intval + 1);
+                            }
+                            else if (line.Contains("--"))
+                            {
+                                string key = line.Substring(4, line.IndexOf("--") - 4);
+
+                                if (!Integers.TryGetValue(key, out int intval))
+                                {
+                                    HandleError("Error", "Unknown variable.");
+                                    break;
+                                }
+
+                                if (Integers.ContainsKey(key))
+                                {
+                                    Integers.Remove(key);
+                                }
+
+                                Integers.Add(key, intval - 1);
+                            }
                             else
                             {
                                 string key = line.Substring(4);
@@ -437,8 +474,7 @@ namespace GoOS._9xCode
                             }
                         }
 
-                        else if (line.StartsWith("Window"))
-                            //                    String
+                        else if (_9xGLLib && line.StartsWith("Window"))
                         {
                             if (line.Contains('='))
                             {
@@ -449,19 +485,48 @@ namespace GoOS._9xCode
                                     Windows.Remove(key);
                                 }
 
-                                if (!_9xGLLib)
-                                {
-                                    if (line.Substring(line.IndexOf("= ") + 2).StartsWith("GetWindow"))
-                                    {
-                                        HandleError("Error", "Graphics library not imported.");
-                                        break;
-                                    }
-                                }
-
                                 if (_9xGLLib && line.Substring(line.IndexOf("= ") + 2).StartsWith("GetWindow"))
                                 {
                                     string[] args2 = line.Split('>')[2].Trim().Split(',');
-                                    Windows.Add(key, new FlexWindow(args2));
+
+                                    if (args2.Length < 3)
+                                    {
+                                        HandleError("Error", "Argument underflow.");
+                                        break;
+                                    }
+                                    if (args2.Length > 3)
+                                    {
+                                        HandleError("Error", "Argument overflow.");
+                                        break;
+                                    }
+
+                                    Window wnd = new Window();
+                                    ushort width, height;
+
+                                    if (args2[0].Contains('"'))
+                                        wnd.Title = args2[0].Substring(1, args2[0].Length - 2);
+                                    else if (Strings.TryGetValue(args2[0], out string strval))
+                                        wnd.Title = strval;
+
+                                    if (Integers.TryGetValue(args2[1], out int widthval))
+                                        width = Convert.ToUInt16(widthval);
+                                    else
+                                        width = Convert.ToUInt16(args2[1]);
+
+                                    if (Integers.TryGetValue(args2[2], out int heightval))
+                                        height = Convert.ToUInt16(heightval);
+                                    else
+                                        height = Convert.ToUInt16(args2[2]);
+
+                                    wnd.Contents = new Canvas(width, height);
+                                    wnd.Visible = true;
+                                    wnd.Closable = true;
+
+                                    wnd.Contents.Clear(Color.LightGray);
+                                    wnd.RenderSystemStyleBorder();
+
+                                    Windows.Add(key, wnd);
+                                    WindowManager.AddWindow(wnd);
                                 }
                                 continue;
                             }
@@ -724,18 +789,103 @@ namespace GoOS._9xCode
 
                         #endregion
 
-                        #region GoGL Library
+                        #region 9xGL Library
 
                         else if (_9xGLLib && line.StartsWith("DrawString") && line.Contains(">>"))
                         {
-                            Console.WriteLine("Function not implemented yet, this is still a WIP.");
+                            string[] args = line.Split('>')[2].Trim().Split(',');
+
+                            if (args.Length < 4)
+                            {
+                                HandleError("Error", "Argument underflow.");
+                                break;
+                            }
+                            if (args.Length > 4)
+                            {
+                                HandleError("Error", "Argument overflow.");
+                                break;
+                            }
+
+                            if (!Windows.TryGetValue(args[0].Trim(), out Window wndval))
+                            {
+                                HandleError("Error", "Unknown variable.");
+                                break;
+                            }
+
+                            if (!Strings.TryGetValue(args[1], out string strval))
+                            {
+                                if (args[1].Contains('"'))
+                                {
+                                    strval = args[1].Trim().Substring(1, args[1].Length - 3);
+                                }
+                                else
+                                {
+                                    HandleError("Error", "Unknown variable.");
+                                    break;
+                                }
+                            }
+
+                            if (!Integers.TryGetValue(args[2], out int xval))
+                            {
+                                xval = Convert.ToInt32(args[2].Trim());
+                            }
+
+                            if (!Integers.TryGetValue(args[3], out int yval))
+                            {
+                                yval = Convert.ToInt32(args[3].Trim());
+                            }
+
+                            wndval.Contents.DrawString(xval, yval, strval, Fonts.Font_1x, Color.Black);
+                        }
+
+                        else if (_9xGLLib && line.StartsWith("SetWindowPos") && line.Contains(">>"))
+                        {
+                            string[] args = line.Split('>')[2].Trim().Split(',');
+
+                            if (args.Length < 3)
+                            {
+                                HandleError("Error", "Argument underflow.");
+                                break;
+                            }
+                            if (args.Length > 3)
+                            {
+                                HandleError("Error", "Argument overflow.");
+                                break;
+                            }
+
+                            if (!Windows.TryGetValue(args[0].Trim(), out Window wndval))
+                            {
+                                HandleError("Error", "Unknown variable.");
+                                break;
+                            }
+
+                            if (Integers.TryGetValue(args[1].Trim(), out int xval))
+                            {
+                                wndval.X = xval;
+                            }
+                            else
+                            {
+                                wndval.X = Convert.ToInt32(args[1].Trim());
+                            }
+
+                            if (Integers.TryGetValue(args[2].Trim(), out int yval))
+                            {
+                                wndval.Y = yval;
+                            }
+                            else
+                            {
+                                wndval.Y = Convert.ToInt32(args[2].Trim());
+                            }
+
+                            wndval.X = xval;
+                            wndval.Y = yval;
                         }
 
                         #endregion
 
                         else
                         {
-                            HandleError("Syntax Error", "Unknown function.");
+                            HandleError("Syntax Error", "Unknown function.\nMaybe try importing a library?");
                         }
                     }
                     catch (Exception ex)

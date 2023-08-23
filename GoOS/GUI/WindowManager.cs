@@ -107,6 +107,7 @@ namespace GoOS.GUI
 
         public static void AddWindow(Window window)
         {
+            window.Paint();
             windows.Add(window);
 
             TaskmanHook?.Invoke();
@@ -300,6 +301,11 @@ namespace GoOS.GUI
                 else if (KeyboardManager.ControlPressed && KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
                 {
                     AddWindow(new TaskManager());
+                }
+
+                else if (KeyboardManager.ShiftPressed && key.Key == ConsoleKeyEx.F10)
+                {
+                    AddWindow(new GTerm());
                 }
 
                 focusedWindow.HandleKey(key);
