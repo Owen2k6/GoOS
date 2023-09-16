@@ -30,11 +30,11 @@ public static class BetterConsole
     /* Character width and height */
     public static ushort charWidth = 8, charHeight = 16;
 
-    /*private static List<string> menuOptions = new()
+    private static List<string> menuOptions = new()
     {
         "Launch Settings",
         "Reboot"
-    };*/
+    };
 
     public static bool ConsoleMode = false;
 
@@ -86,7 +86,7 @@ public static class BetterConsole
     public static Queue<KeyEvent> KeyBuffer = new Queue<KeyEvent>();
 
     public static string Title = "GTerm";
-
+    
     /// <summary>
     /// Initializes the <see cref="BetterConsole">
     /// </summary>
@@ -192,6 +192,8 @@ public static class BetterConsole
                 // Just to be safe
                 Canvas.DrawString((CursorLeft - 1) * charWidth, CursorTop * charHeight, '_'.ToString(), font, Color.Black);
                 Canvas.DrawString((CursorLeft + 1) * charWidth, CursorTop * charHeight, '_'.ToString(), font, Color.Black);
+                Canvas.DrawString(CursorLeft * charWidth, (CursorTop - 1) * charHeight, '_'.ToString(), font, Color.Black);
+                Canvas.DrawString(CursorLeft * charWidth, (CursorTop + 1) * charHeight, '_'.ToString(), font, Color.Black);
             }
         }
     }
@@ -271,11 +273,7 @@ public static class BetterConsole
                             if (key.Key == ConsoleKeyEx.G)
                             {
                                 string collected = Heap.Collect() + " items collected";
-                                //Init(Canvas.Width, Canvas.Height);
-                                Canvas.DrawString(Canvas.Width - (collected.Length * 8) - 8, Canvas.Height - 32,
-                                    collected, font, ThemeManager.WindowText);
-                                // SetCursorPosition(0, 0);
-                                // GoOS.Kernel.DrawPrompt();
+                                Canvas.DrawString(Canvas.Width - (collected.Length * 8) - 8, Canvas.Height - 32, collected, font, ThemeManager.WindowText);
                                 Write(returnValue);
                             }
                             else if (key.Key == ConsoleKeyEx.L)
@@ -292,16 +290,11 @@ public static class BetterConsole
                                 {
                                     Clear();
                                     Canvas.DrawImage(0, 0, Image.FromBitmap(easterEgg, false), false);
-                                    //Canvas.Update(); it stopped working?
                                     ReadKey(true);
                                     Clear();
                                 }
-                                else
-                                {
-                                    Write("Nope");
-                                }
                             }
-                            /*else if (KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
+                            else if (ConsoleMode && KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
                             {
                                 int selected = 0;
 
@@ -350,7 +343,7 @@ public static class BetterConsole
 
                                     case ConsoleKeyEx.Enter:
                                         if (menuOptions[selected] == menuOptions[0])
-                                            ControlPanel.Launch();
+                                            GoOS.ControlPanel.Launch();
                                         else if (menuOptions[selected] == menuOptions[1])
                                             Power.Reboot();
                                         break;
@@ -369,7 +362,7 @@ public static class BetterConsole
 
                                 Clear();
                                 GoOS.Kernel.DrawPrompt();
-                            }*/
+                            }
                         }
                         else
                         {
@@ -425,20 +418,14 @@ public static class BetterConsole
 
         if (CursorTop >= Canvas.Height / charHeight)
         {
-            Canvas.DrawFilledRectangle(0, 0, Canvas.Width, charHeight, 0, Color.Black);
-            for (int y = charHeight; y < Canvas.Height; y++)
-            {
-                for (int CursorLeft = 0; CursorLeft < Canvas.Width; CursorLeft++)
-                {
-                    Canvas[CursorLeft, y - charHeight] = Canvas[CursorLeft, y];
-                }
-            }
-
+            Canvas.DrawImage(0, -charHeight, Canvas, false);
             Canvas.DrawFilledRectangle(0, Canvas.Height - charHeight, Canvas.Width, charHeight, 0, Color.Black);
             CursorLeft = 0;
             CursorTop = (Canvas.Height / charHeight) - 1;
+
             if (!DoubleBufferedMode)
                 Render();
+
             Heap.Collect();
         }
     }
