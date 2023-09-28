@@ -3,6 +3,7 @@ using System.IO;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
 using GoCode = GoOS.Commands.Run;
+using Console = BetterConsole;
 
 namespace GoOS.GUI.Apps.GoIDE
 {
@@ -75,14 +76,19 @@ namespace GoOS.GUI.Apps.GoIDE
                 Debugging = true;
 
                 File.WriteAllText(ProjectPath, Code.Text);
-                BetterConsole.Clear();
-                BetterConsole.Title = "Terminal - GoIDE";
+
+                Console.Clear();
+                Console.Title = "Terminal - GoIDE";
                 WindowManager.AddWindow(new GTerm(false));
+                Console.Clear();
 
                 if (!Is9xCode)
                     GoCode.Main(ProjectPath, false);
                 else
                     _9xCode.Interpreter.Run(ProjectPath);
+
+                Console.Clear();
+                WindowManager.RemoveWindowByTitle("Terminal - GoIDE");
 
                 Debugging = false;
             }

@@ -235,6 +235,7 @@
         <PackageReference Include="Cosmos.Core" Version="0.1.0-*" />
         <PackageReference Include="Cosmos.Debug.Kernel" Version="0-*" NoWarn="NU1604" />
         <PackageReference Include="Cosmos.HAL2" Version="0.1.0-*" />
+        <PackageReference Include="Cosmos.Plugs" Version="0.1.0-localbuild20230903032912" />
         <PackageReference Include="Cosmos.System2" Version="0-*" NoWarn="NU1604" />
         <PackageReference Include="IL2CPU.API" Version="0.1.0-*" />
     </ItemGroup>

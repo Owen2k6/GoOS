@@ -19,6 +19,8 @@ namespace GoOS.GUI.Apps
 
         public Desktop()
         {
+            Fonts.Generate();
+
             Contents = new Canvas(WindowManager.Canvas.Width, Convert.ToUInt16(WindowManager.Canvas.Height - 28));
             Contents.Clear(Kernel.DesktopColour);
             Title = nameof(Desktop);
@@ -39,6 +41,8 @@ namespace GoOS.GUI.Apps
             };
 
             FolderButton.Render();
+
+            Contents.DrawString(Contents.Height - 16, Fonts.Font_1x.MeasureString("GoOS " + Kernel.BuildType + Kernel.version), "GoOS " + Kernel.BuildType + Kernel.version, Fonts.Font_1x, Color.Black);
         }
 
         private void FolderButton_Click()
