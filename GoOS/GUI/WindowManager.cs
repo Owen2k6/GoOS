@@ -434,25 +434,11 @@ namespace GoOS.GUI
             }
         }
 
-        private static void DimBackground()
-        {
-            for (int y = 0; y < WindowManager.Canvas.Height - 1; y++)
-            {
-                for (int x = 0; x < WindowManager.Canvas.Width - 1; x++)
-                {
-                    if ((y % 2) == 0)
-                    {
-                        if ((x % 2) == 0)
-                        {
-                            WindowManager.Canvas[x, y] = Color.Black;
-                        }
-                    }
-                    else
-                    {
-                        if ((x % 2) == 0)
-                        {
-                            WindowManager.Canvas[x + 1, y] = Color.Black;
-                        }
+        private static void DimBackground() {
+            for (int y = 0; y < WindowManager.Canvas.Height - 1; y++) {
+                for (int x = 0; x < WindowManager.Canvas.Width - 1; x++) {
+                    if ((x % 2) == 0) {
+                        WindowManager.Canvas[x + y % 2, y] = Color.Black;
                     }
                 }
             }

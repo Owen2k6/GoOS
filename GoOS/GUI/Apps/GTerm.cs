@@ -7,6 +7,8 @@ namespace GoOS.GUI.Apps
     {
         public GTerm(bool overrideTitle = true)
         {
+            if (overrideTitle) BetterConsole.Title = "GTerm";
+
             Contents = BetterConsole.Canvas;
             Title = BetterConsole.Title;
             Visible = true;
@@ -14,8 +16,6 @@ namespace GoOS.GUI.Apps
             SetDock(WindowDock.Auto);
             BetterConsole.font = new Font(BetterConsole.rawFont, BetterConsole.charHeight);
             BetterConsole.Visible = true;
-            if (overrideTitle)
-                BetterConsole.Title = "GTerm";
         }
 
         public override void HandleRun()

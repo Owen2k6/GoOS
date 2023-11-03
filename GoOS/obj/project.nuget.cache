@@ -1,16 +1,28 @@
 {
   "version": 2,
-  "dgSpecHash": "FY7A5ThYatFTAcuvqHrDYGGPg9DnjgRp9d9y1NP2AzQ+0SSbRyDt4Sekn9Txvte50V2XVJ3QWBhyAilFDIJOjg==",
+  "dgSpecHash": "fNNhdPAln2TlfsyvG2Bp3AnUjm1TgZtrmkK0BOmcA1vq6AjXUsfUtVo0yB6K7p3IHMp4S4nXRCQuZAhSgDADAA==",
   "success": true,
-  "projectFilePath": "D:\\Documentos\\GitHub\\GoOS\\GoOS\\GoOS.csproj",
+  "projectFilePath": "C:\\Users\\Eric\\Documents\\GitHub\\GoOS\\GoOS\\GoOS.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.build\\0.1.0-localbuild20230802123431\\cosmos.build.0.1.0-localbuild20230802123431.nupkg.sha512",
-    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.common\\0.1.0-localbuild20230802123444\\cosmos.common.0.1.0-localbuild20230802123444.nupkg.sha512",
-    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.core\\0.1.0-localbuild20230802123444\\cosmos.core.0.1.0-localbuild20230802123444.nupkg.sha512",
-    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.debug.kernel\\0.1.0-localbuild20230802123444\\cosmos.debug.kernel.0.1.0-localbuild20230802123444.nupkg.sha512",
-    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.hal2\\0.1.0-localbuild20230802123444\\cosmos.hal2.0.1.0-localbuild20230802123444.nupkg.sha512",
-    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.system2\\0.1.0-localbuild20230802123444\\cosmos.system2.0.1.0-localbuild20230802123444.nupkg.sha512",
-    "C:\\Users\\Eric\\.nuget\\packages\\il2cpu.api\\0.1.0-localbuild20230802123444\\il2cpu.api.0.1.0-localbuild20230802123444.nupkg.sha512"
+    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.build\\0.1.0-localbuild20231017092707\\cosmos.build.0.1.0-localbuild20231017092707.nupkg.sha512",
+    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.common\\0.1.0-localbuild20231017092713\\cosmos.common.0.1.0-localbuild20231017092713.nupkg.sha512",
+    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.core\\0.1.0-localbuild20231017092713\\cosmos.core.0.1.0-localbuild20231017092713.nupkg.sha512",
+    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.debug.kernel\\0.1.0-localbuild20231017092713\\cosmos.debug.kernel.0.1.0-localbuild20231017092713.nupkg.sha512",
+    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.hal2\\0.1.0-localbuild20231017092713\\cosmos.hal2.0.1.0-localbuild20231017092713.nupkg.sha512",
+    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.plugs\\0.1.0-localbuild20231017092713\\cosmos.plugs.0.1.0-localbuild20231017092713.nupkg.sha512",
+    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.system2\\0.1.0-localbuild20231017092713\\cosmos.system2.0.1.0-localbuild20231017092713.nupkg.sha512",
+    "C:\\Users\\Eric\\.nuget\\packages\\il2cpu.api\\0.1.0-localbuild20231017092713\\il2cpu.api.0.1.0-localbuild20231017092713.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "GoOS depends on Cosmos.Plugs (>= 0.1.0-localbuild20230903032912) but Cosmos.Plugs 0.1.0-localbuild20230903032912 was not found. An approximate best match of Cosmos.Plugs 0.1.0-localbuild20231017092713 was resolved.",
+      "libraryId": "Cosmos.Plugs",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
 }
