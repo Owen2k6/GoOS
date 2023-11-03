@@ -42,7 +42,8 @@ namespace GoOS.GUI.Apps
 
             FolderButton.Render();
 
-            Contents.DrawString(Contents.Height - 16, Fonts.Font_1x.MeasureString("GoOS " + Kernel.BuildType + Kernel.version), "GoOS " + Kernel.BuildType + Kernel.version, Fonts.Font_1x, Color.Black);
+            Contents.DrawString(Contents.Width - Fonts.Font_1x.MeasureString("GoOS " + Kernel.BuildType + " " + Kernel.version) - 22, Contents.Height - 42, "GoOS " + Kernel.BuildType + " " + Kernel.version, Fonts.Font_1x, Color.White);
+            Contents.DrawString(Contents.Width - Fonts.Font_1x.MeasureString("Development build") - 22, Contents.Height - 25, "Development build", Fonts.Font_1x, Color.White);
         }
 
         private void FolderButton_Click()

@@ -257,6 +257,9 @@
       <Reference Include="PrismAPI">
         <HintPath>..\..\..\Prism-OS\PrismAPI\bin\Debug\net6.0\PrismAPI.dll</HintPath>
       </Reference>
+      <Reference Include="UWS">
+        <HintPath>..\..\UWS\UWS\bin\Debug\net6.0\UWS.dll</HintPath>
+      </Reference>
     </ItemGroup>
 	
 </Project>
