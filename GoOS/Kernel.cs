@@ -441,7 +441,6 @@ namespace GoOS
                             try
                             {
                                 xClient.Connect(NetworkConfiguration.CurrentAddress, 500, 1000);
-                                //5.39.84.58
                             }
                             catch (Exception e)
                             {
@@ -452,7 +451,6 @@ namespace GoOS
                             /** Send data **/
                             xClient.Send(Encoding.ASCII.GetBytes("GET /" + filetoget +
                                                                  ".goexe HTTP/1.1\nHost: apps.goos.owen2k6.com\n\n"));
-
                             /** Receive data **/
                             log(ConsoleColor.Red, "4");
                             var endpoint = new EndPoint(Address.Zero, 0);
