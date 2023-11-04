@@ -30,15 +30,10 @@ namespace GoOS.GUI.Apps.GoIDE
 
         private void NextButton_Click()
         {
-            Dialogue msg = new Dialogue("Setup Wizard", "Installing GoIDE...", default, Dialogue.infoIcon);
-            WindowManager.AddWindow(msg);
-            WindowManager.Update();
-
             Directory.CreateDirectory(@"0:\content\prf\GoIDE");
             Directory.CreateDirectory(@"0:\content\prf\GoIDE\Projects");
             Directory.CreateDirectory(@"0:\content\prf\GoIDE\SaveData");
 
-            msg.Dispose();
             Dispose();
             WindowManager.AddWindow(new NewProjectFrame());
         }

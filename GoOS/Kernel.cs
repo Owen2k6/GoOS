@@ -75,6 +75,7 @@ namespace GoOS
             }
 
             WindowManager.Canvas = Display.GetDisplay(800, 600); //TODO: Not have this hard coded >:^(
+            WindowManager.Canvas.Clear(Color.ClassicBlue);
             Console.Init(800, 600);
 
             var loadingDialogue = new LoadingDialogue("GoOS is starting\nPlease wait...");
@@ -829,6 +830,9 @@ namespace GoOS
                     }
 
                     _9xCode.Interpreter.Run(Directory.GetCurrentDirectory() + args[1]);
+                    break;
+                case "gostore":
+                    WindowManager.AddWindow(new GUI.Apps.GoStore.MainFrame());
                     break;
                 default:
                     if (isGCIenabled)
