@@ -1,21 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\GitHub\\GoOS\\GoOS\\GoOS.csproj": {}
+    "D:\\Github\\GoOS\\GoOS\\GoOS.csproj": {}
   },
   "projects": {
-    "D:\\GitHub\\GoOS\\GoOS\\GoOS.csproj": {
+    "D:\\Github\\GoOS\\GoOS\\GoOS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GitHub\\GoOS\\GoOS\\GoOS.csproj",
+        "projectUniqueName": "D:\\Github\\GoOS\\GoOS\\GoOS.csproj",
         "projectName": "GoOS",
-        "projectPath": "D:\\GitHub\\GoOS\\GoOS\\GoOS.csproj",
+        "projectPath": "D:\\Github\\GoOS\\GoOS\\GoOS.csproj",
         "packagesPath": "C:\\Users\\Owen2k6\\.nuget\\packages\\",
-        "outputPath": "D:\\GitHub\\GoOS\\GoOS\\obj\\",
+        "outputPath": "D:\\Github\\GoOS\\GoOS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
           "C:\\Users\\Owen2k6\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -70,6 +69,10 @@
               "target": "Package",
               "version": "[0.1.0-*, )"
             },
+            "Cosmos.Plugs": {
+              "target": "Package",
+              "version": "[0.1.0-localbuild20231103064939, )"
+            },
             "Cosmos.System2": {
               "target": "Package",
               "version": "[0.0.0-*, )",
@@ -98,7 +101,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     }

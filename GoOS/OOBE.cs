@@ -68,7 +68,7 @@ namespace GoOS
             {
                 case 1:
                     Console.Canvas.DrawImage(0, 0, setupWelcome, false);
-                    Console.Canvas.Update();
+                    Console.Render();
 
                     ReadAgain1:
                     var key1 = Console.ReadKey(true);
@@ -78,7 +78,7 @@ namespace GoOS
 
                 case 2:
                     Console.Canvas.DrawImage(0, 0, setupTOU, false);
-                    Console.Canvas.Update();
+                    Console.Render();
 
                     ReadAgain2:
                     var key2 = Console.ReadKey(true);
@@ -87,7 +87,7 @@ namespace GoOS
 
                 case 3:
                     Console.Canvas.DrawImage(0, 0, setupUA, false);
-                    Console.Canvas.Update();
+                    Console.Render();
 
                     ReadAgain3:
                     var key3 = Console.ReadKey(true);
@@ -96,7 +96,7 @@ namespace GoOS
 
                 case 4:
                     Console.Canvas.DrawImage(0, 0, setupSupport, false);
-                    Console.Canvas.Update();
+                    Console.Render();
 
                     ReadAgain4:
                     var key4 = Console.ReadKey(true);
@@ -105,7 +105,7 @@ namespace GoOS
 
                 case 5:
                     Console.Canvas.DrawImage(0, 0, setupUser, false);
-                    Console.Canvas.Update();
+                    Console.Render();
 
                     Console.SetCursorPosition(14, 8);
                     Console.Write("Username: ");
@@ -114,7 +114,7 @@ namespace GoOS
 
                 case 6:
                     Console.Canvas.DrawImage(0, 0, setupComputer, false);
-                    Console.Canvas.Update();
+                    Console.Render();
 
                     Console.SetCursorPosition(14, 7);
                     Console.Write("Computer Name: ");
@@ -123,7 +123,7 @@ namespace GoOS
 
                 case 7:
                     Console.Canvas.DrawImage(0, 0, setupTheme, false);
-                    Console.Canvas.Update();
+                    Console.Render();
 
                     int themeMenuSelectedButton = 0;
 
@@ -175,7 +175,7 @@ namespace GoOS
 
                 case 8:
                     Console.Canvas.DrawImage(0, 0, setupRes, false);
-                    Console.Canvas.Update();
+                    Console.Render();
 
                     List<(string, (ushort Width, ushort Height))> videoModes = new()
                     {
@@ -228,50 +228,40 @@ namespace GoOS
                 case 9:
                     
                     
-                    balls:
+                    retry:
                     try
                     {
-                        tries++;
                         Directory.CreateDirectory(@"0:\content");
                         Directory.CreateDirectory(@"0:\content\sys");
                         Directory.CreateDirectory(@"0:\content\themes");
+                        Directory.CreateDirectory(@"0:\content\prf");
+                        Directory.CreateDirectory(@"0:\framework");
                         File.Create(@"0:\content\sys\option-showprotectedfiles.gms");
                         File.Create(@"0:\content\sys\option-editprotectedfiles.gms");
                         File.Create(@"0:\content\sys\option-deleteprotectedfiles.gms");
                         File.Create(@"0:\content\sys\setup.gms");
-                        File.WriteAllText(@"0:\content\sys\version.gms",
-                            $"System.Version is set to {Kernel.version} \n Note to users reading this: DO NOT ALTER. IMPORTANT IF USER DATA NEEDS CONVERTING.");
-                        File.WriteAllText(@"0:\content\sys\user.gms",
-                            $"username: {username}\ncomputername: {computerName}");
-                        File.WriteAllBytes(@"0:\content\sys\resolution.gms",
-                            new byte[] { videoMode }); // Video mode 2: 1280x720
-                        File.WriteAllText(@"0:\content\themes\default.gtheme",
-                            "Default = White\nBackground = Black\nStartup = DarkMagenta,Red,DarkRed\nWindowText = Cyan\nWindowBorder = Green\nErrorText = Red\nOther1 = Yellow");
-                        File.WriteAllText(@"0:\content\themes\mono.gtheme",
-                            "Default = White\nBackground = Black\nStartup = White,White,White\nWindowText = White\nWindowBorder = White\nErrorText = White\nOther1 = White");
-                        File.WriteAllText(@"0:\content\themes\dark.gtheme",
-                            "Default = Gray\nBackground = Black\nStartup = DarkGray,Gray,DarkGray\nWindowText = Gray\nWindowBorder = DarkGray\nErrorText = DarkGray\nOther1 = DarkGray");
-                        File.WriteAllText(@"0:\content\themes\light.gtheme",
-                            "Default = Black\nBackground = White\nStartup = Black,Black,Black\nWindowText = Black\nWindowBorder = Black\nErrorText = Black\nOther1 = Black");
-                        File.WriteAllText(@"0:\content\sys\theme.gms", @"ThemeFile = " + theme);
+                        File.WriteAllText(@"0:\content\sys\version.gms", $"System.Version is set to {Kernel.version} \n Note to users reading this: DO NOT ALTER. IMPORTANT IF USER DATA NEEDS CONVERTING.");
+                        File.WriteAllText(@"0:\content\sys\user.gms", $"username: {username}\ncomputername: {computerName}");
+                        File.WriteAllBytes(@"0:\content\sys\resolution.gms", new byte[] { videoMode }); // Video mode 2: 1280x720
+                        File.WriteAllText(@"0:\content\themes\default.gtheme", "Default = White\nBackground = Black\nStartup = DarkMagenta,Red,DarkRed\nWindowText = Cyan\nWindowBorder = Green\nErrorText = Red\nOther1 = Yellow");
+                        File.WriteAllText(@"0:\content\themes\mono.gtheme", "Default = White\nBackground = Black\nStartup = White,White,White\nWindowText = White\nWindowBorder = White\nErrorText = White\nOther1 = White");
+                        File.WriteAllText(@"0:\content\themes\dark.gtheme", "Default = Gray\nBackground = Black\nStartup = DarkGray,Gray,DarkGray\nWindowText = Gray\nWindowBorder = DarkGray\nErrorText = DarkGray\nOther1 = DarkGray");
+                        File.WriteAllText(@"0:\content\themes\light.gtheme", "Default = Black\nBackground = White\nStartup = Black,Black,Black\nWindowText = Black\nWindowBorder = Black\nErrorText = Black\nOther1 = Black");
+                        File.WriteAllText(@"0:\content\sys\theme.gms", "ThemeFile = " + theme);
+
+                        tries++;
                     }
                     catch (Exception e)
                     {               
                         Console.SetCursorPosition(0,0);
-                        //Console.WriteLine(e);
                         
                         if (tries < 10)
                         {
-                            goto balls;
+                            goto retry;
                         }
                         else
                         {
                             Console.Clear();
-                            Console.WriteLine(e);
-                            Console.WriteLine(e);
-                            Console.WriteLine(e);
-                            Console.WriteLine(e);
-                            Console.WriteLine(e);
                             Console.WriteLine(e);
                             Console.WriteLine("Press any key to shutdown.");
                             Console.ReadKey(true);
@@ -280,7 +270,7 @@ namespace GoOS
                     }
 
                     Console.Canvas.DrawImage(0, 0, setupFinal, false);
-                    Console.Canvas.Update();
+                    Console.Render();
 
                     ReadAgain9:
                     var key9 = Console.ReadKey(true);

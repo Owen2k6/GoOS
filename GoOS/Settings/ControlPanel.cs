@@ -28,7 +28,7 @@ namespace GoOS
 
         private static readonly List<string> categoryButtonsAdvancedMenu = new List<string>
         {
-            "Format",
+            "Format"
         };
 
         private static readonly List<string> categoryButtonsInfoMenu = new List<string>
@@ -57,13 +57,13 @@ namespace GoOS
 
         public static readonly List<(string, (ushort Width, ushort Height))> videoModes = new()
         {
-            ("640 x 480", (640, 480)), //0 ++1
-            ("720 x 480", (720, 480)), //1 ++2
-            ("800 x 600", (800, 600)), //2 ++3
-            ("1024 x 768", (1024, 768)), //3 ++4
-            ("1280 x 720", (1280, 720)), //4 ++5
-            ("1600 x 900", (1600, 900)), //5 ++6
-            ("1920 x 1080", (1920, 1080)) //6 ++7
+            ("640 x 480", (640, 480)),
+            ("720 x 480", (720, 480)),
+            ("800 x 600", (800, 600)),
+            ("1024 x 768", (1024, 768)),
+            ("1280 x 720", (1280, 720)),
+            ("1600 x 900", (1600, 900)),
+            ("1920 x 1080", (1920, 1080))
         };
 
         private static readonly List<string> mainMenuControls = new()
@@ -81,11 +81,13 @@ namespace GoOS
             isRunning = true;
             menuToShow = categoryButtonsGeneralMenu[0];
             categorieToShow = menuButtons[0];
+            Console.CursorVisible = false;
             Console.DoubleBufferedMode = true;
             Console.Clear();
             MainLoop();
             Console.ForegroundColor = ThemeManager.WindowText;
             Console.BackgroundColor = ThemeManager.Background;
+            Console.CursorVisible = true;
             Console.DoubleBufferedMode = false;
             Console.Clear();
         }
@@ -103,7 +105,7 @@ namespace GoOS
                 ShowMenu(menuToShow, categorieToShow, true);
                 Console.Render();
 
-                ConsoleKey key = System.Console.ReadKey(true).Key;
+                ConsoleKey key = Console.ReadKey(true).Key;
                 switch (key)
                 {
                     case ConsoleKey.Escape:

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
@@ -101,35 +101,50 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="Virtualisation\Interface.cs" />
+      <None Remove="Resources\GUI\Paint\rubber.bmp" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="BetterConsole\Font_1x_2.btf" />
-      <None Remove="Resources\credits05.bmp" />
-      <None Remove="Resources\Font_1x.btf" />
-      <None Remove="Resources\GoOS_Intro.bmp" />
-      <None Remove="Resources\OOBE\setupcomputer.bmp" />
-      <None Remove="Resources\OOBE\setupfinal.bmp" />
-      <None Remove="Resources\OOBE\setupres.bmp" />
-      <None Remove="Resources\OOBE\setupsupport.bmp" />
-      <None Remove="Resources\OOBE\setupthm.bmp" />
-      <None Remove="Resources\OOBE\setupTOU.bmp" />
-      <None Remove="Resources\OOBE\setupua.bmp" />
-      <None Remove="Resources\OOBE\setupuser.bmp" />
-      <None Remove="Resources\OOBE\setupwelcome.bmp" />
-      <None Remove="test.bmp" />
-    </ItemGroup>
-
-    <ItemGroup>
+      <EmbeddedResource Include="Resources\Font_2x.btf" />
+      <EmbeddedResource Include="Resources\GUI\brown_ghost.bmp" />
+      <EmbeddedResource Include="Resources\GUI\error.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoIDE\run.bmp" />
+      <EmbeddedResource Include="Resources\GUI\ide.bmp" />
+      <EmbeddedResource Include="Resources\GUI\mouse_click.bmp" />
+      <EmbeddedResource Include="Resources\GUI\mouse_text.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Paint\brush.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Paint\bucket.bmp" />
+      <EmbeddedResource Include="Resources\GUI\clock.bmp" />
+      <EmbeddedResource Include="Resources\GUI\closebutton.bmp" />
+      <EmbeddedResource Include="Resources\GUI\closebutton_pressed.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Paint\colors.bmp" />
+      <EmbeddedResource Include="Resources\GUI\drum.bmp" />
+      <EmbeddedResource Include="Resources\GUI\folder.bmp" />
+      <EmbeddedResource Include="Resources\GUI\gterm.bmp" />
+      <EmbeddedResource Include="Resources\GUI\info.bmp" />
+      <EmbeddedResource Include="Resources\GUI\mouse.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Paint\rubber.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Paint\text.bmp" />
+      <EmbeddedResource Include="Resources\GUI\shutdown.bmp" />
+      <EmbeddedResource Include="Resources\GUI\user.bmp" />
       <EmbeddedResource Include="Resources\OOBE\setupsupport.bmp" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Include="Resources\OOBE\setupfinal.bmp" />
-    </ItemGroup>
-
-    <ItemGroup>
+      <EmbeddedResource Include="Resources\GUI\TaskManager.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Notepad\SAVE.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Notepad\PASTE.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Notepad\COPY.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Notepad\CUT.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Maximize.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Minimize.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Minimize_Hovered.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Minimize_Pressed.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Gosplorer\BIN.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Gosplorer\CHILD.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Gosplorer\MOVE.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Gosplorer\PARENT.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Gosplorer\NEW.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Gosplorer\REFRESH.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Gosplorer\LOADINNOTEPAD.bmp" />
+	  <EmbeddedResource Include="Resources\OOBE\setupfinal.bmp" />
       <EmbeddedResource Include="Resources\Credits05.bmp" />
       <EmbeddedResource Include="Resources\Font_1x.btf" />
       <EmbeddedResource Include="Resources\GoOS_Intro.bmp" />
@@ -140,12 +155,11 @@
       <EmbeddedResource Include="Resources\OOBE\setupua.bmp" />
       <EmbeddedResource Include="Resources\OOBE\setupuser.bmp" />
       <EmbeddedResource Include="Resources\OOBE\setupwelcome.bmp" />
-      <None Remove="Resources\MSUIGothicCustomCharset16.btf" />
+      <EmbeddedResource Include="Resources\GUI\question.bmp" />
+      <EmbeddedResource Include="Resources\GUI\closebutton_hover.bmp" />
       <EmbeddedResource Include="Resources\MSUIGothicCustomCharset16.btf" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Include="Virtualisation\Interface.cs" />
+      <EmbeddedResource Include="Resources\Welcome.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\warning.bmp" />
     </ItemGroup>
 
     <ItemGroup>
@@ -156,11 +170,21 @@
         <PackageReference Include="Cosmos.Core" Version="0.1.0-*" />
         <PackageReference Include="Cosmos.Debug.Kernel" Version="0-*" NoWarn="NU1604" />
         <PackageReference Include="Cosmos.HAL2" Version="0.1.0-*" />
+        <PackageReference Include="Cosmos.Plugs" Version="0.1.0-*" />
         <PackageReference Include="Cosmos.System2" Version="0-*" NoWarn="NU1604" />
         <PackageReference Include="IL2CPU.API" Version="0.1.0-*" />
     </ItemGroup>
 
     <ItemGroup>
+      <Reference Include="DotNetClr">
+        <HintPath>DotNetClr.dll</HintPath>
+      </Reference>
+      <Reference Include="DotNetParser">
+        <HintPath>DotNetParser.dll</HintPath>
+      </Reference>
+      <Reference Include="LibDotNetParser">
+        <HintPath>LibDotNetParser.dll</HintPath>
+      </Reference>
       <Reference Include="PrismAPI">
         <HintPath>..\..\..\Prism-OS\PrismAPI\bin\Debug\net6.0\PrismAPI.dll</HintPath>
       </Reference>

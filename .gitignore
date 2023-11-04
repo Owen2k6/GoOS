@@ -25,3 +25,12 @@ GoOS/.vs/GoOS/v17/.suo
 /.idea/
 
 GoOS/.idea/
+/.vs
+/GoOS/obj/*
+GoOS/obj/Debug/net6.0/GoOS.assets.cache
+GoOS/obj/Debug/net6.0/GoOS.csproj.AssemblyReference.cache
+GoOS/obj/GoOS.csproj.nuget.dgspec.json
+GoOS/obj/GoOS.csproj.nuget.g.props
+GoOS/obj/GoOS.csproj.nuget.g.targets
+GoOS/obj/project.assets.json
+GoOS/obj/project.nuget.cache
