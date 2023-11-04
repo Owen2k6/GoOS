@@ -5,12 +5,12 @@
 using Cosmos.HAL;
 using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4;
-using Cosmos.System.Network.IPv4.TCP;
 using Cosmos.System.Network.IPv4.UDP.DHCP;
 using System;
 using System.Collections.Generic;
 using Sys = Cosmos.System;
 using System.IO;
+using System.Net.Sockets;
 using System.Text;
 using GoOS.Themes;
 using GoOS.Commands;
@@ -18,6 +18,7 @@ using Console = BetterConsole;
 using ConsoleColor = PrismAPI.Graphics.Color;
 using static GoOS.Core;
 using System.Threading;
+using Cosmos.System.Network.IPv4.UDP.DNS;
 using PrismAPI.Graphics;
 using IL2CPU.API.Attribs;
 using PrismAPI.Hardware.GPU;
@@ -25,6 +26,7 @@ using GoOS.GUI;
 using GoOS.GUI.Apps;
 using GoOS.Networking;
 using LibDotNetParser.CILApi;
+using TcpClient = Cosmos.System.Network.IPv4.TCP.TcpClient;
 
 // Goplex Studios - GoOS
 // Copyright (C) 2022  Owen2k6
@@ -36,6 +38,7 @@ namespace GoOS
         public static Dictionary<string, string> InstalledPrograms = new Dictionary<string, string>() { };
 
         public static bool isGCIenabled = false;
+
         //Vars for OS
         public static string version = "1.5";
         public static string BuildType = "Beta";
@@ -96,7 +99,7 @@ namespace GoOS
                 {
                 }
             }
-            
+
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {
                 Console.ConsoleMode = true;
@@ -248,8 +251,16 @@ namespace GoOS
                 computername = "GoOS";
             }
 
+            using (var xClient = new DHCPClient())
+            {
+                /** Send a DHCP Discover packet **/
+                //This will automatically set the IP config after DHCP response
+                xClient.SendDiscoverPacket();
+                log(ConsoleColor.Blue, NetworkConfiguration.CurrentAddress.ToString());
+            }
+
             loadingDialogue.Closing = true;
-            WindowManager.Canvas = Display.GetDisplay(1280, 720);
+            WindowManager.Canvas = Display.GetDisplay(3840, 2160);
             WindowManager.AddWindow(new Taskbar());
             WindowManager.AddWindow(new Desktop());
             WindowManager.AddWindow(new Welcome());
@@ -416,64 +427,118 @@ namespace GoOS
 
                     Commands.Help.Main();
                     break;
-                case "goget":
-                    if (args.Length != 2)
+                case "go":
+                    if (args.Length < 2)
                     {
-                        log(ThemeManager.ErrorText, "Invalid Params");
+                        log(ThemeManager.ErrorText, "Insufficient arguments");
                         break;
                     }
 
-                    String filetoget = args[1];
-                    try
+                    switch (args[1])
                     {
-                        log(ConsoleColor.Red, "1");
-                        using (var xClient = new DHCPClient())
-                        {
-                            /** Send a DHCP Discover packet **/
-                            //This will automatically set the IP config after DHCP response
-                            xClient.SendDiscoverPacket();
-                            log(ConsoleColor.Blue, NetworkConfiguration.CurrentAddress.ToString());
-                        }
-
-                        using (var xClient = new TcpClient(39482))
-                        {
-                            log(ConsoleColor.Red, "2");
+                        case "repo":
+                            log(Color.Minty, "GoOS - Application Repositorys");
+                            log(Color.GoogleYellow, "-a apps.goos.owen2k6.com");
+                            log(Color.GoogleYellow, "-b dev.apps.goos.owen2k6.com");
+                            break;
+                        case "type":
+                            log(Color.Minty, "GoOS - Application Types");
+                            log(Color.GoogleYellow, "-g Goexe");
+                            log(Color.GoogleYellow, "-9 9xCode");
+                            break;
+                        case "install":
+                            if (args.Length != 5)
+                            {
+                                log(ThemeManager.ErrorText, "X: go install -<repo> <appname> -<type>");
+                                break;
+                            }
+                            String filetoget = args[3];
                             try
                             {
-                                xClient.Connect(NetworkConfiguration.CurrentAddress, 500, 1000);
+                                var dnsClient = new DnsClient();
+                                var tcpClient = new TcpClient();
+                                string repo;
+                                string type;
+                                //temporary use of local repository list
+                                if (args[2] == "-a")
+                                {
+                                    repo = "apps.goos.owen2k6.com";
+                                    log(Color.Red, repo);
+                                }
+                                else if (args[2] == "-b")
+                                {
+                                    repo = "dev.apps.goos.owen2k6.com";
+                                    log(Color.Red, repo);
+                                }
+                                else
+                                {
+                                    log(ThemeManager.ErrorText, "Unknown repository");
+                                    break;
+                                }
+
+                                if (args[4] == "-g")
+                                {
+                                    type = "goexe";
+                                    log(Color.Red, type);
+                                }
+                                else if (args[4] == "-9")
+                                {
+                                    type = "9x";
+                                    log(Color.Red, type);
+                                }
+                                else
+                                {
+                                    log(ThemeManager.ErrorText, "Unknown application type");
+                                    break;
+                                }
+                                log(Color.Red, repo+"/"+filetoget+"."+type);
+
+                                dnsClient.Connect(DNSConfig.DNSNameservers[0]);
+                                dnsClient.SendAsk(repo);
+                                Address address = dnsClient.Receive();
+                                log(Color.Red, address.ToString());
+                                dnsClient.Close();
+
+                                tcpClient.Connect(address, 80);
+
+                                string httpget = "GET /" + filetoget + "."+type+" HTTP/1.1\r\n" +
+                                                 "User-Agent: GoOS\r\n" +
+                                                 "Accept: */*\r\n" +
+                                                 "Accept-Encoding: identity\r\n" +
+                                                 "Host: "+repo+"\r\n" +
+                                                 "Connection: Keep-Alive\r\n\r\n";
+
+                                tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
+
+                                var ep = new EndPoint(Address.Zero, 0);
+                                var data = tcpClient.Receive(ref ep);
+                                tcpClient.Close();
+
+                                string httpresponse = Encoding.ASCII.GetString(data);
+
+                                string[] responseParts =
+                                    httpresponse.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
+
+                                if (responseParts.Length == 2)
+                                {
+                                    string headers = responseParts[0];
+                                    string content = responseParts[1];
+                                    //Console.WriteLine(content);
+
+                                    File.Create(@"0:\" + filetoget + "."+type);
+                                    File.WriteAllText(@"0:\" + filetoget + "."+type, content);
+                                    log(Color.Green, "Downloaded " + filetoget + "."+type);
+                                }
                             }
-                            catch (Exception e)
+                            catch (Exception ex)
                             {
-                                log(ConsoleColor.Red, e.ToString());
+                                Console.WriteLine(ex.ToString());
                             }
 
-                            log(ConsoleColor.Red, "3");
-                            /** Send data **/
-                            xClient.Send(Encoding.ASCII.GetBytes("GET /" + filetoget +
-                                                                 ".goexe HTTP/1.1\nHost: apps.goos.owen2k6.com\n\n"));
-                            /** Receive data **/
-                            log(ConsoleColor.Red, "4");
-                            var endpoint = new EndPoint(Address.Zero, 0);
-                            log(ConsoleColor.Red, "5");
-                            var data = xClient.Receive(ref endpoint); //set endpoint to remote machine IP:port
-                            log(ConsoleColor.Red, "6");
-                            var data2 = xClient
-                                .NonBlockingReceive(ref endpoint); //retrieve receive buffer without waiting
-                            log(ConsoleColor.Red, "7");
-                            string bitString = BitConverter.ToString(data2);
-                            log(ConsoleColor.Red, "8");
-                            File.Create(@"0:\" + filetoget + ".goexe");
-                            log(ConsoleColor.Red, "9");
-                            File.WriteAllText(@"0:\" + filetoget + ".goexe", bitString);
-                            log(ConsoleColor.Red, "10");
-                            print(bitString);
-                            log(ConsoleColor.Red, "TASK END");
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        log(ConsoleColor.Red, "Internal Error:");
-                        log(ConsoleColor.White, e.ToString());
+                            break;
+                        default:
+                            log(ThemeManager.ErrorText, "Unknown request.");
+                            break;
                     }
 
                     break;
@@ -734,18 +799,6 @@ namespace GoOS
                     }
 
                     Console.Init(Convert.ToUInt16(args[1]), Convert.ToUInt16(args[2]));
-                    break;
-                case "floppy":
-                    log(ThemeManager.WindowText, "1");
-                    PrismAPI.Network.NetworkManager.Init();
-                    log(ThemeManager.WindowText, "2");
-                    PrismAPI.Network.HTTP.HTTPClient client = new("http://apps.goos.owen2k6.com/test.goexe");
-                    //log(ThemeManager.WindowText, "3");
-                    //client.URL = new();
-                    log(ThemeManager.WindowText, "3");
-                    byte[] test = client.Get();
-                    log(ThemeManager.WindowText, "4");
-                    Console.WriteLine(Encoding.ASCII.GetString(test));
                     break;
                 case "dtest":
                     Dialogue.Show("Message", "Hello world!!!");

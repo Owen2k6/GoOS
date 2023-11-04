@@ -37,7 +37,7 @@ public class Ping
                 log(ConsoleColor.Blue, NetworkConfiguration.CurrentAddress.ToString());
             }
 
-            using (var xClient = new TcpClient(39482))
+            using (var xClient = new TcpClient())
             {
                 log(ConsoleColor.Red, "2");
                 try

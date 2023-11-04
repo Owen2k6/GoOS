@@ -17,9 +17,7 @@ namespace GoOS.GUI.Apps
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.shutdown.bmp")] private static byte[] shutdownIconRaw;
         private static Canvas shutdownIcon = Image.FromBitmap(shutdownIconRaw, false);
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.gterm.bmp")] private static byte[] gtermIconRaw;
-        private static Canvas gtermIcon = Image.FromBitmap(gtermIconRaw, false);
+        
 
         List<Button> appButtons = new();
 
@@ -87,22 +85,6 @@ namespace GoOS.GUI.Apps
             button.Clicked = Power_Click;
         }
 
-        private void AddExitGuiButton()
-        {
-            Button button = new Button(
-                this,
-                8,
-                (ushort)(Contents.Height - 64 - 8),
-                96,
-                64,
-                "Exit"
-            );
-
-            button.Image = gtermIcon;
-
-            button.Clicked = ExitGui_Click;
-        }
-
         public StartMenu()
         {
             Contents = new Canvas(256, 384);
@@ -121,46 +103,10 @@ namespace GoOS.GUI.Apps
 
             AddPowerButton();
 
-            AddExitGuiButton();
-
             foreach (Control control in Controls)
             {
                 control.Render();
             }
-        }
-
-        private void ExitGui_Click()
-        {
-            WindowManager.Dimmed = true;
-            Dialogue.Show(
-                "GoOS",
-                "Exit to the console?",
-                new()
-                {
-                    new() { Text = "Exit", Callback = () =>
-                    {
-                        WindowManager.Dimmed = false;
-
-                        WindowManager.CloseAll();
-
-                        BetterConsole.ConsoleMode = true;
-
-                        WindowManager.Canvas = Display.GetDisplay(
-                            800,
-                            600
-                        );
-                        
-                        // ^ TODO not hardcode.
-
-                        WindowManager.AddWindow(new GTerm());
-                    }},
-
-                    new() { Text = "Cancel" }
-                },
-                gtermIcon
-            );
-
-            Visible = false;
         }
 
         private void Power_Click()
