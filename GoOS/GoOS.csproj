@@ -101,6 +101,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Resources\GUI\Paint\rubber.bmp" />
+    </ItemGroup>
+
+    <ItemGroup>
       <EmbeddedResource Include="Resources\Font_2x.btf" />
       <EmbeddedResource Include="Resources\GUI\brown_ghost.bmp" />
       <EmbeddedResource Include="Resources\GUI\error.bmp" />
@@ -119,6 +123,7 @@
       <EmbeddedResource Include="Resources\GUI\gterm.bmp" />
       <EmbeddedResource Include="Resources\GUI\info.bmp" />
       <EmbeddedResource Include="Resources\GUI\mouse.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Paint\rubber.bmp" />
       <EmbeddedResource Include="Resources\GUI\Paint\text.bmp" />
       <EmbeddedResource Include="Resources\GUI\shutdown.bmp" />
       <EmbeddedResource Include="Resources\GUI\user.bmp" />
