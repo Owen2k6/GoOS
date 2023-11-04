@@ -4,7 +4,6 @@ using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4;
 using Cosmos.System.Network.IPv4.UDP.DNS;
 using TcpClient = Cosmos.System.Network.IPv4.TCP.TcpClient;
-using GoOS.Themes;
 using System.Text;
 using System.Collections.Generic;
 using PrismAPI.Graphics;
@@ -14,7 +13,6 @@ namespace GoOS.GUI.Apps.GoStore
     public class MainFrame : Window
     {
         Button[] RepoFilesButtons;
-        Canvas DescriptionCanvas;
         List<(string, string, string, string, string)> repoFiles = new List<(string, string, string, string, string)>();
 
         public MainFrame()
@@ -22,17 +20,20 @@ namespace GoOS.GUI.Apps.GoStore
             try
             {
                 // Get the file list from every repo
-                string[] infoFiles =
+                string[][] infoFiles =
                 {
-                    GetInfoFile("apps.goos.owen2k6.com"),
-                    //GetInfoFile("dev.apps.goos.owen2k6.com"),
-                    GetInfoFile("repo.mobren.net")
+                    GetInfoFile("apps.goos.owen2k6.com").Split('\n'),
+                    //GetInfoFile("dev.apps.goos.owen2k6.com").Split('|'),
+                    GetInfoFile("repo.mobren.net").Split('\n')
                 };
 
-                foreach (string file in infoFiles)
+                foreach (string[] file in infoFiles)
                 {
-                    string[] metadata = file.Split('|');
-                    repoFiles.Add((metadata[0], metadata[1], metadata[2], metadata[3], metadata[4]));
+                    foreach (string program in file)
+                    {
+                        string[] metadata = program.Split('|');
+                        repoFiles.Add((metadata[0], metadata[1], metadata[2], metadata[3], metadata[4]));
+                    }
                 }
 
                 // Generate the fonts.
@@ -60,8 +61,6 @@ namespace GoOS.GUI.Apps.GoStore
                         ClickedAlt = repoFiles_Click
                     };
                 }
-
-                DescriptionCanvas = new Canvas(300, 250);
 
                 // Paint the window.
                 Contents.Clear(Color.LightGray);
@@ -129,28 +128,9 @@ namespace GoOS.GUI.Apps.GoStore
 
         private void repoFiles_Click(string i)
         {
-            DescriptionCanvas.Clear(Color.LightGray);
-            DescriptionCanvas.DrawLine(0, 0, DescriptionCanvas.Width - 1, 0, new Color(80, 80, 80));
-            DescriptionCanvas.DrawLine(0, 0, 0, DescriptionCanvas.Height - 1, new Color(80, 80, 80));
-            DescriptionCanvas.DrawLine(1, DescriptionCanvas.Height - 2, DescriptionCanvas.Width - 2, DescriptionCanvas.Height - 2, new Color(89, 89, 89));
-            DescriptionCanvas.DrawLine(DescriptionCanvas.Width - 2, 1, DescriptionCanvas.Width - 2, DescriptionCanvas.Height - 1, new Color(89, 89, 89));
-            DescriptionCanvas.DrawLine(0, DescriptionCanvas.Height - 1, DescriptionCanvas.Width, DescriptionCanvas.Height - 1, Color.Black);
-            DescriptionCanvas.DrawLine(DescriptionCanvas.Width - 1, 0, DescriptionCanvas.Width - 1, DescriptionCanvas.Height - 1, Color.Black);
-            DescriptionCanvas.DrawString(10, 10, i, Fonts.Font_2x, Color.White);
-            DescriptionCanvas.DrawString(10, 52, "Version: " + repoFiles[GetIndexByTitle(i)].Item3, Fonts.Font_1x, Color.White);
-            DescriptionCanvas.DrawString(10, 64, "Author: " + repoFiles[GetIndexByTitle(i)].Item3, Fonts.Font_1x, Color.White);
-            DescriptionCanvas.DrawString(10, 76, "Description: " + repoFiles[GetIndexByTitle(i)].Item4, Fonts.Font_1x, Color.White);
-            DescriptionCanvas.DrawString(10, 88, "Language: " + repoFiles[GetIndexByTitle(i)].Item1, Fonts.Font_1x, Color.White);
-
-            for (int y = 0; y < 300; y++)
-            {
-                for (int x = 0; x < 400; x++)
-                {
-                    Contents[x, y] = new Color(Contents[x, y].R - 100, Contents[x, y].G - 100, Contents[x, y].B - 100);
-                }
-            }
-
-            Contents.DrawImage(50, 25, DescriptionCanvas, false);
+            WindowManager.AddWindow(new DescriptionFrame(repoFiles[GetIndexByTitle(i)].Item1,
+                repoFiles[GetIndexByTitle(i)].Item4, repoFiles[GetIndexByTitle(i)].Item5,
+                repoFiles[GetIndexByTitle(i)].Item3, repoFiles[GetIndexByTitle(i)].Item2));
         }
     }
 }
