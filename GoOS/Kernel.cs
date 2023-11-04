@@ -834,6 +834,9 @@ namespace GoOS
                 case "gostore":
                     WindowManager.AddWindow(new GUI.Apps.GoStore.MainFrame());
                     break;
+                case "about":
+                    WindowManager.AddWindow(new GUI.Apps.About());
+                    break;
                 default:
                     if (isGCIenabled)
                     {
