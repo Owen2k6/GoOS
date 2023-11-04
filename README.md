@@ -9,7 +9,7 @@ GoOS (GoplexOS) is a simple operating system (OS) built from scratch using [Cosm
 - Runs on both virtual machines and real hardware (NOT RECOMMENDED ON REAL HARDWARE)
 
 ## Minimum requirements
-- 150MB RAM or more
+- 256MB RAM or more
 - 8MB HDD or bigger preformatted as FAT32
 - PS/2 Keyboard & Mouse
 - VGA Display (HDMI will work if onboard)
@@ -25,6 +25,7 @@ GoOS (GoplexOS) is a simple operating system (OS) built from scratch using [Cosm
 If you're interested in contributing to GoOS, we'd love to have your help! Please see the [CONTRIBUTING.md](https://github.com/Owen2k6/GoOS/blob/Development/CONTRIBUTING.md) file for more information on how to contribute.
 
 ## Screenshots
+
 GUI Interface
 
 ![Screenshot1](https://github.com/9xbt/GoOS/assets/109512837/bc014550-b466-4082-bd91-104d06a59371)
