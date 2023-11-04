@@ -410,5 +410,26 @@ namespace GoOS.GUI
         /// Paint the window. Required for resizing.
         /// </summary>
         public virtual void Paint() { }
+
+        public void AutoCreate(WindowDock dock, int Width, int Height, string Title)
+        {
+            Fonts.Generate();
+            Contents = new Canvas((ushort)Width, (ushort)Height);
+            SetDock(dock);
+            this.Title = Title;
+            Visible = true;
+            Closable = true;
+        }
+
+        public void AutoCreate(int X, int Y, int Width, int Height, string Title)
+        {
+            Fonts.Generate();
+            Contents = new Canvas((ushort)Width, (ushort)Height);
+            this.X = X;
+            this.Y = Y;
+            this.Title = Title;
+            Visible = true;
+            Closable = true;
+        }
     }
 }

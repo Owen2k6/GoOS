@@ -2,6 +2,10 @@
 // I hate xrc2 code. // 
 ///////////////////////
 
+////////// xrc2 //////////
+// I hate ekeleze code. //
+//////////////////////////
+
 using Cosmos.HAL;
 using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4;
@@ -64,14 +68,10 @@ namespace GoOS
             {
                 System.Console.ForegroundColor = System.ConsoleColor.Red;
                 System.Console.WriteLine();
-                System.Console.Write(
-                    "GoOS - Not enough ram to boot GoOS. Please increase the amount of RAM of your VM");
-                System.Console.Write(
-                    "GoOS - Or if you are running this on real hardware (you shouldn't), buy more RAM");
+                System.Console.Write("GoOS - Not enough ram to boot GoOS. Please increase the amount of RAM of your VM");
+                System.Console.Write("GoOS - Or if you are running this on real hardware (you shouldn't), buy more RAM");
 
-                while (true)
-                {
-                }
+                while (true);
             }
 
             WindowManager.Canvas = Display.GetDisplay(800, 600); //TODO: Not have this hard coded >:^(

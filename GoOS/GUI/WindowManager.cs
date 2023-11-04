@@ -94,6 +94,16 @@ namespace GoOS.GUI
 
         public static bool ContainsWindowByTitle(string wnd) => GetAmountOfWindowsByTitle(wnd) > 0;
 
+        public static bool ContainsAWindow(List<Window> wnds)
+        {
+            foreach (Window w in wnds)
+            {
+                if (windows.Contains(w)) return true;
+            }
+
+            return false;
+        }
+
         public static void RemoveWindowByTitle(string wnd)
         {
             foreach (Window w in windows)

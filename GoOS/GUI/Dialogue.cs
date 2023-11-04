@@ -17,7 +17,7 @@ namespace GoOS.GUI
     public class Dialogue : Window
     {
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.info.bmp")] private static byte[] infoIconRaw;
-        private static Canvas infoIcon = Image.FromBitmap(infoIconRaw, false);
+        public static Canvas infoIcon = Image.FromBitmap(infoIconRaw, false);
 
         private const int buttonSpacing = 20;
 

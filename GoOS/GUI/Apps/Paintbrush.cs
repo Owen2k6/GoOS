@@ -10,7 +10,8 @@ namespace GoOS.GUI.Apps
     {
         Brush = 0,
         Bucket = 1,
-        Text = 2
+        Text = 2,
+        Rubber
     }
 
     public class Paintbrush : Window
@@ -33,6 +34,9 @@ namespace GoOS.GUI.Apps
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse_text.bmp")] private static byte[] mouse_textRaw;
         private static Canvas mouse_text = Image.FromBitmap(mouse_textRaw, false);
 
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.rubber.bmp")] private static byte[] rubberRaw;
+        private static Canvas rubber = Image.FromBitmap(rubberRaw, false);
+
         private bool IsOverColorTable { get { return MouseManager.X > X + 54 && MouseManager.X < X + 278 && MouseManager.Y > Y + Convert.ToUInt16(Contents.Height - 26) && MouseManager.Y < Y + Convert.ToUInt16(Contents.Height + 6); } }
 
         private bool IsOverPaintableArea { get { return MouseManager.X > X && MouseManager.X < X + Contents.Width - BrushSize && MouseManager.Y > Y + TITLE_BAR_HEIGHT && MouseManager.Y < Y + Convert.ToUInt16(Contents.Height - 36); } }
@@ -53,10 +57,12 @@ namespace GoOS.GUI.Apps
 
         private int TextX, TextY;
 
+        private Color BackgroundColor = Color.White;
+
         public Paintbrush()
         {
             Contents = new Canvas(324, 300);
-            Contents.Clear(Color.LightGray);
+            Contents.Clear(BackgroundColor);
             Title = "Paintbrush";
             Visible = true;
             Closable = true;
@@ -80,7 +86,11 @@ namespace GoOS.GUI.Apps
                     Image = text,
                     Clicked = Text_Click
                 },
-                new Button(this, 28, Convert.ToUInt16(Contents.Height - 26), 16, 16, string.Empty),
+                new Button(this, 28, Convert.ToUInt16(Contents.Height - 26), 16, 16, string.Empty)
+                {
+                    Image = rubber,
+                    Clicked = Rubber_Click
+                }
             };
 
             RenderPanel();
@@ -98,11 +108,8 @@ namespace GoOS.GUI.Apps
                     WindowManager.AddWindow(new BrownGhost());
                     break;
             }
-                
 
             // TODO: implement ctrl + z
-            // What about a fucking eraser? - Owen2k6
-            // you got a pencil that has a rubber on the other side - xrc2
         }
 
         private void Pencil_Click()
@@ -154,6 +161,11 @@ namespace GoOS.GUI.Apps
             Utility = PaintTools.Text;
         }
 
+        private void Rubber_Click()
+        {
+            Utility = PaintTools.Rubber;
+        }
+
         private void Text_Handler()
         {
             Contents.DrawString(TextX, TextY, Dialog_TextBox.Text, BetterConsole.font, SelectedColor);
@@ -178,6 +190,10 @@ namespace GoOS.GUI.Apps
                     case PaintTools.Text:
                         WindowManager.MouseToDraw = mouse_text;
                         break;
+
+                    case PaintTools.Rubber:
+                        WindowManager.MouseToDraw = rubber;
+                        break;
                 }
 
                 if (MouseManager.LastMouseState == MouseState.None)
@@ -188,11 +204,19 @@ namespace GoOS.GUI.Apps
 
                 if (MouseManager.MouseState == MouseState.Left && (OldX != MouseManager.X || OldY != MouseManager.Y))
                 {
-                    if (Utility == PaintTools.Brush)
+                    switch (Utility)
                     {
-                        DrawLine(OldX - X - 1, OldY - Y - 19, (int)MouseManager.X - X - 1, (int)MouseManager.Y - Y - 19, (ushort)BrushSize);
-                        OldX = (int)MouseManager.X;
-                        OldY = (int)MouseManager.Y;
+                        case PaintTools.Brush:
+                            DrawLine(OldX - X - 1, OldY - Y - 19, (int)MouseManager.X - X - 1, (int)MouseManager.Y - Y - 19, (ushort)BrushSize, SelectedColor);
+                            OldX = (int)MouseManager.X;
+                            OldY = (int)MouseManager.Y;
+                            break;
+
+                        case PaintTools.Rubber:
+                            DrawLine(OldX - X - 1, OldY - Y - 19, (int)MouseManager.X - X - 1, (int)MouseManager.Y - Y - 19, 10, BackgroundColor);
+                            OldX = (int)MouseManager.X;
+                            OldY = (int)MouseManager.Y;
+                            break;
                     }
                 }
             }
@@ -206,6 +230,7 @@ namespace GoOS.GUI.Apps
                 {
                     case PaintTools.Bucket:
                         Contents.DrawFilledRectangle(0, 0, Convert.ToUInt16(Contents.Width - 2), Convert.ToUInt16(Contents.Height - 52), 0, SelectedColor);
+                        BackgroundColor = SelectedColor;
                         break;
 
                     case PaintTools.Text:
@@ -244,7 +269,7 @@ namespace GoOS.GUI.Apps
 
         private void RenderPanel()
         {
-            Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 52), Convert.ToUInt16(Contents.Width - 4), 50, 0, new Color(234, 234, 234));
+            Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 52), Convert.ToUInt16(Contents.Width - 4), 50, 0, Color.DeepGray);
             Contents.DrawImage(54, Convert.ToUInt16(Contents.Height - 42), colorTable, false);
             RenderButtons();
             RenderSystemStyleBorder();
@@ -263,12 +288,12 @@ namespace GoOS.GUI.Apps
         }
 
         /* Paint utilities */
-        private void DrawPoint(int X, int Y, ushort size)
+        private void DrawPoint(int X, int Y, ushort size, Color color)
         {
-            Contents.DrawFilledRectangle(X, Y, size, size, 0, SelectedColor);
+            Contents.DrawFilledRectangle(X, Y, size, size, 0, color);
         }
 
-        private void DrawLine(int X1, int Y1, int X2, int Y2, ushort size)
+        private void DrawLine(int X1, int Y1, int X2, int Y2, ushort size, Color color)
         {
             int DX = Math.Abs(X2 - X1), SX = X1 < X2 ? 1 : -1;
             int DY = Math.Abs(Y2 - Y1), SY = Y1 < Y2 ? 1 : -1;
@@ -276,7 +301,7 @@ namespace GoOS.GUI.Apps
 
             while (X1 != X2 || Y1 != Y2)
             {
-                DrawPoint(X1, Y1, size);
+                DrawPoint(X1, Y1, size, color);
 
                 int E2 = err;
 
