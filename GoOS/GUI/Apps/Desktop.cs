@@ -15,6 +15,9 @@ namespace GoOS.GUI.Apps
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.folder.bmp")] private static byte[] folderIconRaw;
         private static Canvas folderIcon = Image.FromBitmap(folderIconRaw, false);
 
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.desktopwallpaper.bmp")] static byte[] backgroundRaw;
+        static Canvas background = Image.FromBitmap(backgroundRaw, false);
+
         Button FolderButton;
 
         public Desktop()
@@ -22,7 +25,8 @@ namespace GoOS.GUI.Apps
             Fonts.Generate();
 
             Contents = new Canvas(WindowManager.Canvas.Width, Convert.ToUInt16(WindowManager.Canvas.Height - 28));
-            Contents.Clear(Kernel.DesktopColour);
+            //Contents.Clear(Kernel.DesktopColour);
+            Contents.DrawImage(0, 0, background, false);
             Title = nameof(Desktop);
             Visible = true;
             Closable = false;
@@ -33,8 +37,8 @@ namespace GoOS.GUI.Apps
             FolderButton = new Button(this, 20, 20, 64, 80, "Apps")
             {
                 UseSystemStyle = false,
-                BackgroundColour = Kernel.DesktopColour,
-                TextColour = Color.White,
+                BackgroundColour = Color.White,
+                TextColour = Color.Black,
 
                 Image = folderIcon,
                 Clicked = FolderButton_Click
