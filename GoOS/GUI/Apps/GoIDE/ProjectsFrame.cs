@@ -1,9 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PrismAPI.Graphics;
 
 namespace GoOS.GUI.Apps.GoIDE
@@ -11,6 +7,7 @@ namespace GoOS.GUI.Apps.GoIDE
     public class ProjectsFrame : Window
     {
         Button[] RecentProjectsButtons;
+        Button DeleteButton;
         Button ImportButton;
         Button LoadExistingButton;
         Button CreateNewButton;
@@ -20,10 +17,11 @@ namespace GoOS.GUI.Apps.GoIDE
             try
             {
                 // Create the directories.
-                if (!Directory.Exists(@"0:\content\prf")) Directory.CreateDirectory(@"0:\content\prf");
-                if (!Directory.Exists(@"0:\content\prf\GoIDE")) Directory.CreateDirectory(@"0:\content\prf\GoIDE");
-                if (!Directory.Exists(@"0:\content\prf\GoIDE\Projects")) Directory.CreateDirectory(@"0:\content\prf\GoIDE\Projects");
-                if (!Directory.Exists(@"0:\content\prf\GoIDE\SaveData")) Directory.CreateDirectory(@"0:\content\prf\GoIDE\SaveData");
+                if (!Directory.Exists(@"0:\content\prf\GoIDE") || !Directory.Exists(@"0:\content\prf\GoIDE\Projects") || !Directory.Exists(@"0:\content\prf\GoIDE\SaveData"))
+                {
+                    WindowManager.AddWindow(new WelcomeFrame());
+                    Dispose(); return;
+                }
 
                 // Generate the fonts.
                 Fonts.Generate();
@@ -53,9 +51,10 @@ namespace GoOS.GUI.Apps.GoIDE
                     };
                 }
 
-                ImportButton = new Button(this, Convert.ToUInt16(Contents.Width - 382), Convert.ToUInt16(Contents.Height - 30), 88, 20, "Import...") { Clicked = ImportButton_Click };
-                LoadExistingButton = new Button(this, Convert.ToUInt16(Contents.Width - 284), Convert.ToUInt16(Contents.Height - 30), 144, 20, "Load existing...") { Clicked = LoadExistingButton_Click };
-                CreateNewButton = new Button(this, Convert.ToUInt16(Contents.Width - 130), Convert.ToUInt16(Contents.Height - 30), 120, 20, "Create new...") { Clicked = CreateNewButton_Click };
+                DeleteButton = new Button(this, Convert.ToUInt16(Contents.Width - 380), Convert.ToUInt16(Contents.Height - 30), 64, 20, "Delete") { Clicked = DeleteButton_Click };
+                ImportButton = new Button(this, Convert.ToUInt16(Contents.Width - 306), Convert.ToUInt16(Contents.Height - 30), 64, 20, "Import") { Clicked = ImportButton_Click };
+                LoadExistingButton = new Button(this, Convert.ToUInt16(Contents.Width - 234), Convert.ToUInt16(Contents.Height - 30), 120, 20, "Load existing") { Clicked = LoadExistingButton_Click };
+                CreateNewButton = new Button(this, Convert.ToUInt16(Contents.Width - 106), Convert.ToUInt16(Contents.Height - 30), 96, 20, "Create new") { Clicked = CreateNewButton_Click };
 
                 // Paint the window.
                 Contents.Clear(Color.LightGray);
@@ -63,38 +62,50 @@ namespace GoOS.GUI.Apps.GoIDE
                 Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4), 38, 0, Color.DeepGray);
                 Contents.DrawString(10, 10, "All projects", Fonts.Font_2x, Color.White);
                 foreach (Button i in RecentProjectsButtons) i.Render();
+                DeleteButton.Render();
                 ImportButton.Render();
                 LoadExistingButton.Render();
                 CreateNewButton.Render();
             }
-            catch (Exception e)
+            catch { }
+        }
+
+        private void RecentProjects_Click(string i)
+        {
+            if (DeleteButton.AppearPressed)
             {
-                Dialogue.Show("TheTunaFishSandwitch is racist!!1", e.Message, null, WindowManager.errorIcon);
+                File.Delete(@"0:\content\prf\GoIDE\Projects\" + i);
+                Dispose();
+                WindowManager.AddWindow(new ProjectsFrame());
+            }
+            else
+            {
+                WindowManager.AddWindow(new IDEFrame(i.Remove(i.LastIndexOf(".")), @"0:\content\prf\GoIDE\Projects\" + i, i.EndsWith(".9xc")));
+                Dispose();
             }
         }
 
-        void RecentProjects_Click(string i)
-        {
-            WindowManager.AddWindow(new IDEFrame(i.Remove(i.LastIndexOf(".")), @"0:\content\prf\GoIDE\Projects\" + i, i.EndsWith(".9xc")));
-            Dispose();
-        }
-
-        void ImportButton_Click()
+        private void ImportButton_Click()
         {
             WindowManager.AddWindow(new ImportProjectFrame());
             Dispose();
         }
 
-        void LoadExistingButton_Click()
+        private void LoadExistingButton_Click()
         {
             WindowManager.AddWindow(new LoadProjectFrame());
             Dispose();
         }
 
-        void CreateNewButton_Click()
+        private void CreateNewButton_Click()
         {
             WindowManager.AddWindow(new NewProjectFrame());
             Dispose();
+        }
+
+        private void DeleteButton_Click()
+        {
+            DeleteButton.AppearPressed = !DeleteButton.AppearPressed;
         }
     }
 }

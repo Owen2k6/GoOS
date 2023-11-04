@@ -10,6 +10,8 @@ namespace GoOS.GUI.Apps
         Button AboutButton;
         List Windows;
 
+        public static bool pko = false;
+
         public TaskManager()
         {
             Contents = new Canvas(270, 310);
@@ -64,7 +66,7 @@ namespace GoOS.GUI.Apps
 
         private void EndButton_Click()
         {
-            if (WindowManager.windows[Windows.Selected].Unkillable)
+            if (WindowManager.windows[Windows.Selected].Unkillable && !pko)
             {
                 Dialogue.Show(
                     "Error",

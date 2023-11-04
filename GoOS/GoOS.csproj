@@ -101,51 +101,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="Resources\GUI\CheckBox\**" />
-      <EmbeddedResource Remove="Resources\GUI\CheckBox\**" />
-      <None Remove="Resources\GUI\CheckBox\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="BetterConsole\Font_1x_2.btf" />
-      <None Remove="Resources\credits05.bmp" />
-      <None Remove="Resources\Font_1x.btf" />
-      <None Remove="Resources\Font_2x.btf" />
-      <None Remove="Resources\GoOS_Intro.bmp" />
-      <None Remove="Resources\GUI\brown_ghost.bmp" />
-      <None Remove="Resources\GUI\error.bmp" />
-      <None Remove="Resources\GUI\GoIDE\run.bmp" />
-      <None Remove="Resources\GUI\ide.bmp" />
-      <None Remove="Resources\GUI\mouse_click.bmp" />
-      <None Remove="Resources\GUI\mouse_text.bmp" />
-      <None Remove="Resources\GUI\Paint\brush.bmp" />
-      <None Remove="Resources\GUI\Paint\bucket.bmp" />
-      <None Remove="Resources\GUI\clock.bmp" />
-      <None Remove="Resources\GUI\closebutton.bmp" />
-      <None Remove="Resources\GUI\closebutton_hover.bmp" />
-      <None Remove="Resources\GUI\closebutton_pressed.bmp" />
-      <None Remove="Resources\GUI\colors.bmp" />
-      <None Remove="Resources\GUI\drum.bmp" />
-      <None Remove="Resources\GUI\folder.bmp" />
-      <None Remove="Resources\GUI\gterm.bmp" />
-      <None Remove="Resources\GUI\info.bmp" />
-      <None Remove="Resources\GUI\mouse.bmp" />
-      <None Remove="Resources\GUI\Paint\text.bmp" />
-      <None Remove="Resources\GUI\question.bmp" />
-      <None Remove="Resources\GUI\shutdown.bmp" />
-      <None Remove="Resources\GUI\user.bmp" />
-      <None Remove="Resources\GUI\warning.bmp" />
-      <None Remove="Resources\OOBE\setupcomputer.bmp" />
-      <None Remove="Resources\OOBE\setupfinal.bmp" />
-      <None Remove="Resources\OOBE\setupres.bmp" />
-      <None Remove="Resources\OOBE\setupsupport.bmp" />
-      <None Remove="Resources\OOBE\setupthm.bmp" />
-      <None Remove="Resources\OOBE\setupTOU.bmp" />
-      <None Remove="Resources\OOBE\setupua.bmp" />
-      <None Remove="Resources\OOBE\setupuser.bmp" />
-      <None Remove="Resources\OOBE\setupwelcome.bmp" />
-      <None Remove="Resources\Welcome.bmp" />
-      <None Remove="test.bmp" />
+      <None Remove="Resources\GUI\Paint\rubber.bmp" />
     </ItemGroup>
 
     <ItemGroup>
@@ -167,49 +123,28 @@
       <EmbeddedResource Include="Resources\GUI\gterm.bmp" />
       <EmbeddedResource Include="Resources\GUI\info.bmp" />
       <EmbeddedResource Include="Resources\GUI\mouse.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Paint\rubber.bmp" />
       <EmbeddedResource Include="Resources\GUI\Paint\text.bmp" />
       <EmbeddedResource Include="Resources\GUI\shutdown.bmp" />
       <EmbeddedResource Include="Resources\GUI\user.bmp" />
       <EmbeddedResource Include="Resources\OOBE\setupsupport.bmp" />
-      <None Remove="Resources\GUI\TaskManager.bmp" />
       <EmbeddedResource Include="Resources\GUI\TaskManager.bmp" />
-      <None Remove="Resources\GUI\Notepad\SAVE.bmp" />
       <EmbeddedResource Include="Resources\GUI\Notepad\SAVE.bmp" />
-      <None Remove="Resources\GUI\Notepad\PASTE.bmp" />
       <EmbeddedResource Include="Resources\GUI\Notepad\PASTE.bmp" />
-      <None Remove="Resources\GUI\Notepad\COPY.bmp" />
       <EmbeddedResource Include="Resources\GUI\Notepad\COPY.bmp" />
-      <None Remove="Resources\GUI\Notepad\CUT.bmp" />
       <EmbeddedResource Include="Resources\GUI\Notepad\CUT.bmp" />
-      <None Remove="Resources\GUI\Maximize.bmp" />
       <EmbeddedResource Include="Resources\GUI\Maximize.bmp" />
-      <None Remove="Resources\GUI\Minimize.bmp" />
       <EmbeddedResource Include="Resources\GUI\Minimize.bmp" />
-      <None Remove="Resources\GUI\Minimize_Hovered.bmp" />
       <EmbeddedResource Include="Resources\GUI\Minimize_Hovered.bmp" />
-      <None Remove="Resources\GUI\Minimize_Pressed.bmp" />
       <EmbeddedResource Include="Resources\GUI\Minimize_Pressed.bmp" />
-      <None Remove="Resources\GUI\Gosplorer\BIN.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\BIN.bmp" />
-      <None Remove="Resources\GUI\Gosplorer\CHILD.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\CHILD.bmp" />
-      <None Remove="Resources\GUI\Gosplorer\MOVE.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\MOVE.bmp" />
-      <None Remove="Resources\GUI\Gosplorer\PARENT.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\PARENT.bmp" />
-      <None Remove="Resources\GUI\Gosplorer\NEW.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\NEW.bmp" />
-      <None Remove="Resources\GUI\Gosplorer\REFRESH.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\REFRESH.bmp" />
-      <None Remove="Resources\GUI\Gosplorer\LOADINNOTEPAD.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\LOADINNOTEPAD.bmp" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Include="Resources\OOBE\setupfinal.bmp" />
-    </ItemGroup>
-
-    <ItemGroup>
+	  <EmbeddedResource Include="Resources\OOBE\setupfinal.bmp" />
       <EmbeddedResource Include="Resources\Credits05.bmp" />
       <EmbeddedResource Include="Resources\Font_1x.btf" />
       <EmbeddedResource Include="Resources\GoOS_Intro.bmp" />
@@ -220,11 +155,11 @@
       <EmbeddedResource Include="Resources\OOBE\setupua.bmp" />
       <EmbeddedResource Include="Resources\OOBE\setupuser.bmp" />
       <EmbeddedResource Include="Resources\OOBE\setupwelcome.bmp" />
-      <None Remove="Resources\MSUIGothicCustomCharset16.btf" />
       <EmbeddedResource Include="Resources\GUI\question.bmp" />
       <EmbeddedResource Include="Resources\GUI\closebutton_hover.bmp" />
       <EmbeddedResource Include="Resources\MSUIGothicCustomCharset16.btf" />
       <EmbeddedResource Include="Resources\Welcome.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\warning.bmp" />
     </ItemGroup>
 
     <ItemGroup>
@@ -235,13 +170,9 @@
         <PackageReference Include="Cosmos.Core" Version="0.1.0-*" />
         <PackageReference Include="Cosmos.Debug.Kernel" Version="0-*" NoWarn="NU1604" />
         <PackageReference Include="Cosmos.HAL2" Version="0.1.0-*" />
-        <PackageReference Include="Cosmos.Plugs" Version="0.1.0-localbuild20231103064939" />
+        <PackageReference Include="Cosmos.Plugs" Version="0.1.0-*" />
         <PackageReference Include="Cosmos.System2" Version="0-*" NoWarn="NU1604" />
         <PackageReference Include="IL2CPU.API" Version="0.1.0-*" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Include="Resources\GUI\warning.bmp" />
     </ItemGroup>
 
     <ItemGroup>
@@ -256,9 +187,6 @@
       </Reference>
       <Reference Include="PrismAPI">
         <HintPath>..\..\..\Prism-OS\PrismAPI\bin\Debug\net6.0\PrismAPI.dll</HintPath>
-      </Reference>
-      <Reference Include="UWS">
-        <HintPath>..\..\UWS\UWS\bin\Debug\net6.0\UWS.dll</HintPath>
       </Reference>
     </ItemGroup>
 	
