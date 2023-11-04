@@ -260,7 +260,7 @@ namespace GoOS
             }
 
             loadingDialogue.Closing = true;
-            WindowManager.Canvas = Display.GetDisplay(3840, 2160);
+            WindowManager.Canvas = Display.GetDisplay(1600, 900);
             WindowManager.AddWindow(new Taskbar());
             WindowManager.AddWindow(new Desktop());
             WindowManager.AddWindow(new Welcome());
