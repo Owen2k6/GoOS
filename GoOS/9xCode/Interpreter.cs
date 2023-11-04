@@ -8,6 +8,7 @@ using PrismAPI.Graphics;
 using static ConsoleColorEx;
 using Console = BetterConsole;
 using ConsoleColor = PrismAPI.Graphics.Color;
+using static GoOS.Resources;
 
 // 9xCode Beta 3.1
 // Licensed under the MIT license
@@ -853,7 +854,7 @@ namespace GoOS._9xCode
                                 }
                             }
 
-                            wndval.Contents.DrawString(xval, yval, strval, Fonts.Font_1x, colval);
+                            wndval.Contents.DrawString(xval, yval, strval, Font_1x, colval);
                         }
 
                         else if (_9xGLLib && line.StartsWith("SetWindowPos") && line.Contains(">>"))

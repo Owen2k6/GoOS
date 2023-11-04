@@ -87,7 +87,7 @@ namespace GoOS.GUI
         private int GetEndXAtCol(int col)
         {
             string here = lines[caretLine].Substring(0, col);
-            return BetterConsole.font.MeasureString(here);
+            return Resources.Font_1x.MeasureString(here);
         }
 
         internal override void HandleDown(MouseEventArgs args)
@@ -96,7 +96,7 @@ namespace GoOS.GUI
             for (int i = 0; i < lines[caretLine].Length; i++)
             {
                 string here = lines[caretLine].Substring(0, i);
-                int hereWidth = BetterConsole.font.MeasureString(here) + 32;
+                int hereWidth = Resources.Font_1x.MeasureString(here) + 32;
                 if (args.X <= hereWidth)
                 {
                     MoveCaret(0, i);
@@ -323,7 +323,7 @@ namespace GoOS.GUI
             if (Text == string.Empty)
             {
                 Contents.DrawRectangle(0, 0, Contents.Width, Contents.Height, 0, Color.DeepGray);
-                Contents.DrawString(0, 0, PlaceholderText, BetterConsole.font, Color.LightGray);
+                Contents.DrawString(0, 0, PlaceholderText, Resources.Font_1x, Color.LightGray);
 
                 Contents.DrawLine(34, caretLine * 14, 34, caretLine * 14 + 16, Color.Black);
 
@@ -331,7 +331,7 @@ namespace GoOS.GUI
 
                 for (int i = 0; i < Contents.Height / 14; i++)
                 {
-                    Contents.DrawString(4, i * 14, (i + 1 + lineOffset).ToString(), BetterConsole.font,
+                    Contents.DrawString(4, i * 14, (i + 1 + lineOffset).ToString(), Resources.Font_1x,
                         Color.LighterBlack);
                 }
 
@@ -342,7 +342,7 @@ namespace GoOS.GUI
             for (var i = 0; i + lineOffset < lines.Count; i++)
             {
                 Contents.DrawString(32 + (-scrollX), i * 14,
-                    Shield ? new string('*', lines[i + lineOffset].Length) : lines[i + lineOffset], BetterConsole.font,
+                    Shield ? new string('*', lines[i + lineOffset].Length) : lines[i + lineOffset], Resources.Font_1x,
                     Color.Black);
             }
 
@@ -353,7 +353,7 @@ namespace GoOS.GUI
 
             for (int i = 0; i < Contents.Height / 14; i++)
             {
-                Contents.DrawString(4, i * 14, (i + 1 + lineOffset).ToString(), BetterConsole.font, Color.LighterBlack);
+                Contents.DrawString(4, i * 14, (i + 1 + lineOffset).ToString(), Resources.Font_1x, Color.LighterBlack);
             }
 
             Parent.RenderControls();

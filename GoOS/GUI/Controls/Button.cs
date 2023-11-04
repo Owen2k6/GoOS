@@ -118,7 +118,7 @@ namespace GoOS.GUI
 
             Color textColour = UseSystemStyle ? Color.White : TextColour;
 
-            Contents.DrawString(textX, textY, Title, BetterConsole.font, textColour, true);
+            Contents.DrawString(textX, textY, Title, Resources.Font_1x, textColour, true);
 
             Parent.RenderControls();
         }

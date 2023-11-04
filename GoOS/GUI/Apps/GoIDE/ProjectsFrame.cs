@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using PrismAPI.Graphics;
+using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.GoIDE
 {
@@ -24,7 +25,7 @@ namespace GoOS.GUI.Apps.GoIDE
                 }
 
                 // Generate the fonts.
-                Fonts.Generate();
+                Generate(ResourceType.Fonts);
 
                 // Create the window.
                 Contents = new Canvas(400, 300);
@@ -60,7 +61,7 @@ namespace GoOS.GUI.Apps.GoIDE
                 Contents.Clear(Color.LightGray);
                 RenderSystemStyleBorder();
                 Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4), 38, 0, Color.DeepGray);
-                Contents.DrawString(10, 10, "All projects", Fonts.Font_2x, Color.White);
+                Contents.DrawString(10, 10, "All projects", Font_2x, Color.White);
                 foreach (Button i in RecentProjectsButtons) i.Render();
                 DeleteButton.Render();
                 ImportButton.Render();

@@ -7,18 +7,12 @@ using Cosmos.System;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
 using PrismAPI.Hardware.GPU;
+using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps
 {
     public class StartMenu : Window
     {
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.user.bmp")] private static byte[] userImageRaw;
-        private static Canvas userImage = Image.FromBitmap(userImageRaw, false);
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.shutdown.bmp")] private static byte[] shutdownIconRaw;
-        private static Canvas shutdownIcon = Image.FromBitmap(shutdownIconRaw, false);
-        
-
         List<Button> appButtons = new();
 
         private const int buttonHeight = 24;
@@ -97,7 +91,7 @@ namespace GoOS.GUI.Apps
             Unkillable = true;
 
             Contents.DrawImage(8, 8, userImage);
-            Contents.DrawString(40, 16, Kernel.username, BetterConsole.font, Color.White);
+            Contents.DrawString(40, 16, Kernel.username, Resources.Font_1x, Color.White);
 
             AddAppButtons();
 

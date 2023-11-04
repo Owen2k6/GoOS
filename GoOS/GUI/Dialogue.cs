@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
+using static GoOS.Resources;
 
 namespace GoOS.GUI
 {
@@ -16,9 +17,6 @@ namespace GoOS.GUI
 
     public class Dialogue : Window
     {
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.info.bmp")] private static byte[] infoIconRaw;
-        public static Canvas infoIcon = Image.FromBitmap(infoIconRaw, false);
-
         private const int buttonSpacing = 20;
 
         private const int buttonPadding = 20;
@@ -43,7 +41,7 @@ namespace GoOS.GUI
             {
                 len = Math.Max(
                     len,
-                    BetterConsole.font.MeasureString(line)
+                    Resources.Font_1x.MeasureString(line)
                 );
             }
 
@@ -73,20 +71,19 @@ namespace GoOS.GUI
                 Height: 128
             );
             RenderOutsetWindowBackground();
-            X = 480;
-            Y = 296;
+            SetDock(WindowDock.Center);
             Title = title;
             Visible = true;
             Closable = true;
 
             Contents.DrawImage(20, 20, icon, true);
 
-            Contents.DrawString(80, 20, message, BetterConsole.font, Color.White);
+            Contents.DrawString(80, 20, message, Resources.Font_1x, Color.White);
 
             int x = Contents.Width;
             foreach (DialogueButton dialogueButton in buttons)
             {
-                ushort width = (ushort)(BetterConsole.font.MeasureString(dialogueButton.Text) + (buttonPadding * 2));
+                ushort width = (ushort)(Resources.Font_1x.MeasureString(dialogueButton.Text) + (buttonPadding * 2));
                 x -= width + buttonSpacing;
 
                 Button button = new Button(

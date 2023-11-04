@@ -8,53 +8,19 @@ using GoOS.Themes;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
 using System.Collections.Generic;
+using static GoOS.Resources;
 
 namespace GoOS
 {
     public static class OOBE
     {
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupwelcome.bmp")]
-        private static byte[] setupWelcomeRaw;
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupTOU.bmp")]
-        private static byte[] setupTOURaw;
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupua.bmp")]
-        private static byte[] setupUARaw;
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupsupport.bmp")]
-        private static byte[] setupSupportRaw;
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupuser.bmp")]
-        private static byte[] setupUserRaw;
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupcomputer.bmp")]
-        private static byte[] setupComputerRaw;
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupthm.bmp")]
-        private static byte[] setupThemeRaw;
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupres.bmp")]
-        private static byte[] setupResRaw;
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupfinal.bmp")]
-        private static byte[] setupFinalRaw;
-
-        private static Canvas setupWelcome = Image.FromBitmap(setupWelcomeRaw, false);
-        private static Canvas setupTOU = Image.FromBitmap(setupTOURaw, false);
-        private static Canvas setupUA = Image.FromBitmap(setupUARaw, false);
-        private static Canvas setupSupport = Image.FromBitmap(setupSupportRaw, false);
-        private static Canvas setupUser = Image.FromBitmap(setupUserRaw, false);
-        private static Canvas setupComputer = Image.FromBitmap(setupComputerRaw, false);
-        private static Canvas setupTheme = Image.FromBitmap(setupThemeRaw, false);
-        private static Canvas setupRes = Image.FromBitmap(setupResRaw, false);
-        private static Canvas setupFinal = Image.FromBitmap(setupFinalRaw, false);
-
         private static string username, computerName, theme;
         private static byte videoMode;
 
         public static void Launch()
         {
+            Resources.Generate(ResourceType.OOBE);
+            
             for (int i = 0; i < 9; i++)
                 ShowPage(i + 1);
 

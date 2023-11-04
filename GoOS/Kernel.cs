@@ -78,8 +78,14 @@ namespace GoOS
             WindowManager.Canvas.Clear(Color.ClassicBlue);
             Console.Init(800, 600);
 
+            Resources.Generate(ResourceType.Fonts);
+            Resources.Generate(ResourceType.Priority);
+
             var loadingDialogue = new LoadingDialogue("GoOS is starting\nPlease wait...");
             WindowManager.AddWindow(loadingDialogue);
+            WindowManager.Update();
+
+            Resources.Generate(ResourceType.Normal);
 
             ThemeManager.SetTheme(Theme.Fallback);
             log(ThemeManager.WindowText, "GoOS - Starting GoOS...");

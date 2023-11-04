@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
 using PrismAPI.UI;
+using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps
 {
@@ -23,9 +24,6 @@ namespace GoOS.GUI.Apps
 
         public Clock()
         {
-            // Generate the fonts.
-            Fonts.Generate();
-
             // Create the window.
             Contents = new Canvas(192, 192);
             Title = "Clock";
@@ -84,10 +82,10 @@ namespace GoOS.GUI.Apps
             }
             else
             {
-                int x = (Contents.Width / 2) - (Fonts.Font_2x.MeasureString(timeText) / 2);
+                int x = (Contents.Width / 2) - (Font_2x.MeasureString(timeText) / 2);
                 int y = (Contents.Height / 2) - (32 / 2);
 
-                Contents.DrawString(x, y, timeText, Fonts.Font_2x, Color.CoolGreen);
+                Contents.DrawString(x, y, timeText, Font_2x, Color.CoolGreen);
             }
         }
 

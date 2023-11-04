@@ -1,0 +1,206 @@
+﻿using IL2CPU.API.Attribs;
+using PrismAPI.Graphics;
+using PrismAPI.Graphics.Fonts;
+
+namespace GoOS
+{
+    public enum ResourceType
+    {
+        All,
+        Normal,
+        Priority,
+        Fonts,
+        OOBE
+    }
+
+    public class Resources
+    {
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupwelcome.bmp")] static byte[] setupWelcomeRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupTOU.bmp")] static byte[] setupTOURaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupua.bmp")] static byte[] setupUARaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupsupport.bmp")] static byte[] setupSupportRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupuser.bmp")] static byte[] setupUserRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupcomputer.bmp")] static byte[] setupComputerRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupthm.bmp")] static byte[] setupThemeRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupres.bmp")] static byte[] setupResRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupfinal.bmp")] static byte[] setupFinalRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.Credits05.bmp")] static byte[] easterEggRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_1x.btf")] static byte[] font_1x_raw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_2x.btf")] static byte[] font_2x_raw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoIDE.run.bmp")] static byte[] runRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.gterm.bmp")] static byte[] gtermIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.clock.bmp")] static byte[] clockIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskManager.bmp")] static byte[] taskmanIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.ide.bmp")] static byte[] ideIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.brown_ghost.bmp")] static byte[] brownGhostRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.CUT.bmp")] public static byte[] cutIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.folder.bmp")] static byte[] folderIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.desktopwallpaper.bmp")] static byte[] backgroundRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.NEW.bmp")] static byte[] NewIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.BIN.bmp")] static byte[] BinIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.CHILD.bmp")] static byte[] ChildIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.PARENT.bmp")] static byte[] ParentIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.MOVE.bmp")] static byte[] MoveIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.COPY.bmp")] static byte[] copyIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.PASTE.bmp")] static byte[] pasteIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.REFRESH.bmp")] static byte[] refIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.LOADINNOTEPAD.bmp")] static byte[] linIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.aboutGoOS.bmp")] static byte[] aboutbgRAW;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.SAVE.bmp")] static byte[] saveIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.question.bmp")] static byte[] questionRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.colors.bmp")] static byte[] colorTableRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.brush.bmp")] static byte[] brushRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.bucket.bmp")] static byte[] bucketRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.text.bmp")] static byte[] textRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse_text.bmp")] static byte[] mouse_textRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.rubber.bmp")] static byte[] rubberRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.user.bmp")] static byte[] userImageRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.shutdown.bmp")] static byte[] shutdownIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.Welcome.bmp")] private static byte[] welcomeImageRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.info.bmp")] private static byte[] infoIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.drum.bmp")] private static byte[] drumIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.warning.bmp")] private static byte[] warningIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton.bmp")] private static byte[] closeButtonRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton_hover.bmp")] private static byte[] closeButtonHoverRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton_pressed.bmp")] private static byte[] closeButtonPressedRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Maximize.bmp")] private static byte[] maximiseRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Hovered.bmp")] private static byte[] maximizeHoverRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Pressed.bmp")] private static byte[] maximizePressedRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize.bmp")] private static byte[] minimiseRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Hovered.bmp")] private static byte[] minimiseHoverRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Pressed.bmp")] private static byte[] minimisePressedRaw;
+
+        public static Canvas setupWelcome;
+        public static Canvas setupTOU;
+        public static Canvas setupUA;
+        public static Canvas setupSupport;
+        public static Canvas setupUser;
+        public static Canvas setupComputer;
+        public static Canvas setupTheme;
+        public static Canvas setupRes;
+        public static Canvas setupFinal;
+        public static Canvas easterEgg;
+        public static Canvas RunImage;
+        public static Canvas gtermIcon;
+        public static Canvas clockIcon;
+        public static Canvas taskmanIcon;
+        public static Canvas ideIcon;
+        public static Canvas brownGhost;
+        public static Canvas cutIcon;
+        public static Canvas folderIcon;
+        public static Canvas background;
+        public static Canvas newIcon;
+        public static Canvas binIcon;
+        public static Canvas childIcon;
+        public static Canvas parentIcon;
+        public static Canvas moveIcon;
+        public static Canvas copyIcon;
+        public static Canvas pasteIcon;
+        public static Canvas refIcon;
+        public static Canvas linIcon;
+        public static Canvas abtbg;
+        public static Canvas saveIcon;
+        public static Canvas question;
+        public static Canvas colorTable;
+        public static Canvas brush;
+        public static Canvas bucket;
+        public static Canvas text;
+        public static Canvas mouse_text;
+        public static Canvas rubber;
+        public static Canvas userImage;
+        public static Canvas shutdownIcon;
+        public static Canvas welcomeImage;
+        public static Canvas infoIcon;
+        public static Canvas drumIcon;
+        public static Canvas warningIcon;
+        public static Canvas closeButton;
+        public static Canvas closeButtonHover;
+        public static Canvas closeButtonPressed;
+        public static Canvas maximize;
+        public static Canvas maximizeHover;
+        public static Canvas maximizePressed;
+        public static Canvas minimise;
+        public static Canvas minimiseHover;
+        public static Canvas minimisePressed;
+        public static Font Font_1x;
+        public static Font Font_2x;
+
+        public static void Generate(ResourceType type)
+        {
+            switch (type)
+            {
+                case ResourceType.All:
+                    Generate(ResourceType.Normal);
+                    Generate(ResourceType.Fonts);
+                    Generate(ResourceType.OOBE);
+                    break;
+            
+                case ResourceType.Normal:
+                    easterEgg = Image.FromBitmap(easterEggRaw, false);
+                    RunImage = Image.FromBitmap(runRaw, false);
+                    gtermIcon = Image.FromBitmap(gtermIconRaw, false);
+                    clockIcon = Image.FromBitmap(clockIconRaw, false);
+                    taskmanIcon = Image.FromBitmap(taskmanIconRaw, false);
+                    ideIcon = Image.FromBitmap(ideIconRaw, false);
+                    brownGhost = Image.FromBitmap(brownGhostRaw, false);
+                    cutIcon = Image.FromBitmap(cutIconRaw, false);
+                    folderIcon = Image.FromBitmap(folderIconRaw, false);
+                    background = Image.FromBitmap(backgroundRaw, false);
+                    newIcon = Image.FromBitmap(NewIconRaw, false);
+                    binIcon = Image.FromBitmap(BinIconRaw, false);
+                    childIcon = Image.FromBitmap(ChildIconRaw, false);
+                    parentIcon = Image.FromBitmap(ParentIconRaw, false);
+                    moveIcon = Image.FromBitmap(MoveIconRaw, false);
+                    copyIcon = Image.FromBitmap(copyIconRaw, false);
+                    pasteIcon = Image.FromBitmap(pasteIconRaw, false);
+                    refIcon = Image.FromBitmap(refIconRaw, false);
+                    linIcon = Image.FromBitmap(linIconRaw, false);
+                    abtbg = Image.FromBitmap(aboutbgRAW, false);
+                    saveIcon = Image.FromBitmap(saveIconRaw, false);
+                    question = Image.FromBitmap(questionRaw, false);
+                    colorTable = Image.FromBitmap(colorTableRaw, false);
+                    brush = Image.FromBitmap(brushRaw, false);
+                    bucket = Image.FromBitmap(bucketRaw, false);
+                    text = Image.FromBitmap(textRaw, false);
+                    mouse_text = Image.FromBitmap(mouse_textRaw, false);
+                    rubber = Image.FromBitmap(rubberRaw, false);
+                    userImage = Image.FromBitmap(userImageRaw, false);
+                    shutdownIcon = Image.FromBitmap(shutdownIconRaw, false);
+                    welcomeImage = Image.FromBitmap(welcomeImageRaw, false);
+                    infoIcon = Image.FromBitmap(infoIconRaw, false);
+                    warningIcon = Image.FromBitmap(warningIconRaw, false);
+                    break;
+
+                case ResourceType.Priority:
+                    closeButton = Image.FromBitmap(closeButtonRaw, false);
+                    closeButtonHover = Image.FromBitmap(closeButtonHoverRaw, false);
+                    closeButtonPressed = Image.FromBitmap(closeButtonPressedRaw, false);
+                    maximize = Image.FromBitmap(maximiseRaw, false);
+                    maximizeHover = Image.FromBitmap(maximizeHoverRaw, false);
+                    maximizePressed = Image.FromBitmap(maximizePressedRaw, false);
+                    minimise = Image.FromBitmap(minimiseRaw, false);
+                    minimiseHover = Image.FromBitmap(minimiseHoverRaw, false);
+                    minimisePressed = Image.FromBitmap(minimisePressedRaw, false);
+                    drumIcon = Image.FromBitmap(drumIconRaw, false);
+                    break;
+
+                case ResourceType.Fonts:
+                    Font_1x = new Font(font_1x_raw, 16);
+                    Font_2x = new Font(font_2x_raw, 32);
+                    break;
+
+                case ResourceType.OOBE:
+                    setupWelcome = Image.FromBitmap(setupWelcomeRaw, false);
+                    setupTOU = Image.FromBitmap(setupTOURaw, false);
+                    setupUA = Image.FromBitmap(setupUARaw, false);
+                    setupSupport = Image.FromBitmap(setupSupportRaw, false);
+                    setupUser = Image.FromBitmap(setupUserRaw, false);
+                    setupComputer = Image.FromBitmap(setupComputerRaw, false);
+                    setupTheme = Image.FromBitmap(setupThemeRaw, false);
+                    setupRes = Image.FromBitmap(setupResRaw, false);
+                    setupFinal = Image.FromBitmap(setupFinalRaw, false);
+                    break;
+            }
+        }
+    }
+}

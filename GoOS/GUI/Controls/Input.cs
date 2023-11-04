@@ -80,7 +80,7 @@ namespace GoOS.GUI
         private int GetEndXAtCol(int col)
         {
             string here = lines[caretLine].Substring(0, col);
-            return BetterConsole.font.MeasureString(here);
+            return Resources.Font_1x.MeasureString(here);
         }
 
         internal override void HandleDown(MouseEventArgs args)
@@ -89,7 +89,7 @@ namespace GoOS.GUI
             for (int i = 0; i < lines[caretLine].Length; i++)
             {
                 string here = lines[caretLine].Substring(0, i);
-                int hereWidth = BetterConsole.font.MeasureString(here);
+                int hereWidth = Resources.Font_1x.MeasureString(here);
                 if (args.X <= hereWidth)
                 {
                     MoveCaret(0, i);
@@ -264,7 +264,7 @@ namespace GoOS.GUI
             if (Text == string.Empty)
             {
                 Contents.DrawRectangle(0, 0, Contents.Width, Contents.Height, 0, Color.DeepGray);
-                Contents.DrawString(0, 0, PlaceholderText, BetterConsole.font, Color.LightGray);
+                Contents.DrawString(0, 0, PlaceholderText, Resources.Font_1x, Color.LightGray);
 
                 int care = GetEndXAtCol(caretCol);
                 Contents.DrawLine(care, caretLine * 16, care, caretLine * 16 + 16, Color.Black);
@@ -276,7 +276,7 @@ namespace GoOS.GUI
             for (var i = 0; i < lines.Count; i++)
             {
                 Contents.DrawString(-scrollX, i * 14, Shield ? new string('*', lines[i].Length) : lines[i],
-                    BetterConsole.font, Color.Black);
+                    Resources.Font_1x, Color.Black);
             }
 
 
