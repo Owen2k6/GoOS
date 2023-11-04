@@ -3,6 +3,7 @@ using Cosmos.System;
 using GoOS.GUI.Models;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
+using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps
 {
@@ -16,27 +17,6 @@ namespace GoOS.GUI.Apps
 
     public class Paintbrush : Window
     {
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.colors.bmp")] private static byte[] colorTableRaw;
-        private static Canvas colorTable = Image.FromBitmap(colorTableRaw, false);
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.brush.bmp")] private static byte[] brushRaw;
-        private static Canvas brush = Image.FromBitmap(brushRaw, false);
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.bucket.bmp")] private static byte[] bucketRaw;
-        private static Canvas bucket = Image.FromBitmap(bucketRaw, false);
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.text.bmp")] private static byte[] textRaw;
-        private static Canvas text = Image.FromBitmap(textRaw, false);
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.question.bmp")] private static byte[] questionRaw;
-        private static Canvas question = Image.FromBitmap(questionRaw, false);
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse_text.bmp")] private static byte[] mouse_textRaw;
-        private static Canvas mouse_text = Image.FromBitmap(mouse_textRaw, false);
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.rubber.bmp")] private static byte[] rubberRaw;
-        private static Canvas rubber = Image.FromBitmap(rubberRaw, false);
-
         private bool IsOverColorTable { get { return MouseManager.X > X + 54 && MouseManager.X < X + 278 && MouseManager.Y > Y + Convert.ToUInt16(Contents.Height - 26) && MouseManager.Y < Y + Convert.ToUInt16(Contents.Height + 6); } }
 
         private bool IsOverPaintableArea { get { return MouseManager.X > X && MouseManager.X < X + Contents.Width - BrushSize && MouseManager.Y > Y + TITLE_BAR_HEIGHT && MouseManager.Y < Y + Convert.ToUInt16(Contents.Height - 36); } }
@@ -168,7 +148,7 @@ namespace GoOS.GUI.Apps
 
         private void Text_Handler()
         {
-            Contents.DrawString(TextX, TextY, Dialog_TextBox.Text, BetterConsole.font, SelectedColor);
+            Contents.DrawString(TextX, TextY, Dialog_TextBox.Text, Resources.Font_1x, SelectedColor);
         }
 
         public override void HandleRun()

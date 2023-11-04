@@ -300,7 +300,6 @@ namespace GoOS.GUI
 
                 else if (KeyboardManager.ControlPressed && key.Key == ConsoleKeyEx.G)
                 {
-                    BetterConsole.font = new Font(BetterConsole.rawFont, BetterConsole.charHeight);
                     Dialogue.Show(
                         nameof(WindowManager),
                         $"Regenerated font.",

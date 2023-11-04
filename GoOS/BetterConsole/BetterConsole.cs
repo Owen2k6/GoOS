@@ -4,26 +4,14 @@ using Cosmos.Core.Memory;
 using Cosmos.System;
 using GoOS.GUI;
 using GoOS.Themes;
-using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
-using PrismAPI.Graphics.Fonts;
+using static GoOS.Resources;
 
 /// <summary>
 /// <see cref="BetterConsole"/> class
 /// </summary>
 public static class BetterConsole
 {
-    /* The raw global font */
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_1x.btf")]
-    public static byte[] rawFont;
-
-    /* The credits easter egg */
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.Credits05.bmp")]
-    private static byte[] easterEgg;
-
-    /* The global font */
-    public static Font font;
-
     /* The canvas for the console */
     public static Canvas Canvas;
 
@@ -94,7 +82,6 @@ public static class BetterConsole
     /// <param name="videoHeight">The height of the canvas</param>
     public static void Init(ushort width, ushort height)
     {
-        font = new Font(rawFont, charHeight);
         //Canvas = Display.GetDisplay(width, height);
         Canvas = new Canvas(width, height);
         WindowWidth = Convert.ToUInt16(width / charWidth);
@@ -165,7 +152,7 @@ public static class BetterConsole
         {
             if (CursorVisible)
             {
-                Canvas.DrawString(CursorLeft * charWidth, CursorTop * charHeight, '_'.ToString(), font, ForegroundColor);
+                Canvas.DrawString(CursorLeft * charWidth, CursorTop * charHeight, '_'.ToString(), Font_1x, ForegroundColor);
             }
 
             var keyPressed = KeyBuffer.TryDequeue(out var key);
@@ -190,10 +177,10 @@ public static class BetterConsole
             if (CursorVisible)
             {
                 // Just to be safe
-                Canvas.DrawString((CursorLeft - 1) * charWidth, CursorTop * charHeight, '_'.ToString(), font, Color.Black);
-                Canvas.DrawString((CursorLeft + 1) * charWidth, CursorTop * charHeight, '_'.ToString(), font, Color.Black);
-                Canvas.DrawString(CursorLeft * charWidth, (CursorTop - 1) * charHeight, '_'.ToString(), font, Color.Black);
-                Canvas.DrawString(CursorLeft * charWidth, (CursorTop + 1) * charHeight, '_'.ToString(), font, Color.Black);
+                Canvas.DrawString((CursorLeft - 1) * charWidth, CursorTop * charHeight, '_'.ToString(), Font_1x, Color.Black);
+                Canvas.DrawString((CursorLeft + 1) * charWidth, CursorTop * charHeight, '_'.ToString(), Font_1x, Color.Black);
+                Canvas.DrawString(CursorLeft * charWidth, (CursorTop - 1) * charHeight, '_'.ToString(), Font_1x, Color.Black);
+                Canvas.DrawString(CursorLeft * charWidth, (CursorTop + 1) * charHeight, '_'.ToString(), Font_1x, Color.Black);
             }
         }
     }
@@ -273,7 +260,7 @@ public static class BetterConsole
                             if (key.Key == ConsoleKeyEx.G)
                             {
                                 string collected = Heap.Collect() + " items collected";
-                                Canvas.DrawString(Canvas.Width - (collected.Length * 8) - 8, Canvas.Height - 32, collected, font, ThemeManager.WindowText);
+                                Canvas.DrawString(Canvas.Width - (collected.Length * 8) - 8, Canvas.Height - 32, collected, Font_1x, ThemeManager.WindowText);
                                 Write(returnValue);
                             }
                             else if (key.Key == ConsoleKeyEx.L)
@@ -289,7 +276,7 @@ public static class BetterConsole
                                 if (input == "e015")
                                 {
                                     Clear();
-                                    Canvas.DrawImage(0, 0, Image.FromBitmap(easterEgg, false), false);
+                                    Canvas.DrawImage(0, 0, easterEgg, false);
                                     ReadKey(true);
                                     Clear();
                                 }
@@ -436,7 +423,7 @@ public static class BetterConsole
             Canvas.DrawFilledRectangle(CursorLeft * charWidth, y * charHeight,
                 Convert.ToUInt16(charWidth + (charWidth / 8)), charHeight, 0, BackgroundColor); //yes this is correct
         if (c != ' ')
-            Canvas.DrawString(CursorLeft * charWidth, y * charHeight, c.ToString(), font, ForegroundColor);
+            Canvas.DrawString(CursorLeft * charWidth, y * charHeight, c.ToString(), Font_1x, ForegroundColor);
     }
 
     #endregion

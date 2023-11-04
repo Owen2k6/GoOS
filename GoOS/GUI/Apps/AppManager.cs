@@ -23,9 +23,6 @@ namespace GoOS.GUI.Apps
 
         public AppManager()
         {
-            // Generate the fonts.
-            Fonts.Generate();
-
             // Create the window.
             Contents = new Canvas(400, 350);
             Title = "GoOS Applications";
@@ -83,8 +80,8 @@ namespace GoOS.GUI.Apps
             Contents.Clear(Color.LightGray);
             RenderSystemStyleBorder();
             Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4), 38, 0, Color.DeepGray);
-            Contents.DrawString(10, 10, "System Applications", Fonts.Font_2x, Color.White);
-            Contents.DrawString(10, 142, "Accessories", Fonts.Font_2x, Color.White);
+            Contents.DrawString(10, 10, "System Applications", Resources.Font_2x, Color.White);
+            Contents.DrawString(10, 142, "Accessories", Resources.Font_2x, Color.White);
             foreach (Button AppButton in AppButtons) AppButton.Render();
             CloseButton.Render();
         }

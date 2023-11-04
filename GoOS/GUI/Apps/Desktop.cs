@@ -7,23 +7,16 @@ using Cosmos.System;
 using GoOS.GUI.Models;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
+using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps
 {
     public class Desktop : Window
     {
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.folder.bmp")] private static byte[] folderIconRaw;
-        private static Canvas folderIcon = Image.FromBitmap(folderIconRaw, false);
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.desktopwallpaper.bmp")] static byte[] backgroundRaw;
-        static Canvas background = Image.FromBitmap(backgroundRaw, false);
-
         Button FolderButton;
 
         public Desktop()
         {
-            Fonts.Generate();
-
             Contents = new Canvas(WindowManager.Canvas.Width, Convert.ToUInt16(WindowManager.Canvas.Height - 28));
             //Contents.Clear(Kernel.DesktopColour);
             Contents.DrawImage(0, 0, background, false);
@@ -48,8 +41,8 @@ namespace GoOS.GUI.Apps
             string line1 = "GoOS " + Kernel.BuildType + " " + Kernel.version;
             string line2 = "Development build";
 
-            Contents.DrawString(Contents.Width - Fonts.Font_1x.MeasureString(line1)-1, Contents.Height - 29, line1, Fonts.Font_1x, Color.White);
-            Contents.DrawString(Contents.Width - Fonts.Font_1x.MeasureString(line2)-1, Contents.Height - 17, line2, Fonts.Font_1x, Color.White);
+            Contents.DrawString(Contents.Width - Font_1x.MeasureString(line1)-1, Contents.Height - 29, line1, Font_1x, Color.White);
+            Contents.DrawString(Contents.Width - Font_1x.MeasureString(line2)-1, Contents.Height - 17, line2, Font_1x, Color.White);
         }
 
         private void FolderButton_Click()

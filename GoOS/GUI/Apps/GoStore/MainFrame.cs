@@ -7,6 +7,7 @@ using TcpClient = Cosmos.System.Network.IPv4.TCP.TcpClient;
 using System.Text;
 using System.Collections.Generic;
 using PrismAPI.Graphics;
+using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.GoStore
 {
@@ -37,7 +38,7 @@ namespace GoOS.GUI.Apps.GoStore
                 }
 
                 // Generate the fonts.
-                Fonts.Generate();
+                Generate(ResourceType.Fonts);
 
                 // Create the window.
                 Contents = new Canvas(400, 300);
@@ -65,7 +66,7 @@ namespace GoOS.GUI.Apps.GoStore
                 // Paint the window.
                 Contents.Clear(Color.LightGray);
                 RenderSystemStyleBorder();
-                Contents.DrawString(10, 10, "GoStore", Fonts.Font_2x, Color.White);
+                Contents.DrawString(10, 10, "GoStore", Font_2x, Color.White);
                 foreach (Button i in RepoFilesButtons) i.Render();
             }
             catch (Exception ex)

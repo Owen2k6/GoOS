@@ -10,32 +10,12 @@ using System.IO;
 using System.Net.Security;
 using System.Threading;
 using GoOS.Security;
+using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps;
 
 public class Notepad : Window
 {
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.SAVE.bmp")]
-    private static byte[] saveIconRaw;
-
-    private static Canvas saveIcon = Image.FromBitmap(saveIconRaw, false);
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.COPY.bmp")]
-    private static byte[] copyIconRaw;
-
-    private static Canvas copyIcon = Image.FromBitmap(copyIconRaw, false);
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.PASTE.bmp")]
-    private static byte[] pasteIconRaw;
-
-    private static Canvas pasteIcon = Image.FromBitmap(pasteIconRaw, false);
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.question.bmp")]
-    private static byte[] questionRaw;
-
-
-    private static Canvas question = Image.FromBitmap(questionRaw, false);
-
     private Button SaveButton;
     private Button CopyButton;
     private Button PasteButton;
@@ -347,7 +327,7 @@ public class NotepadSaveAs : Window
         Contents.Clear(Color.LightGray);
         RenderSystemStyleBorder();
 
-        Contents.DrawString(5, 5, "Please input file name below:", BetterConsole.font, Color.White);
+        Contents.DrawString(5, 5, "Please input file name below:", Resources.Font_1x, Color.White);
         
         AttemptOne.Text = placetheholderofthetextplease;  
         AttemptOne.Text = placetheholderofthetextplease;  

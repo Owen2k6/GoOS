@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
+using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps
 {
@@ -29,7 +30,7 @@ namespace GoOS.GUI.Apps
         
         public static void AddString(Window me, string Text, int X, int Y)
         {
-            me.Contents.DrawString(X, Y, Text, BetterConsole.font, Color.Black);
+            me.Contents.DrawString(X, Y, Text, Font_1x, Color.Black);
         }
     }
 }

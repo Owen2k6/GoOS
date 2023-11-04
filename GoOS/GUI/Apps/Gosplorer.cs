@@ -7,48 +7,12 @@ using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
 using GoOS.Commands;
 using PrismAPI.Graphics.Fonts;
+using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps;
 
 public class Gosplorer : Window
 {
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.NEW.bmp")]
-    private static byte[] NewIconRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.BIN.bmp")]
-    private static byte[] BinIconRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.CHILD.bmp")]
-    private static byte[] ChildIconRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.PARENT.bmp")]
-    private static byte[] ParentIconRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.MOVE.bmp")]
-    private static byte[] MoveIconRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.COPY.bmp")]
-    private static byte[] copyIconRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.PASTE.bmp")]
-    private static byte[] pasteIconRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.REFRESH.bmp")]
-    private static byte[] refIconRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.LOADINNOTEPAD.bmp")]
-    private static byte[] linIconRaw;
-
-    private static Canvas newIcon = Image.FromBitmap(NewIconRaw, false);
-    private static Canvas binIcon = Image.FromBitmap(BinIconRaw, false);
-    private static Canvas childIcon = Image.FromBitmap(ChildIconRaw, false);
-    private static Canvas parentIcon = Image.FromBitmap(ParentIconRaw, false);
-    private static Canvas moveIcon = Image.FromBitmap(MoveIconRaw, false);
-    private static Canvas copyIcon = Image.FromBitmap(copyIconRaw, false);
-    private static Canvas pasteIcon = Image.FromBitmap(pasteIconRaw, false);
-    private static Canvas refIcon = Image.FromBitmap(refIconRaw, false);
-    private static Canvas linIcon = Image.FromBitmap(linIconRaw, false);
-
     List DAF;
     Button Parent;
     Button Child;
@@ -70,7 +34,6 @@ public class Gosplorer : Window
 
     public Gosplorer()
     {
-        BetterConsole.font = new Font(BetterConsole.rawFont, BetterConsole.charHeight);
         Contents = new Canvas(500, 310);
         Title = "Gosplorer";
         Visible = true;
@@ -340,7 +303,6 @@ public class NewFDWindow : Window
         cdir = lcdir;
         gsel = selected;
 
-        BetterConsole.font = new Font(BetterConsole.rawFont, BetterConsole.charHeight);
         Contents = new Canvas(300, 80);
         Title = "New - Gosplorer";
         Visible = true;
@@ -367,7 +329,7 @@ public class NewFDWindow : Window
         Canel.Render();
         Filename.Render();
 
-        Contents.DrawString(5, 5, "Please input file name below:", BetterConsole.font, Color.White);
+        Contents.DrawString(5, 5, "Please input file name below:", Resources.Font_1x, Color.White);
     }
 
     private void OKClick()
@@ -418,7 +380,6 @@ public class MoveFWindow : Window
         gsel = selected;
         cdir = lcdir;
 
-        BetterConsole.font = new Font(BetterConsole.rawFont, BetterConsole.charHeight);
         Contents = new Canvas(300, 80);
         Title = "Move - Gosplorer";
         Visible = true;
@@ -445,7 +406,7 @@ public class MoveFWindow : Window
         Canel.Render();
         Filename.Render();
 
-        Contents.DrawString(5, 5, "Please input new location below:", BetterConsole.font, Color.White);
+        Contents.DrawString(5, 5, "Please input new location below:", Resources.Font_1x, Color.White);
     }
 
     private void OKClick()

@@ -3,6 +3,7 @@ using System.IO;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
 using PrismAPI.Graphics.Fonts;
+using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.GoIDE
 {
@@ -17,9 +18,6 @@ namespace GoOS.GUI.Apps.GoIDE
         {
             try
             {
-                // Generate the fonts.
-                Fonts.Generate();
-
                 // Create the window.
                 Contents = new Canvas(400, 300);
                 Title = "Load project - GoIDE";
@@ -35,8 +33,8 @@ namespace GoOS.GUI.Apps.GoIDE
                 // Paint the window.
                 Contents.Clear(Color.LightGray);
                 RenderSystemStyleBorder();
-                Contents.DrawString(10, 10, "Load project", Fonts.Font_2x, Color.White);
-                Contents.DrawString(10, 52, "Location: ", Fonts.Font_1x, Color.White);
+                Contents.DrawString(10, 10, "Load project", Font_2x, Color.White);
+                Contents.DrawString(10, 52, "Location: ", Font_1x, Color.White);
                 Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4), 38, 0, Color.DeepGray);
                 LoadButton.Render();
                 CancelButton.Render();
