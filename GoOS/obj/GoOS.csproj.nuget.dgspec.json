@@ -71,7 +71,7 @@
             },
             "Cosmos.Plugs": {
               "target": "Package",
-              "version": "[0.1.0-localbuild20231103064939, )"
+              "version": "[0.1.0-*, )"
             },
             "Cosmos.System2": {
               "target": "Package",

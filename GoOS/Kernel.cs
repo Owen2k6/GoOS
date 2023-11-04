@@ -440,6 +440,7 @@ namespace GoOS
                             log(Color.Minty, "GoOS - Application Repositorys");
                             log(Color.GoogleYellow, "-a apps.goos.owen2k6.com");
                             log(Color.GoogleYellow, "-b dev.apps.goos.owen2k6.com");
+                            log(Color.GoogleYellow, "-c repo.mobren.net");
                             break;
                         case "type":
                             log(Color.Minty, "GoOS - Application Types");
@@ -463,12 +464,14 @@ namespace GoOS
                                 if (args[2] == "-a")
                                 {
                                     repo = "apps.goos.owen2k6.com";
-                                    log(Color.Red, repo);
                                 }
                                 else if (args[2] == "-b")
                                 {
                                     repo = "dev.apps.goos.owen2k6.com";
-                                    log(Color.Red, repo);
+                                }
+                                else if (args[2] == "-c")
+                                {
+                                    repo = "repo.mobren.net";
                                 }
                                 else
                                 {
@@ -479,24 +482,23 @@ namespace GoOS
                                 if (args[4] == "-g")
                                 {
                                     type = "goexe";
-                                    log(Color.Red, type);
                                 }
                                 else if (args[4] == "-9")
                                 {
-                                    type = "9x";
-                                    log(Color.Red, type);
+                                    type = "9xc";
                                 }
                                 else
                                 {
                                     log(ThemeManager.ErrorText, "Unknown application type");
                                     break;
                                 }
-                                log(Color.Red, repo+"/"+filetoget+"."+type);
+                                log(Color.Red, "Downloading " + filetoget + "."+type+" from " + repo);
 
                                 dnsClient.Connect(DNSConfig.DNSNameservers[0]);
                                 dnsClient.SendAsk(repo);
                                 Address address = dnsClient.Receive();
-                                log(Color.Red, address.ToString());
+                                log(Color.SuperOrange, "Connected to server. Downloading file...");
+                                log(Color.SuperOrange, "GoOS Will halt the system while it downloads the file.");
                                 dnsClient.Close();
 
                                 tcpClient.Connect(address, 80);
@@ -524,6 +526,11 @@ namespace GoOS
                                     string headers = responseParts[0];
                                     string content = responseParts[1];
                                     //Console.WriteLine(content);
+                                    if(content == "404")
+                                    {
+                                        log(ThemeManager.ErrorText, "The requested file was not found on the server. Try another repo?");
+                                        break;
+                                    }
 
                                     File.Create(@"0:\" + filetoget + "."+type);
                                     File.WriteAllText(@"0:\" + filetoget + "."+type, content);

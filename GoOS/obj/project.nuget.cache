@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ao/uP2dVpsMxbl2wQ+mZQgGKO3Qx5dZZA83bWW31Lj4+j1vJd2F9rQtcyE3MrTpCGJ03+OJlPFSp744yx80qPQ==",
+  "dgSpecHash": "FZfzhtpkZSAUkGenPclfKqDJpYYShaRP9Klr5ip7iv9S9V8RH4yrmJKl2zbcx7bC9zscL6zpozsTsSVb1Ksm3Q==",
   "success": true,
   "projectFilePath": "D:\\Github\\GoOS\\GoOS\\GoOS.csproj",
   "expectedPackageFiles": [
@@ -13,16 +13,5 @@
     "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.system2\\0.1.0-localbuild20231103100549\\cosmos.system2.0.1.0-localbuild20231103100549.nupkg.sha512",
     "C:\\Users\\Owen2k6\\.nuget\\packages\\il2cpu.api\\0.1.0-localbuild20231103100549\\il2cpu.api.0.1.0-localbuild20231103100549.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1603",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "GoOS depends on Cosmos.Plugs (>= 0.1.0-localbuild20231103064939) but Cosmos.Plugs 0.1.0-localbuild20231103064939 was not found. An approximate best match of Cosmos.Plugs 0.1.0-localbuild20231103100549 was resolved.",
-      "libraryId": "Cosmos.Plugs",
-      "targetGraphs": [
-        "net6.0"
-      ]
-    }
-  ]
+  "logs": []
 }

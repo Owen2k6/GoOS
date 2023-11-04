@@ -576,7 +576,7 @@
       "Cosmos.Core >= 0.1.0-*",
       "Cosmos.Debug.Kernel >= 0.0.0-*",
       "Cosmos.HAL2 >= 0.1.0-*",
-      "Cosmos.Plugs >= 0.1.0-localbuild20231103064939",
+      "Cosmos.Plugs >= 0.1.0-*",
       "Cosmos.System2 >= 0.0.0-*",
       "IL2CPU.API >= 0.1.0-*"
     ]
@@ -652,7 +652,7 @@
           },
           "Cosmos.Plugs": {
             "target": "Package",
-            "version": "[0.1.0-localbuild20231103064939, )"
+            "version": "[0.1.0-*, )"
           },
           "Cosmos.System2": {
             "target": "Package",
@@ -685,17 +685,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1603",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "GoOS depends on Cosmos.Plugs (>= 0.1.0-localbuild20231103064939) but Cosmos.Plugs 0.1.0-localbuild20231103064939 was not found. An approximate best match of Cosmos.Plugs 0.1.0-localbuild20231103100549 was resolved.",
-      "libraryId": "Cosmos.Plugs",
-      "targetGraphs": [
-        "net6.0"
-      ]
-    }
-  ]
+  }
 }
