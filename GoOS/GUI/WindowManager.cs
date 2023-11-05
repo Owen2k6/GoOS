@@ -117,6 +117,8 @@ namespace GoOS.GUI
 
         public static void AddWindow(Window window)
         {
+            Resources.Generate(ResourceType.Fonts);
+
             window.Paint();
             windows.Add(window);
 
