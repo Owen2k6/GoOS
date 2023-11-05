@@ -22,7 +22,7 @@ namespace GoOS.GUI.Apps.OOBE
             SetDock(WindowDock.Center);
 
             // Initialize the controls.
-            NextButton = new Button(this, 350, 450, 100, 20, "Next") { Clicked = NextButton_Click };
+            NextButton = new Button(this, 350, 456, 100, 20, "Next") { Clicked = NextButton_Click };
 
             // Paint the window.
             Contents.DrawImage(0, 0, OOBEmain, false);
