@@ -8,32 +8,30 @@ using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.OOBE
 {
-    public class MainFrame : Window
+    public class DoneFrame : Window
     {
-        Button NextButton;
+        Button RestartButton;
 
-        public MainFrame()
+        public DoneFrame()
         {
             // Create the window.
             Contents = new Canvas(800, 600);
-            Title = "Welcome to GoOS";
+            Title = "Finished - GoOS Setup";
             Visible = true;
             Closable = false;
             SetDock(WindowDock.Center);
 
             // Initialize the controls.
-            NextButton = new Button(this, 350, 456, 100, 20, "Next") { Clicked = NextButton_Click };
+            RestartButton = new Button(this, 350, 456, 100, 20, "Restart") { Clicked = RestartButton_Click };
 
             // Paint the window.
-            Contents.DrawImage(0, 0, OOBEmain, false);
-            NextButton.Render();
+            Contents.DrawImage(0, 0, OOBEblank, false);
+            RestartButton.Render();
         }
 
-        private void NextButton_Click()
+        private void RestartButton_Click()
         {
-            // Continue.
-            WindowManager.AddWindow(new UserFrame());
-            Dispose();
+            Cosmos.System.Power.Reboot();
         }
     }
 }
