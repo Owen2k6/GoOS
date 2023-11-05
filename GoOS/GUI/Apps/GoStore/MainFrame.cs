@@ -14,7 +14,16 @@ namespace GoOS.GUI.Apps.GoStore
     public class MainFrame : Window
     {
         Button[] RepoFilesButtons;
-        List<(string, string, string, string, string)> repoFiles = new List<(string, string, string, string, string)>();
+        Button AboutButton;
+        Button CloseButton;
+        List<(string, string, string, string, string, string)> repoFiles = new List<(string, string, string, string, string, string)>();
+
+        readonly string[] repos =
+        {
+            "apps.goos.owen2k6.com",
+            //"dev.apps.goos.owen2k6.com",
+            "repo.mobren.net"
+        };
 
         public MainFrame()
         {
@@ -23,18 +32,20 @@ namespace GoOS.GUI.Apps.GoStore
                 // Get the file list from every repo
                 string[][] infoFiles =
                 {
-                    GetInfoFile("apps.goos.owen2k6.com").Split('\n'),
-                    //GetInfoFile("dev.apps.goos.owen2k6.com").Split('|'),
-                    GetInfoFile("repo.mobren.net").Split('\n')
+                    GetInfoFile(repos[0]).Split('\n'),
+                    GetInfoFile(repos[1]).Split('\n'),
+                    //GetInfoFile(repos[2]).Split('\n')
                 };
 
+                int o = 0;
                 foreach (string[] file in infoFiles)
                 {
                     foreach (string program in file)
                     {
                         string[] metadata = program.Split('|');
-                        repoFiles.Add((metadata[0], metadata[1], metadata[2], metadata[3], metadata[4]));
+                        repoFiles.Add((metadata[0], metadata[1], metadata[2], metadata[3], metadata[4], repos[o]));
                     }
+                    o++;
                 }
 
                 // Generate the fonts.
@@ -48,6 +59,8 @@ namespace GoOS.GUI.Apps.GoStore
                 SetDock(WindowDock.Center);
 
                 // Initialize the controls.
+                AboutButton = new Button(this, Convert.ToUInt16(Contents.Width - 124), Convert.ToUInt16(Contents.Height - 30), 24, 20, "?") { Clicked = ShowAboutDialog };
+                CloseButton = new Button(this, Convert.ToUInt16(Contents.Width - 90), Convert.ToUInt16(Contents.Height - 30), 80, 20, "Close") { Clicked = CloseButton_Click };
                 RepoFilesButtons = new Button[repoFiles.Count];
 
                 for (int i = 0; i < repoFiles.Count; i++)
@@ -67,6 +80,9 @@ namespace GoOS.GUI.Apps.GoStore
                 Contents.Clear(Color.LightGray);
                 RenderSystemStyleBorder();
                 Contents.DrawString(10, 10, "GoStore", Font_2x, Color.White);
+                Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4), 38, 0, Color.DeepGray);
+                AboutButton.Render();
+                CloseButton.Render();
                 foreach (Button i in RepoFilesButtons) i.Render();
             }
             catch (Exception ex)
@@ -129,9 +145,12 @@ namespace GoOS.GUI.Apps.GoStore
 
         private void repoFiles_Click(string i)
         {
-            WindowManager.AddWindow(new DescriptionFrame(repoFiles[GetIndexByTitle(i)].Item1,
-                repoFiles[GetIndexByTitle(i)].Item4, repoFiles[GetIndexByTitle(i)].Item5,
-                repoFiles[GetIndexByTitle(i)].Item3, repoFiles[GetIndexByTitle(i)].Item2));
+            WindowManager.AddWindow(new DescriptionFrame(
+                repoFiles[GetIndexByTitle(i)].Item1, repoFiles[GetIndexByTitle(i)].Item4,
+                repoFiles[GetIndexByTitle(i)].Item5, repoFiles[GetIndexByTitle(i)].Item3,
+                repoFiles[GetIndexByTitle(i)].Item2, repoFiles[GetIndexByTitle(i)].Item6));
         }
+
+        private void CloseButton_Click() => Dispose();
     }
 }

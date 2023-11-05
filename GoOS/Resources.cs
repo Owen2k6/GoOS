@@ -69,6 +69,7 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize.bmp")] private static byte[] minimiseRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Hovered.bmp")] private static byte[] minimiseHoverRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Pressed.bmp")] private static byte[] minimisePressedRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreicon.bmp")] private static byte[] GoStoreiconRaw;
 
         public static Canvas setupWelcome;
         public static Canvas setupTOU;
@@ -122,6 +123,7 @@ namespace GoOS
         public static Canvas minimise;
         public static Canvas minimiseHover;
         public static Canvas minimisePressed;
+        public static Canvas GoStoreicon;
         public static Font Font_1x;
         public static Font Font_2x;
 
@@ -169,6 +171,7 @@ namespace GoOS
                     welcomeImage = Image.FromBitmap(welcomeImageRaw, false);
                     infoIcon = Image.FromBitmap(infoIconRaw, false);
                     warningIcon = Image.FromBitmap(warningIconRaw, false);
+                    GoStoreicon = Image.FromBitmap(GoStoreiconRaw, false);
                     break;
 
                 case ResourceType.Priority:
