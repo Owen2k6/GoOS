@@ -298,15 +298,6 @@ namespace GoOS.GUI
                     return;
                 }
 
-                else if (KeyboardManager.ControlPressed && key.Key == ConsoleKeyEx.G)
-                {
-                    Dialogue.Show(
-                        nameof(WindowManager),
-                        $"Regenerated font.",
-                        null
-                    );
-                }
-
                 else if (KeyboardManager.ControlPressed && KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
                 {
                     AddWindow(new TaskManager());

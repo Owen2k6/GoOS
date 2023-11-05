@@ -44,8 +44,8 @@ namespace GoOS
         public static bool isGCIenabled = false;
 
         //Vars for OS
-        public static string version = "1.5";
-        public static string BuildType = "Beta";
+        public static string version = "1.5pr3";
+        public static string BuildType = "NIFPR";
         public static string olddir = @"0:\";
 
         public static string Notepadtextsavething = "";
@@ -68,10 +68,12 @@ namespace GoOS
             {
                 System.Console.ForegroundColor = System.ConsoleColor.Red;
                 System.Console.WriteLine();
-                System.Console.Write("GoOS - Not enough ram to boot GoOS. Please increase the amount of RAM of your VM");
-                System.Console.Write("GoOS - Or if you are running this on real hardware (you shouldn't), buy more RAM");
+                System.Console.Write(
+                    "GoOS - Not enough ram to boot GoOS. Please increase the amount of RAM of your VM");
+                System.Console.Write(
+                    "GoOS - Or if you are running this on real hardware (you shouldn't), buy more RAM");
 
-                while (true);
+                while (true) ;
             }
 
             WindowManager.Canvas = Display.GetDisplay(800, 600); //TODO: Not have this hard coded >:^(
@@ -270,7 +272,48 @@ namespace GoOS
             WindowManager.Canvas = Display.GetDisplay(1600, 900);
             WindowManager.AddWindow(new Taskbar());
             WindowManager.AddWindow(new Desktop());
-            WindowManager.AddWindow(new Welcome());
+            try
+            {
+                var dnsClient = new DnsClient();
+                var tcpClient = new TcpClient();
+                dnsClient.Connect(DNSConfig.DNSNameservers[0]);
+                dnsClient.SendAsk("apps.goos.owen2k6.com");
+                Address address = dnsClient.Receive();
+                dnsClient.Close();
+                tcpClient.Connect(address, 80);
+                string httpget = "GET /latest.goos HTTP/1.1\r\n" +
+                                 "User-Agent: GoOS\r\n" +
+                                 "Accept: */*\r\n" +
+                                 "Accept-Encoding: identity\r\n" +
+                                 "Host: api.owen2k6.com\r\n" +
+                                 "Connection: Keep-Alive\r\n\r\n";
+                tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
+                var ep = new EndPoint(Address.Zero, 0);
+                var data = tcpClient.Receive(ref ep);
+                tcpClient.Close();
+                string httpresponse = Encoding.ASCII.GetString(data);
+                string[] responseParts =
+                    httpresponse.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
+                if (responseParts.Length == 2)
+                {
+                    string headers = responseParts[0];
+                    string content = responseParts[1];
+                    if (content != version)
+                    {
+                        Dialogue.Show("GoOS Update",
+                            "A newer version of GoOS is available on Github.\nWe recommend you update to the latest version for stability and security reasons.\nhttps://github.com/Owen2k6/GoOS/releases\nCurrent Version: " +
+                            version + "\nLatest Version: " + content);
+                    }
+                    else
+                    {
+                        WindowManager.AddWindow(new Welcome());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Dialogue.Show("GoOS Update", "Failed to connect to Owen2k6 Api. Error: " + ex);
+            }
 
             Console.Clear();
 
@@ -460,6 +503,7 @@ namespace GoOS
                                 log(ThemeManager.ErrorText, "X: go install -<repo> <appname> -<type>");
                                 break;
                             }
+
                             String filetoget = args[3];
                             try
                             {
@@ -499,7 +543,8 @@ namespace GoOS
                                     log(ThemeManager.ErrorText, "Unknown application type");
                                     break;
                                 }
-                                log(Color.Red, "Downloading " + filetoget + "."+type+" from " + repo);
+
+                                log(Color.Red, "Downloading " + filetoget + "." + type + " from " + repo);
 
                                 dnsClient.Connect(DNSConfig.DNSNameservers[0]);
                                 dnsClient.SendAsk(repo);
@@ -510,11 +555,11 @@ namespace GoOS
 
                                 tcpClient.Connect(address, 80);
 
-                                string httpget = "GET /" + filetoget + "."+type+" HTTP/1.1\r\n" +
+                                string httpget = "GET /" + filetoget + "." + type + " HTTP/1.1\r\n" +
                                                  "User-Agent: GoOS\r\n" +
                                                  "Accept: */*\r\n" +
                                                  "Accept-Encoding: identity\r\n" +
-                                                 "Host: "+repo+"\r\n" +
+                                                 "Host: " + repo + "\r\n" +
                                                  "Connection: Keep-Alive\r\n\r\n";
 
                                 tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
@@ -533,15 +578,16 @@ namespace GoOS
                                     string headers = responseParts[0];
                                     string content = responseParts[1];
                                     //Console.WriteLine(content);
-                                    if(content == "404")
+                                    if (content == "404")
                                     {
-                                        log(ThemeManager.ErrorText, "The requested file was not found on the server. Try another repo?");
+                                        log(ThemeManager.ErrorText,
+                                            "The requested file was not found on the server. Try another repo?");
                                         break;
                                     }
 
-                                    File.Create(@"0:\" + filetoget + "."+type);
-                                    File.WriteAllText(@"0:\" + filetoget + "."+type, content);
-                                    log(Color.Green, "Downloaded " + filetoget + "."+type);
+                                    File.Create(@"0:\" + filetoget + "." + type);
+                                    File.WriteAllText(@"0:\" + filetoget + "." + type, content);
+                                    log(Color.Green, "Downloaded " + filetoget + "." + type);
                                 }
                             }
                             catch (Exception ex)
