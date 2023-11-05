@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
+using GoOS.Commands;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
-using GoCode = GoOS.Commands.Run;
+using static GoOS.Commands.Run;
 using Console = BetterConsole;
 using static GoOS.Resources;
 
@@ -81,7 +82,7 @@ namespace GoOS.GUI.Apps.GoIDE
                 Console.Clear();
 
                 if (!Is9xCode)
-                    GoCode.Main(ProjectPath, false);
+                    Run.Main(ProjectPath, false);
                 else
                     _9xCode.Interpreter.Run(ProjectPath);
 
