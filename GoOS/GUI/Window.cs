@@ -267,6 +267,7 @@ namespace GoOS.GUI
                 {
                     hoveredControl?.Clicked?.Invoke();
                     hoveredControl?.ClickedAlt?.Invoke(hoveredControl?.Name);
+                    System.Threading.Thread.Sleep(2);
                 }
 
                 foreach (Control control in Controls)
