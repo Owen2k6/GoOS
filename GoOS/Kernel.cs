@@ -76,8 +76,8 @@ namespace GoOS
                 while (true) ;
             }
 
-            WindowManager.Canvas = Display.GetDisplay(800, 600); //TODO: Not have this hard coded >:^(
-            WindowManager.Canvas.Clear(Color.ClassicBlue);
+            WindowManager.Canvas = Display.GetDisplay(1600, 900); //TODO: Not have this hard coded >:^(
+            WindowManager.Canvas.DrawImage(0, 0, Resources.background, false);
             Console.Init(800, 600);
 
             Resources.Generate(ResourceType.Fonts);
@@ -111,10 +111,14 @@ namespace GoOS
 
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {
-                Console.ConsoleMode = true;
-                WindowManager.AddWindow(new GTerm());
-                Console.WriteLine("First boot... This may take awhile...");
-                OOBE.Launch();
+                //Console.ConsoleMode = true;
+                //WindowManager.AddWindow(new GTerm());
+                //Console.WriteLine("First boot... This may take awhile...");
+                //OOBE.Launch();
+                Resources.Generate(ResourceType.OOBE);
+                WindowManager.IsInOOBE = true;
+                WindowManager.AddWindow(new GUI.Apps.OOBE.MainFrame());
+                return;
             }
 
             if (!Directory.Exists(@"0:\content\GCI\"))
@@ -183,7 +187,6 @@ namespace GoOS
             }
 
             loadingDialogue.Closing = true;
-            WindowManager.Canvas = Display.GetDisplay(1600, 900);
             WindowManager.AddWindow(new Taskbar());
             WindowManager.AddWindow(new Desktop());
             try
@@ -292,6 +295,15 @@ namespace GoOS
 
             switch (args[0])
             {
+                case "ntwinit":
+                    using (var xClient = new DHCPClient())
+                    {
+                        /** Send a DHCP Discover packet **/
+                        //This will automatically set the IP config after DHCP response
+                        xClient.SendDiscoverPacket();
+                        log(ConsoleColor.Blue, NetworkConfiguration.CurrentAddress.ToString());
+                    }
+                    break;
                 case "gui":
                     Console.ConsoleMode = false;
                     WindowManager.Canvas = Display.GetDisplay(1280, 720);
@@ -801,7 +813,10 @@ namespace GoOS
                     WindowManager.AddWindow(new GUI.Apps.GoStore.MainFrame());
                     break;
                 case "about":
-                    WindowManager.AddWindow(new GUI.Apps.About());
+                    WindowManager.AddWindow(new About());
+                    break;
+                case "noobe":
+                    WindowManager.AddWindow(new GUI.Apps.OOBE.MainFrame());
                     break;
                 default:
                     if (isGCIenabled)

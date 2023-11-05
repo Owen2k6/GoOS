@@ -37,6 +37,8 @@ namespace GoOS.GUI
 
         internal static Action TaskbarFocusChangedHook;
 
+        public static bool IsInOOBE = false;
+
         public static Window FocusedWindow
         {
             get
@@ -337,7 +339,7 @@ namespace GoOS.GUI
                         MouseManager.ScreenHeight = Canvas.Height;
                     }
 
-                    //Canvas.Clear(Color.UbuntuPurple);
+                    if (IsInOOBE) Canvas.DrawImage(0, 0, Resources.background, false);
 
                     if (MouseManager.X != LastCursorX || MouseManager.Y != LastCursorY)
                     {
