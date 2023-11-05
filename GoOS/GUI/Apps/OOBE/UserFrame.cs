@@ -25,7 +25,7 @@ namespace GoOS.GUI.Apps.OOBE
             NextButton = new Button(this, 350, 456, 100, 20, "Next") { Clicked = NextButton_Click };
 
             // Paint the window.
-            Contents.DrawImage(0, 0, OOBEmain, false);
+            Contents.DrawImage(0, 0, OOBEblank, false);
             Contents.DrawString(300, 400, "Username: ", Font_1x, Color.White);
             Contents.DrawString(300, 426, "Computer name: ", Font_1x, Color.White);
             UserName.Render();
