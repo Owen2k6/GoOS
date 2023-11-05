@@ -30,6 +30,7 @@ namespace GoOS.GUI
 
             var dialogue = new Dialogue(title, message, buttons, icon);
             WindowManager.AddWindow(dialogue);
+            WindowManager.Update();
             return dialogue;
         }
 

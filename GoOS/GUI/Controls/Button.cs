@@ -33,6 +33,8 @@ namespace GoOS.GUI
 
         private const int PUSH_DEPTH = 1;
 
+        public byte lastSecondClicked;
+
         public Button(Window parent, ushort x, ushort y, ushort width, ushort height, string title)
             : base(parent, x, y, width, height)
         {
