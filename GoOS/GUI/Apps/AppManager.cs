@@ -13,7 +13,7 @@ namespace GoOS.GUI.Apps
         public AppManager()
         {
             // Create the window.
-            Contents = new Canvas(400, 350);
+            Contents = new Canvas(400, 300);
             Title = "GoOS Applications";
             Visible = true;
             Closable = true;

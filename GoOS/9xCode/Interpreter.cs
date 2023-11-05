@@ -144,7 +144,13 @@ namespace GoOS._9xCode
                         {
                             string sub = line.Substring(7);
 
-                            if (sub.StartsWith("System"))
+                            if (sub.StartsWith("*"))
+                            {
+                                SysLib = true; ConsoleLib = true; IOLib = true; TimeLib = true; _9xGLLib = true; GoOSLib = true;
+                                continue;
+                            }
+
+                            else if (sub.StartsWith("System"))
                             {
                                 SysLib = true;
                                 continue;
@@ -459,7 +465,7 @@ namespace GoOS._9xCode
                                 }
                                 else if (line.Substring(line.IndexOf("= ") + 2).StartsWith("Read"))
                                 {
-                                    Strings.Add(key, Console.ReadKey(true).Key.ToString());
+                                    Strings.Add(key, Console.ReadKey(true).KeyChar.ToString());
                                 }
                                 else
                                 {
@@ -583,7 +589,7 @@ namespace GoOS._9xCode
                                 else if (Strings.TryGetValue(comparation[0].Trim(), out string strval))
                                 {
                                     comparation[1] = comparation[1].Substring(comparation[1].IndexOf('"') + 1, comparation[1].LastIndexOf('"') - 2);
-                                    if (comparation[1] != strval) 
+                                    if (comparation[1] != strval)
                                     {
                                         i = endif + 1;
                                     }
@@ -798,6 +804,62 @@ namespace GoOS._9xCode
 
                         #region 9xGL Library
 
+                        else if (_9xGLLib && line.StartsWith("DrawLine") && line.Contains(">>"))
+                        {
+                            string[] args = line.Split('>')[2].Trim().Split(',');
+
+                            if (args.Length < 6)
+                            {
+                                HandleError("Error", "Argument underflow.");
+                                break;
+                            }
+                            if (args.Length > 6)
+                            {
+                                HandleError("Error", "Argument overflow.");
+                                break;
+                            }
+
+                            if (!Windows.TryGetValue(args[0].Trim(), out Window wndval))
+                            {
+                                HandleError("Error", "Unknown variable.");
+                                break;
+                            }
+
+                            if (!Integers.TryGetValue(args[1].Trim(), out int xval))
+                            {
+                                xval = Convert.ToInt32(args[1].Trim());
+                            }
+
+                            if (!Integers.TryGetValue(args[2].Trim(), out int yval))
+                            {
+                                yval = Convert.ToInt32(args[2].Trim());
+                            }
+
+                            if (!Integers.TryGetValue(args[3].Trim(), out int xval2))
+                            {
+                                xval2 = Convert.ToInt32(args[3].Trim());
+                            }
+
+                            if (!Integers.TryGetValue(args[4].Trim(), out int yval2))
+                            {
+                                yval2 = Convert.ToInt32(args[4].Trim());
+                            }
+
+                            if (!Colors.TryGetValue(args[5].Trim(), out Color colval))
+                            {
+                                if (StringToConsoleColor.TryGetValue(args[5].Trim(), out Color colval2))
+                                {
+                                    colval = colval2;
+                                }
+                                else
+                                {
+                                    HandleError("Syntax Error", "Unknown Color.");
+                                }
+                            }
+
+                            wndval.Contents.DrawLine(xval, yval, xval2, yval2, colval);
+                        }
+
                         else if (_9xGLLib && line.StartsWith("DrawString") && line.Contains(">>"))
                         {
                             string[] args = line.Split('>')[2].Trim().Split(',');
@@ -854,6 +916,7 @@ namespace GoOS._9xCode
                                 }
                             }
 
+                            wndval.Contents.DrawFilledRectangle(xval, xval, Convert.ToUInt16(strval.Length * 8), 16, 0, Color.LightGray);
                             wndval.Contents.DrawString(xval, yval, strval, Font_1x, colval);
                         }
 
@@ -878,22 +941,14 @@ namespace GoOS._9xCode
                                 break;
                             }
 
-                            if (Integers.TryGetValue(args[1].Trim(), out int xval))
+                            if (!Integers.TryGetValue(args[1].Trim(), out int xval))
                             {
-                                wndval.X = xval;
-                            }
-                            else
-                            {
-                                wndval.X = Convert.ToInt32(args[1].Trim());
+                                xval = Convert.ToInt32(args[1].Trim());
                             }
 
-                            if (Integers.TryGetValue(args[2].Trim(), out int yval))
+                            if (!Integers.TryGetValue(args[2].Trim(), out int yval))
                             {
-                                wndval.Y = yval;
-                            }
-                            else
-                            {
-                                wndval.Y = Convert.ToInt32(args[2].Trim());
+                                yval = Convert.ToInt32(args[2].Trim());
                             }
 
                             wndval.X = xval;
@@ -902,7 +957,7 @@ namespace GoOS._9xCode
 
                         #endregion
 
-                        #region GoOS Library
+                            #region GoOS Library
 
                         else if (GoOSLib && line.StartsWith("EnableKillingSystemTasks"))
                         {

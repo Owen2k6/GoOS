@@ -112,7 +112,7 @@ namespace GoOS.GUI.Apps.GoStore
             }
             catch (Exception ex)
             {
-                Dialogue.Show("Error", "Exception in GoOS.GUI.Apps.GoStore.DescriptionFrame.InstallButton_Click():\n" + ex.Message);
+                Dialogue.Show("Error", ex.ToString());
             }
         }
 

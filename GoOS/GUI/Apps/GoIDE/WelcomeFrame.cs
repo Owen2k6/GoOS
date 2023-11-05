@@ -12,9 +12,6 @@ namespace GoOS.GUI.Apps.GoIDE
 
         public WelcomeFrame()
         {
-            // Generate the fonts.
-            Generate(ResourceType.Fonts);
-
             // Create the window.
             AutoCreate(WindowDock.Center, 400, 300, "Welcome - GoIDE");
 

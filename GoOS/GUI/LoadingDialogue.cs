@@ -15,15 +15,14 @@ namespace GoOS.GUI
         {
             Contents = new Canvas(320, 128);
             RenderOutsetWindowBackground();
-            X = 240;
-            Y = 236;
             Title = "GoOS";
             Visible = true;
-            Closable = true;
+            Closable = false;
+            SetDock(WindowDock.Center);
 
             Contents.DrawImage(20, 20, drumIcon, true);
 
-            Contents.DrawString(80, 20, message, Resources.Font_1x, Color.Black);
+            Contents.DrawString(80, 20, message, Font_1x, Color.Black);
         }
     }
 }

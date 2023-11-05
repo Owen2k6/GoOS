@@ -108,6 +108,8 @@
       <None Remove="Resources\GUI\Maximize_Hovered.bmp" />
       <None Remove="Resources\GUI\Maximize_Pressed.bmp" />
       <None Remove="Resources\GUI\Paint\rubber.bmp" />
+      <None Remove="Resources\OOBE\oobe.bmp" />
+      <None Remove="Resources\OOBE\oobebg.bmp" />
     </ItemGroup>
 
     <ItemGroup>
@@ -139,6 +141,8 @@
       <EmbeddedResource Include="Resources\GUI\Paint\text.bmp" />
       <EmbeddedResource Include="Resources\GUI\shutdown.bmp" />
       <EmbeddedResource Include="Resources\GUI\user.bmp" />
+      <EmbeddedResource Include="Resources\OOBE\oobe.bmp" />
+      <EmbeddedResource Include="Resources\OOBE\oobebg.bmp" />
       <EmbeddedResource Include="Resources\OOBE\setupsupport.bmp" />
       <EmbeddedResource Include="Resources\GUI\TaskManager.bmp" />
       <EmbeddedResource Include="Resources\GUI\Notepad\SAVE.bmp" />
