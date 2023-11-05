@@ -101,6 +101,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="OOBE.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
       <None Remove="Resources\GUI\aboutGoOS.bmp" />
       <None Remove="Resources\GUI\desktopwallpaper.bmp" />
       <None Remove="Resources\GUI\GoStore.bmp" />
@@ -176,6 +180,10 @@
       <EmbeddedResource Include="Resources\MSUIGothicCustomCharset16.btf" />
       <EmbeddedResource Include="Resources\Welcome.bmp" />
 	  <EmbeddedResource Include="Resources\GUI\warning.bmp" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="OOBE.cs" />
     </ItemGroup>
 
     <ItemGroup>
