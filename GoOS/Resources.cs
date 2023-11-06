@@ -15,7 +15,7 @@ namespace GoOS
 
     public class Resources
     {
-        /*[ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupwelcome.bmp")] static byte[] setupWelcomeRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupwelcome.bmp")] static byte[] setupWelcomeRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupTOU.bmp")] static byte[] setupTOURaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupua.bmp")] static byte[] setupUARaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupsupport.bmp")] static byte[] setupSupportRaw;
@@ -23,7 +23,9 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupcomputer.bmp")] static byte[] setupComputerRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupthm.bmp")] static byte[] setupThemeRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupres.bmp")] static byte[] setupResRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupfinal.bmp")] static byte[] setupFinalRaw;*/
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupfinal.bmp")] static byte[] setupFinalRaw;
+        //[ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.oobe.bmp")] static byte[] OOBEmainraw;
+        //[ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.oobebg.bmp")] static byte[] OOBEblankraw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.Credits05.bmp")] static byte[] easterEggRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_1x.btf")] static byte[] font_1x_raw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_2x.btf")] static byte[] font_2x_raw;
@@ -33,7 +35,7 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskManager.bmp")] static byte[] taskmanIconRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.ide.bmp")] static byte[] ideIconRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.brown_ghost.bmp")] static byte[] brownGhostRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.CUT.bmp")] public static byte[] cutIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.CUT.bmp")] static byte[] cutIconRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.folder.bmp")] static byte[] folderIconRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.desktopwallpaper.bmp")] static byte[] backgroundRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.NEW.bmp")] static byte[] NewIconRaw;
@@ -69,9 +71,8 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize.bmp")] static byte[] minimiseRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Hovered.bmp")] static byte[] minimiseHoverRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Pressed.bmp")] static byte[] minimisePressedRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStore.bmp")] static byte[] GoStoreRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreicon.bmp")] static byte[] GoStoreiconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.oobe.bmp")] static byte[] OOBEmainraw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.oobebg.bmp")] static byte[] OOBEblankraw;
 
         public static Canvas setupWelcome;
         public static Canvas setupTOU;
@@ -125,11 +126,12 @@ namespace GoOS
         public static Canvas minimise;
         public static Canvas minimiseHover;
         public static Canvas minimisePressed;
+        public static Canvas GoStore;
         public static Canvas GoStoreicon;
         public static Canvas OOBEmain;
         public static Canvas OOBEblank;
-        public static Font Font_1x;
-        public static Font Font_2x;
+        public static Font Font_1x = Font.Fallback;
+        public static Font Font_2x = Font.Fallback;
 
         public static void Generate(ResourceType type)
         {
@@ -174,6 +176,7 @@ namespace GoOS
                     welcomeImage = Image.FromBitmap(welcomeImageRaw, false);
                     infoIcon = Image.FromBitmap(infoIconRaw, false);
                     warningIcon = Image.FromBitmap(warningIconRaw, false);
+                    GoStore = Image.FromBitmap(GoStoreRaw, false);
                     GoStoreicon = Image.FromBitmap(GoStoreiconRaw, false);
                     break;
 
@@ -197,9 +200,7 @@ namespace GoOS
                     break;
 
                 case ResourceType.OOBE:
-                    OOBEmain = Image.FromBitmap(OOBEmainraw, false);
-                    OOBEblank = Image.FromBitmap(OOBEblankraw, false);
-                    /*setupWelcome = Image.FromBitmap(setupWelcomeRaw, false);
+                    setupWelcome = Image.FromBitmap(setupWelcomeRaw, false);
                     setupTOU = Image.FromBitmap(setupTOURaw, false);
                     setupUA = Image.FromBitmap(setupUARaw, false);
                     setupSupport = Image.FromBitmap(setupSupportRaw, false);
@@ -207,7 +208,9 @@ namespace GoOS
                     setupComputer = Image.FromBitmap(setupComputerRaw, false);
                     setupTheme = Image.FromBitmap(setupThemeRaw, false);
                     setupRes = Image.FromBitmap(setupResRaw, false);
-                    setupFinal = Image.FromBitmap(setupFinalRaw, false);*/
+                    setupFinal = Image.FromBitmap(setupFinalRaw, false);
+                    //OOBEmain = Image.FromBitmap(OOBEmainraw, false);
+                    //OOBEblank = Image.FromBitmap(OOBEblankraw, false);
                     break;
             }
         }

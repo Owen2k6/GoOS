@@ -13,10 +13,8 @@ namespace GoOS.GUI.Apps.GoStore
 {
     public class MainFrame : Window
     {
-        Button[] CategoryButtons;
         Button[] RepoFilesButtons;
-        List<(string, string, string, string, string, string, string, string)> repoFiles = new List<(string, string, string, string, string, string, string, string)>();
-        List<(string, string, string, string, string, string, string, string)> repoFilesFiltered = new List<(string, string, string, string, string, string, string, string)>();
+        List<(string, string, string, string, string, string)> repoFiles = new List<(string, string, string, string, string, string)>();
 
         readonly string[] repos =
         {
@@ -43,10 +41,13 @@ namespace GoOS.GUI.Apps.GoStore
                     foreach (string program in file)
                     {
                         string[] metadata = program.Split('|');
-                        repoFiles.Add((metadata[0], metadata[1], metadata[2], metadata[3], metadata[4], metadata[5], metadata[6], repos[o]));
+                        repoFiles.Add((metadata[0], metadata[1], metadata[2], metadata[3], metadata[4], repos[o]));
                     }
                     o++;
                 }
+
+                // Generate the fonts.
+                Generate(ResourceType.Fonts);
 
                 // Create the window.
                 Contents = new Canvas(400, 300);
@@ -56,49 +57,25 @@ namespace GoOS.GUI.Apps.GoStore
                 SetDock(WindowDock.Center);
 
                 // Initialize the controls.
-                CategoryButtons = new Button[]
-                {
-                    new Button(this, 2, 2, 80, 20, "Games")
-                    {
-                        UseSystemStyle = false,
-                        BackgroundColour = Color.DeepGray,
-                        SelectionColour = Color.Black,
-                        HasSelectionColour = true,
-                        Clicked = GamesButton_Click
-                    },
-                    new Button(this, 2, 22, 80, 20, "Utilities")
-                    {
-                        UseSystemStyle = false,
-                        BackgroundColour = Color.DeepGray,
-                        SelectionColour = Color.Black,
-                        HasSelectionColour = true,
-                        Clicked = UtilitiesButton_Click
-                    },
-                    new Button(this, 2, 42, 80, 20, "Demos")
-                    {
-                        UseSystemStyle = false,
-                        BackgroundColour = Color.DeepGray,
-                        SelectionColour = Color.Black,
-                        HasSelectionColour = true,
-                        Clicked = DemosButton_Click
-                    },
-                    new Button(this, 2, 62, 80, 20, "Networking")
-                    {
-                        UseSystemStyle = false,
-                        BackgroundColour = Color.DeepGray,
-                        SelectionColour = Color.Black,
-                        HasSelectionColour = true,
-                        Clicked = NetworkingButton_Click
-                    }
-                };
+                RepoFilesButtons = new Button[repoFiles.Count];
 
-                GamesButton_Click(); // Default category
+                for (int i = 0; i < repoFiles.Count; i++)
+                {
+                    RepoFilesButtons[i] = new Button(this, Convert.ToUInt16(10 + i / 10 * 185), Convert.ToUInt16(52 + (i * 20 - i / 10 * 200)), Convert.ToUInt16(repoFiles[i].Item1.Length * 8), 20, repoFiles[i].Item1)
+                    {
+                        Name = repoFiles[i].Item1,
+                        UseSystemStyle = false,
+                        BackgroundColour = new Color(0, 0, 0, 0),
+                        SelectionColour = Color.DeepGray,
+                        HasSelectionColour = true,
+                        ClickedAlt = repoFiles_Click,
+                        RenderWithAlpha = true
+                    };
+                }
 
                 // Paint the window.
-                Contents.Clear(Color.LightGray);
+                Contents.DrawImage(0, 0, Resources.GoStore, false);
                 RenderSystemStyleBorder();
-                Contents.DrawFilledRectangle(2, 2, 80, Convert.ToUInt16(Contents.Height - 4), 0, Color.DeepGray);
-                foreach (Button u in CategoryButtons) u.Render();
                 foreach (Button i in RepoFilesButtons) i.Render();
             }
             catch (Exception ex)
@@ -161,62 +138,10 @@ namespace GoOS.GUI.Apps.GoStore
 
         private void repoFiles_Click(string i)
         {
-            WindowManager.AddWindow(new DescriptionFrame(repoFiles[GetIndexByTitle(i)].Item1,
-                repoFiles[GetIndexByTitle(i)].Item4, repoFiles[GetIndexByTitle(i)].Item5,
-                repoFiles[GetIndexByTitle(i)].Item3, repoFiles[GetIndexByTitle(i)].Item2,
-                repoFiles[GetIndexByTitle(i)].Item6, repoFiles[GetIndexByTitle(i)].Item8));
-        }
-
-        private void RenderRepoFilesFromCategory(string category)
-        {
-            try
-            {
-                repoFilesFiltered = new List<(string, string, string, string, string, string, string, string)>();
-
-                foreach (var repoFile in repoFiles)
-                {
-                    if (repoFile.Item6 == category)
-                    {
-                        repoFilesFiltered.Add(repoFile);
-                    }
-                }
-
-                RepoFilesButtons = new Button[repoFilesFiltered.Count];
-
-                for (int i = 0; i < repoFilesFiltered.Count; i++)
-                {
-                    RepoFilesButtons[i] = new Button(this, Convert.ToUInt16(90 + i / 10 * 185), Convert.ToUInt16(10 + (i * 20 - i / 10 * 200)), Convert.ToUInt16(repoFiles[i].Item1.Length * 8), 20, repoFiles[i].Item1)
-                    {
-                        Name = repoFilesFiltered[i].Item1,
-                        UseSystemStyle = false,
-                        BackgroundColour = Color.LightGray,
-                        SelectionColour = new Color(100, 100, 100),
-                        HasSelectionColour = true,
-                        ClickedAlt = repoFiles_Click
-                    };
-                }
-            }
-            catch { }
-        }
-
-        private void GamesButton_Click()
-        {
-            RenderRepoFilesFromCategory("Games");
-        }
-
-        private void UtilitiesButton_Click()
-        {
-            RenderRepoFilesFromCategory("Utilities");
-        }
-
-        private void DemosButton_Click()
-        {
-            RenderRepoFilesFromCategory("Demos");
-        }
-
-        private void NetworkingButton_Click()
-        {
-            RenderRepoFilesFromCategory("Networking");
+            WindowManager.AddWindow(new DescriptionFrame(
+                repoFiles[GetIndexByTitle(i)].Item1, repoFiles[GetIndexByTitle(i)].Item4,
+                repoFiles[GetIndexByTitle(i)].Item5, repoFiles[GetIndexByTitle(i)].Item3,
+                repoFiles[GetIndexByTitle(i)].Item2, repoFiles[GetIndexByTitle(i)].Item6));
         }
     }
 }

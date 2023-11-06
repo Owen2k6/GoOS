@@ -52,7 +52,7 @@ namespace GoOS.GUI.Apps
                     Image = clockIcon,
                     Clicked = Clock_Click
                 },
-                new Button(this, 264, 10, 64, 80, "IDE")
+                new Button(this, 262, 10, 64, 80, "IDE")
                 {
                     UseSystemStyle = false,
                     BackgroundColour = Color.LightGray,
@@ -71,7 +71,7 @@ namespace GoOS.GUI.Apps
 
                     Image = GoStoreicon,
                     Clicked = Store_Click
-                }
+                },
             };
             CloseButton = new Button(this, Convert.ToUInt16(Contents.Width - 90), Convert.ToUInt16(Contents.Height - 30), 80, 20, "Close") { Clicked = CloseButton_Click };
 
