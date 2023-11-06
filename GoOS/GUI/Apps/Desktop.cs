@@ -52,7 +52,7 @@ namespace GoOS.GUI.Apps
                         Address address = dnsClient.Receive();
                         dnsClient.Close();
                         tcpClient.Connect(address, 80);
-                        string httpget = "GET /GoOS/"+Kernel.edition+".goos HTTP/1.1\r\n" +
+                        string httpget = "GET /GoOS/" + Kernel.edition + ".goos HTTP/1.1\r\n" +
                                          "User-Agent: GoOS\r\n" +
                                          "Accept: */*\r\n" +
                                          "Accept-Encoding: identity\r\n" +
@@ -79,7 +79,8 @@ namespace GoOS.GUI.Apps
                             {
                                 Dialogue.Show("GoOS Update",
                                     "The next GoOS has been released.\nWe don't want to force you to update but at least check out whats new in GoOS " +
-                                    Kernel.editionnext + "!\nhttps://github.com/Owen2k6/GoOS/releases/tag/" + Kernel.editionnext);
+                                    Kernel.editionnext + "!\nhttps://github.com/Owen2k6/GoOS/releases/tag/" +
+                                    Kernel.editionnext);
                             }
                             else if (content == "404")
                             {
@@ -125,21 +126,82 @@ namespace GoOS.GUI.Apps
 
             AppsFolderButton.Render();
             //TODO: xrc if you dare edit this panel you wont exist on this project anymore
-            string line1 = "GoOS " + Kernel.BuildType + " " + Kernel.version;
-            string line2 =
-                "Shh! Let's try our best to not leak our hard work! May be open sourced but listing all the features to everyone ruins the surprises!";
-            string line3 =
-                "I want to make this new version of GoOS so that it surprises people. Sharing every little change really does spoil it.";
-            string line4 = "We're all looking at xrc in this statement :)";
+            if (Kernel.BuildType != "R")
+            {
+                if (Kernel.BuildType == "NIFPR")
+                {
+                    string line1 = "GoOS " + Kernel.BuildType + " " + Kernel.version;
+                    string line2 =
+                        "Shh lets not leak our hard work.";
+                    string line3 =
+                        "Despite this being open source, Lets keep the new features as secret as possible.";
+                    string line4 = "Thank you to everyone that is actively developing and testing GoOS.";
 
-            Contents.DrawString(Contents.Width - Font_1x.MeasureString(line1) - 1, Contents.Height - 53, line1, Font_1x,
-                Color.White);
-            Contents.DrawString(Contents.Width - Font_1x.MeasureString(line2) - 1, Contents.Height - 41, line2, Font_1x,
-                Color.White);
-            Contents.DrawString(Contents.Width - Font_1x.MeasureString(line3) - 1, Contents.Height - 29, line3, Font_1x,
-                Color.White);
-            Contents.DrawString(Contents.Width - Font_1x.MeasureString(line4) - 1, Contents.Height - 17, line4, Font_1x,
-                Color.White);
+                    Contents.DrawString(Contents.Width - Font_1x.MeasureString(line1) - 1, Contents.Height - 53, line1,
+                        Font_1x,
+                        Color.White);
+                    Contents.DrawString(Contents.Width - Font_1x.MeasureString(line2) - 1, Contents.Height - 41, line2,
+                        Font_1x,
+                        Color.White);
+                    Contents.DrawString(Contents.Width - Font_1x.MeasureString(line3) - 1, Contents.Height - 29, line3,
+                        Font_1x,
+                        Color.White);
+                    Contents.DrawString(Contents.Width - Font_1x.MeasureString(line4) - 1, Contents.Height - 17, line4,
+                        Font_1x,
+                        Color.White);
+                }
+                else if (Kernel.BuildType == "PRB")
+                {
+                    string line1 = "GoOS " + Kernel.BuildType + " " + Kernel.version;
+                    string line2 =
+                        "This Build is not stable and is not recommended for use by Non-Testers";
+                    string line3 =
+                        "Official use of this build type is limited to testers only.";
+                    string line4 = "GoOS Update and Security are not available for these builds.";
+
+                    Contents.DrawString(Contents.Width - Font_1x.MeasureString(line1) - 1, Contents.Height - 53, line1,
+                        Font_1x,
+                        Color.White);
+                    Contents.DrawString(Contents.Width - Font_1x.MeasureString(line2) - 1, Contents.Height - 41, line2,
+                        Font_1x,
+                        Color.White);
+                    Contents.DrawString(Contents.Width - Font_1x.MeasureString(line3) - 1, Contents.Height - 29, line3,
+                        Font_1x,
+                        Color.White);
+                    Contents.DrawString(Contents.Width - Font_1x.MeasureString(line4) - 1, Contents.Height - 17, line4,
+                        Font_1x,
+                        Color.White);
+                }
+                else if (Kernel.BuildType == "PRE")
+                {
+                    string line1 = "GoOS " + Kernel.BuildType + " " + Kernel.version;
+                    string line2 =
+                        "This is a Pre Release of GoOS";
+                    string line3 =
+                        "We don't recommend using this build for regular use.";
+                    string line4 = "This build sports beta functions that may not be included in the final release.";
+
+                    Contents.DrawString(Contents.Width - Font_1x.MeasureString(line1) - 1, Contents.Height - 53, line1,
+                        Font_1x,
+                        Color.White);
+                    Contents.DrawString(Contents.Width - Font_1x.MeasureString(line2) - 1, Contents.Height - 41, line2,
+                        Font_1x,
+                        Color.White);
+                    Contents.DrawString(Contents.Width - Font_1x.MeasureString(line3) - 1, Contents.Height - 29, line3,
+                        Font_1x,
+                        Color.White);
+                    Contents.DrawString(Contents.Width - Font_1x.MeasureString(line4) - 1, Contents.Height - 17, line4,
+                        Font_1x,
+                        Color.White);
+                }
+                else
+                {
+                    string line = "GoOS " + Kernel.BuildType + " " + Kernel.version;
+                    Contents.DrawString(Contents.Width - Font_1x.MeasureString(line) - 1, Contents.Height - 17, line,
+                        Font_1x,
+                        Color.White);
+                }
+            }
         }
 
         private void AppsFolderButton_Click()
