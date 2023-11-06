@@ -17,7 +17,7 @@ namespace GoOS.GUI.Apps.GoStore
         Button InstallButton;
         String Name, File, Repo;
 
-        public DescriptionFrame(string name, string version, string author, string description, string language, string category, string repo)
+        public DescriptionFrame(string name, string version, string author, string description, string language, string repo)
         {
             // Set class variables
             File = name + "." + language;
@@ -40,11 +40,10 @@ namespace GoOS.GUI.Apps.GoStore
             Contents.Clear(Color.LightGray);
             RenderSystemStyleBorder();
             Contents.DrawString(10, 10, name, Font_2x, Color.White);
-            Contents.DrawString(10, 56, "Version: " + version, Font_1x, Color.White);
-            Contents.DrawString(10, 72, "Author: " + author, Font_1x, Color.White);
-            Contents.DrawString(10, 86, "Language: " + language, Font_1x, Color.White);
-            Contents.DrawString(10, 100, "Category: " + category, Font_1x, Color.White);
-            Contents.DrawString(10, 114, "Description: " + description.Replace("\\n", "\n"), Font_1x, Color.White);
+            Contents.DrawString(10, 56, "Version: " + version.Replace("\\n", "\n"), Font_1x, Color.White);
+            Contents.DrawString(10, 72, "Author: " + author.Replace("\\n", "\n"), Font_1x, Color.White);
+            Contents.DrawString(10, 86, "Language: " + language.Replace("\\n", "\n"), Font_1x, Color.White);
+            Contents.DrawString(10, 100, "Description: " + description.Replace("\\n", "\n"), Font_1x, Color.White);
             Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4), 38, 0, Color.DeepGray); Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4), 38, 0, Color.DeepGray);
             IDEOpenButton.Render();
             CancelButton.Render();
@@ -113,7 +112,7 @@ namespace GoOS.GUI.Apps.GoStore
             }
             catch (Exception ex)
             {
-                Dialogue.Show("Error", ex.ToString());
+                Dialogue.Show("Error", "Exception in GoOS.GUI.Apps.GoStore.DescriptionFrame.InstallButton_Click():\n" + ex.Message);
             }
         }
 

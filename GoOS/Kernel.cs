@@ -69,6 +69,8 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
+            System.Console.WriteLine("GoOS - Starting GoOS...");
+
             if (Cosmos.Core.CPU.GetAmountOfRAM() < 150)
             {
                 System.Console.ForegroundColor = System.ConsoleColor.Red;
@@ -81,12 +83,12 @@ namespace GoOS
                 while (true) ;
             }
 
+            Resources.Generate(ResourceType.Fonts);
+            Resources.Generate(ResourceType.Priority);
+
             WindowManager.Canvas = Display.GetDisplay(1600, 900); //TODO: Not have this hard coded >:^(
             WindowManager.Canvas.DrawImage(0, 0, Resources.background, false);
             Console.Init(800, 600);
-
-            Resources.Generate(ResourceType.Fonts);
-            Resources.Generate(ResourceType.Priority);
 
             var loadingDialogue = new LoadingDialogue("GoOS is starting\nPlease wait...");
             WindowManager.AddWindow(loadingDialogue);

@@ -68,7 +68,7 @@ namespace GoOS.GUI
         {
             foreach (Control control in Controls)
             {
-                Contents.DrawImage(control.X, control.Y, control.Contents, false);
+                Contents.DrawImage(control.X, control.Y, control.Contents, control.RenderWithAlpha);
             }
         }
 
@@ -267,7 +267,6 @@ namespace GoOS.GUI
                 {
                     hoveredControl?.Clicked?.Invoke();
                     hoveredControl?.ClickedAlt?.Invoke(hoveredControl?.Name);
-                    System.Threading.Thread.Sleep(2);
                 }
 
                 foreach (Control control in Controls)
