@@ -19,6 +19,7 @@ namespace GoOS.GUI.Apps.GoStore
         readonly string[] repos =
         {
             "apps.goos.owen2k6.com",
+            //"dev.goos.ekeleze.org",
             "repo.mobren.net"
         };
 
