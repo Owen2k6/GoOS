@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using Sys = Cosmos.System;
 using System.IO;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using GoOS.Themes;
@@ -23,6 +24,7 @@ using ConsoleColor = PrismAPI.Graphics.Color;
 using static GoOS.Core;
 using System.Threading;
 using Cosmos.System.Network.IPv4.UDP.DNS;
+using GoOS._9xCode;
 using PrismAPI.Graphics;
 using IL2CPU.API.Attribs;
 using PrismAPI.Hardware.GPU;
@@ -41,7 +43,8 @@ namespace GoOS
     {
         public static Dictionary<string, string> InstalledPrograms = new Dictionary<string, string>() { };
 
-        public static bool isGCIenabled = false;
+        public static bool isGCIenabled = true;
+        public static string[] pathPaths = new string[]{};
 
         //Vars for OS
         public static string version = "1.5pr3";
@@ -121,18 +124,31 @@ namespace GoOS
                 return;
             }
 
+            if (!File.Exists(@"0:\content\sys\path.gms"))
+            {
+                try
+                {
+                    File.Create(@"0:\content\sys\path.gms");
+                }
+                catch (Exception)
+                {
+                    // Beg the OS to not try to use the path when the path file cant be made.
+                    isGCIenabled = false;
+                    pathPaths = null;
+                }
+            }
+            
             if (!Directory.Exists(@"0:\content\GCI\"))
             {
                 try
                 {
                     Directory.CreateDirectory(@"0:\content\GCI\");
+                    pathPaths.Append(@"0:\content\GCI\");
                 }
                 catch (Exception)
                 {
-                    if (File.Exists(@"0:\content\sys\GCI.gms"))
-                    {
-                        File.Delete(@"0:\content\sys\GCI.gms");
-                    }
+                    // Do nothing and everything will be fine in this case
+                    // Literally, doing nothing prevents any further errors resulting from this
                 }
             }
 
@@ -269,7 +285,7 @@ namespace GoOS
 
         protected override void Run()
         {
-            isGCIenabled = File.Exists(@"0:\content\sys\GCI.gms");
+            isGCIenabled = File.Exists(@"0:\content\sys\path.gms");
 
             if (isGCIenabled)
             {
@@ -840,8 +856,11 @@ namespace GoOS
                         {
                             TrueLocat = TrueLocat.Replace(@"0:\", "");
                         }
-
-                        Commands.Run.Main(TrueLocat);
+                        
+                        if (locat.ToLower().EndsWith(".goexe") || locat.ToLower().EndsWith(".gexe"))
+                            Commands.Run.Main(TrueLocat);
+                        else if (locat.ToLower().EndsWith(".9xc"))
+                            Interpreter.Run(TrueLocat);
 
                         Directory.SetCurrentDirectory(currentDIRRRRRR);
                         break;
