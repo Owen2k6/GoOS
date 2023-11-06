@@ -33,7 +33,8 @@ namespace GoOS.GUI.Apps.OOBE
             // Paint the window.
             Contents.DrawImage(0, 0, OOBEblank, false);
             NextButton.Render();
-            Contents.DrawString(Contents.Width / 2 - Font_2x.MeasureString("GoOS Activation is n"), Contents.Height/2-50, "GoOS Activation is not available at this time.", Font_2x, Color.White);
+            Contents.DrawString(20, 5, "GoOS Online and Activation", Font_2x, Color.White);
+            Contents.DrawString(20, 27, "GoOS Activation is not available at this time. \nPlease continue to setup.", Font_1x, Color.White);
         }
 
         private void NextButton_Click()
