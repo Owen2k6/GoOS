@@ -537,6 +537,14 @@ namespace GoOS
                                 }
                                 else if (args[2] == "-c")
                                 {
+                                    repo = "goos.ekeleze.org";
+                                }
+                                else if (args[2] == "-d")
+                                {
+                                    repo = "dev.goos.ekeleze.org";
+                                }
+                                else if (args[2] == "-e")
+                                {
                                     repo = "repo.mobren.net";
                                 }
                                 else
