@@ -44,10 +44,12 @@ namespace GoOS
         public static Dictionary<string, string> InstalledPrograms = new Dictionary<string, string>() { };
 
         public static bool isGCIenabled = true;
-        public static string[] pathPaths = new string[]{};
+        public static string[] pathPaths = new string[] { };
 
         //Vars for OS
         public static string version = "1.5pr3";
+        public static string edition = "1.5pre"; // This is the current edition of GoOS. Used for UPDATER.
+        public static string editionnext = "1.5"; // This is the next edition of GoOS. Used for UPDATER.
         public static string BuildType = "NIFPR";
         public static string olddir = @"0:\";
 
@@ -137,7 +139,7 @@ namespace GoOS
                     pathPaths = null;
                 }
             }
-            
+
             if (!Directory.Exists(@"0:\content\GCI\"))
             {
                 try
@@ -205,6 +207,9 @@ namespace GoOS
             loadingDialogue.Closing = true;
             WindowManager.AddWindow(new Taskbar());
             WindowManager.AddWindow(new Desktop());
+
+            #region GoOS Update Check
+
             try
             {
                 var dnsClient = new DnsClient();
@@ -214,7 +219,7 @@ namespace GoOS
                 Address address = dnsClient.Receive();
                 dnsClient.Close();
                 tcpClient.Connect(address, 80);
-                string httpget = "GET /latest.goos HTTP/1.1\r\n" +
+                string httpget = "GET /GoOS/" + edition + ".goos HTTP/1.1\r\n" +
                                  "User-Agent: GoOS\r\n" +
                                  "Accept: */*\r\n" +
                                  "Accept-Encoding: identity\r\n" +
@@ -231,11 +236,21 @@ namespace GoOS
                 {
                     string headers = responseParts[0];
                     string content = responseParts[1];
-                    if (content != version)
+                    if (content != version && content != editionnext)
                     {
                         Dialogue.Show("GoOS Update",
                             "A newer version of GoOS is available on Github.\nWe recommend you update to the latest version for stability and security reasons.\nhttps://github.com/Owen2k6/GoOS/releases\nCurrent Version: " +
                             version + "\nLatest Version: " + content);
+                    }
+                    else if (content == editionnext)
+                    {
+                        Dialogue.Show("GoOS Update",
+                            "The next GoOS has been released.\nWe don't want to force you to update but at least check out whats new in GoOS " +
+                            editionnext + "!\nhttps://github.com/Owen2k6/GoOS/releases/tag/" + editionnext);
+                    }
+                    else if (content == "404")
+                    {
+                        Dialogue.Show("GoOS Update", "Your Version of GoOS does not support GoOS Update.");
                     }
                     else
                     {
@@ -247,6 +262,61 @@ namespace GoOS
             {
                 Dialogue.Show("GoOS Update", "Failed to connect to Owen2k6 Api. Error: " + ex);
             }
+
+            #endregion
+
+            #region GoOS Support Checker
+
+            try
+            {
+                var dnsClient = new DnsClient();
+                var tcpClient = new TcpClient();
+                dnsClient.Connect(DNSConfig.DNSNameservers[0]);
+                dnsClient.SendAsk("apps.goos.owen2k6.com");
+                Address address = dnsClient.Receive();
+                dnsClient.Close();
+                tcpClient.Connect(address, 80);
+                string httpget = "GET /GoOS/" + edition + "-support.goos HTTP/1.1\r\n" +
+                                 "User-Agent: GoOS\r\n" +
+                                 "Accept: */*\r\n" +
+                                 "Accept-Encoding: identity\r\n" +
+                                 "Host: api.owen2k6.com\r\n" +
+                                 "Connection: Keep-Alive\r\n\r\n";
+                tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
+                var ep = new EndPoint(Address.Zero, 0);
+                var data = tcpClient.Receive(ref ep);
+                tcpClient.Close();
+                string httpresponse = Encoding.ASCII.GetString(data);
+                string[] responseParts =
+                    httpresponse.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
+                if (responseParts.Length == 2)
+                {
+                    string headers = responseParts[0];
+                    string content = responseParts[1];
+                    if (content == "true")
+                    {
+                    }
+                    else if (content == "false")
+                    {
+                        Dialogue.Show("GoOS Security Notice",
+                            "GoOS Support for this edition has ended. Please update to the latest version of GoOS for the latest security patches.\nThere will no more security patches released for GoOS " +
+                            edition +
+                            ".\nDownload the latest edition from \nhttps://github.com/Owen2k6/GoOS/releases/tag/");
+                    }
+                    else
+                    {
+                        Dialogue.Show("GoOS Security",
+                            "You seem to be sporting some funky version of GoOS. Your edition doesnt exist on our servers (" +
+                            edition + ")");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Dialogue.Show("GoOS Security", "Failed to connect to Owen2k6 Api. Error: " + ex);
+            }
+
+            #endregion
 
             Console.Clear();
 
@@ -319,6 +389,7 @@ namespace GoOS
                         xClient.SendDiscoverPacket();
                         log(ConsoleColor.Blue, NetworkConfiguration.CurrentAddress.ToString());
                     }
+
                     break;
                 case "gui":
                     Console.ConsoleMode = false;
@@ -856,7 +927,7 @@ namespace GoOS
                         {
                             TrueLocat = TrueLocat.Replace(@"0:\", "");
                         }
-                        
+
                         if (locat.ToLower().EndsWith(".goexe") || locat.ToLower().EndsWith(".gexe"))
                             Commands.Run.Main(TrueLocat);
                         else if (locat.ToLower().EndsWith(".9xc"))

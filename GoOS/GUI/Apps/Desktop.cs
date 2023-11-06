@@ -52,7 +52,7 @@ namespace GoOS.GUI.Apps
                         Address address = dnsClient.Receive();
                         dnsClient.Close();
                         tcpClient.Connect(address, 80);
-                        string httpget = "GET /latest.goos HTTP/1.1\r\n" +
+                        string httpget = "GET /GoOS/"+Kernel.edition+".goos HTTP/1.1\r\n" +
                                          "User-Agent: GoOS\r\n" +
                                          "Accept: */*\r\n" +
                                          "Accept-Encoding: identity\r\n" +
@@ -69,11 +69,21 @@ namespace GoOS.GUI.Apps
                         {
                             string headers = responseParts[0];
                             string content = responseParts[1];
-                            if (content != Kernel.version)
+                            if (content != Kernel.version && content != Kernel.editionnext)
                             {
                                 Dialogue.Show("GoOS Update",
                                     "A newer version of GoOS is available on Github.\nWe recommend you update to the latest version for stability and security reasons.\nhttps://github.com/Owen2k6/GoOS/releases\nCurrent Version: " +
                                     Kernel.version + "\nLatest Version: " + content);
+                            }
+                            else if (content == Kernel.editionnext)
+                            {
+                                Dialogue.Show("GoOS Update",
+                                    "The next GoOS has been released.\nWe don't want to force you to update but at least check out whats new in GoOS " +
+                                    Kernel.editionnext + "!\nhttps://github.com/Owen2k6/GoOS/releases/tag/" + Kernel.editionnext);
+                            }
+                            else if (content == "404")
+                            {
+                                Dialogue.Show("GoOS Update", "Your Version of GoOS does not support GoOS Update.");
                             }
                             else
                             {
