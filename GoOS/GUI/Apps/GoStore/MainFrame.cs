@@ -19,7 +19,6 @@ namespace GoOS.GUI.Apps.GoStore
         readonly string[] repos =
         {
             "apps.goos.owen2k6.com",
-            //"dev.apps.goos.owen2k6.com",
             "repo.mobren.net"
         };
 
@@ -32,7 +31,6 @@ namespace GoOS.GUI.Apps.GoStore
                 {
                     GetInfoFile(repos[0]).Split('\n'),
                     GetInfoFile(repos[1]).Split('\n'),
-                    //GetInfoFile(repos[2]).Split('\n')
                 };
 
                 int o = 0;
