@@ -15,17 +15,17 @@ namespace GoOS
 
     public class Resources
     {
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupwelcome.bmp")] static byte[] setupWelcomeRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupTOU.bmp")] static byte[] setupTOURaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupua.bmp")] static byte[] setupUARaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupsupport.bmp")] static byte[] setupSupportRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupuser.bmp")] static byte[] setupUserRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupcomputer.bmp")] static byte[] setupComputerRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupthm.bmp")] static byte[] setupThemeRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupres.bmp")] static byte[] setupResRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupfinal.bmp")] static byte[] setupFinalRaw;
-        //[ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.oobe.bmp")] static byte[] OOBEmainraw;
-        //[ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.oobebg.bmp")] static byte[] OOBEblankraw;
+        // [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupwelcome.bmp")] static byte[] setupWelcomeRaw;
+        // [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupTOU.bmp")] static byte[] setupTOURaw;
+        // [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupua.bmp")] static byte[] setupUARaw;
+        // [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupsupport.bmp")] static byte[] setupSupportRaw;
+        // [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupuser.bmp")] static byte[] setupUserRaw;
+        // [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupcomputer.bmp")] static byte[] setupComputerRaw;
+        // [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupthm.bmp")] static byte[] setupThemeRaw;
+        // [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupres.bmp")] static byte[] setupResRaw;
+        // [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupfinal.bmp")] static byte[] setupFinalRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.oobe.bmp")] static byte[] OOBEmainraw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.oobebg.bmp")] static byte[] OOBEblankraw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.Credits05.bmp")] static byte[] easterEggRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_1x.btf")] static byte[] font_1x_raw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_2x.btf")] static byte[] font_2x_raw;
@@ -200,17 +200,17 @@ namespace GoOS
                     break;
 
                 case ResourceType.OOBE:
-                    setupWelcome = Image.FromBitmap(setupWelcomeRaw, false);
-                    setupTOU = Image.FromBitmap(setupTOURaw, false);
-                    setupUA = Image.FromBitmap(setupUARaw, false);
-                    setupSupport = Image.FromBitmap(setupSupportRaw, false);
-                    setupUser = Image.FromBitmap(setupUserRaw, false);
-                    setupComputer = Image.FromBitmap(setupComputerRaw, false);
-                    setupTheme = Image.FromBitmap(setupThemeRaw, false);
-                    setupRes = Image.FromBitmap(setupResRaw, false);
-                    setupFinal = Image.FromBitmap(setupFinalRaw, false);
-                    //OOBEmain = Image.FromBitmap(OOBEmainraw, false);
-                    //OOBEblank = Image.FromBitmap(OOBEblankraw, false);
+                    // setupWelcome = Image.FromBitmap(setupWelcomeRaw, false);
+                    // setupTOU = Image.FromBitmap(setupTOURaw, false);
+                    // setupUA = Image.FromBitmap(setupUARaw, false);
+                    // setupSupport = Image.FromBitmap(setupSupportRaw, false);
+                    // setupUser = Image.FromBitmap(setupUserRaw, false);
+                    // setupComputer = Image.FromBitmap(setupComputerRaw, false);
+                    // setupTheme = Image.FromBitmap(setupThemeRaw, false);
+                    // setupRes = Image.FromBitmap(setupResRaw, false);
+                    // setupFinal = Image.FromBitmap(setupFinalRaw, false);
+                    OOBEmain = Image.FromBitmap(OOBEmainraw, false);
+                    OOBEblank = Image.FromBitmap(OOBEblankraw, false);
                     break;
             }
         }
