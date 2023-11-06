@@ -21,7 +21,7 @@ namespace GoOS.GUI.Apps.GoStore
         readonly string[] repos =
         {
             "apps.goos.owen2k6.com",
-            //"dev.goos.ekeleze.org",
+            //"goos.ekeleze.org",
             "repo.mobren.net"
         };
 
@@ -34,6 +34,7 @@ namespace GoOS.GUI.Apps.GoStore
                 {
                     GetInfoFile(repos[0]).Split('\n'),
                     GetInfoFile(repos[1]).Split('\n'),
+                    //GetInfoFile(repos[2]).Split('\n'),
                 };
 
                 int o = 0;
@@ -88,7 +89,7 @@ namespace GoOS.GUI.Apps.GoStore
                 {
                     Contents.DrawImage(0, 0, Resources.GoStore, false);
                     RenderSystemStyleBorder();
-                    Contents.DrawString(0, 0, "The GoStore is coming soon...\nThis will allow users to install applications directly to their device\nWe are working on preparing the GoStore and getting apps made for\nyou to enjoy! See you on launch day!",Font_1x, Color.White, true);
+                    Contents.DrawString(20, 50, "The GoStore is coming soon...\n\nThis will allow users to install applications\ndirectly to their device!\nWe are working on preparing the GoStore\nand getting apps made for you to enjoy!\n\nSee you on launch day!",Font_1x, Color.White);
                 }
             }
             catch (Exception ex)
