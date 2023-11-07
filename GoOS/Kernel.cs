@@ -41,6 +41,10 @@ namespace GoOS
 {
     public class Kernel : Sys.Kernel
     {
+        // This enables the user to switch between the old and new GoCode interpreters.
+        // This is to be removed as soon as the new one is finished, only being added as the new one needs testing.
+        public static bool oldCode = true;
+        
         public static Dictionary<string, string> InstalledPrograms = new Dictionary<string, string>() { };
 
         public static bool isGCIenabled = true;
@@ -383,6 +387,9 @@ namespace GoOS
 
             switch (args[0])
             {
+                case "codeswitch":
+                    oldCode = !oldCode;
+                    break;
                 case "ntwinit":
                     using (var xClient = new DHCPClient())
                     {
@@ -638,7 +645,10 @@ namespace GoOS
                         break;
                     }
 
-                    Commands.Run.Main(args[1]);
+                    if (oldCode)
+                        Commands.Run.Main(args[1]);
+                    else
+                        GoCode.GoCode.Run(args[1]);
                     break;
                 case "mkdir":
                     if (args.Length > 2)

@@ -43,6 +43,10 @@ public class GoCode
                 {
                     content = File.ReadAllLines(file);
                 }
+
+                Interpreter GoCodeInterpreter = new Interpreter();
+                
+                GoCodeInterpreter.Interpret(content, unnecessaryOutputs);
             }
         }
         catch (Exception e)
