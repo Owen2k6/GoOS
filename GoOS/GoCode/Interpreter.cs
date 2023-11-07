@@ -26,16 +26,16 @@ public class Interpreter
     private Dictionary<string, string> Strings = new Dictionary<string, string>() { };
     private Dictionary<string, int> Integers = new Dictionary<string, int>() { };
 
-    public static string[] InstallLines;
+    public string[] InstallLines;
 
-    public static string[] splitit = null;
+    public string[] splitit = null;
 
-    public static Window window = null;
+    public Window window = null;
 
-    public static Boolean windowed = false;
+    public Boolean windowed = false;
 
-    public static ushort windowwidth = 0;
-    public static ushort windowheight = 0;
+    public ushort windowwidth = 0;
+    public ushort windowheight = 0;
 
     public void Interpret(string[] lines, bool unnecessaryOutputs = true)
     {
@@ -592,16 +592,16 @@ public class Interpreter
 
                     break;
             }
-
-            if (unnecessaryOutputs)
+        }
+        
+        if (unnecessaryOutputs)
+        {
+            if (endmessage != null)
             {
-                if (endmessage != null)
-                {
-                    endmessage = "Process has ended.";
-                }
-
-                log(ThemeManager.ErrorText, endmessage);
+                endmessage = "Process has ended.";
             }
+
+            log(ThemeManager.ErrorText, endmessage);
         }
     }
 }
