@@ -91,6 +91,7 @@ namespace GoOS
             Resources.Generate(ResourceType.Priority);
 
             WindowManager.Canvas = Display.GetDisplay(1600, 900); //TODO: Not have this hard coded >:^(
+            // TODO:               looks hard coded to me (◔_◔)    
             WindowManager.Canvas.DrawImage(0, 0, Resources.background, false);
             Console.Init(800, 600);
 
