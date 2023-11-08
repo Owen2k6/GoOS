@@ -101,10 +101,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="OOBE.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Remove="Resources\GUI\aboutGoOS.bmp" />
       <None Remove="Resources\GUI\desktopwallpaper.bmp" />
       <None Remove="Resources\GUI\GoStore.bmp" />
@@ -114,6 +110,8 @@
       <None Remove="Resources\GUI\Paint\rubber.bmp" />
       <None Remove="Resources\OOBE\oobe.bmp" />
       <None Remove="Resources\OOBE\oobebg.bmp" />
+      <Compile Remove="OOBE.cs" />
+      <None Include="OOBE.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -183,10 +181,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Include="OOBE.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Cosmos.Build" Version="0.1.0-*" NoWarn="NU1604">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -194,9 +188,10 @@
         <PackageReference Include="Cosmos.Core" Version="0.1.0-*" />
         <PackageReference Include="Cosmos.Debug.Kernel" Version="0-*" NoWarn="NU1604" />
         <PackageReference Include="Cosmos.HAL2" Version="0.1.0-*" />
-        <PackageReference Include="Cosmos.Plugs" Version="0.1.0-*" />
-        <PackageReference Include="Cosmos.System2" Version="0-*" NoWarn="NU1604" />
+        <PackageReference Include="Cosmos.Plugs" Version="0.1.0-localbuild" />
+        <PackageReference Include="Cosmos.System2" Version="0.1.0-localbuild" />
         <PackageReference Include="IL2CPU.API" Version="0.1.0-*" />
+        <PackageReference Include="PrismAPI" Version="1.0.3" />
     </ItemGroup>
 
     <ItemGroup>
@@ -208,9 +203,6 @@
       </Reference>
       <Reference Include="LibDotNetParser">
         <HintPath>LibDotNetParser.dll</HintPath>
-      </Reference>
-      <Reference Include="PrismAPI">
-        <HintPath>..\..\..\Prism-OS\PrismAPI\bin\Debug\net6.0\PrismAPI.dll</HintPath>
       </Reference>
     </ItemGroup>
 	
