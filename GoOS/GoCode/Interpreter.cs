@@ -26,6 +26,7 @@ public class Interpreter
     private Dictionary<string, string> Strings = new Dictionary<string, string>() { };
     private Dictionary<string, int> Integers = new Dictionary<string, int>() { };
     private Dictionary<string, bool> Booleans = new Dictionary<string, bool>() { };
+    private Dictionary<string, GoWindow> Windows = new Dictionary<string, GoWindow>();
 
     private string fuckingprogramname = "";
     private bool hasbeenregistered = false;
@@ -88,6 +89,34 @@ public class Interpreter
     {
         switch (line)
         {
+            case { } a when a.StartsWith("window="):
+                string windowLess = a.Replace("window=", "");
+                string windowName = windowLess.Split("=")[0];
+                string windowWidth = windowLess.Split("=")[1];
+                string windowHeight = windowLess.Split("=")[2];
+
+                if (Windows.ContainsKey(windowName))
+                {
+                    Windows.Remove(windowName);
+                }
+                
+                Windows.Add(windowName, new GoWindow(int.Parse(windowHeight), int.Parse(windowWidth), windowName));
+                break;
+            case { } a when a.StartsWith("bool="):
+                string input = a.Replace("bool=", "");
+
+                string name = input.Split("=")[0];
+                bool content = input.Split("=")[1].ToLower() == "true";
+
+                if (Booleans.ContainsKey(name))
+                {
+                    Booleans.Remove(name);
+                    Booleans.Add(name, content);
+                    break;
+                }
+                
+                Booleans.Add(name, content);
+                break;
             case { } a when a.StartsWith("if="):
 
                 string iffingHell = line.Replace("if=", "");
