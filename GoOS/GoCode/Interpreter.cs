@@ -39,12 +39,11 @@ public class Interpreter
 
     public void Interpret(string[] lines, bool unnecessaryOutputs = true)
     {
-        string tabSkip = "";
+        string tabSkip = "\t";
         for (int a = 0; a < skipLevel; a++)
         {
             tabSkip = tabSkip + "\t";
         }
-
         for (i = 0; i < lines.Length; i++)
         {
             string line = lines[i];
@@ -59,7 +58,7 @@ public class Interpreter
 
             string[] tabCountString = line.Split("\t");
 
-            currentLevel = tabCountString.Length;
+            currentLevel = tabCountString.Length - 1;
 
             string trueLine = line.Replace("\t", "");
 
@@ -68,7 +67,6 @@ public class Interpreter
                 expectedLevel = currentLevel;
                 skipLevel = expectedLevel + 1;
             }
-
             if (currentLevel >= skipLevel)
                 break;
 
@@ -90,286 +88,284 @@ public class Interpreter
     {
         switch (line)
         {
-            case { } a when a.StartsWith("if"):
-                if (line.StartsWith("if "))
+            case { } a when a.StartsWith("if="):
+
+                string iffingHell = line.Replace("if=", "");
+
+                if (!iffingHell.StartsWith("!"))
                 {
-                    string iffingHell = line.Replace("if ", "");
-
-                    if (!iffingHell.StartsWith("!"))
+                    switch (iffingHell)
                     {
-                        switch (iffingHell)
+                        case { } q when q.Contains("<"):
+                            int inputOne = 0;
+                            int inputTwo = 0;
+                            string[] inputs = iffingHell.Split("<");
+                            if (inputs[0].Contains("\"") || inputs[0].Contains("\""))
+                            {
+                                log(ThemeManager.ErrorText, "You cannot use < with strings.");
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    inputOne = int.Parse(inputs[0]);
+                                    inputTwo = int.Parse(inputs[0]);
+                                }
+                                catch (Exception)
+                                {
+                                    inputOne = 0;
+                                    inputTwo = 0;
+                                }
+                            }
+
+                            if (Integers.ContainsKey(inputs[0]))
+                            {
+                                Integers.TryGetValue(inputs[0], out inputOne);
+                            }
+
+                            if (Integers.ContainsKey(inputs[1]))
+                            {
+                                Integers.TryGetValue(inputs[1], out inputTwo);
+                            }
+
+                            if (inputOne < inputTwo)
+                            {
+                                expectedLevel = currentLevel + 1;
+                                skipLevel = expectedLevel + 1;
+                            }
+
+                            break;
+                        case { } q when q.Contains("<="):
+                            int inputOnea = 0;
+                            int inputTwoa = 0;
+                            string[] inputsa = iffingHell.Split("<=");
+                            if (inputsa[0].Contains("\"") || inputsa[0].Contains("\""))
+                            {
+                                log(ThemeManager.ErrorText, "You cannot use <= with strings.");
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    inputOnea = int.Parse(inputsa[0]);
+                                    inputTwoa = int.Parse(inputsa[0]);
+                                }
+                                catch (Exception)
+                                {
+                                    inputOnea = 0;
+                                    inputTwoa = 0;
+                                }
+                            }
+
+                            if (Integers.ContainsKey(inputsa[0]))
+                            {
+                                Integers.TryGetValue(inputsa[0], out inputOnea);
+                            }
+
+                            if (Integers.ContainsKey(inputsa[1]))
+                            {
+                                Integers.TryGetValue(inputsa[1], out inputTwoa);
+                            }
+
+                            if (inputOnea <= inputTwoa)
+                            {
+                                expectedLevel = currentLevel + 1;
+                                skipLevel = expectedLevel + 1;
+                            }
+
+                            break;
+                        case { } q when q.Contains(">"):
+                            int inputOneb = 0;
+                            int inputTwob = 0;
+                            string[] inputsb = iffingHell.Split(">");
+                            if (inputsb[0].Contains("\"") || inputsb[0].Contains("\""))
+                            {
+                                log(ThemeManager.ErrorText, "You cannot use < with strings.");
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    inputOneb = int.Parse(inputsb[0]);
+                                    inputTwob = int.Parse(inputsb[0]);
+                                }
+                                catch (Exception)
+                                {
+                                    inputOneb = 0;
+                                    inputTwob = 0;
+                                }
+                            }
+
+                            if (Integers.ContainsKey(inputsb[0]))
+                            {
+                                Integers.TryGetValue(inputsb[0], out inputOneb);
+                            }
+
+                            if (Integers.ContainsKey(inputsb[1]))
+                            {
+                                Integers.TryGetValue(inputsb[1], out inputTwob);
+                            }
+
+                            if (inputOneb > inputTwob)
+                            {
+                                expectedLevel = currentLevel + 1;
+                                skipLevel = expectedLevel + 1;
+                            }
+
+                            break;
+                        case { } q when q.Contains(">="):
+                            int inputOnec = 0;
+                            int inputTwoc = 0;
+                            string[] inputsc = iffingHell.Split(">=");
+                            if (inputsc[0].Contains("\"") || inputsc[0].Contains("\""))
+                            {
+                                log(ThemeManager.ErrorText, "You cannot use < with strings.");
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    inputOnec = int.Parse(inputsc[0]);
+                                    inputTwoc = int.Parse(inputsc[0]);
+                                }
+                                catch (Exception)
+                                {
+                                    inputOnec = 0;
+                                    inputTwoc = 0;
+                                }
+                            }
+
+                            if (Integers.ContainsKey(inputsc[0]))
+                            {
+                                Integers.TryGetValue(inputsc[0], out inputOnec);
+                            }
+
+                            if (Integers.ContainsKey(inputsc[1]))
+                            {
+                                Integers.TryGetValue(inputsc[1], out inputTwoc);
+                            }
+
+                            if (inputOnec >= inputTwoc)
+                            {
+                                expectedLevel = currentLevel + 1;
+                                skipLevel = expectedLevel + 1;
+                            }
+
+                            break;
+                        case { } q when q.Contains("=="):
+                            string[] inputsd = iffingHell.Split("==");
+
+                            if (inputsd[0].StartsWith("\"") || inputsd[1].StartsWith("\"") ||
+                                Strings.ContainsKey(inputsd[0]) || Strings.ContainsKey(inputsd[1]))
+                            {
+                                string inputOned = "";
+                                string inputTwod = "";
+                                if (Strings.ContainsKey(inputsd[0]))
+                                {
+                                    Strings.TryGetValue(inputsd[0], out inputOned);
+                                }
+
+                                if (Strings.ContainsKey(inputsd[1]))
+                                {
+                                    Strings.TryGetValue(inputsd[1], out inputTwod);
+                                }
+
+                                if (inputOned == inputTwod)
+                                {
+                                    expectedLevel = currentLevel + 1;
+                                    skipLevel = expectedLevel + 1;
+                                }
+                            }
+                            else
+                            {
+                                int inputOned = 0;
+                                int inputTwod = 0;
+                                try
+                                {
+                                    inputOned = int.Parse(inputsd[0]);
+                                    inputTwod = int.Parse(inputsd[0]);
+                                }
+                                catch (Exception)
+                                {
+                                    inputOned = 0;
+                                    inputTwod = 0;
+                                }
+
+                                if (Integers.ContainsKey(inputsd[0]))
+                                {
+                                    Integers.TryGetValue(inputsd[0], out inputOned);
+                                }
+
+                                if (Integers.ContainsKey(inputsd[1]))
+                                {
+                                    Integers.TryGetValue(inputsd[1], out inputTwod);
+                                }
+
+                                if (inputOned == inputTwod)
+                                {
+                                    expectedLevel = currentLevel + 1;
+                                    skipLevel = expectedLevel + 1;
+                                }
+                            }
+
+                            break;
+                    }
+                }
+                else
+                {
+                    string shit = iffingHell.Replace("!", "");
+                    string[] inputsd = shit.Split("==");
+
+                    if (inputsd[0].StartsWith("\"") || inputsd[1].StartsWith("\"") ||
+                        Strings.ContainsKey(inputsd[0]) || Strings.ContainsKey(inputsd[1]))
+                    {
+                        string inputOned = "";
+                        string inputTwod = "";
+                        if (Strings.ContainsKey(inputsd[0]))
                         {
-                            case { } q when q.Contains(" < "):
-                                int inputOne = 0;
-                                int inputTwo = 0;
-                                string[] inputs = iffingHell.Split(" < ");
-                                if (inputs[0].Contains("\"") || inputs[0].Contains("\""))
-                                {
-                                    log(ThemeManager.ErrorText, "You cannot use < with strings.");
-                                }
-                                else
-                                {
-                                    try
-                                    {
-                                        inputOne = int.Parse(inputs[0]);
-                                        inputTwo = int.Parse(inputs[0]);
-                                    }
-                                    catch (Exception)
-                                    {
-                                        inputOne = 0;
-                                        inputTwo = 0;
-                                    }
-                                }
+                            Strings.TryGetValue(inputsd[0], out inputOned);
+                        }
 
-                                if (Integers.ContainsKey(inputs[0]))
-                                {
-                                    Integers.TryGetValue(inputs[0], out inputOne);
-                                }
+                        if (Strings.ContainsKey(inputsd[1]))
+                        {
+                            Strings.TryGetValue(inputsd[1], out inputTwod);
+                        }
 
-                                if (Integers.ContainsKey(inputs[1]))
-                                {
-                                    Integers.TryGetValue(inputs[1], out inputTwo);
-                                }
-
-                                if (inputOne < inputTwo)
-                                {
-                                    expectedLevel = currentLevel + 1;
-                                    skipLevel = expectedLevel + 1;
-                                }
-
-                                break;
-                            case { } q when q.Contains(" <= "):
-                                int inputOnea = 0;
-                                int inputTwoa = 0;
-                                string[] inputsa = iffingHell.Split(" <= ");
-                                if (inputsa[0].Contains("\"") || inputsa[0].Contains("\""))
-                                {
-                                    log(ThemeManager.ErrorText, "You cannot use <= with strings.");
-                                }
-                                else
-                                {
-                                    try
-                                    {
-                                        inputOnea = int.Parse(inputsa[0]);
-                                        inputTwoa = int.Parse(inputsa[0]);
-                                    }
-                                    catch (Exception)
-                                    {
-                                        inputOnea = 0;
-                                        inputTwoa = 0;
-                                    }
-                                }
-
-                                if (Integers.ContainsKey(inputsa[0]))
-                                {
-                                    Integers.TryGetValue(inputsa[0], out inputOnea);
-                                }
-
-                                if (Integers.ContainsKey(inputsa[1]))
-                                {
-                                    Integers.TryGetValue(inputsa[1], out inputTwoa);
-                                }
-
-                                if (inputOnea <= inputTwoa)
-                                {
-                                    expectedLevel = currentLevel + 1;
-                                    skipLevel = expectedLevel + 1;
-                                }
-
-                                break;
-                            case { } q when q.Contains(" > "):
-                                int inputOneb = 0;
-                                int inputTwob = 0;
-                                string[] inputsb = iffingHell.Split(" > ");
-                                if (inputsb[0].Contains("\"") || inputsb[0].Contains("\""))
-                                {
-                                    log(ThemeManager.ErrorText, "You cannot use < with strings.");
-                                }
-                                else
-                                {
-                                    try
-                                    {
-                                        inputOneb = int.Parse(inputsb[0]);
-                                        inputTwob = int.Parse(inputsb[0]);
-                                    }
-                                    catch (Exception)
-                                    {
-                                        inputOneb = 0;
-                                        inputTwob = 0;
-                                    }
-                                }
-
-                                if (Integers.ContainsKey(inputsb[0]))
-                                {
-                                    Integers.TryGetValue(inputsb[0], out inputOneb);
-                                }
-
-                                if (Integers.ContainsKey(inputsb[1]))
-                                {
-                                    Integers.TryGetValue(inputsb[1], out inputTwob);
-                                }
-
-                                if (inputOneb > inputTwob)
-                                {
-                                    expectedLevel = currentLevel + 1;
-                                    skipLevel = expectedLevel + 1;
-                                }
-
-                                break;
-                            case { } q when q.Contains(" >= "):
-                                int inputOnec = 0;
-                                int inputTwoc = 0;
-                                string[] inputsc = iffingHell.Split(" >= ");
-                                if (inputsc[0].Contains("\"") || inputsc[0].Contains("\""))
-                                {
-                                    log(ThemeManager.ErrorText, "You cannot use < with strings.");
-                                }
-                                else
-                                {
-                                    try
-                                    {
-                                        inputOnec = int.Parse(inputsc[0]);
-                                        inputTwoc = int.Parse(inputsc[0]);
-                                    }
-                                    catch (Exception)
-                                    {
-                                        inputOnec = 0;
-                                        inputTwoc = 0;
-                                    }
-                                }
-
-                                if (Integers.ContainsKey(inputsc[0]))
-                                {
-                                    Integers.TryGetValue(inputsc[0], out inputOnec);
-                                }
-
-                                if (Integers.ContainsKey(inputsc[1]))
-                                {
-                                    Integers.TryGetValue(inputsc[1], out inputTwoc);
-                                }
-
-                                if (inputOnec >= inputTwoc)
-                                {
-                                    expectedLevel = currentLevel + 1;
-                                    skipLevel = expectedLevel + 1;
-                                }
-
-                                break;
-                            case { } q when q.Contains(" == "):
-                                string[] inputsd = iffingHell.Split(" == ");
-
-                                if (inputsd[0].StartsWith("\"") || inputsd[1].StartsWith("\"") ||
-                                    Strings.ContainsKey(inputsd[0]) || Strings.ContainsKey(inputsd[1]))
-                                {
-                                    string inputOned = "";
-                                    string inputTwod = "";
-                                    if (Strings.ContainsKey(inputsd[0]))
-                                    {
-                                        Strings.TryGetValue(inputsd[0], out inputOned);
-                                    }
-
-                                    if (Strings.ContainsKey(inputsd[1]))
-                                    {
-                                        Strings.TryGetValue(inputsd[1], out inputTwod);
-                                    }
-
-                                    if (inputOned == inputTwod)
-                                    {
-                                        expectedLevel = currentLevel + 1;
-                                        skipLevel = expectedLevel + 1;
-                                    }
-                                }
-                                else
-                                {
-                                    int inputOned = 0;
-                                    int inputTwod = 0;
-                                    try
-                                    {
-                                        inputOned = int.Parse(inputsd[0]);
-                                        inputTwod = int.Parse(inputsd[0]);
-                                    }
-                                    catch (Exception)
-                                    {
-                                        inputOned = 0;
-                                        inputTwod = 0;
-                                    }
-
-                                    if (Integers.ContainsKey(inputsd[0]))
-                                    {
-                                        Integers.TryGetValue(inputsd[0], out inputOned);
-                                    }
-
-                                    if (Integers.ContainsKey(inputsd[1]))
-                                    {
-                                        Integers.TryGetValue(inputsd[1], out inputTwod);
-                                    }
-
-                                    if (inputOned == inputTwod)
-                                    {
-                                        expectedLevel = currentLevel + 1;
-                                        skipLevel = expectedLevel + 1;
-                                    }
-                                }
-
-                                break;
+                        if (inputOned == inputTwod)
+                        {
+                            expectedLevel = currentLevel + 1;
+                            skipLevel = expectedLevel + 1;
                         }
                     }
                     else
                     {
-                        string shit = iffingHell.Replace("!", "");
-                        string[] inputsd = shit.Split(" == ");
-
-                        if (inputsd[0].StartsWith("\"") || inputsd[1].StartsWith("\"") ||
-                            Strings.ContainsKey(inputsd[0]) || Strings.ContainsKey(inputsd[1]))
+                        int inputOned = 0;
+                        int inputTwod = 0;
+                        try
                         {
-                            string inputOned = "";
-                            string inputTwod = "";
-                            if (Strings.ContainsKey(inputsd[0]))
-                            {
-                                Strings.TryGetValue(inputsd[0], out inputOned);
-                            }
-
-                            if (Strings.ContainsKey(inputsd[1]))
-                            {
-                                Strings.TryGetValue(inputsd[1], out inputTwod);
-                            }
-
-                            if (inputOned == inputTwod)
-                            {
-                                expectedLevel = currentLevel + 1;
-                                skipLevel = expectedLevel + 1;
-                            }
+                            inputOned = int.Parse(inputsd[0]);
+                            inputTwod = int.Parse(inputsd[0]);
                         }
-                        else
+                        catch (Exception)
                         {
-                            int inputOned = 0;
-                            int inputTwod = 0;
-                            try
-                            {
-                                inputOned = int.Parse(inputsd[0]);
-                                inputTwod = int.Parse(inputsd[0]);
-                            }
-                            catch (Exception)
-                            {
-                                inputOned = 0;
-                                inputTwod = 0;
-                            }
+                            inputOned = 0;
+                            inputTwod = 0;
+                        }
 
-                            if (Integers.ContainsKey(inputsd[0]))
-                            {
-                                Integers.TryGetValue(inputsd[0], out inputOned);
-                            }
+                        if (Integers.ContainsKey(inputsd[0]))
+                        {
+                            Integers.TryGetValue(inputsd[0], out inputOned);
+                        }
 
-                            if (Integers.ContainsKey(inputsd[1]))
-                            {
-                                Integers.TryGetValue(inputsd[1], out inputTwod);
-                            }
+                        if (Integers.ContainsKey(inputsd[1]))
+                        {
+                            Integers.TryGetValue(inputsd[1], out inputTwod);
+                        }
 
-                            if (inputOned == inputTwod)
-                            {
-                                expectedLevel = currentLevel + 1;
-                                skipLevel = expectedLevel + 1;
-                            }
+                        if (inputOned == inputTwod)
+                        {
+                            expectedLevel = currentLevel + 1;
+                            skipLevel = expectedLevel + 1;
                         }
                     }
                 }
