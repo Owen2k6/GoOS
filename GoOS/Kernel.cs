@@ -43,7 +43,7 @@ namespace GoOS
     {
         // This enables the user to switch between the old and new GoCode interpreters.
         // This is to be removed as soon as the new one is finished, only being added as the new one needs testing.
-        public static bool oldCode = true;
+        public static bool oldCode = false;
         
         public static Dictionary<string, string> InstalledPrograms = new Dictionary<string, string>() { };
 
@@ -133,11 +133,11 @@ namespace GoOS
                 return;
             }
 
-            if (!File.Exists(@"0:\content\sys\path.gms"))
+            if (!File.Exists(@"0:\content\sys\path.ugms"))
             {
                 try
                 {
-                    File.Create(@"0:\content\sys\path.gms");
+                    File.Create(@"0:\content\sys\path.ugms");
                 }
                 catch (Exception)
                 {
@@ -362,7 +362,7 @@ namespace GoOS
 
         protected override void Run()
         {
-            isGCIenabled = File.Exists(@"0:\content\sys\path.gms");
+            isGCIenabled = File.Exists(@"0:\content\sys\path.ugms");
 
             if (isGCIenabled)
             {

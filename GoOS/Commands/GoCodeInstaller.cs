@@ -86,6 +86,17 @@ public class GoCodeInstaller
     {
         try
         {
+            string[] firectories = File.ReadAllLines(@"0:\content\sys\path.ugms");
+
+            foreach (var firectory in firectories)
+            {
+                if (!Kernel.pathPaths.Contains(firectory))
+                {
+                    Kernel.pathPaths.Append(firectory); 
+                    
+                }
+            }
+            
             foreach (var pathDir in Kernel.pathPaths)
             {
                 var directory_list = Directory.GetFiles(pathDir);
