@@ -47,6 +47,8 @@ public class GoCode
                 Interpreter GoCodeInterpreter = new Interpreter();
                 
                 GoCodeInterpreter.Interpret(content, unnecessaryOutputs);
+
+                GoCodeInterpreter = null;
             }
         }
         catch (Exception e)
