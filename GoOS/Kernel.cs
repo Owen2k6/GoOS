@@ -54,7 +54,7 @@ namespace GoOS
         public static string version = "1.5pr3";
         public static string edition = "1.5pre"; // This is the current edition of GoOS. Used for UPDATER.
         public static string editionnext = "1.5"; // This is the next edition of GoOS. Used for UPDATER.
-        public static string BuildType = "NIFPR";
+        public static string BuildType = "PRB";
         public static string olddir = @"0:\";
 
         public static string Notepadtextsavething = "";
@@ -509,12 +509,6 @@ namespace GoOS
 
                     switch (args[1])
                     {
-                        case "repo":
-                            log(Color.Minty, "GoOS - Application Repositorys");
-                            log(Color.GoogleYellow, "-a apps.goos.owen2k6.com");
-                            log(Color.GoogleYellow, "-b dev.apps.goos.owen2k6.com");
-                            log(Color.GoogleYellow, "-c repo.mobren.net");
-                            break;
                         case "type":
                             log(Color.Minty, "GoOS - Application Types");
                             log(Color.GoogleYellow, "-g Goexe");
@@ -534,32 +528,8 @@ namespace GoOS
                                 var tcpClient = new TcpClient();
                                 string repo;
                                 string type;
-                                //temporary use of local repository list
-                                if (args[2] == "-a")
-                                {
-                                    repo = "apps.goos.owen2k6.com";
-                                }
-                                else if (args[2] == "-b")
-                                {
-                                    repo = "dev.apps.goos.owen2k6.com";
-                                }
-                                else if (args[2] == "-c")
-                                {
-                                    repo = "goos.ekeleze.org";
-                                }
-                                else if (args[2] == "-d")
-                                {
-                                    repo = "dev.goos.ekeleze.org";
-                                }
-                                else if (args[2] == "-e")
-                                {
-                                    repo = "repo.mobren.net";
-                                }
-                                else
-                                {
-                                    log(ThemeManager.ErrorText, "Unknown repository");
-                                    break;
-                                }
+                                
+                                repo = args[2];
 
                                 if (args[4] == "-g")
                                 {
