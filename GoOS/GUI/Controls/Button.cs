@@ -28,8 +28,14 @@ namespace GoOS.GUI
         public Color TextColour = Color.White;
 
         public bool pressed = false;
+        
+        public bool CenterTitle = true;
 
         public bool AppearPressed = false;
+
+        public int textX = 0;
+        
+        public int textY = 0;
 
         private const int PUSH_DEPTH = 1;
 
@@ -109,8 +115,12 @@ namespace GoOS.GUI
             }
 
             // Title.
-            int textX = Contents.Width / 2;
-            int textY = Image != null ? Image.Height + 12 : Contents.Height / 2;
+
+            if (textX == 0)
+                textX = Contents.Width / 2;
+            
+            if (textY == 0)
+                textY = Image != null ? Image.Height + 12 : Contents.Height / 2;
 
             if ((AppearPressed || pressed) && UseSystemStyle)
             {
@@ -120,8 +130,14 @@ namespace GoOS.GUI
 
             Color textColour = UseSystemStyle ? Color.White : TextColour;
 
-            Contents.DrawString(textX, textY, Title, Resources.Font_1x, textColour, true);
+            Contents.DrawString(textX, textY, Title, Resources.Font_1x, textColour, CenterTitle);
 
+            if ((AppearPressed || pressed) && UseSystemStyle)
+            {
+                textX -= PUSH_DEPTH;
+                textY -= PUSH_DEPTH;
+            }
+            
             Parent.RenderControls();
         }
 
