@@ -18,16 +18,20 @@ namespace GoOS._9xCode
 {
     public static partial class Interpreter
     {
+        public const string Version = "b3.1";
+
         public static void Run(string file)
         {
             if (!File.Exists(file))
             {
-                HandleError("9xCode", "Script doesn't exist!");
+                HandleError("9xCode", "Script not found!");
             }
 
             Console.Title = $"{file.Substring(file.LastIndexOf(@"\")).Replace(".9xc", "")} - 9xCode";
             Console.ForegroundColor = White;
             Interpret(File.ReadAllLines(file));
+            Console.Title = "GTerm";
+            Console.ForegroundColor = White;
         }
 
         private static bool Interpreting = false;
@@ -37,14 +41,14 @@ namespace GoOS._9xCode
             Interpreting = true;
 
             Console.ForegroundColor = Cyan;
-            Console.WriteLine("Mobren 9xCode Interpreter Version b3.1\n");
+            Console.WriteLine($"Mobren 9xCode Interpreter Version {Version}\n");
             Console.ForegroundColor = White;
 
             bool SysLib = false, ConsoleLib = false, IOLib = false, TimeLib = false, _9xGLLib = false, GoOSLib = false;
 
             Dictionary<string, bool> Booleans = new Dictionary<string, bool>() { };
             Dictionary<string, int> Integers = new Dictionary<string, int>() { };
-            Dictionary<string, string> Strings = new Dictionary<string, string>() { { "Version", "b3.0" } };
+            Dictionary<string, string> Strings = new Dictionary<string, string>() { { "Version", Version } };
             Dictionary<string, ConsoleColor> Colors = new Dictionary<string, ConsoleColor>() { };
             Dictionary<string, Window> Windows = new Dictionary<string, Window>();
 
@@ -188,7 +192,7 @@ namespace GoOS._9xCode
 
                             else
                             {
-                                HandleError("Error", "Unknown library.");
+                                HandleError("Error", $"Unknown library at line {i + 1}!");
                             }
                         }
 
@@ -205,7 +209,7 @@ namespace GoOS._9xCode
                                 {
                                     if (key == "Cursor")
                                     {
-                                        HandleError("Error", "Console library not imported");
+                                        HandleError("Error", $"Console library not imported at line {i + 1}!");
                                         break;
                                     }
                                 }
@@ -289,7 +293,7 @@ namespace GoOS._9xCode
                                 }
                                 else
                                 {
-                                    HandleError("Syntax Error", "Unknown Color.");
+                                    HandleError("Syntax Error", $"Unknown Color at line {i + 1}!");
                                 }
                                 continue;
                             }
@@ -325,7 +329,7 @@ namespace GoOS._9xCode
                                 {
                                     if (sub.StartsWith("CursorX") || sub.StartsWith("CursorY"))
                                     {
-                                        HandleError("Error", "Console library not imported");
+                                        HandleError("Error", $"Console library not imported at line {i + 1}!");
                                         break;
                                     }
                                 }
@@ -350,7 +354,7 @@ namespace GoOS._9xCode
                                 {
                                     if (sub.StartsWith("Seconds") || sub.StartsWith("Minutes") || sub.Equals("Hours"))
                                     {
-                                        HandleError("Error", "Time library not imported");
+                                        HandleError("Error", $"Time library not imported at line {i + 1}!");
                                         break;
                                     }
                                 }
@@ -386,7 +390,7 @@ namespace GoOS._9xCode
 
                                 if (!Integers.TryGetValue(key, out int intval))
                                 {
-                                    HandleError("Error", "Unknown variable.");
+                                    HandleError("Error", $"Unknown variable at line {i + 1}!");
                                     break;
                                 }
 
@@ -403,7 +407,7 @@ namespace GoOS._9xCode
 
                                 if (!Integers.TryGetValue(key, out int intval))
                                 {
-                                    HandleError("Error", "Unknown variable.");
+                                    HandleError("Error", $"Unknown variable at line {i + 1}!");
                                     break;
                                 }
 
@@ -443,7 +447,7 @@ namespace GoOS._9xCode
                                 {
                                     if (line.Substring(line.IndexOf("= ") + 2).StartsWith("ReadFile"))
                                     {
-                                        HandleError("Error", "IO library not imported");
+                                        HandleError("Error", $"IO library not imported at line {i + 1}!");
                                         break;
                                     }
                                 }
@@ -504,12 +508,12 @@ namespace GoOS._9xCode
 
                                     if (args2.Length < 3)
                                     {
-                                        HandleError("Error", "Argument underflow.");
+                                        HandleError("Error", $"Argument underflow at line {i + 1}!");
                                         break;
                                     }
                                     if (args2.Length > 3)
                                     {
-                                        HandleError("Error", "Argument overflow.");
+                                        HandleError("Error", $"Argument overflow at line {i + 1}!");
                                         break;
                                     }
 
@@ -810,18 +814,18 @@ namespace GoOS._9xCode
 
                             if (args.Length < 6)
                             {
-                                HandleError("Error", "Argument underflow.");
+                                HandleError("Error", $"Argument underflow at line {i + 1}!");
                                 break;
                             }
                             if (args.Length > 6)
                             {
-                                HandleError("Error", "Argument overflow.");
+                                HandleError("Error", $"Argument overflow at line {i + 1}!");
                                 break;
                             }
 
                             if (!Windows.TryGetValue(args[0].Trim(), out Window wndval))
                             {
-                                HandleError("Error", "Unknown variable.");
+                                HandleError("Error", $"Unknown variable at line {i + 1}!");
                                 break;
                             }
 
@@ -853,7 +857,7 @@ namespace GoOS._9xCode
                                 }
                                 else
                                 {
-                                    HandleError("Syntax Error", "Unknown Color.");
+                                    HandleError("Syntax Error", $"Unknown Color at line {i + 1}!");
                                 }
                             }
 
@@ -866,18 +870,18 @@ namespace GoOS._9xCode
 
                             if (args.Length < 5)
                             {
-                                HandleError("Error", "Argument underflow.");
+                                HandleError("Error", $"Argument underflow at line {i + 1}!");
                                 break;
                             }
                             if (args.Length > 5)
                             {
-                                HandleError("Error", "Argument overflow.");
+                                HandleError("Error", $"Argument overflow at line {i + 1}!");
                                 break;
                             }
 
                             if (!Windows.TryGetValue(args[0].Trim(), out Window wndval))
                             {
-                                HandleError("Error", "Unknown variable.");
+                                HandleError("Error", $"Unknown variable at line {i + 1}!");
                                 break;
                             }
 
@@ -889,7 +893,7 @@ namespace GoOS._9xCode
                                 }
                                 else
                                 {
-                                    HandleError("Error", "Unknown variable.");
+                                    HandleError("Error", $"Unknown variable at line {i + 1}!");
                                     break;
                                 }
                             }
@@ -912,7 +916,7 @@ namespace GoOS._9xCode
                                 }
                                 else
                                 {
-                                    HandleError("Syntax Error", "Unknown Color.");
+                                    HandleError("Syntax Error", $"Unknown Color at line {i + 1}!");
                                 }
                             }
 
@@ -926,18 +930,18 @@ namespace GoOS._9xCode
 
                             if (args.Length < 3)
                             {
-                                HandleError("Error", "Argument underflow.");
+                                HandleError("Error", $"Argument underflow at line {i + 1}!");
                                 break;
                             }
                             if (args.Length > 3)
                             {
-                                HandleError("Error", "Argument overflow.");
+                                HandleError("Error", $"Argument overflow at line {i + 1}!");
                                 break;
                             }
 
                             if (!Windows.TryGetValue(args[0].Trim(), out Window wndval))
                             {
-                                HandleError("Error", "Unknown variable.");
+                                HandleError("Error", $"Unknown variable at line {i + 1}!");
                                 break;
                             }
 
@@ -957,7 +961,7 @@ namespace GoOS._9xCode
 
                         #endregion
 
-                            #region GoOS Library
+                        #region GoOS Library
 
                         else if (GoOSLib && line.StartsWith("EnableKillingSystemTasks"))
                         {
@@ -975,12 +979,12 @@ namespace GoOS._9xCode
 
                             if (args.Length < 1)
                             {
-                                HandleError("Error", "Argument underflow.");
+                                HandleError("Error", $"Argument underflow at line {i + 1}!");
                                 break;
                             }
                             if (args.Length > 1)
                             {
-                                HandleError("Error", "Argument overflow.");
+                                HandleError("Error", $"Argument overflow at line {i + 1}!");
                                 break;
                             }
 
@@ -992,7 +996,7 @@ namespace GoOS._9xCode
                                 }
                                 else
                                 {
-                                    HandleError("Error", "Unknown variable.");
+                                    HandleError("Error", $"Unknown variable at line {i + 1}!");
                                     break;
                                 }
                             }
@@ -1007,12 +1011,12 @@ namespace GoOS._9xCode
 
                         else
                         {
-                            HandleError("Syntax Error", "Unknown function.\nMaybe try importing a library?");
+                            HandleError("Syntax Error", $"Unknown function at line {i + 1}.\nHave you forgotten to import a library?");
                         }
                     }
                     catch (Exception ex)
                     {
-                        HandleError("9xCode", "Unhandled exception in runtime:\n" + ex.Message);
+                        HandleError("9xCode", $"Unhandled exception in runtime at line {i + 1}:\n" + ex.Message);
                     }
                 }
             }

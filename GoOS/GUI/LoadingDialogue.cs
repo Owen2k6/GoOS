@@ -22,7 +22,7 @@ namespace GoOS.GUI
 
             Contents.DrawImage(20, 20, drumIcon, true);
 
-            Contents.DrawString(80, 20, message, Font_1x, Color.Black);
+            Contents.DrawString(80, 20, message, Font_1x, Color.White);
         }
     }
 }
