@@ -19,18 +19,20 @@ namespace GoOS.GUI.Apps.GoStore
     {
         Button[] catagoryButtons = new Button[7];
 
-        readonly List<(string, int)> Catagories = new()
+        readonly List<string> Catagories = new()
         {
-            ("Utilities", 0),
-            ("Games", 1),
-            ("Demos", 2),
-            ("Development", 3),
-            ("Updates", 4),
-            ("Office", 5),
-            ("Production", 6)
+            "Utilities",
+            "Games",
+            "Demos",
+            "Development",
+            "Updates",
+            "Office",
+            "Production",
         };
 
         Button[] RepoFilesButtons;
+
+        private int catagory = 0;
 
         List<(string, string, string, string, string, string, string)> repoFiles =
             new();
@@ -108,54 +110,18 @@ namespace GoOS.GUI.Apps.GoStore
                     {
                         catagoryButtons[i] = new Button(this, Convert.ToUInt16(5),
                             Convert.ToUInt16(45 + i * 20),
-                            Convert.ToUInt16(Catagories[i].Item1.Length * 8), 20, Catagories[i].Item1)
+                            Convert.ToUInt16(Catagories[i].Length * 8), 20, Catagories[i])
                         {
-                            Name = Catagories[1].Item1,
+                            Name = Catagories[i],
                             UseSystemStyle = false,
                             BackgroundColour = new Color(0, 0, 0, 0),
-                            ClickedAlt = repoFiles_Click,
+                            ClickedAlt = CatgoryAction,
                             RenderWithAlpha = true
                         };
                     }
 
                     // Paint the window.
-                    Contents.DrawImage(0, 0, Resources.GoStore, false);
-
-                    for (int i = 0; i < repoFiles.Count; i++)
-                    {
-                        // 207 x 78
-
-                        string GoOSversion = "1.5";
-                        string VersionSpaces = "";
-
-                        if (GoOSversions.ContainsKey(repoFiles[i].Item1))
-                            GoOSversions.TryGetValue(repoFiles[i].Item1, out GoOSversion);
-
-                        for (int ii = 0; ii < 25 - repoFiles[i].Item1.Length - (GoOSversion.TrimEnd().Length + 6); ii++)
-                            VersionSpaces += " ";
-
-                        Contents.DrawImage(150, 45 + i * (78 + 5), StoreButton);
-
-                        RepoFilesButtons[i] = new Button(this, Convert.ToUInt16(150),
-                            Convert.ToUInt16(45 + i * (78 + 5)),
-                            207, 78, repoFiles[i].Item1 + VersionSpaces + "GoOS " +
-                                     GoOSversion.TrimEnd() + "+" + "\nBy " + repoFiles[i].Item5 + "\n" +
-                                     repoFiles[i].Item3)
-                        {
-                            Name = repoFiles[i].Item1,
-                            UseSystemStyle = false,
-                            BackgroundColour = new Color(0, 0, 0, 0),
-                            ClickedAlt = repoFiles_Click,
-                            RenderWithAlpha = true,
-                            CenterTitle = false,
-                            textX = 5,
-                            textY = 2
-                        };
-                    }
-
-                    RenderSystemStyleBorder();
-                    foreach (Button i in RepoFilesButtons) i.Render();
-                    foreach (Button i in catagoryButtons) i.Render();
+                    dostuff();
                 }
                 else
                 {
@@ -170,6 +136,90 @@ namespace GoOS.GUI.Apps.GoStore
             {
                 Dialogue.Show("Error", ex.ToString());
             }
+        }
+
+        private void dostuff()
+        {
+            Contents.Clear();
+            Contents.DrawImage(0, 0, Resources.GoStore, false);
+
+            int accountFor = 0;
+            
+            RepoFilesButtons = new Button[repoFiles.Count];
+            for (int i = 0; i < repoFiles.Count; i++)
+            {
+                // 207 x 78
+
+                int appCat = 0;
+
+                switch (repoFiles[i].Item6)
+                {
+                    case "Utilities":
+                        appCat = 0;
+                        break;
+                    case "Games":
+                        appCat = 1;
+                        break;
+                    case "Demos":
+                        appCat = 2;
+                        break;
+                    case "Development":
+                        appCat = 3;
+                        break;
+                    case "Updates":
+                        appCat = 4;
+                        break;
+                    case "Office":
+                        appCat = 5;
+                        break;
+                    case "Production":
+                        appCat = 6;
+                        break;
+                }
+
+                if (appCat == catagory)
+                {
+                    string GoOSversion = "1.5";
+                    string VersionSpaces = "";
+
+                    if (GoOSversions.ContainsKey(repoFiles[i].Item1))
+                        GoOSversions.TryGetValue(repoFiles[i].Item1, out GoOSversion);
+
+                    for (int ii = 0; ii < 25 - repoFiles[i].Item1.Length - (GoOSversion.TrimEnd().Length + 6); ii++)
+                        VersionSpaces += " ";
+
+                    Contents.DrawImage(150, 45 + (i - accountFor) * (78 + 5), StoreButton);
+
+                    RepoFilesButtons[i] = new Button(this, Convert.ToUInt16(150),
+                        Convert.ToUInt16(45 + (i - accountFor) * (78 + 5)),
+                        207, 78, repoFiles[i].Item1 + VersionSpaces + "GoOS " +
+                                 GoOSversion.TrimEnd() + "+" + "\nBy " + repoFiles[i].Item5 + "\n" +
+                                 repoFiles[i].Item3.Replace(@"\n", "\n"))
+                    {
+                        Name = repoFiles[i].Item1,
+                        UseSystemStyle = false,
+                        BackgroundColour = new Color(0, 0, 0, 0),
+                        ClickedAlt = repoFiles_Click,
+                        RenderWithAlpha = true,
+                        CenterTitle = false,
+                        textX = 5,
+                        textY = 2
+                    };
+                }
+                else
+                {
+                    accountFor++;
+                }
+                
+                
+            }
+            
+            RenderSystemStyleBorder();
+            foreach (Button i in RepoFilesButtons)
+            {
+                if (i != null) i.Render();
+            };
+            foreach (Button i in catagoryButtons) i.Render();
         }
 
         private string GetInfoFile(string repo)
@@ -282,6 +332,36 @@ namespace GoOS.GUI.Apps.GoStore
                 repoFiles[GetIndexByTitle(i)].Item1, repoFiles[GetIndexByTitle(i)].Item4,
                 repoFiles[GetIndexByTitle(i)].Item5, repoFiles[GetIndexByTitle(i)].Item3,
                 repoFiles[GetIndexByTitle(i)].Item2, repoFiles[GetIndexByTitle(i)].Item6));
+        }
+
+        private void CatgoryAction(string name)
+        {
+            switch (name)
+            {
+                case "Utilities":
+                    catagory = 0;
+                    break;
+                case "Games":
+                    catagory = 1;
+                    break;
+                case "Demos":
+                    catagory = 2;
+                    break;
+                case "Development":
+                    catagory = 3;
+                    break;
+                case "Updates":
+                    catagory = 4;
+                    break;
+                case "Office":
+                    catagory = 5;
+                    break;
+                case "Production":
+                    catagory = 6;
+                    break;
+            }
+            
+            dostuff();
         }
     }
 }
