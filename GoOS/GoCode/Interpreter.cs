@@ -9,6 +9,7 @@ using Cosmos.System;
 using GoOS.GUI;
 using GoOS.GUI.Apps;
 using GoOS.Themes;
+using PrismAPI.Graphics;
 using Console = BetterConsole;
 using static ConsoleColorEx;
 using static GoOS.Core;
@@ -26,7 +27,9 @@ public class Interpreter
     private Dictionary<string, string> Strings = new Dictionary<string, string>() { };
     private Dictionary<string, int> Integers = new Dictionary<string, int>() { };
     private Dictionary<string, bool> Booleans = new Dictionary<string, bool>() { };
-    private Dictionary<string, GoWindow> Windows = new Dictionary<string, GoWindow>();
+    private Dictionary<string, Window> Windows = new Dictionary<string, Window>();
+
+    private Dictionary<string, int> ButtonActions = new Dictionary<string, int>();
 
     private string fuckingprogramname = "";
     private bool hasbeenregistered = false;
@@ -89,18 +92,69 @@ public class Interpreter
     {
         switch (line)
         {
+            case { } a when a.StartsWith("button="):
+                string buttonLess = a.Replace("button=", "");
+                string parentWindowName = buttonLess.Split("=")[0];
+                
+                string buttonName = buttonLess.Split("=")[1];
+                
+                string awindowWidthPre = buttonLess.Split("=")[2];
+                string awindowHeightPre = buttonLess.Split("=")[3];
+                ushort awindowWidth = ushort.Parse(awindowWidthPre);
+                ushort awindowHeight = ushort.Parse(awindowHeightPre);
+                
+                string xpre = buttonLess.Split("=")[4];
+                string ypre = buttonLess.Split("=")[5];
+                ushort x = ushort.Parse(xpre);
+                ushort y = ushort.Parse(ypre);
+                
+                string clickActionLinepre = buttonLess.Split("=")[5];
+                ushort clickActionLine = ushort.Parse(clickActionLinepre);
+
+                if (!Windows.ContainsKey(parentWindowName))
+                {
+                    log(ThemeManager.ErrorText, "Could not find specified parent window!");
+                    break;
+                }
+                
+                if (ButtonActions.ContainsKey(buttonName))
+                {
+                    ButtonActions.Remove(buttonName);
+                }
+
+                ButtonActions.Add(buttonName, clickActionLine);
+                
+                Windows.TryGetValue(parentWindowName, out Window buttonWindow);
+
+                Button button = new Button(buttonWindow, x, y, awindowWidth, awindowHeight, buttonName);
+                button.ClickedAlt = ClickAction;
+                break;
             case { } a when a.StartsWith("window="):
+                Window window = new Window();
                 string windowLess = a.Replace("window=", "");
                 string windowName = windowLess.Split("=")[0];
-                string windowWidth = windowLess.Split("=")[1];
-                string windowHeight = windowLess.Split("=")[2];
 
+                window.Title = windowName;
+                
                 if (Windows.ContainsKey(windowName))
                 {
                     Windows.Remove(windowName);
                 }
                 
-                Windows.Add(windowName, new GoWindow(int.Parse(windowHeight), int.Parse(windowWidth), windowName));
+                string windowWidthPre = windowLess.Split("=")[1];
+                string windowHeightPre = windowLess.Split("=")[2];
+                ushort windowWidth = ushort.Parse(windowWidthPre);
+                ushort windowHeight = ushort.Parse(windowHeightPre);
+
+                window.Contents = new Canvas(windowWidth, windowHeight);
+                window.Visible = true;
+                window.Closable = true;
+                
+                window.Contents.Clear(Color.LightGray);
+                window.RenderSystemStyleBorder();
+                
+                Windows.Add(windowName, window);
+                WindowManager.AddWindow(window);
                 break;
             case { } a when a.StartsWith("bool="):
                 string input = a.Replace("bool=", "");
@@ -935,4 +989,14 @@ public class Interpreter
                 break;
         }
     }
+
+    private void ClickAction(string name)
+    {
+        if (ButtonActions.ContainsKey(name))
+        {
+            ButtonActions.TryGetValue(name, out i);
+        }
+    }
+    
+    
 }
