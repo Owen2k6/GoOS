@@ -117,6 +117,29 @@
         "runtime": {
           "lib/netstandard2.0/IL2CPU.API.dll": {}
         }
+      },
+      "PrismAPI/1.0.3": {
+        "type": "package",
+        "dependencies": {
+          "Cosmos.HAL2": "0.1.0-localbuild",
+          "Cosmos.System2": "0.1.0-localbuild",
+          "TinyMath": "1.0.1"
+        },
+        "compile": {
+          "lib/net6.0/PrismAPI.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/PrismAPI.dll": {}
+        }
+      },
+      "TinyMath/1.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/TinyMath.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/TinyMath.dll": {}
+        }
       }
     }
   },
@@ -568,6 +591,32 @@
         "il2cpu.api.nuspec",
         "lib/netstandard2.0/IL2CPU.API.dll"
       ]
+    },
+    "PrismAPI/1.0.3": {
+      "sha512": "lhx9SiMJdi+a+pmCj/BYWx/TLl59O13u2bv3s4/1vs8+h029W97rNej3af000mNhtUBNva0pdtcyjfuvwwmARg==",
+      "type": "package",
+      "path": "prismapi/1.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net6.0/PrismAPI.dll",
+        "prismapi.1.0.3.nupkg.sha512",
+        "prismapi.nuspec"
+      ]
+    },
+    "TinyMath/1.0.1": {
+      "sha512": "PUlZnV23BNExMoFe/qQstJ4qMl+UWjyECXqoVQfKErSNNBY6bmfcmoUdrHFZw5xe9cPa8QwqZunwee/YBh862g==",
+      "type": "package",
+      "path": "tinymath/1.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "TinyMath.png",
+        "lib/net6.0/TinyMath.dll",
+        "tinymath.1.0.1.nupkg.sha512",
+        "tinymath.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -576,9 +625,10 @@
       "Cosmos.Core >= 0.1.0-*",
       "Cosmos.Debug.Kernel >= 0.0.0-*",
       "Cosmos.HAL2 >= 0.1.0-*",
-      "Cosmos.Plugs >= 0.1.0-*",
-      "Cosmos.System2 >= 0.0.0-*",
-      "IL2CPU.API >= 0.1.0-*"
+      "Cosmos.Plugs >= 0.1.0-localbuild",
+      "Cosmos.System2 >= 0.1.0-localbuild",
+      "IL2CPU.API >= 0.1.0-*",
+      "PrismAPI >= 1.0.3"
     ]
   },
   "packageFolders": {
@@ -652,18 +702,19 @@
           },
           "Cosmos.Plugs": {
             "target": "Package",
-            "version": "[0.1.0-*, )"
+            "version": "[0.1.0-localbuild, )"
           },
           "Cosmos.System2": {
             "target": "Package",
-            "version": "[0.0.0-*, )",
-            "noWarn": [
-              "NU1604"
-            ]
+            "version": "[0.1.0-localbuild, )"
           },
           "IL2CPU.API": {
             "target": "Package",
             "version": "[0.1.0-*, )"
+          },
+          "PrismAPI": {
+            "target": "Package",
+            "version": "[1.0.3, )"
           }
         },
         "imports": [
@@ -685,5 +736,27 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "GoOS depends on Cosmos.Plugs (>= 0.1.0-localbuild) but Cosmos.Plugs 0.1.0-localbuild was not found. An approximate best match of Cosmos.Plugs 0.1.0-localbuild20231106032111 was resolved.",
+      "libraryId": "Cosmos.Plugs",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    },
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "GoOS depends on Cosmos.System2 (>= 0.1.0-localbuild) but Cosmos.System2 0.1.0-localbuild was not found. An approximate best match of Cosmos.System2 0.1.0-localbuild20231106032111 was resolved.",
+      "libraryId": "Cosmos.System2",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
 }

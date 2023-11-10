@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "FZfzhtpkZSAUkGenPclfKqDJpYYShaRP9Klr5ip7iv9S9V8RH4yrmJKl2zbcx7bC9zscL6zpozsTsSVb1Ksm3Q==",
+  "dgSpecHash": "8aSrRp4xjYX2X+lbBZRpCVUFA4wH00ulupsFf7+soZcnpWtWlfUpDnSEVIfhpt4EEJg5Rq+ndmD4G6XB9uJ6EA==",
   "success": true,
   "projectFilePath": "D:\\Github\\GoOS\\GoOS\\GoOS.csproj",
   "expectedPackageFiles": [
@@ -11,7 +11,30 @@
     "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.hal2\\0.1.0-localbuild20231106032111\\cosmos.hal2.0.1.0-localbuild20231106032111.nupkg.sha512",
     "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.plugs\\0.1.0-localbuild20231106032111\\cosmos.plugs.0.1.0-localbuild20231106032111.nupkg.sha512",
     "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.system2\\0.1.0-localbuild20231106032111\\cosmos.system2.0.1.0-localbuild20231106032111.nupkg.sha512",
-    "C:\\Users\\Owen2k6\\.nuget\\packages\\il2cpu.api\\0.1.0-localbuild20231106032111\\il2cpu.api.0.1.0-localbuild20231106032111.nupkg.sha512"
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\il2cpu.api\\0.1.0-localbuild20231106032111\\il2cpu.api.0.1.0-localbuild20231106032111.nupkg.sha512",
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\prismapi\\1.0.3\\prismapi.1.0.3.nupkg.sha512",
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\tinymath\\1.0.1\\tinymath.1.0.1.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "GoOS depends on Cosmos.Plugs (>= 0.1.0-localbuild) but Cosmos.Plugs 0.1.0-localbuild was not found. An approximate best match of Cosmos.Plugs 0.1.0-localbuild20231106032111 was resolved.",
+      "libraryId": "Cosmos.Plugs",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    },
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "GoOS depends on Cosmos.System2 (>= 0.1.0-localbuild) but Cosmos.System2 0.1.0-localbuild was not found. An approximate best match of Cosmos.System2 0.1.0-localbuild20231106032111 was resolved.",
+      "libraryId": "Cosmos.System2",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
 }

@@ -73,6 +73,7 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Pressed.bmp")] static byte[] minimisePressedRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStore.bmp")] static byte[] GoStoreRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreicon.bmp")] static byte[] GoStoreiconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.StoreButton.bmp")] static byte[] StoreButtonRaw;
 
         public static Canvas setupWelcome;
         public static Canvas setupTOU;
@@ -128,6 +129,7 @@ namespace GoOS
         public static Canvas minimisePressed;
         public static Canvas GoStore;
         public static Canvas GoStoreicon;
+        public static Canvas StoreButton;
         public static Canvas OOBEmain;
         public static Canvas OOBEblank;
         public static Font Font_1x = Font.Fallback;
@@ -178,6 +180,7 @@ namespace GoOS
                     warningIcon = Image.FromBitmap(warningIconRaw, false);
                     GoStore = Image.FromBitmap(GoStoreRaw, false);
                     GoStoreicon = Image.FromBitmap(GoStoreiconRaw, false);
+                    StoreButton = Image.FromBitmap(StoreButtonRaw, false);
                     break;
 
                 case ResourceType.Priority:

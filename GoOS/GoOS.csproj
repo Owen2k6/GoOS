@@ -205,5 +205,10 @@
         <HintPath>LibDotNetParser.dll</HintPath>
       </Reference>
     </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\GUI\StoreButton.bmp" />
+      <EmbeddedResource Include="Resources\GUI\StoreButton.bmp" />
+    </ItemGroup>
 	
 </Project>
