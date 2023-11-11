@@ -48,7 +48,7 @@ namespace GoOS.GUI.Apps
                         var dnsClient = new DnsClient();
                         var tcpClient = new TcpClient();
                         dnsClient.Connect(DNSConfig.DNSNameservers[0]);
-                        dnsClient.SendAsk("apps.goos.owen2k6.com");
+                        dnsClient.SendAsk("api.goos.owen2k6.com");
                         Address address = dnsClient.Receive();
                         dnsClient.Close();
                         tcpClient.Connect(address, 80);
@@ -56,7 +56,7 @@ namespace GoOS.GUI.Apps
                                          "User-Agent: GoOS\r\n" +
                                          "Accept: */*\r\n" +
                                          "Accept-Encoding: identity\r\n" +
-                                         "Host: api.owen2k6.com\r\n" +
+                                         "Host: api.goos.owen2k6.com\r\n" +
                                          "Connection: Keep-Alive\r\n\r\n";
                         tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
                         var ep = new EndPoint(Address.Zero, 0);
