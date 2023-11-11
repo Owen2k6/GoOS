@@ -8,6 +8,7 @@ using TcpClient = Cosmos.System.Network.IPv4.TCP.TcpClient;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using GoOS.Themes;
 using PrismAPI.Graphics;
 using static GoOS.Resources;
@@ -31,13 +32,18 @@ namespace GoOS.GUI.Apps.GoStore
         };
 
         Button[] RepoFilesButtons;
+        private int[] RepoFilesButtonsPageNumbers;
 
         private int catagory = 0;
+        private int page = 0;
 
         List<(string, string, string, string, string, string, string)> repoFiles =
             new();
 
         private Dictionary<string, string> GoOSversions = new();
+
+        private Button nextButton;
+        private Button prevousButton;
 
         readonly string[] repos =
         {
@@ -103,6 +109,7 @@ namespace GoOS.GUI.Apps.GoStore
 
                 // Initialize the controls.
                 RepoFilesButtons = new Button[repoFiles.Count];
+                RepoFilesButtonsPageNumbers = new int[repoFiles.Count];
                 bool GS = HasLaunched();
                 if (GS || Kernel.BuildType == "NIFPR")
                 {
@@ -119,9 +126,26 @@ namespace GoOS.GUI.Apps.GoStore
                             RenderWithAlpha = true
                         };
                     }
-
-                    // Paint the window.
-                    dostuff();
+                    
+                    nextButton = new Button(this, 685, 556, 109, 35, "Next")
+                    {
+                        Name = "next",
+                        UseSystemStyle = false,
+                        BackgroundColour = new Color(0, 0, 0, 0),
+                        ClickedAlt = nextPage,
+                        RenderWithAlpha = true
+                    };
+                    
+                    prevousButton = new Button(this, 514, 556, 109, 35, "Previous")
+                    {
+                        Name = "Previous",
+                        UseSystemStyle = false,
+                        BackgroundColour = new Color(0, 0, 0, 0),
+                        ClickedAlt = previousPage,
+                        RenderWithAlpha = true
+                    };
+                    
+                    CatgoryAction("Utilities");
                 }
                 else
                 {
@@ -140,12 +164,27 @@ namespace GoOS.GUI.Apps.GoStore
 
         private void dostuff()
         {
+            foreach (Button b in RepoFilesButtons)
+                Controls.Remove(b);
+            
+            RepoFilesButtons = null;
+            RepoFilesButtonsPageNumbers = null;
+
             Contents.Clear();
             Contents.DrawImage(0, 0, Resources.GoStore, false);
 
             int accountFor = 0;
-            
+
+            RepoFilesButtonsPageNumbers = new int[repoFiles.Count];
             RepoFilesButtons = new Button[repoFiles.Count];
+
+            int Line = 0;
+            int Colum = 0;
+            int ButtonPage = 0;
+            page = 0;
+
+            int yOffset = 0;
+
             for (int i = 0; i < repoFiles.Count; i++)
             {
                 // 207 x 78
@@ -177,6 +216,16 @@ namespace GoOS.GUI.Apps.GoStore
                         break;
                 }
 
+                if (Colum >= 3 && Line >= 6 && appCat == catagory)
+                {
+                    ButtonPage++;
+                }
+                else if (Line >= 6 && appCat == catagory)
+                {
+                    Line = 0;
+                    Colum++;
+                }
+
                 if (appCat == catagory)
                 {
                     string GoOSversion = "1.5";
@@ -188,10 +237,11 @@ namespace GoOS.GUI.Apps.GoStore
                     for (int ii = 0; ii < 25 - repoFiles[i].Item1.Length - (GoOSversion.TrimEnd().Length + 6); ii++)
                         VersionSpaces += " ";
 
-                    Contents.DrawImage(150, 45 + (i - accountFor) * (78 + 5), StoreButton);
+                    int x = 150 + Colum * (207 + 5); // 150
+                    int y = 45 + (Line) * (78 + 5);
 
-                    RepoFilesButtons[i] = new Button(this, Convert.ToUInt16(150),
-                        Convert.ToUInt16(45 + (i - accountFor) * (78 + 5)),
+                    RepoFilesButtons[i] = new Button(this, Convert.ToUInt16(x), // 150 
+                        Convert.ToUInt16(y),
                         207, 78, repoFiles[i].Item1 + VersionSpaces + "GoOS " +
                                  GoOSversion.TrimEnd() + "+" + "\nBy " + repoFiles[i].Item5 + "\n" +
                                  repoFiles[i].Item3.Replace(@"\n", "\n"))
@@ -205,21 +255,38 @@ namespace GoOS.GUI.Apps.GoStore
                         textX = 5,
                         textY = 2
                     };
+
+                    Line++;
+
+                    RepoFilesButtonsPageNumbers[i] = ButtonPage;
                 }
-                else
-                {
-                    accountFor++;
-                }
-                
-                
             }
-            
+
             RenderSystemStyleBorder();
+            int a = 0;
             foreach (Button i in RepoFilesButtons)
             {
-                if (i != null) i.Render();
-            };
+                if (page == RepoFilesButtonsPageNumbers[a])
+                {
+                    int x = i.X;
+                    int y = i.Y;
+                    Contents.DrawImage(x, y, StoreButton);
+                    if (i != null) i.Render();
+                }
+
+                a++;
+            }
+            
             foreach (Button i in catagoryButtons) i.Render();
+            
+            // y 556
+            
+            // x 514
+            
+            // Width 109 x Height 35
+            
+            prevousButton.Render();
+            nextButton.Render();
         }
 
         private string GetInfoFile(string repo)
@@ -360,8 +427,88 @@ namespace GoOS.GUI.Apps.GoStore
                     catagory = 6;
                     break;
             }
+
+            dostuff(); // 565
             
-            dostuff();
+            switch (name)
+            {
+                case "Utilities":
+                    Contents.DrawString(38, 563, "Utilities", Font_1x, Color.White);
+                    break;
+                case "Games":
+                    Contents.DrawString(52, 563, "Games", Font_1x, Color.White);
+                    break;
+                case "Demos":
+                    Contents.DrawString(52, 563, "Demos", Font_1x, Color.White);
+                    break;
+                case "Development":
+                    Contents.DrawString(29, 563, "Development", Font_1x, Color.White);
+                    break;
+                case "Updates":
+                    Contents.DrawString(43, 563, "Updates", Font_1x, Color.White);
+                    break;
+                case "Office":
+                    Contents.DrawString(47, 563, "Office", Font_1x, Color.White);
+                    break;
+                case "Production":
+                    Contents.DrawString(33, 563, "Production", Font_1x, Color.White);
+                    break;
+            }
+
+            int pagex = 646 + 4;
+            if ((page + 1).ToString().Length == 2)
+            {
+                pagex -= 4;
+            }
+            
+            if ((page + 1).ToString().Length == 3)
+            {
+                pagex -= 8;
+            }
+            
+            Contents.DrawString(pagex, 563, (page + 1).ToString(), Font_1x, Color.White);
+        }
+
+        private void nextPage(string useless)
+        {
+            if (RepoFilesButtonsPageNumbers.Contains(page + 1))
+            {
+                page++;
+                dostuff();
+                int pagex = 646 + 4;
+                if ((page + 1).ToString().Length == 2)
+                {
+                    pagex -= 4;
+                }
+                
+                if ((page + 1).ToString().Length == 3)
+                {
+                    pagex -= 8;
+                }
+            
+                Contents.DrawString(pagex, 563, (page + 1).ToString(), Font_1x, Color.White);
+            }
+        }
+
+        private void previousPage(string useless)
+        {
+            if (RepoFilesButtonsPageNumbers.Contains(page - 1))
+            {
+                page--;
+                dostuff();
+                int pagex = 646 + 4;
+                if ((page + 1).ToString().Length == 2)
+                {
+                    pagex -= 4;
+                }
+
+                if ((page + 1).ToString().Length == 3)
+                {
+                    pagex -= 8;
+                }
+
+                Contents.DrawString(pagex, 563, (page + 1).ToString(), Font_1x, Color.White);
+            }
         }
     }
 }
