@@ -30,6 +30,12 @@ namespace GoOS.GUI.Apps.GoStore
             "Office",
             "Production",
         };
+        /*
+         * == RC Release Notice.
+         * TODO: This is bad practice as the list is stored on the client so as more categories are added the client will be unable to display apps from them.
+         * TODO: Prevent Release Candidate or Release builds until this is resolved.
+         * - Owen2k6 DO NOT REMOVE.
+         */
 
         Button[] RepoFilesButtons;
         private int[] RepoFilesButtonsPageNumbers;
@@ -62,6 +68,12 @@ namespace GoOS.GUI.Apps.GoStore
             "1.5rc3",
             "1.5"
         };
+        /*
+         * == RC Release Notice.
+         * TODO: This needs to be reset to just 1.5 before release.
+         * TODO: Prevent Release Candidate or Release builds until this is resolved.
+         * - Owen2k6 DO NOT REMOVE.
+         */
 
         public MainFrame()
         {
@@ -214,6 +226,13 @@ namespace GoOS.GUI.Apps.GoStore
                     case "Production":
                         appCat = 6;
                         break;
+                    
+                    /*
+                     * == RC Release Notice.
+                     * TODO: This is bad practice as the list is stored on the client so as more categories are added the client will be unable to display apps from them.
+                     * TODO: Prevent Release Candidate or Release builds until this is resolved.
+                     * - Owen2k6 DO NOT REMOVE.
+                     */
                 }
 
                 if (Colum >= 3 && Line >= 6 && appCat == catagory)
@@ -399,6 +418,14 @@ namespace GoOS.GUI.Apps.GoStore
                 repoFiles[GetIndexByTitle(i)].Item1, repoFiles[GetIndexByTitle(i)].Item4,
                 repoFiles[GetIndexByTitle(i)].Item5, repoFiles[GetIndexByTitle(i)].Item3,
                 repoFiles[GetIndexByTitle(i)].Item2, repoFiles[GetIndexByTitle(i)].Item6));
+            
+            /*
+             * == RC Release Notice.
+             * TODO: This is bad practice. The repository is stored on the end of the metadata. We cant expand the GoStore abilities without breaking earlier clients.
+             * TODO: Assigned to @MrDumbrava as they created this.
+             * TODO: Prevent Release Candidate or Release builds until this is resolved.
+             * - Owen2k6 DO NOT REMOVE.
+             */
         }
 
         private void CatgoryAction(string name)
@@ -426,6 +453,13 @@ namespace GoOS.GUI.Apps.GoStore
                 case "Production":
                     catagory = 6;
                     break;
+                
+                /*
+                 * == RC Release Notice.
+                 * TODO: This is bad practice as the list is stored on the client so as more categories are added the client will be unable to display apps from them.
+                 * TODO: Prevent Release Candidate or Release builds until this is resolved.
+                 * - Owen2k6 DO NOT REMOVE.
+                 */
             }
 
             dostuff(); // 565
@@ -453,6 +487,13 @@ namespace GoOS.GUI.Apps.GoStore
                 case "Production":
                     Contents.DrawString(33, 563, "Production", Font_1x, Color.White);
                     break;
+                
+                /*
+                 * == RC Release Notice.
+                 * TODO: This is bad practice as the list is stored on the client so as more categories are added the client will be unable to display apps from them.
+                 * TODO: Prevent Release Candidate or Release builds until this is resolved.
+                 * - Owen2k6 DO NOT REMOVE.
+                 */
             }
 
             int pagex = 646 + 4;

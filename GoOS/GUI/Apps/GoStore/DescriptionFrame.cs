@@ -8,6 +8,22 @@ using TcpClient = Cosmos.System.Network.IPv4.TCP.TcpClient;
 using PrismAPI.Graphics;
 using static GoOS.Resources;
 
+/*
+ * == RC Release Notice.
+ * TODO: This page has too many issues related to both design and functionality.
+ * The following in this list are known issues related to this page.
+ * - This window recieves the category as the repository which is NOT correct. (MrDumbrava Assigned)
+ * - The window design does not match the GoStore design.
+ * - The window has a cancel button when it already has a close button on the Titlebar.
+ * - The window shouldn't have references to other applications but itself. (GoIDE should not be referenced here.)
+ *
+ * Extended Notes:
+ *  - I will be pushing the bmps for this page and the buttons to the repo soon. I need to work on them a bit more. -- Owen2k6
+ *  - MrDumbrava has been assigned to the repository mismatch issues.
+ * TODO: Prevent Release Candidate or Release builds until this is resolved.
+ * - Owen2k6 DO NOT REMOVE.
+ */
+
 namespace GoOS.GUI.Apps.GoStore
 {
     public class DescriptionFrame : Window
