@@ -20,16 +20,7 @@ namespace GoOS.GUI.Apps.GoStore
     {
         Button[] catagoryButtons = new Button[7];
 
-        readonly List<string> Catagories = new()
-        {
-            "Utilities",
-            "Games",
-            "Demos",
-            "Development",
-            "Updates",
-            "Office",
-            "Production",
-        };
+        readonly List<string> Catagories = new();
         /*
          * == RC Release Notice.
          * TODO: This is bad practice as the list is stored on the client so as more categories are added the client will be unable to display apps from them.
@@ -74,9 +65,18 @@ namespace GoOS.GUI.Apps.GoStore
          * TODO: Prevent Release Candidate or Release builds until this is resolved.
          * - Owen2k6 DO NOT REMOVE.
          */
+        
+        /*
+         * == RC Release Notice.
+         * TODO: Do it yourself, you added this part.
+         * TODO: I will only fix what I made badly, not what you made badly.
+         * - ekeleze DO NOT REMOVE
+         */
 
         public MainFrame()
         {
+            Catagories = new List<string> { GetInfoFile(@"http://api.goos.owen2k6.com/GoOS/cat.gostore") };
+            
             // Get the file list from every repo
             string[][] infoFiles =
             {
@@ -203,36 +203,12 @@ namespace GoOS.GUI.Apps.GoStore
 
                 int appCat = 0;
 
-                switch (repoFiles[i].Item6)
+                for (int ii = 0; ii < Catagories.Count; ii++)
                 {
-                    case "Utilities":
-                        appCat = 0;
-                        break;
-                    case "Games":
-                        appCat = 1;
-                        break;
-                    case "Demos":
-                        appCat = 2;
-                        break;
-                    case "Development":
-                        appCat = 3;
-                        break;
-                    case "Updates":
-                        appCat = 4;
-                        break;
-                    case "Office":
-                        appCat = 5;
-                        break;
-                    case "Production":
-                        appCat = 6;
-                        break;
-                    
-                    /*
-                     * == RC Release Notice.
-                     * TODO: This is bad practice as the list is stored on the client so as more categories are added the client will be unable to display apps from them.
-                     * TODO: Prevent Release Candidate or Release builds until this is resolved.
-                     * - Owen2k6 DO NOT REMOVE.
-                     */
+                    if (repoFiles[i].Item6 == Catagories[ii])
+                    {
+                        appCat = ii;
+                    }
                 }
 
                 if (Colum >= 3 && Line >= 6 && appCat == catagory)
@@ -430,40 +406,16 @@ namespace GoOS.GUI.Apps.GoStore
 
         private void CatgoryAction(string name)
         {
-            switch (name)
+            for (int ii = 0; ii < Catagories.Count; ii++)
             {
-                case "Utilities":
-                    catagory = 0;
-                    break;
-                case "Games":
-                    catagory = 1;
-                    break;
-                case "Demos":
-                    catagory = 2;
-                    break;
-                case "Development":
-                    catagory = 3;
-                    break;
-                case "Updates":
-                    catagory = 4;
-                    break;
-                case "Office":
-                    catagory = 5;
-                    break;
-                case "Production":
-                    catagory = 6;
-                    break;
-                
-                /*
-                 * == RC Release Notice.
-                 * TODO: This is bad practice as the list is stored on the client so as more categories are added the client will be unable to display apps from them.
-                 * TODO: Prevent Release Candidate or Release builds until this is resolved.
-                 * - Owen2k6 DO NOT REMOVE.
-                 */
+                if (name == Catagories[ii])
+                {
+                    catagory = ii;
+                }
             }
 
             dostuff(); // 565
-            
+
             switch (name)
             {
                 case "Utilities":
@@ -487,7 +439,7 @@ namespace GoOS.GUI.Apps.GoStore
                 case "Production":
                     Contents.DrawString(33, 563, "Production", Font_1x, Color.White);
                     break;
-                
+
                 /*
                  * == RC Release Notice.
                  * TODO: This is bad practice as the list is stored on the client so as more categories are added the client will be unable to display apps from them.
