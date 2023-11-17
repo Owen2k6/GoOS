@@ -123,10 +123,6 @@ namespace GoOS
 
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {
-                //Console.ConsoleMode = true;
-                //WindowManager.AddWindow(new GTerm());
-                //Console.WriteLine("First boot... This may take awhile...");
-                //OOBE.Launch();
                 Resources.Generate(ResourceType.OOBE);
                 WindowManager.IsInOOBE = true;
                 WindowManager.AddWindow(new GUI.Apps.OOBE.MainFrame());
@@ -141,7 +137,6 @@ namespace GoOS
                 }
                 catch (Exception)
                 {
-                    // Beg the OS to not try to use the path when the path file cant be made.
                     isGCIenabled = false;
                     pathPaths = null;
                 }
@@ -156,8 +151,7 @@ namespace GoOS
                 }
                 catch (Exception)
                 {
-                    // Do nothing and everything will be fine in this case
-                    // Literally, doing nothing prevents any further errors resulting from this
+                    // ignored
                 }
             }
 
@@ -184,9 +178,6 @@ namespace GoOS
                         ThemeManager.SetTheme(line.Split("ThemeFile = ")[1]);
                     }
                 }
-
-                //byte videoMode = File.ReadAllBytes(@"0:\content\sys\resolution.gms")[0];
-                //Console.Init(ControlPanel.videoModes[videoMode].Item2.Width, ControlPanel.videoModes[videoMode].Item2.Height);
             }
             catch
             {
@@ -205,8 +196,6 @@ namespace GoOS
 
             using (var xClient = new DHCPClient())
             {
-                /** Send a DHCP Discover packet **/
-                //This will automatically set the IP config after DHCP response
                 xClient.SendDiscoverPacket();
                 log(ConsoleColor.Blue, NetworkConfiguration.CurrentAddress.ToString());
             }
@@ -390,16 +379,6 @@ namespace GoOS
             {
                 case "codeswitch":
                     oldCode = !oldCode;
-                    break;
-                case "ntwinit":
-                    using (var xClient = new DHCPClient())
-                    {
-                        /** Send a DHCP Discover packet **/
-                        //This will automatically set the IP config after DHCP response
-                        xClient.SendDiscoverPacket();
-                        log(ConsoleColor.Blue, NetworkConfiguration.CurrentAddress.ToString());
-                    }
-
                     break;
                 case "gui":
                     Console.ConsoleMode = false;
@@ -717,8 +696,6 @@ namespace GoOS
                         log(ThemeManager.ErrorText, "Too many arguments");
                         break;
                     }
-
-                    // do it the ChaOS way, it works so dont touch else you're gay
                     try
                     {
                         Directory.SetCurrentDirectory(Directory.GetCurrentDirectory().TrimEnd('\\')
@@ -728,11 +705,11 @@ namespace GoOS
                     }
                     catch
                     {
+                        // ignored
                     }
-
                     if (!Directory.GetCurrentDirectory().StartsWith(@"0:\"))
                     {
-                        Directory.SetCurrentDirectory(@"0:\"); // Directory error correction
+                        Directory.SetCurrentDirectory(@"0:\");
                     }
 
                     break;

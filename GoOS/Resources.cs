@@ -15,15 +15,6 @@ namespace GoOS
 
     public class Resources
     {
-        // [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupwelcome.bmp")] static byte[] setupWelcomeRaw;
-        // [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupTOU.bmp")] static byte[] setupTOURaw;
-        // [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupua.bmp")] static byte[] setupUARaw;
-        // [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupsupport.bmp")] static byte[] setupSupportRaw;
-        // [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupuser.bmp")] static byte[] setupUserRaw;
-        // [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupcomputer.bmp")] static byte[] setupComputerRaw;
-        // [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupthm.bmp")] static byte[] setupThemeRaw;
-        // [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupres.bmp")] static byte[] setupResRaw;
-        // [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.setupfinal.bmp")] static byte[] setupFinalRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.oobe.bmp")] static byte[] OOBEmainraw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.oobebg.bmp")] static byte[] OOBEblankraw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.Credits05.bmp")] static byte[] easterEggRaw;
