@@ -65,16 +65,7 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStore.bmp")] static byte[] GoStoreRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreicon.bmp")] static byte[] GoStoreiconRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.StoreButton.bmp")] static byte[] StoreButtonRaw;
-
-        public static Canvas setupWelcome;
-        public static Canvas setupTOU;
-        public static Canvas setupUA;
-        public static Canvas setupSupport;
-        public static Canvas setupUser;
-        public static Canvas setupComputer;
-        public static Canvas setupTheme;
-        public static Canvas setupRes;
-        public static Canvas setupFinal;
+        
         public static Canvas easterEgg;
         public static Canvas RunImage;
         public static Canvas gtermIcon;
