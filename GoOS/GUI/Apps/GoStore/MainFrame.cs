@@ -16,6 +16,7 @@ using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.GoStore
 {
+    //TODO: The GoStore is no longer working after commit 3a1e7d6041df6df9409e1416c188419a6027d92f. I have repaired the GoStore Live checker to api.goos.* instead of api.*
     public class MainFrame : Window
     {
         Button[] catagoryButtons = new Button[7];
@@ -72,6 +73,7 @@ namespace GoOS.GUI.Apps.GoStore
          * TODO: I will only fix what I made badly, not what you made badly.
          * - ekeleze DO NOT REMOVE
          */
+        //TODO: ekeleze these are notes to be done before RC, this isnt just for YOU. Besides thats just a list and nothing uses it since the people i asked to do it (9xbt) never did anything
 
         public MainFrame()
         {
@@ -349,7 +351,7 @@ namespace GoOS.GUI.Apps.GoStore
                                  "User-Agent: GoOS\r\n" +
                                  "Accept: */*\r\n" +
                                  "Accept-Encoding: identity\r\n" +
-                                 "Host: api.owen2k6.com\r\n" +
+                                 "Host: api.goos.owen2k6.com\r\n" +
                                  "Connection: Keep-Alive\r\n\r\n";
 
                 tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
