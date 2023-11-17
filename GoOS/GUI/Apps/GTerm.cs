@@ -14,7 +14,6 @@ namespace GoOS.GUI.Apps
             Visible = true;
             Closable = true;
             SetDock(WindowDock.Auto);
-            BetterConsole.font = new Font(BetterConsole.rawFont, BetterConsole.charHeight);
             BetterConsole.Visible = true;
         }
 

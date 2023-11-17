@@ -40,7 +40,7 @@ namespace GoOS.GUI
         {
             for (int i = 0; i < Items.Length; i++)
             {
-                Contents.DrawString(0, i * 16, Items[i], BetterConsole.font, Color.White);
+                Contents.DrawString(0, i * 16, Items[i], Resources.Font_1x, Color.White);
             }
             RenderSystemStyleBorder();
         }

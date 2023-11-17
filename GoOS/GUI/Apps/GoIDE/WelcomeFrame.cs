@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using PrismAPI.Graphics;
+using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.GoIDE
 {
@@ -22,23 +23,18 @@ namespace GoOS.GUI.Apps.GoIDE
             Contents.Clear(Color.LightGray);
             RenderSystemStyleBorder();
             Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4), 38, 0, Color.DeepGray);
-            Contents.DrawString(10, 10, "Welcome", Fonts.Font_2x, Color.White);
-            Contents.DrawString(10, 52, "Welcome to GoIDE! This program will let you\ncreate and debug GoOS applications.\n\nGoIDE currently supports GoCode and 9xCode.\n\nPress next to install GoIDE and create a new\nproject.", Fonts.Font_1x, Color.White);
+            Contents.DrawString(10, 10, "Welcome", Font_2x, Color.White);
+            Contents.DrawString(10, 52, "Welcome to GoIDE! This program will let you\ncreate and debug GoOS applications.\n\nGoIDE currently supports GoCode and 9xCode.\n\nPress next to install GoIDE and create a new\nproject.", Resources.Font_1x, Color.White);
             CancelButton.Render();
             NextButton.Render();
         }
 
         private void NextButton_Click()
         {
-            Dialogue msg = new Dialogue("Setup Wizard", "Installing GoIDE...", default, Dialogue.infoIcon);
-            WindowManager.AddWindow(msg);
-            WindowManager.Update();
-
             Directory.CreateDirectory(@"0:\content\prf\GoIDE");
             Directory.CreateDirectory(@"0:\content\prf\GoIDE\Projects");
             Directory.CreateDirectory(@"0:\content\prf\GoIDE\SaveData");
 
-            msg.Dispose();
             Dispose();
             WindowManager.AddWindow(new NewProjectFrame());
         }

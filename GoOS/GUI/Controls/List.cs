@@ -60,7 +60,7 @@ namespace GoOS.GUI
                 Contents.DrawLine(0, 19, Contents.Width - 2, 19, new Color(216, 216, 216));
                 /*Contents.DrawLine(0, 20, Contents.Width - 2, 19, new Color(216, 216, 216));
                 Contents.DrawLine(0, 21, Contents.Width - 2, 19, new Color(216, 216, 216)); // fuck you owen*/
-                Contents.DrawString(2, 2, Title, BetterConsole.font, ForegroundColor);
+                Contents.DrawString(2, 2, Title, Resources.Font_1x, ForegroundColor);
             }
 
             // Items
@@ -73,9 +73,9 @@ namespace GoOS.GUI
                     //TODO: For example, you could just simply put //Creates a WHITE rectangle.
                     //TODO: This fucked up my theme changing work just cus you made it unnoticeable.
                     //-Owen2k6 >:^(
-                    Contents.DrawString(2, 21 + (i * 20), Items[i], BetterConsole.font, Color.Black);
+                    Contents.DrawString(2, 21 + (i * 20), Items[i], Resources.Font_1x, Color.Black);
                 }
-                else Contents.DrawString(2, 21 + (i * 20), Items[i], BetterConsole.font, ForegroundColor);
+                else Contents.DrawString(2, 21 + (i * 20), Items[i], Resources.Font_1x, ForegroundColor);
             }
 
             Parent.RenderControls();

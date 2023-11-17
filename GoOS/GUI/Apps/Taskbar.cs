@@ -117,7 +117,7 @@ public class Taskbar : Window
             return;
         }
 
-        int width = (windowButtonPadding * 2) + BetterConsole.font.MeasureString(window.Title);
+        int width = (windowButtonPadding * 2) + Resources.Font_1x.MeasureString(window.Title);
 
         int x;
         if (windowButtons.Count > 0)
@@ -163,12 +163,12 @@ public class Taskbar : Window
     private void RenderInformation()
     {
         string timeString = DateTime.Now.ToString("HH:mm");
-        int timeWidth = BetterConsole.font.MeasureString(timeString);
-        Contents.DrawString(Contents.Width - timeWidth - 3, 13, timeString, BetterConsole.font, Color.White, true);
+        int timeWidth = Resources.Font_1x.MeasureString(timeString);
+        Contents.DrawString(Contents.Width - timeWidth - 3, 13, timeString, Resources.Font_1x, Color.White, true);
 
         string fpsString = $"{WindowManager.Canvas.GetFPS()} fps";
-        int fpsWidth = BetterConsole.font.MeasureString(fpsString);
-        Contents.DrawString(Contents.Width - timeWidth - fpsWidth - 12, 13, fpsString, BetterConsole.font, Color.White, true);
+        int fpsWidth = Resources.Font_1x.MeasureString(fpsString);
+        Contents.DrawString(Contents.Width - timeWidth - fpsWidth - 12, 13, fpsString, Resources.Font_1x, Color.White, true);
     }
 
     public override void HandleRun()

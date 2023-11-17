@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using Sys = Cosmos.System;
 using System.IO;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using GoOS.Themes;
@@ -23,6 +24,7 @@ using ConsoleColor = PrismAPI.Graphics.Color;
 using static GoOS.Core;
 using System.Threading;
 using Cosmos.System.Network.IPv4.UDP.DNS;
+using GoOS._9xCode;
 using PrismAPI.Graphics;
 using IL2CPU.API.Attribs;
 using PrismAPI.Hardware.GPU;
@@ -39,13 +41,20 @@ namespace GoOS
 {
     public class Kernel : Sys.Kernel
     {
+        // This enables the user to switch between the old and new GoCode interpreters.
+        // This is to be removed as soon as the new one is finished, only being added as the new one needs testing.
+        public static bool oldCode = false;
+        
         public static Dictionary<string, string> InstalledPrograms = new Dictionary<string, string>() { };
 
-        public static bool isGCIenabled = false;
+        public static bool isGCIenabled = true;
+        public static string[] pathPaths = new string[] { };
 
         //Vars for OS
-        public static string version = "1.5";
-        public static string BuildType = "Beta";
+        public static string version = "1.5pr3";
+        public static string edition = "1.5pre"; // This is the current edition of GoOS. Used for UPDATER.
+        public static string editionnext = "1.5"; // This is the next edition of GoOS. Used for UPDATER.
+        public static string BuildType = "NIFPR";
         public static string olddir = @"0:\";
 
         public static string Notepadtextsavething = "";
@@ -64,21 +73,33 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
+            System.Console.WriteLine("GoOS - Starting GoOS...");
+
             if (Cosmos.Core.CPU.GetAmountOfRAM() < 150)
             {
                 System.Console.ForegroundColor = System.ConsoleColor.Red;
                 System.Console.WriteLine();
-                System.Console.Write("GoOS - Not enough ram to boot GoOS. Please increase the amount of RAM of your VM");
-                System.Console.Write("GoOS - Or if you are running this on real hardware (you shouldn't), buy more RAM");
+                System.Console.Write(
+                    "GoOS - Not enough ram to boot GoOS. Please increase the amount of RAM of your VM");
+                System.Console.Write(
+                    "GoOS - Or if you are running this on real hardware (you shouldn't), buy more RAM");
 
-                while (true);
+                while (true) ;
             }
 
-            WindowManager.Canvas = Display.GetDisplay(800, 600); //TODO: Not have this hard coded >:^(
+            Resources.Generate(ResourceType.Fonts);
+            Resources.Generate(ResourceType.Priority);
+
+            WindowManager.Canvas = Display.GetDisplay(1600, 900); //TODO: Not have this hard coded >:^(
+            // TODO:           looks hard coded to me (◔_◔)    
+            WindowManager.Canvas.DrawImage(0, 0, Resources.background, false);
             Console.Init(800, 600);
 
             var loadingDialogue = new LoadingDialogue("GoOS is starting\nPlease wait...");
             WindowManager.AddWindow(loadingDialogue);
+            WindowManager.Update();
+
+            Resources.Generate(ResourceType.Normal);
 
             ThemeManager.SetTheme(Theme.Fallback);
             log(ThemeManager.WindowText, "GoOS - Starting GoOS...");
@@ -102,110 +123,35 @@ namespace GoOS
 
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {
-                Console.ConsoleMode = true;
-                WindowManager.AddWindow(new GTerm());
-                Console.WriteLine("First boot... This may take awhile...");
-                OOBE.Launch();
+                Resources.Generate(ResourceType.OOBE);
+                WindowManager.IsInOOBE = true;
+                WindowManager.AddWindow(new GUI.Apps.OOBE.MainFrame());
+                return;
             }
-            //
-            // try
-            // {
-            //     if (!File.Exists(@"0:\content\sys\desktopcolour.gms"))
-            //     {
-            //         File.Create(@"0:\content\sys\desktopcolour.gms");
-            //         File.WriteAllText(@"0:\content\sys\desktopcolour.gms", "C=ClassicBlue");
-            //         DesktopColour = Color.ClassicBlue;
-            //     }
-            //     if (File.Exists(@"0:\content\sys\desktopcolour.gms"))
-            //     {
-            //         foreach (string line in File.ReadAllLines(@"0:\content\sys\desktopcolour.gms"))
-            //         {
-            //             if (line.StartsWith("C="))
-            //             {
-            //                 if (line.Replace("C=", "").Equals("ClassicBlue"))
-            //                 {
-            //                     DesktopColour = Color.ClassicBlue;
-            //                     break;
-            //                 }
-            //                 else if (line.Replace("C=", "").Equals("UbuntuPurple"))
-            //                 {
-            //                     DesktopColour = Color.UbuntuPurple;
-            //                     break;
-            //                 }
-            //                 else if (line.Replace("C=", "").Equals("SuperOrange"))
-            //                 {
-            //                     DesktopColour = Color.SuperOrange;
-            //                     break;
-            //                 }
-            //                 else if (line.Replace("C=", "").Equals("Red"))
-            //                 {
-            //                     DesktopColour = Color.Red;
-            //                     break;
-            //                 }
-            //                 else if (line.Replace("C=", "").Equals("Green"))
-            //                 {
-            //                     DesktopColour = Color.Green;
-            //                     break;
-            //                 }
-            //                 else if (line.Replace("C=", "").Equals("Blue"))
-            //                 {
-            //                     DesktopColour = Color.Blue;
-            //                     break;
-            //                 }
-            //                 else if (line.Replace("C=", "").Equals("Yellow"))
-            //                 {
-            //                     DesktopColour = Color.Yellow;
-            //                     break;
-            //                 }
-            //                 else if (line.Replace("C=", "").Equals("Purple"))
-            //                 {
-            //                     DesktopColour = Color.Magenta;
-            //                     break;
-            //                 }
-            //                 else if (line.Replace("C=", "").Equals("Cyan"))
-            //                 {
-            //                     DesktopColour = Color.Cyan;
-            //                     break;
-            //                 }
-            //                 else if (line.Replace("C=", "").Equals("White"))
-            //                 {
-            //                     DesktopColour = Color.White;
-            //                     break;
-            //                 }
-            //
-            //                 else if (line.Replace("C=", "").Equals("Black"))
-            //                 {
-            //                     DesktopColour = Color.Black;
-            //                     break;
-            //                 }
-            //                 else
-            //                 {
-            //                     DesktopColour = Color.ClassicBlue;
-            //                     break;
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
-            // catch (Exception)
-            // {
-            //     DesktopColour = Color.ClassicBlue;
-            //     //Dialogue.Show("Error", "GoOS - Failed to load desktop colour",
-            //         //null);
-            // }
+
+            if (!File.Exists(@"0:\content\sys\path.ugms"))
+            {
+                try
+                {
+                    File.Create(@"0:\content\sys\path.ugms");
+                }
+                catch (Exception)
+                {
+                    isGCIenabled = false;
+                    pathPaths = null;
+                }
+            }
 
             if (!Directory.Exists(@"0:\content\GCI\"))
             {
                 try
                 {
                     Directory.CreateDirectory(@"0:\content\GCI\");
+                    pathPaths.Append(@"0:\content\GCI\");
                 }
                 catch (Exception)
                 {
-                    if (File.Exists(@"0:\content\sys\GCI.gms"))
-                    {
-                        File.Delete(@"0:\content\sys\GCI.gms");
-                    }
+                    // ignored
                 }
             }
 
@@ -232,9 +178,6 @@ namespace GoOS
                         ThemeManager.SetTheme(line.Split("ThemeFile = ")[1]);
                     }
                 }
-
-                //byte videoMode = File.ReadAllBytes(@"0:\content\sys\resolution.gms")[0];
-                //Console.Init(ControlPanel.videoModes[videoMode].Item2.Width, ControlPanel.videoModes[videoMode].Item2.Height);
             }
             catch
             {
@@ -253,17 +196,123 @@ namespace GoOS
 
             using (var xClient = new DHCPClient())
             {
-                /** Send a DHCP Discover packet **/
-                //This will automatically set the IP config after DHCP response
                 xClient.SendDiscoverPacket();
                 log(ConsoleColor.Blue, NetworkConfiguration.CurrentAddress.ToString());
             }
 
             loadingDialogue.Closing = true;
-            WindowManager.Canvas = Display.GetDisplay(1600, 900);
             WindowManager.AddWindow(new Taskbar());
             WindowManager.AddWindow(new Desktop());
-            WindowManager.AddWindow(new Welcome());
+
+            #region GoOS Update Check
+
+            try
+            {
+                var dnsClient = new DnsClient();
+                var tcpClient = new TcpClient();
+                dnsClient.Connect(DNSConfig.DNSNameservers[0]);
+                dnsClient.SendAsk("api.goos.owen2k6.com");
+                Address address = dnsClient.Receive();
+                dnsClient.Close();
+                tcpClient.Connect(address, 80);
+                string httpget = "GET /GoOS/" + Kernel.edition + ".goos HTTP/1.1\r\n" +
+                                 "User-Agent: GoOS\r\n" +
+                                 "Accept: */*\r\n" +
+                                 "Accept-Encoding: identity\r\n" +
+                                 "Host: api.goos.owen2k6.com\r\n" +
+                                 "Connection: Keep-Alive\r\n\r\n";
+                tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
+                var ep = new EndPoint(Address.Zero, 0);
+                var data = tcpClient.Receive(ref ep);
+                tcpClient.Close();
+                string httpresponse = Encoding.ASCII.GetString(data);
+                string[] responseParts =
+                    httpresponse.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
+                if (responseParts.Length == 2)
+                {
+                    string headers = responseParts[0];
+                    string content = responseParts[1];
+                    if (content != version && content != editionnext)
+                    {
+                        Dialogue.Show("GoOS Update",
+                            "A newer version of GoOS is available on Github.\nWe recommend you update to the latest version for stability and security reasons.\nhttps://github.com/Owen2k6/GoOS/releases\nCurrent Version: " +
+                            version + "\nLatest Version: " + content);
+                    }
+                    else if (content == editionnext)
+                    {
+                        Dialogue.Show("GoOS Update",
+                            "The next GoOS has been released.\nWe don't want to force you to update but at least check out whats new in GoOS " +
+                            editionnext + "!\nhttps://github.com/Owen2k6/GoOS/releases/tag/" + editionnext);
+                    }
+                    else if (content == "404")
+                    {
+                        Dialogue.Show("GoOS Update", "Your Version of GoOS does not support GoOS Update.");
+                    }
+                    else
+                    {
+                        WindowManager.AddWindow(new Welcome());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Dialogue.Show("GoOS Update", "Failed to connect to Owen2k6 Api. Error: " + ex);
+            }
+
+            #endregion
+
+            #region GoOS Support Checker
+
+            try
+            {
+                var dnsClient = new DnsClient();
+                var tcpClient = new TcpClient();
+                dnsClient.Connect(DNSConfig.DNSNameservers[0]);
+                dnsClient.SendAsk("api.goos.owen2k6.com");
+                Address address = dnsClient.Receive();
+                dnsClient.Close();
+                tcpClient.Connect(address, 80);
+                string httpget = "GET /GoOS/" + edition + "-support.goos HTTP/1.1\r\n" +
+                                 "User-Agent: GoOS\r\n" +
+                                 "Accept: */*\r\n" +
+                                 "Accept-Encoding: identity\r\n" +
+                                 "Host: api.goos.owen2k6.com\r\n" +
+                                 "Connection: Keep-Alive\r\n\r\n";
+                tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
+                var ep = new EndPoint(Address.Zero, 0);
+                var data = tcpClient.Receive(ref ep);
+                tcpClient.Close();
+                string httpresponse = Encoding.ASCII.GetString(data);
+                string[] responseParts =
+                    httpresponse.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
+                if (responseParts.Length == 2)
+                {
+                    string headers = responseParts[0];
+                    string content = responseParts[1];
+                    if (content == "true")
+                    {
+                    }
+                    else if (content == "false")
+                    {
+                        Dialogue.Show("GoOS Security Notice",
+                            "GoOS Support for this edition has ended. Please update to the latest version of GoOS for the latest security patches.\nThere will no more security patches released for GoOS " +
+                            edition +
+                            ".\nDownload the latest edition from \nhttps://github.com/Owen2k6/GoOS/releases/tag/");
+                    }
+                    else
+                    {
+                        Dialogue.Show("GoOS Security",
+                            "You seem to be sporting some funky version of GoOS. Your edition doesnt exist on our servers (" +
+                            edition + ")");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Dialogue.Show("GoOS Security", "Failed to connect to Owen2k6 Api. Error: " + ex);
+            }
+
+            #endregion
 
             Console.Clear();
 
@@ -302,7 +351,7 @@ namespace GoOS
 
         protected override void Run()
         {
-            isGCIenabled = File.Exists(@"0:\content\sys\GCI.gms");
+            isGCIenabled = File.Exists(@"0:\content\sys\path.ugms");
 
             if (isGCIenabled)
             {
@@ -328,6 +377,9 @@ namespace GoOS
 
             switch (args[0])
             {
+                case "codeswitch":
+                    oldCode = !oldCode;
+                    break;
                 case "gui":
                     Console.ConsoleMode = false;
                     WindowManager.Canvas = Display.GetDisplay(1280, 720);
@@ -436,11 +488,6 @@ namespace GoOS
 
                     switch (args[1])
                     {
-                        case "repo":
-                            log(Color.Minty, "GoOS - Application Repositorys");
-                            log(Color.GoogleYellow, "-a apps.goos.owen2k6.com");
-                            log(Color.GoogleYellow, "-b dev.apps.goos.owen2k6.com");
-                            break;
                         case "type":
                             log(Color.Minty, "GoOS - Application Types");
                             log(Color.GoogleYellow, "-g Goexe");
@@ -452,6 +499,7 @@ namespace GoOS
                                 log(ThemeManager.ErrorText, "X: go install -<repo> <appname> -<type>");
                                 break;
                             }
+
                             String filetoget = args[3];
                             try
                             {
@@ -459,53 +507,39 @@ namespace GoOS
                                 var tcpClient = new TcpClient();
                                 string repo;
                                 string type;
-                                //temporary use of local repository list
-                                if (args[2] == "-a")
-                                {
-                                    repo = "apps.goos.owen2k6.com";
-                                    log(Color.Red, repo);
-                                }
-                                else if (args[2] == "-b")
-                                {
-                                    repo = "dev.apps.goos.owen2k6.com";
-                                    log(Color.Red, repo);
-                                }
-                                else
-                                {
-                                    log(ThemeManager.ErrorText, "Unknown repository");
-                                    break;
-                                }
+                                
+                                repo = args[2];
 
                                 if (args[4] == "-g")
                                 {
                                     type = "goexe";
-                                    log(Color.Red, type);
                                 }
                                 else if (args[4] == "-9")
                                 {
-                                    type = "9x";
-                                    log(Color.Red, type);
+                                    type = "9xc";
                                 }
                                 else
                                 {
                                     log(ThemeManager.ErrorText, "Unknown application type");
                                     break;
                                 }
-                                log(Color.Red, repo+"/"+filetoget+"."+type);
+
+                                log(Color.Red, "Downloading " + filetoget + "." + type + " from " + repo);
 
                                 dnsClient.Connect(DNSConfig.DNSNameservers[0]);
                                 dnsClient.SendAsk(repo);
                                 Address address = dnsClient.Receive();
-                                log(Color.Red, address.ToString());
+                                log(Color.SuperOrange, "Connected to server. Downloading file...");
+                                log(Color.SuperOrange, "GoOS Will halt the system while it downloads the file.");
                                 dnsClient.Close();
 
                                 tcpClient.Connect(address, 80);
 
-                                string httpget = "GET /" + filetoget + "."+type+" HTTP/1.1\r\n" +
+                                string httpget = "GET /" + filetoget + "." + type + " HTTP/1.1\r\n" +
                                                  "User-Agent: GoOS\r\n" +
                                                  "Accept: */*\r\n" +
                                                  "Accept-Encoding: identity\r\n" +
-                                                 "Host: "+repo+"\r\n" +
+                                                 "Host: " + repo + "\r\n" +
                                                  "Connection: Keep-Alive\r\n\r\n";
 
                                 tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
@@ -524,10 +558,16 @@ namespace GoOS
                                     string headers = responseParts[0];
                                     string content = responseParts[1];
                                     //Console.WriteLine(content);
+                                    if (content == "404")
+                                    {
+                                        log(ThemeManager.ErrorText,
+                                            "The requested file was not found on the server. Try another repo?");
+                                        break;
+                                    }
 
-                                    File.Create(@"0:\" + filetoget + "."+type);
-                                    File.WriteAllText(@"0:\" + filetoget + "."+type, content);
-                                    log(Color.Green, "Downloaded " + filetoget + "."+type);
+                                    File.Create(@"0:\" + filetoget + "." + type);
+                                    File.WriteAllText(@"0:\" + filetoget + "." + type, content);
+                                    log(Color.Green, "Downloaded " + filetoget + "." + type);
                                 }
                             }
                             catch (Exception ex)
@@ -555,7 +595,10 @@ namespace GoOS
                         break;
                     }
 
-                    Commands.Run.Main(args[1]);
+                    if (oldCode)
+                        Commands.Run.Main(args[1]);
+                    else
+                        GoCode.GoCode.Run(args[1]);
                     break;
                 case "mkdir":
                     if (args.Length > 2)
@@ -653,8 +696,6 @@ namespace GoOS
                         log(ThemeManager.ErrorText, "Too many arguments");
                         break;
                     }
-
-                    // do it the ChaOS way, it works so dont touch else you're gay
                     try
                     {
                         Directory.SetCurrentDirectory(Directory.GetCurrentDirectory().TrimEnd('\\')
@@ -664,11 +705,11 @@ namespace GoOS
                     }
                     catch
                     {
+                        // ignored
                     }
-
                     if (!Directory.GetCurrentDirectory().StartsWith(@"0:\"))
                     {
-                        Directory.SetCurrentDirectory(@"0:\"); // Directory error correction
+                        Directory.SetCurrentDirectory(@"0:\");
                     }
 
                     break;
@@ -823,6 +864,15 @@ namespace GoOS
 
                     _9xCode.Interpreter.Run(Directory.GetCurrentDirectory() + args[1]);
                     break;
+                case "gostore":
+                    WindowManager.AddWindow(new GUI.Apps.GoStore.MainFrame());
+                    break;
+                case "about":
+                    WindowManager.AddWindow(new About());
+                    break;
+                case "noobe":
+                    WindowManager.AddWindow(new GUI.Apps.OOBE.MainFrame());
+                    break;
                 default:
                     if (isGCIenabled)
                     {
@@ -846,7 +896,10 @@ namespace GoOS
                             TrueLocat = TrueLocat.Replace(@"0:\", "");
                         }
 
-                        Commands.Run.Main(TrueLocat);
+                        if (locat.ToLower().EndsWith(".goexe") || locat.ToLower().EndsWith(".gexe"))
+                            Commands.Run.Main(TrueLocat);
+                        else if (locat.ToLower().EndsWith(".9xc"))
+                            Interpreter.Run(TrueLocat);
 
                         Directory.SetCurrentDirectory(currentDIRRRRRR);
                         break;

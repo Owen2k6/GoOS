@@ -101,15 +101,31 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Resources\GUI\aboutGoOS.bmp" />
+      <None Remove="Resources\GUI\desktopwallpaper.bmp" />
+      <None Remove="Resources\GUI\GoStore.bmp" />
+      <None Remove="Resources\GUI\GoStoreicon.bmp" />
+      <None Remove="Resources\GUI\Maximize_Hovered.bmp" />
+      <None Remove="Resources\GUI\Maximize_Pressed.bmp" />
       <None Remove="Resources\GUI\Paint\rubber.bmp" />
+      <None Remove="Resources\OOBE\oobe.bmp" />
+      <None Remove="Resources\OOBE\oobebg.bmp" />
+      <Compile Remove="OOBE.cs" />
+      <None Include="OOBE.cs" />
     </ItemGroup>
 
     <ItemGroup>
       <EmbeddedResource Include="Resources\Font_2x.btf" />
+      <EmbeddedResource Include="Resources\GUI\aboutGoOS.bmp" />
       <EmbeddedResource Include="Resources\GUI\brown_ghost.bmp" />
+      <EmbeddedResource Include="Resources\GUI\desktopwallpaper.bmp" />
       <EmbeddedResource Include="Resources\GUI\error.bmp" />
       <EmbeddedResource Include="Resources\GUI\GoIDE\run.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoStore.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoStoreicon.bmp" />
       <EmbeddedResource Include="Resources\GUI\ide.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Maximize_Hovered.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Maximize_Pressed.bmp" />
       <EmbeddedResource Include="Resources\GUI\mouse_click.bmp" />
       <EmbeddedResource Include="Resources\GUI\mouse_text.bmp" />
       <EmbeddedResource Include="Resources\GUI\Paint\brush.bmp" />
@@ -127,6 +143,8 @@
       <EmbeddedResource Include="Resources\GUI\Paint\text.bmp" />
       <EmbeddedResource Include="Resources\GUI\shutdown.bmp" />
       <EmbeddedResource Include="Resources\GUI\user.bmp" />
+      <EmbeddedResource Include="Resources\OOBE\oobe.bmp" />
+      <EmbeddedResource Include="Resources\OOBE\oobebg.bmp" />
       <EmbeddedResource Include="Resources\OOBE\setupsupport.bmp" />
       <EmbeddedResource Include="Resources\GUI\TaskManager.bmp" />
       <EmbeddedResource Include="Resources\GUI\Notepad\SAVE.bmp" />
@@ -170,9 +188,10 @@
         <PackageReference Include="Cosmos.Core" Version="0.1.0-*" />
         <PackageReference Include="Cosmos.Debug.Kernel" Version="0-*" NoWarn="NU1604" />
         <PackageReference Include="Cosmos.HAL2" Version="0.1.0-*" />
-        <PackageReference Include="Cosmos.Plugs" Version="0.1.0-*" />
-        <PackageReference Include="Cosmos.System2" Version="0-*" NoWarn="NU1604" />
+        <PackageReference Include="Cosmos.Plugs" Version="0.1.0-localbuild" />
+        <PackageReference Include="Cosmos.System2" Version="0.1.0-localbuild" />
         <PackageReference Include="IL2CPU.API" Version="0.1.0-*" />
+        <PackageReference Include="PrismAPI" Version="1.0.3" />
     </ItemGroup>
 
     <ItemGroup>
@@ -185,9 +204,11 @@
       <Reference Include="LibDotNetParser">
         <HintPath>LibDotNetParser.dll</HintPath>
       </Reference>
-      <Reference Include="PrismAPI">
-        <HintPath>..\..\..\Prism-OS\PrismAPI\bin\Debug\net6.0\PrismAPI.dll</HintPath>
-      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\GUI\StoreButton.bmp" />
+      <EmbeddedResource Include="Resources\GUI\StoreButton.bmp" />
     </ItemGroup>
 	
 </Project>

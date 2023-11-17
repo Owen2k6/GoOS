@@ -20,6 +20,7 @@ namespace GoOS.GUI
         public Canvas Contents;
         public ushort X, Y;
         public bool Visible = true;
+        public bool RenderWithAlpha = false;
 
         public Action Clicked;
         public Action<string> ClickedAlt;

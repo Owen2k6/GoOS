@@ -5,14 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
+using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps
 {
     public class Welcome : Window
     {
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.Welcome.bmp")] private static byte[] welcomeImageRaw;
-        private static Canvas welcomeImage = Image.FromBitmap(welcomeImageRaw, false);
-
         Button closeButton;
 
         public Welcome()

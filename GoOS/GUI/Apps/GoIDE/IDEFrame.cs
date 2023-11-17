@@ -1,17 +1,16 @@
 ﻿using System;
 using System.IO;
+using GoOS.Commands;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
-using GoCode = GoOS.Commands.Run;
+using static GoOS.Commands.Run;
 using Console = BetterConsole;
+using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.GoIDE
 {
     public class IDEFrame : Window
     {
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoIDE.run.bmp")] static byte[] runRaw;
-        static Canvas RunImage = Image.FromBitmap(runRaw, false);
-
         Button SaveButton;
         Button RunButton;
         InputNUMBERS Code;
@@ -58,7 +57,7 @@ namespace GoOS.GUI.Apps.GoIDE
             SaveButton.Render();
             RunButton.Render();
             Code.Render();
-            Contents.DrawString(4, Contents.Height - 20, status, Fonts.Font_1x, Color.LighterBlack);
+            Contents.DrawString(4, Contents.Height - 20, status, Font_1x, Color.LighterBlack);
         }
 
         bool Debugging = false;
@@ -83,7 +82,7 @@ namespace GoOS.GUI.Apps.GoIDE
                 Console.Clear();
 
                 if (!Is9xCode)
-                    GoCode.Main(ProjectPath, false);
+                    Run.Main(ProjectPath, false);
                 else
                     _9xCode.Interpreter.Run(ProjectPath);
 

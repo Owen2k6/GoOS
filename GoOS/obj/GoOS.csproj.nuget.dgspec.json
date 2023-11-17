@@ -71,18 +71,19 @@
             },
             "Cosmos.Plugs": {
               "target": "Package",
-              "version": "[0.1.0-localbuild20231103064939, )"
+              "version": "[0.1.0-localbuild, )"
             },
             "Cosmos.System2": {
               "target": "Package",
-              "version": "[0.0.0-*, )",
-              "noWarn": [
-                "NU1604"
-              ]
+              "version": "[0.1.0-localbuild, )"
             },
             "IL2CPU.API": {
               "target": "Package",
               "version": "[0.1.0-*, )"
+            },
+            "PrismAPI": {
+              "target": "Package",
+              "version": "[1.0.3, )"
             }
           },
           "imports": [

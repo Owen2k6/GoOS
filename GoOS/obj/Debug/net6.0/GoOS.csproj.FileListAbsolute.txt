@@ -84,7 +84,6 @@ C:\Users\Eric\Documents\GitHub\Cosmos\GoOS-Fork\GoOS\obj\Debug\net6.0\GoOS.pdb
 C:\Users\Eric\Documents\GitHub\Cosmos\GoOS-Fork\GoOS\obj\Debug\net6.0\ref\GoOS.dll
 C:\Users\Eric\Documents\GitHub\Cosmos\GoOS-Fork\GoOS\bin\Debug\net6.0\PrismAPI.dll
 C:\Users\Eric\Documents\GitHub\Cosmos\GoOS-Fork\GoOS\obj\Debug\net6.0\GoOS.csproj.CopyComplete
-D:\GitHub\GoOS\GoOS\bin\Debug\net6.0\PrismAPI.dll
 D:\GitHub\GoOS\GoOS\obj\Debug\net6.0\GoOS.csproj.CopyComplete
 C:\Users\ekeleze\Documents\GitHub\GoOS\GoOS\bin\Debug\net6.0\GoOS.deps.json
 C:\Users\ekeleze\Documents\GitHub\GoOS\GoOS\bin\Debug\net6.0\GoOS.dll

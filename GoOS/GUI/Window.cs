@@ -3,30 +3,12 @@ using Cosmos.System;
 using GoOS.GUI.Models;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
+using static GoOS.Resources;
 
 namespace GoOS.GUI
 {
     public class Window
     {
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton.bmp")] private static byte[] closeButtonRaw;
-        private static Canvas closeButton = Image.FromBitmap(closeButtonRaw, false);
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton_hover.bmp")] private static byte[] closeButtonHoverRaw;
-        private static Canvas closeButtonHover = Image.FromBitmap(closeButtonHoverRaw, false);
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton_pressed.bmp")] private static byte[] closeButtonPressedRaw;
-        private static Canvas closeButtonPressed = Image.FromBitmap(closeButtonPressedRaw, false);
-        
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Maximize.bmp")] private static byte[] maximiseRaw;
-        private static Canvas maximize = Image.FromBitmap(maximiseRaw, false);
-        
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize.bmp")] private static byte[] minimiseRaw;
-        private static Canvas minimise = Image.FromBitmap(minimiseRaw, false);
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Hovered.bmp")] private static byte[] minimiseHoverRaw;
-        private static Canvas minimiseHover = Image.FromBitmap(minimiseHoverRaw, false);
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Pressed.bmp")] private static byte[] minimisePressedRaw;
-        private static Canvas minimisePressed = Image.FromBitmap(minimisePressedRaw, false);
-
         public Canvas Contents;
 
         public int X = 50, Y = 50;
@@ -86,7 +68,7 @@ namespace GoOS.GUI
         {
             foreach (Control control in Controls)
             {
-                Contents.DrawImage(control.X, control.Y, control.Contents, false);
+                Contents.DrawImage(control.X, control.Y, control.Contents, control.RenderWithAlpha);
             }
         }
 
@@ -157,7 +139,28 @@ namespace GoOS.GUI
             get
             {
                 return IsMouseOverTitleBar &&
-                       MouseManager.X >= X + Contents.Width - TITLE_BAR_HEIGHT;
+                       MouseManager.X >= X + Contents.Width - TITLE_BAR_HEIGHT &&
+                       MouseManager.X <= X + Contents.Width + TITLE_BAR_HEIGHT;
+            }
+        }
+
+        public bool IsMouseOverMaximizeButton
+        {
+            get
+            {
+                return IsMouseOverTitleBar &&
+                       MouseManager.X >= X + Contents.Width - (TITLE_BAR_HEIGHT * 2) &&
+                       MouseManager.X <= X + Contents.Width - TITLE_BAR_HEIGHT;
+            }
+        }
+
+        public bool IsMouseOverMinimizeButton
+        {
+            get
+            {
+                return IsMouseOverTitleBar &&
+                    MouseManager.X >= X + Contents.Width - (TITLE_BAR_HEIGHT * 3) &&
+                    MouseManager.X <= X + Contents.Width - (TITLE_BAR_HEIGHT * 2);
             }
         }
 
@@ -286,24 +289,31 @@ namespace GoOS.GUI
                 cv.DrawFilledRectangle(X, Y, Contents.Width, TITLE_BAR_HEIGHT, 0,
                     focused ? Color.LighterBlack : Color.DeepGray);
 
-                cv.DrawString(X + 2, Y, Title, BetterConsole.font, Color.White);
+                cv.DrawString(X + 2, Y, Title, Resources.Font_1x, Color.White);
 
                 // Close button.
                 if (Closable)
                 {
-                    Canvas closeButtonImage = closeButton;
+                    Canvas closeButtonImage = closeButton, maximizeButtonImage = maximize, minimiseButtonImage = minimise;
                     if (IsMouseOverCloseButton)
                     {
                         closeButtonImage = MouseManager.MouseState == MouseState.Left ?
                             closeButtonPressed : closeButtonHover;
                     }
+                    else if (IsMouseOverMaximizeButton)
+                    {
+                        maximizeButtonImage = MouseManager.MouseState == MouseState.Left ?
+                            maximizePressed : maximizeHover;
+                    }
+                    else if (IsMouseOverMinimizeButton)
+                    {
+                        minimiseButtonImage = MouseManager.MouseState == MouseState.Left ?
+                            minimisePressed : minimiseHover;
+                    }
 
                     cv.DrawImage(X + Contents.Width - 21, Y +1, closeButtonImage);
-                    
-                    // TODO: Maximize and minimize
-
-                    /*cv.DrawImage(X + Contents.Width - 39, Y +1, maximize);
-                    cv.DrawImage(X + Contents.Width - 57, Y +1, minimise);*/
+                    cv.DrawImage(X + Contents.Width - 39, Y +1, maximize);
+                    cv.DrawImage(X + Contents.Width - 57, Y +1, minimise);
                 }
             }
 
@@ -413,7 +423,6 @@ namespace GoOS.GUI
 
         public void AutoCreate(WindowDock dock, int Width, int Height, string Title)
         {
-            Fonts.Generate();
             Contents = new Canvas((ushort)Width, (ushort)Height);
             SetDock(dock);
             this.Title = Title;
@@ -423,7 +432,6 @@ namespace GoOS.GUI
 
         public void AutoCreate(int X, int Y, int Width, int Height, string Title)
         {
-            Fonts.Generate();
             Contents = new Canvas((ushort)Width, (ushort)Height);
             this.X = X;
             this.Y = Y;

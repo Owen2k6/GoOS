@@ -6,14 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static GoOS.Resources;
 
 namespace GoOS.GUI
 {
     public static class MemoryWatch
     {
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.warning.bmp")] private static byte[] warningIconRaw;
-        private static Canvas warningIcon = Image.FromBitmap(warningIconRaw, false);
-
         private const int CYCLES_PER_CHECK = 50;
         private const uint WARNING_THRESHOLD = 64;
 

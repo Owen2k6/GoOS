@@ -37,6 +37,8 @@ namespace GoOS.GUI
 
         internal static Action TaskbarFocusChangedHook;
 
+        public static bool IsInOOBE = false;
+
         public static Window FocusedWindow
         {
             get
@@ -117,6 +119,8 @@ namespace GoOS.GUI
 
         public static void AddWindow(Window window)
         {
+            Resources.Generate(ResourceType.Fonts);
+
             window.Paint();
             windows.Add(window);
 
@@ -298,16 +302,6 @@ namespace GoOS.GUI
                     return;
                 }
 
-                else if (KeyboardManager.ControlPressed && key.Key == ConsoleKeyEx.G)
-                {
-                    BetterConsole.font = new Font(BetterConsole.rawFont, BetterConsole.charHeight);
-                    Dialogue.Show(
-                        nameof(WindowManager),
-                        $"Regenerated font.",
-                        null
-                    );
-                }
-
                 else if (KeyboardManager.ControlPressed && KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
                 {
                     AddWindow(new TaskManager());
@@ -345,7 +339,7 @@ namespace GoOS.GUI
                         MouseManager.ScreenHeight = Canvas.Height;
                     }
 
-                    //Canvas.Clear(Color.UbuntuPurple);
+                    if (IsInOOBE) Canvas.DrawImage(0, 0, Resources.background, false);
 
                     if (MouseManager.X != LastCursorX || MouseManager.Y != LastCursorY)
                     {

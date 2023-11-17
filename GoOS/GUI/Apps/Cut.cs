@@ -8,16 +8,12 @@ using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
 using System.IO;
 using System.Threading;
+using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps;
 
 public class Cut : Window
 {
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.CUT.bmp")]
-    private static byte[] cutIconRaw;
-
-    private static Canvas cutIcon = Image.FromBitmap(cutIconRaw, false);
-
     public Cut()
     {
         Contents = new Canvas(148, 150);
