@@ -963,15 +963,7 @@ namespace GoOS._9xCode
 
                         #region GoOS Library
 
-                        else if (GoOSLib && line.StartsWith("EnableKillingSystemTasks"))
-                        {
-                            GUI.Apps.TaskManager.pko = true;
-                        }
 
-                        else if (GoOSLib && line.StartsWith("DisableKillingSystemTasks"))
-                        {
-                            GUI.Apps.TaskManager.pko = false;
-                        }
 
                         else if (GoOSLib && line.StartsWith("RegProg") && line.Contains(">>"))
                         {
