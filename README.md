@@ -1,3 +1,7 @@
+# Since Cosmos updated their networking requiring me to have to rewrite all the shit i spent months working on. I give up on this project.
+# I may come back some time but i think its unlikely
+
+
 # GoOS
 
 GoOS (GoplexOS) is a simple operating system (OS) built from scratch using [CosmosOS](https://github.com/CosmosOS/Cosmos).
