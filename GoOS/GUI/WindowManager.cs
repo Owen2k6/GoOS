@@ -13,7 +13,7 @@ namespace GoOS.GUI
     public class WindowManager
     {
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse.bmp")] private static byte[] mouseRaw;
-        private static Canvas mouse = Image.FromBitmap(mouseRaw, false);
+        public static Canvas mouse = Image.FromBitmap(mouseRaw, false);
 
         private static int framesToHeapCollect = 10;
 
@@ -186,7 +186,7 @@ namespace GoOS.GUI
 
         private static void DrawMouse()
         {
-            Canvas.DrawImage((int)MouseManager.X - MouseOffsetX, (int)MouseManager.Y - MouseOffsetY, MouseToDraw, true);
+            Canvas.DrawImage((int)MouseManager.X - MouseOffsetX - MouseManager.DeltaX, (int)MouseManager.Y - MouseOffsetY - MouseManager.DeltaY, MouseToDraw);
         }
 
         private static void AltTab()
@@ -332,8 +332,7 @@ namespace GoOS.GUI
             {
                 if (!BetterConsole.ConsoleMode)
                 {
-                    if (MouseManager.ScreenWidth != Canvas.Width ||
-                        MouseManager.ScreenHeight != Canvas.Height)
+                    if (MouseManager.ScreenWidth != Canvas.Width || MouseManager.ScreenHeight != Canvas.Height)
                     {
                         MouseManager.ScreenWidth = Canvas.Width;
                         MouseManager.ScreenHeight = Canvas.Height;
@@ -439,10 +438,10 @@ namespace GoOS.GUI
         }
 
         private static void DimBackground() {
-            for (int y = 0; y < WindowManager.Canvas.Height - 1; y++) {
-                for (int x = 0; x < WindowManager.Canvas.Width - 1; x++) {
+            for (int y = 0; y < Canvas.Height - 1; y++) {
+                for (int x = 0; x < Canvas.Width - 1; x++) {
                     if ((x % 2) == 0) {
-                        WindowManager.Canvas[x + y % 2, y] = Color.Black;
+                        Canvas[x + y % 2, y] = Color.Black;
                     }
                 }
             }
