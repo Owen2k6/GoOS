@@ -1,26 +1,26 @@
 {
   "version": 2,
-  "dgSpecHash": "piwnXN94CFJsXGQHXqrabtu7R/3xwCKerOO5D68o4i/HAAYxDJC4jp66cyVLzoAFGGlpJfuGPUZMhvPZFyr6qA==",
+  "dgSpecHash": "8aSrRp4xjYX2X+lbBZRpCVUFA4wH00ulupsFf7+soZcnpWtWlfUpDnSEVIfhpt4EEJg5Rq+ndmD4G6XB9uJ6EA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Eric\\Documents\\GitHub\\GoOS\\GoOS\\GoOS.csproj",
+  "projectFilePath": "D:\\Github\\GoOS\\GoOS\\GoOS.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.build\\0.1.0-localbuild20240114063759\\cosmos.build.0.1.0-localbuild20240114063759.nupkg.sha512",
-    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.common\\0.1.0-localbuild20240114063807\\cosmos.common.0.1.0-localbuild20240114063807.nupkg.sha512",
-    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.core\\0.1.0-localbuild20240114063807\\cosmos.core.0.1.0-localbuild20240114063807.nupkg.sha512",
-    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.debug.kernel\\0.1.0-localbuild20240114063807\\cosmos.debug.kernel.0.1.0-localbuild20240114063807.nupkg.sha512",
-    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.hal2\\0.1.0-localbuild20240114063807\\cosmos.hal2.0.1.0-localbuild20240114063807.nupkg.sha512",
-    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.plugs\\0.1.0-localbuild20240114063807\\cosmos.plugs.0.1.0-localbuild20240114063807.nupkg.sha512",
-    "C:\\Users\\Eric\\.nuget\\packages\\cosmos.system2\\0.1.0-localbuild20240114063807\\cosmos.system2.0.1.0-localbuild20240114063807.nupkg.sha512",
-    "C:\\Users\\Eric\\.nuget\\packages\\il2cpu.api\\0.1.0-localbuild20240114063807\\il2cpu.api.0.1.0-localbuild20240114063807.nupkg.sha512",
-    "C:\\Users\\Eric\\.nuget\\packages\\prismapi\\1.0.3\\prismapi.1.0.3.nupkg.sha512",
-    "C:\\Users\\Eric\\.nuget\\packages\\tinymath\\1.0.1\\tinymath.1.0.1.nupkg.sha512"
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.build\\0.1.0-localbuild20240114080438\\cosmos.build.0.1.0-localbuild20240114080438.nupkg.sha512",
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.common\\0.1.0-localbuild20240114080446\\cosmos.common.0.1.0-localbuild20240114080446.nupkg.sha512",
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.core\\0.1.0-localbuild20240114080446\\cosmos.core.0.1.0-localbuild20240114080446.nupkg.sha512",
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.debug.kernel\\0.1.0-localbuild20240114080446\\cosmos.debug.kernel.0.1.0-localbuild20240114080446.nupkg.sha512",
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.hal2\\0.1.0-localbuild20240114080446\\cosmos.hal2.0.1.0-localbuild20240114080446.nupkg.sha512",
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.plugs\\0.1.0-localbuild20240114080446\\cosmos.plugs.0.1.0-localbuild20240114080446.nupkg.sha512",
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\cosmos.system2\\0.1.0-localbuild20240114080446\\cosmos.system2.0.1.0-localbuild20240114080446.nupkg.sha512",
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\il2cpu.api\\0.1.0-localbuild20240114080446\\il2cpu.api.0.1.0-localbuild20240114080446.nupkg.sha512",
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\prismapi\\1.0.3\\prismapi.1.0.3.nupkg.sha512",
+    "C:\\Users\\Owen2k6\\.nuget\\packages\\tinymath\\1.0.1\\tinymath.1.0.1.nupkg.sha512"
   ],
   "logs": [
     {
       "code": "NU1603",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "GoOS depende de Cosmos.Plugs (>= 0.1.0-localbuild), pero no se encontró Cosmos.Plugs 0.1.0-localbuild. Se resolvió una mejor coincidencia aproximada de Cosmos.Plugs 0.1.0-localbuild20240114063807.",
+      "message": "GoOS depends on Cosmos.Plugs (>= 0.1.0-localbuild) but Cosmos.Plugs 0.1.0-localbuild was not found. An approximate best match of Cosmos.Plugs 0.1.0-localbuild20240114080446 was resolved.",
       "libraryId": "Cosmos.Plugs",
       "targetGraphs": [
         "net6.0"
@@ -30,7 +30,7 @@
       "code": "NU1603",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "GoOS depende de Cosmos.System2 (>= 0.1.0-localbuild), pero no se encontró Cosmos.System2 0.1.0-localbuild. Se resolvió una mejor coincidencia aproximada de Cosmos.System2 0.1.0-localbuild20240114063807.",
+      "message": "GoOS depends on Cosmos.System2 (>= 0.1.0-localbuild) but Cosmos.System2 0.1.0-localbuild was not found. An approximate best match of Cosmos.System2 0.1.0-localbuild20240114080446 was resolved.",
       "libraryId": "Cosmos.System2",
       "targetGraphs": [
         "net6.0"
