@@ -26,12 +26,12 @@ public class Ping
 {
     public static void Run()
     {
-        try
+        /*try
         {
             log(ConsoleColor.Red, "1");
             using (var xClient = new DHCPClient())
             {
-                /** Send a DHCP Discover packet **/
+                // Send a DHCP Discover packet 
                 //This will automatically set the IP config after DHCP response
                 xClient.SendDiscoverPacket();
                 log(ConsoleColor.Blue, NetworkConfiguration.CurrentAddress.ToString());
@@ -62,6 +62,8 @@ public class Ping
         {
             log(ConsoleColor.Red, "Internal Error:");
             log(ConsoleColor.White, e.ToString());
-        }
+        }*/
+
+        Console.WriteLine("Ping is not supported for now.");
     }
 }

@@ -4,7 +4,7 @@ using System.IO;
 using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4;
 using Cosmos.System.Network.IPv4.UDP.DNS;
-using TcpClient = Cosmos.System.Network.IPv4.TCP.TcpClient;
+//using TcpClient = Cosmos.System.Network.IPv4.TCP.TcpClient;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +13,7 @@ using GoOS.Themes;
 using PrismAPI.Graphics;
 using static GoOS.Resources;
 using static GoOS.Resources;
+//using System.Net;
 
 namespace GoOS.GUI.Apps.GoStore
 {
@@ -74,7 +75,6 @@ namespace GoOS.GUI.Apps.GoStore
          * TODO: This needs to be reset to just 1.5 before release.
          * TODO: Prevent Release Candidate or Release builds until this is resolved.
          * - Owen2k6 DO NOT REMOVE.
-         */
          */
 
         public MainFrame()
@@ -314,38 +314,43 @@ namespace GoOS.GUI.Apps.GoStore
         {
             try
             {
-                var dnsClient = new DnsClient();
-                var tcpClient = new TcpClient();
-
-                dnsClient.Connect(DNSConfig.DNSNameservers[0]);
-                dnsClient.SendAsk(repo);
-                Address address = dnsClient.Receive();
-                dnsClient.Close();
-
-                tcpClient.Connect(address, 80);
-
-                string httpget = "GET /info.glist HTTP/1.1\r\n" +
-                                 "User-Agent: GoOS\r\n" +
-                                 "Accept: */*\r\n" +
-                                 "Accept-Encoding: identity\r\n" +
-                                 "Host: " + repo + "\r\n" +
-                                 "Connection: Keep-Alive\r\n\r\n";
-
-                tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
-
-                var ep = new EndPoint(Address.Zero, 0);
-                var data = tcpClient.Receive(ref ep);
-                tcpClient.Close();
-
-                string httpresponse = Encoding.ASCII.GetString(data);
-
-                string[] responseParts =
-                    httpresponse.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
-
-                if (responseParts.Length == 2)
-                {
-                    return responseParts[1];
-                }
+                //var dnsClient = new DnsClient();
+                //var tcpClient = new TcpClient();
+                //
+                //dnsClient.Connect(DNSConfig.DNSNameservers[0]);
+                //dnsClient.SendAsk(repo);
+                //Address address = dnsClient.Receive();
+                //dnsClient.Close();
+                //
+                //tcpClient.Connect(address, 80);
+                //
+                //string httpget = "GET /info.glist HTTP/1.1\r\n" +
+                //                 "User-Agent: GoOS\r\n" +
+                //                 "Accept: */*\r\n" +
+                //                 "Accept-Encoding: identity\r\n" +
+                //                 "Host: " + repo + "\r\n" +
+                //                 "Connection: Keep-Alive\r\n\r\n";
+                //
+                //tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
+                //
+                //var ep = new EndPoint(Address.Zero, 0);
+                //var data = tcpClient.Receive(ref ep);
+                //tcpClient.Close();
+                //
+                //string httpresponse = Encoding.ASCII.GetString(data);
+                //
+                //string[] responseParts =
+                //    httpresponse.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
+                //
+                //if (responseParts.Length == 2)
+                //{
+                //    return responseParts[1];
+                //}
+                //
+                //using (var client = new WebClient())
+                //{
+                //    return client.DownloadString("http://apps.goos.owen2k6.com/info.glist");
+                //}
             }
             catch (Exception ex)
             {
@@ -359,49 +364,51 @@ namespace GoOS.GUI.Apps.GoStore
 
         private Boolean HasLaunched()
         {
-            try
-            {
-                var dnsClient = new DnsClient();
-                var tcpClient = new TcpClient();
+            //try
+            //{
+            //    var dnsClient = new DnsClient();
+            //    var tcpClient = new TcpClient();
+            //
+            //    dnsClient.Connect(DNSConfig.DNSNameservers[0]);
+            //    dnsClient.SendAsk("apps.goos.owen2k6.com");
+            //    Address address = dnsClient.Receive();
+            //    dnsClient.Close();
+            //
+            //    tcpClient.Connect(address, 80);
+            //
+            //    string httpget = "GET /GoOS/gslaunch.goos HTTP/1.1\r\n" +
+            //                     "User-Agent: GoOS\r\n" +
+            //                     "Accept: */*\r\n" +
+            //                     "Accept-Encoding: identity\r\n" +
+            //                     "Host: api.goos.owen2k6.com\r\n" +
+            //                     "Connection: Keep-Alive\r\n\r\n";
+            //
+            //    tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
+            //
+            //    var ep = new EndPoint(Address.Zero, 0);
+            //    var data = tcpClient.Receive(ref ep);
+            //    tcpClient.Close();
+            //
+            //    string httpresponse = Encoding.ASCII.GetString(data);
+            //
+            //    string[] responseParts =
+            //        httpresponse.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
+            //
+            //    if (responseParts.Length == 2)
+            //    {
+            //        if (responseParts[1] == "true")
+            //        {
+            //            return true;
+            //        }
+            //    }
+            //}
+            //catch
+            //{
+            //}
+            //
+            //return false;
 
-                dnsClient.Connect(DNSConfig.DNSNameservers[0]);
-                dnsClient.SendAsk("apps.goos.owen2k6.com");
-                Address address = dnsClient.Receive();
-                dnsClient.Close();
-
-                tcpClient.Connect(address, 80);
-
-                string httpget = "GET /GoOS/gslaunch.goos HTTP/1.1\r\n" +
-                                 "User-Agent: GoOS\r\n" +
-                                 "Accept: */*\r\n" +
-                                 "Accept-Encoding: identity\r\n" +
-                                 "Host: api.goos.owen2k6.com\r\n" +
-                                 "Connection: Keep-Alive\r\n\r\n";
-
-                tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
-
-                var ep = new EndPoint(Address.Zero, 0);
-                var data = tcpClient.Receive(ref ep);
-                tcpClient.Close();
-
-                string httpresponse = Encoding.ASCII.GetString(data);
-
-                string[] responseParts =
-                    httpresponse.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
-
-                if (responseParts.Length == 2)
-                {
-                    if (responseParts[1] == "true")
-                    {
-                        return true;
-                    }
-                }
-            }
-            catch
-            {
-            }
-
-            return false;
+            return true;
         }
 
         private int GetIndexByTitle(string title)

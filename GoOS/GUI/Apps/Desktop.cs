@@ -45,53 +45,53 @@ namespace GoOS.GUI.Apps
                 case " Check for Updates ":
                     try
                     {
-                        var dnsClient = new DnsClient();
-                        var tcpClient = new TcpClient();
-                        dnsClient.Connect(DNSConfig.DNSNameservers[0]);
-                        dnsClient.SendAsk("api.goos.owen2k6.com");
-                        Address address = dnsClient.Receive();
-                        dnsClient.Close();
-                        tcpClient.Connect(address, 80);
-                        string httpget = "GET /GoOS/" + Kernel.edition + ".goos HTTP/1.1\r\n" +
-                                         "User-Agent: GoOS\r\n" +
-                                         "Accept: */*\r\n" +
-                                         "Accept-Encoding: identity\r\n" +
-                                         "Host: api.goos.owen2k6.com\r\n" +
-                                         "Connection: Keep-Alive\r\n\r\n";
-                        tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
-                        var ep = new EndPoint(Address.Zero, 0);
-                        var data = tcpClient.Receive(ref ep);
-                        tcpClient.Close();
-                        string httpresponse = Encoding.ASCII.GetString(data);
-                        string[] responseParts =
-                            httpresponse.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
-                        if (responseParts.Length == 2)
-                        {
-                            string headers = responseParts[0];
-                            string content = responseParts[1];
-                            if (content != Kernel.version && content != Kernel.editionnext)
-                            {
-                                Dialogue.Show("GoOS Update",
-                                    "A newer version of GoOS is available on Github.\nWe recommend you update to the latest version for stability and security reasons.\nhttps://github.com/Owen2k6/GoOS/releases\nCurrent Version: " +
-                                    Kernel.version + "\nLatest Version: " + content);
-                            }
-                            else if (content == Kernel.editionnext)
-                            {
-                                Dialogue.Show("GoOS Update",
-                                    "The next GoOS has been released.\nWe don't want to force you to update but at least check out whats new in GoOS " +
-                                    Kernel.editionnext + "!\nhttps://github.com/Owen2k6/GoOS/releases/tag/" +
-                                    Kernel.editionnext);
-                            }
-                            else if (content == "404")
-                            {
-                                Dialogue.Show("GoOS Update", "Your Version of GoOS does not support GoOS Update.");
-                            }
-                            else
-                            {
-                                Dialogue.Show("GoOS Update", "You are running the latest version of GoOS.\nVersion: " +
-                                                             Kernel.version + "\nLatest Version: " + content);
-                            }
-                        }
+                        //var dnsClient = new DnsClient();
+                        //var tcpClient = new TcpClient();
+                        //dnsClient.Connect(DNSConfig.DNSNameservers[0]);
+                        //dnsClient.SendAsk("api.goos.owen2k6.com");
+                        //Address address = dnsClient.Receive();
+                        //dnsClient.Close();
+                        //tcpClient.Connect(address, 80);
+                        //string httpget = "GET /GoOS/" + Kernel.edition + ".goos HTTP/1.1\r\n" +
+                        //                 "User-Agent: GoOS\r\n" +
+                        //                 "Accept: */*\r\n" +
+                        //                 "Accept-Encoding: identity\r\n" +
+                        //                 "Host: api.goos.owen2k6.com\r\n" +
+                        //                 "Connection: Keep-Alive\r\n\r\n";
+                        //tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
+                        //var ep = new EndPoint(Address.Zero, 0);
+                        //var data = tcpClient.Receive(ref ep);
+                        //tcpClient.Close();
+                        //string httpresponse = Encoding.ASCII.GetString(data);
+                        //string[] responseParts =
+                        //    httpresponse.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
+                        //if (responseParts.Length == 2)
+                        //{
+                        //    string headers = responseParts[0];
+                        //    string content = responseParts[1];
+                        //    if (content != Kernel.version && content != Kernel.editionnext)
+                        //    {
+                        //        Dialogue.Show("GoOS Update",
+                        //            "A newer version of GoOS is available on Github.\nWe recommend you update to the latest version for stability and security reasons.\nhttps://github.com/Owen2k6/GoOS/releases\nCurrent Version: " +
+                        //            Kernel.version + "\nLatest Version: " + content);
+                        //    }
+                        //    else if (content == Kernel.editionnext)
+                        //    {
+                        //        Dialogue.Show("GoOS Update",
+                        //            "The next GoOS has been released.\nWe don't want to force you to update but at least check out whats new in GoOS " +
+                        //            Kernel.editionnext + "!\nhttps://github.com/Owen2k6/GoOS/releases/tag/" +
+                        //            Kernel.editionnext);
+                        //    }
+                        //    else if (content == "404")
+                        //    {
+                        //        Dialogue.Show("GoOS Update", "Your Version of GoOS does not support GoOS Update.");
+                        //    }
+                        //    else
+                        //    {
+                        //        Dialogue.Show("GoOS Update", "You are running the latest version of GoOS.\nVersion: " +
+                        //                                     Kernel.version + "\nLatest Version: " + content);
+                        //    }
+                        //}
                     }
                     catch (Exception ex)
                     {

@@ -5,18 +5,18 @@
     <RestoreTool Condition=" '$(RestoreTool)' == '' ">NuGet</RestoreTool>
     <ProjectAssetsFile Condition=" '$(ProjectAssetsFile)' == '' ">$(MSBuildThisFileDirectory)project.assets.json</ProjectAssetsFile>
     <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
-    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\Owen2k6\.nuget\packages\;C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages</NuGetPackageFolders>
+    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\Eric\.nuget\packages\;C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages</NuGetPackageFolders>
     <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
-    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.6.0</NuGetToolVersion>
+    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.5.0</NuGetToolVersion>
   </PropertyGroup>
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <SourceRoot Include="C:\Users\Owen2k6\.nuget\packages\" />
+    <SourceRoot Include="C:\Users\Eric\.nuget\packages\" />
     <SourceRoot Include="C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\" />
   </ItemGroup>
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <Import Project="$(NuGetPackageRoot)cosmos.build\0.1.0-localbuild20231106032104\build\Cosmos.Build.props" Condition="Exists('$(NuGetPackageRoot)cosmos.build\0.1.0-localbuild20231106032104\build\Cosmos.Build.props')" />
+    <Import Project="$(NuGetPackageRoot)cosmos.build\0.1.0-localbuild20240114063759\build\Cosmos.Build.props" Condition="Exists('$(NuGetPackageRoot)cosmos.build\0.1.0-localbuild20240114063759\build\Cosmos.Build.props')" />
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <PkgCosmos_Build Condition=" '$(PkgCosmos_Build)' == '' ">C:\Users\Owen2k6\.nuget\packages\cosmos.build\0.1.0-localbuild20231106032104</PkgCosmos_Build>
+    <PkgCosmos_Build Condition=" '$(PkgCosmos_Build)' == '' ">C:\Users\Eric\.nuget\packages\cosmos.build\0.1.0-localbuild20240114063759</PkgCosmos_Build>
   </PropertyGroup>
 </Project>
