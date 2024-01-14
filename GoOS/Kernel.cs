@@ -31,6 +31,7 @@ using GoOS.GUI;
 using GoOS.GUI.Apps;
 using GoOS.Networking;
 using LibDotNetParser.CILApi;
+using System.Net.Sockets;
 //using TcpClient = Cosmos.System.Network.IPv4.TCP.TcpClient;
 
 // Goplex Studios - GoOS
@@ -207,39 +208,42 @@ namespace GoOS
 
             try
             {
-                /*string content = string.Empty;
-
-                using (var client = new WebClient())
+                using (TcpClient tcpClient = new TcpClient())
                 {
-                    content = client.DownloadString("api.goos.owen2k6.com/GoOS/ + Kernel.edition");
-                }*/
+                    var dnsClient = new DnsClient();
 
-                //var dnsClient = new DnsClient();
-                //var tcpClient = new TcpClient();
-                //dnsClient.Connect(DNSConfig.DNSNameservers[0]);
-                //dnsClient.SendAsk("api.goos.owen2k6.com");
-                //Address address = dnsClient.Receive();
-                //dnsClient.Close();
-                //tcpClient.Connect(address, 80);
-                //string httpget = "GET /GoOS/" + Kernel.edition + ".goos HTTP/1.1\r\n" +
-                //                 "User-Agent: GoOS\r\n" +
-                //                 "Accept: */*\r\n" +
-                //                 "Accept-Encoding: identity\r\n" +
-                //                 "Host: api.goos.owen2k6.com\r\n" +
-                //                 "Connection: Keep-Alive\r\n\r\n";
-                //tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
-                //var ep = new EndPoint(Address.Zero, 0);
-                //var data = tcpClient.Receive(ref ep);
-                //tcpClient.Close();
-                //string httpresponse = Encoding.ASCII.GetString(data);
-                //string[] responseParts =
-                //    httpresponse.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
-                //if (responseParts.Length == 2)
-                //{
-                //    string headers = responseParts[0];
-                //    string content = responseParts[1];
+                    // DNS
+                    dnsClient.Connect(DNSConfig.DNSNameservers[0]);
+                    dnsClient.SendAsk("api.goos.owen2k6.com");
 
-                /*    if (content != version && content != editionnext)
+                    // Address from IP
+                    Address address = dnsClient.Receive();
+                    dnsClient.Close();
+                    string serverIP = address.ToString();
+
+                    tcpClient.Connect(serverIP, 80);
+                    NetworkStream stream = tcpClient.GetStream();
+                    string httpget = "GET /GoOS/" + edition + ".goos HTTP/1.1\r\n" +
+                                     "User-Agent: GoOS\r\n" +
+                                     "Accept: */*\r\n" +
+                                     "Accept-Encoding: identity\r\n" +
+                                     "Host: api.goos.owen2k6.com\r\n" +
+                                     "Connection: Keep-Alive\r\n\r\n";
+                    byte[] dataToSend = Encoding.ASCII.GetBytes(httpget);
+                    stream.Write(dataToSend, 0, dataToSend.Length);
+
+                    // Receive data
+                    byte[] receivedData = new byte[tcpClient.ReceiveBufferSize];
+                    int bytesRead = stream.Read(receivedData, 0, receivedData.Length);
+                    string receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
+
+                    string[] responseParts = receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
+
+                    if (responseParts.Length < 2 || responseParts.Length > 2) Dialogue.Show("GoOS Update", "Invalid HTTP response!", default, WindowManager.errorIcon);
+
+                    string content = responseParts[1];
+
+                    if (content != version && content != editionnext)
                     {
                         Dialogue.Show("GoOS Update",
                             "A newer version of GoOS is available on Github.\nWe recommend you update to the latest version for stability and security reasons.\nhttps://github.com/Owen2k6/GoOS/releases\nCurrent Version: " +
@@ -258,8 +262,8 @@ namespace GoOS
                     else
                     {
                         WindowManager.AddWindow(new Welcome());
-                    }*/
-                //}
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -272,47 +276,58 @@ namespace GoOS
 
             try
             {
-                //var dnsClient = new DnsClient();
-                //var tcpClient = new TcpClient();
-                //dnsClient.Connect(DNSConfig.DNSNameservers[0]);
-                //dnsClient.SendAsk("api.goos.owen2k6.com");
-                //Address address = dnsClient.Receive();
-                //dnsClient.Close();
-                //tcpClient.Connect(address, 80);
-                //string httpget = "GET /GoOS/" + edition + "-support.goos HTTP/1.1\r\n" +
-                //                 "User-Agent: GoOS\r\n" +
-                //                 "Accept: */*\r\n" +
-                //                 "Accept-Encoding: identity\r\n" +
-                //                 "Host: api.goos.owen2k6.com\r\n" +
-                //                 "Connection: Keep-Alive\r\n\r\n";
-                //tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
-                //var ep = new EndPoint(Address.Zero, 0);
-                //var data = tcpClient.Receive(ref ep);
-                //tcpClient.Close();
-                //string httpresponse = Encoding.ASCII.GetString(data);
-                //string[] responseParts =
-                //    httpresponse.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
-                //if (responseParts.Length == 2)
-                //{
-                //    string headers = responseParts[0];
-                //    string content = responseParts[1];
-                //    if (content == "true")
-                //    {
-                //    }
-                //    else if (content == "false")
-                //    {
-                //        Dialogue.Show("GoOS Security Notice",
-                //            "GoOS Support for this edition has ended. Please update to the latest version of GoOS for the latest security patches.\nThere will no more security patches released for GoOS " +
-                //            edition +
-                //            ".\nDownload the latest edition from \nhttps://github.com/Owen2k6/GoOS/releases/tag/");
-                //    }
-                //    else
-                //    {
-                //        Dialogue.Show("GoOS Security",
-                //            "You seem to be sporting some funky version of GoOS. Your edition doesnt exist on our servers (" +
-                //            edition + ")");
-                //    }
-                //}
+                using (TcpClient tcpClient = new TcpClient())
+                {
+                    var dnsClient = new DnsClient();
+
+                    // DNS
+                    dnsClient.Connect(DNSConfig.DNSNameservers[0]);
+                    dnsClient.SendAsk("api.goos.owen2k6.com");
+
+                    // Address from IP
+                    Address address = dnsClient.Receive();
+                    dnsClient.Close();
+                    string serverIP = address.ToString();
+
+                    tcpClient.Connect(serverIP, 80);
+                    NetworkStream stream = tcpClient.GetStream();
+                    string httpget = "GET /GoOS/" + edition + "-support.goos HTTP/1.1\r\n" +
+                                     "User-Agent: GoOS\r\n" +
+                                     "Accept: */*\r\n" +
+                                     "Accept-Encoding: identity\r\n" +
+                                     "Host: api.goos.owen2k6.com\r\n" +
+                                     "Connection: Keep-Alive\r\n\r\n";
+                    byte[] dataToSend = Encoding.ASCII.GetBytes(httpget);
+                    stream.Write(dataToSend, 0, dataToSend.Length);
+
+                    // Receive data
+                    byte[] receivedData = new byte[tcpClient.ReceiveBufferSize];
+                    int bytesRead = stream.Read(receivedData, 0, receivedData.Length);
+                    string receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
+
+                    string[] responseParts = receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
+
+                    if (responseParts.Length < 2 || responseParts.Length > 2) Dialogue.Show("GoOS Update", "Invalid HTTP response!", default, WindowManager.errorIcon);
+
+                    string content = responseParts[1];
+
+                    if (content == "true")
+                    {
+                    }
+                    else if (content == "false")
+                    {
+                        Dialogue.Show("GoOS Security Notice",
+                            "GoOS Support for this edition has ended. Please update to the latest version of GoOS for the latest security patches.\nThere will no more security patches released for GoOS " +
+                            edition +
+                            ".\nDownload the latest edition from \nhttps://github.com/Owen2k6/GoOS/releases/tag/");
+                    }
+                    else
+                    {
+                        Dialogue.Show("GoOS Security",
+                            "You seem to be sporting some funky version of GoOS. Your edition doesnt exist on our servers (" +
+                            edition + ")");
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -503,19 +518,14 @@ namespace GoOS
                         case "install":
                             if (args.Length != 5)
                             {
-                                log(ThemeManager.ErrorText, "X: go install -<repo> <appname> -<type>");
+                                log(ThemeManager.ErrorText, "X: go install <repo> <appname> -<type>");
                                 break;
                             }
 
                             String filetoget = args[3];
                             try
                             {
-                                //var dnsClient = new DnsClient();
-                                //var tcpClient = new TcpClient();
-                                string repo;
-                                string type;
-                                
-                                repo = args[2];
+                                string repo = args[2], type;
 
                                 if (args[4] == "-g")
                                 {
@@ -533,51 +543,51 @@ namespace GoOS
 
                                 log(Color.Red, "Downloading " + filetoget + "." + type + " from " + repo);
 
-                                //dnsClient.Connect(DNSConfig.DNSNameservers[0]);
-                                //dnsClient.SendAsk(repo);
-                                //Address address = dnsClient.Receive();
-                                //log(Color.SuperOrange, "Connected to server. Downloading file...");
-                                //log(Color.SuperOrange, "GoOS Will halt the system while it downloads the file.");
-                                //dnsClient.Close();
-                                //
-                                //tcpClient.Connect(address, 80);
-                                //
-                                //string httpget = "GET /" + filetoget + "." + type + " HTTP/1.1\r\n" +
-                                //                 "User-Agent: GoOS\r\n" +
-                                //                 "Accept: */*\r\n" +
-                                //                 "Accept-Encoding: identity\r\n" +
-                                //                 "Host: " + repo + "\r\n" +
-                                //                 "Connection: Keep-Alive\r\n\r\n";
-                                //
-                                //tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
-                                //
-                                //var ep = new EndPoint(Address.Zero, 0);
-                                //var data = tcpClient.Receive(ref ep);
-                                //tcpClient.Close();
-                                //
-                                //string httpresponse = Encoding.ASCII.GetString(data);
-                                //
-                                //string[] responseParts =
-                                //    httpresponse.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
-                                //
-                                //if (responseParts.Length == 2)
-                                //{
-                                //    string headers = responseParts[0];
-                                //    string content = responseParts[1];
-                                //    //Console.WriteLine(content);
-                                //    if (content == "404")
-                                //    {
-                                //        log(ThemeManager.ErrorText,
-                                //            "The requested file was not found on the server. Try another repo?");
-                                //        break;
-                                //    }
-                                //
-                                //    File.Create(@"0:\" + filetoget + "." + type);
-                                //    File.WriteAllText(@"0:\" + filetoget + "." + type, content);
-                                //    log(Color.Green, "Downloaded " + filetoget + "." + type);
-                                //}
+                                using (TcpClient tcpClient = new TcpClient())
+                                {
+                                    var dnsClient = new DnsClient();
 
-                                Console.WriteLine("Not supported!");
+                                    // DNS
+                                    dnsClient.Connect(DNSConfig.DNSNameservers[0]);
+                                    dnsClient.SendAsk(repo);
+
+                                    // Address from IP
+                                    Address address = dnsClient.Receive();
+                                    dnsClient.Close();
+                                    string serverIP = address.ToString();
+
+                                    tcpClient.Connect(serverIP, 80);
+                                    NetworkStream stream = tcpClient.GetStream();
+                                    string httpget = "GET /" + filetoget + "." + type + " HTTP/1.1\r\n" +
+                                                     "User-Agent: GoOS\r\n" +
+                                                     "Accept: */*\r\n" +
+                                                     "Accept-Encoding: identity\r\n" +
+                                                     "Host: " + repo + "\r\n" +
+                                                     "Connection: Keep-Alive\r\n\r\n";
+                                    byte[] dataToSend = Encoding.ASCII.GetBytes(httpget);
+                                    stream.Write(dataToSend, 0, dataToSend.Length);
+
+                                    // Receive data
+                                    byte[] receivedData = new byte[tcpClient.ReceiveBufferSize];
+                                    int bytesRead = stream.Read(receivedData, 0, receivedData.Length);
+                                    string receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
+
+                                    string[] responseParts = receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
+
+                                    if (responseParts.Length < 2 || responseParts.Length > 2) Dialogue.Show("GoOS Update", "Invalid HTTP response!", default, WindowManager.errorIcon);
+
+                                    string content = responseParts[1];
+
+                                    if (content == "404")
+                                    {
+                                        log(ThemeManager.ErrorText, "The requested file was not found on the server. Try another repo?");
+                                        break;
+                                    }
+
+                                    File.Create(@"0:\" + filetoget + "." + type);
+                                    File.WriteAllText(@"0:\" + filetoget + "." + type, content);
+                                    log(Color.Green, "Downloaded " + filetoget + "." + type);
+                                }
                             }
                             catch (Exception ex)
                             {
