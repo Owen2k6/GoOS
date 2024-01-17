@@ -29,7 +29,7 @@ namespace GoOS.Virtualisation.ChaOS
         {
             try
             {
-                //GoOS.GUI.Apps.ChaOS_VM.VMTERM.Clear();
+                Console.Clear();
                 log("Welcome to...\n");
                 clog("  ______   __                   ______    ______  \n /      \\ |  \\                 /      \\  /      \\ \n|  $$$$$$\\| $$____    ______  |  $$$$$$\\|  $$$$$$\\\n| $$   \\$$| $$    \\  |      \\ | $$  | $$| $$___\\$$\n| $$      | $$$$$$$\\  \\$$$$$$\\| $$  | $$ \\$$    \\ \n| $$   __ | $$  | $$ /      $$| $$  | $$ _\\$$$$$$\\\n| $$__/  \\| $$  | $$|  $$$$$$$| $$__/ $$|  \\__| $$\n \\$$    $$| $$  | $$ \\$$    $$ \\$$    $$ \\$$    $$\n  \\$$$$$$  \\$$   \\$$  \\$$$$$$$  \\$$$$$$   \\$$$$$$ ", DarkGreen);
                 log("\n" + ver + "\n" + copyright + "\nType \"help\" to get started!");
@@ -51,10 +51,10 @@ namespace GoOS.Virtualisation.ChaOS
                 {
                     falsedir = truedir.Replace(@"0:\content\vrt\ChaOS\", @"0:\");
                 }
-                if (disk) GoOS.GUI.Apps.ChaOS_VM.VMTERM.Write(username + " (" + falsedir + "): ");
-                else GoOS.GUI.Apps.ChaOS_VM.VMTERM.Write(username + " > ");
+                if (disk) Console.Write(username + " (" + falsedir + "): ");
+                else Console.Write(username + " > ");
 
-                inputBeforeLower = GoOS.GUI.Apps.ChaOS_VM.VMTERM.ReadLine();
+                inputBeforeLower = Console.ReadLine();
                 inputCapitalized = inputBeforeLower.ToUpper(); // Input converted to uppercase
                 input = inputBeforeLower.ToLower().Trim();     // Input converted to lowercase
 
@@ -63,7 +63,7 @@ namespace GoOS.Virtualisation.ChaOS
                 if (input.StartsWith("help"))
                 {
                     var us = string.Empty;
-                    var color = GoOS.GUI.Apps.ChaOS_VM.VMTERM.ForegroundColor;
+                    var color = Console.ForegroundColor;
                     if (!disk) { us = " (unavailable)"; color = Gray; }
 
                     clog("Functions:", DarkGreen);
@@ -113,9 +113,9 @@ namespace GoOS.Virtualisation.ChaOS
                 {
                     if (input.EndsWith("list"))
                     {
-                        var OldBack = GoOS.GUI.Apps.ChaOS_VM.VMTERM.BackgroundColor; var OldFore = GoOS.GUI.Apps.ChaOS_VM.VMTERM.ForegroundColor;
+                        var OldBack = Console.BackgroundColor; var OldFore = Console.ForegroundColor;
                         clog("Color list:", Green);
-                        GoOS.GUI.Apps.ChaOS_VM.VMTERM.Write(" "); SetScreenColor(White, Black, false); GoOS.GUI.Apps.ChaOS_VM.VMTERM.Write("black - Pure light mode, will make you blind"); SetScreenColor(OldBack, OldFore, false);
+                        Console.Write(" "); SetScreenColor(White, Black, false); Console.Write("black - Pure light mode, will make you blind"); SetScreenColor(OldBack, OldFore, false);
                         clog("\n dark blue - Dark blue with black background", DarkBlue);
                         clog(" dark green - Dark green with black background", DarkGreen);
                         clog(" dark cyan - Dark cyan with black background", DarkCyan);
@@ -154,26 +154,26 @@ namespace GoOS.Virtualisation.ChaOS
 
                 else if (input == "credits")
                 {
-                    GoOS.GUI.Apps.ChaOS_VM.VMTERM.Clear();
-                    GoOS.GUI.Apps.ChaOS_VM.VMTERM.SetCursorPosition(0, 1);
+                    Console.Clear();
+                    Console.SetCursorPosition(0, 1);
                     cwrite("  ______   __                   ______    ______  \n /      \\ |  \\                 /      \\  /      \\ \n|  $$$$$$\\| $$____    ______  |  $$$$$$\\|  $$$$$$\\\n| $$   \\$$| $$    \\  |      \\ | $$  | $$| $$___\\$$\n| $$      | $$$$$$$\\  \\$$$$$$\\| $$  | $$ \\$$    \\ \n| $$   __ | $$  | $$ /      $$| $$  | $$ _\\$$$$$$\\\n| $$__/  \\| $$  | $$|  $$$$$$$| $$__/ $$|  \\__| $$\n \\$$    $$| $$  | $$ \\$$    $$ \\$$    $$ \\$$    $$\n  \\$$$$$$  \\$$   \\$$  \\$$$$$$$  \\$$$$$$   \\$$$$$$ ", DarkGreen);
-                    GoOS.GUI.Apps.ChaOS_VM.VMTERM.SetCursorPosition(55, 3);
+                    Console.SetCursorPosition(55, 3);
                     cwrite("Version 1.3", Yellow);
-                    GoOS.GUI.Apps.ChaOS_VM.VMTERM.SetCursorPosition(62, 5);
+                    Console.SetCursorPosition(62, 5);
                     cwrite("Credits", Yellow);
-                    GoOS.GUI.Apps.ChaOS_VM.VMTERM.SetCursorPosition(57, 6);
-                    GoOS.GUI.Apps.ChaOS_VM.VMTERM.Write("ekeleze - Creator");
-                    GoOS.GUI.Apps.ChaOS_VM.VMTERM.SetCursorPosition(60, 7);
-                    GoOS.GUI.Apps.ChaOS_VM.VMTERM.Write("xrc2 - Contributor");
-                    GoOS.GUI.Apps.ChaOS_VM.VMTERM.SetCursorPosition(20, 11);
-                    GoOS.GUI.Apps.ChaOS_VM.VMTERM.Write("Special thanks:");
-                    GoOS.GUI.Apps.ChaOS_VM.VMTERM.SetCursorPosition(1, 13);
-                    GoOS.GUI.Apps.ChaOS_VM.VMTERM.Write("Owen2k6 - For allowing ChaOS to live on");
-                    GoOS.GUI.Apps.ChaOS_VM.VMTERM.SetCursorPosition(0, 24);
+                    Console.SetCursorPosition(57, 6);
+                    Console.Write("ekeleze - Creator");
+                    Console.SetCursorPosition(60, 7);
+                    Console.Write("xrc2 - Contributor");
+                    Console.SetCursorPosition(20, 11);
+                    Console.Write("Special thanks:");
+                    Console.SetCursorPosition(1, 13);
+                    Console.Write("Owen2k6 - For allowing ChaOS to live on");
+                    Console.SetCursorPosition(0, 24);
                 }
 
                 else if (input == "clear" || input == "cls")
-                    GoOS.GUI.Apps.ChaOS_VM.VMTERM.Clear();
+                    Console.Clear();
 
                 else if (input == "time")
                 {
@@ -182,7 +182,7 @@ namespace GoOS.Virtualisation.ChaOS
                     clog("Current time is " + Hour + ":" + Minute + "\n", Yellow);
                 }
 
-                else if (input == "notepad" && disk)
+                else if (input.StartsWith("notepad") && disk)
                     MIV.StartMIV(input.Split("notepad ")[1]);
 
                 else if (input == "shutdown" || input == "sd")
@@ -371,7 +371,7 @@ namespace GoOS.Virtualisation.ChaOS
 
                 else
                 {
-                    GoOS.GUI.Apps.ChaOS_VM.VMTERM.Beep();
+                    Console.Beep();
                     clog("Unknown command.\n", Red);
                 }
             }

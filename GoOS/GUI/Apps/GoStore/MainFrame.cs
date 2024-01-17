@@ -1,24 +1,16 @@
 using System;
-using System.Collections;
-using System.IO;
+using System.Text;
+using System.Linq;
+using System.Net.Sockets;
+using System.Collections.Generic;
 using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4;
 using Cosmos.System.Network.IPv4.UDP.DNS;
-//using TcpClient = Cosmos.System.Network.IPv4.TCP.TcpClient;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using GoOS.Themes;
 using PrismAPI.Graphics;
 using static GoOS.Resources;
-using static GoOS.Resources;
-using System.Net.Sockets;
-//using System.Net;
 
 namespace GoOS.GUI.Apps.GoStore
 {
-    //TODO: The GoStore is no longer working after commit 3a1e7d6041df6df9409e1416c188419a6027d92f. I have repaired the GoStore Live checker to api.goos.* instead of api.*
     public class MainFrame : Window
     {
         Button[] catagoryButtons = new Button[7];
@@ -40,14 +32,13 @@ namespace GoOS.GUI.Apps.GoStore
          * - Owen2k6 DO NOT REMOVE.
          */
 
-        Button[] RepoFilesButtons;
-        private int[] RepoFilesButtonsPageNumbers;
+        Button[] _repoFilesButtons;
+        private int[] _repoFilesButtonsPageNumbers;
 
         private int catagory = 0;
         private int page = 0;
 
-        List<(string, string, string, string, string, string, string)> repoFiles =
-            new();
+        private List<Application> _repoFiles;
 
         private Dictionary<string, string> GoOSversions = new();
 
@@ -57,11 +48,11 @@ namespace GoOS.GUI.Apps.GoStore
         readonly string[] repos =
         {
             "apps.goos.owen2k6.com",
-            "goos.ekeleze.org",
-            "repo.mobren.net"
+            //"goos.ekeleze.org",
+            //"repo.mobren.net"
         };
 
-        private readonly string[] allowDLfrom =
+        private readonly string[] _allowDLFrom =
         {
             "1.5pre1",
             "1.5pre2",
@@ -80,40 +71,28 @@ namespace GoOS.GUI.Apps.GoStore
 
         public MainFrame()
         {
-            // Get the file list from every repo
-            string[][] infoFiles =
-            {
-                GetInfoFile(repos[0]).Split('\n'),
-                GetInfoFile(repos[1]).Split('\n'),
-                GetInfoFile(repos[2]).Split('\n')
-            };
             try
             {
-                int o = 0;
-                foreach (string[] file in infoFiles)
-                {
-                    try
-                    {
-                        foreach (string program in file)
-                        {
-                            string[] metadata = program.Split('|');
-                            repoFiles.Add((metadata[0], metadata[1], metadata[2], metadata[3], metadata[4], metadata[5],
-                                repos[o]));
-                            if (GoOSversions.ContainsKey(metadata[0]))
-                                GoOSversions.Remove(metadata[0]);
-                            GoOSversions.Add(metadata[0], metadata[6]);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Dialogue.Show("GoStore had an issue.", ex.ToString());
-                    }
+                // Get the info file from every repo
+                string[] repos = GetReposFile();
+                Infofile[] infoFiles = new Infofile[repos.Length];
+                _repoFiles = new List<Application>();
 
-                    o++;
+                for (int i = 0; i < repos.Length; i++)
+                {
+                    infoFiles[i] = new Infofile(GetInfoFile(repos[i]).Split('\n'), repos[i]);
                 }
 
-                // Generate the fonts.
-                Generate(ResourceType.Fonts);
+                foreach (Infofile file in infoFiles)
+                {
+                    foreach (string program in file.Contents)
+                    {
+                        Application app = new Application(program.Split('|'), file.URL);
+                        app.Downloadable = _allowDLFrom.Contains(app.GoOSVersion);
+
+                        _repoFiles.Add(app);
+                    }
+                }
 
                 // Create the window.
                 Contents = new Canvas(800, 600);
@@ -123,10 +102,10 @@ namespace GoOS.GUI.Apps.GoStore
                 SetDock(WindowDock.Center);
 
                 // Initialize the controls.
-                RepoFilesButtons = new Button[repoFiles.Count];
-                RepoFilesButtonsPageNumbers = new int[repoFiles.Count];
-                bool GS = HasLaunched();
-                if (GS || Kernel.BuildType == "NIFPR")
+                _repoFilesButtons = new Button[_repoFiles.Count];
+                _repoFilesButtonsPageNumbers = new int[_repoFiles.Count];
+
+                if (HasLaunched() || Kernel.BuildType == "NIFPR")
                 {
                     for (int i = 0; i < Catagories.Count; i++)
                     {
@@ -141,25 +120,25 @@ namespace GoOS.GUI.Apps.GoStore
                             RenderWithAlpha = true
                         };
                     }
-                    
+
                     nextButton = new Button(this, 685, 556, 109, 35, "Next")
                     {
                         Name = "next",
                         UseSystemStyle = false,
                         BackgroundColour = new Color(0, 0, 0, 0),
-                        ClickedAlt = nextPage,
+                        Clicked = nextPage,
                         RenderWithAlpha = true
                     };
-                    
+
                     prevousButton = new Button(this, 514, 556, 109, 35, "Previous")
                     {
                         Name = "Previous",
                         UseSystemStyle = false,
                         BackgroundColour = new Color(0, 0, 0, 0),
-                        ClickedAlt = previousPage,
+                        Clicked = previousPage,
                         RenderWithAlpha = true
                     };
-                    
+
                     CatgoryAction("Utilities");
                 }
                 else
@@ -171,27 +150,24 @@ namespace GoOS.GUI.Apps.GoStore
                         Font_1x, Color.White);
                 }
             }
-            catch (Exception ex)
-            {
-                Dialogue.Show("Error", ex.ToString());
-            }
+            catch (Exception e) { ShowCrashDialogue(e); }
         }
 
-        private void dostuff()
+        private void RenderApplicationsList()
         {
-            foreach (Button b in RepoFilesButtons)
+            foreach (Button b in _repoFilesButtons)
                 Controls.Remove(b);
             
-            RepoFilesButtons = null;
-            RepoFilesButtonsPageNumbers = null;
+            _repoFilesButtons = null;
+            _repoFilesButtonsPageNumbers = null;
 
             Contents.Clear();
             Contents.DrawImage(0, 0, Resources.GoStore, false);
 
             int accountFor = 0;
 
-            RepoFilesButtonsPageNumbers = new int[repoFiles.Count];
-            RepoFilesButtons = new Button[repoFiles.Count];
+            _repoFilesButtonsPageNumbers = new int[_repoFiles.Count];
+            _repoFilesButtons = new Button[_repoFiles.Count];
 
             int Line = 0;
             int Colum = 0;
@@ -200,13 +176,13 @@ namespace GoOS.GUI.Apps.GoStore
 
             int yOffset = 0;
 
-            for (int i = 0; i < repoFiles.Count; i++)
+            for (int i = 0; i < _repoFiles.Count; i++)
             {
                 // 207 x 78
 
                 int appCat = 0;
 
-                switch (repoFiles[i].Item6)
+                switch (_repoFiles[i].Category)
                 {
                     case "Utilities":
                         appCat = 0;
@@ -253,25 +229,22 @@ namespace GoOS.GUI.Apps.GoStore
                     string GoOSversion = "1.5";
                     string VersionSpaces = "";
 
-                    if (GoOSversions.ContainsKey(repoFiles[i].Item1))
-                        GoOSversions.TryGetValue(repoFiles[i].Item1, out GoOSversion);
-
-                    for (int ii = 0; ii < 25 - repoFiles[i].Item1.Length - (GoOSversion.TrimEnd().Length + 6); ii++)
+                    for (int ii = 0; ii < 25 - _repoFiles[i].Name.Length - (GoOSversion.TrimEnd().Length + 6); ii++)
                         VersionSpaces += " ";
 
                     int x = 150 + Colum * (207 + 5); // 150
                     int y = 45 + (Line) * (78 + 5);
 
-                    RepoFilesButtons[i] = new Button(this, Convert.ToUInt16(x), // 150 
+                    _repoFilesButtons[i] = new Button(this, Convert.ToUInt16(x), // 150 
                         Convert.ToUInt16(y),
-                        207, 78, repoFiles[i].Item1 + VersionSpaces + "GoOS " +
-                                 GoOSversion.TrimEnd() + "+" + "\nBy " + repoFiles[i].Item5 + "\n" +
-                                 repoFiles[i].Item3.Replace(@"\n", "\n"))
+                        207, 78, _repoFiles[i].Name + VersionSpaces + "GoOS " +
+                                 GoOSversion.TrimEnd() + "+" + "\nBy " + _repoFiles[i].Author + "\n" +
+                                 _repoFiles[i].Version.Replace(@"\n", "\n"))
                     {
-                        Name = repoFiles[i].Item1,
+                        Name = _repoFiles[i].Name,
                         UseSystemStyle = false,
                         BackgroundColour = new Color(0, 0, 0, 0),
-                        ClickedAlt = repoFiles_Click,
+                        ClickedAlt = _repoFiles_Click,
                         RenderWithAlpha = true,
                         CenterTitle = false,
                         textX = 5,
@@ -280,35 +253,26 @@ namespace GoOS.GUI.Apps.GoStore
 
                     Line++;
 
-                    RepoFilesButtonsPageNumbers[i] = ButtonPage;
+                    _repoFilesButtonsPageNumbers[i] = ButtonPage;
                 }
             }
 
-            RenderSystemStyleBorder();
-            int a = 0;
-            foreach (Button i in RepoFilesButtons)
+            for (int i = 0; i < _repoFilesButtons.Length; i++)
             {
-                if (page == RepoFilesButtonsPageNumbers[a])
+                if (page == _repoFilesButtonsPageNumbers[i])
                 {
-                    int x = i.X;
-                    int y = i.Y;
+                    int x = _repoFilesButtons[i].X;
+                    int y = _repoFilesButtons[i].Y;
                     Contents.DrawImage(x, y, StoreButton);
-                    if (i != null) i.Render();
+                    if (_repoFilesButtons[i] != null) _repoFilesButtons[i].Render();
                 }
-
-                a++;
             }
             
             foreach (Button i in catagoryButtons) i.Render();
-            
-            // y 556
-            
-            // x 514
-            
-            // Width 109 x Height 35
-            
             prevousButton.Render();
             nextButton.Render();
+
+            RenderSystemStyleBorder();
         }
 
         private string GetInfoFile(string repo)
@@ -334,7 +298,7 @@ namespace GoOS.GUI.Apps.GoStore
                                      "User-Agent: GoOS\r\n" +
                                      "Accept: */*\r\n" +
                                      "Accept-Encoding: identity\r\n" +
-                                     "Host: api.goos.owen2k6.com\r\n" +
+                                     "Host: " + repo + "\r\n" +
                                      "Connection: Keep-Alive\r\n\r\n";
                     byte[] dataToSend = Encoding.ASCII.GetBytes(httpget);
                     stream.Write(dataToSend, 0, dataToSend.Length);
@@ -353,15 +317,65 @@ namespace GoOS.GUI.Apps.GoStore
             }
             catch (Exception ex)
             {
-                Dialogue.Show("GoStore Was unable to connect you.",
-                    "Some apps may not be available as some servers were uncontactable. \nError: " + ex +
-                    "\n\nPlease try again later.");
-            }
+                Dialogue.Show("Failed to contact servers - GoStore",
+                    "Some apps may not be available as some servers were uncontactable\n"
+                    + ex + "\n\nPlease try again later");
 
-            return string.Empty;
+                return string.Empty;
+            }
         }
 
-        private Boolean HasLaunched()
+        private string[] GetReposFile()
+        {
+            try
+            {
+                using (TcpClient tcpClient = new TcpClient())
+                {
+                    var dnsClient = new DnsClient();
+
+                    // DNS
+                    dnsClient.Connect(DNSConfig.DNSNameservers[0]);
+                    dnsClient.SendAsk("api.goos.owen2k6.com");
+
+                    // Address from IP
+                    Address address = dnsClient.Receive();
+                    dnsClient.Close();
+                    string serverIP = address.ToString();
+
+                    tcpClient.Connect(serverIP, 80);
+                    NetworkStream stream = tcpClient.GetStream();
+                    string httpget = "GET /GoOS/repos.gostore HTTP/1.1\r\n" +
+                                     "User-Agent: GoOS\r\n" +
+                                     "Accept: */*\r\n" +
+                                     "Accept-Encoding: identity\r\n" +
+                                     "Host: api.goos.owen2k6.com\r\n" +
+                                     "Connection: Keep-Alive\r\n\r\n";
+                    byte[] dataToSend = Encoding.ASCII.GetBytes(httpget);
+                    stream.Write(dataToSend, 0, dataToSend.Length);
+
+                    // Receive data
+                    byte[] receivedData = new byte[tcpClient.ReceiveBufferSize];
+                    int bytesRead = stream.Read(receivedData, 0, receivedData.Length);
+                    string receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
+
+                    string[] responseParts = receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
+
+                    if (responseParts.Length < 2 || responseParts.Length > 2) Dialogue.Show("GoStore", "Invalid HTTP response!", default, WindowManager.errorIcon);
+
+                    return responseParts[1].Split('\n');
+                }
+            }
+            catch (Exception ex)
+            {
+                Dialogue.Show("Failed to contact servers - GoStore",
+                    "Some apps may not be available as some servers were uncontactable\n"
+                    + ex + "\n\nPlease try again later");
+
+                return Array.Empty<string>();
+            }
+        }
+
+        private bool HasLaunched()
         {
             try
             {
@@ -401,27 +415,19 @@ namespace GoOS.GUI.Apps.GoStore
                     return responseParts[1] == "true";
                 }
             }
-            catch { }
-
-            return false;
+            catch { return false; }
         }
 
         private int GetIndexByTitle(string title)
         {
-            for (int i = 0; i < repoFiles.Count; i++)
-            {
-                if (repoFiles[i].Item1 == title) return i;
-            }
-
+            for (int i = 0; i < _repoFiles.Count; i++)
+                if (_repoFiles[i].Name == title) return i;
             return 0;
         }
 
-        private void repoFiles_Click(string i)
+        private void _repoFiles_Click(string i)
         {
-            WindowManager.AddWindow(new DescriptionFrame(
-                repoFiles[GetIndexByTitle(i)].Item1, repoFiles[GetIndexByTitle(i)].Item4,
-                repoFiles[GetIndexByTitle(i)].Item5, repoFiles[GetIndexByTitle(i)].Item3,
-                repoFiles[GetIndexByTitle(i)].Item2, repoFiles[GetIndexByTitle(i)].Item6));
+            WindowManager.AddWindow(new DescriptionFrame(_repoFiles[GetIndexByTitle(i)]));
             
             /*
              * == RC Release Notice.
@@ -466,7 +472,7 @@ namespace GoOS.GUI.Apps.GoStore
                  */
             }
 
-            dostuff(); // 565
+            RenderApplicationsList();
             
             switch (name)
             {
@@ -514,12 +520,12 @@ namespace GoOS.GUI.Apps.GoStore
             Contents.DrawString(pagex, 563, (page + 1).ToString(), Font_1x, Color.White);
         }
 
-        private void nextPage(string useless)
+        private void nextPage()
         {
-            if (RepoFilesButtonsPageNumbers.Contains(page + 1))
+            if (_repoFilesButtonsPageNumbers.Contains(page + 1))
             {
                 page++;
-                dostuff();
+                RenderApplicationsList();
                 int pagex = 646 + 4;
                 if ((page + 1).ToString().Length == 2)
                 {
@@ -535,12 +541,12 @@ namespace GoOS.GUI.Apps.GoStore
             }
         }
 
-        private void previousPage(string useless)
+        private void previousPage()
         {
-            if (RepoFilesButtonsPageNumbers.Contains(page - 1))
+            if (_repoFilesButtonsPageNumbers.Contains(page - 1))
             {
                 page--;
-                dostuff();
+                RenderApplicationsList();
                 int pagex = 646 + 4;
                 if ((page + 1).ToString().Length == 2)
                 {

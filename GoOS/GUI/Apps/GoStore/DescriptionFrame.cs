@@ -32,14 +32,12 @@ namespace GoOS.GUI.Apps.GoStore
         Button IDEOpenButton;
         Button CancelButton;
         Button InstallButton;
-        String Name, File, Repo;
+        Application App;
 
-        public DescriptionFrame(string name, string version, string author, string description, string language, string repo)
+        public DescriptionFrame(Application app)
         {
             // Set class variables
-            File = name + "." + language;
-            Name = name;
-            Repo = repo;
+            App = app;
 
             // Create the window.
             Contents = new Canvas(300, 250);
@@ -51,16 +49,16 @@ namespace GoOS.GUI.Apps.GoStore
             // Initialize the controls
             IDEOpenButton = new Button(this, 10, Convert.ToUInt16(Contents.Height - 30), 104, 20, "Open in IDE") { Clicked = IDEOpenButton_Click };
             CancelButton = new Button(this, Convert.ToUInt16(Contents.Width - 172), Convert.ToUInt16(Contents.Height - 30), 64, 20, "Cancel") { Clicked = CancelButton_Click };
-            InstallButton = new Button(this, Convert.ToUInt16(Contents.Width - 98), Convert.ToUInt16(Contents.Height - 30), 88, 20, !IO.File.Exists(@"0:\go\" + File) ? " Install " : "Uninstall") { Clicked = InstallButton_Click };
+            InstallButton = new Button(this, Convert.ToUInt16(Contents.Width - 98), Convert.ToUInt16(Contents.Height - 30), 88, 20, !IO.File.Exists(@"0:\go\" + app.Filename) ? " Install " : "Uninstall") { Clicked = InstallButton_Click };
 
             // Paint the window.
             Contents.Clear(Color.LightGray);
             RenderSystemStyleBorder();
-            Contents.DrawString(10, 10, name, Font_2x, Color.White);
-            Contents.DrawString(10, 56, "Version: " + version.Replace("\\n", "\n"), Font_1x, Color.White);
-            Contents.DrawString(10, 72, "Author: " + author.Replace("\\n", "\n"), Font_1x, Color.White);
-            Contents.DrawString(10, 86, "Language: " + language.Replace("\\n", "\n"), Font_1x, Color.White);
-            Contents.DrawString(10, 100, "Description: " + description.Replace("\\n", "\n"), Font_1x, Color.White);
+            Contents.DrawString(10, 10, app.Name, Font_2x, Color.White);
+            Contents.DrawString(10, 56, "Description: " + app.Description.Replace("\\n", "\n"), Font_1x, Color.White);
+            Contents.DrawString(10, 72, "Version: " + app.Version.Replace("\\n", "\n"), Font_1x, Color.White);
+            //Contents.DrawString(10, 86, "Language: " + language.Replace("\\n", "\n"), Font_1x, Color.White);
+            Contents.DrawString(10, 86 /*100*/, "Author: " + app.Author.Replace("\\n", "\n"), Font_1x, Color.White);
             Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4), 38, 0, Color.DeepGray); Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4), 38, 0, Color.DeepGray);
             IDEOpenButton.Render();
             CancelButton.Render();
@@ -71,7 +69,7 @@ namespace GoOS.GUI.Apps.GoStore
         {
             try
             {
-                if (!IO.File.Exists(@"0:\go\" + File))
+                if (!IO.File.Exists(@"0:\go\" + App.Filename))
                 {
                     using (TcpClient tcpClient = new TcpClient())
                     {
@@ -79,7 +77,7 @@ namespace GoOS.GUI.Apps.GoStore
 
                         // DNS
                         dnsClient.Connect(DNSConfig.DNSNameservers[0]);
-                        dnsClient.SendAsk(Repo);
+                        dnsClient.SendAsk(App.Repository);
 
                         // Address from IP
                         Address address = dnsClient.Receive();
@@ -88,11 +86,11 @@ namespace GoOS.GUI.Apps.GoStore
 
                         tcpClient.Connect(serverIP, 80);
                         NetworkStream stream = tcpClient.GetStream();
-                        string httpget = "GET /" + File + " HTTP/1.1\r\n" +
+                        string httpget = "GET /" + App.Filename + " HTTP/1.1\r\n" +
                                          "User-Agent: GoOS\r\n" +
                                          "Accept: */*\r\n" +
                                          "Accept-Encoding: identity\r\n" +
-                                         "Host: api.goos.owen2k6.com\r\n" +
+                                         "Host: " + App.Repository + "\r\n" +
                                          "Connection: Keep-Alive\r\n\r\n";
                         byte[] dataToSend = Encoding.ASCII.GetBytes(httpget);
                         stream.Write(dataToSend, 0, dataToSend.Length);
@@ -114,16 +112,16 @@ namespace GoOS.GUI.Apps.GoStore
                     
                         if (!IO.Directory.Exists(@"0:\go")) IO.Directory.CreateDirectory(@"0:\go");
                     
-                        IO.File.WriteAllText(@"0:\go\" + File, responseParts[1]);
+                        IO.File.WriteAllText(@"0:\go\" + App.Filename, responseParts[1]);
                     }
 
-                    Dialogue.Show("Success", "Application installed successfully. (not really)");
+                    Dialogue.Show("Success", "Application installed successfully.");
                     InstallButton.Title = "Uninstall";
                     InstallButton.Render();
                 }
                 else
                 {
-                    while (IO.File.Exists(@"0:\go\" + File)) IO.File.Delete(@"0:\go\" + File);
+                    while (IO.File.Exists(@"0:\go\" + App.Filename)) IO.File.Delete(@"0:\go\" + App.Filename);
 
                     Dialogue.Show("Success", "Application uninstalled successfully.");
                     InstallButton.Title = " Install ";
@@ -140,13 +138,13 @@ namespace GoOS.GUI.Apps.GoStore
 
         private void IDEOpenButton_Click()
         {
-            if (!IO.File.Exists(@"0:\go\" + File))
+            if (!IO.File.Exists(@"0:\go\" + App.Filename))
             {
                 Dialogue.Show("Error", "You need to install this package before you can use it.", default, WindowManager.errorIcon);
             }
             else
             {
-                WindowManager.AddWindow(new GoIDE.IDEFrame(Name, @"0:\go\" + File, File.EndsWith(".9xc")));
+                WindowManager.AddWindow(new GoIDE.IDEFrame(App.Name, @"0:\go\" + App.Filename, App.Filename.EndsWith(".9xc")));
             }
         }
     }

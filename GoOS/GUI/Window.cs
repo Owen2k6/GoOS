@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Cosmos.System;
 using GoOS.GUI.Models;
-using IL2CPU.API.Attribs;
+using System;
 using PrismAPI.Graphics;
 using static GoOS.Resources;
 
@@ -263,11 +263,14 @@ namespace GoOS.GUI
                     MouseState = previousMouseState
                 });
 
-                if (previousMouseState == MouseState.Left)
+                FocusedControl = hoveredControl;
+
+                hoveredControl?.HandleClick(new MouseEventArgs()
                 {
-                    hoveredControl?.Clicked?.Invoke();
-                    hoveredControl?.ClickedAlt?.Invoke(hoveredControl?.Name);
-                }
+                    X = RelativeMouseX - hoveredControl.X,
+                    Y = RelativeMouseY - hoveredControl.Y,
+                    MouseState = MouseManager.MouseState
+                });
 
                 foreach (Control control in Controls)
                 {
@@ -438,6 +441,12 @@ namespace GoOS.GUI
             this.Title = Title;
             Visible = true;
             Closable = true;
+        }
+
+        public void ShowCrashDialogue(Exception e)
+        {
+            Dialogue.Show(nameof(WindowManager), "The app " + Title + " has thrown an exception and has had to close:\n" + e, default, WindowManager.errorIcon);
+            Dispose();
         }
     }
 }

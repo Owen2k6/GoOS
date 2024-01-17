@@ -345,31 +345,17 @@ namespace GoOS.GUI
                         MouseMove?.Invoke();
                     }
 
-                    for (int i = windows.Count - 1; i >= 0; i--)
-                    {
-                        if (windows[i].Closing)
-                        {
-                            TaskbarWindowRemovedHook?.Invoke(windows[i]);
-
-                            if (windows[i].Title == "GoOS")
-                                Dimmed = false;
-
-                            windows.RemoveAt(i);
-
-                            TaskmanHook?.Invoke();
-                        }
-                    }
-
                     DoInput();
 
-                    if (KeyboardManager.TryReadKey(out var key))
+                    /*if (KeyboardManager.TryReadKey(out var key))
                     {
                         if (KeyboardManager.ControlPressed && KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
                         {
                             AddWindow(new TaskManager());
                         }
-                    }
+                    }*/
 
+                    // Regular windows
                     for (int i = 0; i <= windows.Count - 1; i++)
                     {
                         Window window = windows[i];
@@ -392,6 +378,22 @@ namespace GoOS.GUI
                         if (windows[i].Title == nameof(Taskbar))
                         {
                             windows[i].DrawWindow(Canvas, i == windows.Count - 1);
+                        }
+                    }
+
+                    // move back up if it doesn't work
+                    for (int i = windows.Count - 1; i >= 0; i--)
+                    {
+                        if (windows[i].Closing)
+                        {
+                            TaskbarWindowRemovedHook?.Invoke(windows[i]);
+
+                            if (windows[i].Title == "GoOS")
+                                Dimmed = false;
+
+                            windows.RemoveAt(i);
+
+                            TaskmanHook?.Invoke();
                         }
                     }
 
