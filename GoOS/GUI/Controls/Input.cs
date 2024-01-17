@@ -264,7 +264,7 @@ namespace GoOS.GUI
             if (Text == string.Empty)
             {
                 Contents.DrawRectangle(0, 0, Contents.Width, Contents.Height, 0, Color.DeepGray);
-                Contents.DrawString(0, 0, PlaceholderText, Resources.Font_1x, Color.LightGray);
+                Contents.DrawString(2, 0, PlaceholderText, Resources.Font_1x, Color.LightGray);
 
                 int care = GetEndXAtCol(caretCol);
                 Contents.DrawLine(care, caretLine * 16, care, caretLine * 16 + 16, Color.Black);
@@ -275,7 +275,7 @@ namespace GoOS.GUI
 
             for (var i = 0; i < lines.Count; i++)
             {
-                Contents.DrawString(-scrollX, i * 14, Shield ? new string('*', lines[i].Length) : lines[i],
+                Contents.DrawString(-scrollX + 2, i * 14, Shield ? new string('*', lines[i].Length) : lines[i],
                     Resources.Font_1x, Color.Black);
             }
 

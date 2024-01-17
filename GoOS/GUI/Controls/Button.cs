@@ -145,7 +145,7 @@ namespace GoOS.GUI
 
         public override void Update()
         {
-            if (IsMouseOver)
+            if (IsMouseOver && Visible && Parent.Visible && (Parent.Focused || Parent.Title == nameof(Apps.Desktop)))
             {
                 WindowManager.MouseToDraw = mouseClick;
             }

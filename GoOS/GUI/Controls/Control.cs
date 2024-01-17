@@ -46,6 +46,12 @@ namespace GoOS.GUI
 
         internal virtual void HandleRelease() { }
 
+        internal virtual void HandleClick(MouseEventArgs args)
+        {
+            Clicked?.Invoke();
+            ClickedAlt?.Invoke(Name);
+        }
+
         internal virtual void HandleUnfocus() { }
 
         internal virtual void HandleKey(KeyEvent key) { }

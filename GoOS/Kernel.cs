@@ -194,15 +194,11 @@ namespace GoOS
                 computername = "GoOS";
             }
 
-            using (var xClient = new DHCPClient())
-            {
-                xClient.SendDiscoverPacket();
-                log(ConsoleColor.Blue, NetworkConfiguration.CurrentAddress.ToString());
-            }
-
             loadingDialogue.Closing = true;
             WindowManager.AddWindow(new Taskbar());
             WindowManager.AddWindow(new Desktop());
+
+            InitNetwork();
 
             #region GoOS Update Check
 
@@ -347,6 +343,15 @@ namespace GoOS
 
         public static string currentdirfix = string.Empty;
 
+        private static void InitNetwork()
+        {
+            using (var xClient = new DHCPClient())
+            {
+                xClient.SendDiscoverPacket();
+                log(ConsoleColor.Blue, NetworkConfiguration.CurrentAddress.ToString());
+            }
+        }
+
         public static void DrawPrompt()
         {
             textcolour(ThemeManager.WindowText);
@@ -404,10 +409,19 @@ namespace GoOS
                     break;
                 case "gui":
                     Console.ConsoleMode = false;
-                    WindowManager.Canvas = Display.GetDisplay(1280, 720);
+                    WindowManager.Canvas = Display.GetDisplay(1600, 900);
                     WindowManager.AddWindow(new Taskbar());
                     WindowManager.AddWindow(new Desktop());
                     WindowManager.AddWindow(new Welcome());
+                    break;
+                case "cli":            // i missed it ok
+                    WindowManager.CloseAll();
+                    Console.ConsoleMode = true;
+                    WindowManager.Canvas = Display.GetDisplay(800, 600);
+                    WindowManager.AddWindow(new GTerm());
+                    break;
+                case "ntwinit":
+                    InitNetwork();
                     break;
                 case "exit":
                     Console.Visible = false;
