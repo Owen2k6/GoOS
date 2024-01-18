@@ -18,7 +18,7 @@ namespace GoOS.GUI.Apps
         public GCLauncher()
         {
             Contents = new Canvas(400, 200);
-            Contents.Clear(Color.LightGray);
+            Contents.Clear(Color.Black);
             Title = "GoCode Launcher";
             Visible = true;
             Closable = true;

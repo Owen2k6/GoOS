@@ -414,12 +414,6 @@ namespace GoOS
                     WindowManager.AddWindow(new Desktop());
                     WindowManager.AddWindow(new Welcome());
                     break;
-                case "cli":            // i missed it ok
-                    WindowManager.CloseAll();
-                    Console.ConsoleMode = true;
-                    WindowManager.Canvas = Display.GetDisplay(800, 600);
-                    WindowManager.AddWindow(new GTerm());
-                    break;
                 case "ntwinit":
                     InitNetwork();
                     break;
