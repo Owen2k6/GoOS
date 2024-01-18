@@ -12,7 +12,9 @@ namespace GoOS.GUI
 {
     public class WindowManager
     {
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse.bmp")] private static byte[] mouseRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse.bmp")]
+        private static byte[] mouseRaw;
+
         public static Canvas mouse = Image.FromBitmap(mouseRaw, false);
 
         private static int framesToHeapCollect = 10;
@@ -61,6 +63,7 @@ namespace GoOS.GUI
                     return w;
                 }
             }
+
             return null;
         }
 
@@ -178,15 +181,13 @@ namespace GoOS.GUI
 
         public static bool AreThereDraggingWindows
         {
-            get
-            {
-                return GetDraggingWindow() != null;
-            }
+            get { return GetDraggingWindow() != null; }
         }
 
         private static void DrawMouse()
         {
-            Canvas.DrawImage((int)MouseManager.X - MouseOffsetX - MouseManager.DeltaX, (int)MouseManager.Y - MouseOffsetY - MouseManager.DeltaY, MouseToDraw);
+            Canvas.DrawImage((int)MouseManager.X - MouseOffsetX - MouseManager.DeltaX,
+                (int)MouseManager.Y - MouseOffsetY - MouseManager.DeltaY, MouseToDraw);
         }
 
         private static void AltTab()
@@ -210,6 +211,7 @@ namespace GoOS.GUI
             {
                 tabIndex = 0;
             }
+
             tabIndex = (tabIndex + 1) % tabbableWindows.Count;
 
             MoveWindowToFront(tabbableWindows[tabIndex]);
@@ -296,7 +298,7 @@ namespace GoOS.GUI
                 }
 
                 else if (key.Key == ConsoleKeyEx.LWin ||
-                    key.Key == ConsoleKeyEx.RWin)
+                         key.Key == ConsoleKeyEx.RWin)
                 {
                     ToggleStartMenu();
                     return;
@@ -321,7 +323,9 @@ namespace GoOS.GUI
             windows.Clear();
         }
 
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.error.bmp")] private static byte[] errorIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.error.bmp")]
+        private static byte[] errorIconRaw;
+
         public static Canvas errorIcon = Image.FromBitmap(errorIconRaw, false);
 
         private static uint LastCursorX, LastCursorY;
@@ -427,6 +431,7 @@ namespace GoOS.GUI
                     Heap.Collect();
                     framesToHeapCollect = 10;
                 }
+
                 framesToHeapCollect--;
             }
             catch (Exception ex)
@@ -439,10 +444,14 @@ namespace GoOS.GUI
             }
         }
 
-        private static void DimBackground() {
-            for (int y = 0; y < Canvas.Height - 1; y++) {
-                for (int x = 0; x < Canvas.Width - 1; x++) {
-                    if ((x % 2) == 0) {
+        private static void DimBackground()
+        {
+            for (int y = 0; y < Canvas.Height - 1; y++)
+            {
+                for (int x = 0; x < Canvas.Width - 1; x++)
+                {
+                    if ((x % 2) == 0)
+                    {
                         Canvas[x + y % 2, y] = Color.Black;
                     }
                 }

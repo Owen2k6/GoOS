@@ -33,18 +33,23 @@ namespace GoOS.GUI
         {
             get
             {
-                return MouseManager.X >= Parent.X + X                                                     &&
-                   MouseManager.X     < Parent.X  + X + Contents.Width                                    &&
-                   MouseManager.Y     >= Parent.Y + Y + (Parent.HasTitlebar ? Window.TITLE_BAR_HEIGHT : 0)                     &&
-                   MouseManager.Y     < Parent.Y  + Y + Contents.Height + (Parent.HasTitlebar ? Window.TITLE_BAR_HEIGHT : 0);
+                return MouseManager.X >= Parent.X + X &&
+                       MouseManager.X < Parent.X + X + Contents.Width &&
+                       MouseManager.Y >= Parent.Y + Y + (Parent.HasTitlebar ? Window.TITLE_BAR_HEIGHT : 0) &&
+                       MouseManager.Y < Parent.Y + Y + Contents.Height +
+                       (Parent.HasTitlebar ? Window.TITLE_BAR_HEIGHT : 0);
             }
         }
 
         public abstract void Render();
 
-        internal virtual void HandleDown(MouseEventArgs args) { }
+        internal virtual void HandleDown(MouseEventArgs args)
+        {
+        }
 
-        internal virtual void HandleRelease() { }
+        internal virtual void HandleRelease()
+        {
+        }
 
         internal virtual void HandleClick(MouseEventArgs args)
         {
@@ -52,10 +57,16 @@ namespace GoOS.GUI
             ClickedAlt?.Invoke(Name);
         }
 
-        internal virtual void HandleUnfocus() { }
+        internal virtual void HandleUnfocus()
+        {
+        }
 
-        internal virtual void HandleKey(KeyEvent key) { }
+        internal virtual void HandleKey(KeyEvent key)
+        {
+        }
 
-        public virtual void Update() { }
+        public virtual void Update()
+        {
+        }
     }
 }

@@ -12,7 +12,8 @@ namespace GoOS.GUI
 {
     public class Input : Control
     {
-        public Input(Window parent, ushort x, ushort y, ushort width, ushort height, string placeholder, Canvas image = null)
+        public Input(Window parent, ushort x, ushort y, ushort width, ushort height, string placeholder,
+            Canvas image = null)
             : base(parent, x, y, width, height)
         {
             PlaceholderText = placeholder;
@@ -263,7 +264,8 @@ namespace GoOS.GUI
                 // Highlight.
                 Contents.DrawLine(1, Contents.Height - 2, Contents.Width - 2, Contents.Height - 2,
                     new Color(216, 216, 216));
-                Contents.DrawLine(Contents.Width - 2, 1, Contents.Width - 2, Contents.Height - 1, new Color(216, 216, 216));
+                Contents.DrawLine(Contents.Width - 2, 1, Contents.Width - 2, Contents.Height - 1,
+                    new Color(216, 216, 216));
 
                 // Light highlight.
                 Contents.DrawLine(0, Contents.Height - 1, Contents.Width, Contents.Height - 1, Color.White);

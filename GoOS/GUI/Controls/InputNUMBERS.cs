@@ -193,7 +193,7 @@ namespace GoOS.GUI
 
                         break;
                     }
-                    
+
                     if (lineOffset >= 1)
                     {
                         lineOffset--;
@@ -282,7 +282,8 @@ namespace GoOS.GUI
 
                     break;
                 default:
-                    lines[caretLine + lineOffset] = lines[caretLine + lineOffset].Insert(caretCol, key.KeyChar.ToString());
+                    lines[caretLine + lineOffset] =
+                        lines[caretLine + lineOffset].Insert(caretCol, key.KeyChar.ToString());
                     caretCol++;
 
                     Changed?.Invoke();
