@@ -40,17 +40,9 @@ namespace GoOS.GUI.Apps.GoStore
 
         private List<Application> _repoFiles;
 
-        private Dictionary<string, string> GoOSversions = new();
-
         private Button nextButton;
         private Button prevousButton;
-
-        readonly string[] repos =
-        {
-            "apps.goos.owen2k6.com",
-            //"goos.ekeleze.org",
-            //"repo.mobren.net"
-        };
+        private Input _searchTextBox;
 
         private readonly string[] _allowDLFrom =
         {
@@ -104,6 +96,7 @@ namespace GoOS.GUI.Apps.GoStore
                 // Initialize the controls.
                 _repoFilesButtons = new Button[_repoFiles.Count];
                 _repoFilesButtonsPageNumbers = new int[_repoFiles.Count];
+
 
                 if (HasLaunched() || Kernel.BuildType == "NIFPR")
                 {
@@ -161,7 +154,7 @@ namespace GoOS.GUI.Apps.GoStore
             _repoFilesButtons = null;
             _repoFilesButtonsPageNumbers = null;
 
-            Contents.Clear();
+            //Contents.Clear();
             Contents.DrawImage(0, 0, Resources.GoStore, false);
 
             int accountFor = 0;
@@ -226,10 +219,9 @@ namespace GoOS.GUI.Apps.GoStore
 
                 if (appCat == catagory)
                 {
-                    string GoOSversion = "1.5";
                     string VersionSpaces = "";
 
-                    for (int ii = 0; ii < 25 - _repoFiles[i].Name.Length - (GoOSversion.TrimEnd().Length + 6); ii++)
+                    for (int ii = 0; ii < 25 - _repoFiles[i].Name.Length - (_repoFiles[i].GoOSVersion.TrimEnd().Length + 6); ii++)
                         VersionSpaces += " ";
 
                     int x = 150 + Colum * (207 + 5); // 150
@@ -238,7 +230,7 @@ namespace GoOS.GUI.Apps.GoStore
                     _repoFilesButtons[i] = new Button(this, Convert.ToUInt16(x), // 150 
                         Convert.ToUInt16(y),
                         207, 78, _repoFiles[i].Name + VersionSpaces + "GoOS " +
-                                 GoOSversion.TrimEnd() + "+" + "\nBy " + _repoFiles[i].Author + "\n" +
+                                 _repoFiles[i].GoOSVersion.TrimEnd() + "+" + "\nBy " + _repoFiles[i].Author + "\n" +
                                  _repoFiles[i].Version.Replace(@"\n", "\n"))
                     {
                         Name = _repoFiles[i].Name,
@@ -428,14 +420,6 @@ namespace GoOS.GUI.Apps.GoStore
         private void _repoFiles_Click(string i)
         {
             WindowManager.AddWindow(new DescriptionFrame(_repoFiles[GetIndexByTitle(i)]));
-            
-            /*
-             * == RC Release Notice.
-             * TODO: This is bad practice. The repository is stored on the end of the metadata. We cant expand the GoStore abilities without breaking earlier clients.
-             * TODO: Assigned to @MrDumbrava as they created this.
-             * TODO: Prevent Release Candidate or Release builds until this is resolved.
-             * - Owen2k6 DO NOT REMOVE.
-             */
         }
 
         private void CatgoryAction(string name)
