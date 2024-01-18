@@ -292,7 +292,7 @@ namespace GoOS.GUI
             }
 
             int caretTwitter = GetEndXAtCol(caretCol);
-            Contents.DrawLine(caretTwitter, caretLine * 16, caretTwitter, caretLine * 16 + 16, Color.Black);
+            Contents.DrawLine(caretTwitter + 2, caretLine * 16, caretTwitter + 2, caretLine * 16 + 16, Color.Black);
 
             Parent.RenderControls();
         }

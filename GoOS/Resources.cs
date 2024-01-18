@@ -65,6 +65,7 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStore.bmp")] static byte[] GoStoreRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreicon.bmp")] static byte[] GoStoreiconRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.StoreButton.bmp")] static byte[] StoreButtonRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreinput.bmp")] static byte[] GoStoreinputRaw;
         
         public static Canvas easterEgg;
         public static Canvas RunImage;
@@ -114,6 +115,7 @@ namespace GoOS
         public static Canvas StoreButton;
         public static Canvas OOBEmain;
         public static Canvas OOBEblank;
+        public static Canvas GoStoreinput;
         public static Font Font_1x = Font.Fallback;
         public static Font Font_2x = Font.Fallback;
 
@@ -163,6 +165,7 @@ namespace GoOS
                     GoStore = Image.FromBitmap(GoStoreRaw, false);
                     GoStoreicon = Image.FromBitmap(GoStoreiconRaw, false);
                     StoreButton = Image.FromBitmap(StoreButtonRaw, false);
+                    GoStoreinput = Image.FromBitmap(GoStoreinputRaw, false);
                     break;
 
                 case ResourceType.Priority:
