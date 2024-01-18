@@ -8,13 +8,14 @@ using Cosmos.System.Network.IPv4;
 using Cosmos.System.Network.IPv4.UDP.DNS;
 using PrismAPI.Graphics;
 using static GoOS.Resources;
+using System.Xml.Linq;
 
 namespace GoOS.GUI.Apps.GoStore
 {
     public class MainFrame : Window
     {
         Button[] catagoryButtons = new Button[7];
-
+        
         readonly List<string> Catagories = new()
         {
             "Utilities",
@@ -96,7 +97,7 @@ namespace GoOS.GUI.Apps.GoStore
                 // Initialize the controls.
                 _repoFilesButtons = new Button[_repoFiles.Count];
                 _repoFilesButtonsPageNumbers = new int[_repoFiles.Count];
-
+                _searchTextBox = new Input(this, 174, 564, 238, 16, "Search", GoStoreinput);
 
                 if (HasLaunched() || Kernel.BuildType == "NIFPR")
                 {
@@ -109,7 +110,7 @@ namespace GoOS.GUI.Apps.GoStore
                             Name = Catagories[i],
                             UseSystemStyle = false,
                             BackgroundColour = new Color(0, 0, 0, 0),
-                            ClickedAlt = CatgoryAction,
+                            ClickedAlt = Render,
                             RenderWithAlpha = true
                         };
                     }
@@ -132,7 +133,7 @@ namespace GoOS.GUI.Apps.GoStore
                         RenderWithAlpha = true
                     };
 
-                    CatgoryAction("Utilities");
+                    Render("Utilities");
                 }
                 else
                 {
@@ -146,15 +147,47 @@ namespace GoOS.GUI.Apps.GoStore
             catch (Exception e) { ShowCrashDialogue(e); }
         }
 
-        private void RenderApplicationsList()
+        private void Render(string category)
         {
+            switch (category)
+            {
+                case "Utilities":
+                    catagory = 0;
+                    break;
+                case "Games":
+                    catagory = 1;
+                    break;
+                case "Demos":
+                    catagory = 2;
+                    break;
+                case "Development":
+                    catagory = 3;
+                    break;
+                case "Updates":
+                    catagory = 4;
+                    break;
+                case "Office":
+                    catagory = 5;
+                    break;
+                case "Production":
+                    catagory = 6;
+                    break;
+
+                    /*
+                     * == RC Release Notice.
+                     * TODO: This is bad practice as the list is stored on the client so as more categories are added the client will be unable to display apps from them.
+                     * TODO: Prevent Release Candidate or Release builds until this is resolved.
+                     * - Owen2k6 DO NOT REMOVE.
+                     */
+            }
+
             foreach (Button b in _repoFilesButtons)
                 Controls.Remove(b);
-            
+
             _repoFilesButtons = null;
             _repoFilesButtonsPageNumbers = null;
 
-            //Contents.Clear();
+            Contents.Clear();
             Contents.DrawImage(0, 0, Resources.GoStore, false);
 
             int accountFor = 0;
@@ -198,13 +231,13 @@ namespace GoOS.GUI.Apps.GoStore
                     case "Production":
                         appCat = 6;
                         break;
-                    
-                    /*
-                     * == RC Release Notice.
-                     * TODO: This is bad practice as the list is stored on the client so as more categories are added the client will be unable to display apps from them.
-                     * TODO: Prevent Release Candidate or Release builds until this is resolved.
-                     * - Owen2k6 DO NOT REMOVE.
-                     */
+
+                        /*
+                         * == RC Release Notice.
+                         * TODO: This is bad practice as the list is stored on the client so as more categories are added the client will be unable to display apps from them.
+                         * TODO: Prevent Release Candidate or Release builds until this is resolved.
+                         * - Owen2k6 DO NOT REMOVE.
+                         */
                 }
 
                 if (Colum >= 3 && Line >= 6 && appCat == catagory)
@@ -259,11 +292,57 @@ namespace GoOS.GUI.Apps.GoStore
                     if (_repoFilesButtons[i] != null) _repoFilesButtons[i].Render();
                 }
             }
-            
+
+            switch (category)
+            {
+                case "Utilities":
+                    Contents.DrawString(38, 563, "Utilities", Font_1x, Color.White);
+                    break;
+                case "Games":
+                    Contents.DrawString(52, 563, "Games", Font_1x, Color.White);
+                    break;
+                case "Demos":
+                    Contents.DrawString(52, 563, "Demos", Font_1x, Color.White);
+                    break;
+                case "Development":
+                    Contents.DrawString(29, 563, "Development", Font_1x, Color.White);
+                    break;
+                case "Updates":
+                    Contents.DrawString(43, 563, "Updates", Font_1x, Color.White);
+                    break;
+                case "Office":
+                    Contents.DrawString(47, 563, "Office", Font_1x, Color.White);
+                    break;
+                case "Production":
+                    Contents.DrawString(33, 563, "Production", Font_1x, Color.White);
+                    break;
+
+                    /*
+                     * == RC Release Notice.
+                     * TODO: This is bad practice as the list is stored on the client so as more categories are added the client will be unable to display apps from them.
+                     * TODO: Prevent Release Candidate or Release builds until this is resolved.
+                     * - Owen2k6 DO NOT REMOVE.
+                     */
+            }
+
+            int pagex = 646 + 4;
+            if ((page + 1).ToString().Length == 2)
+            {
+                pagex -= 4;
+            }
+
+            if ((page + 1).ToString().Length == 3)
+            {
+                pagex -= 8;
+            }
+
+            Contents.DrawString(pagex, 563, (page + 1).ToString(), Font_1x, Color.White);
+
             foreach (Button i in catagoryButtons) i.Render();
             prevousButton.Render();
             nextButton.Render();
-
+            _searchTextBox.Render();
+            
             RenderSystemStyleBorder();
         }
 
@@ -386,7 +465,7 @@ namespace GoOS.GUI.Apps.GoStore
 
                     tcpClient.Connect(serverIP, 80);
                     NetworkStream stream = tcpClient.GetStream();
-                    string httpget = "GET /GoOS/gslaunch.goos HTTP/1.1\r\n" + 
+                    string httpget = "GET /GoOS/gslaunch.goos HTTP/1.1\r\n" +
                                      "User-Agent: GoOS\r\n" +
                                      "Accept: */*\r\n" +
                                      "Accept-Encoding: identity\r\n" +
@@ -422,105 +501,23 @@ namespace GoOS.GUI.Apps.GoStore
             WindowManager.AddWindow(new DescriptionFrame(_repoFiles[GetIndexByTitle(i)]));
         }
 
-        private void CatgoryAction(string name)
-        {
-            switch (name)
-            {
-                case "Utilities":
-                    catagory = 0;
-                    break;
-                case "Games":
-                    catagory = 1;
-                    break;
-                case "Demos":
-                    catagory = 2;
-                    break;
-                case "Development":
-                    catagory = 3;
-                    break;
-                case "Updates":
-                    catagory = 4;
-                    break;
-                case "Office":
-                    catagory = 5;
-                    break;
-                case "Production":
-                    catagory = 6;
-                    break;
-                
-                /*
-                 * == RC Release Notice.
-                 * TODO: This is bad practice as the list is stored on the client so as more categories are added the client will be unable to display apps from them.
-                 * TODO: Prevent Release Candidate or Release builds until this is resolved.
-                 * - Owen2k6 DO NOT REMOVE.
-                 */
-            }
-
-            RenderApplicationsList();
-            
-            switch (name)
-            {
-                case "Utilities":
-                    Contents.DrawString(38, 563, "Utilities", Font_1x, Color.White);
-                    break;
-                case "Games":
-                    Contents.DrawString(52, 563, "Games", Font_1x, Color.White);
-                    break;
-                case "Demos":
-                    Contents.DrawString(52, 563, "Demos", Font_1x, Color.White);
-                    break;
-                case "Development":
-                    Contents.DrawString(29, 563, "Development", Font_1x, Color.White);
-                    break;
-                case "Updates":
-                    Contents.DrawString(43, 563, "Updates", Font_1x, Color.White);
-                    break;
-                case "Office":
-                    Contents.DrawString(47, 563, "Office", Font_1x, Color.White);
-                    break;
-                case "Production":
-                    Contents.DrawString(33, 563, "Production", Font_1x, Color.White);
-                    break;
-                
-                /*
-                 * == RC Release Notice.
-                 * TODO: This is bad practice as the list is stored on the client so as more categories are added the client will be unable to display apps from them.
-                 * TODO: Prevent Release Candidate or Release builds until this is resolved.
-                 * - Owen2k6 DO NOT REMOVE.
-                 */
-            }
-
-            int pagex = 646 + 4;
-            if ((page + 1).ToString().Length == 2)
-            {
-                pagex -= 4;
-            }
-            
-            if ((page + 1).ToString().Length == 3)
-            {
-                pagex -= 8;
-            }
-            
-            Contents.DrawString(pagex, 563, (page + 1).ToString(), Font_1x, Color.White);
-        }
-
         private void nextPage()
         {
             if (_repoFilesButtonsPageNumbers.Contains(page + 1))
             {
                 page++;
-                RenderApplicationsList();
+                Render(Catagories[catagory]);
                 int pagex = 646 + 4;
                 if ((page + 1).ToString().Length == 2)
                 {
                     pagex -= 4;
                 }
-                
+
                 if ((page + 1).ToString().Length == 3)
                 {
                     pagex -= 8;
                 }
-            
+
                 Contents.DrawString(pagex, 563, (page + 1).ToString(), Font_1x, Color.White);
             }
         }
@@ -530,7 +527,7 @@ namespace GoOS.GUI.Apps.GoStore
             if (_repoFilesButtonsPageNumbers.Contains(page - 1))
             {
                 page--;
-                RenderApplicationsList();
+                Render(Catagories[catagory]);
                 int pagex = 646 + 4;
                 if ((page + 1).ToString().Length == 2)
                 {
