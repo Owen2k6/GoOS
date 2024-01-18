@@ -40,8 +40,34 @@ namespace GoOS.GUI.Apps.OOBE
 
         private void NextButton_Click()
         {
+            // Check if the username is valid.
+            if (UserName.Text == "")
+            {
+                Dialogue.Show("Error", "Your username can't be empty.");
+                return;
+            }
+
+            if (ComputerName.Text == "")
+            {
+                Dialogue.Show("Error", "Your computer's name can't be empty.");
+                return;
+            }
+
+            if (UserName.Text.Contains(' '))
+            {
+                Dialogue.Show("Notice", "Spaces in your username have been replaced with underscores (_)");
+            }
+
+            if (ComputerName.Text.Contains(' '))
+            {
+                Dialogue.Show("Notice", "Spaces in your computer's name have been replaced with underscores (_)");
+            }
+
+
+            string username = UserName.Text = UserName.Text.Replace(" ", "_");
+            string computername = ComputerName.Text = ComputerName.Text.Replace(" ", "_");
             // Continue.
-            WindowManager.AddWindow(new ActivationFrame(UserName.Text, ComputerName.Text));
+            WindowManager.AddWindow(new ActivationFrame(username, computername));
             Dispose();
         }
     }
