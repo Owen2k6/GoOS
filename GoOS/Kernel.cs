@@ -407,22 +407,6 @@ namespace GoOS
                 case "codeswitch":
                     oldCode = !oldCode;
                     break;
-                case "gui":
-                    Console.ConsoleMode = false;
-                    WindowManager.Canvas = Display.GetDisplay(1600, 900);
-                    WindowManager.AddWindow(new Taskbar());
-                    WindowManager.AddWindow(new Desktop());
-                    WindowManager.AddWindow(new Welcome());
-                    break;
-                case "cli":            // i missed it ok
-                    WindowManager.CloseAll();
-                    Console.ConsoleMode = true;
-                    WindowManager.Canvas = Display.GetDisplay(800, 600);
-                    WindowManager.AddWindow(new GTerm());
-                    break;
-                case "ntwinit":
-                    InitNetwork();
-                    break;
                 case "exit":
                     Console.Visible = false;
                     break;
@@ -441,7 +425,6 @@ namespace GoOS
                         log(ThemeManager.ErrorText, "Too many arguments!");
                         break;
                     }
-
                     GoCodeInstaller.Install(args[1]);
                     break;
                 case "uninstall":
@@ -804,9 +787,6 @@ namespace GoOS
                     var editor = new TextEditor(Util.Paths.JoinPaths(currentdirfix, args[1]));
                     editor.Start();
                     break;
-                case "settings":
-                    ControlPanel.Launch();
-                    break;
                 case "vm":
                     if (args.Length > 2)
                     {
@@ -825,57 +805,9 @@ namespace GoOS
                 case "clear":
                     Console.Clear();
                     break;
-                case "settheme":
-                    if (args.Length > 2)
-                    {
-                        log(ThemeManager.ErrorText, "Too many arguments");
-                        break;
-                    }
-
-                    if (args.Length == 1)
-                    {
-                        log(ThemeManager.ErrorText, "Missing arguments");
-                        break;
-                    }
-
-                    ThemeManager.SetTheme(@"0:\content\themes\" + args[1]);
-                    break;
-                case "systest":
-                    systest.run();
-                    break;
                 case "whoami":
                     log(ThemeManager.ErrorText, "Showing Internet Information");
                     log(ThemeManager.ErrorText, NetworkConfiguration.CurrentAddress.ToString());
-                    break;
-                case "lr":
-                    if (args[1] == "get")
-                    {
-                        string app = new GoOS.Util.localRepo().GetFile(args[2]);
-                        log(ThemeManager.WindowText, app);
-                    }
-                    else
-                    {
-                        log(ThemeManager.ErrorText, "Unknown order.");
-                    }
-
-                    break;
-                case "mode":
-                    if (args.Length > 3)
-                    {
-                        log(ThemeManager.ErrorText, "Too many arguments");
-                        break;
-                    }
-
-                    if (args.Length == 1)
-                    {
-                        log(ThemeManager.ErrorText, "Missing arguments");
-                        break;
-                    }
-
-                    Console.Init(Convert.ToUInt16(args[1]), Convert.ToUInt16(args[2]));
-                    break;
-                case "dtest":
-                    Dialogue.Show("Message", "Hello world!!!");
                     break;
                 case "dotnet":
                     var fl = new DotNetFile(Directory.GetCurrentDirectory() + args[1]);
@@ -896,15 +828,6 @@ namespace GoOS
                     }
 
                     _9xCode.Interpreter.Run(Directory.GetCurrentDirectory() + args[1]);
-                    break;
-                case "gostore":
-                    WindowManager.AddWindow(new GUI.Apps.GoStore.MainFrame());
-                    break;
-                case "about":
-                    WindowManager.AddWindow(new About());
-                    break;
-                case "noobe":
-                    WindowManager.AddWindow(new GUI.Apps.OOBE.MainFrame());
                     break;
                 default:
                     if (isGCIenabled)

@@ -10,7 +10,7 @@ using static GoOS.Resources;
 /// <summary>
 /// <see cref="BetterConsole"/> class
 /// </summary>
-public static class BetterConsole
+public static class BetterConsole //Shitter Console
 {
     /* The canvas for the console */
     public static Canvas Canvas;

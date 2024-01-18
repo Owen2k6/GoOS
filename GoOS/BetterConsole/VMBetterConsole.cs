@@ -11,7 +11,7 @@ using PrismAPI.Graphics.Fonts;
 /// <summary>
 /// <see cref="VMBetterConsole"/> class
 /// </summary>
-public class VMBetterConsole
+public class VMBetterConsole //Shitter Console
 {
     /* The raw global font */
     [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_1x.btf")]
