@@ -1,12 +1,3 @@
-/////// ekeleze ///////
-// I hate xrc2 code. // 
-///////////////////////
-
-////////// xrc2 //////////
-// I hate ekeleze code. //
-//////////////////////////
-
-using Cosmos.HAL;
 using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4;
 using Cosmos.System.Network.IPv4.UDP.DHCP;
@@ -21,7 +12,6 @@ using GoOS.Commands;
 using Console = BetterConsole;
 using ConsoleColor = PrismAPI.Graphics.Color;
 using static GoOS.Core;
-using System.Threading;
 using Cosmos.System.Network.IPv4.UDP.DNS;
 using GoOS._9xCode;
 using PrismAPI.Graphics;
@@ -32,10 +22,9 @@ using GoOS.GUI.Apps;
 using GoOS.Networking;
 using LibDotNetParser.CILApi;
 using System.Net.Sockets;
-//using TcpClient = Cosmos.System.Network.IPv4.TCP.TcpClient;
 
 // Goplex Studios - GoOS
-// Copyright (C) 2022  Owen2k6
+// Copyright (C) 2024  Owen2k6
 
 namespace GoOS
 {
@@ -44,7 +33,7 @@ namespace GoOS
         // This enables the user to switch between the old and new GoCode interpreters.
         // This is to be removed as soon as the new one is finished, only being added as the new one needs testing.
         public static bool oldCode = false;
-        
+
         public static Dictionary<string, string> InstalledPrograms = new Dictionary<string, string>() { };
 
         public static bool isGCIenabled = true;
@@ -66,7 +55,6 @@ namespace GoOS
         public static string computername = null;
 
         public static string cutStatus = "Disabled";
-        public static Color DesktopColour = Color.ClassicBlue;
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GoOS_Intro.bmp")]
         public static byte[] rawBootLogo;
@@ -75,14 +63,14 @@ namespace GoOS
         {
             System.Console.WriteLine("GoOS - Starting GoOS...");
 
-            if (Cosmos.Core.CPU.GetAmountOfRAM() < 150)
+            if (Cosmos.Core.CPU.GetAmountOfRAM() < 256)
             {
                 System.Console.ForegroundColor = System.ConsoleColor.Red;
                 System.Console.WriteLine();
                 System.Console.Write(
-                    "GoOS - Not enough ram to boot GoOS. Please increase the amount of RAM of your VM");
+                    "GoOS - Insufficient Memory to initialise GoOS.");
                 System.Console.Write(
-                    "GoOS - Or if you are running this on real hardware (you shouldn't), buy more RAM");
+                    "GoOS - GoOS Recommends 1024MiB but the minimum is 256MiB");
 
                 while (true) ;
             }
@@ -90,8 +78,7 @@ namespace GoOS
             Resources.Generate(ResourceType.Fonts);
             Resources.Generate(ResourceType.Priority);
 
-            WindowManager.Canvas = Display.GetDisplay(1600, 900); //TODO: Not have this hard coded >:^(
-            // TODO:           looks hard coded to me (◔_◔)    
+            WindowManager.Canvas = Display.GetDisplay(1600, 900);
             WindowManager.Canvas.DrawImage(0, 0, Resources.background, false);
             Console.Init(800, 600);
 
@@ -235,7 +222,8 @@ namespace GoOS
 
                     string[] responseParts = receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
 
-                    if (responseParts.Length < 2 || responseParts.Length > 2) Dialogue.Show("GoOS Update", "Invalid HTTP response!", default, WindowManager.errorIcon);
+                    if (responseParts.Length < 2 || responseParts.Length > 2)
+                        Dialogue.Show("GoOS Update", "Invalid HTTP response!", default, WindowManager.errorIcon);
 
                     string content = responseParts[1];
 
@@ -303,7 +291,8 @@ namespace GoOS
 
                     string[] responseParts = receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
 
-                    if (responseParts.Length < 2 || responseParts.Length > 2) Dialogue.Show("GoOS Update", "Invalid HTTP response!", default, WindowManager.errorIcon);
+                    if (responseParts.Length < 2 || responseParts.Length > 2)
+                        Dialogue.Show("GoOS Update", "Invalid HTTP response!", default, WindowManager.errorIcon);
 
                     string content = responseParts[1];
 
@@ -425,6 +414,7 @@ namespace GoOS
                         log(ThemeManager.ErrorText, "Too many arguments!");
                         break;
                     }
+
                     GoCodeInstaller.Install(args[1]);
                     break;
                 case "uninstall":
@@ -569,15 +559,19 @@ namespace GoOS
                                     int bytesRead = stream.Read(receivedData, 0, receivedData.Length);
                                     string receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
 
-                                    string[] responseParts = receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
+                                    string[] responseParts = receivedMessage.Split(new[] { "\r\n\r\n" }, 2,
+                                        StringSplitOptions.None);
 
-                                    if (responseParts.Length < 2 || responseParts.Length > 2) Dialogue.Show("GoOS Update", "Invalid HTTP response!", default, WindowManager.errorIcon);
+                                    if (responseParts.Length < 2 || responseParts.Length > 2)
+                                        Dialogue.Show("GoOS Update", "Invalid HTTP response!", default,
+                                            WindowManager.errorIcon);
 
                                     string content = responseParts[1];
 
                                     if (content == "404")
                                     {
-                                        log(ThemeManager.ErrorText, "The requested file was not found on the server. Try another repo?");
+                                        log(ThemeManager.ErrorText,
+                                            "The requested file was not found on the server. Try another repo?");
                                         break;
                                     }
 
@@ -712,6 +706,7 @@ namespace GoOS
                         log(ThemeManager.ErrorText, "Too many arguments");
                         break;
                     }
+
                     try
                     {
                         Directory.SetCurrentDirectory(Directory.GetCurrentDirectory().TrimEnd('\\')
@@ -723,6 +718,7 @@ namespace GoOS
                     {
                         // ignored
                     }
+
                     if (!Directory.GetCurrentDirectory().StartsWith(@"0:\"))
                     {
                         Directory.SetCurrentDirectory(@"0:\");
@@ -865,7 +861,5 @@ namespace GoOS
                     break;
             }
         }
-
-        public static List OW;
     }
 }
