@@ -35,7 +35,6 @@ namespace GoOS.GUI.Apps.GoStore
 
         Button[] _repoFilesButtons;
         private int[] _repoFilesButtonsPageNumbers;
-        private bool[] _repoFilesButtonsSearch;
 
         private int catagory = 0;
         private int page = 0;
@@ -44,7 +43,6 @@ namespace GoOS.GUI.Apps.GoStore
 
         private Button nextButton;
         private Button prevousButton;
-        private Button searchButton;
         private Input _searchTextBox;
 
         private readonly string[] _allowDLFrom =
@@ -99,7 +97,6 @@ namespace GoOS.GUI.Apps.GoStore
                 // Initialize the controls.
                 _repoFilesButtons = new Button[_repoFiles.Count];
                 _repoFilesButtonsPageNumbers = new int[_repoFiles.Count];
-                _repoFilesButtonsSearch = new bool[_repoFiles.Count];
                 _searchTextBox = new Input(this, 174, 564, 238, 16, "Search", GoStoreinput);
 
                 if (HasLaunched() || Kernel.BuildType == "NIFPR")
@@ -133,15 +130,6 @@ namespace GoOS.GUI.Apps.GoStore
                         UseSystemStyle = false,
                         BackgroundColour = new Color(0, 0, 0, 0),
                         Clicked = previousPage,
-                        RenderWithAlpha = true
-                    };
-
-                    searchButton = new Button(this, 426, 556, 52, 34, "Go")
-                    {
-                        Name = "Search",
-                        UseSystemStyle = false,
-                        BackgroundColour = new Color(0, 0, 0, 0),
-                        Clicked = SearchAction,
                         RenderWithAlpha = true
                     };
 
@@ -198,7 +186,6 @@ namespace GoOS.GUI.Apps.GoStore
 
             _repoFilesButtons = null;
             _repoFilesButtonsPageNumbers = null;
-            _repoFilesButtonsSearch = null;
 
             Contents.Clear();
             Contents.DrawImage(0, 0, Resources.GoStore, false);
@@ -206,7 +193,6 @@ namespace GoOS.GUI.Apps.GoStore
             int accountFor = 0;
 
             _repoFilesButtonsPageNumbers = new int[_repoFiles.Count];
-            _repoFilesButtonsSearch = new bool[_repoFiles.Count];
             _repoFilesButtons = new Button[_repoFiles.Count];
 
             int Line = 0;
@@ -215,30 +201,6 @@ namespace GoOS.GUI.Apps.GoStore
             page = 0;
 
             int yOffset = 0;
-            
-            BetterConsole.WriteLine("[PRELOOP] _repoFiles.Count: " + _repoFiles.Count);
-            BetterConsole.WriteLine("[PRELOOP] _repoFilesButtonsSearch.Length: " + _repoFilesButtonsSearch.Length);
-            
-            for (int i = 0; i < _repoFilesButtonsSearch.Length - 1; i++)
-            {
-                BetterConsole.WriteLine("i: " + i);
-                BetterConsole.WriteLine("1");
-                if (_searchTextBox.Text == string.Empty || _searchTextBox.Text == null)
-                {
-                    BetterConsole.WriteLine("1.1");
-                    _repoFilesButtonsSearch[i] = !false;
-                }
-                if (_repoFiles[i].Name.Contains(_searchTextBox.Text))
-                {
-                    BetterConsole.WriteLine("1.2");
-                    _repoFilesButtonsSearch[i] = !false;
-                }
-                else
-                {
-                    BetterConsole.WriteLine("1.3");
-                    _repoFilesButtonsSearch[i] = !true;
-                }
-            }
 
             for (int i = 0; i < _repoFiles.Count; i++)
             {
@@ -277,9 +239,7 @@ namespace GoOS.GUI.Apps.GoStore
                          * - Owen2k6 DO NOT REMOVE.
                          */
                 }
-                
-                
-                
+
                 if (Colum >= 3 && Line >= 6 && appCat == catagory)
                 {
                     ButtonPage++;
@@ -290,7 +250,7 @@ namespace GoOS.GUI.Apps.GoStore
                     Colum++;
                 }
 
-                if (appCat == catagory && _repoFilesButtonsSearch[i]) // Ruled out, not issue
+                if (appCat == catagory)
                 {
                     string VersionSpaces = "";
 
@@ -382,7 +342,6 @@ namespace GoOS.GUI.Apps.GoStore
             prevousButton.Render();
             nextButton.Render();
             _searchTextBox.Render();
-            searchButton.Render();
             
             RenderSystemStyleBorder();
         }
@@ -582,11 +541,6 @@ namespace GoOS.GUI.Apps.GoStore
 
                 Contents.DrawString(pagex, 563, (page + 1).ToString(), Font_1x, Color.White);
             }
-        }
-
-        private void SearchAction()
-        {
-            Render(Catagories[catagory]); // Ruled out, not issue
         }
     }
 }
