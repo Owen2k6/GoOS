@@ -96,7 +96,7 @@ namespace GoOS.GUI.Apps.GoStore
                             Name = Catagories[i].Trim(),
                             UseSystemStyle = false,
                             BackgroundColour = new Color(0, 0, 0, 0),
-                            ClickedAlt = Render,
+                            ClickedAlt = CategoryButtonClick,
                             RenderWithAlpha = true
                         };
                     }
@@ -131,6 +131,12 @@ namespace GoOS.GUI.Apps.GoStore
                 }
             }
             catch (Exception e) { ShowCrashDialogue(e); }
+        }
+
+        private void CategoryButtonClick(string cat)
+        {
+            page = 0;
+            Render(cat);
         }
 
         private int GetCatagoryIndex(string cat)
