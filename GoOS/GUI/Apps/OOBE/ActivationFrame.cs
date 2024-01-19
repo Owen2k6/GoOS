@@ -28,13 +28,13 @@ namespace GoOS.GUI.Apps.OOBE
             SetDock(WindowDock.Center);
 
             // Initialize the controls.
-            NextButton = new Button(this, 350, 456, 100, 20, "Next") { Clicked = NextButton_Click };
+            NextButton = new Button(this, 20, 570, 100, 20, "Continue") { Clicked = NextButton_Click };
 
             // Paint the window.
             Contents.DrawImage(0, 0, OOBEblank, false);
             NextButton.Render();
-            Contents.DrawString(20, 5, "GoOS Online and Activation", Font_2x, Color.White);
-            Contents.DrawString(20, 27, "GoOS Activation is not available at this time. \nPlease continue to setup.", Font_1x, Color.White);
+            Contents.DrawString(20, 5, "GoOS Activation", Font_2x, Color.White);
+            Contents.DrawString(20, 40, "You're all set to continue and begin setting up the OS files.\nClicking continue will begin creating files onto your HDD\nThere is still time to cancel setup if you do not wish to install GoOS Files.", Font_1x, Color.White);
         }
 
         private void NextButton_Click()
