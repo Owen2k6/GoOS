@@ -105,7 +105,7 @@
       <None Remove="Resources\GUI\desktopwallpaper.bmp" />
       <None Remove="Resources\GUI\GoStore.bmp" />
       <None Remove="Resources\GUI\GoStoreicon.bmp" />
-      <None Remove="Resources\GUI\GoStoreinput.bmp" />
+      <None Remove="Resources\GUI\GoStoreinfoboard.bmp" />
       <None Remove="Resources\GUI\Maximize_Hovered.bmp" />
       <None Remove="Resources\GUI\Maximize_Pressed.bmp" />
       <None Remove="Resources\GUI\Paint\rubber.bmp" />
@@ -124,7 +124,7 @@
       <EmbeddedResource Include="Resources\GUI\GoIDE\run.bmp" />
       <EmbeddedResource Include="Resources\GUI\GoStore.bmp" />
       <EmbeddedResource Include="Resources\GUI\GoStoreicon.bmp" />
-      <EmbeddedResource Include="Resources\GUI\GoStoreinput.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoStoreinfoboard.bmp" />
       <EmbeddedResource Include="Resources\GUI\ide.bmp" />
       <EmbeddedResource Include="Resources\GUI\Maximize_Hovered.bmp" />
       <EmbeddedResource Include="Resources\GUI\Maximize_Pressed.bmp" />
