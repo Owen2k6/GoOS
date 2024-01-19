@@ -215,15 +215,27 @@ namespace GoOS.GUI.Apps.GoStore
             page = 0;
 
             int yOffset = 0;
-
-            for (int i = 0; i < _repoFiles.Count; i++)
+            
+            BetterConsole.WriteLine("[PRELOOP] _repoFiles.Count: " + _repoFiles.Count);
+            BetterConsole.WriteLine("[PRELOOP] _repoFilesButtonsSearch.Length: " + _repoFilesButtonsSearch.Length);
+            
+            for (int i = 0; i < _repoFilesButtonsSearch.Length - 1; i++)
             {
+                BetterConsole.WriteLine("i: " + i);
+                BetterConsole.WriteLine("1");
+                if (_searchTextBox.Text == string.Empty || _searchTextBox.Text == null)
+                {
+                    BetterConsole.WriteLine("1.1");
+                    _repoFilesButtonsSearch[i] = !false;
+                }
                 if (_repoFiles[i].Name.Contains(_searchTextBox.Text))
                 {
+                    BetterConsole.WriteLine("1.2");
                     _repoFilesButtonsSearch[i] = !false;
                 }
                 else
                 {
+                    BetterConsole.WriteLine("1.3");
                     _repoFilesButtonsSearch[i] = !true;
                 }
             }
