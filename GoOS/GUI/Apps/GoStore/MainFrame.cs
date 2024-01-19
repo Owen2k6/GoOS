@@ -14,27 +14,10 @@ namespace GoOS.GUI.Apps.GoStore
 {
     public class MainFrame : Window
     {
-        Button[] catagoryButtons = new Button[7];
-        
-        readonly List<string> Catagories = new()
-        {
-            "Utilities",
-            "Games",
-            "Demos",
-            "Development",
-            "Updates",
-            "Office",
-            "Production",
-        };
-        /*
-         * == RC Release Notice.
-         * TODO: This is bad practice as the list is stored on the client so as more categories are added the client will be unable to display apps from them.
-         * TODO: Prevent Release Candidate or Release builds until this is resolved.
-         * - Owen2k6 DO NOT REMOVE.
-         */
-
+        Button[] catagoryButtons;
         Button[] _repoFilesButtons;
         private int[] _repoFilesButtonsPageNumbers;
+        string[] Catagories;
 
         private int catagory = 0;
         private int page = 0;
@@ -43,7 +26,6 @@ namespace GoOS.GUI.Apps.GoStore
 
         private Button nextButton;
         private Button prevousButton;
-        private Input _searchTextBox;
 
         private readonly string[] _allowDLFrom =
         {
@@ -70,6 +52,8 @@ namespace GoOS.GUI.Apps.GoStore
                 string[] repos = GetReposFile();
                 Infofile[] infoFiles = new Infofile[repos.Length];
                 _repoFiles = new List<Application>();
+                Catagories = GetCatagoriesFile();
+                catagoryButtons = new Button[Catagories.Length];
 
                 for (int i = 0; i < repos.Length; i++)
                 {
@@ -97,17 +81,16 @@ namespace GoOS.GUI.Apps.GoStore
                 // Initialize the controls.
                 _repoFilesButtons = new Button[_repoFiles.Count];
                 _repoFilesButtonsPageNumbers = new int[_repoFiles.Count];
-                _searchTextBox = new Input(this, 174, 564, 238, 16, "Search", GoStoreinput);
 
                 if (HasLaunched() || Kernel.BuildType == "NIFPR")
                 {
-                    for (int i = 0; i < Catagories.Count; i++)
+                    for (int i = 0; i < Catagories.Length; i++)
                     {
                         catagoryButtons[i] = new Button(this, Convert.ToUInt16(5),
                             Convert.ToUInt16(45 + i * 20),
-                            Convert.ToUInt16(Catagories[i].Length * 8), 20, Catagories[i])
+                            Convert.ToUInt16(Catagories[i].Length * 8), 20, Catagories[i].Trim())
                         {
-                            Name = Catagories[i],
+                            Name = Catagories[i].Trim(),
                             UseSystemStyle = false,
                             BackgroundColour = new Color(0, 0, 0, 0),
                             ClickedAlt = Render,
@@ -147,39 +130,22 @@ namespace GoOS.GUI.Apps.GoStore
             catch (Exception e) { ShowCrashDialogue(e); }
         }
 
+        private int GetCatagoryIndex(string cat)
+        {
+            for (int i = 0; i < Catagories.Length; i++)
+            {
+                if (Catagories[i].Trim() == cat)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
         private void Render(string category)
         {
-            switch (category)
-            {
-                case "Utilities":
-                    catagory = 0;
-                    break;
-                case "Games":
-                    catagory = 1;
-                    break;
-                case "Demos":
-                    catagory = 2;
-                    break;
-                case "Development":
-                    catagory = 3;
-                    break;
-                case "Updates":
-                    catagory = 4;
-                    break;
-                case "Office":
-                    catagory = 5;
-                    break;
-                case "Production":
-                    catagory = 6;
-                    break;
-
-                    /*
-                     * == RC Release Notice.
-                     * TODO: This is bad practice as the list is stored on the client so as more categories are added the client will be unable to display apps from them.
-                     * TODO: Prevent Release Candidate or Release builds until this is resolved.
-                     * - Owen2k6 DO NOT REMOVE.
-                     */
-            }
+            catagory = GetCatagoryIndex(category);
 
             foreach (Button b in _repoFilesButtons)
                 Controls.Remove(b);
@@ -197,54 +163,19 @@ namespace GoOS.GUI.Apps.GoStore
 
             int Line = 0;
             int Colum = 0;
-            int ButtonPage = 0;
             page = 0;
 
             int yOffset = 0;
 
-            for (int i = 0; i < _repoFiles.Count; i++)
+            for (int i = page * 18; i < 18; i++)
             {
                 // 207 x 78
 
-                int appCat = 0;
+                if (i >= _repoFiles.Count) return;
 
-                switch (_repoFiles[i].Category)
-                {
-                    case "Utilities":
-                        appCat = 0;
-                        break;
-                    case "Games":
-                        appCat = 1;
-                        break;
-                    case "Demos":
-                        appCat = 2;
-                        break;
-                    case "Development":
-                        appCat = 3;
-                        break;
-                    case "Updates":
-                        appCat = 4;
-                        break;
-                    case "Office":
-                        appCat = 5;
-                        break;
-                    case "Production":
-                        appCat = 6;
-                        break;
+                int appCat = GetCatagoryIndex(_repoFiles[i].Category);
 
-                        /*
-                         * == RC Release Notice.
-                         * TODO: This is bad practice as the list is stored on the client so as more categories are added the client will be unable to display apps from them.
-                         * TODO: Prevent Release Candidate or Release builds until this is resolved.
-                         * - Owen2k6 DO NOT REMOVE.
-                         */
-                }
-
-                if (Colum >= 3 && Line >= 6 && appCat == catagory)
-                {
-                    ButtonPage++;
-                }
-                else if (Line >= 6 && appCat == catagory)
+                if (Line >= 6 && appCat == catagory)
                 {
                     Line = 0;
                     Colum++;
@@ -278,52 +209,25 @@ namespace GoOS.GUI.Apps.GoStore
 
                     Line++;
 
-                    _repoFilesButtonsPageNumbers[i] = ButtonPage;
+                    _repoFilesButtonsPageNumbers[i] = i / 18;
                 }
             }
 
-            for (int i = 0; i < _repoFilesButtons.Length; i++)
+            for (int i = page * 18; i < 18; i++)
             {
-                if (page == _repoFilesButtonsPageNumbers[i])
+                if (i >= _repoFiles.Count) return;
+
+                if (_repoFilesButtonsPageNumbers[i] == page)
                 {
                     int x = _repoFilesButtons[i].X;
                     int y = _repoFilesButtons[i].Y;
                     Contents.DrawImage(x, y, StoreButton);
                     if (_repoFilesButtons[i] != null) _repoFilesButtons[i].Render();
                 }
+                else break;
             }
 
-            switch (category)
-            {
-                case "Utilities":
-                    Contents.DrawString(38, 563, "Utilities", Font_1x, Color.White);
-                    break;
-                case "Games":
-                    Contents.DrawString(52, 563, "Games", Font_1x, Color.White);
-                    break;
-                case "Demos":
-                    Contents.DrawString(52, 563, "Demos", Font_1x, Color.White);
-                    break;
-                case "Development":
-                    Contents.DrawString(29, 563, "Development", Font_1x, Color.White);
-                    break;
-                case "Updates":
-                    Contents.DrawString(43, 563, "Updates", Font_1x, Color.White);
-                    break;
-                case "Office":
-                    Contents.DrawString(47, 563, "Office", Font_1x, Color.White);
-                    break;
-                case "Production":
-                    Contents.DrawString(33, 563, "Production", Font_1x, Color.White);
-                    break;
-
-                    /*
-                     * == RC Release Notice.
-                     * TODO: This is bad practice as the list is stored on the client so as more categories are added the client will be unable to display apps from them.
-                     * TODO: Prevent Release Candidate or Release builds until this is resolved.
-                     * - Owen2k6 DO NOT REMOVE.
-                     */
-            }
+            Contents.DrawString((144 / 2) - (Font_1x.MeasureString(category.Trim()) / 2), 563, category.Trim(), Font_1x, Color.White);
 
             int pagex = 646 + 4;
             if ((page + 1).ToString().Length == 2)
@@ -341,7 +245,6 @@ namespace GoOS.GUI.Apps.GoStore
             foreach (Button i in catagoryButtons) i.Render();
             prevousButton.Render();
             nextButton.Render();
-            _searchTextBox.Render();
             
             RenderSystemStyleBorder();
         }
@@ -416,6 +319,56 @@ namespace GoOS.GUI.Apps.GoStore
                     tcpClient.Connect(serverIP, 80);
                     NetworkStream stream = tcpClient.GetStream();
                     string httpget = "GET /GoOS/repos.gostore HTTP/1.1\r\n" +
+                                     "User-Agent: GoOS\r\n" +
+                                     "Accept: */*\r\n" +
+                                     "Accept-Encoding: identity\r\n" +
+                                     "Host: api.goos.owen2k6.com\r\n" +
+                                     "Connection: Keep-Alive\r\n\r\n";
+                    byte[] dataToSend = Encoding.ASCII.GetBytes(httpget);
+                    stream.Write(dataToSend, 0, dataToSend.Length);
+
+                    // Receive data
+                    byte[] receivedData = new byte[tcpClient.ReceiveBufferSize];
+                    int bytesRead = stream.Read(receivedData, 0, receivedData.Length);
+                    string receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
+
+                    string[] responseParts = receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
+
+                    if (responseParts.Length < 2 || responseParts.Length > 2) Dialogue.Show("GoStore", "Invalid HTTP response!", default, WindowManager.errorIcon);
+
+                    return responseParts[1].Split('\n');
+                }
+            }
+            catch (Exception ex)
+            {
+                Dialogue.Show("Failed to contact servers - GoStore",
+                    "Some apps may not be available as some servers were uncontactable\n"
+                    + ex + "\n\nPlease try again later");
+
+                return Array.Empty<string>();
+            }
+        }
+
+        private string[] GetCatagoriesFile()
+        {
+            try
+            {
+                using (TcpClient tcpClient = new TcpClient())
+                {
+                    var dnsClient = new DnsClient();
+
+                    // DNS
+                    dnsClient.Connect(DNSConfig.DNSNameservers[0]);
+                    dnsClient.SendAsk("api.goos.owen2k6.com");
+
+                    // Address from IP
+                    Address address = dnsClient.Receive();
+                    dnsClient.Close();
+                    string serverIP = address.ToString();
+
+                    tcpClient.Connect(serverIP, 80);
+                    NetworkStream stream = tcpClient.GetStream();
+                    string httpget = "GET /GoOS/cat.gostore HTTP/1.1\r\n" +
                                      "User-Agent: GoOS\r\n" +
                                      "Accept: */*\r\n" +
                                      "Accept-Encoding: identity\r\n" +
