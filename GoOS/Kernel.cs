@@ -181,11 +181,11 @@ namespace GoOS
                 computername = "GoOS";
             }
 
+            InitNetwork();
+
             loadingDialogue.Closing = true;
             WindowManager.AddWindow(new Taskbar());
             WindowManager.AddWindow(new Desktop());
-
-            InitNetwork();
 
             #region GoOS Update Check
 
