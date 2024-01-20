@@ -168,8 +168,14 @@ namespace GoOS.GUI
             return null;
         }
 
+        private bool IsHandling = false;
+
         internal void HandleMouseInput()
         {
+            if (IsHandling) return;
+
+            IsHandling = true;
+
             if (Closable &&
                 IsMouseOverCloseButton &&
                 MouseManager.MouseState == MouseState.None &&
@@ -273,6 +279,8 @@ namespace GoOS.GUI
             }
 
             previousMouseState = MouseManager.MouseState;
+
+            IsHandling = false;
         }
 
         public void DrawWindow(Canvas cv, bool focused)

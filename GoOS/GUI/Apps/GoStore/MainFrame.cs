@@ -25,7 +25,7 @@ namespace GoOS.GUI.Apps.GoStore
         private Button nextButton;
         private Button prevousButton;
 
-        private readonly string[] _allowDLFrom =
+        public static readonly List<string> AllowDLFrom = new List<string>
         {
             "1.5pre1",
             "1.5pre2",
@@ -66,7 +66,7 @@ namespace GoOS.GUI.Apps.GoStore
                     foreach (string program in file.Contents)
                     {
                         Application app = new Application(program.Split('|'), file.URL);
-                        app.Downloadable = _allowDLFrom.Contains(app.GoOSVersion);
+                        app.Downloadable = AllowDLFrom.Contains(app.GoOSVersion);
 
                         _repoFiles.Add(app);
                     }
@@ -119,7 +119,7 @@ namespace GoOS.GUI.Apps.GoStore
                         RenderWithAlpha = true
                     };
 
-                    Render("Utilities");
+                    Render(Catagories[0]);
                 }
                 else
                 {

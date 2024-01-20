@@ -66,7 +66,11 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreicon.bmp")] static byte[] GoStoreiconRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.StoreButton.bmp")] static byte[] StoreButtonRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreinfoboard.bmp")] static byte[] GoStoreinfoboardRaw;
-        
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreButtonBlue.bmp")] static byte[] GoStoreButtonBlueRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreButtonGreen.bmp")] static byte[] GoStoreButtonGreenRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreButtonRed.bmp")] static byte[] GoStoreButtonRedRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreDescFrame.bmp")] static byte[] GoStoreDescFrameRaw;
+
         public static Canvas easterEgg;
         public static Canvas RunImage;
         public static Canvas gtermIcon;
@@ -116,6 +120,10 @@ namespace GoOS
         public static Canvas OOBEmain;
         public static Canvas OOBEblank;
         public static Canvas GoStoreinfoboard;
+        public static Canvas GoStoreButtonBlue;
+        public static Canvas GoStoreButtonGreen;
+        public static Canvas GoStoreButtonRed;
+        public static Canvas GoStoreDescFrame;
         public static Font Font_1x = Font.Fallback;
         public static Font Font_2x = Font.Fallback;
 
@@ -166,6 +174,10 @@ namespace GoOS
                     GoStoreicon = Image.FromBitmap(GoStoreiconRaw, false);
                     StoreButton = Image.FromBitmap(StoreButtonRaw, false);
                     GoStoreinfoboard = Image.FromBitmap(GoStoreinfoboardRaw, false);
+                    GoStoreButtonBlue = Image.FromBitmap(GoStoreButtonBlueRaw, false);
+                    GoStoreButtonGreen = Image.FromBitmap(GoStoreButtonGreenRaw, false);
+                    GoStoreButtonRed = Image.FromBitmap(GoStoreButtonRedRaw, false);
+                    GoStoreDescFrame = Image.FromBitmap(GoStoreDescFrameRaw, false);
                     break;
 
                 case ResourceType.Priority:
