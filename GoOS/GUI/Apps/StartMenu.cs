@@ -37,19 +37,19 @@ namespace GoOS.GUI.Apps
                 WindowManager.AddWindow(new Paintbrush());
                 CloseStartMenu();
             });
-            
+
             AddAppButton("Notepad", () =>
             {
                 WindowManager.AddWindow(new Notepad(false, ""));
                 CloseStartMenu();
             });
-            
+
             AddAppButton("GCLauncher", () =>
             {
                 WindowManager.AddWindow(new GCLauncher());
                 CloseStartMenu();
             });
-            
+
             AddAppButton("Gosplorer", () =>
             {
                 WindowManager.AddWindow(new Gosplorer());
@@ -76,7 +76,7 @@ namespace GoOS.GUI.Apps
 
             button.Image = shutdownIcon;
 
-            button.Clicked = PowerCLickAlt;
+            button.Clicked = Power_Click;
         }
 
         public StartMenu()
@@ -127,11 +127,6 @@ namespace GoOS.GUI.Apps
             Visible = false;
         }
 
-        private void PowerCLickAlt()
-        {
-            WindowManager.AddWindow(new PowerClickedAltClass());
-        }
-
         private void OpenStartMenu()
         {
             Visible = true;
@@ -158,44 +153,6 @@ namespace GoOS.GUI.Apps
             {
                 OpenStartMenu();
             }
-        }
-    }
-
-    public class PowerClickedAltClass : Window
-    {
-        private Button shutdown;
-        private Button restart;
-        
-        public PowerClickedAltClass()
-        {
-            Contents = new Canvas(200, 45);
-            Contents.Clear(Color.DeepGray);
-            Title = "Power options";
-            Visible = true;
-            Closable = true;
-            SetDock(WindowDock.Center);
-
-            shutdown = new Button(this, 10, 10, 85, 25, "Shut down")
-            {
-                Clicked = Off
-            };
-            restart = new Button(this, 105, 10, 85, 25, "Restart")
-            {
-                Clicked = OffOn
-            };
-
-            shutdown.Render();
-            restart.Render();
-        }
-
-        private void Off()
-        {
-            Power.Shutdown();
-        }
-
-        private void OffOn()
-        {
-            Power.Reboot();
         }
     }
 }

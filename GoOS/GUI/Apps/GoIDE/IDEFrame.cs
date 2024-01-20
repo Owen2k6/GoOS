@@ -15,7 +15,7 @@ namespace GoOS.GUI.Apps.GoIDE
         Button RunButton;
         InputNUMBERS Code;
 
-        string ProjectName, ProjectPath;
+        string ProjectPath;
         bool Is9xCode;
 
         public IDEFrame(string projectName, string projectPath, bool is9xCode)
@@ -23,7 +23,6 @@ namespace GoOS.GUI.Apps.GoIDE
             try
             {
                 // Store project name and project path to local variable.
-                ProjectName = projectName;
                 ProjectPath = projectPath;
                 Is9xCode = is9xCode;
                 
@@ -88,6 +87,7 @@ namespace GoOS.GUI.Apps.GoIDE
 
                 Console.Clear();
                 WindowManager.RemoveWindowByTitle("Terminal - GoIDE");
+                Console.Title = "GTerm";
 
                 Debugging = false;
             }

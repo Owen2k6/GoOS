@@ -1,6 +1,6 @@
 ﻿namespace GoOS.GUI.Apps.GoStore
 {
-    public class Infofile
+    public struct Infofile
     {
         public Infofile(string[] contents, string url)
         {

@@ -104,6 +104,10 @@
       <None Remove="Resources\GUI\aboutGoOS.bmp" />
       <None Remove="Resources\GUI\desktopwallpaper.bmp" />
       <None Remove="Resources\GUI\GoStore.bmp" />
+      <None Remove="Resources\GUI\GoStoreButtonBlue.bmp" />
+      <None Remove="Resources\GUI\GoStoreButtonGreen.bmp" />
+      <None Remove="Resources\GUI\GoStoreButtonRed.bmp" />
+      <None Remove="Resources\GUI\GoStoreDescFrame.bmp" />
       <None Remove="Resources\GUI\GoStoreicon.bmp" />
       <None Remove="Resources\GUI\GoStoreinfoboard.bmp" />
       <None Remove="Resources\GUI\Maximize_Hovered.bmp" />
@@ -123,6 +127,10 @@
       <EmbeddedResource Include="Resources\GUI\error.bmp" />
       <EmbeddedResource Include="Resources\GUI\GoIDE\run.bmp" />
       <EmbeddedResource Include="Resources\GUI\GoStore.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoStoreButtonBlue.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoStoreButtonGreen.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoStoreButtonRed.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoStoreDescFrame.bmp" />
       <EmbeddedResource Include="Resources\GUI\GoStoreicon.bmp" />
       <EmbeddedResource Include="Resources\GUI\GoStoreinfoboard.bmp" />
       <EmbeddedResource Include="Resources\GUI\ide.bmp" />
