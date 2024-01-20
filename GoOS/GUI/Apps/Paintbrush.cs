@@ -37,18 +37,65 @@ namespace GoOS.GUI.Apps
 
         private int TextX, TextY;
 
+        private ushort Width, Height;
+
         private Color BackgroundColor = Color.White;
 
         public Paintbrush()
         {
-            Contents = new Canvas(800, 600);
+            Dialogue sizeDialogue = new Dialogue(
+                "Canvas size",
+                "Please input canvas size:",
+                new System.Collections.Generic.List<DialogueButton>()
+                {
+                    new DialogueButton()
+                    {
+                        Text = "OK",
+                        Callback = Size_Handler
+                    },
+                    new DialogueButton()
+                    {
+                        Text = "Cancel",
+                    }
+                },
+                question);
+
+            Dialog_TextBox = new Input(sizeDialogue, 80, 52, 195, 20, "800x600");
+
+            WindowManager.AddWindow(sizeDialogue);
+        }
+
+        private void Size_Handler()
+        {
+            try
+            {
+                if (Dialog_TextBox.Text == string.Empty)
+                {
+                    Width = 800;
+                    Height = 600;
+                }
+                else
+                {
+                    string[] dimensions = Dialog_TextBox.Text.Replace(" ", "").Split("x");
+                    Width = ushort.Parse(dimensions[0]);
+                    Height = ushort.Parse(dimensions[1]);
+                }
+            }
+            catch (Exception)
+            {
+                Dialogue.Show("Error", "Invalid canvas size syntax!");
+                Dispose();
+                return;
+            }
+
+            Contents = new Canvas(Width, Height);
             Contents.Clear(BackgroundColor);
             Title = "Paintbrush";
             Visible = true;
             Closable = true;
             SetDock(WindowDock.Auto);
 
-            AboutButton = new Button(this, Convert.ToUInt16(Contents.Width - 36), Convert.ToUInt16(Contents.Height - 38), 24, 20, "?") { Clicked = ShowAboutDialog };
+            AboutButton = new Button(this, Convert.ToUInt16(Contents.Width - 36), Convert.ToUInt16(Contents.Height - 38), 24, 20, "?") { Clicked = AboutButton_Click };
             Utilities = new Button[4]
             {
                 new Button(this, 12, Convert.ToUInt16(Contents.Height - 42), 16, 16, string.Empty)
@@ -75,6 +122,8 @@ namespace GoOS.GUI.Apps
 
             RenderPanel();
         }
+
+        private void AboutButton_Click() => ShowAboutDialog("1.1");
 
         public override void HandleKey(KeyEvent key)
         {
