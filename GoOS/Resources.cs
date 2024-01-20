@@ -70,6 +70,10 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreButtonGreen.bmp")] static byte[] GoStoreButtonGreenRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreButtonRed.bmp")] static byte[] GoStoreButtonRedRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreDescFrame.bmp")] static byte[] GoStoreDescFrameRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.appbackground.bmp")] static byte[] appbackgroundRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.arrowleft.bmp")] static byte[] arrowleftRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.arrowright.bmp")] static byte[] arrowrightRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.arrowup.bmp")] static byte[] arrowupRaw;
 
         public static Canvas easterEgg;
         public static Canvas RunImage;
@@ -124,6 +128,10 @@ namespace GoOS
         public static Canvas GoStoreButtonGreen;
         public static Canvas GoStoreButtonRed;
         public static Canvas GoStoreDescFrame;
+        public static Canvas appbackground;
+        public static Canvas arrowleft;
+        public static Canvas arrowright;
+        public static Canvas arrowup;
         public static Font Font_1x = Font.Fallback;
         public static Font Font_2x = Font.Fallback;
 
@@ -178,6 +186,10 @@ namespace GoOS
                     GoStoreButtonGreen = Image.FromBitmap(GoStoreButtonGreenRaw, false);
                     GoStoreButtonRed = Image.FromBitmap(GoStoreButtonRedRaw, false);
                     GoStoreDescFrame = Image.FromBitmap(GoStoreDescFrameRaw, false);
+                    appbackground = Image.FromBitmap(appbackgroundRaw, false);
+                    arrowleft = Image.FromBitmap(arrowleftRaw, false);
+                    arrowright = Image.FromBitmap(arrowrightRaw, false);
+                    arrowup = Image.FromBitmap(arrowupRaw, false);
                     break;
 
                 case ResourceType.Priority:
