@@ -2,6 +2,7 @@
 using PrismAPI.Graphics;
 using IL2CPU.API.Attribs;
 using Cosmos.System;
+using PrismAPI.Graphics.Rasterizer;
 
 namespace GoOS.GUI
 {
@@ -56,7 +57,7 @@ namespace GoOS.GUI
                 if (AppearPressed || pressed)
                 {
                     // Background.
-                    Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, new Color(71, 71, 71));
+                    Contents.Clear(new Color(71, 71, 71));
 
                     // Dark shadow.
                     Contents.DrawLine(0, 0, Contents.Width - 1, 0, Color.Black);
@@ -77,7 +78,7 @@ namespace GoOS.GUI
                 else
                 {
                     // Background.
-                    Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, new Color(71, 71, 71));
+                    Contents.Clear(new Color(71, 71, 71));
 
                     // Highlight.
                     Contents.DrawLine(0, 0, Contents.Width - 1, 0, new Color(80, 80, 80));
@@ -99,12 +100,12 @@ namespace GoOS.GUI
                 if (IsMouseOver && HasSelectionColour)
                 {
                     // Selection.
-                    Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, SelectionColour);
+                    Contents.Clear(SelectionColour);
                 }
                 else
                 {
                     // Background.
-                    Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, BackgroundColour);
+                    Contents.Clear(BackgroundColour);
                 }
             }
 

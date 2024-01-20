@@ -40,10 +40,10 @@ namespace GoOS
         public static string[] pathPaths = new string[] { };
 
         //Vars for OS
-        public static string version = "1.5pr3";
-        public static string edition = "1.5pre"; // This is the current edition of GoOS. Used for UPDATER.
-        public static string editionnext = "1.5"; // This is the next edition of GoOS. Used for UPDATER.
-        public static string BuildType = "NIFPR";
+        public const string version = "1.5pr3";
+        public const string edition = "1.5pre"; // This is the current edition of GoOS. Used for UPDATER.
+        public const string editionnext = "1.5"; // This is the next edition of GoOS. Used for UPDATER.
+        public const string BuildType = "NIFPR";
         public static string olddir = @"0:\";
 
         public static string Notepadtextsavething = "";
@@ -395,6 +395,9 @@ namespace GoOS
             {
                 case "codeswitch":
                     oldCode = !oldCode;
+                    break;
+                case "fm":
+                    WindowManager.AddWindow(new FileManager());
                     break;
                 case "exit":
                     Console.Visible = false;

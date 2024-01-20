@@ -399,14 +399,16 @@ namespace GoOS.GUI
             Contents.DrawLine(Contents.Width - 1, 0, Contents.Width - 1, Contents.Height - 1, Color.Black);
         }
 
-        protected void ShowAboutDialog()
+        protected void ShowAboutDialog(string version)
         {
             Dialogue.Show(
                 $"About {Title}",
-                $"GoOS {Title} v{Kernel.version}\n\nCopyright (c) 2023 Owen2k6\nAll rights reserved.",
+                $"GoOS {Title} v{version}\n\nCopyright (c) 2021-2024 Owen2k6\nAll rights reserved.",
                 null,
                 heightOverride: 144);
         }
+
+        protected void ShowAboutDialog() => ShowAboutDialog(Kernel.version);
 
         protected void SetDock(WindowDock dock)
         {

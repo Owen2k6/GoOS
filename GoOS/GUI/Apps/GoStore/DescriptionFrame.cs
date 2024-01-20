@@ -5,28 +5,11 @@ using System.Text;
 using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4;
 using Cosmos.System.Network.IPv4.UDP.DNS;
-//using TcpClient = Cosmos.System.Network.IPv4.TCP.TcpClient;
 using PrismAPI.Graphics;
 using static GoOS.Resources;
 using System.Net.Sockets;
 using Console = BetterConsole;
 using GoOS.Commands;
-using System.Text.RegularExpressions;
-using System.Linq;
-
-/*
- * == RC Release Notice.
- * TODO: This page has too many issues related to both design and functionality.
- * The following in this list are known issues related to this page.
- * - The window design does not match the GoStore design.
- * - The window has a cancel button when it already has a close button on the Titlebar.
- * - The window shouldn't have references to other applications but itself. (GoIDE should not be referenced here.)
- *
- * Extended Notes:
- *  - MrDumbrava has been assigned to the repository mismatch issues.
- * TODO: Prevent Release Candidate or Release builds until this is resolved.
- * - Owen2k6 DO NOT REMOVE.
- */
 
 namespace GoOS.GUI.Apps.GoStore
 {
@@ -71,6 +54,8 @@ namespace GoOS.GUI.Apps.GoStore
             DescriptionLines.AddRange(SpliceText("Author: " + app.Author.Replace("\\n", "\n"), 59));
             DescriptionLines.AddRange(SpliceText("Category: " + app.Category.Replace("\\n", "\n"), 59));
             DescriptionLines.AddRange(SpliceText("GoOS Version: " + app.GoOSVersion.Replace("\\n", "\n"), 59));
+
+            Contents.DrawString(10, 10, "test", default, Color.White);
         }
 
         static string[] SpliceText(string input, int n)
@@ -93,13 +78,13 @@ namespace GoOS.GUI.Apps.GoStore
         public override void Paint()
         {
             Contents.DrawImage(0, 0, GoStoreDescFrame, false);
-            Contents.DrawString(10, 10, App.Name, Font_2x, Color.White);
+            /*Contents.DrawString(10, 10, App.Name, Font_2x, Color.White);
             Contents.DrawImage(OpenButton.X, OpenButton.Y, GoStoreButtonBlue);
             Contents.DrawImage(InstallButton.X, InstallButton.Y, InstallButton.Title == "Install" ? GoStoreButtonGreen : GoStoreButtonRed);
             for (int i = 0; i < DescriptionLines.Count; i++) Contents.DrawString(10, 56 + i * 16, DescriptionLines[i], Font_1x, Color.White);
             OpenButton.Render();
             InstallButton.Render();
-            RenderSystemStyleBorder();
+            RenderSystemStyleBorder();*/
         }
 
         private void InstallButton_Click()
@@ -184,7 +169,7 @@ namespace GoOS.GUI.Apps.GoStore
         {
             if (!IO.File.Exists(@"0:\go\" + App.Filename))
             {
-                Dialogue.Show("Error", "", default, WindowManager.errorIcon);
+                Dialogue.Show("Error", "You must install the app before you can use it.", default, WindowManager.errorIcon);
             }
             else
             {
@@ -194,9 +179,9 @@ namespace GoOS.GUI.Apps.GoStore
                 Console.Clear();
 
                 if (!App.Filename.EndsWith(".9xc"))
-                    Run.Main(App.Filename, false);
+                    Run.Main(@"0:\go\" + App.Filename, false);
                 else
-                    _9xCode.Interpreter.Run(App.Filename);
+                    _9xCode.Interpreter.Run(@"0:\go\" + App.Filename);
 
                 Console.Clear();
                 WindowManager.RemoveWindowByTitle("Terminal - GoIDE");

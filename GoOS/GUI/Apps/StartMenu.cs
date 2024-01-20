@@ -44,12 +44,6 @@ namespace GoOS.GUI.Apps
                 CloseStartMenu();
             });
 
-            AddAppButton("GCLauncher", () =>
-            {
-                WindowManager.AddWindow(new GCLauncher());
-                CloseStartMenu();
-            });
-
             AddAppButton("Gosplorer", () =>
             {
                 WindowManager.AddWindow(new Gosplorer());
