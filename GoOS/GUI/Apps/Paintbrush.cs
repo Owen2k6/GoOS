@@ -41,7 +41,7 @@ namespace GoOS.GUI.Apps
 
         public Paintbrush()
         {
-            Contents = new Canvas(324, 300);
+            Contents = new Canvas(800, 600);
             Contents.Clear(BackgroundColor);
             Title = "Paintbrush";
             Visible = true;
@@ -113,7 +113,7 @@ namespace GoOS.GUI.Apps
                 },
                 question);
 
-            Dialog_TextBox = new Input(pencilDialogue, 80, 52, 232, 20, BrushSize.ToString());
+            Dialog_TextBox = new Input(pencilDialogue, 80, 52, 187, 20, BrushSize.ToString());
 
             WindowManager.AddWindow(pencilDialogue);
         }
@@ -234,7 +234,7 @@ namespace GoOS.GUI.Apps
                             },
                             question);
 
-                        Dialog_TextBox = new Input(pencilDialogue, 80, 52, 232, 20, string.Empty);
+                        Dialog_TextBox = new Input(pencilDialogue, 80, 52, 187, 20, string.Empty);
 
                         WindowManager.AddWindow(pencilDialogue);
                         break;
