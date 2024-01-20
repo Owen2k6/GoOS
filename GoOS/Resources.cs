@@ -74,6 +74,8 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.arrowleft.bmp")] static byte[] arrowleftRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.arrowright.bmp")] static byte[] arrowrightRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.arrowup.bmp")] static byte[] arrowupRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.drive.bmp")] static byte[] driveRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.drive_locked.bmp")] static byte[] drive_lockedRaw;
 
         public static Canvas easterEgg;
         public static Canvas RunImage;
@@ -132,6 +134,8 @@ namespace GoOS
         public static Canvas arrowleft;
         public static Canvas arrowright;
         public static Canvas arrowup;
+        public static Canvas drive;
+        public static Canvas drive_locked;
         public static Font Font_1x = Font.Fallback;
         public static Font Font_2x = Font.Fallback;
 
@@ -190,6 +194,8 @@ namespace GoOS
                     arrowleft = Image.FromBitmap(arrowleftRaw, false);
                     arrowright = Image.FromBitmap(arrowrightRaw, false);
                     arrowup = Image.FromBitmap(arrowupRaw, false);
+                    drive = Image.FromBitmap(driveRaw, false);
+                    drive_locked = Image.FromBitmap(drive_lockedRaw, false);
                     break;
 
                 case ResourceType.Priority:

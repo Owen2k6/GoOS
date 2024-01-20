@@ -107,6 +107,8 @@
       <None Remove="Resources\GUI\FileManager\arrowleft.bmp" />
       <None Remove="Resources\GUI\FileManager\arrowright.bmp" />
       <None Remove="Resources\GUI\FileManager\arrowup.bmp" />
+      <None Remove="Resources\GUI\FileManager\drive.bmp" />
+      <None Remove="Resources\GUI\FileManager\drive_locked.bmp" />
       <None Remove="Resources\GUI\GoStore.bmp" />
       <None Remove="Resources\GUI\GoStoreButtonBlue.bmp" />
       <None Remove="Resources\GUI\GoStoreButtonGreen.bmp" />
@@ -133,6 +135,8 @@
       <EmbeddedResource Include="Resources\GUI\FileManager\arrowleft.bmp" />
       <EmbeddedResource Include="Resources\GUI\FileManager\arrowright.bmp" />
       <EmbeddedResource Include="Resources\GUI\FileManager\arrowup.bmp" />
+      <EmbeddedResource Include="Resources\GUI\FileManager\drive.bmp" />
+      <EmbeddedResource Include="Resources\GUI\FileManager\drive_locked.bmp" />
       <EmbeddedResource Include="Resources\GUI\GoIDE\run.bmp" />
       <EmbeddedResource Include="Resources\GUI\GoStore.bmp" />
       <EmbeddedResource Include="Resources\GUI\GoStoreButtonBlue.bmp" />
