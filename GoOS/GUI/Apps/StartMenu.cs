@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Cosmos.System;
+using GoOS.Commands;
 using IL2CPU.API.Attribs;
 using PrismAPI.Graphics;
 using PrismAPI.Hardware.GPU;
@@ -12,19 +15,19 @@ using static GoOS.Resources;
 namespace GoOS.GUI.Apps
 {
     public class StartMenu : Window
-    {
-        List<Button> appButtons = new();
+    { 
+        private string[] apps;
         List<Button> sButtons = new();
 
         private const int buttonHeight = 24;
 
-        private void AddAppButton(string name, Action clickedAction)
+        /*private void AddAppButton(string name, Action clickedAction)
         {
             appButtons.Add(new Button(this, 8, (ushort)(64 + (appButtons.Count * buttonHeight)), 281, buttonHeight, name)
             {
                 Clicked = clickedAction
             });
-        }
+        }*/
         private void AddSideButton(string name, Action clickedAction)
         {
             sButtons.Add(new Button(this, (ushort)(Contents.Width - 96 - 8), (ushort)(64 + (sButtons.Count * buttonHeight)), 96, buttonHeight, name)
@@ -35,12 +38,46 @@ namespace GoOS.GUI.Apps
 
         private void AddAppButtons()
         {
+            if (!File.Exists(@"0:\content\sys\pinnedapps.gms"))
+            {
+                File.Create(@"0:\content\sys\pinnedapps.gms");
+            }
+            
+            apps = File.ReadAllLines(@"0:\content\sys\pinnedapps.gms");
+            
+            Button[] buttons = new Button[apps.Length];
 
-            AddAppButton("ToDO: Click me!", () =>
+            for (int i = 0; i < apps.Length; i++)
+            {
+                string apppath = apps[i];
+
+                string name = Path.GetFileNameWithoutExtension(apppath);
+
+                buttons[i] = new Button(this, 8, (ushort)(64 + (buttons.Length - 1) * buttonHeight), 281, buttonHeight, name)
+                {
+                    Name = apppath,
+                    ClickedAlt = appAction
+                };
+                
+                if (buttons[i] != null) buttons[i].Render();
+            }
+            
+            /*AddAppButton("ToDO: Click me!", () =>
             {
                 Dialogue.Show("GoOS", "We should have a way of allowing users to \"pin\" apps here");
                 CloseStartMenu();
-            });
+            });*/
+        }
+
+        private void appAction(string path)
+        {
+            WindowManager.AddWindow(new GTerm());
+            BetterConsole.Clear();
+            
+            if (!path.EndsWith(".9xc"))
+                GoCode.GoCode.Run(path, false, false);
+            else
+                _9xCode.Interpreter.Run(path);
         }
         
         private void AddSideButtons()
@@ -85,6 +122,8 @@ namespace GoOS.GUI.Apps
 
         public StartMenu()
         {
+            WindowManager.AddWindow(new GTerm());
+            
             Contents = new Canvas(400, 500);
             Contents.Clear(Color.DeepGray);
             X = 0;
@@ -112,7 +151,7 @@ namespace GoOS.GUI.Apps
 
         private void Power_Click()
         {
-            WindowManager.Dimmed = true;
+            //WindowManager.Dimmed = true;
             Dialogue.Show(
                 "GoOS",
                 "What would you like to do?",
