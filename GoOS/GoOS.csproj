@@ -114,6 +114,10 @@
       <None Remove="Resources\GUI\GoStoreDescFrame.bmp" />
       <None Remove="Resources\GUI\GoStoreicon.bmp" />
       <None Remove="Resources\GUI\GoStoreinfoboard.bmp" />
+      <None Remove="Resources\GUI\GoWeb.bmp" />
+      <None Remove="Resources\GUI\GoWeb\Go.bmp" />
+      <None Remove="Resources\GUI\GoWeb\Home.bmp" />
+      <None Remove="Resources\GUI\GoWeb\ToolbarBackground.bmp" />
       <None Remove="Resources\GUI\Maximize_Hovered.bmp" />
       <None Remove="Resources\GUI\Maximize_Pressed.bmp" />
       <None Remove="Resources\GUI\Paint\rubber.bmp" />
@@ -141,6 +145,10 @@
       <EmbeddedResource Include="Resources\GUI\GoStoreDescFrame.bmp" />
       <EmbeddedResource Include="Resources\GUI\GoStoreicon.bmp" />
       <EmbeddedResource Include="Resources\GUI\GoStoreinfoboard.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoWeb.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoWeb\Go.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoWeb\Home.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoWeb\ToolbarBackground.bmp" />
       <EmbeddedResource Include="Resources\GUI\ide.bmp" />
       <EmbeddedResource Include="Resources\GUI\Maximize_Hovered.bmp" />
       <EmbeddedResource Include="Resources\GUI\Maximize_Pressed.bmp" />

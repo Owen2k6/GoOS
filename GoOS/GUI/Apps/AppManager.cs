@@ -72,6 +72,16 @@ namespace GoOS.GUI.Apps
                     Image = GoStoreicon,
                     Clicked = Store_Click
                 },
+                new Button(this, 84, 100, 64, 80, "GoWeb")
+                {
+                    UseSystemStyle = false,
+                    BackgroundColour = Color.LightGray,
+                    SelectionColour = new Color(100, 100, 100),
+                    TextColour = Color.White,
+
+                    Image = goWebIcon,
+                    Clicked = GoWeb_Click
+                },
             };
             CloseButton = new Button(this, Convert.ToUInt16(Contents.Width - 90), Convert.ToUInt16(Contents.Height - 30), 80, 20, "Close") { Clicked = CloseButton_Click };
 
@@ -92,6 +102,8 @@ namespace GoOS.GUI.Apps
         private void IDE_Click() => WindowManager.AddWindow(new GoIDE.ProjectsFrame());
 
         private void Store_Click() => WindowManager.AddWindow(new GoStore.MainFrame());
+
+        private void GoWeb_Click() => WindowManager.AddWindow(new GoWeb.GoWebWindow());
 
         private void CloseButton_Click() => Dispose();
     }
