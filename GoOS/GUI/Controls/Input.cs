@@ -81,8 +81,9 @@ namespace GoOS.GUI
 
         private int GetEndXAtCol(int col)
         {
-            string here = lines[caretLine].Substring(0, col);
-            return Resources.Font_1x.MeasureString(here);
+            //string here = lines[caretLine].Substring(0, col);
+            //return Resources.Font_1x.MeasureString(here);
+            return col * 8;
         }
 
         internal override void HandleDown(MouseEventArgs args)
@@ -235,7 +236,7 @@ namespace GoOS.GUI
             Render();
         }
 
-        private List<string> lines = new List<string>() { string.Empty };
+        public List<string> lines = new List<string>() { string.Empty };
 
         private int caretLine = 0;
         private int caretCol = 0;

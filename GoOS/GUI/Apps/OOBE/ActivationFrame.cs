@@ -50,6 +50,7 @@ namespace GoOS.GUI.Apps.OOBE
             File.Create(@"0:\content\sys\option-editprotectedfiles.gms");
             File.Create(@"0:\content\sys\option-deleteprotectedfiles.gms");
             File.Create(@"0:\content\sys\setup.gms");
+            File.Create(@"0:\content\sys\pinnedapps.gms");
             File.WriteAllText(@"0:\content\sys\version.gms", $"System.Version is set to {Kernel.version} \n Note to users reading this: DO NOT ALTER. IMPORTANT IF USER DATA NEEDS CONVERTING.");
             File.WriteAllText(@"0:\content\sys\user.gms", $"username: {Username}\ncomputername: {Computername}");
             File.WriteAllBytes(@"0:\content\sys\resolution.gms", new byte[] { 2 }); // Video mode 2: 1280x720
