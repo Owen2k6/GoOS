@@ -81,6 +81,9 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.header.bmp")] static byte[] headerRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.sidebar.bmp")] static byte[] sidebarRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskStart.startmenuBG.bmp")] static byte[] startMenuBackgroundRaw;
+#if BUILD_GOWEB
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoWeb.bmp")] static byte[] goWebIconRaw;
+#endif
 
         public static Canvas easterEgg;
         public static Canvas RunImage;
@@ -146,6 +149,9 @@ namespace GoOS
         public static Canvas header;
         public static Canvas sidebar;
         public static Canvas startMenuBackground;
+#if BUILD_GOWEB
+        public static Canvas goWebIcon;
+#endif
         public static Font Font_1x = Font.Fallback;
         public static Font Font_2x = Font.Fallback;
 
@@ -211,6 +217,9 @@ namespace GoOS
                     header = Image.FromBitmap(headerRaw, false);
                     sidebar = Image.FromBitmap(sidebarRaw, false);
                     startMenuBackground = Image.FromBitmap(startMenuBackgroundRaw, false);
+#if BUILD_GOWEB
+                    goWebIcon = Image.FromBitmap(goWebIconRaw, false);
+#endif
                     break;
 
                 case ResourceType.Priority:
