@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
@@ -214,6 +214,15 @@
 	  <EmbeddedResource Include="Resources\GUI\warning.bmp" />
 	  <None Remove="Resources\GUI\TaskStart\startmenuBG.bmp" />
 	  <EmbeddedResource Include="Resources\GUI\TaskStart\startmenuBG.bmp" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <DefineConstants>BUILD_GOWEB</DefineConstants>
+    </PropertyGroup>
+  
+    <ItemGroup Condition="'$(DefineConstants.Contains(BUILD_GOWEB))' != 'true'">
+      <Compile Remove="GUI\Apps\GoWeb\**" />
+      <Compile Remove="Networking\FastDns.cs" />
     </ItemGroup>
 
     <ItemGroup>

@@ -6,18 +6,18 @@ namespace GoOS.GUI.Apps.GoWeb.Render
 {
     public class GlyphRun
     {
-        public GlyphRun(DocumentLayout layout, TextNode textNode, int containerWidth)
+        public GlyphRun(DocumentLayout layout, TextNode textNode)
         {
             Font = textNode.GetFont();
             Color = textNode.GetColor();
             Underline = textNode.GetUnderline();
-            Glyphs = new (Glyph, int, int)[textNode.Text.Length];
+            Glyphs = new (int, int)[textNode.Text.Length];
             bool preformatted = textNode.IsPreformatted();
             for (int i = 0; i < textNode.Text.Length; i++)
             {
                 char c = textNode.Text[i];
                 Glyph glyph = Font.GetGlyph(c);
-                if (layout.X > containerWidth - glyph.Width - 32)
+                if (layout.X > layout.ScreenWidth - glyph.Width - 32)
                 {
                     layout.X = 0;
                     layout.Y += Font.Size;
@@ -54,11 +54,11 @@ namespace GoOS.GUI.Apps.GoWeb.Render
                     layout.X += glyph.Width + 2;
                     layout.PermitWhitespace = true;
                 }
-                Glyphs[i] = (Font.GetGlyph(c), layout.X, layout.Y);
+                Glyphs[i] = (layout.X, layout.Y);
             }
         }
 
-        public (Glyph glyph, int x, int y)[] Glyphs { get; init; }
+        public (int x, int y)[] Glyphs { get; init; }
 
         public Font Font { get; init; }
 

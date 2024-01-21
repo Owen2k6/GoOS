@@ -1,6 +1,4 @@
 ﻿using GoOS.GUI.Apps.GoWeb.Html;
-using System;
-using System.Linq;
 
 namespace GoOS.GUI.Apps.GoWeb.Render
 {
@@ -13,9 +11,56 @@ namespace GoOS.GUI.Apps.GoWeb.Render
             LayOut();
         }
 
+        public void LayOutRecurse(Element element)
+        {;
+            if (!element.IsVisible())
+            {
+                return;
+            }
+
+            bool isBlockLevel = element.IsBlockLevel();
+            int height = element.GetFont().Size;
+
+            element.X = X;
+            element.Y = Y;
+
+            if (X > 0 && isBlockLevel)
+            {
+                X = 0;
+                Y += LineHeight;
+                LineHeight = height;
+                PermitWhitespace = false;
+            }
+
+            if (element is TextNode textNode)
+            {
+                var glyphRun = new GlyphRun(this, textNode);
+
+                textNode.GlyphRun = glyphRun;
+            }
+
+            foreach (Element child in element.Children)
+            {
+                LayOutRecurse(child);
+            }
+
+            if (element is BreakElement || isBlockLevel)
+            {
+                X = 0;
+                Y += height;
+                LineHeight = height;
+                PermitWhitespace = false;
+            }
+
+            if (height > LineHeight)
+            {
+                LineHeight = height;
+            }
+        }
+
         private void LayOut()
         {
-            _document.Body.LayOut(this);
+            LayOutRecurse(_document.Body);
         }
 
         readonly Document _document;

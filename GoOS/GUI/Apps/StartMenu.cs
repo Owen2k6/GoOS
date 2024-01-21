@@ -60,6 +60,13 @@ namespace GoOS.GUI.Apps
                 WindowManager.AddWindow(new GosplorerOld());
                 CloseStartMenu();
             });
+#if BUILD_GOWEB
+            AddSideButton("GoWeb", () =>
+            {
+                WindowManager.AddWindow(new GoWeb.GoWebWindow());
+                CloseStartMenu();
+            });
+#endif
             AddSideButton("Settings", () =>
             {
                 Dialogue.Show("GoOS", "This feature is not yet implemented.");

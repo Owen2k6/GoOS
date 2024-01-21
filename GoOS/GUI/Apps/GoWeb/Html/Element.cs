@@ -75,6 +75,8 @@ namespace GoOS.GUI.Apps.GoWeb.Html
             };
         }
 
+        public bool IsBlockLevel() => _blockLevelTags.Contains(GetTag());
+
         public abstract string GetTag();
 
         public bool Selector(string selector)
@@ -141,7 +143,7 @@ namespace GoOS.GUI.Apps.GoWeb.Html
 
         public void Add(Element element)
         {
-            if (Children.Contains(element))
+            if (element == this || Children.Contains(element))
             {
                 return;
             }
@@ -203,57 +205,6 @@ namespace GoOS.GUI.Apps.GoWeb.Html
             foreach (Element child in Children)
             {
                 child.Render(ctx);
-            }
-        }
-
-        public void LayOut(DocumentLayout layout)
-        {
-            bool isBlockLevel = _blockLevelTags.Contains(GetTag());
-            int height = GetFont().Size;
-
-            X = layout.X;
-            Y = layout.Y;
-
-            if (layout.X > 0 && isBlockLevel)
-            {
-                layout.X = 0;
-                layout.Y += layout.LineHeight;
-                layout.LineHeight = height;
-                layout.PermitWhitespace = false;
-            }
-
-            if (this is TextNode textNode)
-            {
-                var glyphRun = new GlyphRun(layout, textNode, layout.ScreenWidth);
-
-                textNode.GlyphRun = glyphRun;
-            }
-
-            foreach (Element child in Children)
-            {
-                child.LayOut(layout);
-            }
-
-            if (this is BreakElement || isBlockLevel)
-            {
-                layout.X = 0;
-                layout.Y += height;
-                layout.LineHeight = height;
-                layout.PermitWhitespace = false;
-            }
-
-            layout.LineHeight = Math.Max(layout.LineHeight, height);
-        }
-
-        public IEnumerable<Element> EnumerateTree()
-        {
-            yield return this;
-            foreach (var direct in Children)
-            {
-                foreach (var child in direct.EnumerateTree())
-                {
-                    yield return child;
-                }
             }
         }
 

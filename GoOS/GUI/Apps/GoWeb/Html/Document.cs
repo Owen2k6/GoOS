@@ -43,7 +43,14 @@ namespace GoOS.GUI.Apps.GoWeb.Html
     <h1>Welcome</h1>
     <hr>
     <p>GoWeb is the Web browser for GoOS.</p>
-    <p>To get started, enter a location in the address bar and hope it doesn't crash</p>
+    <p>To get started, enter a location in the address bar.
+<br>GoWeb is currently in alpha. Not all sites will work correctly.</p>
+    <hr>
+    <h2>Known Working URLs</h2>
+    <pre>- http://example.org
+- http://apps.goos.owen2k6.com
+- http://mirrorservice.org
+- http://mirrors.nav.ro</pre>
 </body>
 </html>", "text/html");
                 default:
@@ -55,8 +62,8 @@ namespace GoOS.GUI.Apps.GoWeb.Html
         {
             HttpRequest request = new(uri);
             var response = request.Send();
-            response.Headers.TryGetValue("content-type", out string? contentType);
-            return new Document(uri, response.Text, contentType ?? "text/plain");
+            //response.Headers.TryGetValue("content-type", out string? contentType);
+            return new Document(uri, response.Text, "text/html");
         }
 
         public static Document LoadFromUri(Uri uri)

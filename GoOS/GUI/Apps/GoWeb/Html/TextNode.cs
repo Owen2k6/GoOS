@@ -24,7 +24,9 @@ namespace GoOS.GUI.Apps.GoWeb.Html
             int lastX = 1, lastY = -1;
             for (int i = 0; i < Text.Length; i++)
             {
-                (Glyph glyph, int x, int y) = GlyphRun!.Glyphs[i];
+                char c = Text[i];
+                (int x, int y) = GlyphRun!.Glyphs[i];
+                Glyph glyph = GlyphRun.Font.GetGlyph(c);
                 for (int p = 0; p < glyph.Points.Count; p++)
                 {
                     ctx.Target[x + glyph.Points[p].X, y + glyph.Points[p].Y] = GlyphRun.Color;

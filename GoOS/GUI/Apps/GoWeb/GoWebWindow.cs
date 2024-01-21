@@ -15,11 +15,11 @@ namespace GoOS.GUI.Apps.GoWeb
 
         Document? ActiveDocument;
 
+        Canvas PageCanvas;
+
         private static readonly Uri HOMEPAGE = Uri.FromString("about:welcome");
 
         private const int TOOLBAR_HEIGHT = 48;
-
-        private const int CONTENT_PADDING = 2; /* window border */
 
         public GoWebWindow()
         {
@@ -29,6 +29,8 @@ namespace GoOS.GUI.Apps.GoWeb
             Closable = true;
             Sizable = false;
             SetDock(WindowDock.Auto);
+
+            PageCanvas = new((ushort)Contents.Width, (ushort)(Contents.Height - TOOLBAR_HEIGHT));
 
             Contents.Clear(Color.White);
 
@@ -56,30 +58,55 @@ namespace GoOS.GUI.Apps.GoWeb
             Goto(HOMEPAGE);
         }
 
+        void DisplayStatus(string message)
+        {
+            int boxX = 10;
+            int boxY = TOOLBAR_HEIGHT + 10;
+            ushort boxW = (ushort)(Resources.Font_1x.MeasureString(message) + 100);
+            ushort boxH = 56;
+            const byte shdDist = 2;
+
+            Contents.DrawFilledRectangle(0, TOOLBAR_HEIGHT, Contents.Width, (ushort)(Contents.Height - TOOLBAR_HEIGHT), 0, Color.White);
+
+            Contents.DrawFilledRectangle(boxX + shdDist, boxY + shdDist, boxW, boxH, 0, Color.Black);
+            Contents.DrawFilledRectangle(boxX, boxY, boxW, boxH, 0, Color.White);
+            Contents.DrawRectangle(boxX, boxY, boxW, boxH, 0, Color.Black);
+            
+            Contents.DrawImage(boxX + 10, boxY + 10, Resources.drumIcon, true);
+
+            Contents.DrawString(boxX + 70, boxY + (boxH - Resources.Font_1x.Size) / 2, message, Resources.Font_1x, Color.Black);
+
+            RenderSystemStyleBorder();
+
+            WindowManager.Update();
+        }
+
         void Goto(Uri uri)
         {
             try
             {
+                DisplayStatus($"Loading {uri.ToString()}.");
+
                 ActiveDocument = Document.LoadFromUri(uri);
                 Title = $"{ActiveDocument.Title} - GoWeb";
                 //AddressBar.Text = uri.ToString(); /* crash? */
 
-                //Dialogue.Show("Document Loaded", ActiveDocument.Title);
+                DisplayStatus($"Laying out {uri.ToString()}.");
 
                 DocumentLayout layout = new DocumentLayout(ActiveDocument, Contents.Width);
-                
-                Canvas target = new((ushort)(Contents.Width - CONTENT_PADDING * 2), (ushort)(Contents.Height - TOOLBAR_HEIGHT - CONTENT_PADDING));
-                
-                Renderer.Render(ActiveDocument, target);
-                
-                Contents.DrawImage(CONTENT_PADDING, TOOLBAR_HEIGHT, target, false);
-                
+
+                DisplayStatus($"Rendering {uri.ToString()}.");
+
+                Renderer.Render(ActiveDocument, PageCanvas);
+
+                Contents.DrawImage(0, TOOLBAR_HEIGHT, PageCanvas, false);
+
                 RenderSystemStyleBorder();
             }
             catch (System.Exception e)
             {
+                Contents.DrawFilledRectangle(0, TOOLBAR_HEIGHT, Contents.Width, (ushort)(Contents.Height - TOOLBAR_HEIGHT), 0, Color.White);
                 Dialogue.Show("GoWeb", $"The page at '{uri.ToString()}' failed to load.\n{e.ToString()}", null, WindowManager.errorIcon);
-                AddressBar.Text = string.Empty;
             }
         }
 
