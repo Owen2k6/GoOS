@@ -25,7 +25,7 @@ namespace GoOS.GUI
 
         public static int MouseOffsetX = 0, MouseOffsetY = 0;
 
-        public static readonly List<Window> windows = new List<Window>(10);
+        public static List<Window> windows = new List<Window>(10);
 
         public static Display Canvas;
 

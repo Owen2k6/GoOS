@@ -11,7 +11,7 @@ using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps;
 
-public class Gosplorer : Window
+public class GosplorerOld : Window
 {
     List DAF;
     Button Parent;
@@ -32,7 +32,7 @@ public class Gosplorer : Window
     private string clickcounter = "";
     private int ccnum = 0;
 
-    public Gosplorer()
+    public GosplorerOld()
     {
         Contents = new Canvas(500, 310);
         Title = "Gosplorer";

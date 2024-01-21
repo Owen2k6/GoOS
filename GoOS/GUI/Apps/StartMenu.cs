@@ -57,7 +57,7 @@ namespace GoOS.GUI.Apps
             });
             AddSideButton("Gosplorer", () =>
             {
-                WindowManager.AddWindow(new Gosplorer());
+                WindowManager.AddWindow(new GosplorerOld());
                 CloseStartMenu();
             });
             AddSideButton("Settings", () =>

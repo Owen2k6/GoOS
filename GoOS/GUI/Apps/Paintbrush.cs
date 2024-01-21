@@ -55,7 +55,7 @@ namespace GoOS.GUI.Apps
                     },
                     new DialogueButton()
                     {
-                        Text = "Cancel",
+                        Text = "Cancel"
                     }
                 },
                 question);
