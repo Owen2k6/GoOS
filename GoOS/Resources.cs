@@ -80,6 +80,7 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.drive_locked.bmp")] static byte[] drive_lockedRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.header.bmp")] static byte[] headerRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.sidebar.bmp")] static byte[] sidebarRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskStart.startmenuBG.bmp")] static byte[] startMenuBackgroundRaw;
 
         public static Canvas easterEgg;
         public static Canvas RunImage;
@@ -144,6 +145,7 @@ namespace GoOS
         public static Canvas drive_locked;
         public static Canvas header;
         public static Canvas sidebar;
+        public static Canvas startMenuBackground;
         public static Font Font_1x = Font.Fallback;
         public static Font Font_2x = Font.Fallback;
 
@@ -208,6 +210,7 @@ namespace GoOS
                     drive_locked = Image.FromBitmap(drive_lockedRaw, false);
                     header = Image.FromBitmap(headerRaw, false);
                     sidebar = Image.FromBitmap(sidebarRaw, false);
+                    startMenuBackground = Image.FromBitmap(startMenuBackgroundRaw, false);
                     break;
 
                 case ResourceType.Priority:

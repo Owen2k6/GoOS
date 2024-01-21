@@ -208,6 +208,8 @@
       <EmbeddedResource Include="Resources\MSUIGothicCustomCharset16.btf" />
       <EmbeddedResource Include="Resources\Welcome.bmp" />
 	  <EmbeddedResource Include="Resources\GUI\warning.bmp" />
+	  <None Remove="Resources\GUI\TaskStart\startmenuBG.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\TaskStart\startmenuBG.bmp" />
     </ItemGroup>
 
     <ItemGroup>
