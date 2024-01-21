@@ -100,7 +100,9 @@ namespace GoOS.GUI.Apps.GoStore
                 //    return;
                 //}
 
-                if (!IO.File.Exists(@"0:\go\" + App.Filename))
+                // I've changed where apps install to 0:\content\prf so the apps are
+                // in the same folder as their respective program files - xrc2
+                if (!IO.File.Exists(@"0:\content\prf\" + App.Filename))
                 {
                     using (TcpClient tcpClient = new TcpClient())
                     {
