@@ -25,9 +25,11 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.clock.bmp")] static byte[] clockIconRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskManager.bmp")] static byte[] taskmanIconRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.ide.bmp")] static byte[] ideIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.idesmall.bmp")] static byte[] ideIconSmallRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.brown_ghost.bmp")] static byte[] brownGhostRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.CUT.bmp")] static byte[] cutIconRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.folder.bmp")] static byte[] folderIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.file.bmp")] static byte[] fileIconRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.desktopwallpaper.bmp")] static byte[] backgroundRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.NEW.bmp")] static byte[] NewIconRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.BIN.bmp")] static byte[] BinIconRaw;
@@ -74,6 +76,11 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.arrowleft.bmp")] static byte[] arrowleftRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.arrowright.bmp")] static byte[] arrowrightRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.arrowup.bmp")] static byte[] arrowupRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.drive.bmp")] static byte[] driveRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.drive_locked.bmp")] static byte[] drive_lockedRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.header.bmp")] static byte[] headerRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.sidebar.bmp")] static byte[] sidebarRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskStart.startmenuBG.bmp")] static byte[] startMenuBackgroundRaw;
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoWeb.bmp")] static byte[] goWebIconRaw;
 
         public static Canvas easterEgg;
@@ -82,9 +89,11 @@ namespace GoOS
         public static Canvas clockIcon;
         public static Canvas taskmanIcon;
         public static Canvas ideIcon;
+        public static Canvas ideIconSmall;
         public static Canvas brownGhost;
         public static Canvas cutIcon;
         public static Canvas folderIcon;
+        public static Canvas fileIcon;
         public static Canvas background;
         public static Canvas newIcon;
         public static Canvas binIcon;
@@ -133,7 +142,11 @@ namespace GoOS
         public static Canvas arrowleft;
         public static Canvas arrowright;
         public static Canvas arrowup;
-        public static Canvas toolbarBackground;
+        public static Canvas drive;
+        public static Canvas drive_locked;
+        public static Canvas header;
+        public static Canvas sidebar;
+        public static Canvas startMenuBackground;
         public static Canvas goWebIcon;
         public static Font Font_1x = Font.Fallback;
         public static Font Font_2x = Font.Fallback;
@@ -155,9 +168,11 @@ namespace GoOS
                     clockIcon = Image.FromBitmap(clockIconRaw, false);
                     taskmanIcon = Image.FromBitmap(taskmanIconRaw, false);
                     ideIcon = Image.FromBitmap(ideIconRaw, false);
+                    ideIconSmall = Image.FromBitmap(ideIconSmallRaw, false);
                     brownGhost = Image.FromBitmap(brownGhostRaw, false);
                     cutIcon = Image.FromBitmap(cutIconRaw, false);
                     folderIcon = Image.FromBitmap(folderIconRaw, false);
+                    fileIcon = Image.FromBitmap(fileIconRaw, false);
                     newIcon = Image.FromBitmap(NewIconRaw, false);
                     binIcon = Image.FromBitmap(BinIconRaw, false);
                     childIcon = Image.FromBitmap(ChildIconRaw, false);
@@ -193,6 +208,11 @@ namespace GoOS
                     arrowleft = Image.FromBitmap(arrowleftRaw, false);
                     arrowright = Image.FromBitmap(arrowrightRaw, false);
                     arrowup = Image.FromBitmap(arrowupRaw, false);
+                    drive = Image.FromBitmap(driveRaw, false);
+                    drive_locked = Image.FromBitmap(drive_lockedRaw, false);
+                    header = Image.FromBitmap(headerRaw, false);
+                    sidebar = Image.FromBitmap(sidebarRaw, false);
+                    startMenuBackground = Image.FromBitmap(startMenuBackgroundRaw, false);
                     goWebIcon = Image.FromBitmap(goWebIconRaw, false);
                     break;
 

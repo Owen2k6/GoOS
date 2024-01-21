@@ -64,7 +64,7 @@ namespace GoOS.GUI.Apps.GoWeb
                 Title = $"{ActiveDocument.Title} - GoWeb";
                 //AddressBar.Text = uri.ToString(); /* crash? */
 
-                Dialogue.Show("Document Loaded", ActiveDocument.Title);
+                //Dialogue.Show("Document Loaded", ActiveDocument.Title);
 
                 DocumentLayout layout = new DocumentLayout(ActiveDocument, Contents.Width);
                 

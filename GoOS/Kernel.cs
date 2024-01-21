@@ -61,18 +61,17 @@ namespace GoOS
 
         protected override void BeforeRun()
         {
+            System.Console.Clear();
+            System.Console.ForegroundColor = System.ConsoleColor.Cyan;
             System.Console.WriteLine("GoOS - Starting GoOS...");
 
-            if (Cosmos.Core.CPU.GetAmountOfRAM() < 256)
+            if (Cosmos.Core.CPU.GetAmountOfRAM() < 192)
             {
                 System.Console.ForegroundColor = System.ConsoleColor.Red;
-                System.Console.WriteLine();
-                System.Console.Write(
-                    "GoOS - Insufficient Memory to initialise GoOS.");
-                System.Console.Write(
-                    "GoOS - GoOS Recommends 1024MiB but the minimum is 256MiB");
+                System.Console.WriteLine("GoOS - Insufficient Memory to initialise GoOS.");
+                System.Console.WriteLine("GoOS - GoOS Recommends 1024MiB but the minimum is 172MiB");
 
-                while (true) ;
+                while (true);
             }
 
             Resources.Generate(ResourceType.Fonts);
@@ -82,8 +81,7 @@ namespace GoOS
             WindowManager.Canvas.DrawImage(0, 0, Resources.background, false);
             Console.Init(800, 600);
 
-            var loadingDialogue = new LoadingDialogue("GoOS is starting\nPlease wait...");
-            WindowManager.AddWindow(loadingDialogue);
+            WindowManager.AddWindow(new LoadingDialogue("GoOS is starting\nPlease wait..."));
             WindowManager.Update();
 
             Resources.Generate(ResourceType.Normal);
@@ -99,13 +97,12 @@ namespace GoOS
             }
             catch
             {
-                log(ThemeManager.ErrorText, "GoOS - Failed to initialize filesystem.\n");
-                log(ThemeManager.ErrorText,
-                    "GoOS - GoOS Needs a HDD installed to save user settings, application data and more.\n");
-                log(ThemeManager.ErrorText, "GoOS - Please verify that your hard disk is plugged in correctly.");
-                while (true)
-                {
-                }
+                WindowManager.AddWindow(new Dialogue("Fatal Error", "Failed to initialize filesystem!\n" +
+                                                     "GoOS needs a HDD installed to save user settings, application data and more\n" +
+                                                     "Please verify that your hard disk is plugged in correctly",
+                                                     default, WindowManager.errorIcon));
+                WindowManager.Update();
+                while (true);
             }
 
             if (!File.Exists(@"0:\content\sys\setup.gms"))
@@ -118,10 +115,7 @@ namespace GoOS
 
             if (!File.Exists(@"0:\content\sys\path.ugms"))
             {
-                try
-                {
-                    File.Create(@"0:\content\sys\path.ugms");
-                }
+                try { File.Create(@"0:\content\sys\path.ugms"); }
                 catch (Exception)
                 {
                     isGCIenabled = false;
@@ -136,10 +130,7 @@ namespace GoOS
                     Directory.CreateDirectory(@"0:\content\GCI\");
                     pathPaths.Append(@"0:\content\GCI\");
                 }
-                catch (Exception)
-                {
-                    // ignored
-                }
+                catch (Exception) { }
             }
 
             try
@@ -147,27 +138,18 @@ namespace GoOS
                 var systemsetup = File.ReadAllLines(@"0:\content\sys\user.gms");
                 foreach (string line in systemsetup)
                 {
-                    if (line.StartsWith("username: "))
-                    {
-                        username = line.Replace("username: ", "");
-                    }
-
-                    if (line.StartsWith("computername: "))
-                    {
-                        computername = line.Replace("computername: ", "");
-                    }
+                    if (line.StartsWith("username: ")) username = line.Replace("username: ", "");
+                    if (line.StartsWith("computername: ")) computername = line.Replace("computername: ", "");
                 }
 
                 foreach (string line in File.ReadAllLines(@"0:\content\sys\theme.gms"))
                 {
-                    if (line.StartsWith("ThemeFile = "))
-                    {
-                        ThemeManager.SetTheme(line.Split("ThemeFile = ")[1]);
-                    }
+                    if (line.StartsWith("ThemeFile = ")) ThemeManager.SetTheme(line.Split("ThemeFile = ")[1]);
                 }
             }
             catch
             {
+                WindowManager.AddWindow(new Dialogue("Warning", "Failed to load settings!\nContinuing with default values...", default, Resources.warningIcon));
                 log(ThemeManager.Other1, "GoOS - Failed to load settings, continuing with default values...");
             }
 
@@ -183,7 +165,7 @@ namespace GoOS
 
             InitNetwork();
 
-            loadingDialogue.Closing = true;
+            WindowManager.windows = new List<Window>(10);
             WindowManager.AddWindow(new Taskbar());
             WindowManager.AddWindow(new Desktop());
 
@@ -397,7 +379,7 @@ namespace GoOS
                     oldCode = !oldCode;
                     break;
                 case "fm":
-                    WindowManager.AddWindow(new FileManager());
+                    WindowManager.AddWindow(new GUI.Apps.Gosplorer.MainFrame());
                     break;
                 case "exit":
                     Console.Visible = false;

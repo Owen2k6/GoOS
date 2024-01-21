@@ -78,13 +78,13 @@ namespace GoOS.GUI.Apps.GoStore
         public override void Paint()
         {
             Contents.DrawImage(0, 0, GoStoreDescFrame, false);
-            /*Contents.DrawString(10, 10, App.Name, Font_2x, Color.White);
+            Contents.DrawString(10, 10, App.Name, Font_2x, Color.White);
             Contents.DrawImage(OpenButton.X, OpenButton.Y, GoStoreButtonBlue);
             Contents.DrawImage(InstallButton.X, InstallButton.Y, InstallButton.Title == "Install" ? GoStoreButtonGreen : GoStoreButtonRed);
             for (int i = 0; i < DescriptionLines.Count; i++) Contents.DrawString(10, 56 + i * 16, DescriptionLines[i], Font_1x, Color.White);
             OpenButton.Render();
             InstallButton.Render();
-            RenderSystemStyleBorder();*/
+            RenderSystemStyleBorder();
         }
 
         private void InstallButton_Click()

@@ -14,12 +14,20 @@ namespace GoOS.GUI.Apps
     public class StartMenu : Window
     {
         List<Button> appButtons = new();
+        List<Button> sButtons = new();
 
         private const int buttonHeight = 24;
 
         private void AddAppButton(string name, Action clickedAction)
         {
-            appButtons.Add(new Button(this, 8, (ushort)(48 + (appButtons.Count * buttonHeight)), (ushort)(Contents.Width - 16), buttonHeight, name)
+            appButtons.Add(new Button(this, 8, (ushort)(64 + (appButtons.Count * buttonHeight)), 281, buttonHeight, name)
+            {
+                Clicked = clickedAction
+            });
+        }
+        private void AddSideButton(string name, Action clickedAction)
+        {
+            sButtons.Add(new Button(this, (ushort)(Contents.Width - 96 - 8), (ushort)(64 + (sButtons.Count * buttonHeight)), 96, buttonHeight, name)
             {
                 Clicked = clickedAction
             });
@@ -27,38 +35,34 @@ namespace GoOS.GUI.Apps
 
         private void AddAppButtons()
         {
-            AddAppButton("GoOS Applications", () => {
+
+            AddAppButton("ToDO: Click me!", () =>
+            {
+                Dialogue.Show("GoOS", "We should have a way of allowing users to \"pin\" apps here");
+                CloseStartMenu();
+            });
+        }
+        
+        private void AddSideButtons()
+        {
+            AddSideButton("Apps", () =>
+            {
                 WindowManager.AddWindow(new AppManager());
                 CloseStartMenu();
             });
-
-            AddAppButton("Paint", () =>
+            AddSideButton("GoStore", () =>
             {
-                WindowManager.AddWindow(new Paintbrush());
+                WindowManager.AddWindow(new GoStore.MainFrame());
                 CloseStartMenu();
             });
-
-            AddAppButton("Notepad", () =>
+            AddSideButton("Gosplorer", () =>
             {
-                WindowManager.AddWindow(new Notepad(false, ""));
+                WindowManager.AddWindow(new GosplorerOld());
                 CloseStartMenu();
             });
-
-            AddAppButton("Gosplorer", () =>
+            AddSideButton("Settings", () =>
             {
-                WindowManager.AddWindow(new Gosplorer());
-                CloseStartMenu();
-            });
-
-            AddAppButton("GoIDE", () =>
-            {
-                WindowManager.AddWindow(new GoIDE.ProjectsFrame());
-                CloseStartMenu();
-            });
-
-            AddAppButton("GoWeb", () =>
-            {
-                WindowManager.AddWindow(new GoWeb.GoWebWindow());
+                Dialogue.Show("GoOS", "This feature is not yet implemented.");
                 CloseStartMenu();
             });
         }
@@ -81,7 +85,7 @@ namespace GoOS.GUI.Apps
 
         public StartMenu()
         {
-            Contents = new Canvas(256, 384);
+            Contents = new Canvas(400, 500);
             Contents.Clear(Color.DeepGray);
             X = 0;
             Y = WindowManager.Canvas.Height - 28 - Contents.Height;
@@ -90,12 +94,15 @@ namespace GoOS.GUI.Apps
             Visible = false;
             Unkillable = true;
 
-            Contents.DrawImage(8, 8, userImage);
-            Contents.DrawString(40, 16, Kernel.username, Resources.Font_1x, Color.White);
+            Contents.DrawImage(0,0, startMenuBackground);
+            Contents.DrawImage(10, 11, userImage);
+            Contents.DrawString(52, 28, Kernel.username, Resources.Font_1x, Color.White);
 
             AddAppButtons();
 
             AddPowerButton();
+            
+            AddSideButtons();
 
             foreach (Control control in Controls)
             {
