@@ -97,6 +97,11 @@ namespace GoOS.GUI.Apps
                 WindowManager.AddWindow(new GosplorerOld());
                 CloseStartMenu();
             });
+            AddSideButton("Gosplorer 2", () =>
+            {
+                WindowManager.AddWindow(new Gosplorer.MainFrame());
+                CloseStartMenu();
+            });
             AddSideButton("Settings", () =>
             {
                 Dialogue.Show("GoOS", "This feature is not yet implemented.");
