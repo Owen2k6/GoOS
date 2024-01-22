@@ -215,6 +215,10 @@
 	  <EmbeddedResource Include="Resources\GUI\TaskStart\startmenuBG.bmp" />
 	  <None Remove="Resources\GUI\Gosplorer\REFRESH.bmp" />
 	  <EmbeddedResource Include="Resources\GUI\Gosplorer\REFRESH.bmp" />
+	  <None Remove="Resources\GUI\TaskStart\start.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\TaskStart\start.bmp" />
+	  <None Remove="Resources\GUI\TaskStart\taskbar.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\TaskStart\taskbar.bmp" />
     </ItemGroup>
 
     <PropertyGroup>
