@@ -36,23 +36,28 @@ namespace GoOS.GUI.Apps.GoWeb.Html
                     return new Document(uri, string.Empty, "text/html");
                 case "welcome":
                     return new Document(uri, @"<html>
-<head>
-    <title>Welcome</title>
-</head>
 <body>
-    <h1>Welcome</h1>
-    <hr>
-    <p>GoWeb is the Web browser for GoOS.</p>
-    <p>To get started, enter a location in the address bar.
-<br>GoWeb is currently in alpha. Not all sites will work correctly.</p>
-    <hr>
-    <h2>Known Working URLs</h2>
-    <pre>- http://example.org
-- http://apps.goos.owen2k6.com
-- http://mirrorservice.org
-- http://mirrors.nav.ro</pre>
+
+<h1>Welcome to GoWeb Browser</h1>
+<hr>
+<h2>Alpha Version</h2>
+<pre>
+GoWeb is a web browser for GoOS. At this time, GoWeb is unable to open modern websites.
+GoWeb is currently in alpha, and is not ready for general use.
+
+GoWeb is free software, and is licensed under the Owen2k6 Open Sourced license. The source code is available at:
+https://github.com/Owen2k6/GoOS/tree/master/GUI/Apps/GoWeb
+
+Below is a list of known websites that work with GoWeb:
+ - http://example.org
+ - http://apps.goos.owen2k6.com
+ - http://mirrorservice.org
+ - http://mirrors.nav.ro</pre>
+</pre>
+
 </body>
-</html>", "text/html");
+</html>
+", "text/html");
                 default:
                     return new Document(uri, $"Unknown built-in page '{uri.Host}'.", "text/plain");
             }

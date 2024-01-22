@@ -226,7 +226,6 @@ namespace GoOS
         public static Canvas taskmanIcon;
         public static Canvas ideIcon;
         public static Canvas ideIconSmall;
-        public static Canvas brownGhost;
         public static Canvas cutIcon;
         public static Canvas folderIcon;
         public static Canvas fileIcon;
