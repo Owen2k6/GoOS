@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using IO = System.IO;
 using System.Text;
 using Cosmos.System.Network.Config;
@@ -40,7 +41,8 @@ namespace GoOS.GUI.Apps.GoStore
                 BackgroundColour = new Color(0, 0, 0, 0),
                 RenderWithAlpha = true
             };
-            InstallButton = new Button(this, 246, 323, 133, 30, !IO.File.Exists(@"0:\go\" + app.Filename) ? "Install" : "Uninstall")
+            InstallButton = new Button(this, 246, 323, 133, 30,
+                !IO.File.Exists(@"0:\go\" + app.Filename) ? "Install" : "Uninstall")
             {
                 Clicked = InstallButton_Click,
                 UseSystemStyle = false,
@@ -77,11 +79,60 @@ namespace GoOS.GUI.Apps.GoStore
 
         public override void Paint()
         {
+            Controls.Remove(OpenButton);
+            Controls.Remove(InstallButton);
+            
+            OpenButton = null;
+            InstallButton = null;
+            
+            Contents.Clear();
+            
             Contents.DrawImage(0, 0, GoStoreDescFrame, false);
             Contents.DrawString(10, 10, App.Name, Font_2x, Color.White);
+            //Contents.DrawImage(OpenButton.X, OpenButton.Y, GoStoreButtonBlue);
+            //Contents.DrawImage(InstallButton.X, InstallButton.Y,
+               //InstallButton.Title == "Install" ? GoStoreButtonGreen : GoStoreButtonRed);
+            for (int i = 0; i < DescriptionLines.Count; i++)
+                Contents.DrawString(10, 56 + i * 16, DescriptionLines[i], Font_1x, Color.White);
+
+            OpenButton = new Button(this, 101, 323, 133, 30, "Open")
+            {
+                //Image = GoStoreButtonBlue,
+                Clicked = OpenButton_Click,
+                UseSystemStyle = false,
+                BackgroundColour = Color.Transparent,
+                RenderWithAlpha = true
+            };
+            
             Contents.DrawImage(OpenButton.X, OpenButton.Y, GoStoreButtonBlue);
-            Contents.DrawImage(InstallButton.X, InstallButton.Y, InstallButton.Title == "Install" ? GoStoreButtonGreen : GoStoreButtonRed);
-            for (int i = 0; i < DescriptionLines.Count; i++) Contents.DrawString(10, 56 + i * 16, DescriptionLines[i], Font_1x, Color.White);
+
+            if (IO.File.Exists(@"0:\go\" + App.Filename))
+            {
+                InstallButton = new Button(this, 246, 323, 133, 30, "Uninstall")
+                {
+                    //Image = GoStoreButtonRed,
+                    Clicked = InstallButton_Click,
+                    UseSystemStyle = false,
+                    BackgroundColour = Color.Transparent,
+                    RenderWithAlpha = true
+                };
+                
+                Contents.DrawImage(InstallButton.X, InstallButton.Y, GoStoreButtonRed);
+            }
+            else
+            {
+                InstallButton = new Button(this, 246, 323, 133, 30, "Install")
+                {
+                    //Image = GoStoreButtonGreen,
+                    Clicked = InstallButton_Click,
+                    UseSystemStyle = false,
+                    BackgroundColour = Color.Transparent,
+                    RenderWithAlpha = true
+                };
+                
+                Contents.DrawImage(InstallButton.X, InstallButton.Y, GoStoreButtonGreen);
+            }
+            
             OpenButton.Render();
             InstallButton.Render();
             RenderSystemStyleBorder();
@@ -131,30 +182,33 @@ namespace GoOS.GUI.Apps.GoStore
                         int bytesRead = stream.Read(receivedData, 0, receivedData.Length);
                         string receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
 
-                        string[] responseParts = receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
+                        string[] responseParts =
+                            receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
 
-                        if (responseParts.Length < 2 || responseParts.Length > 2) Dialogue.Show("GoStore", "Invalid HTTP response!", default, WindowManager.errorIcon);
+                        if (responseParts.Length < 2 || responseParts.Length > 2)
+                            Dialogue.Show("GoStore", "Invalid HTTP response!", default, WindowManager.errorIcon);
 
                         if (responseParts[1] == "404")
                         {
-                            Dialogue.Show("Error", "The requested file or resource was not found.", default, WindowManager.errorIcon);
+                            Dialogue.Show("Error", "The requested file or resource was not found.", default,
+                                WindowManager.errorIcon);
                             return;
                         }
-                    
+
                         if (!IO.Directory.Exists(@"0:\go")) IO.Directory.CreateDirectory(@"0:\go");
-                    
+
                         IO.File.WriteAllText(@"0:\go\" + App.Filename, responseParts[1]);
                     }
 
                     Dialogue.Show("Success", "Application installed successfully.");
-                    InstallButton.Title = "Uninstall";
+                    //InstallButton.Title = "Uninstall";
                 }
                 else
                 {
                     while (IO.File.Exists(@"0:\go\" + App.Filename)) IO.File.Delete(@"0:\go\" + App.Filename);
 
                     Dialogue.Show("Success", "Application uninstalled successfully.");
-                    InstallButton.Title = "Install";
+                    //InstallButton.Title = "Install";
                 }
 
                 Paint();
@@ -169,7 +223,8 @@ namespace GoOS.GUI.Apps.GoStore
         {
             if (!IO.File.Exists(@"0:\go\" + App.Filename))
             {
-                Dialogue.Show("Error", "You must install the app before you can use it.", default, WindowManager.errorIcon);
+                Dialogue.Show("Error", "You must install the app before you can use it.", default,
+                    WindowManager.errorIcon);
             }
             else
             {
