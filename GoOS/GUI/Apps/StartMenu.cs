@@ -44,7 +44,10 @@ namespace GoOS.GUI.Apps
             }
             
             apps = File.ReadAllLines(@"0:\content\sys\pinnedapps.gms");
-            
+            if (apps.Length == 0)
+            {
+                Contents.DrawString(8, 64, "TIP: Apps you pin from Gosplorer\nwill appear here", Resources.Font_1x, Color.White);
+            }
             Button[] buttons = new Button[apps.Length];
 
             for (int i = 0; i < apps.Length; i++)
