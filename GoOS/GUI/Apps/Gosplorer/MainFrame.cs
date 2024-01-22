@@ -17,6 +17,7 @@ namespace GoOS.GUI.Apps.Gosplorer
         Button BackButton;
         Button ForwardButton;
         Button UpButton;
+        Button RefreshButton;
 
         Button[] Shortcuts;
         Button[] FolderContents;
@@ -26,16 +27,18 @@ namespace GoOS.GUI.Apps.Gosplorer
 
         public MainFrame()
         {
-            Contents = new Canvas(480, 360);
+            Contents = new Canvas(835, 600);
             Title = Path + " - Gosplorer";
             Visible = true;
             Closable = true;
             SetDock(WindowDock.Auto);
 
-            AddressBar = new Input(this, 90, 10, (ushort)(Contents.Width - 100), 20, "Path") { Text = Path, Submitted = AddressBar_Submit }; // TODO: submitted is probably broken
+            AddressBar = new Input(this, 90, 10, (ushort)(Contents.Width - 100 - 20 - 10), 20, "Path") { Text = Path, Submitted = AddressBar_Submit }; // TODO: submitted is probably broken
             BackButton = new Button(this, 10, 10, 20, 20, string.Empty) { Image = arrowleft, Clicked = BackButton_Click };
             ForwardButton = new Button(this, 30, 10, 20, 20, string.Empty) { Image = arrowright, Clicked = ForwardButton_Click };
             UpButton = new Button(this, 60, 10, 20, 20, string.Empty) { Image = arrowup, Clicked = UpArrow_Click };
+            RefreshButton = new Button(this, (ushort)(Contents.Width - 30), 10, 20, 20, string.Empty)
+                { Image = refIcon, Clicked = RefreshButton_Click };
 
             Shortcuts = new Button[]
             {
@@ -83,11 +86,17 @@ namespace GoOS.GUI.Apps.Gosplorer
             BackButton.Render();
             ForwardButton.Render();
             UpButton.Render();
+            RefreshButton.Render();
 
             foreach (Button i in Shortcuts) i.Render();
             foreach (Button i in FolderContents) if (i != null) i.Render();
 
             RenderSystemStyleBorder();
+        }
+
+        private void RefreshButton_Click()
+        {
+            RenderFolderItems();
         }
 
         private void AddressBar_Submit()
@@ -161,7 +170,7 @@ namespace GoOS.GUI.Apps.Gosplorer
             {
                 if (itemNames[i].EndsWith(".gms")) continue;
 
-                if (column >= 5)
+                if (column >= 10)
                 {
                     column = 0;
                     row++;

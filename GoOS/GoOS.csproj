@@ -194,7 +194,6 @@
       <EmbeddedResource Include="Resources\GUI\Gosplorer\MOVE.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\PARENT.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\NEW.bmp" />
-      <EmbeddedResource Include="Resources\GUI\Gosplorer\REFRESH.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\LOADINNOTEPAD.bmp" />
 	  <EmbeddedResource Include="Resources\OOBE\setupfinal.bmp" />
       <EmbeddedResource Include="Resources\Credits05.bmp" />
@@ -214,6 +213,8 @@
 	  <EmbeddedResource Include="Resources\GUI\warning.bmp" />
 	  <None Remove="Resources\GUI\TaskStart\startmenuBG.bmp" />
 	  <EmbeddedResource Include="Resources\GUI\TaskStart\startmenuBG.bmp" />
+	  <None Remove="Resources\GUI\Gosplorer\REFRESH.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\Gosplorer\REFRESH.bmp" />
     </ItemGroup>
 
     <PropertyGroup>
