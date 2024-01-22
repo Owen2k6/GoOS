@@ -217,9 +217,7 @@ namespace GoOS
                     header = Image.FromBitmap(headerRaw, false);
                     sidebar = Image.FromBitmap(sidebarRaw, false);
                     startMenuBackground = Image.FromBitmap(startMenuBackgroundRaw, false);
-#if BUILD_GOWEB
                     goWebIcon = Image.FromBitmap(goWebIconRaw, false);
-#endif
                     break;
 
                 case ResourceType.Priority:
