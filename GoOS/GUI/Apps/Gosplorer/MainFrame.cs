@@ -256,6 +256,19 @@ namespace GoOS.GUI.Apps.Gosplorer
                         BetterConsole.Clear();
                         Kernel.DrawPrompt();
                         break;
+                    
+                    case { } a when a.EndsWith(".bmp"):
+                        WindowManager.AddWindow(new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 0));
+                        break;
+                    case { } a when a.EndsWith(".png"):
+                        WindowManager.AddWindow(new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 1));
+                        break;
+                    case { } a when a.EndsWith(".ppm"):
+                        WindowManager.AddWindow(new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 2));
+                        break;
+                    case { } a when a.EndsWith(".tga"):
+                        WindowManager.AddWindow(new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 3));
+                        break;
 
                     default:
                         Dialogue.Show("Error", "Unknown file extension!", null, WindowManager.errorIcon);
