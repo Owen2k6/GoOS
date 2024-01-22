@@ -77,7 +77,7 @@ namespace GoOS
             Resources.Generate(ResourceType.Fonts);
             Resources.Generate(ResourceType.Priority);
 
-            WindowManager.Canvas = Display.GetDisplay(1600, 900);
+            WindowManager.Canvas = Display.GetDisplay(1920, 1080);
             WindowManager.Canvas.DrawImage(0, 0, Resources.background, false);
             Console.Init(800, 600);
 
