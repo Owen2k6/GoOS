@@ -73,12 +73,6 @@ namespace GoOS.GUI.Apps
 
                 if (buttons[i] != null) buttons[i].Render();
             }
-
-            /*AddAppButton("ToDO: Click me!", () =>
-            {
-                Dialogue.Show("GoOS", "We should have a way of allowing users to \"pin\" apps here");
-                CloseStartMenu();
-            });*/
         }
 
         private void appAction(string path)
@@ -114,13 +108,11 @@ namespace GoOS.GUI.Apps
                 WindowManager.AddWindow(new Gosplorer.MainFrame());
                 CloseStartMenu();
             });
-#if BUILD_GOWEB
             AddSideButton("GoWeb", () =>
             {
                 WindowManager.AddWindow(new GoWeb.GoWebWindow());
                 CloseStartMenu();
             });
-#endif
             AddSideButton("Settings", () =>
             {
                 Dialogue.Show("GoOS", "This feature is not yet implemented.");
