@@ -132,10 +132,6 @@ namespace GoOS.GUI.Apps
                 case ConsoleKeyEx.F1:
                     ShowAboutDialog();
                     break;
-
-                case ConsoleKeyEx.F2:
-                    WindowManager.AddWindow(new BrownGhost());
-                    break;
             }
 
             // TODO: implement ctrl + z

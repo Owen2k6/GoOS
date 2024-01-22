@@ -15,75 +15,209 @@ namespace GoOS
 
     public class Resources
     {
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.oobe.bmp")] static byte[] OOBEmainraw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.oobebg.bmp")] static byte[] OOBEblankraw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.Credits05.bmp")] static byte[] easterEggRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_1x.btf")] static byte[] font_1x_raw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_2x.btf")] static byte[] font_2x_raw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoIDE.run.bmp")] static byte[] runRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.gterm.bmp")] static byte[] gtermIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.clock.bmp")] static byte[] clockIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskManager.bmp")] static byte[] taskmanIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.ide.bmp")] static byte[] ideIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.idesmall.bmp")] static byte[] ideIconSmallRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.brown_ghost.bmp")] static byte[] brownGhostRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.CUT.bmp")] static byte[] cutIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.folder.bmp")] static byte[] folderIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.file.bmp")] static byte[] fileIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.desktopwallpaper.bmp")] static byte[] backgroundRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.NEW.bmp")] static byte[] NewIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.BIN.bmp")] static byte[] BinIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.CHILD.bmp")] static byte[] ChildIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.PARENT.bmp")] static byte[] ParentIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.MOVE.bmp")] static byte[] MoveIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.COPY.bmp")] static byte[] copyIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.PASTE.bmp")] static byte[] pasteIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.REFRESH.bmp")] static byte[] refIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.LOADINNOTEPAD.bmp")] static byte[] linIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.aboutGoOS.bmp")] static byte[] aboutbgRAW;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.SAVE.bmp")] static byte[] saveIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.question.bmp")] static byte[] questionRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.colors.bmp")] static byte[] colorTableRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.brush.bmp")] static byte[] brushRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.bucket.bmp")] static byte[] bucketRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.text.bmp")] static byte[] textRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse_text.bmp")] static byte[] mouse_textRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.rubber.bmp")] static byte[] rubberRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.user.bmp")] static byte[] userImageRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.shutdown.bmp")] static byte[] shutdownIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.Welcome.bmp")] static byte[] welcomeImageRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.info.bmp")] static byte[] infoIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.drum.bmp")] static byte[] drumIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.warning.bmp")] static byte[] warningIconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton.bmp")] static byte[] closeButtonRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton_hover.bmp")] static byte[] closeButtonHoverRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton_pressed.bmp")] static byte[] closeButtonPressedRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Maximize.bmp")] static byte[] maximiseRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Hovered.bmp")] static byte[] maximizeHoverRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Pressed.bmp")] static byte[] maximizePressedRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize.bmp")] static byte[] minimiseRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Hovered.bmp")] static byte[] minimiseHoverRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Pressed.bmp")] static byte[] minimisePressedRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStore.bmp")] static byte[] GoStoreRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreicon.bmp")] static byte[] GoStoreiconRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.StoreButton.bmp")] static byte[] StoreButtonRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreinfoboard.bmp")] static byte[] GoStoreinfoboardRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreButtonBlue.bmp")] static byte[] GoStoreButtonBlueRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreButtonGreen.bmp")] static byte[] GoStoreButtonGreenRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreButtonRed.bmp")] static byte[] GoStoreButtonRedRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreDescFrame.bmp")] static byte[] GoStoreDescFrameRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.appbackground.bmp")] static byte[] appbackgroundRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.arrowleft.bmp")] static byte[] arrowleftRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.arrowright.bmp")] static byte[] arrowrightRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.arrowup.bmp")] static byte[] arrowupRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.drive.bmp")] static byte[] driveRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.drive_locked.bmp")] static byte[] drive_lockedRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.header.bmp")] static byte[] headerRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.sidebar.bmp")] static byte[] sidebarRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskStart.startmenuBG.bmp")] static byte[] startMenuBackgroundRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskStart.start.bmp")] static byte[] startBackgroundRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskStart.taskbar.bmp")] static byte[] taskbarBackgroundRaw;
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoWeb.bmp")] static byte[] goWebIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.oobe.bmp")]
+        static byte[] OOBEmainraw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.oobebg.bmp")]
+        static byte[] OOBEblankraw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.Credits05.bmp")]
+        static byte[] easterEggRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_1x.btf")]
+        static byte[] font_1x_raw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_2x.btf")]
+        static byte[] font_2x_raw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoIDE.run.bmp")]
+        static byte[] runRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.gterm.bmp")]
+        static byte[] gtermIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.clock.bmp")]
+        static byte[] clockIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskManager.bmp")]
+        static byte[] taskmanIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.ide.bmp")]
+        static byte[] ideIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.idesmall.bmp")]
+        static byte[] ideIconSmallRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.CUT.bmp")]
+        static byte[] cutIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.folder.bmp")]
+        static byte[] folderIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.file.bmp")]
+        static byte[] fileIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.desktopwallpaper.bmp")]
+        static byte[] backgroundRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.NEW.bmp")]
+        static byte[] NewIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.BIN.bmp")]
+        static byte[] BinIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.CHILD.bmp")]
+        static byte[] ChildIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.PARENT.bmp")]
+        static byte[] ParentIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.MOVE.bmp")]
+        static byte[] MoveIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.COPY.bmp")]
+        static byte[] copyIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.PASTE.bmp")]
+        static byte[] pasteIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.REFRESH.bmp")]
+        static byte[] refIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.LOADINNOTEPAD.bmp")]
+        static byte[] linIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.aboutGoOS.bmp")]
+        static byte[] aboutbgRAW;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.SAVE.bmp")]
+        static byte[] saveIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.question.bmp")]
+        static byte[] questionRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.colors.bmp")]
+        static byte[] colorTableRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.brush.bmp")]
+        static byte[] brushRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.bucket.bmp")]
+        static byte[] bucketRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.text.bmp")]
+        static byte[] textRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse_text.bmp")]
+        static byte[] mouse_textRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.rubber.bmp")]
+        static byte[] rubberRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.user.bmp")]
+        static byte[] userImageRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.shutdown.bmp")]
+        static byte[] shutdownIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.Welcome.bmp")]
+        static byte[] welcomeImageRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.info.bmp")]
+        static byte[] infoIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.drum.bmp")]
+        static byte[] drumIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.warning.bmp")]
+        static byte[] warningIconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton.bmp")]
+        static byte[] closeButtonRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton_hover.bmp")]
+        static byte[] closeButtonHoverRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton_pressed.bmp")]
+        static byte[] closeButtonPressedRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Maximize.bmp")]
+        static byte[] maximiseRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Hovered.bmp")]
+        static byte[] maximizeHoverRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Pressed.bmp")]
+        static byte[] maximizePressedRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize.bmp")]
+        static byte[] minimiseRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Hovered.bmp")]
+        static byte[] minimiseHoverRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Pressed.bmp")]
+        static byte[] minimisePressedRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStore.bmp")]
+        static byte[] GoStoreRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreicon.bmp")]
+        static byte[] GoStoreiconRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.StoreButton.bmp")]
+        static byte[] StoreButtonRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreinfoboard.bmp")]
+        static byte[] GoStoreinfoboardRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreButtonBlue.bmp")]
+        static byte[] GoStoreButtonBlueRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreButtonGreen.bmp")]
+        static byte[] GoStoreButtonGreenRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreButtonRed.bmp")]
+        static byte[] GoStoreButtonRedRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreDescFrame.bmp")]
+        static byte[] GoStoreDescFrameRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.appbackground.bmp")]
+        static byte[] appbackgroundRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.arrowleft.bmp")]
+        static byte[] arrowleftRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.arrowright.bmp")]
+        static byte[] arrowrightRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.arrowup.bmp")]
+        static byte[] arrowupRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.drive.bmp")]
+        static byte[] driveRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.drive_locked.bmp")]
+        static byte[] drive_lockedRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.header.bmp")]
+        static byte[] headerRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.sidebar.bmp")]
+        static byte[] sidebarRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskStart.startmenuBG.bmp")]
+        static byte[] startMenuBackgroundRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskStart.start.bmp")]
+        static byte[] startBackgroundRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskStart.taskbar.bmp")]
+        static byte[] taskbarBackgroundRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoWeb.bmp")]
+        static byte[] goWebIconRaw;
 
         public static Canvas easterEgg;
         public static Canvas RunImage;
@@ -164,7 +298,7 @@ namespace GoOS
                     Generate(ResourceType.Fonts);
                     Generate(ResourceType.OOBE);
                     break;
-            
+
                 case ResourceType.Normal:
                     easterEgg = Image.FromBitmap(easterEggRaw, false);
                     RunImage = Image.FromBitmap(runRaw, false);
@@ -173,7 +307,6 @@ namespace GoOS
                     taskmanIcon = Image.FromBitmap(taskmanIconRaw, false);
                     ideIcon = Image.FromBitmap(ideIconRaw, false);
                     ideIconSmall = Image.FromBitmap(ideIconSmallRaw, false);
-                    brownGhost = Image.FromBitmap(brownGhostRaw, false);
                     cutIcon = Image.FromBitmap(cutIconRaw, false);
                     folderIcon = Image.FromBitmap(folderIconRaw, false);
                     fileIcon = Image.FromBitmap(fileIconRaw, false);
@@ -242,15 +375,6 @@ namespace GoOS
                     break;
 
                 case ResourceType.OOBE:
-                    // setupWelcome = Image.FromBitmap(setupWelcomeRaw, false);
-                    // setupTOU = Image.FromBitmap(setupTOURaw, false);
-                    // setupUA = Image.FromBitmap(setupUARaw, false);
-                    // setupSupport = Image.FromBitmap(setupSupportRaw, false);
-                    // setupUser = Image.FromBitmap(setupUserRaw, false);
-                    // setupComputer = Image.FromBitmap(setupComputerRaw, false);
-                    // setupTheme = Image.FromBitmap(setupThemeRaw, false);
-                    // setupRes = Image.FromBitmap(setupResRaw, false);
-                    // setupFinal = Image.FromBitmap(setupFinalRaw, false);
                     OOBEmain = Image.FromBitmap(OOBEmainraw, false);
                     OOBEblank = Image.FromBitmap(OOBEblankraw, false);
                     break;
