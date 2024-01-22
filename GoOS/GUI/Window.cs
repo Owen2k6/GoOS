@@ -246,7 +246,7 @@ namespace GoOS.GUI
             }
 
             // Click, any button.
-            if (MouseManager.MouseState == MouseState.None && previousMouseState != MouseState.None)
+            if (MouseManager.MouseState == MouseState.None && previousMouseState == MouseState.Left)
             {
                 if (previousMouseState == MouseState.Right)
                 {

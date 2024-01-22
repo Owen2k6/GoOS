@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Cosmos.System;
 using GoOS.Commands;
 using PrismAPI.Graphics;
 using static GoOS.Resources;
@@ -33,26 +34,37 @@ namespace GoOS.GUI.Apps.Gosplorer
             Closable = true;
             SetDock(WindowDock.Auto);
 
-            AddressBar = new Input(this, 90, 10, (ushort)(Contents.Width - 100 - 20 - 10), 20, "Path")
-                { Text = Path, Submitted = AddressBar_Submit }; // TODO: submitted is probably broken
+            AddressBar = new Input(this, 90, 10, (ushort)(Contents.Width - 100 - 20 - 10), 20, "Path") { Text = Path, Submitted = AddressBar_Submit };
             BackButton = new Button(this, 3, 6, 26, 26, string.Empty)
             {
-                Image = arrowleft, Clicked = BackButton_Click, UseSystemStyle = false, RenderWithAlpha = true,
+                Image = arrowleft,
+                Clicked = BackButton_Click,
+                UseSystemStyle = false,
+                RenderWithAlpha = true,
                 BackgroundColour = Color.Transparent
             };
             ForwardButton = new Button(this, 29, 6, 26, 26, string.Empty)
             {
-                Image = arrowright, Clicked = ForwardButton_Click, UseSystemStyle = false, RenderWithAlpha = true,
+                Image = arrowright,
+                Clicked = ForwardButton_Click,
+                UseSystemStyle = false,
+                RenderWithAlpha = true,
                 BackgroundColour = Color.Transparent
             };
             UpButton = new Button(this, 59, 6, 26, 26, string.Empty)
             {
-                Image = arrowup, Clicked = UpArrow_Click, UseSystemStyle = false, RenderWithAlpha = true,
+                Image = arrowup,
+                Clicked = UpArrow_Click,
+                UseSystemStyle = false,
+                RenderWithAlpha = true,
                 BackgroundColour = Color.Transparent
             };
             RefreshButton = new Button(this, 800, 6, 26, 26, string.Empty)
             {
-                Image = refIcon, Clicked = RefreshButton_Click, UseSystemStyle = false, RenderWithAlpha = true,
+                Image = refIcon,
+                Clicked = RefreshButton_Click,
+                UseSystemStyle = false,
+                RenderWithAlpha = true,
                 BackgroundColour = Color.Transparent
             };
 
@@ -105,11 +117,45 @@ namespace GoOS.GUI.Apps.Gosplorer
             RefreshButton.Render();
 
             foreach (Button i in Shortcuts) i.Render();
-            foreach (Button i in FolderContents)
-                if (i != null)
-                    i.Render();
+            foreach (Button i in FolderContents) if (i != null) i.Render();
 
             RenderSystemStyleBorder();
+        }
+
+        private Button GetButtonUnderMouse()
+        {
+            foreach (Button i in FolderContents)
+                {
+                    if (MouseManager.X > i.X || MouseManager.X < i.X + i.Contents.Width ||
+                        MouseManager.Y > i.Y || MouseManager.Y < i.Y + i.Contents.Height)
+                    {
+                        return i;
+                    }
+                }
+
+                return null;
+        }
+
+        public override void ShowContextMenu()
+        {
+            // TODO: finish this
+
+            /*string[] contextMenuButtons;
+            Button buttonUnderMouse = GetButtonUnderMouse();
+
+            if (buttonUnderMouse == null)
+            {
+                contextMenuButtons = 
+            }
+
+            if (Directory.Exists(Path + (Path.EndsWith(@"\") ? "" : @"\") + )))
+
+            ContextMenu.Show(contextMenuButtons, 155, ContextMenu_Handle);*/
+        }
+
+        private void ContextMenu_Handle(string item)
+        {
+            
         }
 
         private void RefreshButton_Click()
@@ -179,8 +225,7 @@ namespace GoOS.GUI.Apps.Gosplorer
         private void RenderFolderItems()
         {
             string[] itemNames = Directory.GetDirectories(Path).Concat(Directory.GetFiles(Path)).ToArray();
-            bool[] itemTypes = itemNames
-                .Select(item => Directory.Exists(Path + (Path.EndsWith(@"\") ? "" : @"\") + item)).ToArray();
+            bool[] itemTypes = itemNames.Select(item => Directory.Exists(Path + (Path.EndsWith(@"\") ? "" : @"\") + item)).ToArray();
             int row = 0, column = 0;
 
             foreach (Button i in FolderContents) Controls.Remove(i);
@@ -195,8 +240,7 @@ namespace GoOS.GUI.Apps.Gosplorer
                     row++;
                 }
 
-                FolderContents[i] = new Button(this, (ushort)(94 + (column * (IconWidth + 10))),
-                    (ushort)(50 + (row * (IconHeight + 10))), IconWidth, IconHeight, itemNames[i])
+                FolderContents[i] = new Button(this, (ushort)(94 + (column * (IconWidth + 10))), (ushort)(50 + (row * (IconHeight + 10))), IconWidth, IconHeight, itemNames[i])
                 {
                     UseSystemStyle = false,
                     RenderWithAlpha = true,
@@ -260,12 +304,15 @@ namespace GoOS.GUI.Apps.Gosplorer
                     case { } a when a.EndsWith(".bmp"):
                         WindowManager.AddWindow(new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 0));
                         break;
+
                     case { } a when a.EndsWith(".png"):
                         WindowManager.AddWindow(new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 1));
                         break;
+
                     case { } a when a.EndsWith(".ppm"):
                         WindowManager.AddWindow(new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 2));
                         break;
+
                     case { } a when a.EndsWith(".tga"):
                         WindowManager.AddWindow(new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 3));
                         break;
