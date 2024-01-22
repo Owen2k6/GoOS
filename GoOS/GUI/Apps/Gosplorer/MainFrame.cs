@@ -187,7 +187,7 @@ namespace GoOS.GUI.Apps.Gosplorer
             FolderContents = new Button[itemNames.Length];
             for (int i = 0; i < itemNames.Length; i++)
             {
-                if (itemNames[i].EndsWith(".gms")) continue;
+                if (itemNames[i].EndsWith(".gms") && !Kernel.devMode) continue;
 
                 if (column >= 10)
                 {

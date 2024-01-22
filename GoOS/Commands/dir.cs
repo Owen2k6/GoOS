@@ -36,7 +36,7 @@ namespace GoOS.Commands
 
                 foreach (var file in directory_list)
                 {
-                    if (file.EndsWith(".gms"))
+                    if (file.EndsWith(".gms") && !Kernel.devMode)
                     {
                         log(ThemeManager.ErrorText, "<System> Protected File");
                     }
