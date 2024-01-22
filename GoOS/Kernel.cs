@@ -33,7 +33,7 @@ namespace GoOS
         // This enables the user to switch between the old and new GoCode interpreters.
         // This is to be removed as soon as the new one is finished, only being added as the new one needs testing.
         public static bool oldCode = false;
-        public static readonly bool devMode = true;
+        public static readonly bool devMode = false;
 
         public static Dictionary<string, string> InstalledPrograms = new Dictionary<string, string>() { };
 
