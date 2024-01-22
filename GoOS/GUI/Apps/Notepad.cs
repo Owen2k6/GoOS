@@ -16,6 +16,7 @@ namespace GoOS.GUI.Apps;
 
 public class Notepad : Window
 {
+    private bool gms = false;
     private Button SaveButton;
     private Button CopyButton;
     private Button PasteButton;
@@ -28,6 +29,8 @@ public class Notepad : Window
     public Notepad(bool openFile, string fileToOpen)
     {
         string infi = fileToOpen;
+        
+        
 
         Contents = new Canvas(500, 300);
         Title = "GoOS Notepad";
@@ -90,18 +93,31 @@ public class Notepad : Window
 
     private void LoadFile(string filefile)
     {
-        string infi = filefile;    
-        
-        string toreturn = "";
-        string[] lines = File.ReadAllLines(filefile);
-        foreach (var line in lines)
+        string infi = filefile;
+
+        if (infi.ToLower().Contains(".gms") && !Kernel.devMode)
         {
-            toreturn = toreturn + line + "\n";
+            gms = true;
+            
+            string toreturn = "You cannot open .gms files in notepad.";
+            
+            AttemptOne.Text = toreturn;
+
+            AttemptOne.Render();
         }
+        else
+        {
+            string toreturn = "";
+            string[] lines = File.ReadAllLines(filefile);
+            foreach (var line in lines)
+            {
+                toreturn = toreturn + line + "\n";
+            }
 
-        AttemptOne.Text = toreturn;
+            AttemptOne.Text = toreturn;
 
-        AttemptOne.Render();
+            AttemptOne.Render();
+        }
     }
 
     private void SaveClick()
@@ -269,8 +285,10 @@ public class Notepad : Window
             WindowManager.AddWindow(new Cut());
         }
 
-
-        WindowManager.AddWindow(new NotepadSaveAs(infi, shittosave));
+        if (!gms)
+        {
+            WindowManager.AddWindow(new NotepadSaveAs(infi, shittosave));
+        }
     }
 
     internal static string HashPasswordSha256(string hellomario)

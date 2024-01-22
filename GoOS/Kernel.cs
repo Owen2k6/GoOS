@@ -33,11 +33,12 @@ namespace GoOS
         // This enables the user to switch between the old and new GoCode interpreters.
         // This is to be removed as soon as the new one is finished, only being added as the new one needs testing.
         public static bool oldCode = false;
+        public static readonly bool devMode = true;
 
         public static Dictionary<string, string> InstalledPrograms = new Dictionary<string, string>() { };
 
         public static bool isGCIenabled = true;
-        public static string[] pathPaths = new string[] { };
+        public static string[] pathPaths = { };
 
         //Vars for OS
         public const string version = "1.5pr3";
@@ -757,7 +758,7 @@ namespace GoOS
                         break;
                     }
 
-                    if (args[1].EndsWith(".gms"))
+                    if (args[1].EndsWith(".gms") && !devMode)
                     {
                         log(ThemeManager.ErrorText,
                             "Files that end with .gms cannot be opened. they are protected files.");
