@@ -139,16 +139,16 @@ namespace GoOS.GUI.Apps.Gosplorer
 
         public override void ShowContextMenu()
         {
-            string[] contextMenuEntries = { "New Folder", "New File" };
+            string[] contextMenuEntries = { " New Folder", " New File" };
             ContextButton = GetButtonUnderMouse();
 
             if (ContextButton != null && ContextButton.Image == fileIcon)
             {
-                contextMenuEntries = new[] { "Open", "Delete", "New Folder", "New File" };
+                contextMenuEntries = new[] { " Open", " Delete" };
             }
             else if (ContextButton != null && ContextButton.Image == folderIcon)
             {
-                contextMenuEntries = new[] { "Open", "Delete", "New Folder", "New File" };
+                contextMenuEntries = new[] { " Open", " Delete" };
             }
 
             ContextMenu.Show(contextMenuEntries, 155, ContextMenu_Handle);
@@ -158,20 +158,20 @@ namespace GoOS.GUI.Apps.Gosplorer
         {
             switch (item)
             {
-                case "Open":
+                case " Open":
                     FolderContents_Clicked(ContextButton.Name);
                     break;
-                case "Delete":
+                case " Delete":
                     if (File.Exists(Path + @"\" + ContextButton.Name))
                         File.Delete(Path + @"\" + ContextButton.Name);
                     else if (Directory.Exists(Path + @"\" + ContextButton.Name))
                         Directory.Delete(Path + @"\" + ContextButton.Name, true);
                     RenderFolderItems();
                     break;
-                case "New Folder":
+                case " New Folder":
                     WindowManager.AddWindow(new NewFolderFrame(Path));
                     break;
-                case "New File":
+                case " New File":
                     WindowManager.AddWindow(new NewFileFrame(Path));
                     break;
             }
