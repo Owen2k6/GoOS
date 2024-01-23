@@ -35,7 +35,7 @@ namespace GoOS.GUI
             return dialogue;
         }
 
-        private static int GetLongestLineWidth(string str)
+        public static int GetLongestLineWidth(string str)
         {
             int len = 0;
 

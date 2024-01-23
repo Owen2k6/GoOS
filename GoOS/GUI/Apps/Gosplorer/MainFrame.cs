@@ -12,10 +12,10 @@ namespace GoOS.GUI.Apps.Gosplorer
     public class MainFrame : Window
     {
         const int IconWidth = 64, IconHeight = 80;
-        
         string Path = @"0:\";
         
         Input AddressBar;
+        Input Dialog_TextBox;
         Button BackButton;
         Button ForwardButton;
         Button UpButton;
@@ -36,8 +36,7 @@ namespace GoOS.GUI.Apps.Gosplorer
             Closable = true;
             SetDock(WindowDock.Auto);
 
-            AddressBar = new Input(this, 90, 10, (ushort)(Contents.Width - 100 - 20 - 10), 20, "Path") 
-                { Text = Path, Submitted = AddressBar_Submit };
+            AddressBar = new Input(this, 90, 10, (ushort)(Contents.Width - 100 - 20 - 10), 20, "Path") { Text = Path, Submitted = AddressBar_Submit };
             BackButton = new Button(this, 3, 6, 26, 26, string.Empty)
             {
                 Image = arrowleft,
@@ -65,7 +64,7 @@ namespace GoOS.GUI.Apps.Gosplorer
             RefreshButton = new Button(this, 800, 6, 26, 26, string.Empty)
             {
                 Image = refIcon,
-                Clicked = RefreshButton_Click,
+                Clicked = RenderFolderItems,
                 UseSystemStyle = false,
                 RenderWithAlpha = true,
                 BackgroundColour = Color.Transparent
@@ -120,38 +119,39 @@ namespace GoOS.GUI.Apps.Gosplorer
             RefreshButton.Render();
 
             foreach (Button i in Shortcuts) i.Render();
-            foreach (Button i in FolderContents)
-                if (i != null)
-                    i.Render();
+            foreach (Button i in FolderContents) if (i != null) i.Render();
 
             RenderSystemStyleBorder();
         }
 
         private Button GetButtonUnderMouse()
         {
-            foreach (Button i in FolderContents)
-            {
-                if (i.IsMouseOver) { return i; }
-            }
-
+            foreach (Button i in FolderContents) if (i.IsMouseOver) return i;
             return null;
+        }
+
+        private bool IsMouseOverFolderArea
+        {
+            get
+            {
+                return MouseManager.X >= X + 84 &&
+                       MouseManager.X < X + 84 + Contents.Width &&
+                       MouseManager.Y >= Y + 40 &&
+                       MouseManager.Y < Y + 40 + Contents.Height;
+            }
         }
 
         public override void ShowContextMenu()
         {
-            string[] contextMenuEntries = { " New Folder", " New File" };
+            string[] contextMenuEntries = { };
             ContextButton = GetButtonUnderMouse();
 
-            if (ContextButton != null && ContextButton.Image == fileIcon)
-            {
-                contextMenuEntries = new[] { " Open", " Delete" };
-            }
-            else if (ContextButton != null && ContextButton.Image == folderIcon)
-            {
-                contextMenuEntries = new[] { " Open", " Delete" };
-            }
+            if (!IsMouseOverFolderArea) return;
+            else if (ContextButton != null && ContextButton.Image == fileIcon) contextMenuEntries = new[] { " Open", " Delete" };
+            else if (ContextButton != null && ContextButton.Image == folderIcon) contextMenuEntries = new[] { " Open", " Delete" };
+            else if (!Path.StartsWith(@"1:\")) contextMenuEntries = new[] { " New Folder", " New File" };
 
-            ContextMenu.Show(contextMenuEntries, Font_1x.MeasureString(" New Folder "), ContextMenu_Handle);
+            ContextMenu.Show(contextMenuEntries, (ContextButton.Image == fileIcon || ContextButton.Image == folderIcon) ? (ushort)64 : (ushort)96, ContextMenu_Handle);
         }
 
         private void ContextMenu_Handle(string item)
@@ -161,24 +161,83 @@ namespace GoOS.GUI.Apps.Gosplorer
                 case " Open":
                     FolderContents_Clicked(ContextButton.Name);
                     break;
+
                 case " Delete":
-                    if (File.Exists(Path + @"\" + ContextButton.Name))
-                        File.Delete(Path + @"\" + ContextButton.Name);
-                    else if (Directory.Exists(Path + @"\" + ContextButton.Name))
-                        Directory.Delete(Path + @"\" + ContextButton.Name, true);
+                    if (Directory.Exists(Path + @"\" + ContextButton.Name)) Directory.Delete(Path + @"\" + ContextButton.Name, true);
+                    else File.Delete(Path + @"\" + ContextButton.Name);
+
                     RenderFolderItems();
                     break;
+
                 case " New Folder":
-                    WindowManager.AddWindow(new NewFolderFrame(Path));
+                    Dialogue folderDialogue = new Dialogue(
+                        "New Folder",
+                        "Please input folder name:",
+                        new List<DialogueButton>()
+                        {
+                            new DialogueButton()
+                            {
+                                Text = "OK",
+                                Callback = NewFolder_Handler
+                            },
+                            new DialogueButton()
+                            {
+                                Text = "Cancel"
+                            }
+                        },
+                        question);
+
+                    Dialog_TextBox = new Input(folderDialogue, 80, 52, 195, 20, "Folder name");
+
+                    WindowManager.AddWindow(folderDialogue);
                     break;
+
                 case " New File":
-                    WindowManager.AddWindow(new NewFileFrame(Path));
+                    Dialogue fileDialogue = new Dialogue(
+                        "New Folder",
+                        "Please input filename:",
+                        new List<DialogueButton>()
+                        {
+                            new DialogueButton()
+                            {
+                                Text = "OK",
+                                Callback = NewFile_Handler
+                            },
+                            new DialogueButton()
+                            {
+                                Text = "Cancel"
+                            }
+                        },
+                        question);
+
+                    Dialog_TextBox = new Input(fileDialogue, 80, 52, 170, 20, "Filename");
+
+                    WindowManager.AddWindow(fileDialogue);
                     break;
             }
         }
-        
-        private void RefreshButton_Click()
+
+        private void NewFolder_Handler()
         {
+            if (Dialog_TextBox.Text.Trim().Length == 0)
+            {
+                Dialogue.Show("Error", "Folder name cannot be empty!", null, WindowManager.errorIcon);
+                return;
+            }
+
+            Directory.CreateDirectory(Path + (Path.EndsWith(@"\") ? "" : @"\") + Dialog_TextBox.Text);
+            RenderFolderItems();
+        }
+
+        private void NewFile_Handler()
+        {
+            if (Dialog_TextBox.Text.Trim().Length == 0)
+            {
+                Dialogue.Show("Error", "Folder name cannot be empty!", null, WindowManager.errorIcon);
+                return;
+            }
+
+            File.Create(Path + (Path.EndsWith(@"\") ? "" : @"\") + Dialog_TextBox.Text);
             RenderFolderItems();
         }
 
