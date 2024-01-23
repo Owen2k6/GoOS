@@ -12,13 +12,15 @@ namespace GoOS.GUI.Apps.Gosplorer
     public class MainFrame : Window
     {
         const int IconWidth = 64, IconHeight = 80;
+        
         string Path = @"0:\";
-
+        
         Input AddressBar;
         Button BackButton;
         Button ForwardButton;
         Button UpButton;
         Button RefreshButton;
+        Button ContextButton;
 
         Button[] Shortcuts;
         Button[] FolderContents;
@@ -34,7 +36,8 @@ namespace GoOS.GUI.Apps.Gosplorer
             Closable = true;
             SetDock(WindowDock.Auto);
 
-            AddressBar = new Input(this, 90, 10, (ushort)(Contents.Width - 100 - 20 - 10), 20, "Path") { Text = Path, Submitted = AddressBar_Submit };
+            AddressBar = new Input(this, 90, 10, (ushort)(Contents.Width - 100 - 20 - 10), 20, "Path")
+                { Text = Path, Submitted = AddressBar_Submit };
             BackButton = new Button(this, 3, 6, 26, 26, string.Empty)
             {
                 Image = arrowleft,
@@ -117,7 +120,9 @@ namespace GoOS.GUI.Apps.Gosplorer
             RefreshButton.Render();
 
             foreach (Button i in Shortcuts) i.Render();
-            foreach (Button i in FolderContents) if (i != null) i.Render();
+            foreach (Button i in FolderContents)
+                if (i != null)
+                    i.Render();
 
             RenderSystemStyleBorder();
         }
@@ -125,39 +130,53 @@ namespace GoOS.GUI.Apps.Gosplorer
         private Button GetButtonUnderMouse()
         {
             foreach (Button i in FolderContents)
-                {
-                    if (MouseManager.X > i.X || MouseManager.X < i.X + i.Contents.Width ||
-                        MouseManager.Y > i.Y || MouseManager.Y < i.Y + i.Contents.Height)
-                    {
-                        return i;
-                    }
-                }
+            {
+                if (i.IsMouseOver) { return i; }
+            }
 
-                return null;
+            return null;
         }
 
         public override void ShowContextMenu()
         {
-            // TODO: finish this
+            string[] contextMenuEntries = { "New Folder", "New File" };
+            ContextButton = GetButtonUnderMouse();
 
-            /*string[] contextMenuButtons;
-            Button buttonUnderMouse = GetButtonUnderMouse();
-
-            if (buttonUnderMouse == null)
+            if (ContextButton != null && ContextButton.Image == fileIcon)
             {
-                contextMenuButtons = 
+                contextMenuEntries = new[] { "Open", "Delete", "New Folder", "New File" };
+            }
+            else if (ContextButton != null && ContextButton.Image == folderIcon)
+            {
+                contextMenuEntries = new[] { "Open", "Delete", "New Folder", "New File" };
             }
 
-            if (Directory.Exists(Path + (Path.EndsWith(@"\") ? "" : @"\") + )))
-
-            ContextMenu.Show(contextMenuButtons, 155, ContextMenu_Handle);*/
+            ContextMenu.Show(contextMenuEntries, 155, ContextMenu_Handle);
         }
 
         private void ContextMenu_Handle(string item)
         {
-            
+            switch (item)
+            {
+                case "Open":
+                    FolderContents_Clicked(ContextButton.Name);
+                    break;
+                case "Delete":
+                    if (File.Exists(Path + @"\" + ContextButton.Name))
+                        File.Delete(Path + @"\" + ContextButton.Name);
+                    else if (Directory.Exists(Path + @"\" + ContextButton.Name))
+                        Directory.Delete(Path + @"\" + ContextButton.Name, true);
+                    RenderFolderItems();
+                    break;
+                case "New Folder":
+                    WindowManager.AddWindow(new NewFolderFrame(Path));
+                    break;
+                case "New File":
+                    WindowManager.AddWindow(new NewFileFrame(Path));
+                    break;
+            }
         }
-
+        
         private void RefreshButton_Click()
         {
             RenderFolderItems();
@@ -225,7 +244,8 @@ namespace GoOS.GUI.Apps.Gosplorer
         private void RenderFolderItems()
         {
             string[] itemNames = Directory.GetDirectories(Path).Concat(Directory.GetFiles(Path)).ToArray();
-            bool[] itemTypes = itemNames.Select(item => Directory.Exists(Path + (Path.EndsWith(@"\") ? "" : @"\") + item)).ToArray();
+            bool[] itemTypes = itemNames
+                .Select(item => Directory.Exists(Path + (Path.EndsWith(@"\") ? "" : @"\") + item)).ToArray();
             int row = 0, column = 0;
 
             foreach (Button i in FolderContents) Controls.Remove(i);
@@ -240,7 +260,8 @@ namespace GoOS.GUI.Apps.Gosplorer
                     row++;
                 }
 
-                FolderContents[i] = new Button(this, (ushort)(94 + (column * (IconWidth + 10))), (ushort)(50 + (row * (IconHeight + 10))), IconWidth, IconHeight, itemNames[i])
+                FolderContents[i] = new Button(this, (ushort)(94 + (column * (IconWidth + 10))),
+                    (ushort)(50 + (row * (IconHeight + 10))), IconWidth, IconHeight, itemNames[i])
                 {
                     UseSystemStyle = false,
                     RenderWithAlpha = true,
@@ -300,21 +321,25 @@ namespace GoOS.GUI.Apps.Gosplorer
                         BetterConsole.Clear();
                         Kernel.DrawPrompt();
                         break;
-                    
+
                     case { } a when a.EndsWith(".bmp"):
-                        WindowManager.AddWindow(new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 0));
+                        WindowManager.AddWindow(
+                            new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 0));
                         break;
 
                     case { } a when a.EndsWith(".png"):
-                        WindowManager.AddWindow(new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 1));
+                        WindowManager.AddWindow(
+                            new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 1));
                         break;
 
                     case { } a when a.EndsWith(".ppm"):
-                        WindowManager.AddWindow(new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 2));
+                        WindowManager.AddWindow(
+                            new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 2));
                         break;
 
                     case { } a when a.EndsWith(".tga"):
-                        WindowManager.AddWindow(new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 3));
+                        WindowManager.AddWindow(
+                            new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 3));
                         break;
 
                     default:

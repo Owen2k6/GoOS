@@ -669,7 +669,7 @@ namespace GoOS
                         break;
                     }
 
-                    Delete.UniveralDelete(args[1]);
+                    Delete.UniversalDelete(args[1]);
                     break;
                 case "cd":
                     if (args.Length > 2)

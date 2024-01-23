@@ -207,6 +207,11 @@ namespace GoOS.GUI
 
                 Dragging = false;
             }
+            
+            if (MouseManager.MouseState == MouseState.None && previousMouseState == MouseState.Right)
+            {
+                ShowContextMenu();
+            }
 
             if (Dragging)
             {
@@ -224,7 +229,7 @@ namespace GoOS.GUI
             {
                 wasDown = true;
                 downOnControl = hoveredControl;
-
+                
                 HandleDown(new MouseEventArgs()
                 {
                     X = RelativeMouseX,
@@ -248,11 +253,6 @@ namespace GoOS.GUI
             // Click, any button.
             if (MouseManager.MouseState == MouseState.None && previousMouseState == MouseState.Left)
             {
-                if (previousMouseState == MouseState.Right)
-                {
-                    ShowContextMenu();
-                }
-
                 HandleClick(new MouseEventArgs()
                 {
                     X = RelativeMouseX,

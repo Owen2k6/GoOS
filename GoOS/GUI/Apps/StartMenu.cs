@@ -98,12 +98,12 @@ namespace GoOS.GUI.Apps
                 WindowManager.AddWindow(new GoStore.MainFrame());
                 CloseStartMenu();
             });
-            AddSideButton("Gosplorer", () =>
+            /*AddSideButton("Gosplorer", () =>
             {
                 WindowManager.AddWindow(new GosplorerOld());
                 CloseStartMenu();
-            });
-            AddSideButton("Gosplorer 2", () =>
+            });*/
+            AddSideButton("Gosplorer", () =>
             {
                 WindowManager.AddWindow(new Gosplorer.MainFrame());
                 CloseStartMenu();
