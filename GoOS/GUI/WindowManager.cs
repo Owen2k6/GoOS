@@ -336,6 +336,11 @@ namespace GoOS.GUI
             {
                 if (!BetterConsole.ConsoleMode)
                 {
+                    if (GetWindowByType<StartMenu>() != null && FocusedWindow != GetWindowByType<StartMenu>())
+                    {
+                        GetWindowByType<StartMenu>().Dispose();
+                    }
+                    
                     if (MouseManager.ScreenWidth != Canvas.Width || MouseManager.ScreenHeight != Canvas.Height)
                     {
                         MouseManager.ScreenWidth = Canvas.Width;
