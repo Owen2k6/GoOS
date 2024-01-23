@@ -15,6 +15,7 @@ namespace GoOS.GUI.Apps.Gosplorer
         string Path = @"0:\";
         
         Input AddressBar;
+        Input Dialog_TextBox;
         Button BackButton;
         Button ForwardButton;
         Button UpButton;
@@ -169,13 +170,75 @@ namespace GoOS.GUI.Apps.Gosplorer
                     break;
 
                 case " New Folder":
-                    WindowManager.AddWindow(new NewFolderFrame(Path));
+                    Dialogue folderDialogue = new Dialogue(
+                        "New Folder",
+                        "Please input folder name:",
+                        new List<DialogueButton>()
+                        {
+                            new DialogueButton()
+                            {
+                                Text = "OK",
+                                Callback = NewFolder_Handler
+                            },
+                            new DialogueButton()
+                            {
+                                Text = "Cancel"
+                            }
+                        },
+                        question);
+
+                    Dialog_TextBox = new Input(folderDialogue, 80, 52, 195, 20, "Folder name");
+
+                    WindowManager.AddWindow(folderDialogue);
                     break;
 
                 case " New File":
-                    WindowManager.AddWindow(new NewFileFrame(Path));
+                    Dialogue fileDialogue = new Dialogue(
+                        "New Folder",
+                        "Please input filename:",
+                        new List<DialogueButton>()
+                        {
+                            new DialogueButton()
+                            {
+                                Text = "OK",
+                                Callback = NewFile_Handler
+                            },
+                            new DialogueButton()
+                            {
+                                Text = "Cancel"
+                            }
+                        },
+                        question);
+
+                    Dialog_TextBox = new Input(fileDialogue, 80, 52, 170, 20, "Filename");
+
+                    WindowManager.AddWindow(fileDialogue);
                     break;
             }
+        }
+
+        private void NewFolder_Handler()
+        {
+            if (Dialog_TextBox.Text.Trim().Length == 0)
+            {
+                Dialogue.Show("Error", "Folder name cannot be empty!", null, WindowManager.errorIcon);
+                return;
+            }
+
+            Directory.CreateDirectory(Path + (Path.EndsWith(@"\") ? "" : @"\") + Dialog_TextBox.Text);
+            RenderFolderItems();
+        }
+
+        private void NewFile_Handler()
+        {
+            if (Dialog_TextBox.Text.Trim().Length == 0)
+            {
+                Dialogue.Show("Error", "Folder name cannot be empty!", null, WindowManager.errorIcon);
+                return;
+            }
+
+            File.Create(Path + (Path.EndsWith(@"\") ? "" : @"\") + Dialog_TextBox.Text);
+            RenderFolderItems();
         }
 
         private void AddressBar_Submit()
