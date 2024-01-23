@@ -36,7 +36,7 @@ namespace GoOS.GUI.Apps.Gosplorer
             Closable = true;
             SetDock(WindowDock.Auto);
 
-            AddressBar = new Input(this, 90, 10, (ushort)(Contents.Width - 100 - 20 - 10), 20, "Path")
+            AddressBar = new Input(this, 90, 10, (ushort)(Contents.Width - 100 - 20 - 10), 20, "Path") 
                 { Text = Path, Submitted = AddressBar_Submit };
             BackButton = new Button(this, 3, 6, 26, 26, string.Empty)
             {
@@ -151,7 +151,7 @@ namespace GoOS.GUI.Apps.Gosplorer
                 contextMenuEntries = new[] { " Open", " Delete" };
             }
 
-            ContextMenu.Show(contextMenuEntries, 155, ContextMenu_Handle);
+            ContextMenu.Show(contextMenuEntries, Font_1x.MeasureString(" New Folder "), ContextMenu_Handle);
         }
 
         private void ContextMenu_Handle(string item)
