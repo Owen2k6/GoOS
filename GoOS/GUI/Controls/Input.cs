@@ -88,16 +88,24 @@ namespace GoOS.GUI
 
         internal override void HandleDown(MouseEventArgs args)
         {
+            bool isDone = false;
+            
             caretLine = 0;
             for (int i = 0; i < lines[caretLine].Length; i++)
             {
                 string here = lines[caretLine].Substring(0, i);
                 int hereWidth = Resources.Font_1x.MeasureString(here);
-                if (args.X <= hereWidth)
+                if (args.X <= hereWidth && !isDone)
                 {
                     MoveCaret(0, i);
-                    return;
+                    isDone = true;
+                    //return;
                 }
+            }
+
+            if (!isDone)
+            {
+                MoveCaret(0, lines[caretLine].Length);
             }
         }
 
