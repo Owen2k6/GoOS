@@ -138,7 +138,7 @@ namespace GoOS.GUI.Apps
 
         public StartMenu()
         {
-            WindowManager.AddWindow(new GTerm());
+            //WindowManager.AddWindow(new GTerm());
 
             Contents = new Canvas(400, 500);
             Contents.Clear(Color.DeepGray);
@@ -146,7 +146,7 @@ namespace GoOS.GUI.Apps
             Y = WindowManager.Canvas.Height - 28 - Contents.Height;
             Title = nameof(StartMenu);
             HasTitlebar = false;
-            Visible = false;
+            Visible = true;
             Unkillable = true;
 
             Contents.DrawImage(0, 0, startMenuBackground);
@@ -199,7 +199,7 @@ namespace GoOS.GUI.Apps
             WindowManager.GetWindowByType<Taskbar>().HandleStartMenuClose();
         }
 
-        public void ToggleStartMenu()
+        /*public void ToggleStartMenu()
         {
             if (Visible)
             {
@@ -209,6 +209,6 @@ namespace GoOS.GUI.Apps
             {
                 OpenStartMenu();
             }
-        }
+        }*/
     }
 }

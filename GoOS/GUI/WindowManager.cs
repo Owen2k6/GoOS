@@ -223,7 +223,7 @@ namespace GoOS.GUI
             {
                 StartMenu startMenu = GetWindowByType<StartMenu>();
 
-                startMenu.ToggleStartMenu();
+                startMenu.Dispose();
             }
         }
 

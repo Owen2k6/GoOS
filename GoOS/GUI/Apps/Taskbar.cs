@@ -35,13 +35,13 @@ public class Taskbar : Window
         Unkillable = true;
 
         startMenu = new StartMenu();
-        WindowManager.AddWindow(startMenu);
+        //WindowManager.AddWindow(startMenu);
         startButton = new Button(this, 0, 0, 74, 28, String.Empty)
         {
             Image = Resources.startBackground,
             BackgroundColour = Color.Transparent,
             UseSystemStyle = false,
-            RenderWithAlpha = true
+            RenderWithAlpha = true,
         };
         startButton.Clicked = StartClicked;
         startButton.Render();
@@ -71,7 +71,18 @@ public class Taskbar : Window
     {
         if (!WindowManager.Dimmed)
         {
-            startMenu.ToggleStartMenu();
+            //startMenu.ToggleStartMenu();
+            if (startMenu == null)
+            {
+                startMenu = new StartMenu();
+                WindowManager.AddWindow(startMenu);
+            }
+            else
+            {
+                startMenu.Dispose();
+                startMenu = null;
+            }
+            
         }
     }
 
