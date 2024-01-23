@@ -66,7 +66,7 @@ namespace GoOS.GUI.Apps
 
         private void EndButton_Click()
         {
-            if (WindowManager.windows[Windows.Selected].Unkillable && !pko)
+            if (WindowManager.windows[Windows.Selected].Unkillable && !pko && !Kernel.devMode)
             {
                 Dialogue.Show(
                     "Error",
