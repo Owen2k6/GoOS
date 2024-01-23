@@ -91,32 +91,32 @@ namespace GoOS.GUI.Apps
             AddSideButton("Apps", () =>
             {
                 WindowManager.AddWindow(new AppManager());
-                CloseStartMenu();
+                Dispose();
             });
             AddSideButton("GoStore", () =>
             {
                 WindowManager.AddWindow(new GoStore.MainFrame());
-                CloseStartMenu();
+                Dispose();
             });
             /*AddSideButton("Gosplorer", () =>
             {
                 WindowManager.AddWindow(new GosplorerOld());
-                CloseStartMenu();
+                Dispose();
             });*/
             AddSideButton("Gosplorer", () =>
             {
                 WindowManager.AddWindow(new Gosplorer.MainFrame());
-                CloseStartMenu();
+                Dispose();
             });
             AddSideButton("GoWeb", () =>
             {
                 WindowManager.AddWindow(new GoWeb.GoWebWindow());
-                CloseStartMenu();
+                Dispose();
             });
             AddSideButton("Settings", () =>
             {
                 Dialogue.Show("GoOS", "This feature is not yet implemented.");
-                CloseStartMenu();
+                Dispose();
             });
         }
 
@@ -203,7 +203,7 @@ namespace GoOS.GUI.Apps
         {
             if (Visible)
             {
-                CloseStartMenu();
+                Dispose();
             }
             else
             {
