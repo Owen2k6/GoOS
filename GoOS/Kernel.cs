@@ -79,6 +79,10 @@ namespace GoOS
             Resources.Generate(ResourceType.Priority);
 
             WindowManager.Canvas = Display.GetDisplay(1920, 1080);
+
+            Sys.MouseManager.X = 0;
+            Sys.MouseManager.Y = 0;
+            
             WindowManager.Canvas.DrawImage(0, 0, Resources.background, false);
             Console.Init(800, 600);
 
