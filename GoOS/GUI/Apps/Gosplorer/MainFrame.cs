@@ -143,25 +143,39 @@ namespace GoOS.GUI.Apps.Gosplorer
 
         public override void ShowContextMenu()
         {
-            string[] contextMenuEntries = { };
+            List<string> contextMenuEntries = new List<string>{};
             ContextButton = GetButtonUnderMouse();
 
             if (!IsMouseOverFolderArea) return;
-            else if (ContextButton != null && ContextButton.Image == fileIcon) contextMenuEntries = new[] { " Open", " Delete" };
-            else if (ContextButton != null && ContextButton.Image == folderIcon) contextMenuEntries = new[] { " Open", " Delete" };
-            else if (!Path.StartsWith(@"1:\")) contextMenuEntries = new[] { " New Folder", " New File" };
+            else if (ContextButton != null && ContextButton.Image == fileIcon) contextMenuEntries = new List<string> { " Open", " Delete" };
+            else if (ContextButton != null && ContextButton.Image == folderIcon) contextMenuEntries = new List<string>() { " Open", " Delete" };
+            else if (!Path.StartsWith(@"1:\")) contextMenuEntries = new List<string>() { " New Folder", " New File" };
 
-            ContextMenu.Show(contextMenuEntries, (ContextButton.Image == fileIcon || ContextButton.Image == folderIcon) ? (ushort)64 : (ushort)96, ContextMenu_Handle);
+            if (ContextButton != null && ContextButton.Image == fileIcon && ContextButton.Name.EndsWith(".goexe") ||
+                ContextButton.Name.EndsWith(".gexe") || ContextButton.Name.EndsWith(".9xc"))
+            {
+                contextMenuEntries.Add(" Pin App");
+            }
+
+            ContextMenu.Show(contextMenuEntries.ToArray(), (ContextButton.Image == fileIcon || ContextButton.Image == folderIcon) ? (ushort)64 : (ushort)96, ContextMenu_Handle);
         }
 
         private void ContextMenu_Handle(string item)
         {
             switch (item)
             {
+                case " Pin App":
+                    List<string> lines = new List<string>(File.ReadAllLines(@"0:\content\sys\pinnedapps.gms"));
+                    
+                    lines.Add(Path + @"\" + ContextButton.Name);
+                    
+                    File.WriteAllLines(@"0:\content\sys\pinnedapps.gms", lines.ToArray());
+                    break;
+                
                 case " Open":
                     FolderContents_Clicked(ContextButton.Name);
                     break;
-
+                
                 case " Delete":
                     if (Directory.Exists(Path + @"\" + ContextButton.Name)) Directory.Delete(Path + @"\" + ContextButton.Name, true);
                     else File.Delete(Path + @"\" + ContextButton.Name);
