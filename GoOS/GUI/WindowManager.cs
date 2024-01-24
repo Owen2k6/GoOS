@@ -217,13 +217,25 @@ namespace GoOS.GUI
             MoveWindowToFront(tabbableWindows[tabIndex]);
         }
 
-        private static void ToggleStartMenu()
+        private static bool startOpen = false;
+
+        public static void ToggleStartMenu()
         {
             if (!Dimmed)
             {
-                StartMenu startMenu = GetWindowByType<StartMenu>();
+                if (!WindowManager.Dimmed)
+                {
+                    if (!startOpen)
+                    {
+                        AddWindow(new StartMenu());
+                    }
+                    else
+                    {
+                        GetWindowByType<StartMenu>().Dispose();
+                    }
 
-                startMenu.Dispose();
+                    startOpen = !startOpen;
+                }
             }
         }
 

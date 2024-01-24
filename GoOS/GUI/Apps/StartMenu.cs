@@ -183,22 +183,6 @@ namespace GoOS.GUI.Apps
             Visible = false;
         }
 
-        private void OpenStartMenu()
-        {
-            Visible = true;
-
-            WindowManager.MoveWindowToFront(this);
-
-            WindowManager.GetWindowByType<Taskbar>().HandleStartMenuOpen();
-        }
-
-        private void CloseStartMenu()
-        {
-            Visible = false;
-
-            WindowManager.GetWindowByType<Taskbar>().HandleStartMenuClose();
-        }
-
         /*public void ToggleStartMenu()
         {
             if (Visible)

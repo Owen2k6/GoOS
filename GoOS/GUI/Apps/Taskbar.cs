@@ -66,27 +66,10 @@ public class Taskbar : Window
 
         RenderInformation();
     }
-
-    private bool startOpen;
     
     private void StartClicked()
     {
-        if (!WindowManager.Dimmed)
-        {
-            //startMenu.ToggleStartMenu();
-            if (!startOpen)
-            {
-                startMenu = new StartMenu();
-                WindowManager.AddWindow(startMenu);
-            }
-            else
-            {
-                startMenu.Dispose();
-                startMenu = null;
-            }
-
-            startOpen = !startOpen;
-        }
+        WindowManager.ToggleStartMenu();
     }
 
     private void WindowRemoved(Window window)
