@@ -30,7 +30,10 @@ namespace GoOS.GUI.Apps
 
         public override void ShowContextMenu()
         {
-            ContextMenu.Show(contextMenuButtons, 155, ContextMenu_Handle);
+            if (MouseManager.X != 0 && MouseManager.Y != 0)
+            {
+                ContextMenu.Show(contextMenuButtons, 155, ContextMenu_Handle);
+            }
         }
 
         private void ContextMenu_Handle(string item)

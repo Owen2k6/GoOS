@@ -79,9 +79,6 @@ namespace GoOS
             Resources.Generate(ResourceType.Priority);
 
             WindowManager.Canvas = Display.GetDisplay(1920, 1080);
-
-            Sys.MouseManager.X = 0;
-            Sys.MouseManager.Y = 0;
             
             WindowManager.Canvas.DrawImage(0, 0, Resources.background, false);
             Console.Init(800, 600);
@@ -173,6 +170,9 @@ namespace GoOS
             WindowManager.windows = new List<Window>(10);
             WindowManager.AddWindow(new Taskbar());
             WindowManager.AddWindow(new Desktop());
+            
+            Sys.MouseManager.X = 0;
+            Sys.MouseManager.Y = 0;
 
             #region GoOS Update Check
 
