@@ -43,24 +43,24 @@ namespace GoOS.GUI.Apps.OOBE
             // Check if the username is valid.
             if (UserName.Text == "")
             {
-                //Dialogue.Show("Error", "Your username can't be empty.");
+                Dialogue.Show("Error", "Your username can't be empty.");
                 return;
             }
 
             if (ComputerName.Text == "")
             {
-                //Dialogue.Show("Error", "Your computer's name can't be empty.");
+                Dialogue.Show("Error", "Your computer's name can't be empty.");
                 return;
             }
 
             if (UserName.Text.Contains(' '))
             {
-                //Dialogue.Show("Notice", "Spaces in your username have been replaced with underscores (_)");
+                Dialogue.Show("Notice", "Spaces in your username have been replaced with underscores (_)");
             }
 
             if (ComputerName.Text.Contains(' '))
             {
-                //Dialogue.Show("Notice", "Spaces in your computer's name have been replaced with underscores (_)");
+                Dialogue.Show("Notice", "Spaces in your computer's name have been replaced with underscores (_)");
             }
 
             string username = UserName.Text.Replace(" ", "_");
