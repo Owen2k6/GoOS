@@ -380,6 +380,9 @@ namespace GoOS
 
             switch (args[0])
             {
+                case "gldiag":
+                    WindowManager.AddWindow(new GUI.Apps.GoGLDiag());
+                    break;
                 case "codeswitch":
                     oldCode = !oldCode;
                     break;
