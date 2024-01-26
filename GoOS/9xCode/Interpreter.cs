@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading;
 using Cosmos.System;
 using GoOS.GUI;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using static ConsoleColorEx;
 using Console = BetterConsole;
-using ConsoleColor = PrismAPI.Graphics.Color;
+using ConsoleColor = GoGL.Graphics.Color;
 using static GoOS.Resources;
 
 // 9xCode Beta 3.1

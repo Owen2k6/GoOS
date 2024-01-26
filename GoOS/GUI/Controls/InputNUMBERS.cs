@@ -1,11 +1,11 @@
 ﻿using Cosmos.System;
-using PrismAPI.Graphics.Rasterizer;
+using GoGL.Graphics.Rasterizer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Cosmos.System.Graphics.Fonts;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using GoOS.GUI.Models;
 
 namespace GoOS.GUI

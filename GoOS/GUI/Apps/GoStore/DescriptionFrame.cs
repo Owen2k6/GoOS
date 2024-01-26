@@ -6,7 +6,7 @@ using System.Text;
 using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4;
 using Cosmos.System.Network.IPv4.UDP.DNS;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using static GoOS.Resources;
 using System.Net.Sockets;
 using Console = BetterConsole;

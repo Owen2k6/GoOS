@@ -2,7 +2,7 @@
 using System.IO;
 using GoOS.Commands;
 using IL2CPU.API.Attribs;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using static GoOS.Commands.Run;
 using Console = BetterConsole;
 using static GoOS.Resources;

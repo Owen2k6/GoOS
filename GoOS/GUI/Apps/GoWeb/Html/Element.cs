@@ -1,7 +1,7 @@
 ﻿#nullable enable
 using GoOS.GUI.Apps.GoWeb.Render;
-using PrismAPI.Graphics;
-using PrismAPI.Graphics.Fonts;
+using GoGL.Graphics;
+using GoGL.Graphics.Fonts;
 using System;
 using System.Collections.Generic;
 using System.Linq;

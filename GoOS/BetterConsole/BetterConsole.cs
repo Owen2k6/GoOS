@@ -4,7 +4,7 @@ using Cosmos.Core.Memory;
 using Cosmos.System;
 using GoOS.GUI;
 using GoOS.Themes;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using static GoOS.Resources;
 
 /// <summary>

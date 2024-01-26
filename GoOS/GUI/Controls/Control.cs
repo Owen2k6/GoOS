@@ -1,5 +1,5 @@
 ﻿using GoOS.GUI.Models;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using System;
 using Cosmos.System;
 

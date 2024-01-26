@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using Console = BetterConsole;
-using ConsoleColor = PrismAPI.Graphics.Color;
+using ConsoleColor = GoGL.Graphics.Color;
 
 namespace GoOS
 {

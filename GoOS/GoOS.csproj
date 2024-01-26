@@ -249,6 +249,9 @@
       <Reference Include="DotNetParser">
         <HintPath>DotNetParser.dll</HintPath>
       </Reference>
+      <Reference Include="GoGL">
+        <HintPath>GoGL.dll</HintPath>
+      </Reference>
       <Reference Include="LibDotNetParser">
         <HintPath>LibDotNetParser.dll</HintPath>
       </Reference>

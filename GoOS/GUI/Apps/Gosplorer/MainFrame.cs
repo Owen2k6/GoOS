@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Cosmos.System;
 using GoOS.Commands;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.Gosplorer

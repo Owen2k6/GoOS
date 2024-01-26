@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reflection;
 using Cosmos.System;
 using IL2CPU.API.Attribs;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using GoOS.Commands;
-using PrismAPI.Graphics.Fonts;
+using GoGL.Graphics.Fonts;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps;

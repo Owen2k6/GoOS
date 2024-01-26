@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.GoIDE

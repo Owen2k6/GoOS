@@ -4,9 +4,9 @@ using Cosmos.Core.Memory;
 using Cosmos.System;
 using GoOS.GUI.Apps;
 using IL2CPU.API.Attribs;
-using PrismAPI.Graphics;
-using PrismAPI.Graphics.Fonts;
-using PrismAPI.Hardware.GPU;
+using GoGL.Graphics;
+using GoGL.Graphics.Fonts;
+using GoGL.Hardware.GPU;
 
 namespace GoOS.GUI
 {

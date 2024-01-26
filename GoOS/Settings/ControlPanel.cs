@@ -7,7 +7,7 @@ using GoOS.Themes;
 using Convert = System.Convert;
 using ConsoleKey = System.ConsoleKey;
 using Console = BetterConsole;
-using ConsoleColor = PrismAPI.Graphics.Color;
+using ConsoleColor = GoGL.Graphics.Color;
 using Cosmos.Core.Memory;
 
 namespace GoOS
