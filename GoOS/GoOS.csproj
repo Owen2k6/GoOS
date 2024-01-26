@@ -255,9 +255,6 @@
       <Reference Include="LibDotNetParser">
         <HintPath>LibDotNetParser.dll</HintPath>
       </Reference>
-      <Reference Include="PrismAPI">
-        <HintPath>PrismAPI.dll</HintPath>
-      </Reference>
     </ItemGroup>
 
     <ItemGroup>
