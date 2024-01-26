@@ -78,12 +78,15 @@ namespace GoOS.GUI.Apps
                             int bytesRead = stream.Read(receivedData, 0, receivedData.Length);
                             string receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
 
-                            string[] responseParts = receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
+                            string[] responseParts =
+                                receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
 
-                            if (responseParts.Length < 2 || responseParts.Length > 2) Dialogue.Show("GoOS Update", "Invalid HTTP response!", default, WindowManager.errorIcon);
+                            if (responseParts.Length < 2 || responseParts.Length > 2)
+                                Dialogue.Show("GoOS Update", "Invalid HTTP response!", default,
+                                    WindowManager.errorIcon);
 
                             string content = responseParts[1];
-                             
+
                             if (content != Kernel.version && content != Kernel.editionnext)
                             {
                                 Dialogue.Show("GoOS Update",
@@ -206,6 +209,13 @@ namespace GoOS.GUI.Apps
                         Font_1x,
                         Color.White);
                     Contents.DrawString(Contents.Width - Font_1x.MeasureString(line4) - 1, Contents.Height - 17, line4,
+                        Font_1x,
+                        Color.White);
+                }
+                else if (Kernel.BuildType == "INTERNAL TEST BUILD")
+                {
+                    string line1 = "GoOS " + Kernel.BuildType + " " + Kernel.version;
+                    Contents.DrawString(Contents.Width - Font_1x.MeasureString(line1) - 1, Contents.Height - 17, line1,
                         Font_1x,
                         Color.White);
                 }
