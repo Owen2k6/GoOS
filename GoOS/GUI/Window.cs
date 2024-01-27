@@ -403,7 +403,7 @@ namespace GoOS.GUI
         {
             Dialogue.Show(
                 $"About {Title}",
-                $"GoOS {Title} v{version}\n\nCopyright (c) 2021-2024 Owen2k6\nAll rights reserved.",
+                $"GoOS {Title} v{version}\n\nCopyright (c) "+Kernel.Copyright+ "Owen2k6\nAll rights reserved.",
                 null,
                 heightOverride: 144);
         }
