@@ -12,7 +12,7 @@ using Cosmos.System.Network.IPv4.TCP;
 using Cosmos.System.Network.IPv4.UDP.DNS;
 using GoOS.GUI.Models;
 using IL2CPU.API.Attribs;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps

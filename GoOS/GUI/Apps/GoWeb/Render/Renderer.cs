@@ -1,5 +1,5 @@
 ﻿using GoOS.GUI.Apps.GoWeb.Html;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 
 namespace GoOS.GUI.Apps.GoWeb.Render
 {

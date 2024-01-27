@@ -11,12 +11,12 @@ using System.Text;
 using GoOS.Themes;
 using GoOS.Commands;
 using Console = BetterConsole;
-using ConsoleColor = PrismAPI.Graphics.Color;
+using ConsoleColor = GoGL.Graphics.Color;
 using static GoOS.Core;
 using System.Threading;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using IL2CPU.API.Attribs;
-using PrismAPI.Hardware.GPU;
+using GoGL.Hardware.GPU;
 using GoOS.GUI;
 using GoOS.GUI.Apps;
 

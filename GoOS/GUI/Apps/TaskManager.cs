@@ -1,6 +1,6 @@
 ﻿using System;
 using Cosmos.System;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 
 namespace GoOS.GUI.Apps
 {

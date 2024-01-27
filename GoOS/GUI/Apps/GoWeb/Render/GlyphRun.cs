@@ -1,6 +1,6 @@
 ﻿using GoOS.GUI.Apps.GoWeb.Html;
-using PrismAPI.Graphics;
-using PrismAPI.Graphics.Fonts;
+using GoGL.Graphics;
+using GoGL.Graphics.Fonts;
 
 namespace GoOS.GUI.Apps.GoWeb.Render
 {

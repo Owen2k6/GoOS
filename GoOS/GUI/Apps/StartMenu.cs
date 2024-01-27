@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using Cosmos.System;
 using GoOS.Commands;
 using IL2CPU.API.Attribs;
-using PrismAPI.Graphics;
-using PrismAPI.Hardware.GPU;
+using GoGL.Graphics;
+using GoGL.Hardware.GPU;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps

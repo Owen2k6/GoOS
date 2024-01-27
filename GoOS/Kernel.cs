@@ -10,13 +10,13 @@ using System.Text;
 using GoOS.Themes;
 using GoOS.Commands;
 using Console = BetterConsole;
-using ConsoleColor = PrismAPI.Graphics.Color;
+using ConsoleColor = GoGL.Graphics.Color;
 using static GoOS.Core;
 using Cosmos.System.Network.IPv4.UDP.DNS;
 using GoOS._9xCode;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using IL2CPU.API.Attribs;
-using PrismAPI.Hardware.GPU;
+using GoGL.Hardware.GPU;
 using GoOS.GUI;
 using GoOS.GUI.Apps;
 using GoOS.Networking;
@@ -41,10 +41,10 @@ namespace GoOS
         public static string[] pathPaths = { };
 
         //Vars for OS
-        public const string version = "1.5pr3";
-        public const string edition = "1.5pre"; // This is the current edition of GoOS. Used for UPDATER.
+        public const string version = "1";
+        public const string edition = "1.5it"; // This is the current edition of GoOS. Used for UPDATER.
         public const string editionnext = "1.5"; // This is the next edition of GoOS. Used for UPDATER.
-        public const string BuildType = "NIFPR";
+        public const string BuildType = "INTERNAL TEST BUILD";
         public static string olddir = @"0:\";
 
         public static string Notepadtextsavething = "";
@@ -380,6 +380,9 @@ namespace GoOS
 
             switch (args[0])
             {
+                case "gldiag":
+                    WindowManager.AddWindow(new GUI.Apps.GoGLDiag());
+                    break;
                 case "codeswitch":
                     oldCode = !oldCode;
                     break;

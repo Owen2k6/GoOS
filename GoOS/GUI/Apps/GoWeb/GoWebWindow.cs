@@ -2,7 +2,7 @@
 using GoOS.GUI.Apps.GoWeb.Html;
 using GoOS.GUI.Apps.GoWeb.Http;
 using GoOS.GUI.Apps.GoWeb.Render;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 
 namespace GoOS.GUI.Apps.GoWeb
 {

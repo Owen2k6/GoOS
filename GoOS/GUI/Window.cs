@@ -2,7 +2,7 @@
 using Cosmos.System;
 using GoOS.GUI.Models;
 using System;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.OOBE

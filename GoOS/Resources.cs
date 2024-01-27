@@ -1,6 +1,6 @@
 ﻿using IL2CPU.API.Attribs;
-using PrismAPI.Graphics;
-using PrismAPI.Graphics.Fonts;
+using GoGL.Graphics;
+using GoGL.Graphics.Fonts;
 
 namespace GoOS
 {
