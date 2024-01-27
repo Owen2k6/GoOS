@@ -45,7 +45,7 @@ namespace GoOS.GUI.Apps
             switch (key.Key)
             {
                 case ConsoleKeyEx.F1:
-                    ShowAboutDialog();
+                    ShowAboutDialog("1.0");
                     break;
 
                 case ConsoleKeyEx.F5:

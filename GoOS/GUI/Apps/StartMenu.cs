@@ -115,7 +115,18 @@ namespace GoOS.GUI.Apps
             });
             AddSideButton("Settings", () =>
             {
-                Dialogue.Show("GoOS", "This feature is not yet implemented.");
+                WindowManager.AddWindow(new GTerm());
+                ControlPanel.Launch();
+                Dispose();
+            });
+            AddSideButton("Paint", () =>
+            {
+                WindowManager.AddWindow(new Paintbrush());
+                Dispose();
+            });
+            AddSideButton("Notepad", () =>
+            {
+                WindowManager.AddWindow(new Notepad(false, null));
                 Dispose();
             });
         }

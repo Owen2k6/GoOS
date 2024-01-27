@@ -13,7 +13,8 @@ namespace GoOS.GUI.Apps.Gosplorer
     {
         const int IconWidth = 64, IconHeight = 80;
         string Path = @"0:\";
-        
+
+        List Dialog_List;
         Input AddressBar;
         Input Dialog_TextBox;
         Button BackButton;
@@ -143,19 +144,14 @@ namespace GoOS.GUI.Apps.Gosplorer
 
         public override void ShowContextMenu()
         {
-            List<string> contextMenuEntries = new List<string>{};
+            string[] contextMenuEntries = Array.Empty<string>();
             ContextButton = GetButtonUnderMouse();
 
             if (!IsMouseOverFolderArea) return;
-            else if (ContextButton != null && ContextButton.Image == fileIcon) contextMenuEntries = new List<string> { " Open", " Delete" };
-            else if (ContextButton != null && ContextButton.Image == folderIcon) contextMenuEntries = new List<string>() { " Open", " Delete" };
-            else if (!Path.StartsWith(@"1:\")) contextMenuEntries = new List<string>() { " New Folder", " New File" };
-
-            if (ContextButton != null && ContextButton.Image == fileIcon && ContextButton.Name.EndsWith(".goexe") ||
-                ContextButton.Name.EndsWith(".gexe") || ContextButton.Name.EndsWith(".9xc"))
-            {
-                contextMenuEntries.Add(" Pin App");
-            }
+            else if (ContextButton != null && ContextButton.Image == folderIcon) contextMenuEntries = new[] { " Open", " Delete" };
+            else if (ContextButton != null && ContextButton.Image == fileIcon) contextMenuEntries = new[] { " Open", " Delete", string.Empty, " Pin to start menu", " Open with..." };
+            //else if (ContextButton != null && ContextButton.Image == fileIcon && ContextButton.Name.EndsWith(".goexe") || ContextButton.Name.EndsWith(".gexe") || ContextButton.Name.EndsWith(".9xc")) contextMenuEntries = new[] { " Open", " Delete", string.Empty, " Pin to start menu", " Open with..." };
+            else if (!Path.StartsWith(@"1:\")) contextMenuEntries = new[] { " New Folder", " New File" };
 
             ContextMenu.Show(contextMenuEntries.ToArray(), (ContextButton.Image == fileIcon || ContextButton.Image == folderIcon) ? (ushort)64 : (ushort)96, ContextMenu_Handle);
         }
@@ -164,14 +160,6 @@ namespace GoOS.GUI.Apps.Gosplorer
         {
             switch (item)
             {
-                case " Pin App":
-                    List<string> lines = new List<string>(File.ReadAllLines(@"0:\content\sys\pinnedapps.gms"));
-                    
-                    lines.Add(Path + @"\" + ContextButton.Name);
-                    
-                    File.WriteAllLines(@"0:\content\sys\pinnedapps.gms", lines.ToArray());
-                    break;
-                
                 case " Open":
                     FolderContents_Clicked(ContextButton.Name);
                     break;
@@ -181,6 +169,34 @@ namespace GoOS.GUI.Apps.Gosplorer
                     else File.Delete(Path + @"\" + ContextButton.Name);
 
                     RenderFolderItems();
+                    break;
+
+                case " Pin to start menu":
+                    List<string> lines = new List<string>(File.ReadAllLines(@"0:\content\sys\pinnedapps.gms")) { Path + @"\" + ContextButton.Name };
+                    File.WriteAllLines(@"0:\content\sys\pinnedapps.gms", lines.ToArray());
+                    break;
+
+                case " Open with...":
+                    Dialogue openWithDialogue = new Dialogue(
+                        "Open with...",
+                        "Select the app to open with:",
+                        new List<DialogueButton>()
+                        {
+                            new DialogueButton()
+                            {
+                                Text = "OK",
+                                Callback = NewFolder_Handler
+                            },
+                            new DialogueButton()
+                            {
+                                Text = "Cancel"
+                            }
+                        },
+                        question);
+
+                    Dialog_List = new List(openWithDialogue, 80, 52, 195, 20, "Applications", new string[] { "Notepad", "GoCode Interpreter", "9xCode Interpreter", "GoIDE", "Gimviewer" });
+
+                    WindowManager.AddWindow(openWithDialogue);
                     break;
 
                 case " New Folder":
@@ -229,6 +245,11 @@ namespace GoOS.GUI.Apps.Gosplorer
                     WindowManager.AddWindow(fileDialogue);
                     break;
             }
+        }
+        
+        private void OpenWith_Handler()
+        {
+            Dialogue.Show("Debug", "This function is not implemented yet");
         }
 
         private void NewFolder_Handler()
@@ -360,65 +381,67 @@ namespace GoOS.GUI.Apps.Gosplorer
                 AddressBar.Text = Path;
                 AddressBar_Submit();
             }
-            else
+            else OpenAppByExtension(e);
+        }
+
+        private void OpenAppByExtension(string e)
+        {
+            switch (Path + (Path.EndsWith(@"\") ? "" : @"\") + e.ToLower())
             {
-                switch (Path + (Path.EndsWith(@"\") ? "" : @"\") + e.ToLower())
-                {
-                    case { } a when a.EndsWith(".txt") || a.EndsWith(".log") || a.EndsWith(".md") ||
+                case { } a when a.EndsWith(".txt") || a.EndsWith(".log") || a.EndsWith(".md") ||
                                     a.EndsWith(".gtheme"):
-                        WindowManager.AddWindow(new Notepad(true, Path + (Path.EndsWith(@"\") ? "" : @"\") + e));
-                        break;
+                    WindowManager.AddWindow(new Notepad(true, Path + (Path.EndsWith(@"\") ? "" : @"\") + e));
+                    break;
 
-                    case { } a when a.EndsWith(".gexe") || a.EndsWith(".goexe"):
-                        BetterConsole.Clear();
-                        BetterConsole.Title = "GoCode Interpreter";
-                        WindowManager.AddWindow(new GTerm(false));
+                case { } a when a.EndsWith(".gexe") || a.EndsWith(".goexe"):
+                    BetterConsole.Clear();
+                    BetterConsole.Title = "GoCode Interpreter";
+                    WindowManager.AddWindow(new GTerm(false));
 
-                        Run.Main(Path + (Path.EndsWith(@"\") ? "" : @"\") + e, false);
+                    Run.Main(Path + (Path.EndsWith(@"\") ? "" : @"\") + e, false);
 
-                        WindowManager.RemoveWindowByTitle("GoCode Interpreter");
-                        BetterConsole.Title = "GTerm";
-                        BetterConsole.Clear();
-                        Kernel.DrawPrompt();
-                        break;
+                    WindowManager.RemoveWindowByTitle("GoCode Interpreter");
+                    BetterConsole.Title = "GTerm";
+                    BetterConsole.Clear();
+                    Kernel.DrawPrompt();
+                    break;
 
-                    case { } a when a.EndsWith(".9xc"):
-                        BetterConsole.Clear();
-                        BetterConsole.Title = "9xCode Interpreter";
-                        WindowManager.AddWindow(new GTerm(false));
+                case { } a when a.EndsWith(".9xc"):
+                    BetterConsole.Clear();
+                    BetterConsole.Title = "9xCode Interpreter";
+                    WindowManager.AddWindow(new GTerm(false));
 
-                        _9xCode.Interpreter.Run(Path + (Path.EndsWith(@"\") ? "" : @"\") + e);
+                    _9xCode.Interpreter.Run(Path + (Path.EndsWith(@"\") ? "" : @"\") + e);
 
-                        WindowManager.RemoveWindowByTitle("9xCode Interpreter");
-                        BetterConsole.Title = "GTerm";
-                        BetterConsole.Clear();
-                        Kernel.DrawPrompt();
-                        break;
+                    WindowManager.RemoveWindowByTitle("9xCode Interpreter");
+                    BetterConsole.Title = "GTerm";
+                    BetterConsole.Clear();
+                    Kernel.DrawPrompt();
+                    break;
 
-                    case { } a when a.EndsWith(".bmp"):
-                        WindowManager.AddWindow(
-                            new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 0));
-                        break;
+                case { } a when a.EndsWith(".bmp"):
+                    WindowManager.AddWindow(
+                        new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 0));
+                    break;
 
-                    case { } a when a.EndsWith(".png"):
-                        WindowManager.AddWindow(
-                            new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 1));
-                        break;
+                case { } a when a.EndsWith(".png"):
+                    WindowManager.AddWindow(
+                        new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 1));
+                    break;
 
-                    case { } a when a.EndsWith(".ppm"):
-                        WindowManager.AddWindow(
-                            new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 2));
-                        break;
+                case { } a when a.EndsWith(".ppm"):
+                    WindowManager.AddWindow(
+                        new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 2));
+                    break;
 
-                    case { } a when a.EndsWith(".tga"):
-                        WindowManager.AddWindow(
-                            new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 3));
-                        break;
+                case { } a when a.EndsWith(".tga"):
+                    WindowManager.AddWindow(
+                        new Gimviewer(File.ReadAllBytes(Path + (Path.EndsWith(@"\") ? "" : @"\") + e), 3));
+                    break;
 
-                    default:
-                        Dialogue.Show("Error", "Unknown file extension!", null, WindowManager.errorIcon);
-                        break;
-                }
+                default:
+                    Dialogue.Show("Error", "Unknown file extension!", null, WindowManager.errorIcon);
+                    break;
             }
         }
     }

@@ -240,6 +240,7 @@
         <PackageReference Include="Cosmos.Plugs" Version="0.1.0-localbuild" />
         <PackageReference Include="Cosmos.System2" Version="0.1.0-localbuild" />
         <PackageReference Include="IL2CPU.API" Version="0.1.0-*" />
+		<PackageReference Include="PrismAPI" Version="1.0.3" />
     </ItemGroup>
 
     <ItemGroup>

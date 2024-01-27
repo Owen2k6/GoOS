@@ -69,11 +69,11 @@ namespace GoOS.GUI
 
         public static Action MouseMove;
 
-        private static bool AreThereWindowsInRange(int StartX, int StartY, int EndX, int EndY)
+        public static bool AreThereWindowsInRange(int StartX, int StartY, int EndX, int EndY)
         {
             foreach (Window w in windows)
             {
-                if (w.X > StartX && w.X < EndX && w.Y > StartY && w.Y < EndY)
+                if (w is not Desktop && w.X > StartX && w.X < EndX && w.Y > StartY && w.Y < EndY)
                 {
                     return true;
                 }
