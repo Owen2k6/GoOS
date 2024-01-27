@@ -9,6 +9,7 @@ using ConsoleKey = System.ConsoleKey;
 using Console = BetterConsole;
 using ConsoleColor = GoGL.Graphics.Color;
 using Cosmos.Core.Memory;
+using GoOS.GUI.Apps;
 
 namespace GoOS
 {
@@ -23,7 +24,8 @@ namespace GoOS
         {
             "Keyboard",
             "Themes",
-            "Display"
+            "Terminal",
+            "Screen"
         };
 
         private static readonly List<string> categoryButtonsAdvancedMenu = new List<string>
@@ -55,15 +57,28 @@ namespace GoOS
             ("105TRQWERTY-TR-1.0", new TRStandardLayout())
         };
 
-        public static readonly List<(string, (ushort Width, ushort Height))> videoModes = new()
+        public static readonly List<(string, (ushort Width, ushort Height))> terminalModes = new()
         {
+            ("480 x 360", (480, 360)),
             ("640 x 480", (640, 480)),
             ("720 x 480", (720, 480)),
             ("800 x 600", (800, 600)),
-            ("1024 x 768", (1024, 768)),
-            ("1280 x 720", (1280, 720)),
-            ("1600 x 900", (1600, 900)),
-            ("1920 x 1080", (1920, 1080))
+            ("1024 x 768 (4:3)", (1024, 768)),
+            ("1152 x 864 (4:3)", (1152, 864)),
+            ("1280 x 720 (16:9)", (1280, 720)),
+            ("1280 x 1024 (5:4)", (1280, 1024)),
+        };
+
+        public static readonly List<(string, (ushort Width, ushort Height))> videoModes = new()
+        {
+            ("1024 x 768 (4:3)", (1024, 768)),
+            ("1152 x 864 (4:3)", (1152, 864)),
+            ("1280 x 720 (16:9)", (1280, 720)),
+            ("1280 x 1024 (5:4)", (1280, 1024)),
+            ("1440 x 900 (16:10)", (1440, 900)),
+            ("1600 x 900 (16:9)", (1600, 900)),
+            ("1920 x 1080 (16:9)", (1920, 1080)),
+            ("2560 × 1440 (16:9)", (2560, 1440))
         };
 
         private static readonly List<string> mainMenuControls = new()
@@ -145,13 +160,13 @@ namespace GoOS
                 switch (menuSelectedButton)
                 {
                     case 0: // General menu
-                        if (categorieSelectedButton > 2)
+                        if (categorieSelectedButton > 3)
                         {
                             categorieSelectedButton = 0;
                         }
                         else if (categorieSelectedButton < 0)
                         {
-                            categorieSelectedButton = 2;
+                            categorieSelectedButton = 3;
                         }
 
                         break;
@@ -517,6 +532,80 @@ namespace GoOS
                 {
                     if (preview)
                     {
+                        DrawText("Allows you to change your terminal's size.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                            ThemeManager.Background);
+                        DrawText("Available resolutions:", 18, 2, ThemeManager.WindowText,
+                            ThemeManager.Background);
+
+                        for (int i = 0; i < terminalModes.Count; i++)
+                        {
+                            DrawButton(terminalModes[i].Item1, 18, 4 + i, false); // Draw button automatically at the correct coordinates
+                        }
+                    }
+                    else
+                    {
+                        int displayMenuSelectedButton = 0;
+
+                    Refresh:
+                        if (displayMenuSelectedButton > terminalModes.Count - 1)
+                        {
+                            displayMenuSelectedButton = 0;
+                        }
+                        else if (displayMenuSelectedButton < 0)
+                        {
+                            displayMenuSelectedButton = terminalModes.Count - 1;
+                        }
+
+                        Console.ForegroundColor = ThemeManager.WindowText;
+                        Console.BackgroundColor = ThemeManager.Background;
+
+                        DrawText("Allows you to change your terminal's size.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                            ThemeManager.Background);
+                        DrawText("Available resolutions:", 18, 2, ThemeManager.WindowText,
+                            ThemeManager.Background);
+
+                        for (int i = 0; i < terminalModes.Count; i++)
+                        {
+                            DrawButton(terminalModes[i].Item1, 18, 4 + i,
+                                i == displayMenuSelectedButton); // Draw button automatically at the correct coordinates
+                        }
+                        Console.Render();
+
+                        var key = Console.ReadKey(true).Key;
+                        switch (key)
+                        {
+                            case ConsoleKey.Escape:
+                                ClearMenu();
+                                break;
+
+                            case ConsoleKey.Enter:
+                                Console.Init(terminalModes[displayMenuSelectedButton].Item2.Width, terminalModes[displayMenuSelectedButton].Item2.Height);
+                                Console.Visible = false;
+                                GUI.WindowManager.AddWindow(new GTerm());
+                                File.Create(@"0:\content\sys\tresolution.gms");
+                                File.WriteAllBytes(@"0:\content\sys\tresolution.gms", new byte[] { (byte)displayMenuSelectedButton });
+                                DrawMenu();
+                                DrawMessage("Set terminal size mode to " + terminalModes[displayMenuSelectedButton].Item1);
+                                //DrawMenu();
+                                goto Refresh;
+
+                            case ConsoleKey.UpArrow:
+                                displayMenuSelectedButton--;
+                                goto Refresh;
+
+                            case ConsoleKey.DownArrow:
+                                displayMenuSelectedButton++;
+                                goto Refresh;
+
+                            default:
+                                goto Refresh;
+                        }
+                    }
+                }
+                else if (menu == categoryButtonsGeneralMenu[3])
+                {
+                    if (preview)
+                    {
                         DrawText("Allows you to change your video card's resolution.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
                             ThemeManager.Background);
                         DrawText("Available resolutions:", 18, 2, ThemeManager.WindowText,
@@ -564,11 +653,17 @@ namespace GoOS
                                 break;
 
                             case ConsoleKey.Enter:
-                                Console.Init(videoModes[displayMenuSelectedButton].Item2.Width, videoModes[displayMenuSelectedButton].Item2.Height);
+                                Console.ConsoleMode = true;
+                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(videoModes[displayMenuSelectedButton].Item2.Width, videoModes[displayMenuSelectedButton].Item2.Height);
+                                GUI.WindowManager.Update();
+                                GUI.WindowManager.windows = new List<GUI.Window>(10);
+                                Console.ConsoleMode = false;
+                                GUI.WindowManager.AddWindow(new Taskbar());
+                                GUI.WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms", new byte[] { (byte)displayMenuSelectedButton });
                                 DrawMenu();
-                                DrawMessage("Set video mode to " + scanMaps[displayMenuSelectedButton].Item1);
+                                DrawMessage("Set video mode to " + videoModes[displayMenuSelectedButton].Item1);
                                 //DrawMenu();
                                 goto Refresh;
 

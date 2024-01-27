@@ -149,15 +149,9 @@ namespace GoOS.GUI.Apps.Gosplorer
 
             if (!IsMouseOverFolderArea) return;
             else if (ContextButton != null && ContextButton.Image == folderIcon) contextMenuEntries = new[] { " Open", " Delete" };
-            else if (ContextButton != null && ContextButton.Image == fileIcon) contextMenuEntries = new[] { " Open", " Delete", string.Empty, " Open with..." };
+            else if (ContextButton != null && ContextButton.Image == fileIcon) contextMenuEntries = new[] { " Open", " Delete", string.Empty, " Pin to start menu", " Open with..." };
             //else if (ContextButton != null && ContextButton.Image == fileIcon && ContextButton.Name.EndsWith(".goexe") || ContextButton.Name.EndsWith(".gexe") || ContextButton.Name.EndsWith(".9xc")) contextMenuEntries = new[] { " Open", " Delete", string.Empty, " Pin to start menu", " Open with..." };
             else if (!Path.StartsWith(@"1:\")) contextMenuEntries = new[] { " New Folder", " New File" };
-
-            BetterConsole.WriteLine("[ DEBUG ] " + ContextButton.Name);
-            BetterConsole.WriteLine("[ DEBUG ] " + ContextButton.Name.EndsWith(".goexe").ToString());
-            BetterConsole.WriteLine("[ DEBUG ] " + ContextButton.Name.EndsWith(".gexe").ToString());
-            BetterConsole.WriteLine("[ DEBUG ] " + ContextButton.Name.EndsWith(".9xc").ToString());
-            BetterConsole.WriteLine();
 
             ContextMenu.Show(contextMenuEntries.ToArray(), (ContextButton.Image == fileIcon || ContextButton.Image == folderIcon) ? (ushort)64 : (ushort)96, ContextMenu_Handle);
         }
