@@ -218,6 +218,8 @@
 	  <EmbeddedResource Include="Resources\GUI\TaskStart\start.bmp" />
 	  <None Remove="Resources\GUI\TaskStart\taskbar.bmp" />
 	  <EmbeddedResource Include="Resources\GUI\TaskStart\taskbar.bmp" />
+	  <None Remove="Resources\GUI\GoStoreSoon.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\GoStoreSoon.bmp" />
     </ItemGroup>
 
     <PropertyGroup>

@@ -1,6 +1,5 @@
 using System;
 using System.Text;
-using System.Linq;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using Cosmos.System.Network.Config;
@@ -123,11 +122,15 @@ namespace GoOS.GUI.Apps.GoStore
                 }
                 else
                 {
-                    Contents.DrawImage(0, 0, Resources.GoStore, false);
+                    Contents.DrawImage(0, 0, Resources.GoStoreSoon, false);
+                    long unixTime = Convert.ToInt64(1707955200); //1707955200
+                    DateTime targetDate = DateTimeOffset.FromUnixTimeSeconds(unixTime).DateTime;
+                    DateTime currentDate = DateTime.UtcNow;
+
+                    TimeSpan difference = targetDate - currentDate;
+                    int daysUntil = (int)difference.TotalDays;
+                    Contents.DrawString(290, 467, daysUntil+" Days left", Resources.Font_2x, Color.Green);
                     RenderSystemStyleBorder();
-                    Contents.DrawString(150, 50,
-                        "The GoStore is coming soon...\n\nThis will allow users to install applications\ndirectly to their device!\nWe are working on preparing the GoStore\nand getting apps made for you to enjoy!\n\nSee you on launch day!",
-                        Font_1x, Color.White);
                 }
             }
             catch (Exception e) { ShowCrashDialogue(e); }

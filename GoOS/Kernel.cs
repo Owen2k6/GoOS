@@ -41,7 +41,7 @@ namespace GoOS
         public static string[] pathPaths = { };
 
         //Vars for OS
-        public const string version = "132";
+        public const string version = "155";
         public const string edition = "1.5it"; // This is the current edition of GoOS. Used for UPDATER.
         public const string editionnext = "1.5"; // This is the next edition of GoOS. Used for UPDATER.
         public const string BuildType = "INTERNAL TEST BUILD";
@@ -73,14 +73,14 @@ namespace GoOS
                 System.Console.WriteLine("GoOS - Insufficient Memory to initialise GoOS.");
                 System.Console.WriteLine("GoOS - GoOS Recommends 1024MiB but the minimum is 172MiB");
 
-                while (true);
+                while (true) ;
             }
 
             Resources.Generate(ResourceType.Fonts);
             Resources.Generate(ResourceType.Priority);
 
             WindowManager.Canvas = Display.GetDisplay(1920, 1080);
-            
+
             WindowManager.Canvas.DrawImage(0, 0, Resources.background, false);
             Console.Init(800, 600);
 
@@ -101,11 +101,11 @@ namespace GoOS
             catch
             {
                 WindowManager.AddWindow(new Dialogue("Fatal Error", "Failed to initialize filesystem!\n" +
-                                                     "GoOS needs a HDD installed to save user settings, application data and more\n" +
-                                                     "Please verify that your hard disk is plugged in correctly",
-                                                     default, WindowManager.errorIcon));
+                                                                    "GoOS needs a HDD installed to save user settings, application data and more\n" +
+                                                                    "Please verify that your hard disk is plugged in correctly",
+                    default, WindowManager.errorIcon));
                 WindowManager.Update();
-                while (true);
+                while (true) ;
             }
 
             if (!File.Exists(@"0:\content\sys\setup.gms"))
@@ -118,7 +118,10 @@ namespace GoOS
 
             if (!File.Exists(@"0:\content\sys\path.ugms"))
             {
-                try { File.Create(@"0:\content\sys\path.ugms"); }
+                try
+                {
+                    File.Create(@"0:\content\sys\path.ugms");
+                }
                 catch (Exception)
                 {
                     isGCIenabled = false;
@@ -133,7 +136,9 @@ namespace GoOS
                     Directory.CreateDirectory(@"0:\content\GCI\");
                     pathPaths.Append(@"0:\content\GCI\");
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                }
             }
 
             try
@@ -152,7 +157,8 @@ namespace GoOS
             }
             catch
             {
-                WindowManager.AddWindow(new Dialogue("Warning", "Failed to load settings!\nContinuing with default values...", default, Resources.warningIcon));
+                WindowManager.AddWindow(new Dialogue("Warning",
+                    "Failed to load settings!\nContinuing with default values...", default, Resources.warningIcon));
                 log(ThemeManager.Other1, "GoOS - Failed to load settings, continuing with default values...");
             }
 
@@ -171,7 +177,7 @@ namespace GoOS
             WindowManager.windows = new List<Window>(10);
             WindowManager.AddWindow(new Taskbar());
             WindowManager.AddWindow(new Desktop());
-            
+
             Sys.MouseManager.X = 0;
             Sys.MouseManager.Y = 0;
 
@@ -217,15 +223,31 @@ namespace GoOS
 
                     if (content != version && content != editionnext)
                     {
-                        Dialogue.Show("GoOS Update",
-                            "A newer version of GoOS is available on Github.\nWe recommend you update to the latest version for stability and security reasons.\nhttps://github.com/Owen2k6/GoOS/releases\nCurrent Version: " +
-                            version + "\nLatest Version: " + content);
+                        if (BuildType == "INTERNAL TEST BUILD")
+                        {
+                            Dialogue.Show("It's time to move on...",
+                                "The Internal Test Version for this edition of GoOS has ended\nThis build of GoOS can no longer access GoOS Online Services.\nPlease check with your INTERNAL TEST Group to see if a new version has been issued.");
+                        }
+                        else
+                        {
+                            Dialogue.Show("GoOS Update",
+                                "A newer version of GoOS is available on Github.\nWe recommend you update to the latest version for stability and security reasons.\nhttps://github.com/Owen2k6/GoOS/releases\nCurrent Version: " +
+                                version + "\nLatest Version: " + content);
+                        }
                     }
                     else if (content == editionnext)
                     {
-                        Dialogue.Show("GoOS Update",
-                            "The next GoOS has been released.\nWe don't want to force you to update but at least check out whats new in GoOS " +
-                            editionnext + "!\nhttps://github.com/Owen2k6/GoOS/releases/tag/" + editionnext);
+                        if (BuildType == "INTERNAL TEST BUILD")
+                        {
+                            Dialogue.Show("It's time to move on...",
+                                "The Internal Test Version for this edition of GoOS has ended\nThis build of GoOS can no longer access GoOS Online Services.\nPlease check with your INTERNAL TEST Group to see if a new version has been issued.");
+                        }
+                        else
+                        {
+                            Dialogue.Show("GoOS Update",
+                                "The next GoOS has been released.\nWe don't want to force you to update but at least check out whats new in GoOS " +
+                                editionnext + "!\nhttps://github.com/Owen2k6/GoOS/releases/tag/" + editionnext);
+                        }
                     }
                     else if (content == "404")
                     {
@@ -296,9 +318,17 @@ namespace GoOS
                     }
                     else
                     {
-                        Dialogue.Show("GoOS Security",
-                            "You seem to be sporting some funky version of GoOS. Your edition doesnt exist on our servers (" +
-                            edition + ")");
+                        if (BuildType == "INTERNAL TEST BUILD")
+                        {
+                            Dialogue.Show("It's time to move on...",
+                                "The Internal Test Version for this edition of GoOS has ended\nThis build of GoOS can no longer access GoOS Online Services.\nPlease check with your INTERNAL TEST Group to see if a new version has been issued.");
+                        }
+                        else
+                        {
+                            Dialogue.Show("GoOS Security",
+                                "You seem to be sporting some funky version of GoOS. Your edition doesnt exist on our servers (" +
+                                edition + ")");
+                        }
                     }
                 }
             }

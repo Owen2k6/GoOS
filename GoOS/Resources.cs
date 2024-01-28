@@ -161,6 +161,9 @@ namespace GoOS
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStore.bmp")]
         static byte[] GoStoreRaw;
+        
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreSoon.bmp")]
+        static byte[] GoStoreSoonRaw;
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreicon.bmp")]
         static byte[] GoStoreiconRaw;
@@ -264,6 +267,7 @@ namespace GoOS
         public static Canvas minimiseHover;
         public static Canvas minimisePressed;
         public static Canvas GoStore;
+        public static Canvas GoStoreSoon;
         public static Canvas GoStoreicon;
         public static Canvas StoreButton;
         public static Canvas OOBEmain;
@@ -333,6 +337,7 @@ namespace GoOS
                     infoIcon = Image.FromBitmap(infoIconRaw, false);
                     warningIcon = Image.FromBitmap(warningIconRaw, false);
                     GoStore = Image.FromBitmap(GoStoreRaw, false);
+                    GoStoreSoon = Image.FromBitmap(GoStoreSoonRaw, false);
                     GoStoreicon = Image.FromBitmap(GoStoreiconRaw, false);
                     StoreButton = Image.FromBitmap(StoreButtonRaw, false);
                     GoStoreinfoboard = Image.FromBitmap(GoStoreinfoboardRaw, false);

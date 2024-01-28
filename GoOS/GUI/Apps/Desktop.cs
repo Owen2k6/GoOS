@@ -87,11 +87,16 @@ namespace GoOS.GUI.Apps
 
                             string content = responseParts[1];
 
-                            if (content != Kernel.version && content != Kernel.editionnext)
+                            if (content != Kernel.version && content != Kernel.editionnext && Kernel.BuildType != "INTERNAL TEST BUILD")
                             {
                                 Dialogue.Show("GoOS Update",
                                     "A newer version of GoOS is available on Github.\nWe recommend you update to the latest version for stability and security reasons.\nhttps://github.com/Owen2k6/GoOS/releases\nCurrent Version: " +
                                     Kernel.version + "\nLatest Version: " + content);
+                            }
+                            if (content != Kernel.version && content != Kernel.editionnext && Kernel.BuildType == "INTERNAL TEST BUILD")
+                            {
+                                Dialogue.Show("It's time to move on...",
+                                    "The Internal Test Version for this edition of GoOS has ended\nThis build of GoOS can no longer access GoOS Online Services.\nPlease check with your INTERNAL TEST Group to see if a new version has been issued.");
                             }
                             else if (content == Kernel.editionnext)
                             {
