@@ -149,11 +149,11 @@ namespace GoOS.GUI.Apps.Gosplorer
 
             if (!IsMouseOverFolderArea) return;
             else if (ContextButton != null && ContextButton.Image == folderIcon) contextMenuEntries = new[] { " Open", " Delete" };
-            else if (ContextButton != null && ContextButton.Image == fileIcon) contextMenuEntries = new[] { " Open", " Delete", string.Empty, " Pin to start menu", " Open with..." };
+            else if (ContextButton != null && ContextButton.Image == fileIcon) contextMenuEntries = new[] { " Open", " Delete", " Pin to start menu", " Unpin from start menu", /*" Open with..."*/ };
             //else if (ContextButton != null && ContextButton.Image == fileIcon && ContextButton.Name.EndsWith(".goexe") || ContextButton.Name.EndsWith(".gexe") || ContextButton.Name.EndsWith(".9xc")) contextMenuEntries = new[] { " Open", " Delete", string.Empty, " Pin to start menu", " Open with..." };
             else if (!Path.StartsWith(@"1:\")) contextMenuEntries = new[] { " New Folder", " New File" };
 
-            ContextMenu.Show(contextMenuEntries.ToArray(), (ContextButton.Image == fileIcon || ContextButton.Image == folderIcon) ? (ushort)64 : (ushort)96, ContextMenu_Handle);
+            ContextMenu.Show(contextMenuEntries.ToArray(), (ContextButton.Image == fileIcon || ContextButton.Image == folderIcon) ? (ushort)168 : (ushort)64, ContextMenu_Handle);
         }
 
         private void ContextMenu_Handle(string item)
@@ -172,11 +172,29 @@ namespace GoOS.GUI.Apps.Gosplorer
                     break;
 
                 case " Pin to start menu":
-                    List<string> lines = new List<string>(File.ReadAllLines(@"0:\content\sys\pinnedapps.gms")) { Path + @"\" + ContextButton.Name };
+                    List<string> lines = new List<string>(File.ReadAllLines(@"0:\content\sys\pinnedapps.gms"))
+                    {
+                        (Path + (Path.EndsWith(@"\") ? "" : @"\") + ContextButton.Name).Trim()
+                    };
                     File.WriteAllLines(@"0:\content\sys\pinnedapps.gms", lines.ToArray());
+                    Dialogue.Show("Gosplorer", "App pinned to start menu");
                     break;
 
-                case " Open with...":
+                case " Unpin to start menu":
+                    List<string> lines2 = new List<string>(File.ReadAllLines(@"0:\content\sys\pinnedapps.gms"));
+                    for (int i = 0; i < lines2.Count; i++)
+                    {
+                        if (lines2[i] == (Path + (Path.EndsWith(@"\") ? "" : @"\") + ContextButton.Name).Trim())
+                        {
+                            lines2.RemoveAt(i);
+                        }
+                    }
+
+                    File.WriteAllLines(@"0:\content\sys\pinnedapps.gms", lines2.ToArray());
+                    Dialogue.Show("Gosplorer", "App unpinned to start menu");
+                    break;
+
+                /*case " Open with...":
                     Dialogue openWithDialogue = new Dialogue(
                         "Open with...",
                         "Select the app to open with:",
@@ -197,7 +215,7 @@ namespace GoOS.GUI.Apps.Gosplorer
                     Dialog_List = new List(openWithDialogue, 80, 52, 195, 20, "Applications", new string[] { "Notepad", "GoCode Interpreter", "9xCode Interpreter", "GoIDE", "Gimviewer" });
 
                     WindowManager.AddWindow(openWithDialogue);
-                    break;
+                    break;*/
 
                 case " New Folder":
                     Dialogue folderDialogue = new Dialogue(
@@ -247,10 +265,10 @@ namespace GoOS.GUI.Apps.Gosplorer
             }
         }
         
-        private void OpenWith_Handler()
+        /*private void OpenWith_Handler()
         {
-            Dialogue.Show("Debug", "This function is not implemented yet");
-        }
+            Dialogue.Show("Warning", "This function is not implemented yet", default, Resources.WarningIcon);
+        }*/
 
         private void NewFolder_Handler()
         {

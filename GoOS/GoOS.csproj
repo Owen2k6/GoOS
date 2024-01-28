@@ -264,5 +264,9 @@
       <None Remove="Resources\GUI\StoreButton.bmp" />
       <EmbeddedResource Include="Resources\GUI\StoreButton.bmp" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\GoGL\GoGL\GoGL.csproj" />
+    </ItemGroup>
 	
 </Project>
