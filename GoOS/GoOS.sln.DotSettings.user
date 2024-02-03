@@ -2,4 +2,6 @@
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005COwen2k6_005CDownloads_005CPrismAPI_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CGitHub_005CGoOS_005CGoOS_005CDotNetClr_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CGitHub_005CGoOS_005CGoOS_005CDotNetParser_002Edll/@EntryIndexedValue">True</s:Boolean>
-	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CGitHub_005CGoOS_005CGoOS_005CLibDotNetParser_002Edll/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CGithub_005CGoOS_005CGoOS_005CGoGL_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CGitHub_005CGoOS_005CGoOS_005CLibDotNetParser_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CGithub_005CGoOS_005CGoOS_005CPrismAPI_002Edll/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

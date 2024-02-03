@@ -1,6 +1,6 @@
 ﻿using Cosmos.Core;
 using IL2CPU.API.Attribs;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -7,31 +7,31 @@ class MIV
 {
     public static void printMIVStartScreen()
     {
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.Clear();
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~                               MIV - Minimalistic Vi");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~                                  Version 1.2.1");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~                              By Denis Bartashevich");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~                           Minor additions by CaveSponge");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~                     MIV is open source and freely distributable");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~                          type :help        For information");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~                          type :q           To exit");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~                          type :wq          Save to file and exit");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~                          press I           To write");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("~");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.Write("~");
+        Console.Clear();
+        Console.WriteLine("~");
+        Console.WriteLine("~");
+        Console.WriteLine("~");
+        Console.WriteLine("~");
+        Console.WriteLine("~");
+        Console.WriteLine("~");
+        Console.WriteLine("~                               MIV - Minimalistic Vi");
+        Console.WriteLine("~");
+        Console.WriteLine("~                                  Version 1.2.1");
+        Console.WriteLine("~                              By Denis Bartashevich");
+        Console.WriteLine("~                           Minor additions by CaveSponge");
+        Console.WriteLine("~                     MIV is open source and freely distributable");
+        Console.WriteLine("~");
+        Console.WriteLine("~                          type :help        For information");
+        Console.WriteLine("~                          type :q           To exit");
+        Console.WriteLine("~                          type :wq          Save to file and exit");
+        Console.WriteLine("~                          press I           To write");
+        Console.WriteLine("~");
+        Console.WriteLine("~");
+        Console.WriteLine("~");
+        Console.WriteLine("~");
+        Console.WriteLine("~");
+        Console.WriteLine("~");
+        Console.Write("~");
     }
 
     public static string stringCopy(string value)
@@ -51,19 +51,19 @@ class MIV
         int countNewLine = 0;
         int countChars = 0;
         delay(1000);
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.Clear();
+        Console.Clear();
 
         for (int i = 0; i < pos; i++)
         {
             if (chars[i] == '\n')
             {
-                GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("");
+                Console.WriteLine("");
                 countNewLine++;
                 countChars = 0;
             }
             else
             {
-                GoOS.GUI.Apps.ChaOS_VM.VMTERM.Write(chars[i]);
+                Console.Write(chars[i]);
                 countChars++;
                 if (countChars % 80 == 79)
                 {
@@ -72,31 +72,31 @@ class MIV
             }
         }
 
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.Write("/");
+        Console.Write("/");
 
         for (int i = 0; i < 23 - countNewLine; i++)
         {
-            GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("");
-            GoOS.GUI.Apps.ChaOS_VM.VMTERM.Write("~");
+            Console.WriteLine("");
+            Console.Write("~");
         }
 
         //PRINT INSTRUCTION
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine();
+        Console.WriteLine();
         for (int i = 0; i < 72; i++)
         {
             if (i < infoBar.Length)
             {
-                GoOS.GUI.Apps.ChaOS_VM.VMTERM.Write(infoBar[i]);
+                Console.Write(infoBar[i]);
             }
             else
             {
-                GoOS.GUI.Apps.ChaOS_VM.VMTERM.Write(" ");
+                Console.Write(" ");
             }
         }
 
         if (editMode)
         {
-            GoOS.GUI.Apps.ChaOS_VM.VMTERM.Write(countNewLine + 1 + "," + countChars);
+            Console.Write(countNewLine + 1 + "," + countChars);
         }
 
     }
@@ -127,7 +127,7 @@ class MIV
 
         do
         {
-            keyInfo = GoOS.GUI.Apps.ChaOS_VM.VMTERM.ReadKey(true);
+            keyInfo = Console.ReadKey(true);
 
             if (isForbiddenKey(keyInfo.Key)) continue;
 
@@ -137,7 +137,7 @@ class MIV
                 printMIVScreen(chars, pos, infoBar, editMode);
                 do
                 {
-                    keyInfo = GoOS.GUI.Apps.ChaOS_VM.VMTERM.ReadKey(true);
+                    keyInfo = Console.ReadKey(true);
                     if (keyInfo.Key == ConsoleKey.Enter)
                     {
                         if (infoBar == ":wq")
@@ -270,24 +270,24 @@ class MIV
         string file = args;
         if (args == null)
         {
-            GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("Enter file's filename to open:");
-            GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("If the specified file does not exist, it will be created.");
-            file = GoOS.GUI.Apps.ChaOS_VM.VMTERM.ReadLine();
+            Console.WriteLine("Enter file's filename to open:");
+            Console.WriteLine("If the specified file does not exist, it will be created.");
+            file = Console.ReadLine();
         }
         if (File.Exists(Directory.GetCurrentDirectory() + "\\" + file))
         {
-            GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("Found file!");
+            Console.WriteLine("Found file!");
         }
         else if (!File.Exists(Directory.GetCurrentDirectory() + "\\" + file))
         {
-            GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("Creating file!");
+            Console.WriteLine("Creating file!");
             File.Create(Directory.GetCurrentDirectory() + "\\" + file);
         }
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.Clear();
+        Console.Clear();
 
         string text = string.Empty;
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("Do you want to open " + Path.Combine(Directory.GetCurrentDirectory() + "\\" + file) + " content? (Yes/No)");
-        if (GoOS.GUI.Apps.ChaOS_VM.VMTERM.ReadLine().ToLower() == "yes" || GoOS.GUI.Apps.ChaOS_VM.VMTERM.ReadLine().ToLower() == "y")
+        Console.WriteLine("Do you want to open " + Path.Combine(Directory.GetCurrentDirectory() + "\\" + file) + " content? (Yes/No)");
+        if (Console.ReadLine().ToLower() == "yes" || Console.ReadLine().ToLower() == "y")
         {
             text = miv(File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory() + "\\" + file)));
         }
@@ -296,14 +296,14 @@ class MIV
             text = miv(null);
         }
 
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.Clear();
+        Console.Clear();
 
         if (text != null)
         {
             File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory() + "\\" + file), text);
-            GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("Content has been saved to " + Path.Combine(Directory.GetCurrentDirectory() + "\\" + file));
+            Console.WriteLine("Content has been saved to " + Path.Combine(Directory.GetCurrentDirectory() + "\\" + file));
         }
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.WriteLine("Press any key to continue...");
-        GoOS.GUI.Apps.ChaOS_VM.VMTERM.ReadKey(true);
+        Console.WriteLine("Press any key to continue...");
+        Console.ReadKey(true);
     }
 }

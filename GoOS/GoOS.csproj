@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
@@ -102,9 +102,24 @@
 
     <ItemGroup>
       <None Remove="Resources\GUI\aboutGoOS.bmp" />
+      <None Remove="Resources\GUI\appbackground.bmp" />
       <None Remove="Resources\GUI\desktopwallpaper.bmp" />
+      <None Remove="Resources\GUI\file.bmp" />
+      <None Remove="Resources\GUI\FileManager\arrowleft.bmp" />
+      <None Remove="Resources\GUI\FileManager\arrowright.bmp" />
+      <None Remove="Resources\GUI\FileManager\arrowup.bmp" />
+      <None Remove="Resources\GUI\FileManager\drive.bmp" />
+      <None Remove="Resources\GUI\FileManager\drive_locked.bmp" />
+      <None Remove="Resources\GUI\FileManager\header.bmp" />
+      <None Remove="Resources\GUI\FileManager\sidebar.bmp" />
       <None Remove="Resources\GUI\GoStore.bmp" />
+      <None Remove="Resources\GUI\GoStoreButtonBlue.bmp" />
+      <None Remove="Resources\GUI\GoStoreButtonGreen.bmp" />
+      <None Remove="Resources\GUI\GoStoreButtonRed.bmp" />
+      <None Remove="Resources\GUI\GoStoreDescFrame.bmp" />
       <None Remove="Resources\GUI\GoStoreicon.bmp" />
+      <None Remove="Resources\GUI\GoStoreinfoboard.bmp" />
+      <None Remove="Resources\GUI\idesmall.bmp" />
       <None Remove="Resources\GUI\Maximize_Hovered.bmp" />
       <None Remove="Resources\GUI\Maximize_Pressed.bmp" />
       <None Remove="Resources\GUI\Paint\rubber.bmp" />
@@ -117,13 +132,31 @@
     <ItemGroup>
       <EmbeddedResource Include="Resources\Font_2x.btf" />
       <EmbeddedResource Include="Resources\GUI\aboutGoOS.bmp" />
-      <EmbeddedResource Include="Resources\GUI\brown_ghost.bmp" />
+      <EmbeddedResource Include="Resources\GUI\appbackground.bmp" />
       <EmbeddedResource Include="Resources\GUI\desktopwallpaper.bmp" />
       <EmbeddedResource Include="Resources\GUI\error.bmp" />
+      <EmbeddedResource Include="Resources\GUI\file.bmp" />
+      <EmbeddedResource Include="Resources\GUI\FileManager\arrowleft.bmp" />
+      <EmbeddedResource Include="Resources\GUI\FileManager\arrowright.bmp" />
+      <EmbeddedResource Include="Resources\GUI\FileManager\arrowup.bmp" />
+      <EmbeddedResource Include="Resources\GUI\FileManager\drive.bmp" />
+      <EmbeddedResource Include="Resources\GUI\FileManager\drive_locked.bmp" />
+      <EmbeddedResource Include="Resources\GUI\FileManager\header.bmp" />
+      <EmbeddedResource Include="Resources\GUI\FileManager\sidebar.bmp" />
       <EmbeddedResource Include="Resources\GUI\GoIDE\run.bmp" />
       <EmbeddedResource Include="Resources\GUI\GoStore.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoStoreButtonBlue.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoStoreButtonGreen.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoStoreButtonRed.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoStoreDescFrame.bmp" />
       <EmbeddedResource Include="Resources\GUI\GoStoreicon.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoStoreinfoboard.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoWeb.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoWeb\Go.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoWeb\Home.bmp" />
+      <EmbeddedResource Include="Resources\GUI\GoWeb\ToolbarBackground.bmp" />
       <EmbeddedResource Include="Resources\GUI\ide.bmp" />
+      <EmbeddedResource Include="Resources\GUI\idesmall.bmp" />
       <EmbeddedResource Include="Resources\GUI\Maximize_Hovered.bmp" />
       <EmbeddedResource Include="Resources\GUI\Maximize_Pressed.bmp" />
       <EmbeddedResource Include="Resources\GUI\mouse_click.bmp" />
@@ -160,7 +193,6 @@
       <EmbeddedResource Include="Resources\GUI\Gosplorer\MOVE.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\PARENT.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\NEW.bmp" />
-      <EmbeddedResource Include="Resources\GUI\Gosplorer\REFRESH.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\LOADINNOTEPAD.bmp" />
 	  <EmbeddedResource Include="Resources\OOBE\setupfinal.bmp" />
       <EmbeddedResource Include="Resources\Credits05.bmp" />
@@ -178,6 +210,25 @@
       <EmbeddedResource Include="Resources\MSUIGothicCustomCharset16.btf" />
       <EmbeddedResource Include="Resources\Welcome.bmp" />
 	  <EmbeddedResource Include="Resources\GUI\warning.bmp" />
+	  <None Remove="Resources\GUI\TaskStart\startmenuBG.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\TaskStart\startmenuBG.bmp" />
+	  <None Remove="Resources\GUI\Gosplorer\REFRESH.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\Gosplorer\REFRESH.bmp" />
+	  <None Remove="Resources\GUI\TaskStart\start.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\TaskStart\start.bmp" />
+	  <None Remove="Resources\GUI\TaskStart\taskbar.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\TaskStart\taskbar.bmp" />
+	  <None Remove="Resources\GUI\GoStoreSoon.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\GoStoreSoon.bmp" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <DefineConstants>BUILD_GOWEB</DefineConstants>
+    </PropertyGroup>
+  
+    <ItemGroup Condition="'$(DefineConstants.Contains(BUILD_GOWEB))' != 'true'">
+      <Compile Remove="GUI\Apps\GoWeb\**" />
+      <Compile Remove="Networking\FastDns.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -191,7 +242,7 @@
         <PackageReference Include="Cosmos.Plugs" Version="0.1.0-localbuild" />
         <PackageReference Include="Cosmos.System2" Version="0.1.0-localbuild" />
         <PackageReference Include="IL2CPU.API" Version="0.1.0-*" />
-        <PackageReference Include="PrismAPI" Version="1.0.3" />
+		<PackageReference Include="PrismAPI" Version="1.0.3" />
     </ItemGroup>
 
     <ItemGroup>
@@ -200,6 +251,9 @@
       </Reference>
       <Reference Include="DotNetParser">
         <HintPath>DotNetParser.dll</HintPath>
+      </Reference>
+      <Reference Include="GoGL">
+        <HintPath>GoGL.dll</HintPath>
       </Reference>
       <Reference Include="LibDotNetParser">
         <HintPath>LibDotNetParser.dll</HintPath>

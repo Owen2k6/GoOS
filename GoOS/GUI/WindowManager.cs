@@ -4,16 +4,18 @@ using Cosmos.Core.Memory;
 using Cosmos.System;
 using GoOS.GUI.Apps;
 using IL2CPU.API.Attribs;
-using PrismAPI.Graphics;
-using PrismAPI.Graphics.Fonts;
-using PrismAPI.Hardware.GPU;
+using GoGL.Graphics;
+using GoGL.Graphics.Fonts;
+using GoGL.Hardware.GPU;
 
 namespace GoOS.GUI
 {
     public class WindowManager
     {
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse.bmp")] private static byte[] mouseRaw;
-        private static Canvas mouse = Image.FromBitmap(mouseRaw, false);
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse.bmp")]
+        private static byte[] mouseRaw;
+
+        public static Canvas mouse = Image.FromBitmap(mouseRaw, false);
 
         private static int framesToHeapCollect = 10;
 
@@ -23,7 +25,7 @@ namespace GoOS.GUI
 
         public static int MouseOffsetX = 0, MouseOffsetY = 0;
 
-        public static readonly List<Window> windows = new List<Window>(10);
+        public static List<Window> windows = new List<Window>(10);
 
         public static Display Canvas;
 
@@ -61,16 +63,17 @@ namespace GoOS.GUI
                     return w;
                 }
             }
+
             return null;
         }
 
         public static Action MouseMove;
 
-        private static bool AreThereWindowsInRange(int StartX, int StartY, int EndX, int EndY)
+        public static bool AreThereWindowsInRange(int StartX, int StartY, int EndX, int EndY)
         {
             foreach (Window w in windows)
             {
-                if (w.X > StartX && w.X < EndX && w.Y > StartY && w.Y < EndY)
+                if (w is not Desktop && w.X > StartX && w.X < EndX && w.Y > StartY && w.Y < EndY)
                 {
                     return true;
                 }
@@ -178,15 +181,13 @@ namespace GoOS.GUI
 
         public static bool AreThereDraggingWindows
         {
-            get
-            {
-                return GetDraggingWindow() != null;
-            }
+            get { return GetDraggingWindow() != null; }
         }
 
         private static void DrawMouse()
         {
-            Canvas.DrawImage((int)MouseManager.X - MouseOffsetX, (int)MouseManager.Y - MouseOffsetY, MouseToDraw, true);
+            Canvas.DrawImage((int)MouseManager.X - MouseOffsetX - MouseManager.DeltaX,
+                (int)MouseManager.Y - MouseOffsetY - MouseManager.DeltaY, MouseToDraw);
         }
 
         private static void AltTab()
@@ -210,18 +211,31 @@ namespace GoOS.GUI
             {
                 tabIndex = 0;
             }
+
             tabIndex = (tabIndex + 1) % tabbableWindows.Count;
 
             MoveWindowToFront(tabbableWindows[tabIndex]);
         }
 
-        private static void ToggleStartMenu()
+        private static bool startOpen = false;
+
+        public static void ToggleStartMenu()
         {
             if (!Dimmed)
             {
-                StartMenu startMenu = GetWindowByType<StartMenu>();
+                if (!WindowManager.Dimmed)
+                {
+                    if (!startOpen)
+                    {
+                        AddWindow(new StartMenu());
+                    }
+                    else
+                    {
+                        GetWindowByType<StartMenu>().Dispose();
+                    }
 
-                startMenu.ToggleStartMenu();
+                    startOpen = !startOpen;
+                }
             }
         }
 
@@ -296,7 +310,7 @@ namespace GoOS.GUI
                 }
 
                 else if (key.Key == ConsoleKeyEx.LWin ||
-                    key.Key == ConsoleKeyEx.RWin)
+                         key.Key == ConsoleKeyEx.RWin)
                 {
                     ToggleStartMenu();
                     return;
@@ -321,7 +335,9 @@ namespace GoOS.GUI
             windows.Clear();
         }
 
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.error.bmp")] private static byte[] errorIconRaw;
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.error.bmp")]
+        private static byte[] errorIconRaw;
+
         public static Canvas errorIcon = Image.FromBitmap(errorIconRaw, false);
 
         private static uint LastCursorX, LastCursorY;
@@ -332,8 +348,12 @@ namespace GoOS.GUI
             {
                 if (!BetterConsole.ConsoleMode)
                 {
-                    if (MouseManager.ScreenWidth != Canvas.Width ||
-                        MouseManager.ScreenHeight != Canvas.Height)
+                    if (GetWindowByType<StartMenu>() != null && FocusedWindow != GetWindowByType<StartMenu>())
+                    {
+                        GetWindowByType<StartMenu>().Dispose();
+                    }
+                    
+                    if (MouseManager.ScreenWidth != Canvas.Width || MouseManager.ScreenHeight != Canvas.Height)
                     {
                         MouseManager.ScreenWidth = Canvas.Width;
                         MouseManager.ScreenHeight = Canvas.Height;
@@ -346,31 +366,17 @@ namespace GoOS.GUI
                         MouseMove?.Invoke();
                     }
 
-                    for (int i = windows.Count - 1; i >= 0; i--)
-                    {
-                        if (windows[i].Closing)
-                        {
-                            TaskbarWindowRemovedHook?.Invoke(windows[i]);
-
-                            if (windows[i].Title == "GoOS")
-                                Dimmed = false;
-
-                            windows.RemoveAt(i);
-
-                            TaskmanHook?.Invoke();
-                        }
-                    }
-
                     DoInput();
 
-                    if (KeyboardManager.TryReadKey(out var key))
+                    /*if (KeyboardManager.TryReadKey(out var key))
                     {
                         if (KeyboardManager.ControlPressed && KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
                         {
                             AddWindow(new TaskManager());
                         }
-                    }
+                    }*/
 
+                    // Regular windows
                     for (int i = 0; i <= windows.Count - 1; i++)
                     {
                         Window window = windows[i];
@@ -393,6 +399,22 @@ namespace GoOS.GUI
                         if (windows[i].Title == nameof(Taskbar))
                         {
                             windows[i].DrawWindow(Canvas, i == windows.Count - 1);
+                        }
+                    }
+
+                    // move back up if it doesn't work
+                    for (int i = windows.Count - 1; i >= 0; i--)
+                    {
+                        if (windows[i].Closing)
+                        {
+                            TaskbarWindowRemovedHook?.Invoke(windows[i]);
+
+                            if (windows[i].Title == "GoOS")
+                                Dimmed = false;
+
+                            windows.RemoveAt(i);
+
+                            TaskmanHook?.Invoke();
                         }
                     }
 
@@ -426,6 +448,7 @@ namespace GoOS.GUI
                     Heap.Collect();
                     framesToHeapCollect = 10;
                 }
+
                 framesToHeapCollect--;
             }
             catch (Exception ex)
@@ -438,11 +461,15 @@ namespace GoOS.GUI
             }
         }
 
-        private static void DimBackground() {
-            for (int y = 0; y < WindowManager.Canvas.Height - 1; y++) {
-                for (int x = 0; x < WindowManager.Canvas.Width - 1; x++) {
-                    if ((x % 2) == 0) {
-                        WindowManager.Canvas[x + y % 2, y] = Color.Black;
+        private static void DimBackground()
+        {
+            for (int y = 0; y < Canvas.Height - 1; y++)
+            {
+                for (int x = 0; x < Canvas.Width - 1; x++)
+                {
+                    if ((x % 2) == 0)
+                    {
+                        Canvas[x + y % 2, y] = Color.Black;
                     }
                 }
             }

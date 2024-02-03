@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using static System.Net.Mime.MediaTypeNames;
 using Console = BetterConsole;
-using ConsoleColor = PrismAPI.Graphics.Color;
+using ConsoleColor = GoGL.Graphics.Color;
 
 namespace GoOS
 {

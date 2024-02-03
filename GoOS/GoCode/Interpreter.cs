@@ -9,7 +9,7 @@ using Cosmos.System;
 using GoOS.GUI;
 using GoOS.GUI.Apps;
 using GoOS.Themes;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using Console = BetterConsole;
 using static ConsoleColorEx;
 using static GoOS.Core;

@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IL2CPU.API.Attribs;
-using PrismAPI.Graphics;
-using PrismAPI.UI;
+using GoGL.Graphics;
 
 namespace GoOS.GUI.Apps
 {

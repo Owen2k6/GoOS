@@ -23,9 +23,9 @@ public class ExtendedFilesystem
 
             string name = FullName.Substring(FullName.IndexOf("."));
 
-            var Contents = File.ReadAllText(from);
+            var Contents = File.ReadAllBytes(from);
             File.Create(to + FullName);
-            File.WriteAllText(to + FullName, Contents);
+            File.WriteAllBytes(to + FullName, Contents);
         }
         else
         {
@@ -34,9 +34,9 @@ public class ExtendedFilesystem
 
             string name = FullName.Substring(FullName.IndexOf("."));
 
-            var Contents = File.ReadAllText(from);
+            var Contents = File.ReadAllBytes(from);
             File.Create(to + FullName);
-            File.WriteAllText(to + FullName, Contents);
+            File.WriteAllBytes(to + FullName, Contents);
         }
     }
 
@@ -50,9 +50,9 @@ public class ExtendedFilesystem
 
             string name = FullName.Substring(FullName.IndexOf("."));
 
-            var Contents = File.ReadAllText(from);
+            var Contents = File.ReadAllBytes(from);
             File.Create(to + FullName);
-            File.WriteAllText(to + FullName, Contents);
+            File.WriteAllBytes(to + FullName, Contents);
             File.Delete(from);
         }
         else
@@ -61,9 +61,9 @@ public class ExtendedFilesystem
 
             string name = FullName.Substring(FullName.IndexOf("."));
 
-            var Contents = File.ReadAllText(from);
+            var Contents = File.ReadAllBytes(from);
             File.Create(to + FullName);
-            File.WriteAllText(to + FullName, Contents);
+            File.WriteAllBytes(to + FullName, Contents);
             File.Delete(from);
         }
     }

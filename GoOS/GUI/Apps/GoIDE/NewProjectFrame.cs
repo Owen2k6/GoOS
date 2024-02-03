@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.GoIDE
@@ -70,6 +70,11 @@ namespace GoOS.GUI.Apps.GoIDE
             if (!location.EndsWith(@"\"))
                 location += @"\";
 
+            if (location.StartsWith(@"1:\")) {
+                Dialogue.Show("GoIDE", "Cannot create projects on the CD drive.", null, WindowManager.errorIcon);
+                return;
+            }
+            
             if (!Directory.Exists(location))
             {
                 Dialogue.Show("GoIDE", "Invalid path.", null, WindowManager.errorIcon);

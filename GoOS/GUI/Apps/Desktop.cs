@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using Cosmos.Core.Memory;
@@ -11,7 +12,7 @@ using Cosmos.System.Network.IPv4.TCP;
 using Cosmos.System.Network.IPv4.UDP.DNS;
 using GoOS.GUI.Models;
 using IL2CPU.API.Attribs;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps
@@ -29,7 +30,10 @@ namespace GoOS.GUI.Apps
 
         public override void ShowContextMenu()
         {
-            ContextMenu.Show(contextMenuButtons, 155, ContextMenu_Handle);
+            if (MouseManager.X != 0 && MouseManager.Y != 0)
+            {
+                ContextMenu.Show(contextMenuButtons, 155, ContextMenu_Handle);
+            }
         }
 
         private void ContextMenu_Handle(string item)
@@ -45,35 +49,54 @@ namespace GoOS.GUI.Apps
                 case " Check for Updates ":
                     try
                     {
-                        var dnsClient = new DnsClient();
-                        var tcpClient = new TcpClient();
-                        dnsClient.Connect(DNSConfig.DNSNameservers[0]);
-                        dnsClient.SendAsk("api.goos.owen2k6.com");
-                        Address address = dnsClient.Receive();
-                        dnsClient.Close();
-                        tcpClient.Connect(address, 80);
-                        string httpget = "GET /GoOS/" + Kernel.edition + ".goos HTTP/1.1\r\n" +
-                                         "User-Agent: GoOS\r\n" +
-                                         "Accept: */*\r\n" +
-                                         "Accept-Encoding: identity\r\n" +
-                                         "Host: api.goos.owen2k6.com\r\n" +
-                                         "Connection: Keep-Alive\r\n\r\n";
-                        tcpClient.Send(Encoding.ASCII.GetBytes(httpget));
-                        var ep = new EndPoint(Address.Zero, 0);
-                        var data = tcpClient.Receive(ref ep);
-                        tcpClient.Close();
-                        string httpresponse = Encoding.ASCII.GetString(data);
-                        string[] responseParts =
-                            httpresponse.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
-                        if (responseParts.Length == 2)
+                        using (TcpClient tcpClient = new TcpClient())
                         {
-                            string headers = responseParts[0];
+                            var dnsClient = new DnsClient();
+
+                            // DNS
+                            dnsClient.Connect(DNSConfig.DNSNameservers[0]);
+                            dnsClient.SendAsk("api.goos.owen2k6.com");
+
+                            // Address from IP
+                            Address address = dnsClient.Receive();
+                            dnsClient.Close();
+                            string serverIP = address.ToString();
+
+                            tcpClient.Connect(serverIP, 80);
+                            NetworkStream stream = tcpClient.GetStream();
+                            string httpget = "GET /GoOS/" + Kernel.edition + ".goos HTTP/1.1\r\n" +
+                                             "User-Agent: GoOS\r\n" +
+                                             "Accept: */*\r\n" +
+                                             "Accept-Encoding: identity\r\n" +
+                                             "Host: api.goos.owen2k6.com\r\n" +
+                                             "Connection: Keep-Alive\r\n\r\n";
+                            byte[] dataToSend = Encoding.ASCII.GetBytes(httpget);
+                            stream.Write(dataToSend, 0, dataToSend.Length);
+
+                            // Receive data
+                            byte[] receivedData = new byte[tcpClient.ReceiveBufferSize];
+                            int bytesRead = stream.Read(receivedData, 0, receivedData.Length);
+                            string receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
+
+                            string[] responseParts =
+                                receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
+
+                            if (responseParts.Length < 2 || responseParts.Length > 2)
+                                Dialogue.Show("GoOS Update", "Invalid HTTP response!", default,
+                                    WindowManager.errorIcon);
+
                             string content = responseParts[1];
-                            if (content != Kernel.version && content != Kernel.editionnext)
+
+                            if (content != Kernel.version && content != Kernel.editionnext && Kernel.BuildType != "INTERNAL TEST BUILD")
                             {
                                 Dialogue.Show("GoOS Update",
                                     "A newer version of GoOS is available on Github.\nWe recommend you update to the latest version for stability and security reasons.\nhttps://github.com/Owen2k6/GoOS/releases\nCurrent Version: " +
                                     Kernel.version + "\nLatest Version: " + content);
+                            }
+                            if (content != Kernel.version && content != Kernel.editionnext && Kernel.BuildType == "INTERNAL TEST BUILD")
+                            {
+                                Dialogue.Show("It's time to move on...",
+                                    "The Internal Test Version for this edition of GoOS has ended\nThis build of GoOS can no longer access GoOS Online Services.\nPlease check with your INTERNAL TEST Group to see if a new version has been issued.");
                             }
                             else if (content == Kernel.editionnext)
                             {
@@ -191,6 +214,13 @@ namespace GoOS.GUI.Apps
                         Font_1x,
                         Color.White);
                     Contents.DrawString(Contents.Width - Font_1x.MeasureString(line4) - 1, Contents.Height - 17, line4,
+                        Font_1x,
+                        Color.White);
+                }
+                else if (Kernel.BuildType == "INTERNAL TEST BUILD")
+                {
+                    string line1 = "GoOS " + Kernel.BuildType + " " + Kernel.version;
+                    Contents.DrawString(Contents.Width - Font_1x.MeasureString(line1) - 1, Contents.Height - 17, line1,
                         Font_1x,
                         Color.White);
                 }

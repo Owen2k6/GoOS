@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Cosmos.System;
 using GoOS.GUI.Models;
-using IL2CPU.API.Attribs;
-using PrismAPI.Graphics;
+using System;
+using GoGL.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI
@@ -74,26 +74,17 @@ namespace GoOS.GUI
 
         public bool Focused
         {
-            get
-            {
-                return WindowManager.windows[WindowManager.windows.Count - 1] == this;
-            }
+            get { return WindowManager.windows[WindowManager.windows.Count - 1] == this; }
         }
 
         public int RelativeMouseX
         {
-            get
-            {
-                return (int)(MouseManager.X - X);
-            }
+            get { return (int)(MouseManager.X - X); }
         }
 
         public int RelativeMouseY
         {
-            get
-            {
-                return (int)(MouseManager.Y - Y - (HasTitlebar ? TITLE_BAR_HEIGHT : 0));
-            }
+            get { return (int)(MouseManager.Y - Y - (HasTitlebar ? TITLE_BAR_HEIGHT : 0)); }
         }
 
         public bool IsMouseOver
@@ -159,8 +150,8 @@ namespace GoOS.GUI
             get
             {
                 return IsMouseOverTitleBar &&
-                    MouseManager.X >= X + Contents.Width - (TITLE_BAR_HEIGHT * 3) &&
-                    MouseManager.X <= X + Contents.Width - (TITLE_BAR_HEIGHT * 2);
+                       MouseManager.X >= X + Contents.Width - (TITLE_BAR_HEIGHT * 3) &&
+                       MouseManager.X <= X + Contents.Width - (TITLE_BAR_HEIGHT * 2);
             }
         }
 
@@ -177,8 +168,14 @@ namespace GoOS.GUI
             return null;
         }
 
+        private bool IsHandling = false;
+
         internal void HandleMouseInput()
         {
+            if (IsHandling) return;
+
+            IsHandling = true;
+
             if (Closable &&
                 IsMouseOverCloseButton &&
                 MouseManager.MouseState == MouseState.None &&
@@ -210,6 +207,11 @@ namespace GoOS.GUI
 
                 Dragging = false;
             }
+            
+            if (MouseManager.MouseState == MouseState.None && previousMouseState == MouseState.Right)
+            {
+                ShowContextMenu();
+            }
 
             if (Dragging)
             {
@@ -227,7 +229,7 @@ namespace GoOS.GUI
             {
                 wasDown = true;
                 downOnControl = hoveredControl;
-
+                
                 HandleDown(new MouseEventArgs()
                 {
                     X = RelativeMouseX,
@@ -249,13 +251,8 @@ namespace GoOS.GUI
             }
 
             // Click, any button.
-            if (MouseManager.MouseState == MouseState.None && previousMouseState != MouseState.None)
+            if (MouseManager.MouseState == MouseState.None && previousMouseState == MouseState.Left)
             {
-                if (previousMouseState == MouseState.Right)
-                {
-                    ShowContextMenu();
-                }
-
                 HandleClick(new MouseEventArgs()
                 {
                     X = RelativeMouseX,
@@ -263,11 +260,14 @@ namespace GoOS.GUI
                     MouseState = previousMouseState
                 });
 
-                if (previousMouseState == MouseState.Left)
+                FocusedControl = hoveredControl;
+
+                hoveredControl?.HandleClick(new MouseEventArgs()
                 {
-                    hoveredControl?.Clicked?.Invoke();
-                    hoveredControl?.ClickedAlt?.Invoke(hoveredControl?.Name);
-                }
+                    X = RelativeMouseX - hoveredControl.X,
+                    Y = RelativeMouseY - hoveredControl.Y,
+                    MouseState = MouseManager.MouseState
+                });
 
                 foreach (Control control in Controls)
                 {
@@ -279,6 +279,8 @@ namespace GoOS.GUI
             }
 
             previousMouseState = MouseManager.MouseState;
+
+            IsHandling = false;
         }
 
         public void DrawWindow(Canvas cv, bool focused)
@@ -294,26 +296,29 @@ namespace GoOS.GUI
                 // Close button.
                 if (Closable)
                 {
-                    Canvas closeButtonImage = closeButton, maximizeButtonImage = maximize, minimiseButtonImage = minimise;
+                    Canvas closeButtonImage = closeButton,
+                        maximizeButtonImage = maximize,
+                        minimiseButtonImage = minimise;
                     if (IsMouseOverCloseButton)
                     {
-                        closeButtonImage = MouseManager.MouseState == MouseState.Left ?
-                            closeButtonPressed : closeButtonHover;
+                        closeButtonImage = MouseManager.MouseState == MouseState.Left
+                            ? closeButtonPressed
+                            : closeButtonHover;
                     }
                     else if (IsMouseOverMaximizeButton)
                     {
-                        maximizeButtonImage = MouseManager.MouseState == MouseState.Left ?
-                            maximizePressed : maximizeHover;
+                        maximizeButtonImage =
+                            MouseManager.MouseState == MouseState.Left ? maximizePressed : maximizeHover;
                     }
                     else if (IsMouseOverMinimizeButton)
                     {
-                        minimiseButtonImage = MouseManager.MouseState == MouseState.Left ?
-                            minimisePressed : minimiseHover;
+                        minimiseButtonImage =
+                            MouseManager.MouseState == MouseState.Left ? minimisePressed : minimiseHover;
                     }
 
-                    cv.DrawImage(X + Contents.Width - 21, Y +1, closeButtonImage);
-                    cv.DrawImage(X + Contents.Width - 39, Y +1, maximize);
-                    cv.DrawImage(X + Contents.Width - 57, Y +1, minimise);
+                    cv.DrawImage(X + Contents.Width - 21, Y + 1, closeButtonImage);
+                    cv.DrawImage(X + Contents.Width - 39, Y + 1, maximize);
+                    cv.DrawImage(X + Contents.Width - 57, Y + 1, minimise);
                 }
             }
 
@@ -324,19 +329,25 @@ namespace GoOS.GUI
         /// <summary>
         /// User function to handle a mouse click, which is defined as a mouse being held down on the window then released.
         /// </summary>
-        public virtual void HandleClick(MouseEventArgs e) { }
+        public virtual void HandleClick(MouseEventArgs e)
+        {
+        }
 
         /// <summary>
         /// User function to handle a mouse down, which is defined as a mouse being held down on the window then released.
         /// </summary>
-        public virtual void HandleDown(MouseEventArgs e) { }
+        public virtual void HandleDown(MouseEventArgs e)
+        {
+        }
 
         /// <summary>
         /// User function to handle a mouse release, which is defined as a mouse being held down on the window then released.
         /// This is different to a click, in that it will fire even if the mouse is pressed and then leaves the window before being released.
         /// </summary>
         /// <param name="e">The arguments of the event. MouseState will contain the previous state, not <see cref="MouseState.None"/>.</param>
-        public virtual void HandleRelease(MouseEventArgs e) { }
+        public virtual void HandleRelease(MouseEventArgs e)
+        {
+        }
 
         /// <summary>
         /// User function to handle a key being pressed. Only routed to the focused window.
@@ -355,7 +366,9 @@ namespace GoOS.GUI
         /// <summary>
         /// User function to handle context menus.
         /// </summary>
-        public virtual void ShowContextMenu() { }
+        public virtual void ShowContextMenu()
+        {
+        }
 
         public void Dispose()
         {
@@ -386,14 +399,16 @@ namespace GoOS.GUI
             Contents.DrawLine(Contents.Width - 1, 0, Contents.Width - 1, Contents.Height - 1, Color.Black);
         }
 
-        protected void ShowAboutDialog()
+        protected void ShowAboutDialog(string version)
         {
             Dialogue.Show(
                 $"About {Title}",
-                $"GoOS {Title} v{Kernel.version}\n\nCopyright (c) 2023 Owen2k6\nAll rights reserved.",
+                $"GoOS {Title} v{version}\n\nCopyright (c) "+Kernel.Copyright+ "Owen2k6\nAll rights reserved.",
                 null,
                 heightOverride: 144);
         }
+
+        protected void ShowAboutDialog() => ShowAboutDialog(Kernel.version);
 
         protected void SetDock(WindowDock dock)
         {
@@ -419,7 +434,9 @@ namespace GoOS.GUI
         /// <summary>
         /// Paint the window. Required for resizing.
         /// </summary>
-        public virtual void Paint() { }
+        public virtual void Paint()
+        {
+        }
 
         public void AutoCreate(WindowDock dock, int Width, int Height, string Title)
         {
@@ -438,6 +455,14 @@ namespace GoOS.GUI
             this.Title = Title;
             Visible = true;
             Closable = true;
+        }
+
+        public void ShowCrashDialogue(Exception e)
+        {
+            Dialogue.Show(nameof(WindowManager),
+                "The app " + Title + " has thrown an exception and has had to close:\n" + e, default,
+                WindowManager.errorIcon);
+            Dispose();
         }
     }
 }

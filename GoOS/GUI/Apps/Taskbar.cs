@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cosmos.HAL.Drivers.Video;
 using IL2CPU.API.Attribs;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 
 namespace GoOS.GUI.Apps;
 
@@ -35,9 +35,14 @@ public class Taskbar : Window
         Unkillable = true;
 
         startMenu = new StartMenu();
-        WindowManager.AddWindow(startMenu);
-
-        startButton = new Button(this, 3, 4, 50, 20, "Start");
+        //WindowManager.AddWindow(startMenu);
+        startButton = new Button(this, 0, 0, 74, 28, String.Empty)
+        {
+            Image = Resources.startBackground,
+            BackgroundColour = Color.Transparent,
+            UseSystemStyle = false,
+            RenderWithAlpha = true,
+        };
         startButton.Clicked = StartClicked;
         startButton.Render();
 
@@ -54,19 +59,17 @@ public class Taskbar : Window
         // Contents.Clear(Color.DeepGray);
         // Contents.DrawFilledRectangle(0, 0, WindowManager.Canvas.Width, 3, 0, Color.LightGray);
 
-        RenderOutsetWindowBackground(); // 3d
+        //RenderOutsetWindowBackground(); // 3d
+        Contents.DrawImage(0,0, Resources.taskbarBackground, false);
 
         RenderControls();
 
         RenderInformation();
     }
-
+    
     private void StartClicked()
     {
-        if (!WindowManager.Dimmed)
-        {
-            startMenu.ToggleStartMenu();
-        }
+        WindowManager.ToggleStartMenu();
     }
 
     private void WindowRemoved(Window window)

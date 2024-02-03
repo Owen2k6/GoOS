@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.OOBE
@@ -16,7 +16,7 @@ namespace GoOS.GUI.Apps.OOBE
         {
             // Create the window.
             Contents = new Canvas(800, 600);
-            Title = "Welcome to GoOS";
+            Title = "Welcome to GoOS!";
             Visible = true;
             Closable = false;
             SetDock(WindowDock.Center);
@@ -32,7 +32,7 @@ namespace GoOS.GUI.Apps.OOBE
         private void NextButton_Click()
         {
             // Continue.
-            WindowManager.AddWindow(new UserFrame());
+            WindowManager.AddWindow(new TermsFrame());
             Dispose();
         }
     }

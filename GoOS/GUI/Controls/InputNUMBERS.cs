@@ -1,11 +1,11 @@
 ﻿using Cosmos.System;
-using PrismAPI.Graphics.Rasterizer;
+using GoGL.Graphics.Rasterizer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Cosmos.System.Graphics.Fonts;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using GoOS.GUI.Models;
 
 namespace GoOS.GUI
@@ -193,7 +193,7 @@ namespace GoOS.GUI
 
                         break;
                     }
-                    
+
                     if (lineOffset >= 1)
                     {
                         lineOffset--;
@@ -282,7 +282,8 @@ namespace GoOS.GUI
 
                     break;
                 default:
-                    lines[caretLine + lineOffset] = lines[caretLine + lineOffset].Insert(caretCol, key.KeyChar.ToString());
+                    lines[caretLine + lineOffset] =
+                        lines[caretLine + lineOffset].Insert(caretCol, key.KeyChar.ToString());
                     caretCol++;
 
                     Changed?.Invoke();

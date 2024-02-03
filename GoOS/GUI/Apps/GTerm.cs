@@ -1,5 +1,5 @@
 ﻿using Cosmos.System;
-using PrismAPI.Graphics.Fonts;
+using GoGL.Graphics.Fonts;
 
 namespace GoOS.GUI.Apps
 {

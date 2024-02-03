@@ -1,7 +1,7 @@
 ﻿using System;
 using Cosmos.System;
 using GoOS.GUI.Models;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 
 namespace GoOS.GUI
 {
@@ -44,16 +44,17 @@ namespace GoOS.GUI
             Contents.DrawLine(0, 0, 0, Contents.Height - 1, Color.Black);
 
             // Highlight.
-            Contents.DrawLine(1, Contents.Height - 2, Contents.Width - 2, Contents.Height - 2, new Color(130, 130, 130));
+            Contents.DrawLine(1, Contents.Height - 2, Contents.Width - 2, Contents.Height - 2,
+                new Color(130, 130, 130));
             Contents.DrawLine(Contents.Width - 2, 1, Contents.Width - 2, Contents.Height - 1, new Color(130, 130, 130));
 
             // Light highlight.
             Contents.DrawLine(0, Contents.Height - 1, Contents.Width, Contents.Height - 1, Color.White);
             Contents.DrawLine(Contents.Width - 1, 0, Contents.Width - 1, Contents.Height - 1, Color.White);
-            
+
             //So much for saying your code is "dry". this is from Button.cs - Owen2k6 :^(
             //That was atmo's :skull: nmf
-             
+
             if (Title != "")
             {
                 // Title
@@ -68,7 +69,8 @@ namespace GoOS.GUI
             {
                 if (i == Selected)
                 {
-                    Contents.DrawFilledRectangle(1, 20 + (i * 20), Convert.ToUInt16(Contents.Width - 3), 18, 0, new Color(130, 130, 130));
+                    Contents.DrawFilledRectangle(1, 20 + (i * 20), Convert.ToUInt16(Contents.Width - 3), 18, 0,
+                        new Color(130, 130, 130));
                     //TODO: XRC you fucking dumbass label areas where you force color changes.
                     //TODO: For example, you could just simply put //Creates a WHITE rectangle.
                     //TODO: This fucked up my theme changing work just cus you made it unnoticeable.

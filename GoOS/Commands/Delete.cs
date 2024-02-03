@@ -43,7 +43,7 @@ namespace GoOS.Commands
             ;
         }
         
-        public static void UniveralDelete(string args)
+        public static void UniversalDelete(string args)
         {
             if (args.Contains("0:\\"))
             {

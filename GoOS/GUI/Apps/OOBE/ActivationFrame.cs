@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GoOS.Themes;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.OOBE
@@ -28,13 +28,13 @@ namespace GoOS.GUI.Apps.OOBE
             SetDock(WindowDock.Center);
 
             // Initialize the controls.
-            NextButton = new Button(this, 350, 456, 100, 20, "Next") { Clicked = NextButton_Click };
+            NextButton = new Button(this, 20, 570, 100, 20, "Continue") { Clicked = NextButton_Click };
 
             // Paint the window.
             Contents.DrawImage(0, 0, OOBEblank, false);
             NextButton.Render();
-            Contents.DrawString(20, 5, "GoOS Online and Activation", Font_2x, Color.White);
-            Contents.DrawString(20, 27, "GoOS Activation is not available at this time. \nPlease continue to setup.", Font_1x, Color.White);
+            Contents.DrawString(20, 5, "GoOS Activation", Font_2x, Color.White);
+            Contents.DrawString(20, 40, "You're all set to continue and begin setting up the OS files.\nClicking continue will begin creating files onto your HDD\nThere is still time to cancel setup if you do not wish to install GoOS Files.", Font_1x, Color.White);
         }
 
         private void NextButton_Click()
@@ -50,6 +50,7 @@ namespace GoOS.GUI.Apps.OOBE
             File.Create(@"0:\content\sys\option-editprotectedfiles.gms");
             File.Create(@"0:\content\sys\option-deleteprotectedfiles.gms");
             File.Create(@"0:\content\sys\setup.gms");
+            File.Create(@"0:\content\sys\pinnedapps.gms");
             File.WriteAllText(@"0:\content\sys\version.gms", $"System.Version is set to {Kernel.version} \n Note to users reading this: DO NOT ALTER. IMPORTANT IF USER DATA NEEDS CONVERTING.");
             File.WriteAllText(@"0:\content\sys\user.gms", $"username: {Username}\ncomputername: {Computername}");
             File.WriteAllBytes(@"0:\content\sys\resolution.gms", new byte[] { 2 }); // Video mode 2: 1280x720

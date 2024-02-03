@@ -1,14 +1,17 @@
 ﻿using GoOS.GUI.Models;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using IL2CPU.API.Attribs;
 using Cosmos.System;
+using GoGL.Graphics.Rasterizer;
 
 namespace GoOS.GUI
 {
     public class Button : Control
     {
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse_click.bmp")] private static byte[] mouseClickRaw;
-        private static Canvas mouseClick = PrismAPI.Graphics.Image.FromBitmap(mouseClickRaw);
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse_click.bmp")]
+        private static byte[] mouseClickRaw;
+
+        private static Canvas mouseClick = GoGL.Graphics.Image.FromBitmap(mouseClickRaw);
 
         public string Title;
 
@@ -28,13 +31,13 @@ namespace GoOS.GUI
         public Color TextColour = Color.White;
 
         public bool pressed = false;
-        
+
         public bool CenterTitle = true;
 
         public bool AppearPressed = false;
 
         public int textX = 0;
-        
+
         public int textY = 0;
 
         private const int PUSH_DEPTH = 1;
@@ -54,32 +57,38 @@ namespace GoOS.GUI
                 if (AppearPressed || pressed)
                 {
                     // Background.
-                    Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, new Color(71, 71, 71));
+                    Contents.Clear(new Color(71, 71, 71));
 
                     // Dark shadow.
                     Contents.DrawLine(0, 0, Contents.Width - 1, 0, Color.Black);
                     Contents.DrawLine(0, 0, 0, Contents.Height - 1, Color.Black);
 
                     // Highlight.
-                    Contents.DrawLine(1, Contents.Height - 2, Contents.Width - 2, Contents.Height - 2, new Color(80, 80, 80));
-                    Contents.DrawLine(Contents.Width - 2, 1, Contents.Width - 2, Contents.Height - 1, new Color(80, 80, 80));
+                    Contents.DrawLine(1, Contents.Height - 2, Contents.Width - 2, Contents.Height - 2,
+                        new Color(80, 80, 80));
+                    Contents.DrawLine(Contents.Width - 2, 1, Contents.Width - 2, Contents.Height - 1,
+                        new Color(80, 80, 80));
 
                     // Light highlight.
-                    Contents.DrawLine(0, Contents.Height - 1, Contents.Width, Contents.Height - 1, new Color(89, 89, 89));
-                    Contents.DrawLine(Contents.Width - 1, 0, Contents.Width - 1, Contents.Height - 1, new Color(89, 89, 89));
+                    Contents.DrawLine(0, Contents.Height - 1, Contents.Width, Contents.Height - 1,
+                        new Color(89, 89, 89));
+                    Contents.DrawLine(Contents.Width - 1, 0, Contents.Width - 1, Contents.Height - 1,
+                        new Color(89, 89, 89));
                 }
                 else
                 {
                     // Background.
-                    Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, new Color(71, 71, 71));
+                    Contents.Clear(new Color(71, 71, 71));
 
                     // Highlight.
                     Contents.DrawLine(0, 0, Contents.Width - 1, 0, new Color(80, 80, 80));
                     Contents.DrawLine(0, 0, 0, Contents.Height - 1, new Color(80, 80, 80));
 
                     // Light shadow.
-                    Contents.DrawLine(1, Contents.Height - 2, Contents.Width - 2, Contents.Height - 2, new Color(89, 89, 89));
-                    Contents.DrawLine(Contents.Width - 2, 1, Contents.Width - 2, Contents.Height - 1, new Color(89, 89, 89));
+                    Contents.DrawLine(1, Contents.Height - 2, Contents.Width - 2, Contents.Height - 2,
+                        new Color(89, 89, 89));
+                    Contents.DrawLine(Contents.Width - 2, 1, Contents.Width - 2, Contents.Height - 1,
+                        new Color(89, 89, 89));
 
                     // Dark shadow.
                     Contents.DrawLine(0, Contents.Height - 1, Contents.Width, Contents.Height - 1, Color.Black);
@@ -91,12 +100,12 @@ namespace GoOS.GUI
                 if (IsMouseOver && HasSelectionColour)
                 {
                     // Selection.
-                    Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, SelectionColour);
+                    Contents.Clear(SelectionColour);
                 }
                 else
                 {
                     // Background.
-                    Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, BackgroundColour);
+                    Contents.Clear(BackgroundColour);
                 }
             }
 
@@ -118,7 +127,7 @@ namespace GoOS.GUI
 
             if (textX == 0)
                 textX = Contents.Width / 2;
-            
+
             if (textY == 0)
                 textY = Image != null ? Image.Height + 12 : Contents.Height / 2;
 
@@ -137,7 +146,7 @@ namespace GoOS.GUI
                 textX -= PUSH_DEPTH;
                 textY -= PUSH_DEPTH;
             }
-            
+
             Parent.RenderControls();
         }
 
@@ -145,12 +154,12 @@ namespace GoOS.GUI
 
         public override void Update()
         {
-            if (IsMouseOver)
+            if (IsMouseOver && Visible && Parent.Visible && (Parent.Focused || Parent.Title == nameof(Apps.Desktop)))
             {
                 WindowManager.MouseToDraw = mouseClick;
             }
 
-            if (lastMouseX != MouseManager.X  || lastMouseY != MouseManager.Y)
+            if (lastMouseX != MouseManager.X || lastMouseY != MouseManager.Y)
             {
                 if (!UseSystemStyle && HasSelectionColour)
                 {

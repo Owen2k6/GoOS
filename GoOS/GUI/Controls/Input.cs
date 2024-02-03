@@ -1,21 +1,23 @@
 ﻿using Cosmos.System;
-using PrismAPI.Graphics.Rasterizer;
+using GoGL.Graphics.Rasterizer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Cosmos.System.Graphics.Fonts;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using GoOS.GUI.Models;
 
 namespace GoOS.GUI
 {
     public class Input : Control
     {
-        public Input(Window parent, ushort x, ushort y, ushort width, ushort height, string placeholder)
+        public Input(Window parent, ushort x, ushort y, ushort width, ushort height, string placeholder,
+            Canvas image = null)
             : base(parent, x, y, width, height)
         {
             PlaceholderText = placeholder;
+            Image = image;
         }
 
         public Action Submitted;
@@ -79,22 +81,31 @@ namespace GoOS.GUI
 
         private int GetEndXAtCol(int col)
         {
-            string here = lines[caretLine].Substring(0, col);
-            return Resources.Font_1x.MeasureString(here);
+            //string here = lines[caretLine].Substring(0, col);
+            //return Resources.Font_1x.MeasureString(here);
+            return col * 8;
         }
 
         internal override void HandleDown(MouseEventArgs args)
         {
+            bool isDone = false;
+            
             caretLine = 0;
             for (int i = 0; i < lines[caretLine].Length; i++)
             {
                 string here = lines[caretLine].Substring(0, i);
                 int hereWidth = Resources.Font_1x.MeasureString(here);
-                if (args.X <= hereWidth)
+                if (args.X <= hereWidth && !isDone)
                 {
                     MoveCaret(0, i);
-                    return;
+                    isDone = true;
+                    //return;
                 }
+            }
+
+            if (!isDone)
+            {
+                MoveCaret(0, lines[caretLine].Length);
             }
         }
 
@@ -233,7 +244,7 @@ namespace GoOS.GUI
             Render();
         }
 
-        private List<string> lines = new List<string>() { string.Empty };
+        public List<string> lines = new List<string>() { string.Empty };
 
         private int caretLine = 0;
         private int caretCol = 0;
@@ -241,33 +252,43 @@ namespace GoOS.GUI
         private int scrollX = 0;
         private int scrollY = 0;
 
+        /// <summary>
+        /// Optional image.
+        /// </summary>
+        public Canvas Image;
+
         public override void Render()
         {
             AutoScroll();
 
-            // Background.
-            Contents.Clear(Color.White);
+            if (Image == null)
+            {
+                // Background.
+                Contents.Clear(Color.White);
 
-            // Dark shadow.
-            Contents.DrawLine(0, 0, Contents.Width - 1, 0, Color.Black);
-            Contents.DrawLine(0, 0, 0, Contents.Height - 1, Color.Black);
+                // Dark shadow.
+                Contents.DrawLine(0, 0, Contents.Width - 1, 0, Color.Black);
+                Contents.DrawLine(0, 0, 0, Contents.Height - 1, Color.Black);
 
-            // Highlight.
-            Contents.DrawLine(1, Contents.Height - 2, Contents.Width - 2, Contents.Height - 2,
-                new Color(216, 216, 216));
-            Contents.DrawLine(Contents.Width - 2, 1, Contents.Width - 2, Contents.Height - 1, new Color(216, 216, 216));
+                // Highlight.
+                Contents.DrawLine(1, Contents.Height - 2, Contents.Width - 2, Contents.Height - 2,
+                    new Color(216, 216, 216));
+                Contents.DrawLine(Contents.Width - 2, 1, Contents.Width - 2, Contents.Height - 1,
+                    new Color(216, 216, 216));
 
-            // Light highlight.
-            Contents.DrawLine(0, Contents.Height - 1, Contents.Width, Contents.Height - 1, Color.White);
-            Contents.DrawLine(Contents.Width - 1, 0, Contents.Width - 1, Contents.Height - 1, Color.White);
+                // Light highlight.
+                Contents.DrawLine(0, Contents.Height - 1, Contents.Width, Contents.Height - 1, Color.White);
+                Contents.DrawLine(Contents.Width - 1, 0, Contents.Width - 1, Contents.Height - 1, Color.White);
+            }
+            else Contents.DrawImage(0, 0, Image);
 
             if (Text == string.Empty)
             {
-                Contents.DrawRectangle(0, 0, Contents.Width, Contents.Height, 0, Color.DeepGray);
-                Contents.DrawString(0, 0, PlaceholderText, Resources.Font_1x, Color.LightGray);
+                if (Image == null) Contents.DrawRectangle(0, 0, Contents.Width, Contents.Height, 0, Color.DeepGray);
+                Contents.DrawString(2, 0, PlaceholderText, Resources.Font_1x, Color.LightGray);
 
                 int care = GetEndXAtCol(caretCol);
-                Contents.DrawLine(care, caretLine * 16, care, caretLine * 16 + 16, Color.Black);
+                if (Image == null) Contents.DrawLine(care, caretLine * 16, care, caretLine * 16 + 16, Color.Black);
 
                 Parent.RenderControls();
                 return;
@@ -275,14 +296,12 @@ namespace GoOS.GUI
 
             for (var i = 0; i < lines.Count; i++)
             {
-                Contents.DrawString(-scrollX, i * 14, Shield ? new string('*', lines[i].Length) : lines[i],
+                Contents.DrawString(-scrollX + 2, i * 14, Shield ? new string('*', lines[i].Length) : lines[i],
                     Resources.Font_1x, Color.Black);
             }
 
-
             int caretTwitter = GetEndXAtCol(caretCol);
-            Contents.DrawLine(caretTwitter, caretLine * 16, caretTwitter, caretLine * 16 + 16, Color.Black);
-
+            Contents.DrawLine(caretTwitter + 2, caretLine * 16, caretTwitter + 2, caretLine * 16 + 16, Color.Black);
 
             Parent.RenderControls();
         }

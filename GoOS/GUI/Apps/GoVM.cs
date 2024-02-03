@@ -1,5 +1,5 @@
 ﻿using System;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 namespace GoOS.GUI.Apps;
 
 public class GoVM : Window

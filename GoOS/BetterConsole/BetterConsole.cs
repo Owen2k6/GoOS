@@ -4,13 +4,13 @@ using Cosmos.Core.Memory;
 using Cosmos.System;
 using GoOS.GUI;
 using GoOS.Themes;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using static GoOS.Resources;
 
 /// <summary>
 /// <see cref="BetterConsole"/> class
 /// </summary>
-public static class BetterConsole
+public static class BetterConsole //Shitter Console
 {
     /* The canvas for the console */
     public static Canvas Canvas;

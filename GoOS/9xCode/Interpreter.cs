@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
+using Cosmos.System;
 using GoOS.GUI;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using static ConsoleColorEx;
 using Console = BetterConsole;
-using ConsoleColor = PrismAPI.Graphics.Color;
+using ConsoleColor = GoGL.Graphics.Color;
 using static GoOS.Resources;
 
 // 9xCode Beta 3.1
@@ -59,6 +60,8 @@ namespace GoOS._9xCode
                     try
                     {
                         WindowManager.Update(); // Don't lock the WM
+
+                        if (KeyboardManager.TryReadKey(out var k) && k.Modifiers == ConsoleModifiers.Control && k.Key == ConsoleKeyEx.C) return;
 
                         string line = code[i].Trim().Replace("\\n", "\n");
 

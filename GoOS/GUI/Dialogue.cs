@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IL2CPU.API.Attribs;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI
@@ -24,7 +24,8 @@ namespace GoOS.GUI
         /// <summary>
         /// Show a system dialogue.
         /// </summary>
-        public static Dialogue Show(string title, string message, List<DialogueButton> buttons = null, Canvas icon = null, int widthOverride = -1, int heightOverride = -1)
+        public static Dialogue Show(string title, string message, List<DialogueButton> buttons = null,
+            Canvas icon = null, int widthOverride = -1, int heightOverride = -1)
         {
             // TODO: finish overrides
 
@@ -34,7 +35,7 @@ namespace GoOS.GUI
             return dialogue;
         }
 
-        private static int GetLongestLineWidth(string str)
+        public static int GetLongestLineWidth(string str)
         {
             int len = 0;
 

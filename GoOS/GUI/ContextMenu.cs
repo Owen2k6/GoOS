@@ -1,7 +1,7 @@
 ﻿using System;
 using Cosmos.System;
 using GoOS.GUI.Models;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 
 namespace GoOS.GUI
 {
@@ -42,13 +42,15 @@ namespace GoOS.GUI
             {
                 Contents.DrawString(0, i * 16, Items[i], Resources.Font_1x, Color.White);
             }
+
             RenderSystemStyleBorder();
         }
 
         public override void HandleRun()
         {
             base.HandleRun();
-            if (MouseManager.LastMouseState == MouseState.Left && MouseManager.MouseState == MouseState.None && !IsMouseOver)
+            if (MouseManager.LastMouseState == MouseState.Left && MouseManager.MouseState == MouseState.None &&
+                !IsMouseOver)
             {
                 Dispose();
             }

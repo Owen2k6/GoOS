@@ -2,7 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using Console = BetterConsole;
-using ConsoleColor = PrismAPI.Graphics.Color;
+using ConsoleColor = GoGL.Graphics.Color;
 using static ConsoleColorEx;
 
 namespace GoOS.Themes

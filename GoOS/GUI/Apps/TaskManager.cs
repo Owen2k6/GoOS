@@ -1,6 +1,6 @@
 ﻿using System;
 using Cosmos.System;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 
 namespace GoOS.GUI.Apps
 {
@@ -45,7 +45,7 @@ namespace GoOS.GUI.Apps
             switch (key.Key)
             {
                 case ConsoleKeyEx.F1:
-                    ShowAboutDialog();
+                    ShowAboutDialog("1.0");
                     break;
 
                 case ConsoleKeyEx.F5:
@@ -66,7 +66,7 @@ namespace GoOS.GUI.Apps
 
         private void EndButton_Click()
         {
-            if (WindowManager.windows[Windows.Selected].Unkillable && !pko)
+            if (WindowManager.windows[Windows.Selected].Unkillable && !pko && !Kernel.devMode)
             {
                 Dialogue.Show(
                     "Error",

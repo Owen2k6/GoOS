@@ -1,5 +1,5 @@
 ﻿using GoOS.GUI.Models;
-using PrismAPI.Graphics;
+using GoGL.Graphics;
 using System;
 using Cosmos.System;
 
@@ -33,23 +33,40 @@ namespace GoOS.GUI
         {
             get
             {
-                return MouseManager.X >= Parent.X + X                                                     &&
-                   MouseManager.X     < Parent.X  + X + Contents.Width                                    &&
-                   MouseManager.Y     >= Parent.Y + Y + (Parent.HasTitlebar ? Window.TITLE_BAR_HEIGHT : 0)                     &&
-                   MouseManager.Y     < Parent.Y  + Y + Contents.Height + (Parent.HasTitlebar ? Window.TITLE_BAR_HEIGHT : 0);
+                return MouseManager.X >= Parent.X + X &&
+                       MouseManager.X < Parent.X + X + Contents.Width &&
+                       MouseManager.Y >= Parent.Y + Y + (Parent.HasTitlebar ? Window.TITLE_BAR_HEIGHT : 0) &&
+                       MouseManager.Y < Parent.Y + Y + Contents.Height +
+                       (Parent.HasTitlebar ? Window.TITLE_BAR_HEIGHT : 0);
             }
         }
 
         public abstract void Render();
 
-        internal virtual void HandleDown(MouseEventArgs args) { }
+        internal virtual void HandleDown(MouseEventArgs args)
+        {
+        }
 
-        internal virtual void HandleRelease() { }
+        internal virtual void HandleRelease()
+        {
+        }
 
-        internal virtual void HandleUnfocus() { }
+        internal virtual void HandleClick(MouseEventArgs args)
+        {
+            Clicked?.Invoke();
+            ClickedAlt?.Invoke(Name);
+        }
 
-        internal virtual void HandleKey(KeyEvent key) { }
+        internal virtual void HandleUnfocus()
+        {
+        }
 
-        public virtual void Update() { }
+        internal virtual void HandleKey(KeyEvent key)
+        {
+        }
+
+        public virtual void Update()
+        {
+        }
     }
 }
