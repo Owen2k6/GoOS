@@ -41,10 +41,10 @@ namespace GoOS
         public static string[] pathPaths = { };
 
         //Vars for OS
-        public const string version = "155";
-        public const string edition = "1.5it"; // This is the current edition of GoOS. Used for UPDATER.
-        public const string editionnext = "1.5"; // This is the next edition of GoOS. Used for UPDATER.
-        public const string BuildType = "INTERNAL TEST BUILD";
+        public const string version = "1.5";
+        public const string edition = "1.5"; // This is the current edition of GoOS. Used for UPDATER.
+        public const string editionnext = "1.6"; // This is the next edition of GoOS. Used for UPDATER.
+        public const string BuildType = "R";
         public const string Copyright = "2021-2024";
         public static string olddir = @"0:\";
 
