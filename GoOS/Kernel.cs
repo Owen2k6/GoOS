@@ -41,7 +41,7 @@ namespace GoOS
         public static string[] pathPaths = { };
 
         //Vars for OS
-        public const string version = "1.5";
+        public const string version = "1.5.1";
         public const string edition = "1.5"; // This is the current edition of GoOS. Used for UPDATER.
         public const string editionnext = "1.6"; // This is the next edition of GoOS. Used for UPDATER.
         public const string BuildType = "R";
@@ -79,18 +79,6 @@ namespace GoOS
             Resources.Generate(ResourceType.Fonts);
             Resources.Generate(ResourceType.Priority);
 
-            WindowManager.Canvas = Display.GetDisplay(1920, 1080);
-
-            WindowManager.Canvas.DrawImage(0, 0, Resources.background, false);
-            Console.Init(800, 600);
-
-            WindowManager.AddWindow(new LoadingDialogue("GoOS is starting\nPlease wait..."));
-            WindowManager.Update();
-
-            Resources.Generate(ResourceType.Normal);
-
-            ThemeManager.SetTheme(Theme.Fallback);
-            log(ThemeManager.WindowText, "GoOS - Starting GoOS...");
             try
             {
                 FS = new Sys.FileSystem.CosmosVFS();
@@ -100,13 +88,26 @@ namespace GoOS
             }
             catch
             {
-                WindowManager.AddWindow(new Dialogue("Fatal Error", "Failed to initialize filesystem!\n" +
-                                                                    "GoOS needs a HDD installed to save user settings, application data and more\n" +
-                                                                    "Please verify that your hard disk is plugged in correctly",
-                    default, WindowManager.errorIcon));
-                WindowManager.Update();
-                while (true) ;
+                log(ConsoleColorEx.Red, "Failed to initialize filesystem!");
+                log(ConsoleColorEx.Red, "GoOS needs a HDD installed to save user settings, application data and more");
+                log(ConsoleColorEx.Red, "Please verify that your hard disk is plugged in correctly");
+                while (true);
             }
+
+            byte[] screenRes = File.Exists(@"0:\content\sys\resolution.gms") ? File.ReadAllBytes(@"0:\content\sys\resolution.gms") : new byte[] { 6 };
+            byte[] termRes = File.Exists(@"0:\content\sys\tresolution.gms") ? File.ReadAllBytes(@"0:\content\sys\tresolution.gms") : new byte[] { 2 };
+            WindowManager.Canvas = Display.GetDisplay(ControlPanel.videoModes[screenRes[0]].Item2.Width, ControlPanel.videoModes[screenRes[0]].Item2.Height);
+            
+            WindowManager.Canvas.DrawImage(0, 0, Resources.background, false);
+            Console.Init(ControlPanel.terminalModes[termRes[0]].Item2.Width, ControlPanel.terminalModes[termRes[0]].Item2.Height);
+
+            WindowManager.AddWindow(new LoadingDialogue("GoOS is starting\nPlease wait..."));
+            WindowManager.Update();
+
+            Resources.Generate(ResourceType.Normal);
+
+            ThemeManager.SetTheme(Theme.Fallback);
+            log(ThemeManager.WindowText, "GoOS - Starting GoOS...");
 
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {
