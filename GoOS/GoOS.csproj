@@ -220,6 +220,10 @@
 	  <EmbeddedResource Include="Resources\GUI\TaskStart\taskbar.bmp" />
 	  <None Remove="Resources\GUI\GoStoreSoon.bmp" />
 	  <EmbeddedResource Include="Resources\GUI\GoStoreSoon.bmp" />
+	  <None Remove="Resources\GUI\boot.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\boot.bmp" />
+	  <None Remove="Resources\GUI\bootlogo.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\bootlogo.bmp" />
     </ItemGroup>
 
     <PropertyGroup>

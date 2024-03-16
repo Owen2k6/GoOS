@@ -60,6 +60,12 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.desktopwallpaper.bmp")]
         static byte[] backgroundRaw;
 
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.boot.bmp")]
+        static byte[] bootbackgroundRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.bootlogo.bmp")]
+        static byte[] bootlogoRaw;
+
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.NEW.bmp")]
         static byte[] NewIconRaw;
 
@@ -161,7 +167,7 @@ namespace GoOS
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStore.bmp")]
         static byte[] GoStoreRaw;
-        
+
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreSoon.bmp")]
         static byte[] GoStoreSoonRaw;
 
@@ -233,6 +239,8 @@ namespace GoOS
         public static Canvas folderIcon;
         public static Canvas fileIcon;
         public static Canvas background;
+        public static Canvas bootbackground;
+        public static Canvas bootlogo;
         public static Canvas newIcon;
         public static Canvas binIcon;
         public static Canvas childIcon;
@@ -371,6 +379,8 @@ namespace GoOS
                     minimisePressed = Image.FromBitmap(minimisePressedRaw, false);
                     drumIcon = Image.FromBitmap(drumIconRaw, false);
                     background = Image.FromBitmap(backgroundRaw, false);
+                    bootbackground = Image.FromBitmap(bootbackgroundRaw, false);
+                    bootlogo = Image.FromBitmap(bootlogoRaw, false);
                     break;
 
                 case ResourceType.Fonts:

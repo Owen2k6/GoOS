@@ -41,7 +41,7 @@ namespace GoOS
         public static string[] pathPaths = { };
 
         //Vars for OS
-        public const string version = "1.5.1";
+        public const string version = "1.5.2";
         public const string edition = "1.5"; // This is the current edition of GoOS. Used for UPDATER.
         public const string editionnext = "1.6"; // This is the next edition of GoOS. Used for UPDATER.
         public const string BuildType = "R";
@@ -98,10 +98,11 @@ namespace GoOS
             byte[] termRes = File.Exists(@"0:\content\sys\tresolution.gms") ? File.ReadAllBytes(@"0:\content\sys\tresolution.gms") : new byte[] { 2 };
             WindowManager.Canvas = Display.GetDisplay(ControlPanel.videoModes[screenRes[0]].Item2.Width, ControlPanel.videoModes[screenRes[0]].Item2.Height);
             
-            WindowManager.Canvas.DrawImage(0, 0, Resources.background, false);
+            WindowManager.Canvas.DrawImage(0, 0, Resources.bootbackground, false);
+            WindowManager.Canvas.DrawImage(ControlPanel.videoModes[screenRes[0]].Item2.Width/2-37, ControlPanel.videoModes[screenRes[0]].Item2.Height/2-37, Resources.bootlogo, true);
             Console.Init(ControlPanel.terminalModes[termRes[0]].Item2.Width, ControlPanel.terminalModes[termRes[0]].Item2.Height);
 
-            WindowManager.AddWindow(new LoadingDialogue("GoOS is starting\nPlease wait..."));
+            //WindowManager.AddWindow(new LoadingDialogue("GoOS is starting\nPlease wait..."));
             WindowManager.Update();
 
             Resources.Generate(ResourceType.Normal);
@@ -111,6 +112,8 @@ namespace GoOS
 
             if (!File.Exists(@"0:\content\sys\setup.gms"))
             {
+                WindowManager.Canvas.DrawImage(0, 0, Resources.bootbackground, false);
+                WindowManager.Update();
                 Resources.Generate(ResourceType.OOBE);
                 WindowManager.IsInOOBE = true;
                 WindowManager.AddWindow(new GUI.Apps.OOBE.MainFrame());
