@@ -67,11 +67,12 @@ namespace GoOS
             System.Console.ForegroundColor = System.ConsoleColor.Cyan;
             System.Console.WriteLine("GoOS - Starting GoOS...");
 
-            if (Cosmos.Core.CPU.GetAmountOfRAM() < 192)
+            if (Cosmos.Core.CPU.GetAmountOfRAM() < 256)
             {
                 System.Console.ForegroundColor = System.ConsoleColor.Red;
+                FATALErrorSound();
                 System.Console.WriteLine("GoOS - Insufficient Memory to initialise GoOS.");
-                System.Console.WriteLine("GoOS - GoOS Recommends 1024MiB but the minimum is 172MiB");
+                System.Console.WriteLine("GoOS - GoOS Recommends 1024MiB but the minimum is 256MiB");
 
                 while (true) ;
             }
@@ -88,19 +89,30 @@ namespace GoOS
             }
             catch
             {
+                FATALErrorSound();
                 log(ConsoleColorEx.Red, "Failed to initialize filesystem!");
                 log(ConsoleColorEx.Red, "GoOS needs a HDD installed to save user settings, application data and more");
                 log(ConsoleColorEx.Red, "Please verify that your hard disk is plugged in correctly");
-                while (true);
+                while (true) ;
             }
 
-            byte[] screenRes = File.Exists(@"0:\content\sys\resolution.gms") ? File.ReadAllBytes(@"0:\content\sys\resolution.gms") : new byte[] { 6 };
-            byte[] termRes = File.Exists(@"0:\content\sys\tresolution.gms") ? File.ReadAllBytes(@"0:\content\sys\tresolution.gms") : new byte[] { 2 };
-            WindowManager.Canvas = Display.GetDisplay(ControlPanel.videoModes[screenRes[0]].Item2.Width, ControlPanel.videoModes[screenRes[0]].Item2.Height);
-            
+            byte[] screenRes = File.Exists(@"0:\content\sys\resolution.gms")
+                ? File.ReadAllBytes(@"0:\content\sys\resolution.gms")
+                : new byte[] { 6 };
+            byte[] termRes = File.Exists(@"0:\content\sys\tresolution.gms")
+                ? File.ReadAllBytes(@"0:\content\sys\tresolution.gms")
+                : new byte[] { 2 };
+            WindowManager.Canvas = Display.GetDisplay(ControlPanel.videoModes[screenRes[0]].Item2.Width,
+                ControlPanel.videoModes[screenRes[0]].Item2.Height);
+
             WindowManager.Canvas.DrawImage(0, 0, Resources.bootbackground, false);
-            WindowManager.Canvas.DrawImage(ControlPanel.videoModes[screenRes[0]].Item2.Width/2-37, ControlPanel.videoModes[screenRes[0]].Item2.Height/2-37, Resources.bootlogo, true);
-            Console.Init(ControlPanel.terminalModes[termRes[0]].Item2.Width, ControlPanel.terminalModes[termRes[0]].Item2.Height);
+            WindowManager.Canvas.DrawImage(ControlPanel.videoModes[screenRes[0]].Item2.Width / 2 - 37,
+                ControlPanel.videoModes[screenRes[0]].Item2.Height / 2 - 37, Resources.bootlogo, true);
+            Console.Init(ControlPanel.terminalModes[termRes[0]].Item2.Width,
+                ControlPanel.terminalModes[termRes[0]].Item2.Height);
+            
+            Cosmos.System.PCSpeaker.Beep(600, 100);
+
 
             //WindowManager.AddWindow(new LoadingDialogue("GoOS is starting\nPlease wait..."));
             WindowManager.Update();
@@ -229,11 +241,13 @@ namespace GoOS
                     {
                         if (BuildType == "INTERNAL TEST BUILD")
                         {
+                            InfoSound();
                             Dialogue.Show("It's time to move on...",
                                 "The Internal Test Version for this edition of GoOS has ended\nThis build of GoOS can no longer access GoOS Online Services.\nPlease check with your INTERNAL TEST Group to see if a new version has been issued.");
                         }
                         else
                         {
+                            InfoSound();
                             Dialogue.Show("GoOS Update",
                                 "A newer version of GoOS is available on Github.\nWe recommend you update to the latest version for stability and security reasons.\nhttps://github.com/Owen2k6/GoOS/releases\nCurrent Version: " +
                                 version + "\nLatest Version: " + content);
@@ -243,11 +257,13 @@ namespace GoOS
                     {
                         if (BuildType == "INTERNAL TEST BUILD")
                         {
+                            InfoSound();
                             Dialogue.Show("It's time to move on...",
                                 "The Internal Test Version for this edition of GoOS has ended\nThis build of GoOS can no longer access GoOS Online Services.\nPlease check with your INTERNAL TEST Group to see if a new version has been issued.");
                         }
                         else
                         {
+                            InfoSound();
                             Dialogue.Show("GoOS Update",
                                 "The next GoOS has been released.\nWe don't want to force you to update but at least check out whats new in GoOS " +
                                 editionnext + "!\nhttps://github.com/Owen2k6/GoOS/releases/tag/" + editionnext);
@@ -265,6 +281,7 @@ namespace GoOS
             }
             catch (Exception ex)
             {
+                ErrorSound();
                 Dialogue.Show("GoOS Update", "Failed to connect to Owen2k6 Api. Error: " + ex);
             }
 
@@ -338,6 +355,7 @@ namespace GoOS
             }
             catch (Exception ex)
             {
+                ErrorSound();
                 Dialogue.Show("GoOS Security", "Failed to connect to Owen2k6 Api. Error: " + ex);
             }
 
@@ -385,6 +403,26 @@ namespace GoOS
             textcolour(ThemeManager.WindowBorder);
             write(currentdirfix);
             textcolour(ThemeManager.Default);
+        }
+
+        public static void FATALErrorSound()
+        {
+            Cosmos.System.PCSpeaker.Beep(600, 400);
+            Cosmos.System.PCSpeaker.Beep(500, 400);
+            Cosmos.System.PCSpeaker.Beep(600, 400);
+            Cosmos.System.PCSpeaker.Beep(500, 400);
+        }
+        public static void ErrorSound()
+        {
+            Cosmos.System.PCSpeaker.Beep(600, 20);
+            Cosmos.System.PCSpeaker.Beep(400, 20);
+            Cosmos.System.PCSpeaker.Beep(200, 20);
+        }
+        public static void InfoSound()
+        {
+            Cosmos.System.PCSpeaker.Beep(600, 20);
+            Cosmos.System.PCSpeaker.Beep(800, 20);
+            Cosmos.System.PCSpeaker.Beep(1200, 20);
         }
 
         protected override void Run()
