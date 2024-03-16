@@ -26,21 +26,8 @@ namespace GoOS.GUI.Apps.GoStore
 
         public static readonly List<string> AllowDLFrom = new List<string>
         {
-            "1.5pre1",
-            "1.5pre2",
-            "1.5pre3",
-            "1.5rc1",
-            "1.5rc2",
-            "1.5rc3",
             "1.5"
         };
-        /*
-         * == RC Release Notice.
-         * TODO: This needs to be reset to just 1.5 before release.
-         * TODO: Prevent Release Candidate or Release builds until this is resolved.
-         * - Owen2k6 DO NOT REMOVE.
-         */
-
         private Canvas _infoBoard;
         private string _infoBoardText;
 
@@ -123,13 +110,13 @@ namespace GoOS.GUI.Apps.GoStore
                 else
                 {
                     Contents.DrawImage(0, 0, Resources.GoStoreSoon, false);
-                    long unixTime = Convert.ToInt64(1707955200); //1707955200
-                    DateTime targetDate = DateTimeOffset.FromUnixTimeSeconds(unixTime).DateTime;
-                    DateTime currentDate = DateTime.UtcNow;
-
-                    TimeSpan difference = targetDate - currentDate;
-                    int daysUntil = (int)difference.TotalDays;
-                    Contents.DrawString(290, 467, daysUntil+" Days left", Resources.Font_2x, Color.Green);
+                    // long unixTime = Convert.ToInt64(1707955200); //1707955200
+                    // DateTime targetDate = DateTimeOffset.FromUnixTimeSeconds(unixTime).DateTime;
+                    // DateTime currentDate = DateTime.UtcNow;
+                    //
+                    // TimeSpan difference = targetDate - currentDate;
+                    // int daysUntil = (int)difference.TotalDays;
+                    // Contents.DrawString(290, 467, daysUntil+" Days left", Resources.Font_2x, Color.Green);
                     RenderSystemStyleBorder();
                 }
             }
