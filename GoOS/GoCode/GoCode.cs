@@ -15,8 +15,10 @@ using static GoOS.Core;
 
 namespace GoOS.GoCode;
 
+
 public class GoCode
 {
+    public static string Version = "0.0.1";
     public static void Run(string file, bool usecurrentdir = true, bool unnecessaryOutputs = true)
     {
         try

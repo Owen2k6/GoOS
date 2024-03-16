@@ -10,15 +10,16 @@ using static GoOS.Resources;
 /// <summary>
 /// <see cref="BetterConsole"/> class
 /// </summary>
-public static class BetterConsole //Shitter Console
+public static class BetterConsole
 {
     /* The canvas for the console */
     public static Canvas Canvas;
 
     /* Character width and height */
-    public static ushort charWidth = 8, charHeight = 16;
+    public const ushort CharWidth = 8;
+    public const ushort CharHeight = 16;
 
-    private static List<string> menuOptions = new()
+    private static readonly List<string> MenuOptions = new()
     {
         "Launch Settings",
         "Reboot"
@@ -30,7 +31,7 @@ public static class BetterConsole //Shitter Console
 
     /// <summary>
     /// The X position of the cursor
-    /// </remarks>
+    /// </summary>
     public static int CursorLeft = 0;
 
     /// <summary>
@@ -51,12 +52,12 @@ public static class BetterConsole //Shitter Console
     /// <summary>
     /// The foreground color of the <see cref="BetterConsole"/>
     /// </summary>
-    public static Color ForegroundColor = Color.White;
+    public static Color ForegroundColor = ConsoleColorEx.White;
 
     /// <summary>
     /// The background color of the <see cref="BetterConsole"/>
     /// </summary>
-    public static Color BackgroundColor = Color.Black;
+    public static Color BackgroundColor = ConsoleColorEx.Black;
 
     /// <summary>
     /// Determines if the cursor is visible
@@ -74,7 +75,7 @@ public static class BetterConsole //Shitter Console
     public static Queue<KeyEvent> KeyBuffer = new Queue<KeyEvent>();
 
     public static string Title = "GTerm";
-    
+
     /// <summary>
     /// Initializes the <see cref="BetterConsole">
     /// </summary>
@@ -82,10 +83,9 @@ public static class BetterConsole //Shitter Console
     /// <param name="videoHeight">The height of the canvas</param>
     public static void Init(ushort width, ushort height)
     {
-        //Canvas = Display.GetDisplay(width, height);
         Canvas = new Canvas(width, height);
-        WindowWidth = Convert.ToUInt16(width / charWidth);
-        WindowHeight = Convert.ToUInt16(height / charHeight);
+        WindowWidth = (ushort)(width / CharWidth);
+        WindowHeight = (ushort)(height / CharHeight);
         Canvas.Clear();
     }
 
@@ -152,7 +152,7 @@ public static class BetterConsole //Shitter Console
         {
             if (CursorVisible)
             {
-                Canvas.DrawString(CursorLeft * charWidth, CursorTop * charHeight, '_'.ToString(), Font_1x, ForegroundColor);
+                Canvas.DrawString(CursorLeft * CharWidth, CursorTop * CharHeight, '_'.ToString(), Font_1x, ForegroundColor);
             }
 
             var keyPressed = KeyBuffer.TryDequeue(out var key);
@@ -177,10 +177,10 @@ public static class BetterConsole //Shitter Console
             if (CursorVisible)
             {
                 // Just to be safe
-                Canvas.DrawString((CursorLeft - 1) * charWidth, CursorTop * charHeight, '_'.ToString(), Font_1x, Color.Black);
-                Canvas.DrawString((CursorLeft + 1) * charWidth, CursorTop * charHeight, '_'.ToString(), Font_1x, Color.Black);
-                Canvas.DrawString(CursorLeft * charWidth, (CursorTop - 1) * charHeight, '_'.ToString(), Font_1x, Color.Black);
-                Canvas.DrawString(CursorLeft * charWidth, (CursorTop + 1) * charHeight, '_'.ToString(), Font_1x, Color.Black);
+                Canvas.DrawString((CursorLeft - 1) * CharWidth, CursorTop * CharHeight, '_'.ToString(), Font_1x, Color.Black);
+                Canvas.DrawString((CursorLeft + 1) * CharWidth, CursorTop * CharHeight, '_'.ToString(), Font_1x, Color.Black);
+                Canvas.DrawString(CursorLeft * CharWidth, (CursorTop - 1) * CharHeight, '_'.ToString(), Font_1x, Color.Black);
+                Canvas.DrawString(CursorLeft * CharWidth, (CursorTop + 1) * CharHeight, '_'.ToString(), Font_1x, Color.Black);
             }
         }
     }
@@ -190,7 +190,7 @@ public static class BetterConsole //Shitter Console
     /// <summary>
     /// Gets input from the user
     /// </summary>
-    /// <returns>The teCursorLeftt that the user typed</returns>
+    /// <returns>The text that the user typed</returns>
     public static string ReadLine()
     {
         int startCursorLeft = CursorLeft, startY = CursorTop;
@@ -226,7 +226,7 @@ public static class BetterConsole //Shitter Console
                             {
                                 PutChar(' ', CursorLeft, CursorTop); // Erase the cursor
                                 CursorTop--;
-                                CursorLeft = Canvas.Width / charWidth - 1;
+                                CursorLeft = Canvas.Width / CharWidth - 1;
                                 PutChar(' ', CursorLeft, CursorTop); // Erase the actual character
                             }
                             else
@@ -287,24 +287,24 @@ public static class BetterConsole //Shitter Console
 
                                 Clear();
                                 Canvas.DrawRectangle((Canvas.Width / 2) - (144 / 2) + 0,
-                                    (Canvas.Height / 2) - ((menuOptions.Count + 4) * 16 / 2) + 0, 144,
-                                    Convert.ToUInt16((menuOptions.Count + 4) * 16), 0, ThemeManager.WindowBorder);
+                                    (Canvas.Height / 2) - ((MenuOptions.Count + 4) * 16 / 2) + 0, 144,
+                                    Convert.ToUInt16((MenuOptions.Count + 4) * 16), 0, ThemeManager.WindowBorder);
                                 Canvas.DrawRectangle((Canvas.Width / 2) - (144 / 2) + 1,
-                                    (Canvas.Height / 2) - ((menuOptions.Count + 4) * 16 / 2) + 1, 144,
-                                    Convert.ToUInt16((menuOptions.Count + 4) * 16), 0, ThemeManager.WindowBorder);
+                                    (Canvas.Height / 2) - ((MenuOptions.Count + 4) * 16 / 2) + 1, 144,
+                                    Convert.ToUInt16((MenuOptions.Count + 4) * 16), 0, ThemeManager.WindowBorder);
 
-                             Refresh:
-                                if (selected > menuOptions.Count - 1)
+                                Refresh:
+                                if (selected > MenuOptions.Count - 1)
                                 {
                                     selected = 0;
                                 }
 
                                 if (selected < 0)
                                 {
-                                    selected = menuOptions.Count - 1;
+                                    selected = MenuOptions.Count - 1;
                                 }
 
-                                for (int i = 0; i < menuOptions.Count; i++)
+                                for (int i = 0; i < MenuOptions.Count; i++)
                                 {
                                     SetCursorPosition((WindowWidth / 2) - (15 / 2) - 1,
                                         (WindowHeight / 2) - 1 + (i * 2));
@@ -319,7 +319,7 @@ public static class BetterConsole //Shitter Console
                                         BackgroundColor = ThemeManager.Background;
                                     }
 
-                                    Write(menuOptions[i]);
+                                    Write(MenuOptions[i]);
                                 }
 
                                 var key2 = KeyboardManager.ReadKey();
@@ -329,9 +329,9 @@ public static class BetterConsole //Shitter Console
                                         break;
 
                                     case ConsoleKeyEx.Enter:
-                                        if (menuOptions[selected] == menuOptions[0])
+                                        if (MenuOptions[selected] == MenuOptions[0])
                                             GoOS.ControlPanel.Launch();
-                                        else if (menuOptions[selected] == menuOptions[1])
+                                        else if (MenuOptions[selected] == MenuOptions[1])
                                             Power.Reboot();
                                         break;
 
@@ -397,18 +397,18 @@ public static class BetterConsole //Shitter Console
 
     private static void Newline()
     {
-        if (CursorLeft >= Canvas.Width / charWidth)
+        if (CursorLeft >= Canvas.Width / CharWidth)
         {
             CursorLeft = 0;
             CursorTop++;
         }
 
-        if (CursorTop >= Canvas.Height / charHeight)
+        if (CursorTop >= Canvas.Height / CharHeight)
         {
-            Canvas.DrawImage(0, -charHeight, Canvas, false);
-            Canvas.DrawFilledRectangle(0, Canvas.Height - charHeight, Canvas.Width, charHeight, 0, Color.Black);
+            Canvas.DrawImage(0, -CharHeight, Canvas, false);
+            Canvas.DrawFilledRectangle(0, Canvas.Height - CharHeight, Canvas.Width, CharHeight, 0, Color.Black);
             CursorLeft = 0;
-            CursorTop = (Canvas.Height / charHeight) - 1;
+            CursorTop = (Canvas.Height / CharHeight) - 1;
 
             if (!DoubleBufferedMode)
                 Render();
@@ -420,10 +420,10 @@ public static class BetterConsole //Shitter Console
     public static void PutChar(char c, int CursorLeft, int y, bool quick = false)
     {
         if (!quick)
-            Canvas.DrawFilledRectangle(CursorLeft * charWidth, y * charHeight,
-                Convert.ToUInt16(charWidth + (charWidth / 8)), charHeight, 0, BackgroundColor); //yes this is correct
+            Canvas.DrawFilledRectangle(CursorLeft * CharWidth, y * CharHeight,
+                Convert.ToUInt16(CharWidth + (CharWidth / 8)), CharHeight, 0, BackgroundColor);
         if (c != ' ')
-            Canvas.DrawString(CursorLeft * charWidth, y * charHeight, c.ToString(), Font_1x, ForegroundColor);
+            Canvas.DrawString(CursorLeft * CharWidth, y * CharHeight, c.ToString(), Font_1x, ForegroundColor);
     }
 
     #endregion
