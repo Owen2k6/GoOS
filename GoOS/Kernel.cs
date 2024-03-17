@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Sys = Cosmos.System;
 using System.IO;
+using System.IO.Enumeration;
 using System.Linq;
 using System.Text;
 using GoOS.Themes;
@@ -66,6 +67,8 @@ namespace GoOS
             System.Console.Clear();
             System.Console.ForegroundColor = System.ConsoleColor.Cyan;
             System.Console.WriteLine("GoOS - Starting GoOS...");
+            System.Console.ForegroundColor = System.ConsoleColor.White;
+            System.Console.WriteLine("Initialising memory.");
 
             if (Cosmos.Core.CPU.GetAmountOfRAM() < 256)
             {
@@ -77,11 +80,17 @@ namespace GoOS
                 while (true) ;
             }
 
+            System.Console.WriteLine(Cosmos.Core.CPU.GetAmountOfRAM() + "MB... DONE!");
+            System.Console.WriteLine("Initialising Fonts...");
             Resources.Generate(ResourceType.Fonts);
+            System.Console.WriteLine("SUCCESSFUL!");
+            System.Console.WriteLine("Initialising System Resources...");
             Resources.Generate(ResourceType.Priority);
+            System.Console.WriteLine("SUCCESSFUL!");
 
             try
             {
+                System.Console.WriteLine("Initialising Filesystem...");
                 FS = new Sys.FileSystem.CosmosVFS();
                 Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS);
                 FS.Initialize(true);
@@ -95,7 +104,8 @@ namespace GoOS
                 log(ConsoleColorEx.Red, "Please verify that your hard disk is plugged in correctly");
                 while (true) ;
             }
-
+            System.Console.WriteLine("SUCCESSFUL!");
+            System.Console.WriteLine("Initialising GoGL...");
             byte[] screenRes = File.Exists(@"0:\content\sys\resolution.gms")
                 ? File.ReadAllBytes(@"0:\content\sys\resolution.gms")
                 : new byte[] { 6 };
@@ -241,13 +251,12 @@ namespace GoOS
                     {
                         if (BuildType == "INTERNAL TEST BUILD")
                         {
-                            InfoSound();
+                            
                             Dialogue.Show("It's time to move on...",
                                 "The Internal Test Version for this edition of GoOS has ended\nThis build of GoOS can no longer access GoOS Online Services.\nPlease check with your INTERNAL TEST Group to see if a new version has been issued.");
                         }
                         else
                         {
-                            InfoSound();
                             Dialogue.Show("GoOS Update",
                                 "A newer version of GoOS is available on Github.\nWe recommend you update to the latest version for stability and security reasons.\nhttps://github.com/Owen2k6/GoOS/releases\nCurrent Version: " +
                                 version + "\nLatest Version: " + content);
@@ -257,13 +266,13 @@ namespace GoOS
                     {
                         if (BuildType == "INTERNAL TEST BUILD")
                         {
-                            InfoSound();
+                            
                             Dialogue.Show("It's time to move on...",
                                 "The Internal Test Version for this edition of GoOS has ended\nThis build of GoOS can no longer access GoOS Online Services.\nPlease check with your INTERNAL TEST Group to see if a new version has been issued.");
                         }
                         else
                         {
-                            InfoSound();
+                            
                             Dialogue.Show("GoOS Update",
                                 "The next GoOS has been released.\nWe don't want to force you to update but at least check out whats new in GoOS " +
                                 editionnext + "!\nhttps://github.com/Owen2k6/GoOS/releases/tag/" + editionnext);

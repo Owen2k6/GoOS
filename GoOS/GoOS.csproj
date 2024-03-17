@@ -224,6 +224,10 @@
 	  <EmbeddedResource Include="Resources\GUI\boot.bmp" />
 	  <None Remove="Resources\GUI\bootlogo.bmp" />
 	  <EmbeddedResource Include="Resources\GUI\bootlogo.bmp" />
+	  <None Remove="Resources\GUI\Settings\Background.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\Settings\Background.bmp" />
+	  <None Remove="Resources\GUI\Settings\Unknown.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\Settings\Unknown.bmp" />
     </ItemGroup>
 
     <PropertyGroup>

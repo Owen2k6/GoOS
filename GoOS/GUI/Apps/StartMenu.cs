@@ -10,6 +10,7 @@ using GoOS.Commands;
 using IL2CPU.API.Attribs;
 using GoGL.Graphics;
 using GoGL.Hardware.GPU;
+using GoOS.GUI.Apps.Settings;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps
@@ -115,8 +116,7 @@ namespace GoOS.GUI.Apps
             });
             AddSideButton("Settings", () =>
             {
-                WindowManager.AddWindow(new GTerm());
-                ControlPanel.Launch();
+                WindowManager.AddWindow(new Frame());
                 Dispose();
             });
             AddSideButton("Paint", () =>

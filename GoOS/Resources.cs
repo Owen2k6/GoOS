@@ -227,6 +227,12 @@ namespace GoOS
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoWeb.bmp")]
         static byte[] goWebIconRaw;
+        
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Settings.Background.bmp")]
+        static byte[] SBGRaw;
+        
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Settings.Unknown.bmp")]
+        static byte[] UnknownRaw;
 
         public static Canvas easterEgg;
         public static Canvas RunImage;
@@ -297,6 +303,8 @@ namespace GoOS
         public static Canvas startBackground;
         public static Canvas taskbarBackground;
         public static Canvas goWebIcon;
+        public static Canvas SBG;
+        public static Canvas Unknown;
         public static Font Font_1x = Font.Fallback;
         public static Font Font_2x = Font.Fallback;
 
@@ -365,6 +373,8 @@ namespace GoOS
                     startBackground = Image.FromBitmap(startBackgroundRaw, false);
                     taskbarBackground = Image.FromBitmap(taskbarBackgroundRaw, false);
                     goWebIcon = Image.FromBitmap(goWebIconRaw, false);
+                    SBG = Image.FromBitmap(SBGRaw, false);
+                    Unknown = Image.FromBitmap(UnknownRaw, false);
                     break;
 
                 case ResourceType.Priority:
