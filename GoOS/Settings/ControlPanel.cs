@@ -13,6 +13,9 @@ using GoOS.GUI.Apps;
 
 namespace GoOS
 {
+    //TODO: This needs to be deprecated with its own dedicated settings app on the GUI.
+    
+    
     /// <summary>
     /// Settings app.
     /// </summary>
@@ -70,13 +73,19 @@ namespace GoOS
 
         public static readonly List<(string, (ushort Width, ushort Height))> videoModes = new()
         {
-            ("1024 x 768 (4:3)", (1024, 768)),
-            ("1152 x 864 (4:3)", (1152, 864)),
-            ("1280 x 720 (16:9)", (1280, 720)),
-            ("1280 x 1024 (5:4)", (1280, 1024)),
-            ("1440 x 900 (16:10)", (1440, 900)),
-            ("1600 x 900 (16:9)", (1600, 900)),
-            ("1920 x 1080 (16:9)", (1920, 1080)),
+            ("800  × 600 (4:3)", (800, 600)),
+            ("1024 × 768 (4:3)", (1024, 768)),
+            ("1280 × 960 (4:3)", (1280, 960)),
+            ("1400 × 1050 (4:3)", (1400, 1050)),
+            ("1600 × 1200 (4:3)", (1600, 1200)),
+            ("1280 × 720 (16:9)", (1280, 720)),
+            ("1280 × 800 (16:10)", (1280, 800)),
+            ("1366 × 768 (16:9)", (1366, 768)),
+            ("1440 × 900 (16:10)", (1440, 900)),
+            ("1600 × 900 (16:9)", (1600, 900)),
+            ("1680 × 1050 (16:10)", (1680, 1050)),
+            ("1920 × 1080 (16:9)", (1920, 1080)),
+            ("1920 × 1200 (16:10)", (1920, 1200)),
             ("2560 × 1440 (16:9)", (2560, 1440))
         };
 
@@ -218,7 +227,8 @@ namespace GoOS
         private static void DrawButtons()
         {
             // Clear the buttons
-            Console.Canvas.DrawFilledRectangle(3 * 8, 2 * 16, 12 * 8, Convert.ToUInt16(Console.Canvas.Height - (6 * 16)), 0, ThemeManager.Background);
+            Console.Canvas.DrawFilledRectangle(3 * 8, 2 * 16, 12 * 8,
+                Convert.ToUInt16(Console.Canvas.Height - (6 * 16)), 0, ThemeManager.Background);
 
             // Draw the menu buttons
             int nextPos = 18;
@@ -286,27 +296,35 @@ namespace GoOS
         private static void DrawFrame()
         {
             // Draw the frame with GUI instead of TUI
-            Console.Canvas.DrawRectangle(3, 7, Convert.ToUInt16(Console.Canvas.Width - 6), Convert.ToUInt16(Console.Canvas.Height - 14), 0, ThemeManager.WindowBorder);
-            Console.Canvas.DrawRectangle(4, 8, Convert.ToUInt16(Console.Canvas.Width - 6), Convert.ToUInt16(Console.Canvas.Height - 14), 0, ThemeManager.WindowBorder);
+            Console.Canvas.DrawRectangle(3, 7, Convert.ToUInt16(Console.Canvas.Width - 6),
+                Convert.ToUInt16(Console.Canvas.Height - 14), 0, ThemeManager.WindowBorder);
+            Console.Canvas.DrawRectangle(4, 8, Convert.ToUInt16(Console.Canvas.Width - 6),
+                Convert.ToUInt16(Console.Canvas.Height - 14), 0, ThemeManager.WindowBorder);
             Console.Canvas.DrawLine(123, 9, 123, Console.Canvas.Height - 7, ThemeManager.WindowBorder);
             Console.Canvas.DrawLine(124, 9, 124, Console.Canvas.Height - 7, ThemeManager.WindowBorder);
-            Console.Canvas.DrawLine(5, Console.Canvas.Height - 64, Console.Canvas.Width - 5, Console.Canvas.Height - 64, ThemeManager.WindowBorder);
-            Console.Canvas.DrawLine(6, Console.Canvas.Height - 64, Console.Canvas.Width - 5, Console.Canvas.Height - 64, ThemeManager.WindowBorder);
+            Console.Canvas.DrawLine(5, Console.Canvas.Height - 64, Console.Canvas.Width - 5, Console.Canvas.Height - 64,
+                ThemeManager.WindowBorder);
+            Console.Canvas.DrawLine(6, Console.Canvas.Height - 64, Console.Canvas.Width - 5, Console.Canvas.Height - 64,
+                ThemeManager.WindowBorder);
         }
 
         private static void DrawControls(List<string> controls)
         {
             // Clear controls
-            Console.Canvas.DrawFilledRectangle(8, Console.Canvas.Height - 8, Convert.ToUInt16(Console.Canvas.Width - 16), 16, 0, ThemeManager.Background);
-            Console.Canvas.DrawLine(8, Console.Canvas.Height - 7, Console.Canvas.Width - 8, Console.Canvas.Height - 7, ThemeManager.WindowBorder);
-            Console.Canvas.DrawLine(8, Console.Canvas.Height - 8, Console.Canvas.Width - 8, Console.Canvas.Height - 8, ThemeManager.WindowBorder);
+            Console.Canvas.DrawFilledRectangle(8, Console.Canvas.Height - 8,
+                Convert.ToUInt16(Console.Canvas.Width - 16), 16, 0, ThemeManager.Background);
+            Console.Canvas.DrawLine(8, Console.Canvas.Height - 7, Console.Canvas.Width - 8, Console.Canvas.Height - 7,
+                ThemeManager.WindowBorder);
+            Console.Canvas.DrawLine(8, Console.Canvas.Height - 8, Console.Canvas.Width - 8, Console.Canvas.Height - 8,
+                ThemeManager.WindowBorder);
 
             // Draw controls
             string controlsStr = string.Empty;
             for (int i = 0; i < controls.Count; i++)
                 controlsStr += controls[i] + " / ";
             controlsStr = controlsStr.Remove(controlsStr.Length - 3);
-            DrawText(" " + controlsStr + " ", Console.WindowWidth - 3 - controlsStr.Length, Console.WindowHeight - 1, ThemeManager.WindowBorder, ThemeManager.Background);
+            DrawText(" " + controlsStr + " ", Console.WindowWidth - 3 - controlsStr.Length, Console.WindowHeight - 1,
+                ThemeManager.WindowBorder, ThemeManager.Background);
         }
 
         /// <summary>
@@ -394,20 +412,22 @@ namespace GoOS
                 {
                     if (preview)
                     {
-                        DrawText("Allows you to change your keyboard distribution.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                        DrawText("Allows you to change your keyboard distribution.", 18, Console.WindowHeight - 7,
+                            ThemeManager.WindowText,
                             ThemeManager.Background);
                         DrawText("Available keyboard distributions:", 18, 2, ThemeManager.WindowText,
                             ThemeManager.Background);
                         for (int i = 0; i < scanMaps.Count; i++)
                         {
-                            DrawButton(scanMaps[i].Item1, 18, 4 + i, false); // Draw button automatically at the correct coordinates
+                            DrawButton(scanMaps[i].Item1, 18, 4 + i,
+                                false); // Draw button automatically at the correct coordinates
                         }
                     }
                     else
                     {
                         int keyboardMenuSelectedButton = 0;
 
-                    Refresh:
+                        Refresh:
                         if (keyboardMenuSelectedButton > 5)
                         {
                             keyboardMenuSelectedButton = 0;
@@ -420,7 +440,8 @@ namespace GoOS
                         Console.ForegroundColor = ThemeManager.WindowText;
                         Console.BackgroundColor = ThemeManager.Background;
 
-                        DrawText("Allows you to change your keyboard distribution.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                        DrawText("Allows you to change your keyboard distribution.", 18, Console.WindowHeight - 7,
+                            ThemeManager.WindowText,
                             ThemeManager.Background);
                         DrawText("Available keyboard distributions:", 18, 2, ThemeManager.WindowText,
                             ThemeManager.Background);
@@ -429,6 +450,7 @@ namespace GoOS
                             DrawButton(scanMaps[i].Item1, 18, 4 + i,
                                 i == keyboardMenuSelectedButton); // Draw button automatically at the correct coordinates
                         }
+
                         Console.Render();
 
                         var key = Console.ReadKey(true).Key;
@@ -461,22 +483,25 @@ namespace GoOS
                 {
                     if (preview)
                     {
-                        DrawText("Allows you to change GoOS's theme.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                        DrawText("Allows you to change GoOS's theme.", 18, Console.WindowHeight - 7,
+                            ThemeManager.WindowText,
                             ThemeManager.Background);
                         DrawText("Available themes: ", 18, 2, ThemeManager.WindowText, ThemeManager.Background);
 
                         string[] themes = Directory.GetFiles(@"0:\content\themes\");
                         for (int i = 0; i < themes.Length; i++)
                         {
-                            DrawButton(themes[i].Replace(".gtheme", ""), 18, 4 + i, false); // Draw button automatically at the correct coordinates
+                            DrawButton(themes[i].Replace(".gtheme", ""), 18, 4 + i,
+                                false); // Draw button automatically at the correct coordinates
                         }
                     }
                     else
                     {
                         int themeMenuSelectedButton = 0;
 
-                    Refresh:
-                        DrawText("Allows you to change GoOS's theme.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                        Refresh:
+                        DrawText("Allows you to change GoOS's theme.", 18, Console.WindowHeight - 7,
+                            ThemeManager.WindowText,
                             ThemeManager.Background);
                         DrawText("Available themes: ", 18, 2, ThemeManager.WindowText, ThemeManager.Background);
 
@@ -496,6 +521,7 @@ namespace GoOS
                             DrawButton(themes[i].Replace(".gtheme", ""), 18, 4 + i,
                                 i == themeMenuSelectedButton); // Draw button automatically at the correct coordinates
                         }
+
                         Console.Render();
 
                         var key = Console.ReadKey(true).Key;
@@ -523,7 +549,6 @@ namespace GoOS
 
                             default:
                                 goto Refresh;
-
                         }
                     }
                 }
@@ -531,21 +556,23 @@ namespace GoOS
                 {
                     if (preview)
                     {
-                        DrawText("Allows you to change your terminal's size.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                        DrawText("Allows you to change your terminal's size.", 18, Console.WindowHeight - 7,
+                            ThemeManager.WindowText,
                             ThemeManager.Background);
                         DrawText("Available resolutions:", 18, 2, ThemeManager.WindowText,
                             ThemeManager.Background);
 
                         for (int i = 0; i < terminalModes.Count; i++)
                         {
-                            DrawButton(terminalModes[i].Item1, 18, 4 + i, false); // Draw button automatically at the correct coordinates
+                            DrawButton(terminalModes[i].Item1, 18, 4 + i,
+                                false); // Draw button automatically at the correct coordinates
                         }
                     }
                     else
                     {
                         int displayMenuSelectedButton = 0;
 
-                    Refresh:
+                        Refresh:
                         if (displayMenuSelectedButton > terminalModes.Count - 1)
                         {
                             displayMenuSelectedButton = 0;
@@ -558,7 +585,8 @@ namespace GoOS
                         Console.ForegroundColor = ThemeManager.WindowText;
                         Console.BackgroundColor = ThemeManager.Background;
 
-                        DrawText("Allows you to change your terminal's size.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                        DrawText("Allows you to change your terminal's size.", 18, Console.WindowHeight - 7,
+                            ThemeManager.WindowText,
                             ThemeManager.Background);
                         DrawText("Available resolutions:", 18, 2, ThemeManager.WindowText,
                             ThemeManager.Background);
@@ -568,6 +596,7 @@ namespace GoOS
                             DrawButton(terminalModes[i].Item1, 18, 4 + i,
                                 i == displayMenuSelectedButton); // Draw button automatically at the correct coordinates
                         }
+
                         Console.Render();
 
                         var key = Console.ReadKey(true).Key;
@@ -578,13 +607,16 @@ namespace GoOS
                                 break;
 
                             case ConsoleKey.Enter:
-                                Console.Init(terminalModes[displayMenuSelectedButton].Item2.Width, terminalModes[displayMenuSelectedButton].Item2.Height);
+                                Console.Init(terminalModes[displayMenuSelectedButton].Item2.Width,
+                                    terminalModes[displayMenuSelectedButton].Item2.Height);
                                 Console.Visible = false;
                                 GUI.WindowManager.AddWindow(new GTerm());
                                 File.Create(@"0:\content\sys\tresolution.gms");
-                                File.WriteAllBytes(@"0:\content\sys\tresolution.gms", new byte[] { (byte)displayMenuSelectedButton });
+                                File.WriteAllBytes(@"0:\content\sys\tresolution.gms",
+                                    new byte[] { (byte)displayMenuSelectedButton });
                                 DrawMenu();
-                                DrawMessage("Set terminal size mode to " + terminalModes[displayMenuSelectedButton].Item1);
+                                DrawMessage("Set terminal size mode to " +
+                                            terminalModes[displayMenuSelectedButton].Item1);
                                 //DrawMenu();
                                 goto Refresh;
 
@@ -605,21 +637,23 @@ namespace GoOS
                 {
                     if (preview)
                     {
-                        DrawText("Allows you to change your video card's resolution.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                        DrawText("Allows you to change your video card's resolution.", 18, Console.WindowHeight - 7,
+                            ThemeManager.WindowText,
                             ThemeManager.Background);
                         DrawText("Available resolutions:", 18, 2, ThemeManager.WindowText,
                             ThemeManager.Background);
 
                         for (int i = 0; i < videoModes.Count; i++)
                         {
-                            DrawButton(videoModes[i].Item1, 18, 4 + i, false); // Draw button automatically at the correct coordinates
+                            DrawButton(videoModes[i].Item1, 18, 4 + i,
+                                false); // Draw button automatically at the correct coordinates
                         }
                     }
                     else
                     {
                         int displayMenuSelectedButton = 0;
 
-                    Refresh:
+                        Refresh:
                         if (displayMenuSelectedButton > videoModes.Count - 1)
                         {
                             displayMenuSelectedButton = 0;
@@ -632,7 +666,8 @@ namespace GoOS
                         Console.ForegroundColor = ThemeManager.WindowText;
                         Console.BackgroundColor = ThemeManager.Background;
 
-                        DrawText("Allows you to change your video card's resolution.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                        DrawText("Allows you to change your video card's resolution.", 18, Console.WindowHeight - 7,
+                            ThemeManager.WindowText,
                             ThemeManager.Background);
                         DrawText("Available resolutions:", 18, 2, ThemeManager.WindowText,
                             ThemeManager.Background);
@@ -642,6 +677,7 @@ namespace GoOS
                             DrawButton(videoModes[i].Item1, 18, 4 + i,
                                 i == displayMenuSelectedButton); // Draw button automatically at the correct coordinates
                         }
+
                         Console.Render();
 
                         var key = Console.ReadKey(true).Key;
@@ -653,14 +689,17 @@ namespace GoOS
 
                             case ConsoleKey.Enter:
                                 Console.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(videoModes[displayMenuSelectedButton].Item2.Width, videoModes[displayMenuSelectedButton].Item2.Height);
+                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                    videoModes[displayMenuSelectedButton].Item2.Width,
+                                    videoModes[displayMenuSelectedButton].Item2.Height);
                                 GUI.WindowManager.Update();
                                 GUI.WindowManager.windows = new List<GUI.Window>(10);
                                 Console.ConsoleMode = false;
                                 GUI.WindowManager.AddWindow(new Taskbar());
                                 GUI.WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
-                                File.WriteAllBytes(@"0:\content\sys\resolution.gms", new byte[] { (byte)displayMenuSelectedButton });
+                                File.WriteAllBytes(@"0:\content\sys\resolution.gms",
+                                    new byte[] { (byte)displayMenuSelectedButton });
                                 DrawMenu();
                                 DrawMessage("Set video mode to " + videoModes[displayMenuSelectedButton].Item1);
                                 //DrawMenu();
@@ -686,28 +725,32 @@ namespace GoOS
                 {
                     if (preview)
                     {
-                        DrawText("Allows you to system reset GoOS to factory settings.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
-                        ThemeManager.Background);
+                        DrawText("Allows you to system reset GoOS to factory settings.", 18, Console.WindowHeight - 7,
+                            ThemeManager.WindowText,
+                            ThemeManager.Background);
                         DrawText("Press R to reset the system, otherwise press ESC to", 18, 2, ThemeManager.WindowText,
                             ThemeManager.Background);
                         DrawText("exit this menu.", 18, 3, ThemeManager.WindowText, ThemeManager.Background);
-                        DrawText("WARNING: This will erase all the data in your hard disk", 18, 5, ThemeManager.ErrorText,
+                        DrawText("WARNING: This will erase all the data in your hard disk", 18, 5,
+                            ThemeManager.ErrorText,
                             ThemeManager.Background);
                         DrawText("drive!", 18, 6, ThemeManager.ErrorText, ThemeManager.Background);
                     }
                     else
                     {
-                        DrawText("Allows you to system reset GoOS to factory settings.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
-                        ThemeManager.Background);
+                        DrawText("Allows you to system reset GoOS to factory settings.", 18, Console.WindowHeight - 7,
+                            ThemeManager.WindowText,
+                            ThemeManager.Background);
                         DrawText("Press R to reset the system, otherwise press ESC to", 18, 2, ThemeManager.WindowText,
                             ThemeManager.Background);
                         DrawText("exit this menu.", 18, 3, ThemeManager.WindowText, ThemeManager.Background);
-                        DrawText("WARNING: This will erase all the data in your hard disk", 18, 5, ThemeManager.ErrorText,
+                        DrawText("WARNING: This will erase all the data in your hard disk", 18, 5,
+                            ThemeManager.ErrorText,
                             ThemeManager.Background);
                         DrawText("drive!", 18, 6, ThemeManager.ErrorText, ThemeManager.Background);
                         Console.Render();
 
-                    Refresh:
+                        Refresh:
                         var key = Console.ReadKey(true).Key;
                         switch (key)
                         {
@@ -717,7 +760,8 @@ namespace GoOS
 
                             case ConsoleKey.R:
                                 ClearMenu();
-                                DrawText("Allows you to system reset GoOS to factory settings.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                                DrawText("Allows you to system reset GoOS to factory settings.", 18,
+                                    Console.WindowHeight - 7, ThemeManager.WindowText,
                                     ThemeManager.Background);
 
                                 DrawText("RESET IN PROGRESS", 18, 2, ThemeManager.ErrorText, ThemeManager.Background);
@@ -727,14 +771,16 @@ namespace GoOS
                                 Kernel.FS.Disks[0].FormatPartition(0, "FAT32", false);
 
                                 ClearMenu();
-                                DrawText("Allows you to system reset GoOS to factory settings.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                                DrawText("Allows you to system reset GoOS to factory settings.", 18,
+                                    Console.WindowHeight - 7, ThemeManager.WindowText,
                                     ThemeManager.Background);
 
                                 for (int i = 40; i > 0; i--) // 250ms * 40 = 10s
                                 {
                                     DrawText("Restarting in " + i / 4 + " seconds...", 18, 2, ThemeManager.WindowText,
                                         ThemeManager.Background);
-                                    DrawText(new string('█', i) + new string('▒', 40 - i), 18, 4, ThemeManager.WindowText,
+                                    DrawText(new string('█', i) + new string('▒', 40 - i), 18, 4,
+                                        ThemeManager.WindowText,
                                         ThemeManager.Background);
                                     Console.Render();
                                     Thread.Sleep(250);
@@ -753,7 +799,8 @@ namespace GoOS
             {
                 if (menu == categoryButtonsInfoMenu[0])
                 {
-                    DrawText("Shows you info about GoOS.", 18, Console.WindowHeight - 7, ThemeManager.WindowText, ThemeManager.Background);
+                    DrawText("Shows you info about GoOS.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                        ThemeManager.Background);
                     DrawText("GoOS Kernel " + Kernel.BuildType + " " + Kernel.version, 18, 2, ThemeManager.WindowText,
                         ThemeManager.Background);
                     DrawText("GoOS is a free and open source software designed with", 18, 4, ThemeManager.WindowText,
@@ -768,7 +815,8 @@ namespace GoOS
                 }
                 else if (menu == categoryButtonsInfoMenu[1])
                 {
-                    DrawText("Shows you info about support for GoOS.", 18, Console.WindowHeight - 7, ThemeManager.WindowText,
+                    DrawText("Shows you info about support for GoOS.", 18, Console.WindowHeight - 7,
+                        ThemeManager.WindowText,
                         ThemeManager.Background);
                     DrawText("GoOS Support", 18, 2, ThemeManager.WindowText, ThemeManager.Background);
                     DrawText("For support, open a ticket in the discord server.", 18, 4, ThemeManager.WindowText,
@@ -792,6 +840,7 @@ namespace GoOS
                     Console.Render();
                 }
             }
+
             Console.DoubleBufferedMode = true;
         }
 
@@ -801,7 +850,8 @@ namespace GoOS
         private static void ClearMenu()
         {
             // Clear the menu with GUI instead of TUI
-            Console.Canvas.DrawFilledRectangle(18 * 8, 2 * 16, Convert.ToUInt16(Console.Canvas.Width - (20 * 8)), Convert.ToUInt16(Console.Canvas.Height - (6 * 16)), 0, ThemeManager.Background);
+            Console.Canvas.DrawFilledRectangle(18 * 8, 2 * 16, Convert.ToUInt16(Console.Canvas.Width - (20 * 8)),
+                Convert.ToUInt16(Console.Canvas.Height - (6 * 16)), 0, ThemeManager.Background);
             //Console.Render();
         }
     }
