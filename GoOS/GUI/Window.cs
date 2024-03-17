@@ -207,7 +207,7 @@ namespace GoOS.GUI
 
                 Dragging = false;
             }
-            
+
             if (MouseManager.MouseState == MouseState.None && previousMouseState == MouseState.Right)
             {
                 ShowContextMenu();
@@ -229,7 +229,7 @@ namespace GoOS.GUI
             {
                 wasDown = true;
                 downOnControl = hoveredControl;
-                
+
                 HandleDown(new MouseEventArgs()
                 {
                     X = RelativeMouseX,
@@ -403,7 +403,7 @@ namespace GoOS.GUI
         {
             Dialogue.Show(
                 $"About {Title}",
-                $"GoOS {Title} v{version}\n\nCopyright (c) "+Kernel.Copyright+ "Owen2k6\nAll rights reserved.",
+                $"GoOS {Title} v{version}\n\nCopyright (c) " + Kernel.Copyright + "Owen2k6\nAll rights reserved.",
                 null,
                 heightOverride: 144);
         }

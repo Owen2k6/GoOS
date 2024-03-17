@@ -41,7 +41,7 @@ namespace GoOS
         public static string[] pathPaths = { };
 
         //Vars for OS
-        public const string version = "1.5.2";
+        public const string version = "1.5.3";
         public const string edition = "1.5"; // This is the current edition of GoOS. Used for UPDATER.
         public const string editionnext = "1.6"; // This is the next edition of GoOS. Used for UPDATER.
         public const string BuildType = "R";
@@ -110,7 +110,7 @@ namespace GoOS
                 ControlPanel.videoModes[screenRes[0]].Item2.Height / 2 - 37, Resources.bootlogo, true);
             Console.Init(ControlPanel.terminalModes[termRes[0]].Item2.Width,
                 ControlPanel.terminalModes[termRes[0]].Item2.Height);
-            
+
             Cosmos.System.PCSpeaker.Beep(600, 100);
 
 
@@ -412,12 +412,14 @@ namespace GoOS
             Cosmos.System.PCSpeaker.Beep(600, 400);
             Cosmos.System.PCSpeaker.Beep(500, 400);
         }
+
         public static void ErrorSound()
         {
             Cosmos.System.PCSpeaker.Beep(600, 20);
             Cosmos.System.PCSpeaker.Beep(400, 20);
             Cosmos.System.PCSpeaker.Beep(200, 20);
         }
+
         public static void InfoSound()
         {
             Cosmos.System.PCSpeaker.Beep(600, 20);

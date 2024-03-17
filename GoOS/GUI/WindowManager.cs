@@ -352,7 +352,7 @@ namespace GoOS.GUI
                     {
                         GetWindowByType<StartMenu>().Dispose();
                     }
-                    
+
                     if (MouseManager.ScreenWidth != Canvas.Width || MouseManager.ScreenHeight != Canvas.Height)
                     {
                         MouseManager.ScreenWidth = Canvas.Width;

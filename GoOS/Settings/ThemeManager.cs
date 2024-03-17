@@ -40,10 +40,10 @@ namespace GoOS.Themes
         {
             { "Black", Black }, { "DarkBlue", DarkBlue },
             { "DarkGreen", DarkGreen }, { "DarkCyan", DarkCyan },
-            { "DarkRed", DarkRed },{ "DarkMagenta", DarkMagenta },
+            { "DarkRed", DarkRed }, { "DarkMagenta", DarkMagenta },
             { "DarkYellow", DarkYellow }, { "Gray", Gray },
-            { "DarkGray", DarkGray },{ "Blue", Blue },
-            { "Green", Green },{ "Cyan", Cyan },
+            { "DarkGray", DarkGray }, { "Blue", Blue },
+            { "Green", Green }, { "Cyan", Cyan },
             { "Red", Red }, { "Magenta", Magenta },
             { "Yellow", Yellow }, { "White", White },
         };
