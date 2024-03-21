@@ -30,6 +30,12 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_2x.btf")]
         static byte[] font_2x_raw;
 
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.MicrosoftSansSerif16.btf")]
+        static byte[] SansSerif16Raw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.MSUIGothic16.btf")]
+        static byte[] UIGothic16Raw;
+
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoIDE.run.bmp")]
         static byte[] runRaw;
 
@@ -228,6 +234,21 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoWeb.bmp")]
         static byte[] goWebIconRaw;
 
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Settings.Background.bmp")]
+        static byte[] SBGRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Settings.Unknown.bmp")]
+        static byte[] UnknownRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Settings.BackgroundMenu.bmp")]
+        static byte[] SBGMRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Settings.ButtonSelection.bmp")]
+        static byte[] SBGBSRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Settings.Back.bmp")]
+        static byte[] SBBBRaw;
+
         public static Canvas easterEgg;
         public static Canvas RunImage;
         public static Canvas gtermIcon;
@@ -297,8 +318,15 @@ namespace GoOS
         public static Canvas startBackground;
         public static Canvas taskbarBackground;
         public static Canvas goWebIcon;
+        public static Canvas SBG;
+        public static Canvas Unknown;
+        public static Canvas SBGM;
+        public static Canvas SBGBS;
+        public static Canvas SBBB;
         public static Font Font_1x = Font.Fallback;
         public static Font Font_2x = Font.Fallback;
+        public static Font SansSerif16 = Font.Fallback;
+        public static Font UIGothic16 = Font.Fallback;
 
         public static void Generate(ResourceType type)
         {
@@ -365,6 +393,11 @@ namespace GoOS
                     startBackground = Image.FromBitmap(startBackgroundRaw, false);
                     taskbarBackground = Image.FromBitmap(taskbarBackgroundRaw, false);
                     goWebIcon = Image.FromBitmap(goWebIconRaw, false);
+                    SBG = Image.FromBitmap(SBGRaw, false);
+                    Unknown = Image.FromBitmap(UnknownRaw, false);
+                    SBGM = Image.FromBitmap(SBGMRaw, false);
+                    SBGBS = Image.FromBitmap(SBGBSRaw, false);
+                    SBBB = Image.FromBitmap(SBBBRaw, false);
                     break;
 
                 case ResourceType.Priority:
@@ -386,6 +419,8 @@ namespace GoOS
                 case ResourceType.Fonts:
                     Font_1x = new Font(font_1x_raw, 16);
                     Font_2x = new Font(font_2x_raw, 32);
+                    SansSerif16 = new Font(SansSerif16Raw, 32);
+                    UIGothic16 = new Font(UIGothic16Raw, 32);
                     break;
 
                 case ResourceType.OOBE:

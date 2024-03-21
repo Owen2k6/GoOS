@@ -29,6 +29,7 @@ namespace GoOS.GUI
         {
             // TODO: finish overrides
 
+            Kernel.InfoSound();
             var dialogue = new Dialogue(title, message, buttons, icon);
             WindowManager.AddWindow(dialogue);
             WindowManager.Update();

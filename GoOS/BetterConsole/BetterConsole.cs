@@ -5,6 +5,7 @@ using Cosmos.System;
 using GoOS.GUI;
 using GoOS.Themes;
 using GoGL.Graphics;
+using GoOS.GUI.Apps.Settings;
 using static GoOS.Resources;
 
 /// <summary>
@@ -330,7 +331,7 @@ public static class BetterConsole
 
                                     case ConsoleKeyEx.Enter:
                                         if (MenuOptions[selected] == MenuOptions[0])
-                                            GoOS.ControlPanel.Launch();
+                                            WindowManager.AddWindow(new Frame());
                                         else if (MenuOptions[selected] == MenuOptions[1])
                                             Power.Reboot();
                                         break;
