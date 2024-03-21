@@ -8,6 +8,7 @@ namespace GoOS.GUI.Apps.GoWeb
 {
     public class GoWebWindow : Window
     {
+        public static string Version = "0.1.0";
         readonly Input AddressBar;
 
         readonly Button HomeButton;

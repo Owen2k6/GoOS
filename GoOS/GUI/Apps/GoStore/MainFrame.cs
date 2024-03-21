@@ -15,6 +15,7 @@ namespace GoOS.GUI.Apps.GoStore
         Button[] catagoryButtons;
         Button[] _repoFilesButtons;
         string[] Catagories;
+        public static string Version = "1.0";
 
         private int catagory = 0;
         private int page = 0;

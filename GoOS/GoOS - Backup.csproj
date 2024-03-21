@@ -207,6 +207,7 @@
       <EmbeddedResource Include="Resources\OOBE\setupwelcome.bmp" />
       <EmbeddedResource Include="Resources\GUI\question.bmp" />
       <EmbeddedResource Include="Resources\GUI\closebutton_hover.bmp" />
+      <EmbeddedResource Include="Resources\MSUIGothicCustomCharset16.btf" />
       <EmbeddedResource Include="Resources\Welcome.bmp" />
 	  <EmbeddedResource Include="Resources\GUI\warning.bmp" />
 	  <None Remove="Resources\GUI\TaskStart\startmenuBG.bmp" />
@@ -233,15 +234,10 @@
 	  <EmbeddedResource Include="Resources\GUI\Settings\ButtonSelection.bmp" />
 	  <None Remove="Resources\GUI\Settings\Back.bmp" />
 	  <EmbeddedResource Include="Resources\GUI\Settings\Back.bmp" />
-	  <None Remove="Resources\MicrosoftSansSerif16.btf" />
-	  <EmbeddedResource Include="Resources\MicrosoftSansSerif16.btf" />
-	  <None Remove="Resources\MSUIGothic16.btf" />
-	  <EmbeddedResource Include="Resources\MSUIGothic16.btf" />
     </ItemGroup>
 
     <PropertyGroup>
       <DefineConstants>BUILD_GOWEB</DefineConstants>
-      <UseUEFI>True</UseUEFI>
     </PropertyGroup>
   
     <ItemGroup Condition="'$(DefineConstants.Contains(BUILD_GOWEB))' != 'true'">

@@ -44,6 +44,7 @@ namespace GoOS
         //Vars for OS
         public const string version = "1.5.3";
         public const string edition = "1.5"; // This is the current edition of GoOS. Used for UPDATER.
+        public const string editiontitle = "Scafell"; // This is the current edition name of GoOS.
         public const string editionnext = "1.6"; // This is the next edition of GoOS. Used for UPDATER.
         public const string BuildType = "R";
         public const string Copyright = "2021-2024";
@@ -68,7 +69,7 @@ namespace GoOS
             System.Console.ForegroundColor = System.ConsoleColor.Cyan;
             System.Console.WriteLine("GoOS - Starting GoOS...");
             System.Console.ForegroundColor = System.ConsoleColor.White;
-            System.Console.WriteLine("Initialising memory.");
+            System.Console.WriteLine("Initialising Memory.");
 
             if (Cosmos.Core.CPU.GetAmountOfRAM() < 256)
             {
@@ -118,13 +119,9 @@ namespace GoOS
             WindowManager.Canvas.DrawImage(0, 0, Resources.bootbackground, false);
             WindowManager.Canvas.DrawImage(ControlPanel.videoModes[screenRes[0]].Item2.Width / 2 - 37,
                 ControlPanel.videoModes[screenRes[0]].Item2.Height / 2 - 37, Resources.bootlogo, true);
-            Console.Init(ControlPanel.terminalModes[termRes[0]].Item2.Width,
-                ControlPanel.terminalModes[termRes[0]].Item2.Height);
-
+            Console.Init(800,
+                600);
             Cosmos.System.PCSpeaker.Beep(600, 100);
-
-
-            //WindowManager.AddWindow(new LoadingDialogue("GoOS is starting\nPlease wait..."));
             WindowManager.Update();
 
             Resources.Generate(ResourceType.Normal);
@@ -206,169 +203,6 @@ namespace GoOS
 
             Sys.MouseManager.X = 0;
             Sys.MouseManager.Y = 0;
-
-            #region GoOS Update Check
-
-            try
-            {
-                using (TcpClient tcpClient = new TcpClient())
-                {
-                    var dnsClient = new DnsClient();
-
-                    // DNS
-                    dnsClient.Connect(DNSConfig.DNSNameservers[0]);
-                    dnsClient.SendAsk("api.goos.owen2k6.com");
-
-                    // Address from IP
-                    Address address = dnsClient.Receive();
-                    dnsClient.Close();
-                    string serverIP = address.ToString();
-
-                    tcpClient.Connect(serverIP, 80);
-                    NetworkStream stream = tcpClient.GetStream();
-                    string httpget = "GET /GoOS/" + edition + ".goos HTTP/1.1\r\n" +
-                                     "User-Agent: GoOS\r\n" +
-                                     "Accept: */*\r\n" +
-                                     "Accept-Encoding: identity\r\n" +
-                                     "Host: api.goos.owen2k6.com\r\n" +
-                                     "Connection: Keep-Alive\r\n\r\n";
-                    byte[] dataToSend = Encoding.ASCII.GetBytes(httpget);
-                    stream.Write(dataToSend, 0, dataToSend.Length);
-
-                    // Receive data
-                    byte[] receivedData = new byte[tcpClient.ReceiveBufferSize];
-                    int bytesRead = stream.Read(receivedData, 0, receivedData.Length);
-                    string receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
-
-                    string[] responseParts = receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
-
-                    if (responseParts.Length < 2 || responseParts.Length > 2)
-                        Dialogue.Show("GoOS Update", "Invalid HTTP response!", default, WindowManager.errorIcon);
-
-                    string content = responseParts[1];
-
-                    if (content != version && content != editionnext)
-                    {
-                        if (BuildType == "INTERNAL TEST BUILD")
-                        {
-                            
-                            Dialogue.Show("It's time to move on...",
-                                "The Internal Test Version for this edition of GoOS has ended\nThis build of GoOS can no longer access GoOS Online Services.\nPlease check with your INTERNAL TEST Group to see if a new version has been issued.");
-                        }
-                        else
-                        {
-                            Dialogue.Show("GoOS Update",
-                                "A newer version of GoOS is available on Github.\nWe recommend you update to the latest version for stability and security reasons.\nhttps://github.com/Owen2k6/GoOS/releases\nCurrent Version: " +
-                                version + "\nLatest Version: " + content);
-                        }
-                    }
-                    else if (content == editionnext)
-                    {
-                        if (BuildType == "INTERNAL TEST BUILD")
-                        {
-                            
-                            Dialogue.Show("It's time to move on...",
-                                "The Internal Test Version for this edition of GoOS has ended\nThis build of GoOS can no longer access GoOS Online Services.\nPlease check with your INTERNAL TEST Group to see if a new version has been issued.");
-                        }
-                        else
-                        {
-                            
-                            Dialogue.Show("GoOS Update",
-                                "The next GoOS has been released.\nWe don't want to force you to update but at least check out whats new in GoOS " +
-                                editionnext + "!\nhttps://github.com/Owen2k6/GoOS/releases/tag/" + editionnext);
-                        }
-                    }
-                    else if (content == "404")
-                    {
-                        Dialogue.Show("GoOS Update", "Your Version of GoOS does not support GoOS Update.");
-                    }
-                    else
-                    {
-                        WindowManager.AddWindow(new Welcome());
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorSound();
-                Dialogue.Show("GoOS Update", "Failed to connect to Owen2k6 Api. Error: " + ex);
-            }
-
-            #endregion
-
-            #region GoOS Support Checker
-
-            try
-            {
-                using (TcpClient tcpClient = new TcpClient())
-                {
-                    var dnsClient = new DnsClient();
-
-                    // DNS
-                    dnsClient.Connect(DNSConfig.DNSNameservers[0]);
-                    dnsClient.SendAsk("api.goos.owen2k6.com");
-
-                    // Address from IP
-                    Address address = dnsClient.Receive();
-                    dnsClient.Close();
-                    string serverIP = address.ToString();
-
-                    tcpClient.Connect(serverIP, 80);
-                    NetworkStream stream = tcpClient.GetStream();
-                    string httpget = "GET /GoOS/" + edition + "-support.goos HTTP/1.1\r\n" +
-                                     "User-Agent: GoOS\r\n" +
-                                     "Accept: */*\r\n" +
-                                     "Accept-Encoding: identity\r\n" +
-                                     "Host: api.goos.owen2k6.com\r\n" +
-                                     "Connection: Keep-Alive\r\n\r\n";
-                    byte[] dataToSend = Encoding.ASCII.GetBytes(httpget);
-                    stream.Write(dataToSend, 0, dataToSend.Length);
-
-                    // Receive data
-                    byte[] receivedData = new byte[tcpClient.ReceiveBufferSize];
-                    int bytesRead = stream.Read(receivedData, 0, receivedData.Length);
-                    string receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
-
-                    string[] responseParts = receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
-
-                    if (responseParts.Length < 2 || responseParts.Length > 2)
-                        Dialogue.Show("GoOS Update", "Invalid HTTP response!", default, WindowManager.errorIcon);
-
-                    string content = responseParts[1];
-
-                    if (content == "true")
-                    {
-                    }
-                    else if (content == "false")
-                    {
-                        Dialogue.Show("GoOS Security Notice",
-                            "GoOS Support for this edition has ended. Please update to the latest version of GoOS for the latest security patches.\nThere will no more security patches released for GoOS " +
-                            edition +
-                            ".\nDownload the latest edition from \nhttps://github.com/Owen2k6/GoOS/releases/tag/");
-                    }
-                    else
-                    {
-                        if (BuildType == "INTERNAL TEST BUILD")
-                        {
-                            Dialogue.Show("It's time to move on...",
-                                "The Internal Test Version for this edition of GoOS has ended\nThis build of GoOS can no longer access GoOS Online Services.\nPlease check with your INTERNAL TEST Group to see if a new version has been issued.");
-                        }
-                        else
-                        {
-                            Dialogue.Show("GoOS Security",
-                                "You seem to be sporting some funky version of GoOS. Your edition doesnt exist on our servers (" +
-                                edition + ")");
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorSound();
-                Dialogue.Show("GoOS Security", "Failed to connect to Owen2k6 Api. Error: " + ex);
-            }
-
-            #endregion
 
             Console.Clear();
 
