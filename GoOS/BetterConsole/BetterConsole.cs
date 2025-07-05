@@ -26,8 +26,10 @@ public static class BetterConsole
         "Reboot"
     };
 
-    public static bool ConsoleMode = false;
+    // Maximum size for key buffer to prevent memory issues
+    private const int MaxKeyBufferSize = 256;
 
+    public static bool ConsoleMode = false;
     public static bool Visible = false;
 
     /// <summary>
@@ -51,12 +53,12 @@ public static class BetterConsole
     public static ushort WindowHeight = 0;
 
     /// <summary>
-    /// The foreground color of the <see cref="BetterConsole"/>
+    /// The foreground colour of the <see cref="BetterConsole"/>
     /// </summary>
     public static Color ForegroundColor = ConsoleColorEx.White;
 
     /// <summary>
-    /// The background color of the <see cref="BetterConsole"/>
+    /// The background colour of the <see cref="BetterConsole"/>
     /// </summary>
     public static Color BackgroundColor = ConsoleColorEx.Black;
 
@@ -77,11 +79,14 @@ public static class BetterConsole
 
     public static string Title = "GTerm";
 
+    private static string lastInput = string.Empty;
+    private static byte scrollCounter = 0;
+
     /// <summary>
-    /// Initializes the <see cref="BetterConsole">
+    /// Initialises the <see cref="BetterConsole">
     /// </summary>
-    /// <param name="videoWidth">The width of the canvas</param>
-    /// <param name="videoHeight">The height of the canvas</param>
+    /// <param name="width">The width of the canvas</param>
+    /// <param name="height">The height of the canvas</param>
     public static void Init(ushort width, ushort height)
     {
         Canvas = new Canvas(width, height);
@@ -98,6 +103,7 @@ public static class BetterConsole
         Canvas.Clear(BackgroundColor);
         CursorLeft = 0;
         CursorTop = 0;
+
         if (render || !DoubleBufferedMode)
             Render();
     }
@@ -114,22 +120,35 @@ public static class BetterConsole
     /// Writes a string to the <see cref="BetterConsole"/>
     /// </summary>
     /// <param name="text">The string to write</param>
+    /// <param name="quick">Whether to use quick rendering</param>
     public static void Write(object text, bool quick = false)
     {
-        foreach (char c in text.ToString())
-        {
-            Newline();
+        if (text == null) return;
 
+        string textStr = text.ToString();
+
+        foreach (char c in textStr)
+        {
+            // Handle newlines
             if (c == '\n')
             {
                 CursorLeft = 0;
                 CursorTop++;
+                CheckNewline();
+                continue;
             }
-            else
+
+            // Check if we need to wrap to next line
+            if (CursorLeft >= WindowWidth)
             {
-                PutChar(c, CursorLeft, CursorTop, quick);
-                CursorLeft++;
+                CursorLeft = 0;
+                CursorTop++;
+                CheckNewline();
             }
+
+            // Draw the character
+            PutChar(c, CursorLeft, CursorTop, quick);
+            CursorLeft++;
         }
 
         if (!DoubleBufferedMode)
@@ -137,10 +156,12 @@ public static class BetterConsole
     }
 
     /// <summary>
-    /// Writes a string to the <see cref="BetterConsole"/>
+    /// Writes a string to the <see cref="BetterConsole"/> followed by a newline
     /// </summary>
     /// <param name="text">The string to write</param>
-    public static void WriteLine(object text = null, bool quick = false) => Write(text + "\n", quick);
+    /// <param name="quick">Whether to use quick rendering</param>
+    public static void WriteLine(object text = null, bool quick = false) =>
+        Write((text ?? "") + "\n", quick);
 
     /// <summary>
     /// Reads input from the user
@@ -153,13 +174,20 @@ public static class BetterConsole
         {
             if (CursorVisible)
             {
-                Canvas.DrawString(CursorLeft * CharWidth, CursorTop * CharHeight, '_'.ToString(), Font_1x, ForegroundColor);
+                Canvas.DrawString(CursorLeft * CharWidth, CursorTop * CharHeight, "_", Font_1x, ForegroundColor);
+                Render();
             }
 
-            var keyPressed = KeyBuffer.TryDequeue(out var key);
-            if (keyPressed)
+            // Check for keypress
+            if (KeyBuffer.Count > 0)
             {
-                if (intercept == false)
+                var key = KeyBuffer.Dequeue();
+
+                // Clear cursor
+                Canvas.DrawFilledRectangle(CursorLeft * CharWidth, CursorTop * CharHeight,
+                    CharWidth, CharHeight, 0, BackgroundColor);
+
+                if (!intercept)
                 {
                     Write(key.KeyChar);
                 }
@@ -170,23 +198,17 @@ public static class BetterConsole
 
                 return new ConsoleKeyInfo(key.KeyChar, key.Key.ToConsoleKey(), xShift, xAlt, xControl);
             }
-            else
-            {
-                WindowManager.Update();
-            }
 
-            if (CursorVisible)
+            // Update the display
+            WindowManager.Update();
+
+            // Limit key buffer size to prevent memory issues
+            while (KeyBuffer.Count > MaxKeyBufferSize)
             {
-                // Just to be safe
-                Canvas.DrawString((CursorLeft - 1) * CharWidth, CursorTop * CharHeight, '_'.ToString(), Font_1x, Color.Black);
-                Canvas.DrawString((CursorLeft + 1) * CharWidth, CursorTop * CharHeight, '_'.ToString(), Font_1x, Color.Black);
-                Canvas.DrawString(CursorLeft * CharWidth, (CursorTop - 1) * CharHeight, '_'.ToString(), Font_1x, Color.Black);
-                Canvas.DrawString(CursorLeft * CharWidth, (CursorTop + 1) * CharHeight, '_'.ToString(), Font_1x, Color.Black);
+                KeyBuffer.Dequeue();
             }
         }
     }
-
-    private static string lastInput = string.Empty;
 
     /// <summary>
     /// Gets input from the user
@@ -202,57 +224,79 @@ public static class BetterConsole
         {
             if (CursorVisible)
             {
-                PutChar('_', CursorLeft, CursorTop, true);
+                PutChar('_', CursorLeft, CursorTop);
                 Render();
             }
 
-            var keyPressed = KeyBuffer.TryDequeue(out var key);
-            if (keyPressed)
+            // Check for keypress
+            if (KeyBuffer.Count > 0)
             {
+                var key = KeyBuffer.Dequeue();
+
+                // Clear cursor
+                PutChar(' ', CursorLeft, CursorTop);
+
                 switch (key.Key)
                 {
                     case ConsoleKeyEx.Enter:
-                        PutChar(' ', CursorLeft, CursorTop);
                         CursorLeft = 0;
                         CursorTop++;
-                        Newline();
+                        CheckNewline();
                         lastInput = returnValue;
                         reading = false;
                         break;
 
                     case ConsoleKeyEx.Backspace:
-                        if (!(CursorLeft == startCursorLeft && CursorTop == startY))
+                        if (CursorLeft > startCursorLeft || CursorTop > startY)
                         {
-                            if (CursorLeft == 0)
+                            if (CursorLeft == 0 && CursorTop > startY)
                             {
-                                PutChar(' ', CursorLeft, CursorTop); // Erase the cursor
+                                // At beginning of line - move to end of previous line
                                 CursorTop--;
-                                CursorLeft = Canvas.Width / CharWidth - 1;
-                                PutChar(' ', CursorLeft, CursorTop); // Erase the actual character
+                                CursorLeft = WindowWidth - 1;
+                                PutChar(' ', CursorLeft, CursorTop);
                             }
-                            else
+                            else if (CursorLeft > 0)
                             {
-                                PutChar(' ', CursorLeft, CursorTop); // Erase the cursor
+                                // Normal backspace within a line
                                 CursorLeft--;
-                                PutChar(' ', CursorLeft, CursorTop); // Erase the actual character
+                                PutChar(' ', CursorLeft, CursorTop);
                             }
 
-                            returnValue =
-                                returnValue.Remove(returnValue.Length - 1); // Remove the last character of the string
+                            // Remove the last character from the string
+                            if (returnValue.Length > 0)
+                            {
+                                returnValue = returnValue.Remove(returnValue.Length - 1);
+                            }
                         }
-
                         break;
+
                     case ConsoleKeyEx.Tab:
                         Write(new string(' ', 4));
                         returnValue += new string(' ', 4);
                         break;
 
                     case ConsoleKeyEx.UpArrow:
-                        SetCursorPosition(startCursorLeft, startY);
-                        Write(new string(' ', returnValue.Length));
-                        SetCursorPosition(startCursorLeft, startY);
-                        Write(lastInput);
-                        returnValue = lastInput;
+                        if (!string.IsNullOrEmpty(lastInput))
+                        {
+                            // Clear current input
+                            SetCursorPosition(startCursorLeft, startY);
+                            for (int i = 0; i < returnValue.Length; i++)
+                            {
+                                PutChar(' ', CursorLeft, CursorTop);
+                                CursorLeft++;
+                                if (CursorLeft >= WindowWidth)
+                                {
+                                    CursorLeft = 0;
+                                    CursorTop++;
+                                }
+                            }
+
+                            // Write previous input
+                            SetCursorPosition(startCursorLeft, startY);
+                            Write(lastInput);
+                            returnValue = lastInput;
+                        }
                         break;
 
                     default:
@@ -261,7 +305,8 @@ public static class BetterConsole
                             if (key.Key == ConsoleKeyEx.G)
                             {
                                 string collected = Heap.Collect() + " items collected";
-                                Canvas.DrawString(Canvas.Width - (collected.Length * 8) - 8, Canvas.Height - 32, collected, Font_1x, ThemeManager.WindowText);
+                                Canvas.DrawString(Canvas.Width - (collected.Length * 8) - 8, Canvas.Height - 32,
+                                    collected, Font_1x, ThemeManager.WindowText);
                                 Write(returnValue);
                             }
                             else if (key.Key == ConsoleKeyEx.L)
@@ -284,81 +329,15 @@ public static class BetterConsole
                             }
                             else if (ConsoleMode && KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
                             {
-                                int selected = 0;
-
-                                Clear();
-                                Canvas.DrawRectangle((Canvas.Width / 2) - (144 / 2) + 0,
-                                    (Canvas.Height / 2) - ((MenuOptions.Count + 4) * 16 / 2) + 0, 144,
-                                    Convert.ToUInt16((MenuOptions.Count + 4) * 16), 0, ThemeManager.WindowBorder);
-                                Canvas.DrawRectangle((Canvas.Width / 2) - (144 / 2) + 1,
-                                    (Canvas.Height / 2) - ((MenuOptions.Count + 4) * 16 / 2) + 1, 144,
-                                    Convert.ToUInt16((MenuOptions.Count + 4) * 16), 0, ThemeManager.WindowBorder);
-
-                                Refresh:
-                                if (selected > MenuOptions.Count - 1)
-                                {
-                                    selected = 0;
-                                }
-
-                                if (selected < 0)
-                                {
-                                    selected = MenuOptions.Count - 1;
-                                }
-
-                                for (int i = 0; i < MenuOptions.Count; i++)
-                                {
-                                    SetCursorPosition((WindowWidth / 2) - (15 / 2) - 1,
-                                        (WindowHeight / 2) - 1 + (i * 2));
-                                    if (i == selected)
-                                    {
-                                        ForegroundColor = ThemeManager.Background;
-                                        BackgroundColor = ThemeManager.WindowText;
-                                    }
-                                    else
-                                    {
-                                        ForegroundColor = ThemeManager.WindowText;
-                                        BackgroundColor = ThemeManager.Background;
-                                    }
-
-                                    Write(MenuOptions[i]);
-                                }
-
-                                var key2 = KeyboardManager.ReadKey();
-                                switch (key2.Key)
-                                {
-                                    case ConsoleKeyEx.Escape:
-                                        break;
-
-                                    case ConsoleKeyEx.Enter:
-                                        if (MenuOptions[selected] == MenuOptions[0])
-                                            WindowManager.AddWindow(new Frame());
-                                        else if (MenuOptions[selected] == MenuOptions[1])
-                                            Power.Reboot();
-                                        break;
-
-                                    case ConsoleKeyEx.UpArrow:
-                                        selected--;
-                                        goto Refresh;
-
-                                    case ConsoleKeyEx.DownArrow:
-                                        selected++;
-                                        goto Refresh;
-
-                                    default:
-                                        goto Refresh;
-                                }
-
-                                Clear();
+                                ShowConsoleMenu();
                                 GoOS.Kernel.DrawPrompt();
                             }
                         }
                         else
                         {
                             Write(key.KeyChar.ToString());
-                            Newline();
                             returnValue += key.KeyChar;
                         }
-
                         break;
                 }
 
@@ -367,6 +346,12 @@ public static class BetterConsole
             else
             {
                 WindowManager.Update();
+
+                // Limit key buffer size to prevent memory issues
+                while (KeyBuffer.Count > MaxKeyBufferSize)
+                {
+                    KeyBuffer.Dequeue();
+                }
             }
         }
 
@@ -376,10 +361,14 @@ public static class BetterConsole
     /// <summary>
     /// Set the cursor position of the <see cref="BetterConsole"/>
     /// </summary>
-    /// <param name="CursorLeft">The CursorLeft position of the cursor</param>
+    /// <param name="x">The X position of the cursor</param>
     /// <param name="y">The Y position of the cursor</param>
     public static void SetCursorPosition(int x, int y)
     {
+        // Ensure we don't position outside of console bounds
+        x = Math.Clamp(x, 0, WindowWidth - 1);
+        y = Math.Clamp(y, 0, WindowHeight - 1);
+
         CursorLeft = x;
         CursorTop = y;
     }
@@ -396,35 +385,117 @@ public static class BetterConsole
 
     #region Private functions
 
-    private static void Newline()
+    private static void CheckNewline()
     {
-        if (CursorLeft >= Canvas.Width / CharWidth)
+        if (CursorTop >= WindowHeight)
         {
-            CursorLeft = 0;
-            CursorTop++;
-        }
-
-        if (CursorTop >= Canvas.Height / CharHeight)
-        {
+            // Scroll the screen up
             Canvas.DrawImage(0, -CharHeight, Canvas, false);
-            Canvas.DrawFilledRectangle(0, Canvas.Height - CharHeight, Canvas.Width, CharHeight, 0, Color.Black);
-            CursorLeft = 0;
-            CursorTop = (Canvas.Height / CharHeight) - 1;
+            Canvas.DrawFilledRectangle(0, Canvas.Height - CharHeight, Canvas.Width, CharHeight, 0, BackgroundColor);
+            CursorTop = WindowHeight - 1;
 
             if (!DoubleBufferedMode)
                 Render();
 
-            Heap.Collect();
+            // Collect memory periodically on screen scroll to reduce memory pressure
+            scrollCounter++;
+            if (scrollCounter >= 3)
+            {
+                Heap.Collect();
+                scrollCounter = 0;
+            }
         }
     }
 
-    public static void PutChar(char c, int CursorLeft, int y, bool quick = false)
+    private static void ShowConsoleMenu()
     {
-        if (!quick)
-            Canvas.DrawFilledRectangle(CursorLeft * CharWidth, y * CharHeight,
-                Convert.ToUInt16(CharWidth + (CharWidth / 8)), CharHeight, 0, BackgroundColor);
+        int selected = 0;
+
+        Clear();
+        DrawMenuBorder();
+
+        while (true)
+        {
+            // Handle selection wrapping
+            selected = (selected + MenuOptions.Count) % MenuOptions.Count;
+
+            // Draw menu options
+            for (int i = 0; i < MenuOptions.Count; i++)
+            {
+                SetCursorPosition((WindowWidth / 2) - (15 / 2) - 1,
+                    (WindowHeight / 2) - 1 + (i * 2));
+
+                // Highlight selected option
+                if (i == selected)
+                {
+                    ForegroundColor = ThemeManager.Background;
+                    BackgroundColor = ThemeManager.WindowText;
+                }
+                else
+                {
+                    ForegroundColor = ThemeManager.WindowText;
+                    BackgroundColor = ThemeManager.Background;
+                }
+
+                Write(MenuOptions[i]);
+            }
+
+            // Handle key input
+            var key = KeyboardManager.ReadKey();
+            switch (key.Key)
+            {
+                case ConsoleKeyEx.Escape:
+                    Clear();
+                    return;
+
+                case ConsoleKeyEx.Enter:
+                    if (selected == 0)
+                    {
+                        WindowManager.AddWindow(new Frame());
+                    }
+                    else if (selected == 1)
+                    {
+                        Power.Reboot();
+                    }
+                    Clear();
+                    return;
+
+                case ConsoleKeyEx.UpArrow:
+                    selected--;
+                    break;
+
+                case ConsoleKeyEx.DownArrow:
+                    selected++;
+                    break;
+            }
+        }
+    }
+
+    private static void DrawMenuBorder()
+    {
+        ushort menuWidth = 144;
+        ushort menuHeight = (ushort)((MenuOptions.Count + 4) * 16);
+        ushort menuX = (ushort)((Canvas.Width / 2) - (menuWidth / 2));
+        ushort menuY = (ushort)((Canvas.Height / 2) - (menuHeight / 2));
+
+        // Draw border with double line for emphasis
+        Canvas.DrawRectangle(menuX, menuY, menuWidth, menuHeight, 0, ThemeManager.WindowBorder);
+        Canvas.DrawRectangle((ushort)(menuX + 1), (ushort)(menuY + 1), (ushort)(menuWidth - 2), (ushort)(menuHeight - 2), 0, ThemeManager.WindowBorder);
+    }
+
+    public static void PutChar(char c, int x, int y, bool quick = false)
+    {
+        // Ensure we're within bounds
+        if (x < 0 || x >= WindowWidth || y < 0 || y >= WindowHeight)
+            return;
+
+        // Always clear the background first to ensure visibility
+        Canvas.DrawFilledRectangle(x * CharWidth, y * CharHeight,
+            CharWidth, CharHeight, 0, BackgroundColor);
+
+        // Draw the character if it's not a space
         if (c != ' ')
-            Canvas.DrawString(CursorLeft * CharWidth, y * CharHeight, c.ToString(), Font_1x, ForegroundColor);
+            Canvas.DrawString(x * CharWidth, y * CharHeight, c.ToString(), Font_1x, ForegroundColor);
     }
 
     #endregion
