@@ -195,18 +195,18 @@ public class Taskbar : Window
         int dateWidth = Resources.Font_1x.MeasureString(dateString);
 
         int rightMargin = 3;
-        int timeX = Contents.Width - timeWidth - rightMargin - 12;
+        int timeX = Contents.Width - timeWidth - rightMargin - 12 + 5+ 3;
 
         int timeCenterX = timeX + (timeWidth);
-        int dateX = timeCenterX - (dateWidth / 2);
+        int dateX = timeCenterX - (dateWidth / 2) + 5;
 
-        Contents.DrawString(timeX, 7, timeString, Resources.Font_1x, Color.White, true);
-        Contents.DrawString(dateX, 19, dateString, Resources.Font_1x, Color.White, true);
+        Contents.DrawString(timeX, 9, timeString, Resources.Font_1x, Color.White, true);
+        Contents.DrawString(dateX, 21, dateString, Resources.Font_1x, Color.White, true);
 
         string fpsString = $"{WindowManager.Canvas.GetFPS()} fps";
         int fpsWidth = Resources.Font_1x.MeasureString(fpsString);
         int fpsX = timeX - fpsWidth - 24;
-        Contents.DrawString(fpsX, 13, fpsString, Resources.Font_1x, Color.White, true);
+        Contents.DrawString(fpsX, 15, fpsString, Resources.Font_1x, Color.White, true);
 
         timeAreaWidth = Math.Max(timeWidth, dateWidth) + fpsWidth + 15;
     }
