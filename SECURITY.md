@@ -10,7 +10,7 @@ Goto https://discord.owen2k6.com/ and open a staff help ticket, otherwise use th
 
 | Edition | Supported          | Support ends      | Latest Version | Edition Title |
 | ------- | ------------------ | ------------      | -------------- | ------------- |
-| 1.5     | :white_check_mark: | Latest Edition    | 1.5.3          | GoOS Scafell  |
+| 1.5     | :white_check_mark: | Latest Edition    | 1.5.4          | GoOS Scafell  |
 | 1.4     | :x:                | 11/10/2022        | 1.4            | GoOS 1.4 (Codename Goose) |
 | 1.3     | :x:                | 16/10/2021        | 1.3            | GoOS 1.3 (Codename Steel) |
 | 1.2     | :x:                | 03/10/2021        | 1.2            | GoOS 1.2 (Codename Silver) |
