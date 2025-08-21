@@ -186,9 +186,34 @@ namespace GoOS.GUI
 
         private static void DrawMouse()
         {
-            Canvas.DrawImage((int)MouseManager.X - MouseOffsetX - MouseManager.DeltaX,
-                (int)MouseManager.Y - MouseOffsetY - MouseManager.DeltaY, MouseToDraw);
+            int drawX = (int)MouseManager.X - MouseOffsetX;
+            int drawY = (int)MouseManager.Y - MouseOffsetY;
+
+            if (drawX < -MouseToDraw.Width) drawX = -MouseToDraw.Width;
+            if (drawY < -MouseToDraw.Height) drawY = -MouseToDraw.Height;
+            int maxX = Canvas.Width - 1;
+            int maxY = Canvas.Height - 1;
+            if (drawX > maxX) drawX = maxX;
+            if (drawY > maxY) drawY = maxY;
+
+            // enable alpha
+            Canvas.DrawImage(drawX, drawY, MouseToDraw, true);
         }
+
+        private static void SyncMouseBoundsAndClamp()
+        {
+            // Ensure MouseManager knows the real screen size (only when it changes)
+            if (MouseManager.ScreenWidth != Canvas.Width || MouseManager.ScreenHeight != Canvas.Height)
+            {
+                MouseManager.ScreenWidth = Canvas.Width;
+                MouseManager.ScreenHeight = Canvas.Height;
+
+                // If Cosmos didn’t clamp internally, keep X/Y sane
+                if (MouseManager.X >= MouseManager.ScreenWidth) MouseManager.X = (uint)(MouseManager.ScreenWidth - 1);
+                if (MouseManager.Y >= MouseManager.ScreenHeight) MouseManager.Y = (uint)(MouseManager.ScreenHeight - 1);
+            }
+        }
+
 
         private static void AltTab()
         {
@@ -352,6 +377,8 @@ namespace GoOS.GUI
                     {
                         GetWindowByType<StartMenu>().Dispose();
                     }
+
+                    SyncMouseBoundsAndClamp();
 
                     if (MouseManager.ScreenWidth != Canvas.Width || MouseManager.ScreenHeight != Canvas.Height)
                     {
