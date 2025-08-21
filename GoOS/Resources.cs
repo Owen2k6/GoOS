@@ -7,6 +7,7 @@ namespace GoOS
     public enum ResourceType
     {
         All,
+        Boot,
         Normal,
         Priority,
         Fonts,
@@ -412,6 +413,9 @@ namespace GoOS
                     minimisePressed = Image.FromBitmap(minimisePressedRaw, false);
                     drumIcon = Image.FromBitmap(drumIconRaw, false);
                     background = Image.FromBitmap(backgroundRaw, false);
+                    break;
+
+                case ResourceType.Boot:
                     bootbackground = Image.FromBitmap(bootbackgroundRaw, false);
                     bootlogo = Image.FromBitmap(bootlogoRaw, false);
                     break;
