@@ -10,7 +10,7 @@ Goto https://discord.owen2k6.com/ and open a staff help ticket, otherwise use th
 
 | Edition | Supported          | Support ends      | Latest Version   | Edition Title              | Kernel                              |
 | ------- | ------------------ | ----------------- | ---------------- | -------------------------- | ----------------------------------- |
-| 2.0     | :white_check_mark: | In Development    | No versions yet. | GoOS Codename Pingu        | Linux 6.12                          |
+| 2.0     | :white_check_mark: | In Development    | No versions yet. | GoOS Scafell Pike          | Linux 6.12                          |
 | 1.5     | :white_check_mark: | Latest Edition    | 1.5.4            | GoOS Scafell               | Cosmos + GoOS Core + Better Console |
 | 1.4     | :x:                | 11/10/2022        | 1.4              | GoOS 1.4 (Codename Goose)  | Cosmos + GoOS Core                  |
 | 1.3     | :x:                | 16/10/2021        | 1.3              | GoOS 1.3 (Codename Steel)  | Cosmos + GoOS Core                  |
