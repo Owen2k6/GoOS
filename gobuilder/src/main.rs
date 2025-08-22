@@ -100,18 +100,11 @@ fn main() -> std::io::Result<()> {
         }
     }
 
-    // Remake it if not cleaning
-    println!("Creating ./out/ & ./out/{}/", build_arch);
-    if let Err(e) = fs::create_dir_all(format!("out/{}", build_arch)) {
-        eprintln!("Failed to create {:?}: {}", format!("./out/{}", build_arch), e);
-    }
-
-    // ISO Image before being iso-ed
+    // Remake out, the arch folder, and the ISO Image before being iso-ed folder in one go
     println!("Creating ./out/{}/image", build_arch);
-    if let Err(e) = fs::create_dir(format!("out/{}/image", build_arch)) {
+    if let Err(e) = fs::create_dir_all(format!("out/{}/image", build_arch)) {
         eprintln!("Failed to create {:?}: {}", format!("./out/{}/image", build_arch), e);
     }
-
 
     println!("Done! Took {:?}", timer.elapsed());
     Ok(())
