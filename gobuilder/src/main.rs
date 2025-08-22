@@ -61,7 +61,7 @@ fn main() -> std::io::Result<()> {
         }
     }
 
-    if fs::exists("out").unwrap() {
+    if fs::exists("out")? {
         // Delete out directory
         println!("Deleting ./out");
 
@@ -73,8 +73,8 @@ fn main() -> std::io::Result<()> {
     if build_clean {
         let root = "./";
 
-        for entry in fs::read_dir(root).unwrap() {
-            let entry = entry.unwrap();
+        for entry in fs::read_dir(root)? {
+            let entry = entry?;
             let path = entry.path();
 
             // Only look at directories
@@ -101,15 +101,15 @@ fn main() -> std::io::Result<()> {
     }
 
     // Remake it if not cleaning
-    println!("Creating ./out");
-    if let Err(e) = fs::create_dir("out") {
-        eprintln!("Failed to create {:?}: {}", "./out", e);
+    println!("Creating ./out/ & ./out/{}/", build_arch);
+    if let Err(e) = fs::create_dir_all(format!("out/{}", build_arch)) {
+        eprintln!("Failed to create {:?}: {}", format!("./out/{}", build_arch), e);
     }
 
     // ISO Image before being iso-ed
-    println!("Creating ./out/image");
-    if let Err(e) = fs::create_dir("out/image") {
-        eprintln!("Failed to create {:?}: {}", "./out/image", e);
+    println!("Creating ./out/{}/image", build_arch);
+    if let Err(e) = fs::create_dir(format!("out/{}/image", build_arch)) {
+        eprintln!("Failed to create {:?}: {}", format!("./out/{}/image", build_arch), e);
     }
 
 
