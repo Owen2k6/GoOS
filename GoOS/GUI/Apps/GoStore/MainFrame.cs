@@ -1,17 +1,14 @@
-using System;
-using System.Text;
-using System.Net.Sockets;
-using System.Collections.Generic;
-using Cosmos.System.Network.Config;
-using Cosmos.System.Network.IPv4;
-using Cosmos.System.Network.IPv4.UDP.DNS;
 using GoGL.Graphics;
+using GoOS.Networking; // HttpHelper
+using System;
+using System.Collections.Generic;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.GoStore
 {
     public class MainFrame : Window
     {
+        // ------------------ UI + data fields ------------------
         Button[] catagoryButtons;
         Button[] _repoFilesButtons;
         string[] Catagories = { "ERROR" }; // Hardcoded fallback
@@ -29,28 +26,116 @@ namespace GoOS.GUI.Apps.GoStore
         {
             "1.5"
         };
+
         private Canvas _infoBoard;
         private string _infoBoardText = "Welcome to GoStore! Please wait while we load application data...";
+        private int _infoTextWidthPx = -1; // cached pixel width for the scrolling marquee
+        private int textX;
 
         // Hard-coded example data to prevent freezing if server is unavailable
         private string[] sampleRepos = { "api.goos.owen2k6.com" };
         private string sampleInfoFile = "GoOS Test|Test application for GoOS|1.0|Owen2k6|Utilities|1.5|test|goexe";
 
-        public MainFrame()
+        // ------------------ Regional/server block state ------------------
+        private bool _regionBlocked = false;
+        private string _regionBlockReason = "Access to Owen2k6 Network is unavailable in your country.";
+        private const string RegionBlockTitle = "Service unavailable in your country";
+
+        // If true, we abort opening entirely (no paint, no run)
+        private bool _abortOpen = false;
+
+        // Defer closing so the Dialogue can render at least a frame (only used if construction proceeds)
+        private bool _deferClose = false;
+        private int _framesUntilClose = 0;
+        private void RequestCloseAfterDialogue(int frames = 2)
         {
+            if (frames < 1) frames = 1;
+            _deferClose = true;
+            _framesUntilClose = frames;
+        }
+
+        // ============================================================
+        // Optional static pre-open probe (kept for convenience)
+        // ============================================================
+        public static bool CanOpenStore(out string reason)
+        {
+            reason = "";
             try
             {
-                // Create the window first
+                HttpHelper.SimpleHttpGet("api.goos.owen2k6.com", "/GoOS/cat.gostore");
+                return true;
+            }
+            catch (HttpHelper.RegionBlockedException ex)
+            {
+                reason = ex.Message;
+                return false;
+            }
+            catch
+            {
+                reason = "GoStore services are not available at the moment.";
+                return false;
+            }
+        }
+
+        // ============================================================
+        // Constructor
+        // ============================================================
+        public MainFrame()
+        {
+            // ---------- HARD GATE: do not open if blocked/unavailable ----------
+            try
+            {
+                // Small, cheap probe that will 401/403/451 for region blocks,
+                // or throw for server unavailability.
+                HttpHelper.SimpleHttpGet("api.goos.owen2k6.com", "/GoOS/cat.gostore");
+            }
+            catch (HttpHelper.RegionBlockedException ex)
+            {
+                _abortOpen = true;
+                _regionBlocked = true;
+                _regionBlockReason = string.IsNullOrWhiteSpace(ex.Message)
+                    ? "Service unavailable in your jurisdiction."
+                    : ex.Message;
+
+                // Inform user; do not bring up the GoStore window at all
+                Dialogue.Show("Error - GoStore", _regionBlockReason, default, WindowManager.errorIcon);
+
+                // Ensure WindowManager culls us before any draw
+                Visible = false;
+                Closing = true;
+                return;
+            }
+            catch
+            {
+                _abortOpen = true;
+
+                Dialogue.Show("Error - GoStore",
+                    "GoStore services are not available at the moment.",
+                    default,
+                    WindowManager.errorIcon);
+
+                Visible = false;
+                Closing = true;
+                return;
+            }
+            // ---------- END HARD GATE ----------
+
+            try
+            {
+                // Create the window only after we know it is allowed
                 Contents = new Canvas(800, 600);
                 Title = "GoStore";
                 Visible = true;
                 Closable = true;
                 SetDock(WindowDock.Center);
 
-                // Initialize basic objects
+                // Initialise basic objects
                 _repoFiles = new List<Application>();
                 _infoBoard = new Canvas(424, 16);
                 textX = 424;
+
+                // prime the cached width for the default message
+                SetInfoBoardText(_infoBoardText);
 
                 // Try to load data
                 LoadData();
@@ -58,122 +143,173 @@ namespace GoOS.GUI.Apps.GoStore
                 InitialiseButtons();
                 Render(Catagories[0]);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Dialogue.Show("GoStore", "Failed to connect to GoOS Services", default, WindowManager.errorIcon);
-                // Don't close the window, just show a blank screen
-                Contents.Clear();
-                RenderSystemStyleBorder();
+                Dialogue.Show("Error - GoStore", "Failed to connect to GoOS Services", default, WindowManager.errorIcon);
+                // Keep the window invisible and flag for close to avoid a blank shell
+                Visible = false;
+                Closing = true;
             }
         }
 
+        // Prevent any painting if we aborted open (WindowManager calls Paint() right after AddWindow)
+        public override void Paint()
+        {
+            if (_abortOpen) return;
+            base.Paint();
+        }
+
+        // ============================================================
+        // Info board text
+        // ============================================================
+        private void SetInfoBoardText(string text)
+        {
+            _infoBoardText = text ?? string.Empty;
+            _infoTextWidthPx = Font_1x.MeasureString(_infoBoardText);
+            if (textX < -_infoTextWidthPx) textX = 424;
+        }
+
+        // ============================================================
+        // Data loading with runtime block handling (belt and braces)
+        // ============================================================
         private void LoadData()
         {
             bool anyDataLoaded = false;
 
-            // Try to get categories from server
             try
             {
-                string[] serverCategories = GetCatagoriesFile();
-                if (serverCategories != null && serverCategories.Length > 0)
-                {
-                    Catagories = serverCategories;
-                    anyDataLoaded = true;
-                }
-            }
-            catch (Exception e)
-            {
-                // Use default categories
-            }
-
-            // Try to get repositories
-            string[] repos;
-            try
-            {
-                repos = GetReposFile();
-                if (repos == null || repos.Length == 0)
-                {
-                    repos = sampleRepos;
-                }
-            }
-            catch (Exception)
-            {
-                repos = sampleRepos;
-            }
-
-            catagoryButtons = new Button[Catagories.Length];
-            _repoFilesButtons = new Button[50]; // Pre-allocate reasonable size
-
-            // Try to get infoboard text
-            try
-            {
-                string infoText = GetInfoBoardFile();
-                if (!string.IsNullOrEmpty(infoText))
-                {
-                    _infoBoardText = infoText;
-                }
-            }
-            catch (Exception)
-            {
-                _infoBoardText = "Welcome to GoStore! Some features may not be available due to connection issues.";
-            }
-
-            // Load applications from repos
-            foreach (string repo in repos)
-            {
-                if (string.IsNullOrEmpty(repo)) continue;
-
+                // Categories
                 try
                 {
-                    string infoFileContent = GetInfoFile(repo);
-                    if (string.IsNullOrEmpty(infoFileContent))
-                        continue;
-
-                    Infofile infoFile = new Infofile(infoFileContent.Split('\n'), repo);
-
-                    foreach (string program in infoFile.Contents)
+                    string[] serverCategories = GetCatagoriesFile();
+                    if (serverCategories != null && serverCategories.Length > 0)
                     {
-                        if (string.IsNullOrEmpty(program)) continue;
-
-                        string[] appData = program.Split('|');
-                        if (appData.Length < 5) continue;
-
-                        Application app = new Application(appData, infoFile.URL);
-                        app.Downloadable = AllowDLFrom.Contains(app.GoOSVersion);
-                        _repoFiles.Add(app);
+                        Catagories = serverCategories;
                         anyDataLoaded = true;
                     }
                 }
-                catch (Exception)
+                catch (HttpHelper.RegionBlockedException)
                 {
-                    // Continue to next repo
+                    throw;
+                }
+                catch
+                {
+                    // Use default categories
+                }
+
+                // Repos
+                string[] repos;
+                try
+                {
+                    repos = GetReposFile();
+                    if (repos == null || repos.Length == 0) repos = sampleRepos;
+                }
+                catch (HttpHelper.RegionBlockedException)
+                {
+                    throw;
+                }
+                catch
+                {
+                    repos = sampleRepos;
+                }
+
+                // UI arrays
+                catagoryButtons = new Button[Catagories.Length];
+                _repoFilesButtons = new Button[50];
+
+                // Info board
+                try
+                {
+                    string infoText = GetInfoBoardFile();
+                    if (!string.IsNullOrEmpty(infoText))
+                        SetInfoBoardText(infoText);
+                    else
+                        SetInfoBoardText(_infoBoardText);
+                }
+                catch (HttpHelper.RegionBlockedException)
+                {
+                    throw;
+                }
+                catch
+                {
+                    SetInfoBoardText("Welcome to GoStore! Some features may not be available due to connection issues.");
+                }
+
+                // Apps
+                foreach (string repo in repos)
+                {
+                    if (string.IsNullOrEmpty(repo)) continue;
+
+                    try
+                    {
+                        string infoFileContent = GetInfoFile(repo);
+                        if (string.IsNullOrEmpty(infoFileContent)) continue;
+
+                        Infofile infoFile = new Infofile(infoFileContent.Split('\n'), repo);
+
+                        foreach (string programme in infoFile.Contents)
+                        {
+                            if (string.IsNullOrEmpty(programme)) continue;
+
+                            string[] appData = programme.Split('|');
+                            if (appData.Length < 5) continue;
+
+                            Application app = new Application(appData, infoFile.URL);
+                            app.Downloadable = AllowDLFrom.Contains(app.GoOSVersion);
+                            _repoFiles.Add(app);
+                            anyDataLoaded = true;
+                        }
+                    }
+                    catch (HttpHelper.RegionBlockedException)
+                    {
+                        throw;
+                    }
+                    catch
+                    {
+                        // next repo
+                    }
+                }
+
+                if (_repoFiles.Count == 0)
+                {
+                    Application sampleApp = new Application(sampleInfoFile.Split('|'), "api.goos.owen2k6.com");
+                    sampleApp.Downloadable = true;
+                    _repoFiles.Add(sampleApp);
+
+                    if (!anyDataLoaded)
+                        Dialogue.Show("GoStore", "Failed to load application data from server", default, WindowManager.errorIcon);
                 }
             }
-
-            // If no applications were loaded, throw an exception
-            if (_repoFiles.Count == 0)
+            catch (HttpHelper.RegionBlockedException ex)
             {
-                // Add sample app as fallback
-                Application sampleApp = new Application(sampleInfoFile.Split('|'), "api.goos.owen2k6.com");
-                sampleApp.Downloadable = true;
-                _repoFiles.Add(sampleApp);
+                _regionBlocked = true;
+                _regionBlockReason = string.IsNullOrWhiteSpace(ex.Message)
+                    ? "Service unavailable in your jurisdiction."
+                    : ex.Message;
 
-                if (!anyDataLoaded)
-                {
-                    Dialogue.Show("GoStore", "Failed to load application data from server", default, WindowManager.errorIcon);
-                }
+                Dialogue.Show("GoStore", _regionBlockReason, default, WindowManager.errorIcon);
+
+                // Close shortly after to ensure the dialogue paints
+                RequestCloseAfterDialogue(2);
             }
         }
 
+        // ============================================================
+        // Buttons and rendering
+        // ============================================================
         private void InitialiseButtons()
         {
             for (int i = 0; i < Catagories.Length; i++)
             {
-                catagoryButtons[i] = new Button(this, Convert.ToUInt16(5),
+                string label = Catagories[i].Trim();
+                catagoryButtons[i] = new Button(this,
+                    Convert.ToUInt16(5),
                     Convert.ToUInt16(45 + i * 20),
-                    Convert.ToUInt16(Catagories[i].Length * 8), 20, Catagories[i].Trim())
+                    Convert.ToUInt16(label.Length * 8),
+                    20,
+                    label)
                 {
-                    Name = Catagories[i].Trim(),
+                    Name = label,
                     UseSystemStyle = false,
                     BackgroundColour = new Color(0, 0, 0, 0),
                     ClickedAlt = CategoryButtonClick,
@@ -206,47 +342,77 @@ namespace GoOS.GUI.Apps.GoStore
             Render(cat);
         }
 
-        private int GetCatagoryIndex(string cat)
+        private int GetCatagoriesIndex(string cat)
         {
             for (int i = 0; i < Catagories.Length; i++)
             {
                 if (Catagories[i].Trim() == cat)
-                {
                     return i;
-                }
             }
-
-            return 0; // Return first category instead of -1 to avoid crashes
+            return 0; // Return first category instead of -1
         }
 
-        private int textX;
+        // Keep old name for compatibility with existing calls
+        private int GetCatagoryIndex(string cat) => GetCatagoriesIndex(cat);
 
         public override void HandleRun()
         {
+            if (_abortOpen) return;
+
             base.HandleRun();
 
             _infoBoard.DrawImage(0, 0, GoStoreinfoboard, false);
             _infoBoard.DrawString(textX, 0, _infoBoardText, Font_1x, Color.Yellow);
             Contents.DrawImage(359, 9, _infoBoard, false);
 
-            if (textX < -Font_1x.MeasureString(_infoBoardText)) textX = 424;
-
+            int width = (_infoTextWidthPx >= 0) ? _infoTextWidthPx : Font_1x.MeasureString(_infoBoardText);
+            if (textX < -width) textX = 424;
             textX--;
+
+            // Deferred close after showing dialogue
+            if (_deferClose)
+            {
+                _framesUntilClose--;
+                if (_framesUntilClose <= 0)
+                {
+                    Closing = true; // WindowManager will remove us cleanly
+                    _deferClose = false;
+                }
+            }
         }
 
         private void Render(string category)
         {
-            catagory = GetCatagoryIndex(category);
+            if (_abortOpen) return;
 
-            foreach (Button b in _repoFilesButtons)
+            if (_regionBlocked)
             {
-                if (b != null)
-                    Controls.Remove(b);
+                Contents.Clear();
+                Contents.DrawImage(0, 0, Resources.GoStore, false);
+
+                string line1 = RegionBlockTitle;
+                string line2 = _regionBlockReason;
+                string line3 = "If you believe this is in error, contact staff on Discord or email help@owen2k6.com.";
+
+                int cx = 150, cy = 120;
+                Contents.DrawString(cx, cy, line1, Font_1x, Color.Red);
+                Contents.DrawString(cx, cy + 18, line2, Font_1x, Color.White);
+                Contents.DrawString(cx, cy + 36, line3, Font_1x, Color.Yellow);
+
+                RenderSystemStyleBorder();
+                return;
             }
 
-            for (int i = 0; i < _repoFilesButtons.Length; i++)
+            catagory = GetCatagoryIndex(category);
+
+            if (_repoFilesButtons != null)
             {
-                _repoFilesButtons[i] = null;
+                foreach (Button b in _repoFilesButtons)
+                {
+                    if (b != null) Controls.Remove(b);
+                }
+                for (int i = 0; i < _repoFilesButtons.Length; i++)
+                    _repoFilesButtons[i] = null;
             }
 
             Contents.Clear();
@@ -270,21 +436,24 @@ namespace GoOS.GUI.Apps.GoStore
 
                 if (appCat == catagory)
                 {
-                    string VersionSpaces = "";
-
-                    for (int ii = 0; ii < 25 - _repoFiles[i].Name.Length - (_repoFiles[i].GoOSVersion.TrimEnd().Length + 6); ii++)
-                        VersionSpaces += " ";
+                    string appName = _repoFiles[i].Name;
+                    string goosVer = _repoFiles[i].GoOSVersion.TrimEnd();
+                    int padCount = 25 - appName.Length - (goosVer.Length + 6);
+                    if (padCount < 0) padCount = 0;
+                    string VersionSpaces = new string(' ', padCount);
 
                     int x = 150 + Colum * (207 + 5);
                     int y = 45 + (Line) * (78 + 5);
 
-                    _repoFilesButtons[buttonCount] = new Button(this, Convert.ToUInt16(x),
+                    _repoFilesButtons[buttonCount] = new Button(this,
+                        Convert.ToUInt16(x),
                         Convert.ToUInt16(y),
-                        207, 78, _repoFiles[i].Name + VersionSpaces + "GoOS " +
-                                 _repoFiles[i].GoOSVersion.TrimEnd() + "+" + "\nBy " + _repoFiles[i].Author + "\n" +
-                                 _repoFiles[i].Version.Replace(@"\n", "\n"))
+                        207, 78,
+                        appName + VersionSpaces + "GoOS " + goosVer + "+" +
+                        "\nBy " + _repoFiles[i].Author + "\n" +
+                        _repoFiles[i].Version.Replace(@"\n", "\n"))
                     {
-                        Name = _repoFiles[i].Name,
+                        Name = appName,
                         UseSystemStyle = false,
                         BackgroundColour = new Color(0, 0, 0, 0),
                         ClickedAlt = _repoFiles_Click,
@@ -302,128 +471,20 @@ namespace GoOS.GUI.Apps.GoStore
                 }
             }
 
-            int pagex = 646 + 4;
-            if ((page + 1).ToString().Length == 2)
-            {
-                pagex -= 4;
-            }
-
-            if ((page + 1).ToString().Length == 3)
-            {
-                pagex -= 8;
-            }
+            int p1 = page + 1;
+            int pagex = 650;
+            int digits = (p1 < 10) ? 1 : (p1 < 100 ? 2 : 3);
+            if (digits == 2) pagex -= 4;
+            else if (digits == 3) pagex -= 8;
 
             foreach (Button i in catagoryButtons) i.Render();
             prevousButton.Render();
             nextButton.Render();
 
             Contents.DrawString((144 / 2) - (Font_1x.MeasureString(category.Trim()) / 2), 563, category.Trim(), Font_1x, Color.White);
-            Contents.DrawString(pagex, 563, (page + 1).ToString(), Font_1x, Color.White);
+            Contents.DrawString(pagex, 563, p1.ToString(), Font_1x, Color.White);
 
             RenderSystemStyleBorder();
-        }
-
-        // Simple, synchronous HTTP GET without using any async methods
-        private string SimpleHttpGet(string host, string path)
-        {
-            using (TcpClient tcpClient = new TcpClient())
-            {
-                string serverIP = ResolveDNS(host);
-                if (string.IsNullOrEmpty(serverIP))
-                    throw new Exception("DNS resolution failed");
-
-                // Connect with a simple approach - no async or timeout
-                tcpClient.Connect(serverIP, 80);
-
-                NetworkStream stream = tcpClient.GetStream();
-
-                string httpget = "GET " + path + " HTTP/1.1\r\n" +
-                                 "User-Agent: GoOS\r\n" +
-                                 "Accept: */*\r\n" +
-                                 "Accept-Encoding: identity\r\n" +
-                                 "Host: " + host + "\r\n" +
-                                 "Connection: close\r\n\r\n";
-
-                byte[] dataToSend = Encoding.ASCII.GetBytes(httpget);
-                stream.Write(dataToSend, 0, dataToSend.Length);
-
-                byte[] receivedData = new byte[8192]; // Use a smaller buffer
-                int bytesRead = 0;
-
-                bytesRead = stream.Read(receivedData, 0, receivedData.Length);
-
-                string receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
-
-                int headerEnd = receivedMessage.IndexOf("\r\n\r\n");
-                if (headerEnd == -1) throw new Exception("Invalid HTTP response");
-
-                return receivedMessage.Substring(headerEnd + 4);
-            }
-        }
-
-        // Network methods that handle exceptions internally
-        private string GetInfoFile(string repo)
-        {
-            try
-            {
-                return SimpleHttpGet(repo, "/info.glist");
-            }
-            catch
-            {
-                return "";
-            }
-        }
-
-        private string GetInfoBoardFile()
-        {
-            try
-            {
-                return SimpleHttpGet("api.goos.owen2k6.com", "/GoOS/" + Kernel.edition + "-status.gostore");
-            }
-            catch
-            {
-                return "";
-            }
-        }
-
-        private string[] GetReposFile()
-        {
-            try
-            {
-                string result = SimpleHttpGet("api.goos.owen2k6.com", "/GoOS/repos.gostore");
-                if (string.IsNullOrEmpty(result))
-                    return new string[0];
-                return result.Split('\n');
-            }
-            catch
-            {
-                return new string[0];
-            }
-        }
-
-        private string[] GetCatagoriesFile()
-        {
-            try
-            {
-                string result = SimpleHttpGet("api.goos.owen2k6.com", "/GoOS/cat.gostore");
-                if (string.IsNullOrEmpty(result))
-                    return new string[0];
-                return result.Split('\n');
-            }
-            catch
-            {
-                return new string[0];
-            }
-        }
-
-        private string ResolveDNS(string host)
-        {
-            var dnsClient = new DnsClient();
-            dnsClient.Connect(DNSConfig.DNSNameservers[0]);
-            dnsClient.SendAsk(host);
-            Address address = dnsClient.Receive();
-            dnsClient.Close();
-            return address.ToString();
         }
 
         private int GetIndexByTitle(string title)
@@ -435,12 +496,14 @@ namespace GoOS.GUI.Apps.GoStore
 
         private void _repoFiles_Click(string i)
         {
+            if (_regionBlocked || _abortOpen) return;
             WindowManager.AddWindow(new DescriptionFrame(_repoFiles[GetIndexByTitle(i)]));
         }
 
         private void nextPage()
         {
-            // Count items in current category
+            if (_regionBlocked || _abortOpen) return;
+
             int itemsInCategory = 0;
             foreach (Application app in _repoFiles)
             {
@@ -448,7 +511,7 @@ namespace GoOS.GUI.Apps.GoStore
                     itemsInCategory++;
             }
 
-            int maxPages = (itemsInCategory + 17) / 18; // Ceiling division
+            int maxPages = (itemsInCategory + 17) / 18;
 
             if (page < maxPages - 1)
             {
@@ -459,11 +522,60 @@ namespace GoOS.GUI.Apps.GoStore
 
         private void previousPage()
         {
+            if (_regionBlocked || _abortOpen) return;
+
             if (page > 0)
             {
                 page--;
                 Render(Catagories[catagory]);
             }
+        }
+
+        // ============================================================
+        // Network wrappers (via HttpHelper)
+        // ============================================================
+        private string GetInfoFile(string repo)
+        {
+            try
+            {
+                return HttpHelper.SimpleHttpGet(repo, "/info.glist");
+            }
+            catch (HttpHelper.RegionBlockedException) { throw; }
+            catch { return ""; }
+        }
+
+        private string GetInfoBoardFile()
+        {
+            try
+            {
+                return HttpHelper.SimpleHttpGet("api.goos.owen2k6.com", "/GoOS/" + Kernel.edition + "-status.gostore");
+            }
+            catch (HttpHelper.RegionBlockedException) { throw; }
+            catch { return ""; }
+        }
+
+        private string[] GetReposFile()
+        {
+            try
+            {
+                string result = HttpHelper.SimpleHttpGet("api.goos.owen2k6.com", "/GoOS/repos.gostore");
+                if (string.IsNullOrEmpty(result)) return new string[0];
+                return result.Split('\n');
+            }
+            catch (HttpHelper.RegionBlockedException) { throw; }
+            catch { return new string[0]; }
+        }
+
+        private string[] GetCatagoriesFile()
+        {
+            try
+            {
+                string result = HttpHelper.SimpleHttpGet("api.goos.owen2k6.com", "/GoOS/cat.gostore");
+                if (string.IsNullOrEmpty(result)) return new string[0];
+                return result.Split('\n');
+            }
+            catch (HttpHelper.RegionBlockedException) { throw; }
+            catch { return new string[0]; }
         }
     }
 }
