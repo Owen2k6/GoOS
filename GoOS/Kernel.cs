@@ -45,8 +45,8 @@ namespace GoOS
         public const string version = "1.5.5";
         public const string edition = "1.5"; // This is the current edition of GoOS. Used for UPDATER.
         public const string editiontitle = "Scafell"; // This is the current edition name of GoOS.
-        public const string editionnext = "2.0"; // This is the next edition of GoOS. Used for UPDATER.
-        public const string BuildType = "NIFPR";
+        public const string editionnext = "1.6"; // This is the next edition of GoOS. Used for UPDATER.
+        public const string BuildType = "R";
         public const string Copyright = "2021-2025";
         public static string olddir = @"0:\";
 
