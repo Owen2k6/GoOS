@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Cosmos.HAL.Drivers.Video;
 using GoGL.Graphics;
 using GoOS.GUI;
@@ -8,11 +7,9 @@ using System.Net.Sockets;
 using Cosmos.System.Network.IPv4.UDP.DNS;
 using Cosmos.System.Network.IPv4;
 using Cosmos.System.Network.Config;
-using Cosmos.HAL;
-using System.IO;
 using Cosmos.System;
-using GoOS.GUI.Apps.Settings;
 using static GoOS.Resources;
+using GoOS.GUI.Apps.Settings;
 using GoOS.GUI.Apps.GoWeb;
 using GoOS.GUI.Apps.Gosplorer;
 using GoOS.GUI.Apps.GoIDE;
@@ -21,39 +18,46 @@ using GoOS.GUI.Apps.GoStore;
 namespace GoOS.GUI.Apps
 {
     /// <summary>
-    /// OS 9–style menubar with ContextMenu-based dropdowns.
-    /// - Background: tiles 1×H Resources.menubarBackground (useAlpha:false)
-    /// - Left: plain “Menu” button (flat style), opens fixed-width dropdown under the button
-    /// - Left area: per-app menus (each opens a dropdown directly under its label)
-    /// - Right: time (far right) and date (immediately to its left), with exact pixel offsets
-    /// - No focused-window title
+    /// Minimal, safe OS 9–style menubar:
+    ///  - Background: tiles 1×H Resources.menubarBackground
+    ///  - Left: flat “Menu” button (dropdown under button)
+    ///  - Left area: per-app menu labels (dropdown under each label)
+    ///  - Right: date then time (black text), small offsets
+    ///  - No focused-window title
+    /// Safety:
+    ///  - No immediate renders from hooks
+    ///  - Render re-entrancy guard
+    ///  - Deferred menu registration processed in HandleRun
     /// </summary>
     public class Menubar : Window
     {
+        // public surface
+        public static Menubar Instance { get; private set; }
+        public static bool IsRenderingNow => Instance != null && Instance._isRendering;
+
+        // layout
+        private readonly int BarHeight;
+        private const int SidePadding = 6;
+        private const int ItemGap = 6;
+        private const int RightMargin = 8;
+        private const int Font1xHeight = 10; // your 1x font height
+        private const ushort ContextWidth = 155;
+
+        // state
+        private Button menuButton;
+        private static readonly Dictionary<Window, List<MenuModel>> menusByWindow = new();
+        private int menusRightEdge;
+        private byte lastSecond = Cosmos.HAL.RTC.Second;
+        private int lastCanvasWidth;
+        private bool needsRedraw = true;
+        private bool _isRendering;
+
+        // deferred menu registration (avoid re-entrancy)
         private struct PendingMenus { public Window Win; public List<MenuModel> Models; }
         private readonly Queue<PendingMenus> _pendingMenus = new();
         private bool _hasPendingMenus;
 
-        private readonly int BarHeight;                 // from resource, fallback 19
-        private const int SidePadding = 6;
-        private const int ItemGap = 6;
-        private const int RightMargin = 8;
-        private const int Font1xHeight = 10;            // confirmed
-        private const ushort ContextWidth = 155;
-
-        public static Menubar Instance { get; private set; }
-
-        private Button menuButton;
-        private static readonly Dictionary<Window, List<MenuModel>> menusByWindow = new();
-
-        private int menusRightEdge;
-
-        private byte lastSecond = Cosmos.HAL.RTC.Second;
-        private int lastCanvasWidth;
-        private bool needsRedraw = true;
-
-        private readonly Dictionary<string, Action> clickMap = new Dictionary<string, Action>(64);
-
+        // root menu items (match ContextMenu labels)
         private static readonly string[] RootMenuItems =
         {
             " About GoOS ",
@@ -94,11 +98,10 @@ namespace GoOS.GUI.Apps
 
             InitialiseMenuButton();
 
-            WindowManager.TaskbarFocusChangedHook = () =>
-            {
-                needsRedraw = true;
-            };
+            // focus hook: mark dirty only (never render here)
+            WindowManager.TaskbarFocusChangedHook = () => { if (!_isRendering) needsRedraw = true; };
 
+            // first frame
             RenderWindow();
         }
 
@@ -115,26 +118,24 @@ namespace GoOS.GUI.Apps
                                     (ushort)btnH,
                                     "Menu")
             {
-                // flat, no 3-D chrome; transparent background; black text
-                UseSystemStyle = false,
+                UseSystemStyle = false,               // flat label
                 BackgroundColour = Color.Transparent,
                 TextColour = Color.Black,
                 RenderWithAlpha = true,
             };
 
-            // Open dropdown DIRECTLY UNDER the menu button (not at the mouse)
+            // dropdown anchored under the button
             menuButton.Clicked = () =>
             {
-                int anchorX = X + menuButton.X;       // screen coords
-                int anchorY = Y + Contents.Height;    // directly beneath the bar
+                int anchorX = X + menuButton.X;
+                int anchorY = Y + Contents.Height;
                 ContextMenu.ShowAt(anchorX, anchorY, RootMenuItems, ContextWidth, RootMenu_Handle);
             };
 
             menuButton.Render();
         }
 
-        // ===== Public API for registering per-app drop-down menus (deferred, non re-entrant) =====
-
+        // ===== external API for apps (deferred) =====
         public static void RegisterMenus(Window window, IEnumerable<MenuModel> menus)
         {
             if (window == null || menus == null || Instance == null) return;
@@ -149,12 +150,11 @@ namespace GoOS.GUI.Apps
         public static void ClearMenus(Window window)
         {
             if (window == null || Instance == null) return;
-
-            // Defer: mark as empty; redraw will happen in the run loop
             menusByWindow.Remove(window);
             Instance.needsRedraw = true;
         }
 
+        // ===== root dropdown =====
         private void RootMenu_Handle(string item)
         {
             switch (item)
@@ -171,10 +171,7 @@ namespace GoOS.GUI.Apps
                     Dialogue.Show(
                         "GoOS",
                         "Are you sure you want to restart your computer?",
-                        new()
-                        {
-                            new() { Text = "Reboot", Callback = () => { Cosmos.System.Power.Reboot(); } },
-                        },
+                        new() { new() { Text = "Reboot", Callback = () => Cosmos.System.Power.Reboot() } },
                         question
                     );
                     break;
@@ -183,81 +180,77 @@ namespace GoOS.GUI.Apps
                     Dialogue.Show(
                         "GoOS",
                         "Are you sure you want to shut down your computer?",
-                        new()
-                        {
-                            new() { Text = "Shut Down", Callback = () => { Cosmos.System.Power.Shutdown(); } },
-                        },
+                        new() { new() { Text = "Shut Down", Callback = () => Cosmos.System.Power.Shutdown() } },
                         question
                     );
                     break;
 
                 case " Clock App ":
-                    WindowManager.AddWindow(new Clock());
-                    break;
+                    WindowManager.AddWindow(new Clock()); break;
                 case " GoStore ":
-                    WindowManager.AddWindow(new GoStore.MainFrame());
-                    break;
+                    WindowManager.AddWindow(new GoStore.MainFrame()); break;
                 case " GoIDE ":
-                    WindowManager.AddWindow(new WelcomeFrame());
-                    break;
+                    WindowManager.AddWindow(new WelcomeFrame()); break;
                 case " Gosplorer ":
-                    WindowManager.AddWindow(new Gosplorer.MainFrame());
-                    break;
+                    WindowManager.AddWindow(new Gosplorer.MainFrame()); break;
                 case " GoWeb ":
-                    WindowManager.AddWindow(new GoWebWindow());
-                    break;
+                    WindowManager.AddWindow(new GoWebWindow()); break;
                 case " Notepad ":
-                    WindowManager.AddWindow(new Notepad(false, null));
-                    break;
+                    WindowManager.AddWindow(new Notepad(false, null)); break;
                 case " Paint ":
-                    WindowManager.AddWindow(new Paintbrush());
-                    break;
+                    WindowManager.AddWindow(new Paintbrush()); break;
                 case " System Monitor ":
-                    WindowManager.AddWindow(new TaskManager());
-                    break;
+                    WindowManager.AddWindow(new TaskManager()); break;
                 case " Settings ":
-                    WindowManager.AddWindow(new Frame());
-                    break;
+                    WindowManager.AddWindow(new Frame()); break;
                 case " Terminal ":
-                    WindowManager.AddWindow(new GTerm());
-                    break;
+                    WindowManager.AddWindow(new GTerm()); break;
             }
         }
 
-        // ===== Rendering =====
-
+        // ===== rendering =====
         private void RenderWindow()
         {
-            if (WindowManager.Canvas.Width != lastCanvasWidth || Contents.Width != WindowManager.Canvas.Width)
+            if (_isRendering) return;     // re-entrancy guard
+            _isRendering = true;
+            try
             {
-                lastCanvasWidth = WindowManager.Canvas.Width;
-                Contents = new Canvas((ushort)WindowManager.Canvas.Width, (ushort)BarHeight);
-                needsRedraw = true;
+                if (WindowManager.Canvas.Width != lastCanvasWidth || Contents.Width != WindowManager.Canvas.Width)
+                {
+                    lastCanvasWidth = WindowManager.Canvas.Width;
+                    Contents = new Canvas((ushort)WindowManager.Canvas.Width, (ushort)BarHeight);
+                    needsRedraw = true;
+                }
+
+                if (!needsRedraw) return;
+
+                DrawBackgroundTiled();
+                RenderControls();
+                RenderAppMenusLeft();
+                RenderRightClockAndDate();
+
+                needsRedraw = false;
             }
-
-            if (!needsRedraw) return;
-
-            DrawBackgroundTiled();
-            RenderControls();
-            RenderAppMenusLeft();
-            RenderRightClockAndDate();
-
-            needsRedraw = false;
+            finally
+            {
+                _isRendering = false;
+            }
         }
 
         private void DrawBackgroundTiled()
         {
-            var tile = Resources.menubarBackground; // must be 1×BarHeight
+            var tile = Resources.menubarBackground;
             if (tile != null && tile.Width == 1 && tile.Height == BarHeight)
             {
                 for (int x = 0; x < Contents.Width; x++)
                     Contents.DrawImage(x, 0, tile, false);
             }
+            // no fallback fill: keep previous frame if resource missing
         }
 
         private void RenderAppMenusLeft()
         {
-            // Remove prior menu label buttons (keep the Menu button)
+            // remove previous label buttons (keep Menu)
             var toRemove = new List<Control>();
             foreach (var c in Controls)
             {
@@ -285,41 +278,41 @@ namespace GoOS.GUI.Apps
                                          (ushort)btnH,
                                          menu.Title)
                     {
-                        // flat, transparent, black text
                         UseSystemStyle = false,
                         BackgroundColour = Color.Transparent,
                         TextColour = Color.Black,
                         RenderWithAlpha = true,
                     };
 
-                    var entries = menu.Items;
+                    var entries = menu.Items; // capture
                     btn.Clicked = () =>
                     {
-                        // Build labels and dispatch map for this menu
-                        clickMap.Clear();
+                        // build a local dispatch map to avoid shared state
+                        var clickMap = new Dictionary<string, Action>(entries.Count);
                         var labels = new string[entries.Count];
+
                         for (int i = 0; i < entries.Count; i++)
                         {
                             if (entries[i].IsSeparator)
+                            {
                                 labels[i] = "----";
+                            }
                             else
                             {
-                                string text = entries[i].Text;
+                                string text = entries[i].Text ?? string.Empty;
                                 labels[i] = text;
                                 if (!clickMap.ContainsKey(text) && entries[i].OnClick != null)
                                     clickMap[text] = entries[i].OnClick;
                             }
                         }
 
-                        // Anchor under this label button (screen coords)
                         int anchorX = X + btn.X;
                         int anchorY = Y + Contents.Height;
 
                         ContextMenu.ShowAt(anchorX, anchorY, labels, ContextWidth, label =>
                         {
                             if (label == "----" || string.IsNullOrEmpty(label)) return;
-                            if (clickMap.TryGetValue(label, out var act) && act != null)
-                                act();
+                            if (clickMap.TryGetValue(label, out var act) && act != null) act();
                         });
                     };
 
@@ -332,7 +325,7 @@ namespace GoOS.GUI.Apps
             RenderControls();
         }
 
-        // Exact offsets: baseline +5; time +20 right; date +24 right (relative)
+        // offsets: baseline +5; small right shifts (stable)
         private void RenderRightClockAndDate()
         {
             string timeString = DateTime.Now.ToString("HH:mm");
@@ -358,16 +351,16 @@ namespace GoOS.GUI.Apps
 
         public override void HandleRun()
         {
-            // Apply any deferred menu registrations safely in the run loop
+            // apply deferred menu registrations safely here
             if (_hasPendingMenus)
             {
                 while (_pendingMenus.Count > 0)
                 {
                     var p = _pendingMenus.Dequeue();
-                    menusByWindow[p.Win] = p.Models;   // replace menus for that window
+                    menusByWindow[p.Win] = p.Models; // replace for that window
                 }
                 _hasPendingMenus = false;
-                needsRedraw = true;                    // request a normal redraw
+                needsRedraw = true;
             }
 
             base.HandleRun();
@@ -375,16 +368,14 @@ namespace GoOS.GUI.Apps
             bool widthChanged = (WindowManager.Canvas.Width != lastCanvasWidth);
             byte currentSecond = Cosmos.HAL.RTC.Second;
 
-            if (currentSecond != lastSecond || widthChanged)
+            if (currentSecond != lastSecond || widthChanged || needsRedraw)
             {
                 lastSecond = currentSecond;
-                needsRedraw = true;
                 RenderWindow();
             }
         }
 
-        // ===== “Check for Updates” (same behaviour as Desktop, tidied) =====
-
+        // ===== “Check for Updates” (same behaviour as Desktop) =====
         private static void CheckForUpdates()
         {
             try
@@ -421,7 +412,7 @@ namespace GoOS.GUI.Apps
                             "Accept-Encoding: identity\r\n" +
                             "Connection: close\r\n\r\n";
 
-                        byte[] req = Encoding.ASCII.GetBytes(http);
+                        byte[] req = System.Text.Encoding.ASCII.GetBytes(http);
                         stream.Write(req, 0, req.Length);
 
                         byte[] buf = new byte[tcpClient.ReceiveBufferSize];
@@ -432,7 +423,7 @@ namespace GoOS.GUI.Apps
                             return;
                         }
 
-                        string resp = Encoding.ASCII.GetString(buf, 0, read);
+                        string resp = System.Text.Encoding.ASCII.GetString(buf, 0, read);
                         int sep = resp.IndexOf("\r\n\r\n", StringComparison.Ordinal);
                         if (sep < 0)
                         {
@@ -440,7 +431,7 @@ namespace GoOS.GUI.Apps
                             return;
                         }
 
-                        string body = resp.Substring(sep + 4).Trim(); // version token or "404"
+                        string body = resp.Substring(sep + 4).Trim();
 
                         if (body != Kernel.version && body != Kernel.editionnext && Kernel.BuildType != "INTERNAL TEST BUILD")
                         {
@@ -479,8 +470,7 @@ namespace GoOS.GUI.Apps
             }
         }
 
-        // ===== Simple models for app menus =====
-
+        // ===== simple models for per-app menus =====
         public readonly struct MenuModel
         {
             public readonly string Title;

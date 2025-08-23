@@ -127,20 +127,11 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Paint.rubber.bmp")]
         static byte[] rubberRaw;
 
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.user.bmp")]
-        static byte[] userImageRaw;
-
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.shutdown.bmp")]
         static byte[] shutdownIconRaw;
 
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.Welcome.bmp")]
-        static byte[] welcomeImageRaw;
-
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.info.bmp")]
         static byte[] infoIconRaw;
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.drum.bmp")]
-        static byte[] drumIconRaw;
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.warning.bmp")]
         static byte[] warningIconRaw;
@@ -222,12 +213,6 @@ namespace GoOS
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.sidebar.bmp")]
         static byte[] sidebarRaw;
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskStart.startmenuBG.bmp")]
-        static byte[] startMenuBackgroundRaw;
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskStart.start.bmp")]
-        static byte[] startBackgroundRaw;
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskStart.taskbar.bmp")]
         static byte[] taskbarBackgroundRaw;
@@ -369,9 +354,6 @@ namespace GoOS
                     text = Image.FromBitmap(textRaw, false);
                     mouse_text = Image.FromBitmap(mouse_textRaw, false);
                     rubber = Image.FromBitmap(rubberRaw, false);
-                    userImage = Image.FromBitmap(userImageRaw, false);
-                    shutdownIcon = Image.FromBitmap(shutdownIconRaw, false);
-                    welcomeImage = Image.FromBitmap(welcomeImageRaw, false);
                     infoIcon = Image.FromBitmap(infoIconRaw, false);
                     warningIcon = Image.FromBitmap(warningIconRaw, false);
                     GoStore = Image.FromBitmap(GoStoreRaw, false);
@@ -391,8 +373,6 @@ namespace GoOS
                     drive_locked = Image.FromBitmap(drive_lockedRaw, false);
                     header = Image.FromBitmap(headerRaw, false);
                     sidebar = Image.FromBitmap(sidebarRaw, false);
-                    startMenuBackground = Image.FromBitmap(startMenuBackgroundRaw, false);
-                    startBackground = Image.FromBitmap(startBackgroundRaw, false);
                     taskbarBackground = Image.FromBitmap(taskbarBackgroundRaw, false);
                     goWebIcon = Image.FromBitmap(goWebIconRaw, false);
                     SBG = Image.FromBitmap(SBGRaw, false);
@@ -412,7 +392,6 @@ namespace GoOS
                     minimise = Image.FromBitmap(minimiseRaw, false);
                     minimiseHover = Image.FromBitmap(minimiseHoverRaw, false);
                     minimisePressed = Image.FromBitmap(minimisePressedRaw, false);
-                    drumIcon = Image.FromBitmap(drumIconRaw, false);
                     background = Image.FromBitmap(backgroundRaw, false);
                     menubarBackground = Image.FromBitmap(menubarBackgroundRaw, false);
                     break;

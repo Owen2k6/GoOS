@@ -244,26 +244,6 @@ namespace GoOS.GUI
 
         private static bool startOpen = false;
 
-        public static void ToggleStartMenu()
-        {
-            if (!Dimmed)
-            {
-                if (!WindowManager.Dimmed)
-                {
-                    if (!startOpen)
-                    {
-                        AddWindow(new StartMenu());
-                    }
-                    else
-                    {
-                        GetWindowByType<StartMenu>().Dispose();
-                    }
-
-                    startOpen = !startOpen;
-                }
-            }
-        }
-
         private static void DoInput()
         {
             if (windows.Count == 0)
@@ -334,13 +314,6 @@ namespace GoOS.GUI
                     return;
                 }
 
-                else if (key.Key == ConsoleKeyEx.LWin ||
-                         key.Key == ConsoleKeyEx.RWin)
-                {
-                    ToggleStartMenu();
-                    return;
-                }
-
                 else if (KeyboardManager.ControlPressed && KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
                 {
                     AddWindow(new TaskManager());
@@ -373,10 +346,6 @@ namespace GoOS.GUI
             {
                 if (!BetterConsole.ConsoleMode)
                 {
-                    if (GetWindowByType<StartMenu>() != null && FocusedWindow != GetWindowByType<StartMenu>())
-                    {
-                        GetWindowByType<StartMenu>().Dispose();
-                    }
 
                     SyncMouseBoundsAndClamp();
 
