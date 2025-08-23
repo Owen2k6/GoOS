@@ -6,7 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using IL2CPU.API.Attribs;
-using GoGL.Graphics;
+using Gold.Graphics;
 using System.IO;
 using System.Threading;
 using static GoOS.Resources;

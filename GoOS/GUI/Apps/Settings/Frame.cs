@@ -7,7 +7,7 @@ using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4;
 using Cosmos.System.Network.IPv4.UDP.DNS;
 using Cosmos.System.ScanMaps;
-using GoGL.Graphics;
+using Gold.Graphics;
 
 namespace GoOS.GUI.Apps.Settings;
 
@@ -67,7 +67,7 @@ public class Frame : Window
                         Contents.DrawString(5, 188, "System Memory: " + Cosmos.Core.CPU.GetAmountOfRAM() + "MB",
                             Resources.Font_1x, Color.White);
                         Contents.DrawString(5, 222, "GoOS Implementations --", Resources.Font_1x, Color.White);
-                        Contents.DrawString(5, 234, "GoGL Version " + new GoGL.Info().getVersion(), Resources.Font_1x,
+                        Contents.DrawString(5, 234, "Gold Version " + Gold.Info.Version, Resources.Font_1x,
                             Color.White);
                         Contents.DrawString(5, 246, "GoCode Version " + GoCode.GoCode.Version, Resources.Font_1x,
                             Color.White);
@@ -386,7 +386,9 @@ public class Frame : Window
                 };
                 break;
             case (1):
-                Contents.DrawString(109, 11, "Current: " + GUI.WindowManager.Canvas.Width+"x"+GUI.WindowManager.Canvas.Height, Resources.Font_1x,
+                Contents.DrawString(109, 11,
+                    "Current: " + GUI.WindowManager.Canvas.Width + "x" + GUI.WindowManager.Canvas.Height,
+                    Resources.Font_1x,
                     Color.White);
                 new Button(this, 109, 28, 185, 24, "Change Resolution")
                 {
@@ -397,14 +399,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
                                     800, 600);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
-                                BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
-                                GUI.WindowManager.AddWindow(new Desktop());
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 0 });
@@ -414,14 +414,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
                                     1024, 768);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
-                                BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
-                                GUI.WindowManager.AddWindow(new Desktop());
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 1 });
@@ -431,14 +429,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
                                     1280, 960);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
-                                BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
-                                GUI.WindowManager.AddWindow(new Desktop());
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 2 });
@@ -448,14 +444,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
                                     1400, 1050);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
-                                BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
-                                GUI.WindowManager.AddWindow(new Desktop());
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 3 });
@@ -465,14 +459,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
                                     1600, 1200);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
-                                BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
-                                GUI.WindowManager.AddWindow(new Desktop());
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 4 });
@@ -482,14 +474,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
                                     1280, 720);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
-                                BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
-                                GUI.WindowManager.AddWindow(new Desktop());
+                                WindowManager.Update();
+                                WindowManager.windows = new List<GUI.Window>(10);
+                                WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 5 });
@@ -499,14 +489,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
                                     1280, 800);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
-                                BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
-                                GUI.WindowManager.AddWindow(new Desktop());
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 6 });
@@ -516,14 +504,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
                                     1366, 768);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
-                                BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
-                                GUI.WindowManager.AddWindow(new Desktop());
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 7 });
@@ -533,14 +519,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
                                     1440, 900);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
-                                BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
-                                GUI.WindowManager.AddWindow(new Desktop());
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 8 });
@@ -550,14 +534,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
                                     1600, 900);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
-                                BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
-                                GUI.WindowManager.AddWindow(new Desktop());
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 9 });
@@ -567,14 +549,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
                                     1680, 1050);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
-                                BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
-                                GUI.WindowManager.AddWindow(new Desktop());
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 10 });
@@ -584,14 +564,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
                                     1920, 1080);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
-                                BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
-                                GUI.WindowManager.AddWindow(new Desktop());
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 11 });
@@ -601,14 +579,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
                                     1920, 1200);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
-                                BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
-                                GUI.WindowManager.AddWindow(new Desktop());
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 12 });
@@ -618,14 +594,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
                                     2560, 1440);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
-                                BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
-                                GUI.WindowManager.AddWindow(new Desktop());
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 13 });

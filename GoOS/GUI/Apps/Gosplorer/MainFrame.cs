@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using Cosmos.System;
 using GoOS.Commands;
-using GoGL.Graphics;
+using Gold.Graphics;
 using static GoOS.Resources;
 using GoOS.Apps; // <-- for GiffRunner
 
@@ -407,25 +407,13 @@ namespace GoOS.GUI.Apps.Gosplorer
                     break;
 
                 case { } a when a.EndsWith(".gexe") || a.EndsWith(".goexe"):
-                    BetterConsole.Clear();
-                    BetterConsole.Title = "GoCode Interpreter";
-                    WindowManager.AddWindow(new GTerm(false));
-                    Run.Main(full, false);
-                    WindowManager.RemoveWindowByTitle("GoCode Interpreter");
-                    BetterConsole.Title = "GTerm";
-                    BetterConsole.Clear();
-                    Kernel.DrawPrompt();
+                    Terminal term = new Terminal();
+                    WindowManager.AddWindow(term);
+                    
                     break;
 
                 case { } a when a.EndsWith(".9xc"):
-                    BetterConsole.Clear();
-                    BetterConsole.Title = "9xCode Interpreter";
-                    WindowManager.AddWindow(new GTerm(false));
-                    _9xCode.Interpreter.Run(full);
-                    WindowManager.RemoveWindowByTitle("9xCode Interpreter");
-                    BetterConsole.Title = "GTerm";
-                    BetterConsole.Clear();
-                    Kernel.DrawPrompt();
+                    
                     break;
 
                 // ---- NEW: GIFF scripts ----

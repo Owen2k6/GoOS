@@ -1,5 +1,6 @@
 ﻿using System;
-using GoGL.Graphics;
+using Cosmos.System;
+using Gold.Graphics;
 namespace GoOS.GUI.Apps;
 
 public class GoVM : Window
@@ -38,9 +39,8 @@ public class GoVM : Window
 
 public class ChaOS_VM : Window
 {
-    
-    public static VMBetterConsole VMTERM;
-    
+    public Terminal VMTERM;
+
     public ChaOS_VM()
     {
         /*Dialogue.Show(
@@ -50,16 +50,16 @@ public class ChaOS_VM : Window
             WindowManager.errorIcon);*/
         try
         {
-            VMTERM = new VMBetterConsole(800, 600);
+            VMTERM = new Terminal();
 
-            Contents = VMTERM.Canvas;
+            Contents = VMTERM.terminal.Contents;
             Title = "ChaOS - GoVM";
             Visible = true;
             Closable = true;
             SetDock(WindowDock.Auto);
             VMTERM.Visible = true;
 
-            //GoOS.Commands.VM.Run("chaos");
+            Commands.VM.Run("chaos");
         }
         catch (Exception eee)
         {
@@ -69,6 +69,5 @@ public class ChaOS_VM : Window
                 null, // default buttons
                 WindowManager.errorIcon);
         }
-        
     }
 }

@@ -6,10 +6,9 @@ using System.Text;
 using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4;
 using Cosmos.System.Network.IPv4.UDP.DNS;
-using GoGL.Graphics;
+using Gold.Graphics;
 using static GoOS.Resources;
 using System.Net.Sockets;
-using Console = BetterConsole;
 using GoOS.Commands;
 
 namespace GoOS.GUI.Apps.GoStore
@@ -57,7 +56,7 @@ namespace GoOS.GUI.Apps.GoStore
             DescriptionLines.AddRange(SpliceText("Category: " + app.Category.Replace("\\n", "\n"), 59));
             DescriptionLines.AddRange(SpliceText("GoOS Version: " + app.GoOSVersion.Replace("\\n", "\n"), 59));
 
-            Contents.DrawString(10, 10, "test", default, Color.White);
+            Contents.DrawString(10, 10, "test", Font_1x, Color.White);
         }
 
         static string[] SpliceText(string input, int n)
@@ -228,19 +227,15 @@ namespace GoOS.GUI.Apps.GoStore
             }
             else
             {
-                Console.Clear();
-                Console.Title = "Terminal - GoIDE";
-                WindowManager.AddWindow(new GTerm(false));
-                Console.Clear();
+                Terminal term = new Terminal();
+                WindowManager.AddWindow(term);
 
                 if (!App.Filename.EndsWith(".9xc"))
-                    Run.Main(@"0:\go\" + App.Filename, false);
+                    Run.Main(term, @"0:\go\" + App.Filename, false);
                 else
-                    _9xCode.Interpreter.Run(@"0:\go\" + App.Filename);
+                    _9xCode.Interpreter.Run(term, @"0:\go\" + App.Filename);
 
-                Console.Clear();
-                WindowManager.RemoveWindowByTitle("Terminal - GoIDE");
-                Console.Title = "GTerm";
+                WindowManager.windows.Remove(term);
             }
         }
     }

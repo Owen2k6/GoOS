@@ -1,5 +1,5 @@
 ﻿using IL2CPU.API.Attribs;
-using GoGL.Graphics;
+using Gold.Graphics;
 
 namespace GoOS.GUI.Apps.GoWeb
 {

@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Globalization;
 
 // Avoid Canvas ambiguity
-using GCanvas = GoGL.Graphics.Canvas;
-using GColor = GoGL.Graphics.Color;
+using GCanvas = Gold.Graphics.Canvas;
+using GColor = Gold.Graphics.Color;
 
 using GoOS.GUI;          // Dialogue, Window, WindowManager
-using GoGL.Graphics;     // Color
+using Gold.Graphics;     // Color
 using static GoOS.Resources; // Font_1x
 
 namespace GoOS.Giff

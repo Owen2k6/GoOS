@@ -9,10 +9,9 @@ using Cosmos.System;
 using GoOS.GUI;
 using GoOS.GUI.Apps;
 using GoOS.Themes;
-using GoGL.Graphics;
-using Console = BetterConsole;
-using static ConsoleColorEx;
-using static GoOS.Core;
+using Gold.Graphics;
+using Console = GoOS.SVGAIITerminal;
+using static Gold.Graphics.Color;
 
 namespace GoOS.GoCode;
 
@@ -40,6 +39,16 @@ public class Interpreter
     private int expectedLevel = 0;
 
     private int i = 0;
+
+    private Terminal terminal;
+    
+    private SVGAIITerminal Console;
+
+    public Interpreter(Terminal terminal)
+    {
+        this.terminal = terminal;
+        Console = terminal.terminal;
+    }
 
     public void Interpret(string[] lines, bool unnecessaryOutputs = true)
     {
@@ -84,7 +93,7 @@ public class Interpreter
                 endmessage = "Process has ended.";
             }
 
-            log(ThemeManager.ErrorText, endmessage);
+            terminal.log(ThemeManager.ErrorText, endmessage);
         }
     }
 
@@ -113,7 +122,7 @@ public class Interpreter
 
                 if (!Windows.ContainsKey(parentWindowName))
                 {
-                    log(ThemeManager.ErrorText, "Could not find specified parent window!");
+                    terminal.log(ThemeManager.ErrorText, "Could not find specified parent window!");
                     break;
                 }
                 
@@ -185,7 +194,7 @@ public class Interpreter
                             string[] inputs = iffingHell.Split("<");
                             if (inputs[0].Contains("\"") || inputs[0].Contains("\""))
                             {
-                                log(ThemeManager.ErrorText, "You cannot use < with strings.");
+                                terminal.log(ThemeManager.ErrorText, "You cannot use < with strings.");
                             }
                             else
                             {
@@ -224,7 +233,7 @@ public class Interpreter
                             string[] inputsa = iffingHell.Split("<=");
                             if (inputsa[0].Contains("\"") || inputsa[0].Contains("\""))
                             {
-                                log(ThemeManager.ErrorText, "You cannot use <= with strings.");
+                                terminal.log(ThemeManager.ErrorText, "You cannot use <= with strings.");
                             }
                             else
                             {
@@ -263,7 +272,7 @@ public class Interpreter
                             string[] inputsb = iffingHell.Split(">");
                             if (inputsb[0].Contains("\"") || inputsb[0].Contains("\""))
                             {
-                                log(ThemeManager.ErrorText, "You cannot use < with strings.");
+                                terminal.log(ThemeManager.ErrorText, "You cannot use < with strings.");
                             }
                             else
                             {
@@ -302,7 +311,7 @@ public class Interpreter
                             string[] inputsc = iffingHell.Split(">=");
                             if (inputsc[0].Contains("\"") || inputsc[0].Contains("\""))
                             {
-                                log(ThemeManager.ErrorText, "You cannot use < with strings.");
+                                terminal.log(ThemeManager.ErrorText, "You cannot use < with strings.");
                             }
                             else
                             {
@@ -466,7 +475,7 @@ public class Interpreter
             case { } a when a.StartsWith("input"):
                 if (line == "input=")
                 {
-                    textcolour(Blue);
+                    Console.ForegroundColor = Color.Blue;
                     string theysaid = Console.ReadLine();
 
                     if (Strings.ContainsKey("input"))
@@ -480,8 +489,8 @@ public class Interpreter
                 else
                 {
                     String addon = line.Replace("input=", "");
-                    write(addon);
-                    textcolour(Blue);
+                    Console.Write(addon);
+                    Console.ForegroundColor = Color.Blue;
                     string theysaid = Console.ReadLine();
 
                     if (Strings.ContainsKey("input"))
@@ -496,17 +505,17 @@ public class Interpreter
             case { } a when a.StartsWith("stop"):
                 if (line == "stop=")
                 {
-                    textcolour(Blue);
-                    log(Green, "Press any key to continue...");
+                    Console.ForegroundColor = Color.Blue;
+                    terminal.log(Color.Green, "Press any key to continue...");
                     Console.ReadKey();
                     Console.WriteLine();
                 }
                 else
                 {
                     String addon = line.Replace("stop=", "");
-                    textcolour(DarkRed);
-                    write(addon);
-                    textcolour(Blue);
+                    Console.ForegroundColor = Color.Red;
+                    Console.Write(addon);
+                    Console.ForegroundColor = Color.Blue;
                     Console.ReadKey();
                     Console.WriteLine();
                 }
@@ -515,7 +524,7 @@ public class Interpreter
             case { } a when a.StartsWith("regprog"):
                 if (hasbeenregistered)
                 {
-                    log(ThemeManager.ErrorText,
+                    terminal.log(ThemeManager.ErrorText,
                         "Attempted second register. Application may be attempting to reregister as another application!!!");
                     break;
                 }
@@ -879,7 +888,7 @@ public class Interpreter
                 }
                 else if (assa == "gray")
                 {
-                    Console.ForegroundColor = Gray;
+                    Console.ForegroundColor = LightGray;
                 }
                 else if (assa == "magenta")
                 {
@@ -891,31 +900,31 @@ public class Interpreter
                 }
                 else if (assa == "darkblue")
                 {
-                    Console.ForegroundColor = DarkBlue;
+                    Console.ForegroundColor = DeepBlue;
                 }
                 else if (assa == "darkcyan")
                 {
-                    Console.ForegroundColor = DarkCyan;
+                    Console.ForegroundColor = Cyan;
                 }
                 else if (assa == "darkgray")
                 {
-                    Console.ForegroundColor = DarkGray;
+                    Console.ForegroundColor = DeepGray;
                 }
                 else if (assa == "darkgreen")
                 {
-                    Console.ForegroundColor = DarkGreen;
+                    Console.ForegroundColor = Green;
                 }
                 else if (assa == "darkmageneta")
                 {
-                    Console.ForegroundColor = DarkMagenta;
+                    Console.ForegroundColor = Magenta;
                 }
                 else if (assa == "darkred")
                 {
-                    Console.ForegroundColor = DarkRed;
+                    Console.ForegroundColor = Red;
                 }
                 else if (assa == "darkyellow")
                 {
-                    Console.ForegroundColor = DarkYellow;
+                    Console.ForegroundColor = Yellow;
                 }
 
                 break;
@@ -947,7 +956,7 @@ public class Interpreter
                 }
                 else if (assb == "gray")
                 {
-                    Console.BackgroundColor = Gray;
+                    Console.BackgroundColor = LightGray;
                 }
                 else if (assb == "magenta")
                 {
@@ -959,31 +968,31 @@ public class Interpreter
                 }
                 else if (assb == "darkblue")
                 {
-                    Console.BackgroundColor = DarkBlue;
+                    Console.BackgroundColor = DeepBlue;
                 }
                 else if (assb == "darkcyan")
                 {
-                    Console.BackgroundColor = DarkCyan;
+                    Console.BackgroundColor = Cyan;
                 }
                 else if (assb == "darkgray")
                 {
-                    Console.BackgroundColor = DarkGray;
+                    Console.BackgroundColor = DeepGray;
                 }
                 else if (assb == "darkgreen")
                 {
-                    Console.BackgroundColor = DarkGreen;
+                    Console.BackgroundColor = Green;
                 }
                 else if (assb == "darkmageneta")
                 {
-                    Console.BackgroundColor = DarkMagenta;
+                    Console.BackgroundColor = Magenta;
                 }
                 else if (assb == "darkred")
                 {
-                    Console.BackgroundColor = DarkRed;
+                    Console.BackgroundColor = Red;
                 }
                 else if (assb == "darkyellow")
                 {
-                    Console.BackgroundColor = DarkYellow;
+                    Console.BackgroundColor = Yellow;
                 }
 
                 break;

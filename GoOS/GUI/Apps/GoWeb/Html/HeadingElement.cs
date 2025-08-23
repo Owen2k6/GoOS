@@ -1,4 +1,4 @@
-﻿using GoGL.Graphics.Fonts;
+﻿using Gold.Graphics.Fonts;
 
 namespace GoOS.GUI.Apps.GoWeb.Html
 {
@@ -28,7 +28,7 @@ namespace GoOS.GUI.Apps.GoWeb.Html
             };
         }
 
-        public override Font GetFont()
+        public override BtfFontFace GetFont()
         {
             return Resources.Font_2x;
         }

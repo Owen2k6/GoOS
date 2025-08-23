@@ -6,7 +6,7 @@
 
 using System;
 using System.Collections.Generic;
-using Console = BetterConsole;
+//using Console = BetterConsole;
 
 namespace GoOS.Util
 {

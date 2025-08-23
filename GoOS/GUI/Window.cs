@@ -2,7 +2,7 @@
 using Cosmos.System;
 using GoOS.GUI.Models;
 using System;
-using GoGL.Graphics;
+using Gold.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI

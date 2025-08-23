@@ -2,7 +2,8 @@
 using GoOS.GUI.Apps.GoWeb.Html;
 using GoOS.GUI.Apps.GoWeb.Http;
 using GoOS.GUI.Apps.GoWeb.Render;
-using GoGL.Graphics;
+using Gold.Graphics;
+using Uri = GoOS.GUI.Apps.GoWeb.Http.Uri;
 
 namespace GoOS.GUI.Apps.GoWeb
 {
@@ -75,7 +76,7 @@ namespace GoOS.GUI.Apps.GoWeb
             
             Contents.DrawImage(boxX + 10, boxY + 10, Resources.drumIcon, true);
 
-            Contents.DrawString(boxX + 70, boxY + (boxH - Resources.Font_1x.Size) / 2, message, Resources.Font_1x, Color.Black);
+            Contents.DrawString(boxX + 70, boxY + (boxH - Resources.Font_1x.GetHeight()) / 2, message, Resources.Font_1x, Color.Black);
 
             RenderSystemStyleBorder();
 

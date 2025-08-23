@@ -1,4 +1,4 @@
-using GoGL.Graphics;
+using Gold.Graphics;
 using GoOS.Networking; // HttpHelper
 using System;
 using System.Collections.Generic;

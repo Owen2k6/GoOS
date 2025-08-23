@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using ConsoleColor = GoGL.Graphics.Color;
-using static ConsoleColorEx;
+using ConsoleColor = Gold.Graphics.Color;
+using static Gold.Graphics.Color;
 
 namespace GoOS._9xCode
 {
@@ -8,11 +8,11 @@ namespace GoOS._9xCode
     {
         private static Dictionary<string, ConsoleColor> StringToConsoleColor = new Dictionary<string, ConsoleColor>()
         {
-            { "Black", Black }, { "DarkBlue", DarkBlue },
-            { "DarkGreen", DarkGreen }, { "DarkCyan", DarkCyan },
-            { "DarkRed", DarkRed },{ "DarkMagenta", DarkMagenta },
-            { "DarkYellow", DarkYellow }, { "Gray", Gray },
-            { "DarkGray", DarkGray },{ "Blue", Blue },
+            { "Black", Black }, { "DarkBlue", DeepBlue },
+            { "DarkGreen", Green }, { "DarkCyan", Cyan },
+            { "DarkRed", Red },{ "DarkMagenta", Magenta },
+            { "DarkYellow", Yellow }, { "Gray", LightGray },
+            { "DarkGray", DeepGray },{ "Blue", Blue },
             { "Green", Green },{ "Cyan", Cyan },
             { "Red", Red }, { "Magenta", Magenta },
             { "Yellow", Yellow }, { "White", White },

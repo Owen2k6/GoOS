@@ -1,7 +1,6 @@
 ﻿using System;
+using GoOS.GUI.Apps;
 using GoOS.Themes;
-using Console = BetterConsole;
-using static GoOS.Core;
 
 namespace GoOS.Virtualisation
 {
@@ -12,12 +11,19 @@ namespace GoOS.Virtualisation
         protected bool mStarted = false;
 
         protected bool mStopped = false;
+        
+        private Terminal terminal;
+
+        public VM(Terminal terminal)
+        {
+            this.terminal = terminal;
+        }
 
         public virtual void Start()
         {
             try
             {
-                log(ThemeManager.WindowText, $"\nStarting virtual machine {name}...\n");
+                terminal.log(ThemeManager.WindowText, $"\nStarting virtual machine {name}...\n");
 
                 if (mStarted)
                 {
@@ -25,8 +31,8 @@ namespace GoOS.Virtualisation
                 }
                 mStarted = true;
 
-                Console.ForegroundColor = ConsoleColorEx.White;
-                Console.BackgroundColor = ConsoleColorEx.Black;
+                terminal.terminal.ForegroundColor = Gold.Graphics.Color.White;
+                terminal.terminal.BackgroundColor = Gold.Graphics.Color.Black;
 
                 OnBoot();
                 BeforeRun();
@@ -38,11 +44,11 @@ namespace GoOS.Virtualisation
 
                 AfterRun();
 
-                log(ThemeManager.WindowText, "\nReturning back to GoOS...\n");
+                terminal.log(ThemeManager.WindowText, "\nReturning back to GoOS...\n");
             }
             catch (Exception ex)
             {
-                log(ThemeManager.ErrorText, $"\nAn exception occured in the virtual machine {name}\n{ex}\n");
+                terminal.log(ThemeManager.ErrorText, $"\nAn exception occured in the virtual machine {name}\n{ex}\n");
             }
         }
 

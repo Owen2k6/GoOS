@@ -1,5 +1,5 @@
 ﻿using GoOS.GUI.Models;
-using GoGL.Graphics;
+using Gold.Graphics;
 using System;
 using Cosmos.System;
 

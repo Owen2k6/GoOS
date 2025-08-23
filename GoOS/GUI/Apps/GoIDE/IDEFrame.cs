@@ -2,9 +2,8 @@
 using System.IO;
 using GoOS.Commands;
 using IL2CPU.API.Attribs;
-using GoGL.Graphics;
+using Gold.Graphics;
 using static GoOS.Commands.Run;
-using Console = BetterConsole;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.GoIDE
@@ -74,20 +73,18 @@ namespace GoOS.GUI.Apps.GoIDE
                 Debugging = true;
 
                 File.WriteAllText(ProjectPath, Code.Text);
+                
+                Terminal term = new Terminal();
+                WindowManager.AddWindow(term);
 
-                Console.Clear();
-                Console.Title = "Terminal - GoIDE";
-                WindowManager.AddWindow(new GTerm(false));
-                Console.Clear();
+                term.Title = "Terminal - GoIDE";
 
                 if (!Is9xCode)
-                    Run.Main(ProjectPath, false);
+                    Main(term, ProjectPath, false);
                 else
-                    _9xCode.Interpreter.Run(ProjectPath);
-
-                Console.Clear();
-                WindowManager.RemoveWindowByTitle("Terminal - GoIDE");
-                Console.Title = "GTerm";
+                    _9xCode.Interpreter.Run(term, ProjectPath);
+                
+                WindowManager.windows.Remove(term);
 
                 Debugging = false;
             }

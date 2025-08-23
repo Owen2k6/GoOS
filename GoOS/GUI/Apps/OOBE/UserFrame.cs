@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using GoGL.Graphics;
+using Gold.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.OOBE

@@ -1,8 +1,8 @@
 ﻿using GoOS.GUI.Models;
-using GoGL.Graphics;
+using Gold.Graphics;
 using IL2CPU.API.Attribs;
 using Cosmos.System;
-using GoGL.Graphics.Rasterizer;
+using Gold.Graphics.Rasterizer;
 
 namespace GoOS.GUI
 {
@@ -11,7 +11,7 @@ namespace GoOS.GUI
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse_click.bmp")]
         private static byte[] mouseClickRaw;
 
-        private static Canvas mouseClick = GoGL.Graphics.Image.FromBitmap(mouseClickRaw);
+        private static Canvas mouseClick = Gold.Graphics.Image.FromBitmap(mouseClickRaw);
 
         public string Title;
 

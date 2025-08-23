@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using GoOS.Themes;
-using static GoOS.Core;
 
 namespace GoOS.Util;
 
@@ -22,7 +21,7 @@ public class localRepo
         }
         else
         {
-            log(ThemeManager.ErrorText,$"LR: Unable to locate {name}!");
+            //log(ThemeManager.ErrorText,$"LR: Unable to locate {name}!");
             return null;
         }
     }

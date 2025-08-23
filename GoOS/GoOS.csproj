@@ -208,12 +208,8 @@
       <EmbeddedResource Include="Resources\GUI\closebutton_hover.bmp" />
       <EmbeddedResource Include="Resources\Welcome.bmp" />
 	  <EmbeddedResource Include="Resources\GUI\warning.bmp" />
-	  <None Remove="Resources\GUI\TaskStart\startmenuBG.bmp" />
-	  <EmbeddedResource Include="Resources\GUI\TaskStart\startmenuBG.bmp" />
 	  <None Remove="Resources\GUI\Gosplorer\REFRESH.bmp" />
 	  <EmbeddedResource Include="Resources\GUI\Gosplorer\REFRESH.bmp" />
-	  <None Remove="Resources\GUI\TaskStart\start.bmp" />
-	  <EmbeddedResource Include="Resources\GUI\TaskStart\start.bmp" />
 	  <None Remove="Resources\GUI\TaskStart\taskbar.bmp" />
 	  <EmbeddedResource Include="Resources\GUI\TaskStart\taskbar.bmp" />
 	  <None Remove="Resources\GUI\GoStoreSoon.bmp" />
@@ -234,6 +230,8 @@
 	  <EmbeddedResource Include="Resources\MicrosoftSansSerif16.btf" />
 	  <None Remove="Resources\MSUIGothic16.btf" />
 	  <EmbeddedResource Include="Resources\MSUIGothic16.btf" />
+	  <None Remove="Resources\Geneva.btf" />
+	  <EmbeddedResource Include="Resources\Geneva.btf" />
     </ItemGroup>
 
     <PropertyGroup>
@@ -257,7 +255,6 @@
         <PackageReference Include="Cosmos.Plugs" Version="0.1.0-localbuild" />
         <PackageReference Include="Cosmos.System2" Version="0.1.0-localbuild" />
         <PackageReference Include="IL2CPU.API" Version="0.1.0-*" />
-		<PackageReference Include="PrismAPI" Version="1.0.3" />
     </ItemGroup>
 
     <ItemGroup>
@@ -266,12 +263,6 @@
       </Reference>
       <Reference Include="DotNetParser">
         <HintPath>DotNetParser.dll</HintPath>
-      </Reference>
-      <Reference Include="GoGL">
-        <HintPath>GoGL.dll</HintPath>
-      </Reference>
-      <Reference Include="Gold">
-        <HintPath>..\..\GoOS\GoOS\Gold.dll</HintPath>
       </Reference>
       <Reference Include="LibDotNetParser">
         <HintPath>LibDotNetParser.dll</HintPath>

@@ -10,13 +10,12 @@ using System.IO;
 using System.Text;
 using GoOS.Themes;
 using GoOS.Commands;
-using Console = BetterConsole;
-using ConsoleColor = GoGL.Graphics.Color;
-using static GoOS.Core;
+//using Console = BetterConsole;
+using ConsoleColor = Gold.Graphics.Color;
 using System.Threading;
-using GoGL.Graphics;
+using Gold.Graphics;
 using IL2CPU.API.Attribs;
-using GoGL.Hardware.GPU;
+using Gold.Hardware.GPU;
 using GoOS.GUI;
 using GoOS.GUI.Apps;
 

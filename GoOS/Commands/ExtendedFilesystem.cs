@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Console = BetterConsole;
+using Console = GoOS.SVGAIITerminal;
 
 public class ExtendedFilesystem
 {

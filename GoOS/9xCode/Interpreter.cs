@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading;
 using Cosmos.System;
 using GoOS.GUI;
-using GoGL.Graphics;
-using static ConsoleColorEx;
-using Console = BetterConsole;
-using ConsoleColor = GoGL.Graphics.Color;
+using GoOS.GUI.Apps;
+using Gold.Graphics;
+using static Gold.Graphics.Color;
+using ConsoleColor = Gold.Graphics.Color;
 using static GoOS.Resources;
 
 // 9xCode Beta 3.1
@@ -21,24 +21,28 @@ namespace GoOS._9xCode
     {
         public const string Version = "b3.1";
 
-        public static void Run(string file)
+        public static void Run(Terminal terminal, string file)
         {
             if (!File.Exists(file))
             {
                 HandleError("9xCode", "Script not found!");
             }
 
-            Console.Title = $"{file.Substring(file.LastIndexOf(@"\")).Replace(".9xc", "")} - 9xCode";
+            SVGAIITerminal Console = terminal.terminal;
+
+            //Console.Title = $"{file.Substring(file.LastIndexOf(@"\")).Replace(".9xc", "")} - 9xCode";
             Console.ForegroundColor = White;
-            Interpret(File.ReadAllLines(file));
-            Console.Title = "GTerm";
+            Interpret(terminal, File.ReadAllLines(file));
+            //Console.Title = "GTerm";
             Console.ForegroundColor = White;
         }
 
         private static bool Interpreting = false;
 
-        private static void Interpret(string[] code)
+        private static void Interpret(Terminal terminal, string[] code)
         {
+            SVGAIITerminal Console = terminal.terminal;
+            
             Interpreting = true;
 
             Console.ForegroundColor = Cyan;

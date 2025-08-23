@@ -19,7 +19,7 @@ namespace GoOS.GUI.Apps.GoWeb.Render
             }
 
             bool isBlockLevel = element.IsBlockLevel();
-            int height = element.GetFont().Size;
+            int height = element.GetFont().GetHeight();
 
             element.X = X;
             element.Y = Y;

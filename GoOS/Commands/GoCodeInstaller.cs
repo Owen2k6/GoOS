@@ -8,13 +8,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using GoOS.Themes;
-using static GoOS.Core;
+using GoOS.GUI.Apps;
 
 namespace GoOS.Commands;
 
 public class GoCodeInstaller
 {
-    public static void Install(string file)
+    public static void Install(Terminal terminal, string file)
     {
         try
         {
@@ -78,11 +78,11 @@ public class GoCodeInstaller
         }
         catch (Exception e)
         {
-            log(ThemeManager.ErrorText, "Error whilst trying to install file: " + e);
+            terminal.log(ThemeManager.ErrorText, "Error whilst trying to install file: " + e);
         }
     }
 
-    public static void CheckForInstalledPrograms()
+    public static void CheckForInstalledPrograms(Terminal terminal)
     {
         try
         {
@@ -135,7 +135,7 @@ public class GoCodeInstaller
         }
         catch (Exception e)
         {
-            log(ThemeManager.ErrorText, "Error whilst trying to detect installed programs: " + e);
+            terminal.log(ThemeManager.ErrorText, "Error whilst trying to detect installed programs: " + e);
         }
     }
 

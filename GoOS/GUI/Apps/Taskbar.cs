@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cosmos.HAL.Drivers.Video;
 using IL2CPU.API.Attribs;
-using GoGL.Graphics;
+using Gold.Graphics;
 
 namespace GoOS.GUI.Apps;
 

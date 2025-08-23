@@ -9,9 +9,8 @@ using Cosmos.System;
 using GoOS.GUI;
 using GoOS.GUI.Apps;
 using GoOS.Themes;
-using Console = BetterConsole;
-using static ConsoleColorEx;
-using static GoOS.Core;
+using Console = GoOS.SVGAIITerminal;
+using static Gold.Graphics.Color;
 
 namespace GoOS.Commands
 {
@@ -32,18 +31,20 @@ namespace GoOS.Commands
         public static ushort windowwidth = 0;
         public static ushort windowheight = 0;
 
-        public static void Main(string run, bool usecurrentdir = true)
+        public static void Main(Terminal terminal, string run, bool usecurrentdir = true)
         {
+            SVGAIITerminal Console = terminal.terminal;
+            
             String inputaman = run;
 
             try
             {
-                log(Cyan, "Goplex Studios GoOS GoCode Interpreter\n");
+                terminal.log(Cyan, "Goplex Studios GoOS GoCode Interpreter\n");
 
                 if (!inputaman.EndsWith(".gexe") && !inputaman.EndsWith(".goexe"))
                 {
-                    log(ThemeManager.ErrorText, "Incompatible format.");
-                    log(ThemeManager.ErrorText, "File must be .gexe");
+                    terminal.log(ThemeManager.ErrorText, "Incompatible format.");
+                    terminal.log(ThemeManager.ErrorText, "File must be .gexe");
                 }
 
                 if (inputaman.EndsWith(".goexe") || inputaman.EndsWith(".gexe"))
@@ -154,14 +155,14 @@ namespace GoOS.Commands
                             {
                                 if (line == "input=")
                                 {
-                                    textcolour(Blue);
+                                    Console.ForegroundColor = Blue;
                                     theysaid = Console.ReadLine();
                                 }
                                 else
                                 {
                                     String addon = line.Replace("input=", "");
-                                    write(addon);
-                                    textcolour(Blue);
+                                    Console.Write(addon);
+                                    Console.ForegroundColor = Blue;
                                     theysaid = Console.ReadLine();
                                 }
                             }
@@ -170,17 +171,17 @@ namespace GoOS.Commands
                             {
                                 if (line == "stop=")
                                 {
-                                    textcolour(Blue);
-                                    log(Green, "Press any key to continue...");
+                                    Console.ForegroundColor = Blue;
+                                    terminal.log(Green, "Press any key to continue...");
                                     Console.ReadKey();
                                     Console.WriteLine();
                                 }
                                 else
                                 {
                                     String addon = line.Replace("stop=", "");
-                                    textcolour(DarkRed);
-                                    write(addon);
-                                    textcolour(Blue);
+                                    Console.ForegroundColor = Red;
+                                    Console.Write(addon);
+                                    Console.ForegroundColor = Blue;
                                     Console.ReadKey();
                                     Console.WriteLine();
                                 }
@@ -195,7 +196,7 @@ namespace GoOS.Commands
                             {
                                 if (hasbeenregistered)
                                 {
-                                    log(ThemeManager.ErrorText,
+                                    terminal.log(ThemeManager.ErrorText,
                                         "Attempted second register. Application may be attempting to reregister as another application!!!");
                                     break;
                                 }
@@ -601,7 +602,7 @@ namespace GoOS.Commands
                                 }
                                 else if (ass == "gray")
                                 {
-                                    Console.ForegroundColor = Gray;
+                                    Console.ForegroundColor = LightGray;
                                 }
                                 else if (ass == "magenta")
                                 {
@@ -613,31 +614,31 @@ namespace GoOS.Commands
                                 }
                                 else if (ass == "darkblue")
                                 {
-                                    Console.ForegroundColor = DarkBlue;
+                                    Console.ForegroundColor = DeepBlue;
                                 }
                                 else if (ass == "darkcyan")
                                 {
-                                    Console.ForegroundColor = DarkCyan;
+                                    Console.ForegroundColor = Cyan;
                                 }
                                 else if (ass == "darkgray")
                                 {
-                                    Console.ForegroundColor = DarkGray;
+                                    Console.ForegroundColor = DeepGray;
                                 }
                                 else if (ass == "darkgreen")
                                 {
-                                    Console.ForegroundColor = DarkGreen;
+                                    Console.ForegroundColor = Green;
                                 }
                                 else if (ass == "darkmageneta")
                                 {
-                                    Console.ForegroundColor = DarkMagenta;
+                                    Console.ForegroundColor = Magenta;
                                 }
                                 else if (ass == "darkred")
                                 {
-                                    Console.ForegroundColor = DarkRed;
+                                    Console.ForegroundColor = Red;
                                 }
                                 else if (ass == "darkyellow")
                                 {
-                                    Console.ForegroundColor = DarkYellow;
+                                    Console.ForegroundColor = Yellow;
                                 }
                             }
 
@@ -670,7 +671,7 @@ namespace GoOS.Commands
                                 }
                                 else if (ass == "gray")
                                 {
-                                    Console.BackgroundColor = Gray;
+                                    Console.BackgroundColor = LightGray;
                                 }
                                 else if (ass == "magenta")
                                 {
@@ -682,31 +683,31 @@ namespace GoOS.Commands
                                 }
                                 else if (ass == "darkblue")
                                 {
-                                    Console.BackgroundColor = DarkBlue;
+                                    Console.BackgroundColor = DeepBlue;
                                 }
                                 else if (ass == "darkcyan")
                                 {
-                                    Console.BackgroundColor = DarkCyan;
+                                    Console.BackgroundColor = Cyan;
                                 }
                                 else if (ass == "darkgray")
                                 {
-                                    Console.BackgroundColor = DarkGray;
+                                    Console.BackgroundColor = DeepGray;
                                 }
                                 else if (ass == "darkgreen")
                                 {
-                                    Console.BackgroundColor = DarkGreen;
+                                    Console.BackgroundColor = Green;
                                 }
                                 else if (ass == "darkmageneta")
                                 {
-                                    Console.BackgroundColor = DarkMagenta;
+                                    Console.BackgroundColor = Magenta;
                                 }
                                 else if (ass == "darkred")
                                 {
-                                    Console.BackgroundColor = DarkRed;
+                                    Console.BackgroundColor = Red;
                                 }
                                 else if (ass == "darkyellow")
                                 {
-                                    Console.BackgroundColor = DarkYellow;
+                                    Console.BackgroundColor = Yellow;
                                 }
                             }
                         }
@@ -784,12 +785,12 @@ namespace GoOS.Commands
                         endmessage = "Process has ended.";
                     }
 
-                    log(ThemeManager.ErrorText, endmessage);
+                    terminal.log(ThemeManager.ErrorText, endmessage);
                 }
             }
             catch (Exception e)
             {
-                log(ThemeManager.ErrorText, e.Message);
+                terminal.log(ThemeManager.ErrorText, e.Message);
             }
         }
     }

@@ -1,7 +1,7 @@
 ﻿#nullable enable
 using GoOS.GUI.Apps.GoWeb.Render;
-using GoGL.Graphics;
-using GoGL.Graphics.Fonts;
+using Gold.Graphics;
+using Gold.Graphics.Fonts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -151,7 +151,7 @@ namespace GoOS.GUI.Apps.GoWeb.Html
             element.Parent = this;
         }
 
-        public virtual Font GetFont()
+        public virtual BtfFontFace GetFont()
         {
             if (Parent != null)
             {

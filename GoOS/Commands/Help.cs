@@ -1,51 +1,53 @@
 ﻿using System;
 using GoOS.Themes;
-using static GoOS.Core;
-using Console = BetterConsole;
+using GoOS.GUI.Apps;
+using Console = GoOS.SVGAIITerminal;
 
 namespace GoOS.Commands
 {
     public class Help
     {
-        public static void Main()
+        public static void Main(Terminal terminal)
         {
+            SVGAIITerminal Console = terminal.terminal;
+            
             int page = 1;
             while (true)
             {
-                textcolour(ThemeManager.WindowBorder);
+                Console.ForegroundColor = ThemeManager.WindowBorder;
                 Console.WriteLine($"Page {page}:");
                 switch (page)
                 {
                     case 1:
-                        log(ThemeManager.WindowText, "help - Shows this exact page.");
-                        log(ThemeManager.WindowText, "run {program}- Run a goexe file.");
-                        log(ThemeManager.WindowText, "delfile {file} - Delete a file.");
-                        log(ThemeManager.WindowText, "deldir {file} - Delete a directory.");
-                        log(ThemeManager.WindowText, "mkfile {file} - Make a file.");
-                        log(ThemeManager.WindowText, "mkdir {file} - Make a Directory.");
+                        terminal.log(ThemeManager.WindowText, "help - Shows this exact page.");
+                        terminal.log(ThemeManager.WindowText, "run {program}- Run a goexe file.");
+                        terminal.log(ThemeManager.WindowText, "delfile {file} - Delete a file.");
+                        terminal.log(ThemeManager.WindowText, "deldir {file} - Delete a directory.");
+                        terminal.log(ThemeManager.WindowText, "mkfile {file} - Make a file.");
+                        terminal.log(ThemeManager.WindowText, "mkdir {file} - Make a Directory.");
                         break;
                     case 2:
-                        log(ThemeManager.WindowText, "cd {file} - Enter a directory.");
-                        log(ThemeManager.WindowText, "cd.. - Go to the parent directory.");
-                        log(ThemeManager.WindowText, "cdr - Jump to root from anywhere.");
-                        log(ThemeManager.WindowText, "dir - List all files and folders in the current directory.");
-                        log(ThemeManager.WindowText, "vm {vmname} - Launches a \"VM\".");
-                        log(ThemeManager.WindowText, "settheme - Change the theme.");
+                        terminal.log(ThemeManager.WindowText, "cd {file} - Enter a directory.");
+                        terminal.log(ThemeManager.WindowText, "cd.. - Go to the parent directory.");
+                        terminal.log(ThemeManager.WindowText, "cdr - Jump to root from anywhere.");
+                        terminal.log(ThemeManager.WindowText, "dir - List all files and folders in the current directory.");
+                        terminal.log(ThemeManager.WindowText, "vm {vmname} - Launches a \"VM\".");
+                        terminal.log(ThemeManager.WindowText, "settheme - Change the theme.");
                         break;
                     case 3:
-                        log(ThemeManager.WindowText, "settings - Open the settings app.");
-                        log(ThemeManager.WindowText, "notepad - Open the Notepad app.");
-                        log(ThemeManager.WindowText, "clear - Clears the terminal.");
+                        terminal.log(ThemeManager.WindowText, "settings - Open the settings app.");
+                        terminal.log(ThemeManager.WindowText, "notepad - Open the Notepad app.");
+                        terminal.log(ThemeManager.WindowText, "clear - Clears the terminal.");
                         //log(ThemeManager.WindowText, "dir - list all files and folders in the current directory.");
                         //log(ThemeManager.WindowText, "vm - Make a file");
                         //log(ThemeManager.WindowText, "toggletheme - Make a Directory");
                         break;
                     default:
-                        log(ThemeManager.ErrorText, "Invalid page number.");
+                        terminal.log(ThemeManager.ErrorText, "Invalid page number.");
                         break;
                 }
 
-                log(ThemeManager.WindowBorder, "Press Enter to continue or Q to quit.");
+                terminal.log(ThemeManager.WindowBorder, "Press Enter to continue or Q to quit.");
 
                 ConsoleKeyInfo input = Console.ReadKey(true);
                 if (input.KeyChar == 'Q' || input.KeyChar == 'q')

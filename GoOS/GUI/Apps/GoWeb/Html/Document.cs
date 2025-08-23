@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using GoOS.GUI.Apps.GoWeb.Http;
 using GoOS.GUI.Apps.GoWeb.Parsers;
+using Uri = GoOS.GUI.Apps.GoWeb.Http.Uri;
 
 namespace GoOS.GUI.Apps.GoWeb.Html
 {

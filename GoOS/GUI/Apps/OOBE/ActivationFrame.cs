@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GoOS.Themes;
-using GoGL.Graphics;
+using Gold.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.OOBE

@@ -1,7 +1,9 @@
 ﻿using IL2CPU.API.Attribs;
-using GoGL.Graphics;
-using GoGL.Graphics.Fonts;
+using Gold.Graphics;
+using Gold.Graphics.Fonts;
 using System.IO;
+using Cosmos.Core;
+using Cosmos.System;
 
 namespace GoOS
 {
@@ -305,12 +307,12 @@ namespace GoOS
         public static Canvas SBGBS;
         public static Canvas SBBB;
         public static Canvas menubarBackground;
-        public static Font Font_1x = Font.Fallback;
-        public static Font Font_2x = Font.Fallback;
-        public static Font SansSerif16 = Font.Fallback;
-        public static Font UIGothic16 = Font.Fallback;
+        public static BtfFontFace Font_1x;
+        public static BtfFontFace Font_2x;
+        public static BtfFontFace SansSerif16;
+        public static BtfFontFace UIGothic16;
         //public static Gold.Graphics.Fonts.AcfFontFace Fragment;
-        public static Gold.Graphics.Fonts.BtfFontFace TerminalFont;
+        public static BtfFontFace TerminalFont;
 
         public static void Generate(ResourceType type)
         {
@@ -397,10 +399,10 @@ namespace GoOS
                     break;
 
                 case ResourceType.Fonts:
-                    Font_1x = new Font(font_1x_raw, 16);
-                    Font_2x = new Font(font_2x_raw, 32);
-                    SansSerif16 = new Font(SansSerif16Raw, 32);
-                    UIGothic16 = new Font(UIGothic16Raw, 32);
+                    Font_1x = new BtfFontFace(font_1x_raw, 16);
+                    Font_2x = new BtfFontFace(font_2x_raw, 32);
+                    SansSerif16 = new BtfFontFace(SansSerif16Raw, 32);
+                    UIGothic16 = new BtfFontFace(UIGothic16Raw, 32);
                     break;
 
                 case ResourceType.OOBE:

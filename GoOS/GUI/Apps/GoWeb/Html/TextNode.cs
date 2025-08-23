@@ -1,6 +1,6 @@
 ﻿#nullable enable
 using GoOS.GUI.Apps.GoWeb.Render;
-using GoGL.Graphics.Fonts;
+using Gold.Graphics.Fonts;
 
 namespace GoOS.GUI.Apps.GoWeb.Html
 {

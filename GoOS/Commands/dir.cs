@@ -6,14 +6,16 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using GoOS.Themes;
-using static GoOS.Core;
+using GoOS.GUI.Apps;
 
 namespace GoOS.Commands
 {
     internal class Dir
     {
-        public static void Run()
+        public static void Run(Terminal terminal)
         {
+            
+            
             int filecount = 0;
             int foldercount = 0;
             string cdir3002 = Directory.GetCurrentDirectory();
@@ -27,10 +29,10 @@ namespace GoOS.Commands
             {
                 var directory_list = Directory.GetFiles(cdir3003);
                 var directory2_list = Directory.GetDirectories(cdir3003);
-                log(ThemeManager.Default, "\nDirectory listing at " + cdir3003 + "\n");
+                terminal.log(ThemeManager.Default, "\nDirectory listing at " + cdir3003 + "\n");
                 foreach (var directory in directory2_list)
                 {
-                    log(ThemeManager.Default, "<Dir> " + directory);
+                    terminal.log(ThemeManager.Default, "<Dir> " + directory);
                     foldercount++;
                 }
 
@@ -38,21 +40,21 @@ namespace GoOS.Commands
                 {
                     if (file.EndsWith(".gms") && !Kernel.devMode)
                     {
-                        log(ThemeManager.ErrorText, "<System> Protected File");
+                        terminal.log(ThemeManager.ErrorText, "<System> Protected File");
                     }
                     else
                     {
-                        log(ThemeManager.Default, "<File> " + file);
+                        terminal.log(ThemeManager.Default, "<File> " + file);
                     }
 
                     filecount++;
                 }
 
-                log(ThemeManager.Default, $"\nListed {filecount} files and {foldercount} folders in this directory.\n");
+                terminal.log(ThemeManager.Default, $"\nListed {filecount} files and {foldercount} folders in this directory.\n");
             }
             catch (Exception e)
             {
-                log(ThemeManager.ErrorText, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
+                terminal.log(ThemeManager.ErrorText, "GoOS Admin: Error Loading disk! You might have disconnected the drive!");
             }
         }
     }

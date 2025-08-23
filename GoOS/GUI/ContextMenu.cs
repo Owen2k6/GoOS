@@ -1,7 +1,7 @@
 ﻿using System;
 using Cosmos.System;
 using GoOS.GUI.Models;
-using GoGL.Graphics;
+using Gold.Graphics;
 
 namespace GoOS.GUI
 {

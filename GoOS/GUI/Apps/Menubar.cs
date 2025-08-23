@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cosmos.HAL.Drivers.Video;
-using GoGL.Graphics;
+using Gold.Graphics;
 using GoOS.GUI;
 using System.Net.Sockets;
 using Cosmos.System.Network.IPv4.UDP.DNS;
@@ -73,7 +73,6 @@ namespace GoOS.GUI.Apps
             " System Monitor ",
             " Settings ",
             " Terminal ",
-            " GTerm (OLD) ",
             " ----------------- ",
             " Restart Computer ",
             " Shutdown Computer "
@@ -206,8 +205,6 @@ namespace GoOS.GUI.Apps
                     WindowManager.AddWindow(new Frame()); break;
                 case " Terminal ":
                     WindowManager.AddWindow(new Terminal()); break;
-                case " GTerm (OLD) ":
-                    WindowManager.AddWindow(new GTerm(false)); break;
             }
         }
 

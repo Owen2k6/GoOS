@@ -1,6 +1,6 @@
 ﻿using GoOS.GUI.Apps.GoWeb.Html;
-using GoGL.Graphics;
-using GoGL.Graphics.Fonts;
+using Gold.Graphics;
+using Gold.Graphics.Fonts;
 
 namespace GoOS.GUI.Apps.GoWeb.Render
 {
@@ -20,7 +20,7 @@ namespace GoOS.GUI.Apps.GoWeb.Render
                 if (layout.X > layout.ScreenWidth - glyph.Width - 32)
                 {
                     layout.X = 0;
-                    layout.Y += Font.Size;
+                    layout.Y += Font.GetHeight();
                 }
                 else if (c == '\n')
                 {
@@ -29,11 +29,11 @@ namespace GoOS.GUI.Apps.GoWeb.Render
                         if (preformatted)
                         {
                             layout.X = 0;
-                            layout.Y += Font.Size;
+                            layout.Y += Font.GetHeight();
                         }
                         else
                         {
-                            layout.X += Font.Size / 2 + 2;
+                            layout.X += Font.GetHeight() / 2 + 2;
                         }
                         layout.PermitWhitespace = false;
                     }
@@ -42,7 +42,7 @@ namespace GoOS.GUI.Apps.GoWeb.Render
                 {
                     if (layout.PermitWhitespace | preformatted)
                     {
-                        layout.X += Font.Size / 2 + 2;
+                        layout.X += Font.GetHeight() / 2 + 2;
                         layout.PermitWhitespace = false;
                     }
                 }
@@ -60,7 +60,7 @@ namespace GoOS.GUI.Apps.GoWeb.Render
 
         public (int x, int y)[] Glyphs { get; init; }
 
-        public Font Font { get; init; }
+        public BtfFontFace Font { get; init; }
 
         public Color Color { get; init; }
 

@@ -4,13 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Console = BetterConsole;
+using Console = GoOS.SVGAIITerminal;
 
 namespace GoOS.Commands
 {
     internal class Delete
     {
-        public static void DeleteDirectory(string args)
+        public static void DeleteDirectory(SVGAIITerminal Console, string args)
         {
             if (args.Contains(@"0:\"))
             {
@@ -26,7 +26,7 @@ namespace GoOS.Commands
             }
         }
 
-        public static void DeleteFile(string args)
+        public static void DeleteFile(SVGAIITerminal Console, string args)
         {
             if (args.Contains("0:\\"))
             {
@@ -43,7 +43,7 @@ namespace GoOS.Commands
             ;
         }
         
-        public static void UniversalDelete(string args)
+        public static void UniversalDelete(SVGAIITerminal Console, string args)
         {
             if (args.Contains("0:\\"))
             {

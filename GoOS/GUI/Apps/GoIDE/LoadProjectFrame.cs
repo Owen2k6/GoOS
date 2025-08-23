@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using IL2CPU.API.Attribs;
-using GoGL.Graphics;
-using GoGL.Graphics.Fonts;
+using Gold.Graphics;
+using Gold.Graphics.Fonts;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.GoIDE

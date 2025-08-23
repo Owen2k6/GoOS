@@ -4,19 +4,19 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Console = BetterConsole;
+using Console = GoOS.SVGAIITerminal;
 
 namespace GoOS.Commands
 {
     internal class Cd
     {
-        public static void Run(string fuck)
+        public static void Run(SVGAIITerminal Console, string olddir, string fuck)
         {
             try
             {
                 string rootf = @"0:\";
                 string cdir = Directory.GetCurrentDirectory();
-                Kernel.olddir = cdir;
+                olddir = cdir;
                 // this fuck = fuck.Split("cd ")[1];
                 if (fuck.Contains(@"0:\"))
                 {

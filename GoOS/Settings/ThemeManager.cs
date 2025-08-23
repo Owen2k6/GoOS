@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using Console = BetterConsole;
-using ConsoleColor = GoGL.Graphics.Color;
-using static ConsoleColorEx;
+using ConsoleColor = Gold.Graphics.Color;
+using static Gold.Graphics.Color;
 
 namespace GoOS.Themes
 {
@@ -28,7 +27,7 @@ namespace GoOS.Themes
             {
                 Default = White;
                 Background = Black;
-                Startup = new ConsoleColor[3] { DarkMagenta, Red, DarkRed };
+                Startup = new ConsoleColor[3] { Magenta, Red, Red };
                 WindowText = Cyan;
                 WindowBorder = Green;
                 ErrorText = Red;
@@ -38,17 +37,17 @@ namespace GoOS.Themes
 
         private static Dictionary<string, ConsoleColor> StringToConsoleColor = new Dictionary<string, ConsoleColor>()
         {
-            { "Black", Black }, { "DarkBlue", DarkBlue },
-            { "DarkGreen", DarkGreen }, { "DarkCyan", DarkCyan },
-            { "DarkRed", DarkRed }, { "DarkMagenta", DarkMagenta },
-            { "DarkYellow", DarkYellow }, { "Gray", Gray },
-            { "DarkGray", DarkGray }, { "Blue", Blue },
+            { "Black", Black }, { "DarkBlue", Blue },
+            { "DarkGreen", Green }, { "DarkCyan", Cyan },
+            { "DarkRed", Red }, { "DarkMagenta", Magenta },
+            { "DarkYellow", Yellow }, { "Gray", LightGray },
+            { "DarkGray", DeepGray }, { "Blue", Blue },
             { "Green", Green }, { "Cyan", Cyan },
             { "Red", Red }, { "Magenta", Magenta },
             { "Yellow", Yellow }, { "White", White },
         };
 
-        public static void SetTheme(string themeFile, bool echo = true)
+        public static void SetTheme(SVGAIITerminal Console, string themeFile, bool echo = true)
         {
             try
             {

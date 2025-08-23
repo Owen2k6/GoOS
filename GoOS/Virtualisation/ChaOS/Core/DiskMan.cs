@@ -1,17 +1,25 @@
 ﻿using System.IO;
 using Cosmos.System.FileSystem;
 using Cosmos.System.FileSystem.VFS;
-using static ChaOS.Core;
-using Console = BetterConsole;
-using static ConsoleColorEx;
+using Gold.Graphics;
 
-namespace ChaOS
+namespace GoOS.Virtualisation.ChaOS.Core
 {
     public class DiskManager
     {
         public const string systempath = @"0:\SYSTEM";
         public const string rootdir = @"0:\";
-        public static bool disk = true;
+        public bool disk = true;
+        
+        private GoOS.Virtualisation.ChaOS.Kernel parent;
+
+        private SVGAIITerminal Console;
+
+        public DiskManager(GoOS.Virtualisation.ChaOS.Kernel parent)
+        {
+            this.parent = parent;
+            Console = parent.Console;
+        }
 
         public class Files
         {
@@ -19,14 +27,14 @@ namespace ChaOS
             public const string colorfile = @"0:\SYSTEM\COLOR.SYS";
         };
 
-        public static void InitFS(CosmosVFS fs)
+        public void InitFS(CosmosVFS fs)
         {
             VFSManager.RegisterVFS(fs);
             try { Directory.GetFiles(rootdir); }
             catch { disk = false; }
         }
 
-        public static void LoadSettings()
+        public void LoadSettings()
         {
             if (disk)
             {
@@ -38,9 +46,9 @@ namespace ChaOS
             }
         }
 
-        public static void SaveChangesToDisk()
+        public void SaveChangesToDisk()
         {
-            clog("Writing changes to disk...", Gray);
+            parent.core.clog("Writing changes to disk...", Color.LightGray);
             Directory.CreateDirectory(systempath);
             File.WriteAllText(Files.userfile, GoOS.Kernel.username);
             //File.WriteAllBytes(Files.colorfile, new byte[] { (byte)GoOS.GUI.Apps.ChaOS_VM.VMTERM.BackgroundColor, (byte)GoOS.GUI.Apps.ChaOS_VM.VMTERM.ForegroundColor });
