@@ -1,15 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Cosmos.System;
-using GoOS.Commands;
-using IL2CPU.API.Attribs;
 using GoGL.Graphics;
-using GoGL.Hardware.GPU;
 using GoOS.GUI.Apps.Settings;
 using static GoOS.Resources;
 

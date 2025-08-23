@@ -11,8 +11,6 @@ namespace GoOS.GUI.Apps;
 
 public class Taskbar : Window
 {
-    private Button startButton;
-    private StartMenu startMenu;
     private List<(Window window, Button button)> windowButtons = new(10);
 
     private const int windowButtonSpacing = 10;
@@ -32,25 +30,9 @@ public class Taskbar : Window
         Closable = false;
         HasTitlebar = false;
         Unkillable = true;
-
-        InitialiseStartMenu();
         InitialiseHooks();
 
         RenderWindow();
-    }
-
-    private void InitialiseStartMenu()
-    {
-        startMenu = new StartMenu();
-        startButton = new Button(this, 0, 0, 74, 28, String.Empty)
-        {
-            Image = Resources.startBackground,
-            BackgroundColour = Color.Transparent,
-            UseSystemStyle = false,
-            RenderWithAlpha = true,
-        };
-        startButton.Clicked = StartClicked;
-        startButton.Render();
     }
 
     private void InitialiseHooks()
@@ -64,16 +46,29 @@ public class Taskbar : Window
     {
         if (!needsRedraw) return;
 
-        Contents.DrawImage(0, 0, Resources.taskbarBackground, false);
+        DrawBackgroundTiled();   // ⬅️ tile the 1px-wide resource across the width
         RenderControls();
-        RenderInformation();
 
         needsRedraw = false;
     }
 
-    private void StartClicked()
+    // --- NEW: tile the taskbar background exactly like the menubar ---
+    private void DrawBackgroundTiled()
     {
-        WindowManager.ToggleStartMenu();
+        var tile = Resources.taskbarBackground;
+
+        // If it’s the expected 1×barHeight strip, tile it horizontally
+        if (tile != null && tile.Width == 1 && tile.Height == Contents.Height)
+        {
+            for (int x = 0; x < Contents.Width; x++)
+                Contents.DrawImage(x, 0, tile, false);
+        }
+        else
+        {
+            // Fallback: original single draw (handles legacy full-width bitmap)
+            if (tile != null)
+                Contents.DrawImage(0, 0, tile, false);
+        }
     }
 
     private void WindowRemoved(Window window)
@@ -166,49 +161,7 @@ public class Taskbar : Window
             return lastButton.X + lastButton.Contents.Width + windowButtonSpacing;
         }
 
-        return startButton.X + startButton.Contents.Width + windowButtonSpacing;
-    }
-
-    public void HandleStartMenuOpen()
-    {
-        startButton.AppearPressed = true;
-        startButton.Render();
-        RenderControls();
-        needsRedraw = true;
-    }
-
-    public void HandleStartMenuClose()
-    {
-        startButton.AppearPressed = false;
-        startButton.Render();
-        RenderControls();
-        needsRedraw = true;
-    }
-
-    private void RenderInformation()
-    {
-        DateTime now = DateTime.Now;
-        string timeString = now.ToString("HH:mm");
-        string dateString = now.ToString("dd/MM/yyyy");
-
-        int timeWidth = Resources.Font_1x.MeasureString(timeString);
-        int dateWidth = Resources.Font_1x.MeasureString(dateString);
-
-        int rightMargin = 3;
-        int timeX = Contents.Width - timeWidth - rightMargin - 12 + 5+ 3;
-
-        int timeCenterX = timeX + (timeWidth);
-        int dateX = timeCenterX - (dateWidth / 2) + 5;
-
-        Contents.DrawString(timeX, 9, timeString, Resources.Font_1x, Color.White, true);
-        Contents.DrawString(dateX, 21, dateString, Resources.Font_1x, Color.White, true);
-
-        string fpsString = $"{WindowManager.Canvas.GetFPS()} fps";
-        int fpsWidth = Resources.Font_1x.MeasureString(fpsString);
-        int fpsX = timeX - fpsWidth - 24;
-        Contents.DrawString(fpsX, 15, fpsString, Resources.Font_1x, Color.White, true);
-
-        timeAreaWidth = Math.Max(timeWidth, dateWidth) + fpsWidth + 15;
+        return 5 + 5 + windowButtonSpacing;
     }
 
     public override void HandleRun()

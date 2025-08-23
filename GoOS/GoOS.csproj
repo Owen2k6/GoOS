@@ -122,6 +122,7 @@
       <None Remove="Resources\GUI\idesmall.bmp" />
       <None Remove="Resources\GUI\Maximize_Hovered.bmp" />
       <None Remove="Resources\GUI\Maximize_Pressed.bmp" />
+      <None Remove="Resources\GUI\Menubar\background.bmp" />
       <None Remove="Resources\GUI\Paint\rubber.bmp" />
       <None Remove="Resources\OOBE\oobe.bmp" />
       <None Remove="Resources\OOBE\oobebg.bmp" />
@@ -159,6 +160,7 @@
       <EmbeddedResource Include="Resources\GUI\idesmall.bmp" />
       <EmbeddedResource Include="Resources\GUI\Maximize_Hovered.bmp" />
       <EmbeddedResource Include="Resources\GUI\Maximize_Pressed.bmp" />
+      <EmbeddedResource Include="Resources\GUI\Menubar\background.bmp" />
       <EmbeddedResource Include="Resources\GUI\mouse_click.bmp" />
       <EmbeddedResource Include="Resources\GUI\mouse_text.bmp" />
       <EmbeddedResource Include="Resources\GUI\Paint\brush.bmp" />

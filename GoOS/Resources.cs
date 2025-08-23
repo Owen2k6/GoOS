@@ -16,6 +16,9 @@ namespace GoOS
 
     public class Resources
     {
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Menubar.background.bmp")]
+        static byte[] menubarBackgroundRaw;
+
         [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.oobe.bmp")]
         static byte[] OOBEmainraw;
 
@@ -321,6 +324,7 @@ namespace GoOS
         public static Canvas SBGM;
         public static Canvas SBGBS;
         public static Canvas SBBB;
+        public static Canvas menubarBackground;
         public static Font Font_1x = Font.Fallback;
         public static Font Font_2x = Font.Fallback;
         public static Font SansSerif16 = Font.Fallback;
@@ -410,6 +414,7 @@ namespace GoOS
                     minimisePressed = Image.FromBitmap(minimisePressedRaw, false);
                     drumIcon = Image.FromBitmap(drumIconRaw, false);
                     background = Image.FromBitmap(backgroundRaw, false);
+                    menubarBackground = Image.FromBitmap(menubarBackgroundRaw, false);
                     break;
 
                 case ResourceType.Boot:
