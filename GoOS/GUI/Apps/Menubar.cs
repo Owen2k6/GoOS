@@ -73,6 +73,7 @@ namespace GoOS.GUI.Apps
             " System Monitor ",
             " Settings ",
             " Terminal ",
+            " GTerm (OLD) ",
             " ----------------- ",
             " Restart Computer ",
             " Shutdown Computer "
@@ -204,7 +205,9 @@ namespace GoOS.GUI.Apps
                 case " Settings ":
                     WindowManager.AddWindow(new Frame()); break;
                 case " Terminal ":
-                    WindowManager.AddWindow(new GTerm()); break;
+                    WindowManager.AddWindow(new Terminal()); break;
+                case " GTerm (OLD) ":
+                    WindowManager.AddWindow(new GTerm(false)); break;
             }
         }
 

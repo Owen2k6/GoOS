@@ -1,6 +1,7 @@
 ﻿using IL2CPU.API.Attribs;
 using GoGL.Graphics;
 using GoGL.Graphics.Fonts;
+using System.IO;
 
 namespace GoOS
 {
@@ -145,15 +146,6 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton_pressed.bmp")]
         static byte[] closeButtonPressedRaw;
 
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Maximize.bmp")]
-        static byte[] maximiseRaw;
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Hovered.bmp")]
-        static byte[] maximizeHoverRaw;
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Pressed.bmp")]
-        static byte[] maximizePressedRaw;
-
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize.bmp")]
         static byte[] minimiseRaw;
 
@@ -235,6 +227,9 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Settings.Back.bmp")]
         static byte[] SBBBRaw;
 
+        //[ManifestResourceStream(ResourceName = "GoOS.Resources.Fragment.acf")]
+        //static byte[] FragmentRaw;
+
         public static Canvas easterEgg;
         public static Canvas RunImage;
         public static Canvas gtermIcon;
@@ -314,6 +309,8 @@ namespace GoOS
         public static Font Font_2x = Font.Fallback;
         public static Font SansSerif16 = Font.Fallback;
         public static Font UIGothic16 = Font.Fallback;
+        //public static Gold.Graphics.Fonts.AcfFontFace Fragment;
+        public static Gold.Graphics.Fonts.BtfFontFace TerminalFont;
 
         public static void Generate(ResourceType type)
         {
@@ -380,15 +377,14 @@ namespace GoOS
                     SBGM = Image.FromBitmap(SBGMRaw, false);
                     SBGBS = Image.FromBitmap(SBGBSRaw, false);
                     SBBB = Image.FromBitmap(SBBBRaw, false);
+                    TerminalFont = new Gold.Graphics.Fonts.BtfFontFace(font_1x_raw, 16);
+                    //Fragment = new Gold.Graphics.Fonts.AcfFontFace(new MemoryStream(FragmentRaw));
                     break;
 
                 case ResourceType.Priority:
                     closeButton = Image.FromBitmap(closeButtonRaw, false);
                     closeButtonHover = Image.FromBitmap(closeButtonHoverRaw, false);
                     closeButtonPressed = Image.FromBitmap(closeButtonPressedRaw, false);
-                    maximize = Image.FromBitmap(maximiseRaw, false);
-                    maximizeHover = Image.FromBitmap(maximizeHoverRaw, false);
-                    maximizePressed = Image.FromBitmap(maximizePressedRaw, false);
                     minimise = Image.FromBitmap(minimiseRaw, false);
                     minimiseHover = Image.FromBitmap(minimiseHoverRaw, false);
                     minimisePressed = Image.FromBitmap(minimisePressedRaw, false);
