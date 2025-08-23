@@ -67,9 +67,6 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.desktopwallpaper.bmp")]
         static byte[] backgroundRaw;
 
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.boot.bmp")]
-        static byte[] bootbackgroundRaw;
-
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.bootlogo.bmp")]
         static byte[] bootlogoRaw;
 
@@ -416,7 +413,6 @@ namespace GoOS
                     break;
 
                 case ResourceType.Boot:
-                    bootbackground = Image.FromBitmap(bootbackgroundRaw, false);
                     bootlogo = Image.FromBitmap(bootlogoRaw, false);
                     break;
 
