@@ -44,7 +44,7 @@ fn main() -> std::io::Result<()> {
             _ => {} // "default"
         }
     }
-
+ 
     match build_arch {
         "i386"|"x86_64"|"arm64"|"all" => {},
         _ => {
