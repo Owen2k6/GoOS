@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using IO = System.IO;
 using System.Text;
 using Cosmos.System.Network.Config;
@@ -10,7 +9,6 @@ using Gold.Graphics;
 using static GoOS.Resources;
 using System.Net.Sockets;
 using GoOS.Commands;
-
 namespace GoOS.GUI.Apps.GoStore
 {
     public class DescriptionFrame : Window
@@ -20,7 +18,7 @@ namespace GoOS.GUI.Apps.GoStore
         Button InstallButton;
         Application App;
 
-        public DescriptionFrame(Application app)
+        public DescriptionFrame(Application app) : base(0, 0, 480, 360, "GoStore")
         {
             // Set class variables
             App = app;
@@ -28,24 +26,20 @@ namespace GoOS.GUI.Apps.GoStore
             // Create the window.
             Contents = new Canvas(480, 360);
             Title = "GoStore";
-            Visible = true;
-            Closable = true;
             SetDock(WindowDock.Center);
 
             // Initialize the controls
             OpenButton = new Button(this, 101, 323, 133, 30, "Open")
             {
                 Clicked = OpenButton_Click,
-                UseSystemStyle = false,
-                BackgroundColour = new Color(0, 0, 0, 0),
+                //BackgroundColour = new Color(0, 0, 0, 0),
                 RenderWithAlpha = true
             };
             InstallButton = new Button(this, 246, 323, 133, 30,
                 !IO.File.Exists(@"0:\go\" + app.Filename) ? "Install" : "Uninstall")
             {
                 Clicked = InstallButton_Click,
-                UseSystemStyle = false,
-                BackgroundColour = new Color(0, 0, 0, 0),
+                //BackgroundColour = new Color(0, 0, 0, 0),
                 RenderWithAlpha = true
             };
 
@@ -76,21 +70,22 @@ namespace GoOS.GUI.Apps.GoStore
             return result.ToString().Split('\n');
         }
 
-        public override void Paint()
+        internal override void Render()
         {
+            base.Render();
             Controls.Remove(OpenButton);
             Controls.Remove(InstallButton);
-            
+
             OpenButton = null;
             InstallButton = null;
-            
+
             Contents.Clear();
-            
+
             Contents.DrawImage(0, 0, GoStoreDescFrame, false);
             Contents.DrawString(10, 10, App.Name, Font_2x, Color.White);
             //Contents.DrawImage(OpenButton.X, OpenButton.Y, GoStoreButtonBlue);
             //Contents.DrawImage(InstallButton.X, InstallButton.Y,
-               //InstallButton.Title == "Install" ? GoStoreButtonGreen : GoStoreButtonRed);
+            //InstallButton.Title == "Install" ? GoStoreButtonGreen : GoStoreButtonRed);
             for (int i = 0; i < DescriptionLines.Count; i++)
                 Contents.DrawString(10, 56 + i * 16, DescriptionLines[i], Font_1x, Color.White);
 
@@ -98,11 +93,10 @@ namespace GoOS.GUI.Apps.GoStore
             {
                 //Image = GoStoreButtonBlue,
                 Clicked = OpenButton_Click,
-                UseSystemStyle = false,
-                BackgroundColour = Color.Transparent,
+                //BackgroundColour = Color.Transparent,
                 RenderWithAlpha = true
             };
-            
+
             Contents.DrawImage(OpenButton.X, OpenButton.Y, GoStoreButtonBlue);
 
             if (IO.File.Exists(@"0:\go\" + App.Filename))
@@ -111,11 +105,10 @@ namespace GoOS.GUI.Apps.GoStore
                 {
                     //Image = GoStoreButtonRed,
                     Clicked = InstallButton_Click,
-                    UseSystemStyle = false,
-                    BackgroundColour = Color.Transparent,
+                    //BackgroundColour = Color.Transparent,
                     RenderWithAlpha = true
                 };
-                
+
                 Contents.DrawImage(InstallButton.X, InstallButton.Y, GoStoreButtonRed);
             }
             else
@@ -124,17 +117,15 @@ namespace GoOS.GUI.Apps.GoStore
                 {
                     //Image = GoStoreButtonGreen,
                     Clicked = InstallButton_Click,
-                    UseSystemStyle = false,
-                    BackgroundColour = Color.Transparent,
+                    //BackgroundColour = Color.Transparent,
                     RenderWithAlpha = true
                 };
-                
+
                 Contents.DrawImage(InstallButton.X, InstallButton.Y, GoStoreButtonGreen);
             }
-            
+
             OpenButton.Render();
             InstallButton.Render();
-            RenderSystemStyleBorder();
         }
 
         private void InstallButton_Click()
@@ -185,12 +176,12 @@ namespace GoOS.GUI.Apps.GoStore
                             receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
 
                         if (responseParts.Length < 2 || responseParts.Length > 2)
-                            Dialogue.Show("GoStore", "Invalid HTTP response!", default, WindowManager.errorIcon);
+                            Dialogue.Show("GoStore", "Invalid HTTP response!", default, Resources.errorIcon);
 
                         if (responseParts[1] == "404")
                         {
                             Dialogue.Show("Error", "The requested file or resource was not found.", default,
-                                WindowManager.errorIcon);
+                                Resources.errorIcon);
                             return;
                         }
 
@@ -210,7 +201,7 @@ namespace GoOS.GUI.Apps.GoStore
                     //InstallButton.Title = "Install";
                 }
 
-                Paint();
+                Render();
             }
             catch (Exception ex)
             {
@@ -223,19 +214,19 @@ namespace GoOS.GUI.Apps.GoStore
             if (!IO.File.Exists(@"0:\go\" + App.Filename))
             {
                 Dialogue.Show("Error", "You must install the app before you can use it.", default,
-                    WindowManager.errorIcon);
+                    Resources.errorIcon);
             }
             else
             {
-                Terminal term = new Terminal();
+                Terminal.Terminal term = new Terminal.Terminal();
                 WindowManager.AddWindow(term);
 
                 if (!App.Filename.EndsWith(".9xc"))
-                    Run.Main(term, @"0:\go\" + App.Filename, false);
+                    Run.Main(term._shell, @"0:\go\" + App.Filename, false);
                 else
-                    _9xCode.Interpreter.Run(term, @"0:\go\" + App.Filename);
+                    _9xCode.Interpreter.Run(term._shell, @"0:\go\" + App.Filename);
 
-                WindowManager.windows.Remove(term);
+                WindowManager.Windows.Remove(term);
             }
         }
     }

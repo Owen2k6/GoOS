@@ -1,12 +1,4 @@
-﻿using Cosmos.Core;
-using IL2CPU.API.Attribs;
-using Gold.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static GoOS.Resources;
+﻿using static GoOS.Resources;
 
 namespace GoOS.GUI
 {

@@ -8,9 +8,8 @@ using GoOS.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using static System.Net.Mime.MediaTypeNames;
 using ConsoleColor = Gold.Graphics.Color;
-using GoOS.GUI.Apps;
+using GoOS.GUI.Apps.Terminal;
 
 namespace GoOS
 {
@@ -65,14 +64,14 @@ namespace GoOS
 
         private bool infoToggle = false;
         
-        private Terminal terminal;
+        private Shell terminal;
 
         private SVGAIITerminal Console;
 
-        public TextEditor(Terminal terminal)
+        public TextEditor(Shell terminal)
         {
             this.terminal = terminal;
-            Console = terminal.terminal;
+            Console = terminal._terminal;
         }
 
         public TextEditor(string value, bool isPath = true)
@@ -126,21 +125,21 @@ namespace GoOS
                 for (int i = (int)updatedLinesStart; i <= updatedLinesEnd; i++)
                 {
                     int y = i - scrollY + TITLEBAR_HEIGHT;
-                    if (y < TITLEBAR_HEIGHT || y >= terminal.Contents.Height - SHORTCUT_BAR_HEIGHT) continue;
+                    if (y < TITLEBAR_HEIGHT || y >= terminal._terminal.Contents.Height - SHORTCUT_BAR_HEIGHT) continue;
 
                     Console.SetCursorPosition(0, y);
 
                     // If we are outside the boundaries of the document, or the entire line is hidden by scrolling, then clear the line.
                     if (i >= lines.Count || scrollX >= lines[i].Length)
                     {
-                        Console.Write(new string(' ', terminal.Contents.Width));
+                        Console.Write(new string(' ', terminal._terminal.Contents.Width));
                     }
                     else
                     {
-                        string line = lines[i].Substring(scrollX, Math.Min(terminal.Contents.Width, lines[i].Length - scrollX));
+                        string line = lines[i].Substring(scrollX, Math.Min(terminal._terminal.Contents.Width, lines[i].Length - scrollX));
                         // Print the line, and pad it with spaces to clear the rest of the line.
                         // if you get an indexoutofrangeexception it's likely this (REMOVE THIS COMMENT)
-                        Console.Write(line + new string(' ', Math.Max(0, terminal.Contents.Width - line.Length)));
+                        Console.Write(line + new string(' ', Math.Max(0, terminal._terminal.Contents.Width - line.Length)));
                     }
                 }
 
@@ -312,7 +311,7 @@ namespace GoOS
         {
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
-            Console.SetCursorPosition((terminal.Contents.Width - text.Length) / 2, terminal.Contents.Width - SHORTCUT_BAR_HEIGHT - 1);
+            Console.SetCursorPosition((terminal._terminal.Contents.Width - text.Length) / 2, terminal._terminal.Contents.Width - SHORTCUT_BAR_HEIGHT - 1);
             Console.Write($" {text} ");
         }
 
@@ -320,8 +319,8 @@ namespace GoOS
         {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.SetCursorPosition(0, terminal.Contents.Width - SHORTCUT_BAR_HEIGHT - 1);
-            Console.Write(new string(' ', terminal.Contents.Width));
+            Console.SetCursorPosition(0, terminal._terminal.Contents.Width - SHORTCUT_BAR_HEIGHT - 1);
+            Console.Write(new string(' ', terminal._terminal.Contents.Width));
         }
 
         // Render a prompt.
@@ -329,13 +328,13 @@ namespace GoOS
         {
             RenderShortcuts(shortcuts);
 
-            int y = terminal.Contents.Width - SHORTCUT_BAR_HEIGHT - 1;
+            int y = terminal._terminal.Contents.Width - SHORTCUT_BAR_HEIGHT - 1;
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
 
             // Clear the line.
             Console.SetCursorPosition(0, y);
-            Console.Write(new string(' ', terminal.Contents.Width));
+            Console.Write(new string(' ', terminal._terminal.Contents.Width));
 
             Console.SetCursorPosition(1, y);
             Console.Write(question);
@@ -587,9 +586,9 @@ namespace GoOS
                 scrollY = currentLine;
                 scrollChanged = true;
             }
-            else if (currentLine >= scrollY + terminal.Contents.Width - TITLEBAR_HEIGHT - SHORTCUT_BAR_HEIGHT)
+            else if (currentLine >= scrollY + terminal._terminal.Contents.Width - TITLEBAR_HEIGHT - SHORTCUT_BAR_HEIGHT)
             {
-                scrollY = currentLine - terminal.Contents.Width + TITLEBAR_HEIGHT + SHORTCUT_BAR_HEIGHT + 1;
+                scrollY = currentLine - terminal._terminal.Contents.Width + TITLEBAR_HEIGHT + SHORTCUT_BAR_HEIGHT + 1;
                 scrollChanged = true;
             }
 
@@ -598,9 +597,9 @@ namespace GoOS
                 scrollX = linePos;
                 scrollChanged = true;
             }
-            else if (linePos > scrollX + terminal.Contents.Width - 1)
+            else if (linePos > scrollX + terminal._terminal.Contents.Width - 1)
             {
-                scrollX = linePos - terminal.Contents.Width + 1;
+                scrollX = linePos - terminal._terminal.Contents.Width + 1;
                 scrollChanged = true;
             }
 
@@ -614,12 +613,12 @@ namespace GoOS
         // Render a list of shortcuts.
         private void RenderShortcuts((string, string)[] shortcuts)
         {
-            int y = terminal.Contents.Width - 1;
+            int y = terminal._terminal.Contents.Width - 1;
 
             // Clear the line.
             Console.SetCursorPosition(0, y);
             Console.BackgroundColor = ConsoleColor.Black;
-            Console.Write(new string(' ', terminal.Contents.Width - 1));
+            Console.Write(new string(' ', terminal._terminal.Contents.Width - 1));
 
             Console.SetCursorPosition(0, y);
             foreach (var shortcut in shortcuts)
@@ -644,10 +643,10 @@ namespace GoOS
             Console.ForegroundColor = ConsoleColor.Black;
             Console.SetCursorPosition(0, 0);
             string text = "  GoOS Notepad 2.0";
-            Console.WriteLine(text + new string(' ', terminal.Contents.Width - text.Length));
+            Console.WriteLine(text + new string(' ', terminal._terminal.Contents.Width - text.Length));
 
             string displayName = path == null ? "New File" : Path.GetFileName(path);
-            Console.SetCursorPosition((terminal.Contents.Width - displayName.Length) / 2, 0);
+            Console.SetCursorPosition((terminal._terminal.Contents.Width - displayName.Length) / 2, 0);
             Console.Write(displayName);
 
             // Shortcut bar.

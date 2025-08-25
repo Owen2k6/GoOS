@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
-using IL2CPU.API.Attribs;
 using Gold.Graphics;
-using Gold.Graphics.Fonts;
 
 namespace GoOS.GUI.Apps.GoIDE
 {
@@ -13,15 +11,15 @@ namespace GoOS.GUI.Apps.GoIDE
 
         Input ScriptLocation;
 
-        public ImportProjectFrame()
+        public ImportProjectFrame() : base(0, 0, 400, 300, "Load project - GoIDE")
         {
             try
             {
                 // Create the window.
                 Contents = new Canvas(400, 300);
                 Title = "Load project - GoIDE";
-                Visible = true;
-                Closable = true;
+                //Visible = true;
+                //Closable = true;
                 SetDock(WindowDock.Center);
 
                 // Initialize the controls.
@@ -31,7 +29,7 @@ namespace GoOS.GUI.Apps.GoIDE
 
                 // Paint the window.
                 Contents.Clear(Color.LightGray);
-                RenderSystemStyleBorder();
+                //RenderSystemStyleBorder();
                 Contents.DrawString(10, 10, "Import project", Resources.Font_2x, Color.White);
                 Contents.DrawString(10, 52, "Location: ", Resources.Font_1x, Color.White);
                 Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4), 38, 0, Color.DeepGray);
@@ -41,7 +39,7 @@ namespace GoOS.GUI.Apps.GoIDE
             }
             catch
             {
-                Dialogue.Show("GoIDE", "Something went wrong.\nPlease try again.", null, WindowManager.errorIcon);
+                Dialogue.Show("GoIDE", "Something went wrong.\nPlease try again.", null, Resources.errorIcon);
             }
         }
 
@@ -53,7 +51,7 @@ namespace GoOS.GUI.Apps.GoIDE
 
             if (!File.Exists(location))
             {
-                Dialogue.Show("GoIDE", "File doesn't exist.", null, WindowManager.errorIcon);
+                Dialogue.Show("GoIDE", "File doesn't exist.", null, Resources.errorIcon);
                 return;
             }
 

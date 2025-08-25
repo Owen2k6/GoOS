@@ -164,8 +164,6 @@
       <EmbeddedResource Include="Resources\GUI\Paint\brush.bmp" />
       <EmbeddedResource Include="Resources\GUI\Paint\bucket.bmp" />
       <EmbeddedResource Include="Resources\GUI\clock.bmp" />
-      <EmbeddedResource Include="Resources\GUI\closebutton.bmp" />
-      <EmbeddedResource Include="Resources\GUI\closebutton_pressed.bmp" />
       <EmbeddedResource Include="Resources\GUI\Paint\colors.bmp" />
       <EmbeddedResource Include="Resources\GUI\drum.bmp" />
       <EmbeddedResource Include="Resources\GUI\folder.bmp" />
@@ -184,9 +182,6 @@
       <EmbeddedResource Include="Resources\GUI\Notepad\PASTE.bmp" />
       <EmbeddedResource Include="Resources\GUI\Notepad\COPY.bmp" />
       <EmbeddedResource Include="Resources\GUI\Notepad\CUT.bmp" />
-      <EmbeddedResource Include="Resources\GUI\Minimize.bmp" />
-      <EmbeddedResource Include="Resources\GUI\Minimize_Hovered.bmp" />
-      <EmbeddedResource Include="Resources\GUI\Minimize_Pressed.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\BIN.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\CHILD.bmp" />
       <EmbeddedResource Include="Resources\GUI\Gosplorer\MOVE.bmp" />
@@ -205,7 +200,6 @@
       <EmbeddedResource Include="Resources\OOBE\setupuser.bmp" />
       <EmbeddedResource Include="Resources\OOBE\setupwelcome.bmp" />
       <EmbeddedResource Include="Resources\GUI\question.bmp" />
-      <EmbeddedResource Include="Resources\GUI\closebutton_hover.bmp" />
       <EmbeddedResource Include="Resources\Welcome.bmp" />
 	  <EmbeddedResource Include="Resources\GUI\warning.bmp" />
 	  <None Remove="Resources\GUI\Gosplorer\REFRESH.bmp" />
@@ -232,6 +226,22 @@
 	  <EmbeddedResource Include="Resources\MSUIGothic16.btf" />
 	  <None Remove="Resources\Geneva.btf" />
 	  <EmbeddedResource Include="Resources\Geneva.btf" />
+	  <None Remove="Resources\GUI\Maximize.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\Maximize.bmp" />
+	  <None Remove="Resources\GUI\MaximizePressed.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\MaximizePressed.bmp" />
+	  <None Remove="Resources\GUI\Minimize.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\Minimize.bmp" />
+	  <None Remove="Resources\GUI\MinimizePressed.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\MinimizePressed.bmp" />
+	  <None Remove="Resources\GUI\ClosePressed.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\ClosePressed.bmp" />
+	  <None Remove="Resources\GUI\Close.bmp" />
+	  <EmbeddedResource Include="Resources\GUI\Close.bmp" />
+	  <None Remove="Resources\Charcoal.btf" />
+	  <EmbeddedResource Include="Resources\Charcoal.btf" />
+	  <None Remove="Resources\Chicago.btf" />
+	  <EmbeddedResource Include="Resources\Chicago.btf" />
     </ItemGroup>
 
     <PropertyGroup>

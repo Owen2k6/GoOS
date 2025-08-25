@@ -6,11 +6,11 @@ namespace GoOS.Virtualisation.ChaOS.Misc.Apps
 {
     class MIV
     {
-        private GoOS.Virtualisation.ChaOS.Kernel parent;
+        private Kernel parent;
 
         private SVGAIITerminal Console;
 
-        public MIV(GoOS.Virtualisation.ChaOS.Kernel parent)
+        public MIV(Kernel parent)
         {
             this.parent = parent;
             Console = parent.Console;

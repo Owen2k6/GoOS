@@ -47,6 +47,7 @@ namespace GoOS.GUI.Apps.GoStore
         // Defer closing so the Dialogue can render at least a frame (only used if construction proceeds)
         private bool _deferClose = false;
         private int _framesUntilClose = 0;
+
         private void RequestCloseAfterDialogue(int frames = 2)
         {
             if (frames < 1) frames = 1;
@@ -80,7 +81,7 @@ namespace GoOS.GUI.Apps.GoStore
         // ============================================================
         // Constructor
         // ============================================================
-        public MainFrame()
+        public MainFrame() : base(0, 0, 800, 600, "GoStore")
         {
             // ---------- HARD GATE: do not open if blocked/unavailable ----------
             try
@@ -98,10 +99,9 @@ namespace GoOS.GUI.Apps.GoStore
                     : ex.Message;
 
                 // Inform user; do not bring up the GoStore window at all
-                Dialogue.Show("Error - GoStore", _regionBlockReason, default, WindowManager.errorIcon);
+                Dialogue.Show("Error - GoStore", _regionBlockReason, default, Resources.errorIcon);
 
                 // Ensure WindowManager culls us before any draw
-                Visible = false;
                 Closing = true;
                 return;
             }
@@ -112,9 +112,8 @@ namespace GoOS.GUI.Apps.GoStore
                 Dialogue.Show("Error - GoStore",
                     "GoStore services are not available at the moment.",
                     default,
-                    WindowManager.errorIcon);
-
-                Visible = false;
+                    Resources.errorIcon);
+                
                 Closing = true;
                 return;
             }
@@ -123,10 +122,6 @@ namespace GoOS.GUI.Apps.GoStore
             try
             {
                 // Create the window only after we know it is allowed
-                Contents = new Canvas(800, 600);
-                Title = "GoStore";
-                Visible = true;
-                Closable = true;
                 SetDock(WindowDock.Center);
 
                 // Initialise basic objects
@@ -145,18 +140,18 @@ namespace GoOS.GUI.Apps.GoStore
             }
             catch (Exception)
             {
-                Dialogue.Show("Error - GoStore", "Failed to connect to GoOS Services", default, WindowManager.errorIcon);
+                Dialogue.Show("Error - GoStore", "Failed to connect to GoOS Services", default,
+                    Resources.errorIcon);
                 // Keep the window invisible and flag for close to avoid a blank shell
-                Visible = false;
                 Closing = true;
             }
         }
 
         // Prevent any painting if we aborted open (WindowManager calls Paint() right after AddWindow)
-        public override void Paint()
+        internal override void Render()
         {
             if (_abortOpen) return;
-            base.Paint();
+            base.Render();
         }
 
         // ============================================================
@@ -232,7 +227,8 @@ namespace GoOS.GUI.Apps.GoStore
                 }
                 catch
                 {
-                    SetInfoBoardText("Welcome to GoStore! Some features may not be available due to connection issues.");
+                    SetInfoBoardText(
+                        "Welcome to GoStore! Some features may not be available due to connection issues.");
                 }
 
                 // Apps
@@ -277,7 +273,8 @@ namespace GoOS.GUI.Apps.GoStore
                     _repoFiles.Add(sampleApp);
 
                     if (!anyDataLoaded)
-                        Dialogue.Show("GoStore", "Failed to load application data from server", default, WindowManager.errorIcon);
+                        Dialogue.Show("GoStore", "Failed to load application data from server", default,
+                            Resources.errorIcon);
                 }
             }
             catch (HttpHelper.RegionBlockedException ex)
@@ -287,7 +284,7 @@ namespace GoOS.GUI.Apps.GoStore
                     ? "Service unavailable in your jurisdiction."
                     : ex.Message;
 
-                Dialogue.Show("GoStore", _regionBlockReason, default, WindowManager.errorIcon);
+                Dialogue.Show("GoStore", _regionBlockReason, default, Resources.errorIcon);
 
                 // Close shortly after to ensure the dialogue paints
                 RequestCloseAfterDialogue(2);
@@ -309,28 +306,22 @@ namespace GoOS.GUI.Apps.GoStore
                     20,
                     label)
                 {
-                    Name = label,
-                    UseSystemStyle = false,
-                    BackgroundColour = new Color(0, 0, 0, 0),
-                    ClickedAlt = CategoryButtonClick,
+                    //BackgroundColour = new Color(0, 0, 0, 0),
+                    //Clicked = CategoryButtonClick,  TODO
                     RenderWithAlpha = true
                 };
             }
 
             nextButton = new Button(this, 685, 556, 109, 35, "Next")
             {
-                Name = "next",
-                UseSystemStyle = false,
-                BackgroundColour = new Color(0, 0, 0, 0),
+                //BackgroundColour = new Color(0, 0, 0, 0),
                 Clicked = nextPage,
                 RenderWithAlpha = true
             };
 
             prevousButton = new Button(this, 514, 556, 109, 35, "Previous")
             {
-                Name = "Previous",
-                UseSystemStyle = false,
-                BackgroundColour = new Color(0, 0, 0, 0),
+                //BackgroundColour = new Color(0, 0, 0, 0),
                 Clicked = previousPage,
                 RenderWithAlpha = true
             };
@@ -349,13 +340,14 @@ namespace GoOS.GUI.Apps.GoStore
                 if (Catagories[i].Trim() == cat)
                     return i;
             }
+
             return 0; // Return first category instead of -1
         }
 
         // Keep old name for compatibility with existing calls
         private int GetCatagoryIndex(string cat) => GetCatagoriesIndex(cat);
 
-        public override void HandleRun()
+        internal override void HandleRun()
         {
             if (_abortOpen) return;
 
@@ -399,7 +391,6 @@ namespace GoOS.GUI.Apps.GoStore
                 Contents.DrawString(cx, cy + 18, line2, Font_1x, Color.White);
                 Contents.DrawString(cx, cy + 36, line3, Font_1x, Color.Yellow);
 
-                RenderSystemStyleBorder();
                 return;
             }
 
@@ -411,6 +402,7 @@ namespace GoOS.GUI.Apps.GoStore
                 {
                     if (b != null) Controls.Remove(b);
                 }
+
                 for (int i = 0; i < _repoFilesButtons.Length; i++)
                     _repoFilesButtons[i] = null;
             }
@@ -453,14 +445,12 @@ namespace GoOS.GUI.Apps.GoStore
                         "\nBy " + _repoFiles[i].Author + "\n" +
                         _repoFiles[i].Version.Replace(@"\n", "\n"))
                     {
-                        Name = appName,
-                        UseSystemStyle = false,
-                        BackgroundColour = new Color(0, 0, 0, 0),
-                        ClickedAlt = _repoFiles_Click,
+                        //BackgroundColour = new Color(0, 0, 0, 0),
+                        //ClickedAlt = _repoFiles_Click, TODO
                         RenderWithAlpha = true,
-                        CenterTitle = false,
-                        textX = 5,
-                        textY = 2
+                        // CenterTitle = false,
+                        // textX = 5,
+                        // textY = 2
                     };
 
                     buttonCount++;
@@ -481,16 +471,16 @@ namespace GoOS.GUI.Apps.GoStore
             prevousButton.Render();
             nextButton.Render();
 
-            Contents.DrawString((144 / 2) - (Font_1x.MeasureString(category.Trim()) / 2), 563, category.Trim(), Font_1x, Color.White);
+            Contents.DrawString((144 / 2) - (Font_1x.MeasureString(category.Trim()) / 2), 563, category.Trim(), Font_1x,
+                Color.White);
             Contents.DrawString(pagex, 563, p1.ToString(), Font_1x, Color.White);
-
-            RenderSystemStyleBorder();
         }
 
         private int GetIndexByTitle(string title)
         {
             for (int i = 0; i < _repoFiles.Count; i++)
-                if (_repoFiles[i].Name == title) return i;
+                if (_repoFiles[i].Name == title)
+                    return i;
             return 0;
         }
 
@@ -540,8 +530,14 @@ namespace GoOS.GUI.Apps.GoStore
             {
                 return HttpHelper.SimpleHttpGet(repo, "/info.glist");
             }
-            catch (HttpHelper.RegionBlockedException) { throw; }
-            catch { return ""; }
+            catch (HttpHelper.RegionBlockedException)
+            {
+                throw;
+            }
+            catch
+            {
+                return "";
+            }
         }
 
         private string GetInfoBoardFile()
@@ -550,8 +546,14 @@ namespace GoOS.GUI.Apps.GoStore
             {
                 return HttpHelper.SimpleHttpGet("api.goos.owen2k6.com", "/GoOS/" + Kernel.edition + "-status.gostore");
             }
-            catch (HttpHelper.RegionBlockedException) { throw; }
-            catch { return ""; }
+            catch (HttpHelper.RegionBlockedException)
+            {
+                throw;
+            }
+            catch
+            {
+                return "";
+            }
         }
 
         private string[] GetReposFile()
@@ -562,8 +564,14 @@ namespace GoOS.GUI.Apps.GoStore
                 if (string.IsNullOrEmpty(result)) return new string[0];
                 return result.Split('\n');
             }
-            catch (HttpHelper.RegionBlockedException) { throw; }
-            catch { return new string[0]; }
+            catch (HttpHelper.RegionBlockedException)
+            {
+                throw;
+            }
+            catch
+            {
+                return new string[0];
+            }
         }
 
         private string[] GetCatagoriesFile()
@@ -574,8 +582,14 @@ namespace GoOS.GUI.Apps.GoStore
                 if (string.IsNullOrEmpty(result)) return new string[0];
                 return result.Split('\n');
             }
-            catch (HttpHelper.RegionBlockedException) { throw; }
-            catch { return new string[0]; }
+            catch (HttpHelper.RegionBlockedException)
+            {
+                throw;
+            }
+            catch
+            {
+                return new string[0];
+            }
         }
     }
 }

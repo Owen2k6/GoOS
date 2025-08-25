@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IL2CPU.API.Attribs;
 using Gold.Graphics;
 using static GoOS.Resources;
 
@@ -32,7 +28,7 @@ namespace GoOS.GUI
             Kernel.InfoSound();
             var dialogue = new Dialogue(title, message, buttons, icon);
             WindowManager.AddWindow(dialogue);
-            WindowManager.Update();
+            //WindowManager.Update();
             return dialogue;
         }
 
@@ -51,7 +47,7 @@ namespace GoOS.GUI
             return len;
         }
 
-        public Dialogue(string title, string message, List<DialogueButton> buttons = null, Canvas icon = null)
+        public Dialogue(string title, string message, List<DialogueButton> buttons = null, Canvas icon = null) : base(0, 0, (ushort)(100 + GetLongestLineWidth(message)), 128, title)
         {
             if (icon == null)
             {
@@ -73,11 +69,11 @@ namespace GoOS.GUI
                 Width: (ushort)(100 + GetLongestLineWidth(message)),
                 Height: 128
             );
-            RenderOutsetWindowBackground();
+            //RenderOutsetWindowBackground();
             SetDock(WindowDock.Center);
             Title = title;
-            Visible = true;
-            Closable = true;
+            //Visible = true;
+            //Closable = true;
 
             Contents.DrawImage(20, 20, icon, true);
 

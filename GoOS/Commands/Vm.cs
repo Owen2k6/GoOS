@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using GoOS.GUI.Apps;
 using WindowManager = GoOS.GUI.WindowManager;
+using GoOS.GUI.Apps.Terminal;
 
 namespace GoOS.Commands
 {
@@ -20,7 +20,7 @@ namespace GoOS.Commands
                 Terminal term = new Terminal();
                 WindowManager.AddWindow(term);
                 
-                Virtualisation.ChaOS.Kernel Kernel = new Virtualisation.ChaOS.Kernel(term);
+                Virtualisation.ChaOS.Kernel Kernel = new Virtualisation.ChaOS.Kernel(term._shell);
                 Kernel.Start();
 
                 Kernel = null;

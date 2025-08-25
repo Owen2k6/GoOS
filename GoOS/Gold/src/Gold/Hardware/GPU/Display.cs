@@ -5,7 +5,6 @@ using Cosmos.System;
 using Gold.Graphics;
 using Gold.Hardware.GPU.VESA;
 using Gold.Hardware.GPU.VMWare;
-using Console = System.Console;
 
 namespace Gold.Hardware.GPU;
 

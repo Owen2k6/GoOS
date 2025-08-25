@@ -11,11 +11,11 @@ namespace GoOS.Virtualisation.ChaOS.Core
         public const string rootdir = @"0:\";
         public bool disk = true;
         
-        private GoOS.Virtualisation.ChaOS.Kernel parent;
+        private Kernel parent;
 
         private SVGAIITerminal Console;
 
-        public DiskManager(GoOS.Virtualisation.ChaOS.Kernel parent)
+        public DiskManager(Kernel parent)
         {
             this.parent = parent;
             Console = parent.Console;

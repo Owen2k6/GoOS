@@ -1,6 +1,6 @@
 ﻿using System;
-using Cosmos.System;
 using Gold.Graphics;
+
 namespace GoOS.GUI.Apps;
 
 public class GoVM : Window
@@ -8,12 +8,8 @@ public class GoVM : Window
     private Button ChaOS_VM_b;
     private bool oig = true;
 
-    public GoVM()
+    public GoVM() : base(0, 0, 300, 600, "Home - GoVM")
     {
-        Contents = new Canvas(300, 300);
-        Title = "Home - GoVM";
-        Visible = true;
-        Closable = true;
         SetDock(WindowDock.Auto);
 
         ChaOS_VM_b = new Button(this, 5, 5, 60, 20, "ChaOS")
@@ -22,7 +18,7 @@ public class GoVM : Window
         };
         
         Contents.Clear(Color.White);
-        RenderSystemStyleBorder();
+        //RenderSystemStyleBorder();
         
         ChaOS_VM_b.Render();
     }
@@ -39,9 +35,9 @@ public class GoVM : Window
 
 public class ChaOS_VM : Window
 {
-    public Terminal VMTERM;
+    public Terminal.Terminal VMTERM;
 
-    public ChaOS_VM()
+    public ChaOS_VM() : base(0, 0, 300, 600, "ChaOS - GoVM")
     {
         /*Dialogue.Show(
             "Error",
@@ -50,14 +46,11 @@ public class ChaOS_VM : Window
             WindowManager.errorIcon);*/
         try
         {
-            VMTERM = new Terminal();
+            VMTERM = new Terminal.Terminal();
 
             Contents = VMTERM.terminal.Contents;
             Title = "ChaOS - GoVM";
-            Visible = true;
-            Closable = true;
             SetDock(WindowDock.Auto);
-            VMTERM.Visible = true;
 
             Commands.VM.Run("chaos");
         }
@@ -67,7 +60,7 @@ public class ChaOS_VM : Window
                 "Error",
                 eee.Message,
                 null, // default buttons
-                WindowManager.errorIcon);
+                Resources.errorIcon);
         }
     }
 }

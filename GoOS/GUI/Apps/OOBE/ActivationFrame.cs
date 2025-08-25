@@ -15,16 +15,12 @@ namespace GoOS.GUI.Apps.OOBE
         Button NextButton;
         String Username, Computername;
 
-        public ActivationFrame(string username, string computername)
+        public ActivationFrame(string username, string computername) : base(0, 0, 800, 600, "Activation - GoOS Setup")
         {
             Username = username;
             Computername = computername;
 
             // Create the window.
-            Contents = new Canvas(800, 600);
-            Title = "Activation - GoOS Setup";
-            Visible = true;
-            Closable = false;
             SetDock(WindowDock.Center);
 
             // Initialize the controls.

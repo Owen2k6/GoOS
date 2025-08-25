@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Cosmos.Core;
-using Cosmos.HAL;
 using Cosmos.System;
 using GoOS.GUI;
 using GoOS.GUI.Apps;
+using GoOS.GUI.Apps.Terminal;
 using GoOS.Themes;
-using Console = GoOS.SVGAIITerminal;
 using static Gold.Graphics.Color;
 
 namespace GoOS.Commands
@@ -31,9 +29,9 @@ namespace GoOS.Commands
         public static ushort windowwidth = 0;
         public static ushort windowheight = 0;
 
-        public static void Main(Terminal terminal, string run, bool usecurrentdir = true)
+        public static void Main(Shell terminal, string run, bool usecurrentdir = true)
         {
-            SVGAIITerminal Console = terminal.terminal;
+            SVGAIITerminal Console = terminal._terminal;
             
             String inputaman = run;
 

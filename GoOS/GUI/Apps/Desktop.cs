@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using Cosmos.Core.Memory;
+﻿using Cosmos.Core.Memory;
 using Cosmos.System;
-using Cosmos.System.Network.Config;
-using Cosmos.System.Network.IPv4;
-using Cosmos.System.Network.IPv4.TCP;
-using Cosmos.System.Network.IPv4.UDP.DNS;
-using GoOS.GUI.Models;
-using IL2CPU.API.Attribs;
 using Gold.Graphics;
 using static GoOS.Resources;
 
@@ -44,16 +32,12 @@ namespace GoOS.GUI.Apps
             }
         }
 
-        public Desktop()
+        public Desktop() : base(0, 0, WindowManager.Screen.Width, WindowManager.Screen.Height, "Desktop")
         {
-            Contents = new Canvas(WindowManager.Canvas.Width, Convert.ToUInt16(WindowManager.Canvas.Height - 28));
+            //Contents = new Canvas(WindowManager.Canvas.Width, Convert.ToUInt16(WindowManager.Canvas.Height - 28));
             //Contents.Clear(Kernel.DesktopColour);
             Contents.DrawImage(0, 0, background, false);
             Title = nameof(Desktop);
-            Visible = true;
-            Closable = false;
-            HasTitlebar = false;
-            Unkillable = true;
             SetDock(WindowDock.None);
 
 
@@ -140,6 +124,11 @@ namespace GoOS.GUI.Apps
                         Color.White);
                 }
             }
+        }
+
+        internal override void Render()
+        {
+            
         }
     }
 }

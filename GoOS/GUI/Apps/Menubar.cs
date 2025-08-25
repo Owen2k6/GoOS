@@ -1,63 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
-using Cosmos.HAL.Drivers.Video;
 using Gold.Graphics;
-using GoOS.GUI;
 using System.Net.Sockets;
+using Cosmos.System;
 using Cosmos.System.Network.IPv4.UDP.DNS;
 using Cosmos.System.Network.IPv4;
 using Cosmos.System.Network.Config;
-using Cosmos.System;
 using static GoOS.Resources;
 using GoOS.GUI.Apps.Settings;
 using GoOS.GUI.Apps.GoWeb;
-using GoOS.GUI.Apps.Gosplorer;
 using GoOS.GUI.Apps.GoIDE;
-using GoOS.GUI.Apps.GoStore;
 
 namespace GoOS.GUI.Apps
 {
-    /// <summary>
-    /// Minimal, safe OS 9–style menubar:
-    ///  - Background: tiles 1×H Resources.menubarBackground
-    ///  - Left: flat “Menu” button (dropdown under button)
-    ///  - Left area: per-app menu labels (dropdown under each label)
-    ///  - Right: date then time (black text), small offsets
-    ///  - No focused-window title
-    /// Safety:
-    ///  - No immediate renders from hooks
-    ///  - Render re-entrancy guard
-    ///  - Deferred menu registration processed in HandleRun
-    /// </summary>
     public class Menubar : Window
     {
-        // public surface
         public static Menubar Instance { get; private set; }
         public static bool IsRenderingNow => Instance != null && Instance._isRendering;
-
-        // layout
-        private readonly int BarHeight;
+        
         private const int SidePadding = 6;
         private const int ItemGap = 6;
         private const int RightMargin = 8;
-        private const int Font1xHeight = 10; // your 1x font height
+        private const int Font1xHeight = 10;
         private const ushort ContextWidth = 155;
 
-        // state
         private Button menuButton;
         private static readonly Dictionary<Window, List<MenuModel>> menusByWindow = new();
+
         private int menusRightEdge;
         private byte lastSecond = Cosmos.HAL.RTC.Second;
         private int lastCanvasWidth;
         private bool needsRedraw = true;
         private bool _isRendering;
+        private bool _ready; // <— becomes true after menuButton exists
 
-        // deferred menu registration (avoid re-entrancy)
         private struct PendingMenus { public Window Win; public List<MenuModel> Models; }
         private readonly Queue<PendingMenus> _pendingMenus = new();
         private bool _hasPendingMenus;
 
-        // root menu items (match ContextMenu labels)
         private static readonly string[] RootMenuItems =
         {
             " About GoOS ",
@@ -78,36 +58,25 @@ namespace GoOS.GUI.Apps
             " Shutdown Computer "
         };
 
-        public Menubar()
+        public Menubar() : base(0, 0, WindowManager.Screen.Width, 19, nameof(Menubar), true)
         {
             Instance = this;
 
-            var tile = Resources.menubarBackground;
-            BarHeight = (tile != null && tile.Width == 1 && tile.Height > 0) ? tile.Height : 19;
+            var tile = menubarBackground;
+            Height = (ushort)(tile != null && tile.Width == 1 && tile.Height > 0 ? tile.Height : 19);
 
-            X = 0;
-            Y = 0;
-            Contents = new Canvas((ushort)WindowManager.Canvas.Width, (ushort)BarHeight);
-            lastCanvasWidth = WindowManager.Canvas.Width;
-
-            Title = nameof(Menubar);
-            Visible = true;
-            Closable = false;
-            HasTitlebar = false;
-            Unkillable = true;
+            // Make the runtime height match the visual bar height
+            lastCanvasWidth = WindowManager.Screen.Width;
 
             InitialiseMenuButton();
 
-            // focus hook: mark dirty only (never render here)
-            WindowManager.TaskbarFocusChangedHook = () => { if (!_isRendering) needsRedraw = true; };
-
-            // first frame
-            RenderWindow();
+            _ready = true;   // now safe to render labels/menus
+            Render();        // paint once so it’s visible immediately
         }
 
         private void InitialiseMenuButton()
         {
-            int btnH = Math.Max(1, BarHeight - 4);
+            int btnH = Math.Max(1, Height - 4);
             int btnY = 2;
             int btnW = 40;
 
@@ -118,13 +87,9 @@ namespace GoOS.GUI.Apps
                                     (ushort)btnH,
                                     "Menu")
             {
-                UseSystemStyle = false,               // flat label
-                BackgroundColour = Color.Transparent,
-                TextColour = Color.Black,
                 RenderWithAlpha = true,
             };
 
-            // dropdown anchored under the button
             menuButton.Clicked = () =>
             {
                 int anchorX = X + menuButton.X;
@@ -132,7 +97,7 @@ namespace GoOS.GUI.Apps
                 ContextMenu.ShowAt(anchorX, anchorY, RootMenuItems, ContextWidth, RootMenu_Handle);
             };
 
-            menuButton.Render();
+            Controls.Add(menuButton);
         }
 
         // ===== external API for apps (deferred) =====
@@ -160,12 +125,10 @@ namespace GoOS.GUI.Apps
             switch (item)
             {
                 case " About GoOS ":
-                    WindowManager.AddWindow(new About());
-                    break;
+                    WindowManager.AddWindow(new About()); break;
 
                 case " Check for Updates ":
-                    CheckForUpdates();
-                    break;
+                    CheckForUpdates(); break;
 
                 case " Restart Computer ":
                     Dialogue.Show(
@@ -185,48 +148,42 @@ namespace GoOS.GUI.Apps
                     );
                     break;
 
-                case " Clock App ":
-                    WindowManager.AddWindow(new Clock()); break;
-                case " GoStore ":
-                    WindowManager.AddWindow(new GoStore.MainFrame()); break;
-                case " GoIDE ":
-                    WindowManager.AddWindow(new WelcomeFrame()); break;
-                case " Gosplorer ":
-                    WindowManager.AddWindow(new Gosplorer.MainFrame()); break;
-                case " GoWeb ":
-                    WindowManager.AddWindow(new GoWebWindow()); break;
-                case " Notepad ":
-                    WindowManager.AddWindow(new Notepad(false, null)); break;
-                case " Paint ":
-                    WindowManager.AddWindow(new Paintbrush()); break;
-                case " System Monitor ":
-                    WindowManager.AddWindow(new TaskManager()); break;
-                case " Settings ":
-                    WindowManager.AddWindow(new Frame()); break;
-                case " Terminal ":
-                    WindowManager.AddWindow(new Terminal()); break;
+                case " Clock App ":          WindowManager.AddWindow(new Clock()); break;
+                case " GoStore ":            WindowManager.AddWindow(new GoStore.MainFrame()); break;
+                case " GoIDE ":              WindowManager.AddWindow(new WelcomeFrame()); break;
+                case " Gosplorer ":          WindowManager.AddWindow(new Gosplorer.MainFrame()); break;
+                case " GoWeb ":              WindowManager.AddWindow(new GoWebWindow()); break;
+                case " Notepad ":            WindowManager.AddWindow(new Notepad(false, null)); break;
+                case " Paint ":              WindowManager.AddWindow(new Paintbrush()); break;
+                case " System Monitor ":     WindowManager.AddWindow(new TaskManager()); break;
+                case " Settings ":           WindowManager.AddWindow(new Frame()); break;
+                case " Terminal ":           WindowManager.AddWindow(new Terminal.Terminal()); break;
             }
         }
 
         // ===== rendering =====
-        private void RenderWindow()
+        internal override void Render()
         {
-            if (_isRendering) return;     // re-entrancy guard
+            if (_isRendering) return;
             _isRendering = true;
             try
             {
-                if (WindowManager.Canvas.Width != lastCanvasWidth || Contents.Width != WindowManager.Canvas.Width)
+                // Ensure our surface matches the current screen width + bar height
+                if (Contents == null ||
+                    Contents.Width != WindowManager.Screen.Width ||
+                    Contents.Height != Height)
                 {
-                    lastCanvasWidth = WindowManager.Canvas.Width;
-                    Contents = new Canvas((ushort)WindowManager.Canvas.Width, (ushort)BarHeight);
-                    needsRedraw = true;
+                    Contents = new Canvas(WindowManager.Screen.Width, Height);
                 }
 
-                if (!needsRedraw) return;
-
+                // Background first
                 DrawBackgroundTiled();
-                RenderControls();
-                RenderAppMenusLeft();
+
+                // Left: app menus (only after constructor finished)
+                if (_ready && menuButton != null)
+                    RenderAppMenusLeft();
+
+                // Right: date/time (always safe)
                 RenderRightClockAndDate();
 
                 needsRedraw = false;
@@ -239,13 +196,17 @@ namespace GoOS.GUI.Apps
 
         private void DrawBackgroundTiled()
         {
-            var tile = Resources.menubarBackground;
-            if (tile != null && tile.Width == 1 && tile.Height == BarHeight)
+            var tile = menubarBackground;
+
+            if (tile != null && tile.Width == 1 && tile.Height == Contents.Height)
             {
                 for (int x = 0; x < Contents.Width; x++)
                     Contents.DrawImage(x, 0, tile, false);
             }
-            // no fallback fill: keep previous frame if resource missing
+            else if (tile != null)
+            {
+                Contents.DrawImage(0, 0, tile, false);
+            }
         }
 
         private void RenderAppMenusLeft()
@@ -253,14 +214,13 @@ namespace GoOS.GUI.Apps
             // remove previous label buttons (keep Menu)
             var toRemove = new List<Control>();
             foreach (var c in Controls)
-            {
                 if (c is Button b && b != menuButton)
                     toRemove.Add(c);
-            }
             foreach (var c in toRemove) Controls.Remove(c);
 
-            int x = menuButton.X + menuButton.Contents.Width + ItemGap;
-            int btnH = Math.Max(1, BarHeight - 4);
+            int baseX = (menuButton != null) ? (menuButton.X + menuButton.Contents.Width) : SidePadding;
+            int x = baseX + ItemGap;
+            int btnH = Math.Max(1, Height - 4);
             int btnY = 2;
 
             var focused = WindowManager.FocusedWindow;
@@ -268,26 +228,17 @@ namespace GoOS.GUI.Apps
             {
                 foreach (var menu in menus)
                 {
-                    int width = Resources.Font_1x.MeasureString(menu.Title) + 12;
+                    int width = Font_1x.MeasureString(menu.Title) + 12;
                     if (x > Contents.Width - 180) break;
 
-                    var btn = new Button(this,
-                                         (ushort)x,
-                                         (ushort)btnY,
-                                         (ushort)width,
-                                         (ushort)btnH,
-                                         menu.Title)
+                    var btn = new Button(this, (ushort)x, (ushort)btnY, (ushort)width, (ushort)btnH, menu.Title)
                     {
-                        UseSystemStyle = false,
-                        BackgroundColour = Color.Transparent,
-                        TextColour = Color.Black,
                         RenderWithAlpha = true,
                     };
 
-                    var entries = menu.Items; // capture
+                    var entries = menu.Items;
                     btn.Clicked = () =>
                     {
-                        // build a local dispatch map to avoid shared state
                         var clickMap = new Dictionary<string, Action>(entries.Count);
                         var labels = new string[entries.Count];
 
@@ -322,10 +273,9 @@ namespace GoOS.GUI.Apps
             }
 
             menusRightEdge = x;
-            RenderControls();
+            RenderControls(); // draw Menu + any label buttons
         }
 
-        // offsets: baseline +5; small right shifts (stable)
         private void RenderRightClockAndDate()
         {
             string timeString = DateTime.Now.ToString("HH:mm");
@@ -334,7 +284,7 @@ namespace GoOS.GUI.Apps
             int timeW = Resources.Font_1x.MeasureString(timeString);
             int dateW = Resources.Font_1x.MeasureString(dateString);
 
-            int baselineY = ((BarHeight - Font1xHeight) / 2) + 5;
+            int baselineY = (Height - Font1xHeight) / 2 + 5;
 
             int timeX = Contents.Width - RightMargin - timeW + 20;
             int dateX = (timeX - 6 - dateW) + 24;
@@ -349,15 +299,14 @@ namespace GoOS.GUI.Apps
             Contents.DrawString(timeX, baselineY, timeString, Resources.Font_1x, Color.Black, true);
         }
 
-        public override void HandleRun()
+        internal override void HandleRun()
         {
-            // apply deferred menu registrations safely here
             if (_hasPendingMenus)
             {
                 while (_pendingMenus.Count > 0)
                 {
                     var p = _pendingMenus.Dequeue();
-                    menusByWindow[p.Win] = p.Models; // replace for that window
+                    menusByWindow[p.Win] = p.Models;
                 }
                 _hasPendingMenus = false;
                 needsRedraw = true;
@@ -365,17 +314,18 @@ namespace GoOS.GUI.Apps
 
             base.HandleRun();
 
-            bool widthChanged = (WindowManager.Canvas.Width != lastCanvasWidth);
+            bool widthChanged = (WindowManager.Screen.Width != lastCanvasWidth);
             byte currentSecond = Cosmos.HAL.RTC.Second;
 
             if (currentSecond != lastSecond || widthChanged || needsRedraw)
             {
                 lastSecond = currentSecond;
-                RenderWindow();
+                lastCanvasWidth = WindowManager.Screen.Width;
+                Render();
             }
         }
 
-        // ===== “Check for Updates” (same behaviour as Desktop) =====
+        // ===== Check for Updates (unchanged) =====
         private static void CheckForUpdates()
         {
             try
@@ -470,7 +420,7 @@ namespace GoOS.GUI.Apps
             }
         }
 
-        // ===== simple models for per-app menus =====
+        // ===== simple models =====
         public readonly struct MenuModel
         {
             public readonly string Title;

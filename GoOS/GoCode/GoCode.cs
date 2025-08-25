@@ -1,15 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using Cosmos.Core;
-using Cosmos.HAL;
-using Cosmos.System;
-using GoOS.GUI;
-using GoOS.GUI.Apps;
+using GoOS.GUI.Apps.Terminal;
 using GoOS.Themes;
-using Console = GoOS.SVGAIITerminal;
 using static Gold.Graphics.Color;
 
 namespace GoOS.GoCode;
@@ -19,7 +11,7 @@ public class GoCode
 {
     public static string Version = "0.0.2";
     
-    public static void Run(Terminal terminal, string file, bool usecurrentdir = true, bool unnecessaryOutputs = true)
+    public static void Run(Shell terminal, string file, bool usecurrentdir = true, bool unnecessaryOutputs = true)
     {
         try
         {
@@ -55,7 +47,7 @@ public class GoCode
         }
         catch (Exception e)
         {
-            terminal.terminal.WriteLine(e);
+            terminal._terminal.WriteLine(e);
             throw;
         }
     }

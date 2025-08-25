@@ -17,14 +17,9 @@ public class Frame : Window
     private const int buttonHeight = 24;
     private int page = 0;
 
-    public Frame()
+    public Frame() : base(0,0,307,400, "Settings")
     {
         // Create the window.
-        Contents = new Canvas(307, 400);
-        Title = "Settings";
-        Visible = true;
-        Closable = true;
-        Sizable = false;
         SetDock(WindowDock.Auto);
         // Paint the window.
         ReDraw();
@@ -121,7 +116,7 @@ public class Frame : Window
 
                                 if (responseParts.Length < 2 || responseParts.Length > 2)
                                     Dialogue.Show("GoOS Update", "Invalid HTTP response!", default,
-                                        WindowManager.errorIcon);
+                                        Resources.errorIcon);
 
                                 string content = responseParts[1];
 
@@ -231,7 +226,7 @@ public class Frame : Window
 
                                 if (responseParts.Length < 2 || responseParts.Length > 2)
                                     Dialogue.Show("GoOS Update", "Invalid HTTP response!", default,
-                                        WindowManager.errorIcon);
+                                        Resources.errorIcon);
 
                                 string content = responseParts[1];
 
@@ -387,7 +382,7 @@ public class Frame : Window
                 break;
             case (1):
                 Contents.DrawString(109, 11,
-                    "Current: " + GUI.WindowManager.Canvas.Width + "x" + GUI.WindowManager.Canvas.Height,
+                    "Current: " + GUI.WindowManager.Screen.Width + "x" + GUI.WindowManager.Screen.Height,
                     Resources.Font_1x,
                     Color.White);
                 new Button(this, 109, 28, 185, 24, "Change Resolution")
@@ -399,10 +394,10 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Screen = Gold.Hardware.GPU.Display.GetDisplay(
                                     800, 600);
-                                WindowManager.Update();
-                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.Render();
+                                WindowManager.Windows = new List<Window>(10);
                                 WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -414,10 +409,10 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Screen = Gold.Hardware.GPU.Display.GetDisplay(
                                     1024, 768);
-                                WindowManager.Update();
-                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.Render();
+                                WindowManager.Windows = new List<Window>(10);
                                 WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -429,10 +424,10 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Screen = Gold.Hardware.GPU.Display.GetDisplay(
                                     1280, 960);
-                                WindowManager.Update();
-                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.Render();
+                                WindowManager.Windows = new List<Window>(10);
                                 WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -444,10 +439,10 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Screen = Gold.Hardware.GPU.Display.GetDisplay(
                                     1400, 1050);
-                                WindowManager.Update();
-                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.Render();
+                                WindowManager.Windows = new List<Window>(10);
                                 WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -459,10 +454,10 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Screen = Gold.Hardware.GPU.Display.GetDisplay(
                                     1600, 1200);
-                                WindowManager.Update();
-                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.Render();
+                                WindowManager.Windows = new List<Window>(10);
                                 WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -474,10 +469,10 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Screen = Gold.Hardware.GPU.Display.GetDisplay(
                                     1280, 720);
-                                WindowManager.Update();
-                                WindowManager.windows = new List<GUI.Window>(10);
+                                WindowManager.Render();
+                                WindowManager.Windows = new List<GUI.Window>(10);
                                 WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -489,10 +484,10 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Screen = Gold.Hardware.GPU.Display.GetDisplay(
                                     1280, 800);
-                                WindowManager.Update();
-                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.Render();
+                                WindowManager.Windows = new List<Window>(10);
                                 WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -504,10 +499,10 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Screen = Gold.Hardware.GPU.Display.GetDisplay(
                                     1366, 768);
-                                WindowManager.Update();
-                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.Render();
+                                WindowManager.Windows = new List<Window>(10);
                                 WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -519,10 +514,10 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Screen = Gold.Hardware.GPU.Display.GetDisplay(
                                     1440, 900);
-                                WindowManager.Update();
-                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.Render();
+                                WindowManager.Windows = new List<Window>(10);
                                 WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -534,10 +529,10 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Screen = Gold.Hardware.GPU.Display.GetDisplay(
                                     1600, 900);
-                                WindowManager.Update();
-                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.Render();
+                                WindowManager.Windows = new List<Window>(10);
                                 WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -549,10 +544,10 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Screen = Gold.Hardware.GPU.Display.GetDisplay(
                                     1680, 1050);
-                                WindowManager.Update();
-                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.Render();
+                                WindowManager.Windows = new List<Window>(10);
                                 WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -564,10 +559,10 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Screen = Gold.Hardware.GPU.Display.GetDisplay(
                                     1920, 1080);
-                                WindowManager.Update();
-                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.Render();
+                                WindowManager.Windows = new List<Window>(10);
                                 WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -579,10 +574,10 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Screen = Gold.Hardware.GPU.Display.GetDisplay(
                                     1920, 1200);
-                                WindowManager.Update();
-                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.Render();
+                                WindowManager.Windows = new List<Window>(10);
                                 WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -594,10 +589,10 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                WindowManager.Canvas = Gold.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Screen = Gold.Hardware.GPU.Display.GetDisplay(
                                     2560, 1440);
-                                WindowManager.Update();
-                                WindowManager.windows = new List<Window>(10);
+                                WindowManager.Render();
+                                WindowManager.Windows = new List<Window>(10);
                                 WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -625,10 +620,9 @@ public class Frame : Window
                 (ushort)(sButtons.Count * buttonHeight), 96, buttonHeight, name)
             {
                 Clicked = clickedAction,
-                AppearPressed = true,
-                UseSystemStyle = false,
+                //AppearPressed = true, TODO
                 RenderWithAlpha = true,
-                BackgroundColour = new Color(0, 0, 0, 0)
+                //BackgroundColour = new Color(0, 0, 0, 0)
                 //Image = Resources.SBGBS
             });
         }
@@ -639,8 +633,7 @@ public class Frame : Window
             {
                 Clicked = clickedAction,
                 RenderWithAlpha = true,
-                UseSystemStyle = false,
-                BackgroundColour = new Color(0, 0, 0, 0)
+                //BackgroundColour = new Color(0, 0, 0, 0)
             });
         }
     }
@@ -654,8 +647,7 @@ public class Frame : Window
         {
             Clicked = () => { ReDraw(); },
             RenderWithAlpha = true,
-            UseSystemStyle = false,
-            BackgroundColour = new Color(0, 0, 0, 0),
+            //BackgroundColour = new Color(0, 0, 0, 0),
             Image = Resources.SBBB
         };
         Contents.DrawString(33, 6, Name, Resources.Font_1x, Color.White);

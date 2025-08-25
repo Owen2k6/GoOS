@@ -20,13 +20,6 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Threading;
-using Cosmos.Core;
-using Cosmos.System;
-using GoOS;
-using GoOS.GUI;
-using Console = System.Console;
-using Kernel = GoOS.Kernel;
 
 namespace Gold.Graphics.Fonts;
 

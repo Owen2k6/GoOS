@@ -1,20 +1,14 @@
 ﻿using System;
 using System.IO;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using GoOS.Themes;
-using GoOS.GUI.Apps;
+using GoOS.GUI.Apps.Terminal;
 
 namespace GoOS.Commands;
 
 public class GoCodeInstaller
 {
-    public static void Install(Terminal terminal, string file)
+    public static void Install(Shell terminal, string file)
     {
         try
         {
@@ -82,7 +76,7 @@ public class GoCodeInstaller
         }
     }
 
-    public static void CheckForInstalledPrograms(Terminal terminal)
+    public static void CheckForInstalledPrograms(Shell terminal)
     {
         try
         {

@@ -4,6 +4,7 @@ using Sys = Cosmos.System;
 using Cosmos.System.FileSystem.VFS;
 using Gold.Graphics;
 using GoOS.GUI.Apps;
+using GoOS.GUI.Apps.Terminal;
 using GoOS.Virtualisation.ChaOS.Core;
 using GoOS.Virtualisation.ChaOS.Misc.Apps;
 using static GoOS.Kernel;
@@ -26,16 +27,16 @@ namespace GoOS.Virtualisation.ChaOS
 
         public static string rootdir = @"0:\content\vrt\ChaOS\";
 
-        public Terminal Terminal;
+        public Shell Terminal;
         public SVGAIITerminal Console;
 
         public ChaOS.Core.Core core;
         private ChaOS.Core.DiskManager diskMan;
 
-        public Kernel(Terminal terminal) : base(terminal)
+        public Kernel(Shell terminal) : base(terminal)
         {
             Terminal = terminal;
-            Console = terminal.terminal;
+            Console = terminal._terminal;
 
             core = new Core.Core(this);
             diskMan = new DiskManager(this);

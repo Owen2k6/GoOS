@@ -1,5 +1,4 @@
-﻿// File: GoOS/GUI/Giff/Giff.cs  (SAFE, no menubar integration; supports label, input, button)
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -15,6 +14,7 @@ namespace GoOS.Giff
 {
     public static class Giff
     {
+        public static string Version => "0.1.1";
         public static List<Window> Run(string script)
         {
             try
@@ -325,9 +325,9 @@ namespace GoOS.Giff
                 var win = new ScriptWindow((ushort)width, (ushort)height)
                 {
                     Title = ReadString(n.Props, "title", n.Name),
-                    Closable = ReadBool(n.Props, "closable", true),
-                    HasTitlebar = ReadBool(n.Props, "titlebar", true),
-                    Visible = true
+                    //Closable = ReadBool(n.Props, "closable", true),
+                    //HasTitlebar = ReadBool(n.Props, "titlebar", true),
+                    //Visible = true
                 };
 
                 // Position
@@ -359,7 +359,7 @@ namespace GoOS.Giff
             catch (Exception ex)
             {
                 Dialogue.Show("Giff", "BuildWindow failed:\n" + ex);
-                var w = new ScriptWindow(200, 80) { Title = "Giff Error", Visible = true };
+                var w = new ScriptWindow(200, 80) { Title = "Giff Error" };
                 w.BackgroundColor = new GColor(64, 0, 0);
                 return w;
             }
@@ -430,9 +430,9 @@ namespace GoOS.Giff
 
                 var btn = new Button(w, (ushort)x, (ushort)y, (ushort)width, (ushort)height, text)
                 {
-                    UseSystemStyle = ReadBool(n.Props, "useSystemStyle", true),
-                    BackgroundColour = ParseColour(ReadString(n.Props, "backgroundColour", "")) ?? GColor.Transparent,
-                    TextColour = ParseColour(ReadString(n.Props, "textColour", "")) ?? GColor.White,
+                    //UseSystemStyle = ReadBool(n.Props, "useSystemStyle", true),
+                    //BackgroundColour = ParseColour(ReadString(n.Props, "backgroundColour", "")) ?? GColor.Transparent,
+                    //TextColour = ParseColour(ReadString(n.Props, "textColour", "")) ?? GColor.White,
                     RenderWithAlpha = true
                 };
 
@@ -526,19 +526,21 @@ namespace GoOS.Giff
 
         private readonly List<LabelSpec> _labels = new List<LabelSpec>(16);
 
-        public ScriptWindow(ushort width, ushort height)
+        public ScriptWindow(ushort width, ushort height) : base(0, 0, width, height, "")
         {
             Contents = new GCanvas(width, height);
-            Visible = true;
-            Closable = true;
-            HasTitlebar = true;
-            Unkillable = false;
+            //Visible = true;
+            //Closable = true;
+            //HasTitlebar = true;
+            //Unkillable = false;
         }
 
         public void AddLabel(LabelSpec spec) => _labels.Add(spec);
 
-        public override void Paint()
+        internal override void Render()
         {
+            base.Render();
+            
             if (BackgroundColor.HasValue)
                 Contents.Clear(BackgroundColor.Value);
 
@@ -550,10 +552,9 @@ namespace GoOS.Giff
             }
 
             RenderControls();
-            RenderSystemStyleBorder();
         }
 
-        public override void HandleRun()
+        internal override void HandleRun()
         {
             base.HandleRun();
 

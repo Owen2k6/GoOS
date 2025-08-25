@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cosmos.HAL.Drivers.Video;
-using IL2CPU.API.Attribs;
+﻿using System.Collections.Generic;
+using Cosmos.System;
 using Gold.Graphics;
 
 namespace GoOS.GUI.Apps;
@@ -20,31 +15,28 @@ public class Taskbar : Window
     private int timeAreaWidth = 0;
     private bool needsRedraw = true;
 
-    public Taskbar()
+    public Taskbar() : base(0, WindowManager.Screen.Height - 28, WindowManager.Screen.Width, 28, nameof(Taskbar), true)
     {
-        Contents = new Canvas(WindowManager.Canvas.Width, 28);
-        X = 0;
-        Y = WindowManager.Canvas.Height - 28;
-        Title = nameof(Taskbar);
-        Visible = true;
-        Closable = false;
-        HasTitlebar = false;
-        Unkillable = true;
-        InitialiseHooks();
+        //Visible = true;
+        //Closable = false;
+        //HasTitlebar = false;
+        //Unkillable = true;
+        //InitialiseHooks();
 
-        RenderWindow();
+        Render();
     }
 
-    private void InitialiseHooks()
+    /*private void InitialiseHooks()
     {
         WindowManager.TaskbarWindowAddedHook = WindowAdded;
         WindowManager.TaskbarWindowRemovedHook = WindowRemoved;
         WindowManager.TaskbarFocusChangedHook = UpdateFocusIndication;
-    }
+    }*/
 
-    private void RenderWindow()
+    internal override void Render()
     {
         if (!needsRedraw) return;
+        Contents.Clear(new Color(0x00FFFFFF));
 
         DrawBackgroundTiled();   // ⬅️ tile the 1px-wide resource across the width
         RenderControls();
@@ -61,7 +53,7 @@ public class Taskbar : Window
         if (tile != null && tile.Width == 1 && tile.Height == Contents.Height)
         {
             for (int x = 0; x < Contents.Width; x++)
-                Contents.DrawImage(x, 0, tile, false);
+                Contents.DrawImage(x, 0, tile, true);
         }
         else
         {
@@ -103,7 +95,7 @@ public class Taskbar : Window
 
         UpdateFocusIndication();
         needsRedraw = true;
-        RenderWindow();
+        Render();
     }
 
     private void UpdateFocusIndication()
@@ -114,9 +106,9 @@ public class Taskbar : Window
         foreach (var item in windowButtons)
         {
             bool shouldBePressed = focusedWindow == item.window;
-            if (item.button.AppearPressed != shouldBePressed)
+            if (item.button.Pressed != shouldBePressed)
             {
-                item.button.AppearPressed = shouldBePressed;
+                item.button.Pressed = shouldBePressed;
                 item.button.Render();
                 anyChanges = true;
             }
@@ -131,7 +123,7 @@ public class Taskbar : Window
     private void WindowAdded(Window window)
     {
         // Don't add windows without titlebars to the taskbar
-        if (!window.HasTitlebar)
+        if (!window.Borderless)
         {
             return;
         }
@@ -142,7 +134,7 @@ public class Taskbar : Window
 
         // Create and render button
         Button button = new Button(this, (ushort)x, 4, (ushort)width, 20, window.Title);
-        button.Clicked = () => WindowManager.MoveWindowToFront(window);
+        button.Clicked = () => WindowManager.FocusedWindow = window;
         button.Render();
 
         // Add to collection
@@ -150,7 +142,7 @@ public class Taskbar : Window
 
         UpdateFocusIndication();
         needsRedraw = true;
-        RenderWindow();
+        Render();
     }
 
     private int CalculateNewButtonX(int buttonWidth)
@@ -164,7 +156,7 @@ public class Taskbar : Window
         return 5 + 5 + windowButtonSpacing;
     }
 
-    public override void HandleRun()
+    internal override void HandleRun()
     {
         base.HandleRun();
 
@@ -174,7 +166,7 @@ public class Taskbar : Window
         {
             lastSecond = currentSecond;
             needsRedraw = true;
-            RenderWindow();
+            Render();
         }
     }
 }

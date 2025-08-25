@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Gold.Graphics;
+﻿using Gold.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.OOBE
@@ -12,13 +7,9 @@ namespace GoOS.GUI.Apps.OOBE
     {
         Button RestartButton;
 
-        public DoneFrame()
+        public DoneFrame() : base(0, 0, 800, 600, "Finished - GoOS Setup")
         {
             // Create the window.
-            Contents = new Canvas(800, 600);
-            Title = "Finished - GoOS Setup";
-            Visible = true;
-            Closable = false;
             SetDock(WindowDock.Center);
 
             // Initialize the controls.

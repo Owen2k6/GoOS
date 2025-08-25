@@ -10,18 +10,19 @@ namespace GoOS.GUI.Apps.GoIDE
         Button CancelButton;
         Button NextButton;
 
-        public WelcomeFrame()
+        public WelcomeFrame() : base(0,0,400,300, "Welcome - GoIDE")
         {
             // Create the window.
-            AutoCreate(WindowDock.Center, 400, 300, "Welcome - GoIDE");
-
+            SetDock(WindowDock.Center);
+            
+            
             // Initialize the controls.
             CancelButton = new Button(this, Convert.ToUInt16(Contents.Width - 132), Convert.ToUInt16(Contents.Height - 30), 64, 20, "Cancel") { Clicked = CancelButton_Click };
             NextButton = new Button(this, Convert.ToUInt16(Contents.Width - 58), Convert.ToUInt16(Contents.Height - 30), 48, 20, "Next") { Clicked = NextButton_Click };
 
             // Paint the window.
             Contents.Clear(Color.LightGray);
-            RenderSystemStyleBorder();
+            //RenderSystemStyleBorder();
             Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4), 38, 0, Color.DeepGray);
             Contents.DrawString(10, 10, "Welcome", Font_2x, Color.White);
             Contents.DrawString(10, 52, "Welcome to GoIDE! This program will let you\ncreate and debug GoOS applications.\n\nGoIDE currently supports GoCode and 9xCode.\n\nPress next to install GoIDE and create a new\nproject.", Resources.Font_1x, Color.White);
@@ -42,7 +43,7 @@ namespace GoOS.GUI.Apps.GoIDE
         private void CancelButton_Click()
         {
             Dispose();
-            Dialogue.Show("GoIDE", "You have canceled GoIDE setup.", default, WindowManager.errorIcon);
+            Dialogue.Show("GoIDE", "You have canceled GoIDE setup.", default, Resources.errorIcon);
         }
     }
 }

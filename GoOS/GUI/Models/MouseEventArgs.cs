@@ -8,5 +8,13 @@ namespace GoOS.GUI.Models
         public int Y;
 
         public MouseState MouseState;
+
+        public MouseEventArgs()
+        {
+            X = (int)MouseManager.X;
+            Y = (int)MouseManager.Y;
+
+            MouseState = MouseManager.MouseState;
+        }
     }
 }

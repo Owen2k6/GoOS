@@ -1,5 +1,4 @@
 ﻿using System;
-using GoOS;
 using ConsoleColor = Gold.Graphics.Color;
 
 namespace GoOS.Virtualisation.ChaOS.Core

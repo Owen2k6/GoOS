@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IL2CPU.API.Attribs;
 using Gold.Graphics;
 using static GoOS.Resources;
 
@@ -21,14 +16,11 @@ namespace GoOS.GUI.Apps
             " Digital view"
         };
 
-        public Clock()
+        public Clock() : base(0, 0, 192, 192, "Clock")
         {
             // Create the window.
             Contents = new Canvas(192, 192);
             Title = "Clock";
-            Visible = true;
-            Closable = true;
-            Sizable = true;
             SetDock(WindowDock.Auto);
         }
 
@@ -39,14 +31,15 @@ namespace GoOS.GUI.Apps
             Contents.DrawLine(originX, originY, x, y, color);
         }
 
-        public override void Paint()
+        internal override void Render()
         {
+            base.Render();
+            
             // Paint the window.
             DateTime now = DateTime.Now;
             string timeText = DateTime.Now.ToString("HH:mm:ss");
 
             Contents.Clear(Color.White);
-            RenderSystemStyleBorder();
 
             if (!digitalView)
             {
@@ -88,14 +81,14 @@ namespace GoOS.GUI.Apps
             }
         }
 
-        public override void HandleRun()
+        internal override void HandleRun()
         {
             base.HandleRun();
 
             if (Cosmos.HAL.RTC.Second != lastSecond)
             {
                 lastSecond = Cosmos.HAL.RTC.Second;
-                Paint();
+                Render();
             }
         }
 
@@ -107,7 +100,7 @@ namespace GoOS.GUI.Apps
         private void ContextMenu_Handle(string item)
         {
             digitalView = item == contextMenuButtons[1];
-            Paint();
+            Render();
         }
     }
 }

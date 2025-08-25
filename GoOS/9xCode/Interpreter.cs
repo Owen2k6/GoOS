@@ -10,10 +10,13 @@ using Gold.Graphics;
 using static Gold.Graphics.Color;
 using ConsoleColor = Gold.Graphics.Color;
 using static GoOS.Resources;
+using GoOS.Tasking;
 
 // 9xCode Beta 3.1
 // Licensed under the MIT license
 // Use permitted in GoOS
+
+using GoOS.GUI.Apps.Terminal;
 
 namespace GoOS._9xCode
 {
@@ -21,14 +24,14 @@ namespace GoOS._9xCode
     {
         public const string Version = "b3.1";
 
-        public static void Run(Terminal terminal, string file)
+        public static void Run(Shell terminal, string file)
         {
             if (!File.Exists(file))
             {
                 HandleError("9xCode", "Script not found!");
             }
 
-            SVGAIITerminal Console = terminal.terminal;
+            SVGAIITerminal Console = terminal._terminal;
 
             //Console.Title = $"{file.Substring(file.LastIndexOf(@"\")).Replace(".9xc", "")} - 9xCode";
             Console.ForegroundColor = White;
@@ -39,9 +42,9 @@ namespace GoOS._9xCode
 
         private static bool Interpreting = false;
 
-        private static void Interpret(Terminal terminal, string[] code)
+        private static void Interpret(Shell terminal, string[] code)
         {
-            SVGAIITerminal Console = terminal.terminal;
+            SVGAIITerminal Console = terminal._terminal;
             
             Interpreting = true;
 
@@ -63,8 +66,6 @@ namespace GoOS._9xCode
                 {
                     try
                     {
-                        WindowManager.Update(); // Don't lock the WM
-
                         if (KeyboardManager.TryReadKey(out var k) && k.Modifiers == ConsoleModifiers.Control && k.Key == ConsoleKeyEx.C) return;
 
                         string line = code[i].Trim().Replace("\\n", "\n");
@@ -523,14 +524,8 @@ namespace GoOS._9xCode
                                         HandleError("Error", $"Argument overflow at line {i + 1}!");
                                         break;
                                     }
-
-                                    Window wnd = new Window();
+                                    
                                     ushort width, height;
-
-                                    if (args2[0].Trim().Contains('"'))
-                                        wnd.Title = args2[0].Substring(1, args2[0].Length - 2);
-                                    else if (Strings.TryGetValue(args2[0].Trim(), out string strval))
-                                        wnd.Title = strval;
 
                                     if (Integers.TryGetValue(args2[1].Trim(), out int widthval))
                                         width = Convert.ToUInt16(widthval);
@@ -541,13 +536,20 @@ namespace GoOS._9xCode
                                         height = Convert.ToUInt16(heightval);
                                     else
                                         height = Convert.ToUInt16(args2[2].Trim());
+                                    
+                                    Window wnd = new Window(WindowManager.Screen._Width / 2, WindowManager.Screen._Height / 2, width, height, "");
+                                    
+                                    if (args2[0].Trim().Contains('"'))
+                                        wnd.Title = args2[0].Substring(1, args2[0].Length - 2);
+                                    else if (Strings.TryGetValue(args2[0].Trim(), out string strval))
+                                        wnd.Title = strval;
 
                                     wnd.Contents = new Canvas(width, height);
-                                    wnd.Visible = true;
-                                    wnd.Closable = true;
+                                    //wnd.Visible = true;
+                                    //wnd.Closable = true;
 
                                     wnd.Contents.Clear(Color.LightGray);
-                                    wnd.RenderSystemStyleBorder();
+                                    //wnd.RenderSystemStyleBorder();
 
                                     Windows.Add(key, wnd);
                                     WindowManager.AddWindow(wnd);
@@ -1019,16 +1021,14 @@ namespace GoOS._9xCode
                     }
                 }
             }
-
-            while (WindowManager.ContainsAWindow(new List<Window>(Windows.Values)))
-            {
-                WindowManager.Update();
-            }
+            
+            MemoryWatch.Watch();
+            ProcessScheduler.HandleRun();
         }
 
         private static void HandleError(string Title, string Message)
         {
-            Dialogue.Show(Title, Message, null, WindowManager.errorIcon);
+            Dialogue.Show(Title, Message, null, Resources.errorIcon);
             Interpreting = false;
         }
     }

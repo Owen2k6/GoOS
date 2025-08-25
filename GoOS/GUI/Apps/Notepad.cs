@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Text;
-using System.Threading.Tasks;
-using IL2CPU.API.Attribs;
 using Gold.Graphics;
 using System.IO;
-using System.Net.Security;
-using System.Threading;
 using GoOS.Security;
 using static GoOS.Resources;
 
@@ -26,16 +19,12 @@ public class Notepad : Window
     private string infi = "";
 
 
-    public Notepad(bool openFile, string fileToOpen)
+    public Notepad(bool openFile, string fileToOpen) : base(0, 0, 500, 300, "GoOS Notepad")
     {
         string infi = fileToOpen;
         
-        
-
-        Contents = new Canvas(500, 300);
-        Title = "GoOS Notepad";
-        Visible = true;
-        Closable = true;
+        //Visible = true;
+        //Closable = true;
         SetDock(WindowDock.Auto);
 
         AttemptOne = new InputNUMBERS(this, 5, 25, 500 - 10, 300 - 30, "")
@@ -46,9 +35,6 @@ public class Notepad : Window
         SaveButton = new Button(this, 5, 5, 15, 15, "")
         {
             //UseSystemStyle = false,
-            BackgroundColour = Color.White,
-            TextColour = Color.Black,
-
             Image = saveIcon,
             Clicked = SaveClick
         };
@@ -56,8 +42,6 @@ public class Notepad : Window
         CopyButton = new Button(this, 25, 5, 15, 15, "")
         {
             //UseSystemStyle = false,
-            BackgroundColour = Color.White,
-            TextColour = Color.Black,
 
             Image = copyIcon,
             Clicked = CopyClick
@@ -66,15 +50,12 @@ public class Notepad : Window
         PasteButton = new Button(this, 45, 5, 15, 15, "")
         {
             //UseSystemStyle = false,
-            BackgroundColour = Color.White,
-            TextColour = Color.Black,
 
             Image = pasteIcon,
             Clicked = PasteClick
         };
 
         Contents.Clear(Color.LightGray);
-        RenderSystemStyleBorder();
 
         SaveButton.Render();
         CopyButton.Render();
@@ -132,158 +113,6 @@ public class Notepad : Window
         {
             WindowManager.AddWindow(new Cut());
         }
-        else if (punchyouintheface.Contains("P0LqY7Fbr9GbGncLcBkxKhGheiV72MIE5oTrAQSnaSI="))
-        {
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-            WindowManager.AddWindow(new Cut());
-        }
 
         if (!gms)
         {
@@ -318,14 +147,12 @@ public class NotepadSaveAs : Window
 
     private string sts = "";
     
-    public NotepadSaveAs(string placetheholderofthetextplease, string stufftosave)
+    public NotepadSaveAs(string placetheholderofthetextplease, string stufftosave) : base(0, 0, 300, 80, "Save - GoOS Notepad")
     {
         sts = stufftosave;
         
-        Contents = new Canvas(300, 80);
-        Title = "Save - GoOS Notepad";
-        Visible = true;
-        Closable = false;
+        //Visible = true;
+        //Closable = false;
         SetDock(WindowDock.Auto);
 
         SaveButton = new Button(this, 5, 50, 60, 20, "Save")
@@ -335,44 +162,27 @@ public class NotepadSaveAs : Window
 
         CancelButton = new Button(this, 300 - 65, 50, 60, 20, "Cancel")
         {
-            Clicked = Dispose
+            Clicked = () => Dispose()
         };
 
-        AttemptOne = new Input(this, 5, 25, 300 - 10, 20, "")
-        {
-        };
+        AttemptOne = new Input(this, 5, 25, 300 - 10, 20, "");
+        
+        Controls.Add(SaveButton);
+        Controls.Add(CancelButton);
+        Controls.Add(AttemptOne);
 
         Contents.Clear(Color.LightGray);
-        RenderSystemStyleBorder();
+        //RenderSystemStyleBorder();
 
         Contents.DrawString(5, 5, "Please input file name below:", Resources.Font_1x, Color.White);
         
         AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
         
-        SaveButton.Render();
-        CancelButton.Render();
-        AttemptOne.Render();
+        //SaveButton.Render();
+        //CancelButton.Render();
+        //AttemptOne.Render();
 
-        AttemptOne.Text = placetheholderofthetextplease;
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
+        /*AttemptOne.Text = placetheholderofthetextplease;*/
     }
 
     private void SaveClick()
@@ -383,8 +193,7 @@ public class NotepadSaveAs : Window
             File.WriteAllText(AttemptOne.Text, sts);
             Dialogue.Show(
                 "Saved!",
-                "Your file has been saved.",
-                null);
+                "Your file has been saved.");
 
             Dispose();
         }
@@ -394,7 +203,7 @@ public class NotepadSaveAs : Window
                 "Error",
                 e.Message,
                 null, // default buttons
-                WindowManager.errorIcon);
+                errorIcon);
         }
     }
 }

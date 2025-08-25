@@ -1,16 +1,14 @@
 ﻿using Cosmos.System;
-using Gold.Graphics.Rasterizer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Cosmos.System.Graphics.Fonts;
 using Gold.Graphics;
 using GoOS.GUI.Models;
 
 namespace GoOS.GUI
 {
-    public class Input : Control
+    internal class Input : Control
     {
         public Input(Window parent, ushort x, ushort y, ushort width, ushort height, string placeholder,
             Canvas image = null)
@@ -109,12 +107,17 @@ namespace GoOS.GUI
             }
         }
 
-        internal override void HandleUnfocus()
+        internal override void HandleRun()
         {
-            caretLine = -1;
-            caretCol = 0;
+            base.HandleRun();
 
-            Render();
+            if (!Parent.Focused && caretLine != -1)
+            {
+                caretLine = -1;
+                caretCol = 0;
+
+                Render();
+            }
         }
 
         private void AutoScroll()
@@ -257,7 +260,7 @@ namespace GoOS.GUI
         /// </summary>
         public Canvas Image;
 
-        public override void Render()
+        internal override void Render()
         {
             AutoScroll();
 

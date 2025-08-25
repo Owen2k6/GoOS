@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Gold.Graphics;
+﻿using Gold.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.OOBE
@@ -9,13 +8,9 @@ namespace GoOS.GUI.Apps.OOBE
         Button NextButton;
         Button NoButton;
 
-        public TermsFrame()
+        public TermsFrame() : base(0, 0, 800, 600, "Terms of Use and Licencing - GoOS Setup")
         {
             // Create the window.
-            Contents = new Canvas(800, 600);
-            Title = "Terms of Use and Licencing - GoOS Setup";
-            Visible = true;
-            Closable = false;
             SetDock(WindowDock.Center);
 
             // Initialize the controls.

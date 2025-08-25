@@ -1,21 +1,13 @@
-﻿using System.Reflection.Metadata.Ecma335;
+﻿namespace GoOS.Commands;
 
-namespace GoOS.Commands;
-
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Console = GoOS.SVGAIITerminal;
 
 public class ExtendedFilesystem
 {
     public static void CopyFile(string from, string to)
     {
         if (from.Contains("\\"))
-        {   
+        {
             //Console.WriteLine("1");
             string whatToRemove = from.Substring(from.LastIndexOf("\\"));
 

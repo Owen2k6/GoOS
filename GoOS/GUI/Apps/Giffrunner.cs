@@ -1,8 +1,6 @@
-﻿// File: GoOS/Apps/GiffRunner.cs
-using System;
+﻿using System;
 using System.IO;
-using GoOS.GUI;           // Dialogue
-using GoOS.Giff;     // Giff.Run
+using GoOS.GUI;
 
 namespace GoOS.Apps
 {

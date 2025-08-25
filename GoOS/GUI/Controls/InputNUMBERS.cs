@@ -1,16 +1,14 @@
 ﻿using Cosmos.System;
-using Gold.Graphics.Rasterizer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Cosmos.System.Graphics.Fonts;
 using Gold.Graphics;
 using GoOS.GUI.Models;
 
 namespace GoOS.GUI
 {
-    public class InputNUMBERS : Control
+    internal class InputNUMBERS : Control
     {
         public InputNUMBERS(Window parent, ushort x, ushort y, ushort width, ushort height, string placeholder)
             : base(parent, x, y, width, height)
@@ -105,14 +103,19 @@ namespace GoOS.GUI
             }
         }
 
-        internal override void HandleUnfocus()
+        internal override void HandleRun()
         {
-            caretLine = -1;
-            caretCol = 0;
+            base.HandleRun();
 
-            Render();
+            if (!Parent.Focused && caretLine != -1)
+            {
+                caretLine = -1;
+                caretCol = 0;
+
+                Render();
+            }
         }
-
+        
         private void AutoScroll()
         {
             if (caretLine == -1) return;
@@ -301,7 +304,7 @@ namespace GoOS.GUI
         private int scrollX = 0;
         private int scrollY = 0;
 
-        public override void Render()
+        internal override void Render()
         {
             AutoScroll();
 

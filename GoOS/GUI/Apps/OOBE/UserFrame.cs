@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Gold.Graphics;
+﻿using Gold.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps.OOBE
@@ -10,13 +9,11 @@ namespace GoOS.GUI.Apps.OOBE
         Input ComputerName;
         Button NextButton;
 
-        public UserFrame()
+        public UserFrame() : base(0, 0, 800, 600, "You and your Computer - GoOS Setup")
         {
             // Create the window.
-            Contents = new Canvas(800, 600);
-            Title = "You and your Computer - GoOS Setup";
-            Visible = true;
-            Closable = false;
+            //Visible = true;
+            //Closable = false;
             SetDock(WindowDock.Center);
 
             // Initialize the controls.

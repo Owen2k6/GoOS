@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IL2CPU.API.Attribs;
-using Gold.Graphics;
+﻿using Gold.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps
@@ -14,17 +8,11 @@ namespace GoOS.GUI.Apps
 
         Button closeButton;
 
-        public CustomInterface(string Name, ushort width, ushort height)
+        public CustomInterface(string Name, ushort width, ushort height) : base(0, 0, width, height, Name == null ? "Unnamed application" : Name)
         {
-            if (Name == null)
-            {
-                Name = "Unnamed application";
-            }
             Contents = new Canvas(width, height);
             Contents.Clear(Color.LightGray);
             Title = Name;
-            Visible = true; //Any non OS application must always be visible and closable. No exceptions.
-            Closable = true;
             SetDock(WindowDock.Center);
         }
         

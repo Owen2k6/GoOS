@@ -2,8 +2,6 @@
 using Gold.Graphics;
 using Gold.Graphics.Fonts;
 using System.IO;
-using Cosmos.Core;
-using Cosmos.System;
 
 namespace GoOS
 {
@@ -42,6 +40,18 @@ namespace GoOS
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.MSUIGothic16.btf")]
         static byte[] UIGothic16Raw;
+        
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.Fragment.acf")]
+        static byte[] fragmentRaw;
+        
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.Geneva.btf")]
+        static byte[] genevaRaw;
+        
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.Charcoal.btf")]
+        static byte[] charcoalRaw;
+        
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.Chicago.btf")]
+        static byte[] chicagoRaw;
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoIDE.run.bmp")]
         static byte[] runRaw;
@@ -139,23 +149,23 @@ namespace GoOS
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.warning.bmp")]
         static byte[] warningIconRaw;
 
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton.bmp")]
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Close.bmp")]
         static byte[] closeButtonRaw;
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton_hover.bmp")]
-        static byte[] closeButtonHoverRaw;
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.closebutton_pressed.bmp")]
+        
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.ClosePressed.bmp")]
         static byte[] closeButtonPressedRaw;
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize.bmp")]
         static byte[] minimiseRaw;
 
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Hovered.bmp")]
-        static byte[] minimiseHoverRaw;
-
-        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Minimize_Pressed.bmp")]
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.MinimizePressed.bmp")]
         static byte[] minimisePressedRaw;
+        
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Maximize.bmp")]
+        static byte[] maximiseRaw;
+
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.MaximizedPressed.bmp")]
+        static byte[] maximisePressedRaw;
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStore.bmp")]
         static byte[] GoStoreRaw;
@@ -228,6 +238,16 @@ namespace GoOS
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Settings.Back.bmp")]
         static byte[] SBBBRaw;
+        
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse.bmp")]
+        private static byte[] mouseRaw;
+        
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse_click.bmp")]
+        private static byte[] mouseClickRaw;
+        
+        [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.error.bmp")]
+        private static byte[] errorIconRaw;
+        
 
         //[ManifestResourceStream(ResourceName = "GoOS.Resources.Fragment.acf")]
         //static byte[] FragmentRaw;
@@ -270,13 +290,10 @@ namespace GoOS
         public static Canvas drumIcon;
         public static Canvas warningIcon;
         public static Canvas closeButton;
-        public static Canvas closeButtonHover;
         public static Canvas closeButtonPressed;
         public static Canvas maximize;
-        public static Canvas maximizeHover;
         public static Canvas maximizePressed;
         public static Canvas minimise;
-        public static Canvas minimiseHover;
         public static Canvas minimisePressed;
         public static Canvas GoStore;
         public static Canvas GoStoreSoon;
@@ -311,8 +328,13 @@ namespace GoOS
         public static BtfFontFace Font_2x;
         public static BtfFontFace SansSerif16;
         public static BtfFontFace UIGothic16;
-        //public static Gold.Graphics.Fonts.AcfFontFace Fragment;
-        public static BtfFontFace TerminalFont;
+        public static BtfFontFace Geneva;
+        public static BtfFontFace Charcoal;
+        public static BtfFontFace Chicago;
+        public static Gold.Graphics.Fonts.AcfFontFace Fragment;
+        public static Canvas Mouse;
+        private static Canvas MouseClick;
+        public static Canvas errorIcon;
 
         public static void Generate(ResourceType type)
         {
@@ -379,19 +401,20 @@ namespace GoOS
                     SBGM = Image.FromBitmap(SBGMRaw, false);
                     SBGBS = Image.FromBitmap(SBGBSRaw, false);
                     SBBB = Image.FromBitmap(SBBBRaw, false);
-                    TerminalFont = new Gold.Graphics.Fonts.BtfFontFace(font_1x_raw, 16);
-                    //Fragment = new Gold.Graphics.Fonts.AcfFontFace(new MemoryStream(FragmentRaw));
+                    errorIcon = Image.FromBitmap(errorIconRaw, false);
                     break;
 
                 case ResourceType.Priority:
                     closeButton = Image.FromBitmap(closeButtonRaw, false);
-                    closeButtonHover = Image.FromBitmap(closeButtonHoverRaw, false);
                     closeButtonPressed = Image.FromBitmap(closeButtonPressedRaw, false);
+                    maximize = Image.FromBitmap(maximiseRaw, false);
+                    maximizePressed = Image.FromBitmap(maximiseRaw, false);
                     minimise = Image.FromBitmap(minimiseRaw, false);
-                    minimiseHover = Image.FromBitmap(minimiseHoverRaw, false);
                     minimisePressed = Image.FromBitmap(minimisePressedRaw, false);
                     background = Image.FromBitmap(backgroundRaw, false);
                     menubarBackground = Image.FromBitmap(menubarBackgroundRaw, false);
+                    Mouse = Image.FromBitmap(mouseRaw, false);
+                    MouseClick = Image.FromBitmap(mouseClickRaw);
                     break;
 
                 case ResourceType.Boot:
@@ -403,6 +426,10 @@ namespace GoOS
                     Font_2x = new BtfFontFace(font_2x_raw, 32);
                     SansSerif16 = new BtfFontFace(SansSerif16Raw, 32);
                     UIGothic16 = new BtfFontFace(UIGothic16Raw, 32);
+                    Fragment = new AcfFontFace(new MemoryStream(fragmentRaw));
+                    Geneva = new BtfFontFace(genevaRaw, 16);
+                    Charcoal = new BtfFontFace(charcoalRaw, 16, -1);
+                    Chicago = new BtfFontFace(chicagoRaw, 16);
                     break;
 
                 case ResourceType.OOBE:

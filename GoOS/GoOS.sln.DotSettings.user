@@ -4,4 +4,7 @@
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CGitHub_005CGoOS_005CGoOS_005CDotNetParser_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CGithub_005CGoOS_005CGoOS_005CGoGL_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CGitHub_005CGoOS_005CGoOS_005CLibDotNetParser_002Edll/@EntryIndexedValue">True</s:Boolean>
-	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CGithub_005CGoOS_005CGoOS_005CPrismAPI_002Edll/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CGithub_005CGoOS_005CGoOS_005CPrismAPI_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AString_002Ecs_002Fl_003AC_0021_003FUsers_003FOwen2k6_003FAppData_003FRoaming_003FJetBrains_003FRider2025_002E2_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003Fe300fc3bcf2547fd9aa67e2916204333a25118_003F06_003F4cf7ff87_003FString_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AVoid_002Ecs_002Fl_003AC_0021_003FUsers_003FOwen2k6_003FAppData_003FRoaming_003FJetBrains_003FRider2025_002E2_003Fresharper_002Dhost_003FSourcesCache_003Fe300fc3bcf2547fd9aa67e2916204333a25118_003F_005Fe67e6_003FVoid_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	</wpf:ResourceDictionary>

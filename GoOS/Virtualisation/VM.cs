@@ -1,5 +1,5 @@
 ﻿using System;
-using GoOS.GUI.Apps;
+using GoOS.GUI.Apps.Terminal;
 using GoOS.Themes;
 
 namespace GoOS.Virtualisation
@@ -12,9 +12,9 @@ namespace GoOS.Virtualisation
 
         protected bool mStopped = false;
         
-        private Terminal terminal;
+        private Shell terminal;
 
-        public VM(Terminal terminal)
+        public VM(Shell terminal)
         {
             this.terminal = terminal;
         }
@@ -31,8 +31,8 @@ namespace GoOS.Virtualisation
                 }
                 mStarted = true;
 
-                terminal.terminal.ForegroundColor = Gold.Graphics.Color.White;
-                terminal.terminal.BackgroundColor = Gold.Graphics.Color.Black;
+                terminal._terminal.ForegroundColor = Gold.Graphics.Color.White;
+                terminal._terminal.BackgroundColor = Gold.Graphics.Color.Black;
 
                 OnBoot();
                 BeforeRun();

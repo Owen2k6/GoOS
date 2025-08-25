@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using GoOS.Themes;
-using GoOS.GUI.Apps;
+using GoOS.GUI.Apps.Terminal;
 
 namespace GoOS.Commands
 {
     internal class Dir
     {
-        public static void Run(Terminal terminal)
+        public static void Run(Shell terminal)
         {
             
             

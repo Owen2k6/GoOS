@@ -1,7 +1,6 @@
 ﻿using System;
 using Cosmos.System;
 using GoOS.GUI.Models;
-using IL2CPU.API.Attribs;
 using Gold.Graphics;
 using static GoOS.Resources;
 
@@ -19,7 +18,7 @@ namespace GoOS.GUI.Apps
     {
         private bool IsOverColorTable { get { return MouseManager.X > X + 54 && MouseManager.X < X + 278 && MouseManager.Y > Y + Convert.ToUInt16(Contents.Height - 26) && MouseManager.Y < Y + Convert.ToUInt16(Contents.Height + 6); } }
 
-        private bool IsOverPaintableArea { get { return MouseManager.X > X && MouseManager.X < X + Contents.Width - BrushSize && MouseManager.Y > Y + TITLE_BAR_HEIGHT && MouseManager.Y < Y + Convert.ToUInt16(Contents.Height - 36); } }
+        private bool IsOverPaintableArea { get { return MouseManager.X > X && MouseManager.X < X + Contents.Width - BrushSize && MouseManager.Y > Y + 29 && MouseManager.Y < Y + Convert.ToUInt16(Contents.Height - 36); } }
 
         private Color SelectedColor = Color.Black;
 
@@ -41,7 +40,7 @@ namespace GoOS.GUI.Apps
 
         private Color BackgroundColor = Color.White;
 
-        public Paintbrush()
+        public Paintbrush() : base(0, 0, 800, 600, "Paintbrush")
         {
             Dialogue sizeDialogue = new Dialogue(
                 "Canvas size",
@@ -91,11 +90,10 @@ namespace GoOS.GUI.Apps
             Contents = new Canvas(Width, Height);
             Contents.Clear(BackgroundColor);
             Title = "Paintbrush";
-            Visible = true;
-            Closable = true;
+            //Visible = true;
+            //Closable = true;
             SetDock(WindowDock.Auto);
 
-            AboutButton = new Button(this, Convert.ToUInt16(Contents.Width - 36), Convert.ToUInt16(Contents.Height - 38), 24, 20, "?") { Clicked = AboutButton_Click };
             Utilities = new Button[4]
             {
                 new Button(this, 12, Convert.ToUInt16(Contents.Height - 42), 16, 16, string.Empty)
@@ -121,20 +119,6 @@ namespace GoOS.GUI.Apps
             };
 
             RenderPanel();
-        }
-
-        private void AboutButton_Click() => ShowAboutDialog("1.1");
-
-        public override void HandleKey(KeyEvent key)
-        {
-            switch (key.Key)
-            {
-                case ConsoleKeyEx.F1:
-                    ShowAboutDialog();
-                    break;
-            }
-
-            // TODO: implement ctrl + z
         }
 
         private void Pencil_Click()
@@ -196,28 +180,28 @@ namespace GoOS.GUI.Apps
             Contents.DrawString(TextX, TextY, Dialog_TextBox.Text, Resources.Font_1x, SelectedColor);
         }
 
-        public override void HandleRun()
+        internal override void HandleRun()
         {
-            if (!WindowManager.AreThereDraggingWindows && Focused && IsMouseOver && IsOverPaintableArea)
+            if (Focused && IsMouseOver() && IsOverPaintableArea)
             {
                 switch (Utility)
                 {
                     case PaintTools.Brush:
-                        WindowManager.MouseToDraw = brush;
-                        WindowManager.MouseOffsetX = 4;
-                        WindowManager.MouseOffsetY = 14;
+                        WindowManager.Screen.DefineCursor(brush);
+                        //WindowManager.MouseOffsetX = 4;
+                        //WindowManager.MouseOffsetY = 14;
                         break;
 
                     case PaintTools.Bucket:
-                        WindowManager.MouseToDraw = bucket;
+                        WindowManager.Screen.DefineCursor(bucket);
                         break;
 
                     case PaintTools.Text:
-                        WindowManager.MouseToDraw = mouse_text;
+                        WindowManager.Screen.DefineCursor(mouse_text);
                         break;
 
                     case PaintTools.Rubber:
-                        WindowManager.MouseToDraw = rubber;
+                        WindowManager.Screen.DefineCursor(rubber);
                         break;
                 }
 
@@ -245,9 +229,14 @@ namespace GoOS.GUI.Apps
                     }
                 }
             }
+
+            if (Focused && IsMouseOver() && MouseManager.MouseState != MouseManager.LastMouseState)
+            {
+                HandleClick(new MouseEventArgs());
+            }
         }
 
-        public override void HandleClick(MouseEventArgs e)
+        private void HandleClick(MouseEventArgs e)
         {
             if (IsOverPaintableArea)
             {
@@ -297,17 +286,17 @@ namespace GoOS.GUI.Apps
             Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 52), Convert.ToUInt16(Contents.Width - 4), 50, 0, Color.DeepGray);
             Contents.DrawImage(54, Convert.ToUInt16(Contents.Height - 42), colorTable, false);
             RenderButtons();
-            RenderSystemStyleBorder();
+            //RenderSystemStyleBorder();
         }
 
         private void RenderButtons()
         {
-            AboutButton.pressed = false;
+            AboutButton.Pressed = false;
             AboutButton.Render();
 
             foreach (var util in Utilities)
             {
-                util.pressed = false;
+                util.Pressed = false;
                 util.Render();
             }
         }

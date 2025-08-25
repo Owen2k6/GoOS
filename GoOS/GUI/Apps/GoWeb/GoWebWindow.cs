@@ -1,6 +1,5 @@
 ﻿#nullable enable
 using GoOS.GUI.Apps.GoWeb.Html;
-using GoOS.GUI.Apps.GoWeb.Http;
 using GoOS.GUI.Apps.GoWeb.Render;
 using Gold.Graphics;
 using Uri = GoOS.GUI.Apps.GoWeb.Http.Uri;
@@ -9,7 +8,7 @@ namespace GoOS.GUI.Apps.GoWeb
 {
     public class GoWebWindow : Window
     {
-        public static string Version = "0.1.0";
+        public static string Version = "0.1.1";
         readonly Input AddressBar;
 
         readonly Button HomeButton;
@@ -23,13 +22,8 @@ namespace GoOS.GUI.Apps.GoWeb
 
         private const int TOOLBAR_HEIGHT = 48;
 
-        public GoWebWindow()
+        public GoWebWindow() : base(0, 0, 800, 600, "GoWeb")
         {
-            Contents = new Canvas(800, 600);
-            Title = "GoWeb";
-            Visible = true;
-            Closable = true;
-            Sizable = false;
             SetDock(WindowDock.Auto);
 
             PageCanvas = new((ushort)Contents.Width, (ushort)(Contents.Height - TOOLBAR_HEIGHT));
@@ -48,14 +42,13 @@ namespace GoOS.GUI.Apps.GoWeb
             };
             HomeButton.Render();
 
-            GoButton = new Button(this, (ushort)(AddressBar.X + AddressBar.Contents.Width + 8), 16, 20, 20, string.Empty)
+            GoButton = new Button(this, (ushort)(AddressBar.X + AddressBar.Contents.Width + 8), 16, 20, 20,
+                string.Empty)
             {
                 Image = GoWebResources.go,
                 Clicked = Go_Click
             };
             GoButton.Render();
-
-            RenderSystemStyleBorder();
 
             Goto(HOMEPAGE);
         }
@@ -68,19 +61,19 @@ namespace GoOS.GUI.Apps.GoWeb
             ushort boxH = 56;
             const byte shdDist = 2;
 
-            Contents.DrawFilledRectangle(0, TOOLBAR_HEIGHT, Contents.Width, (ushort)(Contents.Height - TOOLBAR_HEIGHT), 0, Color.White);
+            Contents.DrawFilledRectangle(0, TOOLBAR_HEIGHT, Contents.Width, (ushort)(Contents.Height - TOOLBAR_HEIGHT),
+                0, Color.White);
 
             Contents.DrawFilledRectangle(boxX + shdDist, boxY + shdDist, boxW, boxH, 0, Color.Black);
             Contents.DrawFilledRectangle(boxX, boxY, boxW, boxH, 0, Color.White);
             Contents.DrawRectangle(boxX, boxY, boxW, boxH, 0, Color.Black);
-            
+
             Contents.DrawImage(boxX + 10, boxY + 10, Resources.drumIcon, true);
 
-            Contents.DrawString(boxX + 70, boxY + (boxH - Resources.Font_1x.GetHeight()) / 2, message, Resources.Font_1x, Color.Black);
+            Contents.DrawString(boxX + 70, boxY + (boxH - Resources.Font_1x.GetHeight()) / 2, message,
+                Resources.Font_1x, Color.Black);
 
-            RenderSystemStyleBorder();
-
-            WindowManager.Update();
+            WindowManager.Render();
         }
 
         void Goto(Uri uri)
@@ -102,13 +95,13 @@ namespace GoOS.GUI.Apps.GoWeb
                 Renderer.Render(ActiveDocument, PageCanvas);
 
                 Contents.DrawImage(0, TOOLBAR_HEIGHT, PageCanvas, false);
-
-                RenderSystemStyleBorder();
             }
             catch (System.Exception e)
             {
-                Contents.DrawFilledRectangle(0, TOOLBAR_HEIGHT, Contents.Width, (ushort)(Contents.Height - TOOLBAR_HEIGHT), 0, Color.White);
-                Dialogue.Show("GoWeb", $"The page at '{uri.ToString()}' failed to load.\n{e.ToString()}", null, WindowManager.errorIcon);
+                Contents.DrawFilledRectangle(0, TOOLBAR_HEIGHT, Contents.Width,
+                    (ushort)(Contents.Height - TOOLBAR_HEIGHT), 0, Color.White);
+                Dialogue.Show("GoWeb", $"The page at '{uri.ToString()}' failed to load.\n{e.ToString()}", null,
+                    Resources.errorIcon);
             }
         }
 
@@ -119,10 +112,12 @@ namespace GoOS.GUI.Apps.GoWeb
             {
                 return;
             }
+
             if (!address.Contains(':'))
             {
                 address = "http://" + address;
             }
+
             Goto(Uri.FromString(address));
         }
 

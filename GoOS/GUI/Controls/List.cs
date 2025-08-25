@@ -5,7 +5,7 @@ using Gold.Graphics;
 
 namespace GoOS.GUI
 {
-    public class List : Control
+    internal class List : Control
     {
         public string[] Items;
         public string Title;
@@ -23,7 +23,7 @@ namespace GoOS.GUI
             Selected = 0;
         }
 
-        public override void Render()
+        internal override void Render()
         {
             if (Selected < 0)
             {
@@ -87,7 +87,7 @@ namespace GoOS.GUI
         {
             if (IsMouseOver)
             {
-                Selected = (((int)MouseManager.Y - Parent.Y - Window.TITLE_BAR_HEIGHT - Y) / 20) - 1;
+                Selected = ((int)MouseManager.Y - Parent.Y - 22 - Y) / 20 - 1;
             }
 
             Render();

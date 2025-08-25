@@ -1,15 +1,14 @@
 ﻿using System;
 using GoOS.Themes;
-using GoOS.GUI.Apps;
-using Console = GoOS.SVGAIITerminal;
+using GoOS.GUI.Apps.Terminal;
 
 namespace GoOS.Commands
 {
     public class Help
     {
-        public static void Main(Terminal terminal)
+        public static void Main(Shell terminal)
         {
-            SVGAIITerminal Console = terminal.terminal;
+            SVGAIITerminal Console = terminal._terminal;
             
             int page = 1;
             while (true)

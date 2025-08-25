@@ -1,13 +1,11 @@
-﻿// File: GoOS/GUI/Apps/Gosplorer/MainFrame.cs
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Cosmos.System;
-using GoOS.Commands;
 using Gold.Graphics;
 using static GoOS.Resources;
-using GoOS.Apps; // <-- for GiffRunner
+using GoOS.Apps;
 
 namespace GoOS.GUI.Apps.Gosplorer
 {
@@ -31,12 +29,12 @@ namespace GoOS.GUI.Apps.Gosplorer
         List<string> BrowseHistory;
         int BrowseHistoryIndex;
 
-        public MainFrame()
+        public MainFrame() : base(0, 0, 835, 600, "Gosplorer")
         {
             Contents = new Canvas(835, 600);
             Title = Path + " - Gosplorer";
-            Visible = true;
-            Closable = true;
+            //Visible = true;
+            //Closable = true;
             SetDock(WindowDock.Auto);
 
             AddressBar = new Input(this, 90, 10, (ushort)(Contents.Width - 100 - 20 - 10), 20, "Path") { Text = Path, Submitted = AddressBar_Submit };
@@ -44,60 +42,60 @@ namespace GoOS.GUI.Apps.Gosplorer
             {
                 Image = arrowleft,
                 Clicked = BackButton_Click,
-                UseSystemStyle = false,
+                //UseSystemStyle = false,
                 RenderWithAlpha = true,
-                BackgroundColour = Color.Transparent
+                //BackgroundColour = Color.Transparent
             };
             ForwardButton = new Button(this, 29, 6, 26, 26, string.Empty)
             {
                 Image = arrowright,
                 Clicked = ForwardButton_Click,
-                UseSystemStyle = false,
+                //UseSystemStyle = false,
                 RenderWithAlpha = true,
-                BackgroundColour = Color.Transparent
+                //BackgroundColour = Color.Transparent
             };
             UpButton = new Button(this, 59, 6, 26, 26, string.Empty)
             {
                 Image = arrowup,
                 Clicked = UpArrow_Click,
-                UseSystemStyle = false,
+                //UseSystemStyle = false,
                 RenderWithAlpha = true,
-                BackgroundColour = Color.Transparent
+                //BackgroundColour = Color.Transparent
             };
             RefreshButton = new Button(this, 800, 6, 26, 26, string.Empty)
             {
                 Image = refIcon,
                 Clicked = RenderFolderItems,
-                UseSystemStyle = false,
+                //UseSystemStyle = false,
                 RenderWithAlpha = true,
-                BackgroundColour = Color.Transparent
+                //BackgroundColour = Color.Transparent
             };
 
             Shortcuts = new Button[]
             {
                 new Button(this, 26, 45, 40, 20, @"0:\")
                 {
-                    UseSystemStyle = false,
+                    //UseSystemStyle = false,
                     RenderWithAlpha = true,
-                    BackgroundColour = new Color(0, 0, 0, 0),
-                    Name = @"0:\",
-                    ClickedAlt = Shortcut_Click
+                    //BackgroundColour = new Color(0, 0, 0, 0),
+                    //Name = @"0:\",
+                    //ClickedAlt = Shortcut_Click
                 },
                 new Button(this, 26, 70, 40, 20, @"1:\")
                 {
-                    UseSystemStyle = false,
+                    //UseSystemStyle = false,
                     RenderWithAlpha = true,
-                    BackgroundColour = new Color(0, 0, 0, 0),
-                    Name = @"1:\",
-                    ClickedAlt = Shortcut_Click
+                    //BackgroundColour = new Color(0, 0, 0, 0),
+                    //Name = @"1:\",
+                    //ClickedAlt = Shortcut_Click
                 },
                 new Button(this, 26, 95, 48, 20, "Apps")
                 {
-                    UseSystemStyle = false,
+                    //UseSystemStyle = false,
                     RenderWithAlpha = true,
-                    BackgroundColour = new Color(0, 0, 0, 0),
-                    Name = "Apps",
-                    ClickedAlt = Shortcut_Click
+                    //BackgroundColour = new Color(0, 0, 0, 0),
+                    //Name = "Apps",
+                    //ClickedAlt = Shortcut_Click
                 }
             };
 
@@ -106,8 +104,10 @@ namespace GoOS.GUI.Apps.Gosplorer
             RenderFolderItems();
         }
 
-        public override void Paint()
+        internal override void Render()
         {
+            base.Render();
+            
             Contents.DrawImage(0, 0, appbackground, false);
             Contents.DrawImage(0, 0, header, false);
             Contents.DrawImage(0, 40, sidebar, false);
@@ -123,8 +123,6 @@ namespace GoOS.GUI.Apps.Gosplorer
 
             foreach (Button i in Shortcuts) i.Render();
             foreach (Button i in FolderContents) if (i != null) i.Render();
-
-            RenderSystemStyleBorder();
         }
 
         private Button GetButtonUnderMouse()
@@ -154,7 +152,7 @@ namespace GoOS.GUI.Apps.Gosplorer
             bool hasButton = ContextButton != null;
             bool isFolder = hasButton && ContextButton.Image == folderIcon;
             bool isFile = hasButton && ContextButton.Image == fileIcon;
-            string name = hasButton ? ContextButton.Name : string.Empty;
+            string name = hasButton ? ContextButton.Text : string.Empty;
             string ext = hasButton ? (name.LastIndexOf('.') >= 0 ? name.Substring(name.LastIndexOf('.')).ToLower() : string.Empty) : string.Empty;
 
             if (isFolder)
@@ -182,12 +180,12 @@ namespace GoOS.GUI.Apps.Gosplorer
             switch (item)
             {
                 case " Open":
-                    FolderContents_Clicked(ContextButton.Name);
+                    FolderContents_Clicked(ContextButton.Text);
                     break;
 
                 case " Delete":
-                    if (Directory.Exists(Path + @"\" + ContextButton.Name)) Directory.Delete(Path + @"\" + ContextButton.Name, true);
-                    else File.Delete(Path + @"\" + ContextButton.Name);
+                    if (Directory.Exists(Path + @"\" + ContextButton.Text)) Directory.Delete(Path + @"\" + ContextButton.Text, true);
+                    else File.Delete(Path + @"\" + ContextButton.Text);
                     RenderFolderItems();
                     break;
 
@@ -195,7 +193,7 @@ namespace GoOS.GUI.Apps.Gosplorer
                     {
                         List<string> lines = new List<string>(File.ReadAllLines(@"0:\content\sys\pinnedapps.gms"))
                         {
-                            (Path + (Path.EndsWith(@"\") ? "" : @"\") + ContextButton.Name).Trim()
+                            (Path + (Path.EndsWith(@"\") ? "" : @"\") + ContextButton.Text).Trim()
                         };
                         File.WriteAllLines(@"0:\content\sys\pinnedapps.gms", lines.ToArray());
                         Dialogue.Show("Gosplorer", "App pinned to start menu");
@@ -207,7 +205,7 @@ namespace GoOS.GUI.Apps.Gosplorer
                         List<string> lines2 = new List<string>(File.ReadAllLines(@"0:\content\sys\pinnedapps.gms"));
                         for (int i = 0; i < lines2.Count; i++)
                         {
-                            if (lines2[i] == (Path + (Path.EndsWith(@"\") ? "" : @"\") + ContextButton.Name).Trim())
+                            if (lines2[i] == (Path + (Path.EndsWith(@"\") ? "" : @"\") + ContextButton.Text).Trim())
                             {
                                 lines2.RemoveAt(i);
                                 i--;
@@ -220,7 +218,7 @@ namespace GoOS.GUI.Apps.Gosplorer
 
                 case " Open with Notepad":
                     {
-                        string full = Path + (Path.EndsWith(@"\") ? "" : @"\") + ContextButton.Name;
+                        string full = Path + (Path.EndsWith(@"\") ? "" : @"\") + ContextButton.Text;
                         WindowManager.AddWindow(new Notepad(true, full));
                         break;
                     }
@@ -265,7 +263,7 @@ namespace GoOS.GUI.Apps.Gosplorer
         {
             if (Dialog_TextBox.Text.Trim().Length == 0)
             {
-                Dialogue.Show("Error", "Folder name cannot be empty!", null, WindowManager.errorIcon);
+                Dialogue.Show("Error", "Folder name cannot be empty!", null, errorIcon);
                 return;
             }
 
@@ -277,7 +275,7 @@ namespace GoOS.GUI.Apps.Gosplorer
         {
             if (Dialog_TextBox.Text.Trim().Length == 0)
             {
-                Dialogue.Show("Error", "Folder name cannot be empty!", null, WindowManager.errorIcon);
+                Dialogue.Show("Error", "Folder name cannot be empty!", null, errorIcon);
                 return;
             }
 
@@ -369,19 +367,19 @@ namespace GoOS.GUI.Apps.Gosplorer
                     (ushort)(50 + (row * (IconHeight + 10))),
                     IconWidth, IconHeight, itemNames[i])
                 {
-                    UseSystemStyle = false,
+                    //UseSystemStyle = false,
                     RenderWithAlpha = true,
-                    BackgroundColour = new Color(0, 0, 0, 0),
+                    //BackgroundColour = new Color(0, 0, 0, 0),
                     Image = itemTypes[i] ? folderIcon : fileIcon,
-                    ClickedAlt = FolderContents_Clicked,
-                    Name = itemNames[i]
+                    //ClickedAlt = FolderContents_Clicked,
+                    //Name = itemNames[i]
                 };
 
                 column++;
             }
 
             Title = Path + " - Gosplorer";
-            Paint();
+            WindowManager.Render();
         }
 
         private void FolderContents_Clicked(string e)
@@ -407,7 +405,7 @@ namespace GoOS.GUI.Apps.Gosplorer
                     break;
 
                 case { } a when a.EndsWith(".gexe") || a.EndsWith(".goexe"):
-                    Terminal term = new Terminal();
+                    Terminal.Terminal term = new Terminal.Terminal();
                     WindowManager.AddWindow(term);
                     
                     break;
@@ -438,7 +436,7 @@ namespace GoOS.GUI.Apps.Gosplorer
                     break;
 
                 default:
-                    Dialogue.Show("Error", "Unknown file extension!", null, WindowManager.errorIcon);
+                    Dialogue.Show("Error", "Unknown file extension!", null, errorIcon);
                     break;
             }
         }

@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using IL2CPU.API.Attribs;
-using Gold.Graphics;
-using System.IO;
-using System.Threading;
-using static GoOS.Resources;
+﻿using Gold.Graphics;
 
 namespace GoOS.GUI.Apps;
 
@@ -17,16 +6,13 @@ public class Gimviewer : Window
 {
     public static Canvas gim;
     public static string aeiou;
-    public Gimviewer(byte[] image, int type)
+    public Gimviewer(byte[] image, int type) : base(0, 0, 800, 600, "Gimviewer")
     {
-        
-        Visible = true;
-        Closable = true;
-        Unkillable = false;
         SetDock(WindowDock.Auto);
         ProcessImg(image, type);
+        Width = gim.Width;
+        Height = gim.Height;
         Contents = gim;
-        RenderSystemStyleBorder();
         Title = "Gimviewer! Currently viewing: "+aeiou;
     }
 

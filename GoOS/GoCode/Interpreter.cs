@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Cosmos.Core;
-using Cosmos.HAL;
 using Cosmos.System;
 using GoOS.GUI;
-using GoOS.GUI.Apps;
 using GoOS.Themes;
 using Gold.Graphics;
-using Console = GoOS.SVGAIITerminal;
+using GoOS.GUI.Apps.Terminal;
 using static Gold.Graphics.Color;
 
 namespace GoOS.GoCode;
@@ -40,14 +37,14 @@ public class Interpreter
 
     private int i = 0;
 
-    private Terminal terminal;
+    private Shell terminal;
     
     private SVGAIITerminal Console;
 
-    public Interpreter(Terminal terminal)
+    public Interpreter(Shell terminal)
     {
         this.terminal = terminal;
-        Console = terminal.terminal;
+        Console = terminal._terminal;
     }
 
     public void Interpret(string[] lines, bool unnecessaryOutputs = true)
@@ -136,31 +133,24 @@ public class Interpreter
                 Windows.TryGetValue(parentWindowName, out Window buttonWindow);
 
                 Button button = new Button(buttonWindow, x, y, awindowWidth, awindowHeight, buttonName);
-                button.ClickedAlt = ClickAction;
+                //button.ClickedAlt = ClickAction;
                 break;
             case { } a when a.StartsWith("window="):
-                Window window = new Window();
                 string windowLess = a.Replace("window=", "");
                 string windowName = windowLess.Split("=")[0];
-
-                window.Title = windowName;
-                
-                if (Windows.ContainsKey(windowName))
-                {
-                    Windows.Remove(windowName);
-                }
                 
                 string windowWidthPre = windowLess.Split("=")[1];
                 string windowHeightPre = windowLess.Split("=")[2];
                 ushort windowWidth = ushort.Parse(windowWidthPre);
                 ushort windowHeight = ushort.Parse(windowHeightPre);
-
-                window.Contents = new Canvas(windowWidth, windowHeight);
-                window.Visible = true;
-                window.Closable = true;
+                
+                Window window = new Window(WindowManager.Screen._Width / 2, WindowManager.Screen._Height / 2, windowWidth, windowHeight, windowName);;
+                
+                //window.Visible = true;
+                //window.Closable = true;
                 
                 window.Contents.Clear(Color.LightGray);
-                window.RenderSystemStyleBorder();
+                //window.RenderSystemStyleBorder();
                 
                 Windows.Add(windowName, window);
                 WindowManager.AddWindow(window);

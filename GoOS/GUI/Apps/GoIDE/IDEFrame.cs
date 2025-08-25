@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using GoOS.Commands;
-using IL2CPU.API.Attribs;
 using Gold.Graphics;
 using static GoOS.Commands.Run;
 using static GoOS.Resources;
@@ -17,7 +15,7 @@ namespace GoOS.GUI.Apps.GoIDE
         string ProjectPath;
         bool Is9xCode;
 
-        public IDEFrame(string projectName, string projectPath, bool is9xCode)
+        public IDEFrame(string projectName, string projectPath, bool is9xCode) : base(0, 0, 800, 600, projectName + "GoIDE")
         {
             try
             {
@@ -26,15 +24,13 @@ namespace GoOS.GUI.Apps.GoIDE
                 Is9xCode = is9xCode;
                 
                 // Create the window.
-                Contents = new Canvas(800, 600);
-                Title = projectName + " - GoIDE";
-                Visible = true;
-                Closable = true;
+                //Visible = true;
+                //Closable = true;
                 SetDock(WindowDock.Auto);
 
                 // Initialize the controls.
-                SaveButton = new Button(this, 2, 2, 48, 18, "Save") { Clicked = SaveButton_Click, UseSystemStyle = false, BackgroundColour = Color.LightGray };
-                RunButton = new Button(this, Convert.ToUInt16(Contents.Width - 42), 2, 40, 18, "Run") { Clicked = RunButton_Click, UseSystemStyle = false, BackgroundColour = Color.LightGray };
+                SaveButton = new Button(this, 2, 2, 48, 18, "Save") { Clicked = SaveButton_Click };
+                RunButton = new Button(this, Convert.ToUInt16(Contents.Width - 42), 2, 40, 18, "Run") { Clicked = RunButton_Click };
                 Code = new InputNUMBERS(this, 2, 20, Convert.ToUInt16(Contents.Width - 4), Convert.ToUInt16(Contents.Height - 43), string.Empty) { MultiLine = true };
                 Code.Text = File.ReadAllText(projectPath);
 
@@ -43,14 +39,14 @@ namespace GoOS.GUI.Apps.GoIDE
             }
             catch (Exception ex)
             {
-                Dialogue.Show("GoIDE", "Something went wrong.\nPlease try again.\n\n" + ex, null, WindowManager.errorIcon);
+                Dialogue.Show("GoIDE", "Something went wrong.\nPlease try again.\n\n" + ex, null, errorIcon);
             }
         }
 
         void Paint(string status)
         {
             Contents.Clear(Color.LightGray);
-            RenderSystemStyleBorder();
+            //RenderSystemStyleBorder();
             Contents.DrawImage(Contents.Width - 62, 0, RunImage);
             SaveButton.Render();
             RunButton.Render();
@@ -74,17 +70,17 @@ namespace GoOS.GUI.Apps.GoIDE
 
                 File.WriteAllText(ProjectPath, Code.Text);
                 
-                Terminal term = new Terminal();
+                Terminal.Terminal term = new Terminal.Terminal();
                 WindowManager.AddWindow(term);
 
                 term.Title = "Terminal - GoIDE";
 
                 if (!Is9xCode)
-                    Main(term, ProjectPath, false);
+                    Main(term._shell, ProjectPath, false);
                 else
-                    _9xCode.Interpreter.Run(term, ProjectPath);
+                    _9xCode.Interpreter.Run(term._shell, ProjectPath);
                 
-                WindowManager.windows.Remove(term);
+                WindowManager.Windows.Remove(term);
 
                 Debugging = false;
             }

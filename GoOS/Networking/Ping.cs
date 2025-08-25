@@ -1,23 +1,4 @@
-﻿using Cosmos.HAL;
-using Cosmos.System.Network.Config;
-using Cosmos.System.Network.IPv4;
-using Cosmos.System.Network.IPv4.TCP;
-using Cosmos.System.Network.IPv4.UDP.DHCP;
-using System;
-using System.Collections.Generic;
-using Sys = Cosmos.System;
-using System.IO;
-using System.Text;
-using GoOS.Themes;
-using GoOS.Commands;
-//using Console = BetterConsole;
-using ConsoleColor = Gold.Graphics.Color;
-using System.Threading;
-using Gold.Graphics;
-using IL2CPU.API.Attribs;
-using Gold.Hardware.GPU;
-using GoOS.GUI;
-using GoOS.GUI.Apps;
+﻿using System;
 
 namespace GoOS.Networking;
 

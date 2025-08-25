@@ -1,11 +1,10 @@
 ﻿using System;
 using Cosmos.System;
-using GoOS.GUI.Models;
 using Gold.Graphics;
 
 namespace GoOS.GUI
 {
-    public class ContextMenu : Window
+    internal class ContextMenu : Window
     {
         public string[] Items;
         public Action<string> Handle;
@@ -18,7 +17,7 @@ namespace GoOS.GUI
         public static ContextMenu Show(string[] items, ushort width, Action<string> handle)
         {
             var cm = new ContextMenu(items, width) { Handle = handle };
-            WindowManager.RemoveWindowByTitle(nameof(ContextMenu));
+            WindowManager.RemoveWindow(cm);
             WindowManager.AddWindow(cm);
             return cm;
         }
@@ -27,51 +26,65 @@ namespace GoOS.GUI
         public static ContextMenu ShowAt(int x, int y, string[] items, ushort width, Action<string> handle)
         {
             var cm = new ContextMenu(items, width, x, y) { Handle = handle };
-            WindowManager.RemoveWindowByTitle(nameof(ContextMenu));
+            WindowManager.RemoveWindow(cm);
             WindowManager.AddWindow(cm);
             return cm;
         }
 
         // Existing ctor (spawn at mouse)
-        public ContextMenu(string[] items, ushort width)
+        public ContextMenu(string[] items, ushort width) : base((int)MouseManager.X, (int)MouseManager.Y, width,
+            Convert.ToUInt16(items.Length * 16 + 2), "")
         {
             Items = items;
-            WindowManager.MouseMove = MouseMove;
+            //WindowManager.MouseMove = MouseMove;
 
             Contents = new Canvas(width, Convert.ToUInt16(items.Length * 16 + 2));
             X = (int)MouseManager.X;
             Y = (int)MouseManager.Y;
             Title = nameof(ContextMenu);
-            Visible = true;
-            Closable = false;
-            HasTitlebar = false;
+            //Visible = true;
+            //Closable = false;
+            //HasTitlebar = false;
 
             Contents.Clear(Color.LightGray);
             MouseMove();
 
+            List list = new List(this, 0, 0, Width, Height, Title, items);
+
+            list.Clicked = () => Handle?.Invoke(Items[list.Selected]);
+
+            Controls.Add(list);
+
             lastState = MouseManager.MouseState; // initialise tracker
-            suppressNextOutsideRelease = true;   // ignore opener release
+            suppressNextOutsideRelease = true; // ignore opener release
         }
 
         // NEW ctor (spawn at explicit x,y)
-        public ContextMenu(string[] items, ushort width, int x, int y)
+        public ContextMenu(string[] items, ushort width, int x, int y) : base((int)MouseManager.X, (int)MouseManager.Y,
+            width, Convert.ToUInt16(items.Length * 16 + 2), "")
         {
             Items = items;
-            WindowManager.MouseMove = MouseMove;
+            //WindowManager.MouseMove = MouseMove;
 
             Contents = new Canvas(width, Convert.ToUInt16(items.Length * 16 + 2));
             X = x;
             Y = y;
             Title = nameof(ContextMenu);
-            Visible = true;
-            Closable = false;
-            HasTitlebar = false;
+            //Visible = true;
+            //Closable = false;
+            //HasTitlebar = false;
 
             Contents.Clear(Color.LightGray);
             MouseMove();
 
+            List list = new List(this, 0, 0, Width, Height, Title, items);
+
+            list.Clicked = () => Handle?.Invoke(Items[list.Selected]);
+
+            Controls.Add(list);
+
             lastState = MouseManager.MouseState; // initialise tracker
-            suppressNextOutsideRelease = true;   // ignore opener release
+            suppressNextOutsideRelease = true; // ignore opener release
         }
 
         private void MouseMove()
@@ -79,36 +92,21 @@ namespace GoOS.GUI
             for (int i = 0; i < Items.Length; i++)
                 Contents.DrawString(0, i * 16, Items[i], Resources.Font_1x, Color.White);
 
-            RenderSystemStyleBorder();
+            //RenderSystemStyleBorder();
         }
 
-        public override void HandleRun()
+        internal override void HandleRun()
         {
-            base.HandleRun();
-
-            // Detect Left -> None transitions (mouse release)
-            var cur = MouseManager.MouseState;
-            if (lastState == MouseState.Left && cur == MouseState.None)
+            if (MouseManager.MouseState == MouseState.Left && !IsMouseOver())
             {
-                if (suppressNextOutsideRelease)
-                {
-                    // Ignore the first release after opening
-                    suppressNextOutsideRelease = false;
-                }
-                else
-                {
-                    // Now apply normal outside-click dismissal
-                    if (!IsMouseOver)
-                    {
-                        Dispose();
-                        return;
-                    }
-                }
+                Dispose();
+                return;
             }
-            lastState = cur;
+            
+            base.HandleRun();
         }
 
-        public override void HandleClick(MouseEventArgs e)
+        /*public override void HandleClick(MouseEventArgs e)
         {
             if (e.MouseState == MouseState.Left)
             {
@@ -120,6 +118,6 @@ namespace GoOS.GUI
                 }
                 Dispose();
             }
-        }
+        }*/
     }
 }

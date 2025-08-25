@@ -1,16 +1,17 @@
 using System.Collections.Generic;
 using System.IO;
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Cosmos.Core;
-using Cosmos.System;
 using Cosmos.System.Network.IPv4.UDP.DHCP;
-using Gold.Graphics;
-using Gold.Graphics.Fonts;
 using Gold.Hardware.GPU;
 using GoOS.GUI;
 using GoOS.GUI.Apps;
-using GoOS.Themes;
+using GoOS.GUI.Apps.Terminal;
 using IL2CPU.API.Attribs;
+using Sys = Cosmos.System;
+using GoOS.Tasking;
 
 // Goplex Studios - GoOS
 // Copyright (C) 2025
@@ -54,6 +55,8 @@ namespace GoOS
         // Placeholder (kept)
         public static string cutStatus = "Disabled";
 
+        public static Terminal debugTerm;
+
         public static Cosmos.System.FileSystem.CosmosVFS FS;
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GoOS_Intro.bmp")]
@@ -64,7 +67,7 @@ namespace GoOS
         // =========================================================
         protected override void BeforeRun()
         {
-            System.Console.Clear();
+            /*System.Console.Clear();
 
             // RAM gate (Cosmos-safe)
             uint ramAmount = CPU.GetAmountOfRAM();
@@ -155,30 +158,69 @@ namespace GoOS
                 while (true)
                 {
                 }
+            }*/
+            
+            Console.Write("Welcome to ");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("GoOS");
+            Console.ResetColor();
+            Console.WriteLine("!\n");
+
+            try
+            {
+                FS = new Sys.FileSystem.CosmosVFS();
+                Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS);
+                FS.Initialize(true); 
+                
+                byte[] screenRes = File.Exists(@"0:\content\sys\resolution.gms")
+                    ? File.ReadAllBytes(@"0:\content\sys\resolution.gms")
+                    : new byte[] { 6 };
+
+                var videoMode = ControlPanel.videoModes[screenRes[0]].Item2;
+                
+                Display Screen = Display.GetDisplay(videoMode.Width, videoMode.Height);
+                
+                Resources.Generate(ResourceType.Boot);
+                
+                Screen.Clear();
+                Screen.DrawImage(videoMode.Width / 2 - 37, videoMode.Height / 2 - 37, Resources.bootlogo, false);
+                Screen.Update();
+                
+                Resources.Generate(ResourceType.Fonts);
+                Resources.Generate(ResourceType.Priority);
+                Resources.Generate(ResourceType.Normal);
+                
+                ProcessScheduler.AddProcess(new WindowManager(Screen));
+                
+                //LoadingDialogue.Instance = (LoadingDialogue)ProcessScheduler.AddProcess(new LoadingDialogue());
+                //ProcessScheduler.HandleRun();
+                
+                //LoadingDialogue.Instance.Dispose();
+
+                //ProcessScheduler.AddProcess(new TestApp());
+
+                debugTerm = new Terminal();
+                ProcessScheduler.AddProcess(debugTerm);
+
+                ProcessScheduler.AddProcess(new Desktop());
+                ProcessScheduler.AddProcess(new Menubar());
+                ProcessScheduler.AddProcess(new Taskbar());
+            }
+            catch (Exception ex)
+            {
+                WindowManager.Screen.IsEnabled = false;
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("A fatal error occurred: " + ex.Message);
+                Console.WriteLine("    at GoOS.Kernel.BeforeRun()");
+                Console.WriteLine("    at Cosmos.System.Kernel.Start()");
+                Console.ResetColor();
+                Console.WriteLine("\nPress any key to reboot...");
+                Console.ReadKey(true);
+                CPU.Reboot();
             }
         }
-
-        private void InitialiseGold()
-        {
-            System.Console.WriteLine("Initialising Gold...");
-
-            byte[] screenRes = File.Exists(@"0:\content\sys\resolution.gms")
-                ? File.ReadAllBytes(@"0:\content\sys\resolution.gms")
-                : new byte[] { 6 };
-
-            var videoMode = ControlPanel.videoModes[screenRes[0]].Item2;
-            WindowManager.Canvas = Display.GetDisplay(videoMode.Width, videoMode.Height);
-
-            WindowManager.Canvas.DrawImage(0, 0, Resources.bootbackground, false);
-            WindowManager.Canvas.DrawImage(videoMode.Width / 2 - 37, videoMode.Height / 2 - 37, Resources.bootlogo,
-                true);
-
-            //Console.Init(800, 600);
-
-            Cosmos.System.PCSpeaker.Beep(600, 100);
-            WindowManager.Update();
-        }
-
+        
         private void SetupPathAndGCI()
         {
             // Ensure PATH file exists
@@ -315,8 +357,26 @@ namespace GoOS
 
         protected override void Run()
         {
-            WindowManager.Update();
-            /* No longer needed but has to exist. */
+            try
+            {
+                ProcessScheduler.HandleRun();
+                //MemoryWatch.Watch();
+            }
+            catch (Exception ex)
+            {
+                WindowManager.Screen.IsEnabled = false;
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("The process scheduler crashed!: " + ex.Message);
+                Console.WriteLine("    at GoOS.Tasking.ProcessScheduler.HandleRun()");
+                Console.WriteLine("    at GoOS.Kernel.Run()");
+                Console.WriteLine("    at Cosmos.System.Kernel.Start()");
+
+                Console.ResetColor();
+                Console.WriteLine("\nPress any key to reboot...");
+                Console.ReadKey(true);
+                CPU.Reboot();
+            }
         }
 
         // =========================================================
