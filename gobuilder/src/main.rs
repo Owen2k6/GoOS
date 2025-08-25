@@ -2,21 +2,19 @@ mod actions;
 mod project;
 
 use std::{env, fs, thread};
-use std::collections::HashMap;
 use std::hash::Hash;
 use std::process::Command;
 use std::time::Instant;
-use log::debug;
 use crate::actions::kernel::kernel_actions;
 use crate::project::Project;
 
 fn main() -> std::io::Result<()> {
     // Set up variables
-    let mut build_kernel = false;
-    let mut build_image = false;
-    let mut build_debug = false;
+    let mut build_kernel = true;
+    let mut build_image = true;
+    let mut build_debug = true;
     let mut build_clean = false;
-    let mut build_arch = "unknown";
+    let build_arch = "unknown";
     let cores = thread::available_parallelism().expect("REASON").get();
 
     // Make default build architecture match host CPU.
@@ -33,13 +31,13 @@ fn main() -> std::io::Result<()> {
 
     for string in args {
         match string.as_str() { // Basically a rust "switch" case
-            "--compile-kernel" => build_kernel = true, // (re)compiles the kernel
+            "--no-kernel" => build_kernel = false, // Disables compiling the kernel
             "--x86" => build_arch = "i386", // Compiles the OS for x86 systems
             "--amd64" => build_arch = "x86_64", // Compiles the OS for amd64/x86_64 systems
             "--arm64" => build_arch = "arm64", // Compiles the OS for arm64 systems
             "--all" => build_arch = "all", // Compiles the OS for all supported architectures (useful for releases)
-            "--image" => build_image = true, // Creates a bootable ISO after building, like cosmos.
-            "--debug" => build_debug = true, // Compiles the OS with debug
+            "--no-image" => build_image = false, // Disables building an image
+            "--release" => build_debug = false, // Compiles the OS with release
             "--clean" => build_clean = true, // Just cleans
             _ => {} // "default"
         }
@@ -61,7 +59,7 @@ fn main() -> std::io::Result<()> {
         _ => "fucking hell mate"
     };
 
-    println!("Building GoOS for {} using {} threads", build_arch, cores);
+    println!("Building GoOS for {} using {} threads", build_arch, cores);//
     let total_timer = Instant::now();
 
     let mut dir = env::current_dir()?;
@@ -131,7 +129,7 @@ fn main() -> std::io::Result<()> {
         eprintln!("Failed to create {:?}: {}", format!("./out/{}/image", build_arch), e);
     }
 
-    println!("Copying ./configs/kernel{}.config to ./kernel/.config", build_arch);
+    println!("Copying ./configs/kernel/{}.config to ./kernel/.config", build_arch);
     if let Err(e) = fs::copy(format!("configs/kernel/{}.config", build_arch), "kernel/.config") {
         eprintln!("Failed to copy {:?}: {}", format!("./out/{}/image", build_arch), e);
     }
@@ -145,6 +143,10 @@ fn main() -> std::io::Result<()> {
 
     while completed_builds.len() < c_projects.len() + rust_projects.len() {
         'c_projects: for project in &c_projects {
+            if build_kernel && project.name == "kernel" {
+                continue 'c_projects;
+            }
+
             for dependency in &project.dependencies {
                 if !completed_builds.contains(dependency) {
                     continue 'c_projects;
@@ -200,6 +202,7 @@ fn main() -> std::io::Result<()> {
                         let status = Command::new("cargo")
                             .args(&[
                                 "build",
+                                "--release",
                                 "--target", rust_target
                             ])
                             .current_dir(&project.name)
@@ -217,6 +220,10 @@ fn main() -> std::io::Result<()> {
                 }
             }
         }
+    }
+
+    if build_image {
+
     }
 
     println!("Done! Total time elapsed: {:?}", total_timer.elapsed());
@@ -238,7 +245,7 @@ fn add_c_projects() -> Vec<Project> {
 fn add_rust_projects() -> Vec<Project> {
     let mut rust_proj: Vec<Project> = Vec::new();
 
-    // Do this like above in add_c_projects, just that there is nothing to add at the moment
+    rust_proj.push(Project::new("init", None /* TODO: Make a build action for this */, vec!["kernel"]));
 
     rust_proj // return without return
 }
