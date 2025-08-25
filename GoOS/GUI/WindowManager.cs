@@ -65,8 +65,10 @@ namespace GoOS.GUI
         }
 
         internal static bool RemoveWindow(Window window) {
-            WindowOrder.Remove(window);
-            return Windows.Remove(window);
+            bool wo = WindowOrder.Remove(window);
+            bool w = Windows.Remove(window);
+            Render();
+            return w && wo;
         } 
 
         internal static void Render()
