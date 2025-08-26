@@ -90,7 +90,6 @@ namespace GoOS.GUI
         public bool RenderWithAlpha = false;
 
         public Action Clicked;
-        public Action<string> ClickedAlt;
 
         public string Name;
 
