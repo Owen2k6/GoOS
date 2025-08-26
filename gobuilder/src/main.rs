@@ -4,6 +4,7 @@ mod project;
 use std::{env, fs, thread};
 use std::process::Command;
 use std::time::Instant;
+use crate::actions::init::init_actions;
 use crate::actions::kernel::kernel_actions;
 use crate::project::Project;
 
@@ -127,6 +128,8 @@ fn main() -> std::io::Result<()> {
         std::process::exit(1);
     }
 
+    do_dirs(build_arch);
+
     println!("Copying ./configs/kernel/{}.config to ./kernel/.config", build_arch);
     if let Err(e) = fs::copy(format!("configs/kernel/{}.config", build_arch), "kernel/.config") {
         eprintln!("Failed to copy {:?}: {}", format!("./out/{}/image", build_arch), e);
@@ -172,7 +175,7 @@ fn main() -> std::io::Result<()> {
                 }
 
                 match project.post_build {
-                    Some(f) => { f(); println!("Ran post-build action for project {} ", &project.name); },
+                    Some(f) => { f(build_arch, build_debug); println!("Ran post-build action for project {} ", &project.name); },
                     None => println!("No post-build action for project {}, continuing", &project.name)
                 }
 
@@ -224,7 +227,7 @@ fn main() -> std::io::Result<()> {
                     }
 
                     match project.post_build {
-                        Some(f) => { f(); println!("Ran post-build action for project {} ", &project.name); },
+                        Some(f) => { f(build_arch, build_debug); println!("Ran post-build action for project {} ", &project.name); },
                         None => println!("No post-build action for project {}, continuing", &project.name)
                     }
 
@@ -244,7 +247,37 @@ fn main() -> std::io::Result<()> {
     Ok(())
 }
 
+fn do_dirs(build_arch: &str) {
+    println!("Creating ./out/{}/image/proc", build_arch);
+    if let Err(e) = fs::create_dir_all(format!("out/{}/image/proc", build_arch)) {
+        eprintln!("Failed to create {:?}: {}", format!("./out/{}/image/proc", build_arch), e);
+        std::process::exit(1);
+    }
 
+    println!("Creating ./out/{}/image/sys", build_arch);
+    if let Err(e) = fs::create_dir_all(format!("out/{}/image/sys", build_arch)) {
+        eprintln!("Failed to create {:?}: {}", format!("./out/{}/image/sys", build_arch), e);
+        std::process::exit(1);
+    }
+
+    println!("Creating ./out/{}/image/tmp", build_arch);
+    if let Err(e) = fs::create_dir_all(format!("out/{}/image/tmp", build_arch)) {
+        eprintln!("Failed to create {:?}: {}", format!("./out/{}/image/tmp", build_arch), e);
+        std::process::exit(1);
+    }
+
+    println!("Creating ./out/{}/image/dev", build_arch);
+    if let Err(e) = fs::create_dir_all(format!("out/{}/image/dev", build_arch)) {
+        eprintln!("Failed to create {:?}: {}", format!("./out/{}/image/dev", build_arch), e);
+        std::process::exit(1);
+    }
+
+    println!("Creating ./out/{}/image/Applications", build_arch);
+    if let Err(e) = fs::create_dir_all(format!("out/{}/image/Applications", build_arch)) {
+        eprintln!("Failed to create {:?}: {}", format!("./out/{}/image/Applications", build_arch), e);
+        std::process::exit(1);
+    }
+}
 
 fn add_c_projects() -> Vec<Project> {
     let mut c_proj: Vec<Project> = Vec::new();
@@ -259,7 +292,7 @@ fn add_c_projects() -> Vec<Project> {
 fn add_rust_projects() -> Vec<Project> {
     let mut rust_proj: Vec<Project> = Vec::new();
 
-    rust_proj.push(Project::new("init", None /* TODO: Make a build action for this */, vec!["kernel"]));
+    rust_proj.push(Project::new("init", Some(init_actions), vec!["kernel"]));
 
-    rust_proj // return without return
+    rust_proj
 }
