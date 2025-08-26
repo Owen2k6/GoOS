@@ -83,7 +83,7 @@ namespace GoOS.GUI
             Parent.RenderControls();
         }
 
-        internal override void HandleDown(MouseEventArgs args)
+        internal override void HandleDown()
         {
             if (IsMouseOver)
             {

@@ -79,7 +79,7 @@ namespace GoOS.GUI.Apps.Gosplorer
                     RenderWithAlpha = true,
                     //BackgroundColour = new Color(0, 0, 0, 0),
                     //Name = @"0:\",
-                    //ClickedAlt = Shortcut_Click
+                    ClickedStr = Shortcut_Click
                 },
                 new Button(this, 26, 70, 40, 20, @"1:\")
                 {
@@ -87,7 +87,7 @@ namespace GoOS.GUI.Apps.Gosplorer
                     RenderWithAlpha = true,
                     //BackgroundColour = new Color(0, 0, 0, 0),
                     //Name = @"1:\",
-                    //ClickedAlt = Shortcut_Click
+                    ClickedStr = Shortcut_Click
                 },
                 new Button(this, 26, 95, 48, 20, "Apps")
                 {
@@ -95,7 +95,7 @@ namespace GoOS.GUI.Apps.Gosplorer
                     RenderWithAlpha = true,
                     //BackgroundColour = new Color(0, 0, 0, 0),
                     //Name = "Apps",
-                    //ClickedAlt = Shortcut_Click
+                    ClickedStr = Shortcut_Click
                 }
             };
 
@@ -371,7 +371,7 @@ namespace GoOS.GUI.Apps.Gosplorer
                     RenderWithAlpha = true,
                     //BackgroundColour = new Color(0, 0, 0, 0),
                     Image = itemTypes[i] ? folderIcon : fileIcon,
-                    //ClickedAlt = FolderContents_Clicked,
+                    ClickedStr = FolderContents_Clicked,
                     //Name = itemNames[i]
                 };
 
@@ -405,7 +405,7 @@ namespace GoOS.GUI.Apps.Gosplorer
                     break;
 
                 case { } a when a.EndsWith(".gexe") || a.EndsWith(".goexe"):
-                    Terminal.Terminal term = new Terminal.Terminal();
+                    Terminal.GoTerminal term = new Terminal.GoTerminal();
                     WindowManager.AddWindow(term);
                     
                     break;

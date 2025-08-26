@@ -70,15 +70,15 @@ namespace GoOS.GUI.Apps.GoIDE
 
                 File.WriteAllText(ProjectPath, Code.Text);
                 
-                Terminal.Terminal term = new Terminal.Terminal();
+                Terminal.GoTerminal term = new Terminal.GoTerminal();
                 WindowManager.AddWindow(term);
 
                 term.Title = "Terminal - GoIDE";
 
                 if (!Is9xCode)
-                    Main(term._shell, ProjectPath, false);
+                    Main(term.term._shell, ProjectPath, false);
                 else
-                    _9xCode.Interpreter.Run(term._shell, ProjectPath);
+                    _9xCode.Interpreter.Run(term.term._shell, ProjectPath);
                 
                 WindowManager.Windows.Remove(term);
 

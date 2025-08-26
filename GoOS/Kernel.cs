@@ -55,8 +55,6 @@ namespace GoOS
         // Placeholder (kept)
         public static string cutStatus = "Disabled";
 
-        public static Terminal debugTerm;
-
         public static Cosmos.System.FileSystem.CosmosVFS FS;
 
         [ManifestResourceStream(ResourceName = "GoOS.Resources.GoOS_Intro.bmp")]
@@ -190,21 +188,38 @@ namespace GoOS
                 Resources.Generate(ResourceType.Priority);
                 Resources.Generate(ResourceType.Normal);
                 
-                ProcessScheduler.AddProcess(new WindowManager(Screen));
+                ProcessScheduler.AddPriorityProcess(new WindowManager(Screen));
                 
                 //LoadingDialogue.Instance = (LoadingDialogue)ProcessScheduler.AddProcess(new LoadingDialogue());
                 //ProcessScheduler.HandleRun();
                 
                 //LoadingDialogue.Instance.Dispose();
-
-                //ProcessScheduler.AddProcess(new TestApp());
-
-                debugTerm = new Terminal();
-                ProcessScheduler.AddProcess(debugTerm);
-
-                ProcessScheduler.AddProcess(new Desktop());
-                ProcessScheduler.AddProcess(new Menubar());
-                ProcessScheduler.AddProcess(new Taskbar());
+                
+                //ProcessScheduler.AddPriorityProcess(new Desktop());
+                ProcessScheduler.AddPriorityProcess(new Menubar());
+                ProcessScheduler.AddPriorityProcess(new Taskbar());
+                
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
+                ProcessScheduler.AddProcess(new GoTerminal());
             }
             catch (Exception ex)
             {

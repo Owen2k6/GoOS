@@ -1,5 +1,6 @@
 ﻿using System;
 using Gold.Graphics;
+using GoOS.GUI.Apps.Terminal;
 
 namespace GoOS.GUI.Apps;
 
@@ -35,7 +36,7 @@ public class GoVM : Window
 
 public class ChaOS_VM : Window
 {
-    public Terminal.Terminal VMTERM;
+    public GoTerminal VMTERM;
 
     public ChaOS_VM() : base(0, 0, 300, 600, "ChaOS - GoVM")
     {
@@ -46,9 +47,9 @@ public class ChaOS_VM : Window
             WindowManager.errorIcon);*/
         try
         {
-            VMTERM = new Terminal.Terminal();
+            VMTERM = new GoTerminal();
 
-            Contents = VMTERM.terminal.Contents;
+            Contents = VMTERM.term.terminal.Contents;
             Title = "ChaOS - GoVM";
             SetDock(WindowDock.Auto);
 

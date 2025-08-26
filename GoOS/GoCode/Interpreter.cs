@@ -133,7 +133,7 @@ public class Interpreter
                 Windows.TryGetValue(parentWindowName, out Window buttonWindow);
 
                 Button button = new Button(buttonWindow, x, y, awindowWidth, awindowHeight, buttonName);
-                //button.ClickedAlt = ClickAction;
+                button.ClickedStr = ClickAction;
                 break;
             case { } a when a.StartsWith("window="):
                 string windowLess = a.Replace("window=", "");

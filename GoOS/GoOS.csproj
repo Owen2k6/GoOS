@@ -69,6 +69,7 @@
         <IntelEdison_ISOFile>bin\Debug\net6.0\GoOS.iso</IntelEdison_ISOFile>
         <IntelEdison_CompileVBEMultiboot>False</IntelEdison_CompileVBEMultiboot>
         <IntelEdison_ExtractMapFile>False</IntelEdison_ExtractMapFile>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -246,7 +247,7 @@
 
     <PropertyGroup>
       <DefineConstants>BUILD_GOWEB</DefineConstants>
-      <UseUEFI>True</UseUEFI>
+      <UseUEFI>False</UseUEFI>
     </PropertyGroup>
   
     <ItemGroup Condition="'$(DefineConstants.Contains(BUILD_GOWEB))' != 'true'">

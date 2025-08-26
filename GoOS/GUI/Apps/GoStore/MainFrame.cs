@@ -446,7 +446,7 @@ namespace GoOS.GUI.Apps.GoStore
                         _repoFiles[i].Version.Replace(@"\n", "\n"))
                     {
                         //BackgroundColour = new Color(0, 0, 0, 0),
-                        //ClickedAlt = _repoFiles_Click, TODO
+                        ClickedStr = _repoFiles_Click,
                         RenderWithAlpha = true,
                         // CenterTitle = false,
                         // textX = 5,

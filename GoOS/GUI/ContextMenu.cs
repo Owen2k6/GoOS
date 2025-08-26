@@ -61,7 +61,7 @@ namespace GoOS.GUI
 
         // NEW ctor (spawn at explicit x,y)
         public ContextMenu(string[] items, ushort width, int x, int y) : base((int)MouseManager.X, (int)MouseManager.Y,
-            width, Convert.ToUInt16(items.Length * 16 + 2), "")
+            width, Convert.ToUInt16(items.Length * 16 + 2), "contextMenu", true)
         {
             Items = items;
             //WindowManager.MouseMove = MouseMove;
@@ -97,7 +97,7 @@ namespace GoOS.GUI
 
         internal override void HandleRun()
         {
-            if (MouseManager.MouseState == MouseState.Left && !IsMouseOver())
+            if (WindowManager.FocusedWindow != this)
             {
                 Dispose();
                 return;

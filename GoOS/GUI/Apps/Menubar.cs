@@ -58,7 +58,7 @@ namespace GoOS.GUI.Apps
             " Shutdown Computer "
         };
 
-        public Menubar() : base(0, 0, WindowManager.Screen.Width, 19, nameof(Menubar), true)
+        public Menubar() : base(0, 0, WindowManager.Screen.Width, 19, "menubar", true)
         {
             Instance = this;
 
@@ -81,11 +81,11 @@ namespace GoOS.GUI.Apps
             int btnW = 40;
 
             menuButton = new Button(this,
-                                    (ushort)SidePadding,
+                                    SidePadding,
                                     (ushort)btnY,
                                     (ushort)btnW,
                                     (ushort)btnH,
-                                    "Menu")
+                                    "Menu", true)
             {
                 RenderWithAlpha = true,
             };
@@ -157,7 +157,7 @@ namespace GoOS.GUI.Apps
                 case " Paint ":              WindowManager.AddWindow(new Paintbrush()); break;
                 case " System Monitor ":     WindowManager.AddWindow(new TaskManager()); break;
                 case " Settings ":           WindowManager.AddWindow(new Frame()); break;
-                case " Terminal ":           WindowManager.AddWindow(new Terminal.Terminal()); break;
+                case " Terminal ":           WindowManager.AddWindow(new Terminal.GoTerminal()); break;
             }
         }
 

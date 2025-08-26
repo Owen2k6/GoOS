@@ -42,7 +42,7 @@ namespace GoOS.GUI.Apps.GoIDE
                         Convert.ToUInt16(52 + ((i * 20) - (i / 10 * 200))),
                         Convert.ToUInt16(recentProjects[i].Length * 8), 20, recentProjects[i])
                     {
-                        //ClickedAlt = RecentProjects_Click
+                        ClickedStr = RecentProjects_Click
                     };
                 }
 

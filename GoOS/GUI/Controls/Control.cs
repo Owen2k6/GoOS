@@ -5,33 +5,36 @@ using Cosmos.System;
 
 namespace GoOS.GUI
 {
-    internal abstract class Control
+    internal class Control
     {
         internal int X, Y;
         internal ushort Width, Height;
         internal bool RenderWithAlpha = false;
         internal bool Pressed;
+        internal bool NoOffset;
 
         internal Window Parent;
         internal Action Clicked;
         internal Action<string> ClickedStr;
         internal Canvas Contents;
+        internal string Name;
 
         public bool IsMouseOver
         {
-            get => MouseManager.X > Parent.X + X + (Parent.Borderless ? 2 : 6) &&
-                   MouseManager.X < Parent.X + X + Width + (Parent.Borderless ? 2 : 6) &&
-                   MouseManager.Y > Parent.Y + Y + (Parent.Borderless ? 2 : 22) &&
-                   MouseManager.Y < Parent.Y + Y + Height + (Parent.Borderless ? 2 : 22);
+            get => MouseManager.X > Parent.X + X + (!NoOffset ? Parent.Borderless ? 2 : 6 : 0) &&
+                   MouseManager.X < Parent.X + X + Width + (!NoOffset ? Parent.Borderless ? 2 : 6 : 0) &&
+                   MouseManager.Y > Parent.Y + Y + (!NoOffset ? Parent.Borderless ? 2 : 22 : 0) &&
+                   MouseManager.Y < Parent.Y + Y + Height + (!NoOffset ? Parent.Borderless ? 2 : 22 : 0);
         }
 
-        protected Control(Window Parent, int X, int Y, ushort Width, ushort Height)
+        internal Control(Window Parent, int X, int Y, ushort Width, ushort Height, string Name = "", bool noOffset = false)
         {
             this.Parent = Parent;
             this.X = X;
             this.Y = Y;
             this.Width = Width;
             this.Height = Height;
+            NoOffset = noOffset;
 
             Contents = new Canvas(Width, Height);
             Parent.Controls.Add(this);
@@ -40,34 +43,29 @@ namespace GoOS.GUI
         internal virtual void HandleDown()
             => Pressed = true;
         
-        internal virtual void HandleDown(MouseEventArgs args) => Pressed = true;
-
         internal virtual void HandleUp()
             => Pressed = false;
 
         internal virtual void Render()
             => Parent.RenderControls();
-        
-        internal virtual void HandleKey(KeyEvent key)
-        {
-        }
 
         internal virtual void HandleRun()
         {
             if (Parent.Focused && IsMouseOver &&
                 MouseManager.LastMouseState == MouseState.None &&
-                MouseManager.MouseState == MouseState.Left)
+                MouseManager.MouseState == MouseState.Left && !Pressed)
             {
                 HandleDown();
             }
 
             if (Parent.Focused && IsMouseOver &&
                 MouseManager.LastMouseState == MouseState.Left &&
-                MouseManager.MouseState == MouseState.None)
+                MouseManager.MouseState == MouseState.None && Pressed)
             {
                 HandleUp();
-
-                if (IsMouseOver) Clicked?.Invoke();
+                
+                Clicked?.Invoke();
+                ClickedStr?.Invoke(Name);
             }
         }
     }

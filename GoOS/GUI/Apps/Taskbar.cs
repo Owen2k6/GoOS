@@ -15,7 +15,7 @@ public class Taskbar : Window
     private int timeAreaWidth = 0;
     private bool needsRedraw = true;
 
-    public Taskbar() : base(0, WindowManager.Screen.Height - 28, WindowManager.Screen.Width, 28, nameof(Taskbar), true)
+    public Taskbar() : base(0, WindowManager.Screen.Height - 28, WindowManager.Screen.Width, 28, "taskbar", true)
     {
         //Visible = true;
         //Closable = false;

@@ -12,10 +12,10 @@ namespace GoOS.GUI
     internal sealed class WindowManager : Process
     {
         private static int _framesToHeapCollect = 20;
-        private static byte _lastSecond = RTC.Second;
 
         internal static List<Window> Windows = new List<Window>();
-        internal static List<Window> WindowOrder = new List<Window>();
+        internal static List<Window> SpecialWindows = new List<Window>();
+        
         internal static Display Screen = null;
 
         internal static WindowManager Instance;
@@ -61,19 +61,23 @@ namespace GoOS.GUI
 
         internal static void AddWindow(Window window) {
             Windows.Add(window);
-            WindowOrder.Add(window);
+            
+            if (window.Title == "menubar" || window.Title == "taskbar" || window.Title == "contextMenu") 
+                SpecialWindows.Add(window);
+                
+            FocusedWindow = window;
         }
 
         internal static bool RemoveWindow(Window window) {
-            bool wo = WindowOrder.Remove(window);
+            bool sw =  SpecialWindows.Remove(window);
             bool w = Windows.Remove(window);
             Render();
-            return w && wo;
+            return w && sw;
         } 
 
         internal static void Render()
         {
-            //Screen.DrawImage(0, 0, Resources.background, false);
+            Screen.DrawImage(0, 0, Resources.background, false);
 
             Screen.DrawString(10, 10, "GoOS v1.6", Resources.Charcoal, Color.White, Shadow: true);
             Screen.DrawString(10, 36, Screen.GetFPS() + " FPS", Resources.Charcoal, Color.White, Shadow: true);
@@ -97,15 +101,15 @@ namespace GoOS.GUI
                     continue;
                 }
 
-                if (WindowOrder.Contains(w)) WindowOrder.Remove(w);
-                WindowOrder.Add(w);
+                //if (WindowOrder.Contains(w)) WindowOrder.Remove(w);
+                //WindowOrder.Add(w);
 
                 Screen.DrawImage(w.X, w.Y, w.Contents, false);
 
                 if (w.Borderless) continue;
 
-                Screen.DrawLine(w.X + 2, w.Y + w.Height, w.X + w.Width + 1, w.Y + w.Height, Color.Black);
-                Screen.DrawLine(w.X + w.Width, w.Y + 2, w.X + w.Width, w.Y + w.Height + 1, Color.Black);
+                Screen.DrawLine(w.X + 2, w.Y + (w.Minimized ? 22 : w.Height), w.X + w.Width + 1, w.Y + (w.Minimized ? 22 : w.Height), Color.Black);
+                Screen.DrawLine(w.X + w.Width, w.Y + 2, w.X + w.Width, w.Y + (w.Minimized ? 22 : w.Height) + 1, Color.Black);
             }
 
             /*WindowOrder.Reverse();
@@ -128,11 +132,8 @@ namespace GoOS.GUI
 
         internal override void HandleRun()
         {
-            if (_lastSecond != RTC.Second)
-            {
+            if (ProcessScheduler._lastSecond != RTC.Second)
                 Render();
-                _lastSecond = RTC.Second;
-            }
 
             // Rendering the mouse technically counts as rendering a frame.
             // Since we don't need to copy the framebuffer for rendering the

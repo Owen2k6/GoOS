@@ -218,13 +218,13 @@ namespace GoOS.GUI.Apps.GoStore
             }
             else
             {
-                Terminal.Terminal term = new Terminal.Terminal();
+                Terminal.GoTerminal term = new Terminal.GoTerminal();
                 WindowManager.AddWindow(term);
 
                 if (!App.Filename.EndsWith(".9xc"))
-                    Run.Main(term._shell, @"0:\go\" + App.Filename, false);
+                    Run.Main(term.term._shell, @"0:\go\" + App.Filename, false);
                 else
-                    _9xCode.Interpreter.Run(term._shell, @"0:\go\" + App.Filename);
+                    _9xCode.Interpreter.Run(term.term._shell, @"0:\go\" + App.Filename);
 
                 WindowManager.Windows.Remove(term);
             }

@@ -84,16 +84,16 @@ namespace GoOS.GUI
             return col * 8;
         }
 
-        internal override void HandleDown(MouseEventArgs args)
+        internal override void HandleDown()
         {
             bool isDone = false;
-            
+
             caretLine = 0;
             for (int i = 0; i < lines[caretLine].Length; i++)
             {
                 string here = lines[caretLine].Substring(0, i);
                 int hereWidth = Resources.Font_1x.MeasureString(here);
-                if (args.X <= hereWidth && !isDone)
+                if (MouseManager.X <= hereWidth && !isDone)
                 {
                     MoveCaret(0, i);
                     isDone = true;
@@ -110,6 +110,102 @@ namespace GoOS.GUI
         internal override void HandleRun()
         {
             base.HandleRun();
+
+            if (Parent.Focused)
+            {
+                KeyboardManager.TryReadKey(out var key);
+                switch (key.Key)
+                {
+                    case ConsoleKeyEx.LeftArrow:
+                        if (caretCol == 0)
+                        {
+                            if (caretLine == 0) return;
+                            caretLine--;
+                            caretCol = lines[caretLine].Length;
+                        }
+                        else
+                        {
+                            caretCol--;
+                        }
+
+                        break;
+                    case ConsoleKeyEx.RightArrow:
+                        if (caretCol == lines[caretLine].Length)
+                        {
+                            if (caretLine == lines.Count - 1) return;
+                            caretLine++;
+
+                            caretCol = 0;
+                        }
+                        else
+                        {
+                            caretCol++;
+                        }
+
+                        break;
+                    case ConsoleKeyEx.UpArrow:
+                        if (caretLine == 0) return;
+
+                        caretLine--;
+                        caretCol = Math.Min(lines[caretLine].Length, caretCol);
+                        break;
+                    case ConsoleKeyEx.DownArrow:
+                        if (caretLine == lines.Count - 1) return;
+
+                        caretLine++;
+                        caretCol = Math.Min(lines[caretLine].Length, caretCol);
+                        break;
+                    case ConsoleKeyEx.Enter:
+                        if (!MultiLine)
+                        {
+                            Submitted?.Invoke();
+
+                            caretLine = -1;
+                            caretCol = 0;
+
+                            break;
+                        }
+
+                        lines.Insert(caretLine + 1, lines[caretLine].Substring(caretCol));
+                        lines[caretLine] = lines[caretLine].Substring(0, caretCol);
+                        // 
+                        caretLine++;
+                        caretCol = 0;
+                        // 
+                        Changed?.Invoke();
+                        break;
+                    case ConsoleKeyEx.Backspace:
+                        if (caretCol == 0)
+                        {
+                            if (caretLine == 0) return;
+
+                            caretLine--;
+                            caretCol = lines[caretLine].Length;
+
+                            lines[caretLine] += lines[caretLine + 1];
+                            lines.RemoveAt(caretLine + 1);
+
+                            Changed?.Invoke();
+                        }
+                        else
+                        {
+                            lines[caretLine] = lines[caretLine].Remove(caretCol - 1, 1);
+                            caretCol--;
+
+                            Changed?.Invoke();
+                        }
+
+                        break;
+                    default:
+                        lines[caretLine] = lines[caretLine].Insert(caretCol, key.KeyChar.ToString());
+                        caretCol++;
+
+                        Changed?.Invoke();
+                        break;
+                }
+
+                Render();
+            }
 
             if (!Parent.Focused && caretLine != -1)
             {
@@ -149,102 +245,6 @@ namespace GoOS.GUI
                 // Scroll left.
                 scrollX = GetEndXAtCol(caretCol);
             }
-        }
-
-        internal override void HandleKey(KeyEvent key)
-        {
-            if (caretLine == -1 || ReadOnly) return;
-            switch (key.Key)
-            {
-                case ConsoleKeyEx.LeftArrow:
-                    if (caretCol == 0)
-                    {
-                        if (caretLine == 0) return;
-                        caretLine--;
-                        caretCol = lines[caretLine].Length;
-                    }
-                    else
-                    {
-                        caretCol--;
-                    }
-
-                    break;
-                case ConsoleKeyEx.RightArrow:
-                    if (caretCol == lines[caretLine].Length)
-                    {
-                        if (caretLine == lines.Count - 1) return;
-                        caretLine++;
-
-                        caretCol = 0;
-                    }
-                    else
-                    {
-                        caretCol++;
-                    }
-
-                    break;
-                case ConsoleKeyEx.UpArrow:
-                    if (caretLine == 0) return;
-
-                    caretLine--;
-                    caretCol = Math.Min(lines[caretLine].Length, caretCol);
-                    break;
-                case ConsoleKeyEx.DownArrow:
-                    if (caretLine == lines.Count - 1) return;
-
-                    caretLine++;
-                    caretCol = Math.Min(lines[caretLine].Length, caretCol);
-                    break;
-                case ConsoleKeyEx.Enter:
-                    if (!MultiLine)
-                    {
-                        Submitted?.Invoke();
-
-                        caretLine = -1;
-                        caretCol = 0;
-
-                        break;
-                    }
-
-                    lines.Insert(caretLine + 1, lines[caretLine].Substring(caretCol));
-                    lines[caretLine] = lines[caretLine].Substring(0, caretCol);
-                    // 
-                    caretLine++;
-                    caretCol = 0;
-                    // 
-                    Changed?.Invoke();
-                    break;
-                case ConsoleKeyEx.Backspace:
-                    if (caretCol == 0)
-                    {
-                        if (caretLine == 0) return;
-
-                        caretLine--;
-                        caretCol = lines[caretLine].Length;
-
-                        lines[caretLine] += lines[caretLine + 1];
-                        lines.RemoveAt(caretLine + 1);
-
-                        Changed?.Invoke();
-                    }
-                    else
-                    {
-                        lines[caretLine] = lines[caretLine].Remove(caretCol - 1, 1);
-                        caretCol--;
-
-                        Changed?.Invoke();
-                    }
-
-                    break;
-                default:
-                    lines[caretLine] = lines[caretLine].Insert(caretCol, key.KeyChar.ToString());
-                    caretCol++;
-
-                    Changed?.Invoke();
-                    break;
-            }
-
-            Render();
         }
 
         public List<string> lines = new List<string>() { string.Empty };

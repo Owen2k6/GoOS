@@ -17,10 +17,10 @@ namespace GoOS.Commands
             
             if (args.Equals("ChaOS", StringComparison.OrdinalIgnoreCase))
             {
-                Terminal term = new Terminal();
+                GoTerminal term = new GoTerminal();
                 WindowManager.AddWindow(term);
                 
-                Virtualisation.ChaOS.Kernel Kernel = new Virtualisation.ChaOS.Kernel(term._shell);
+                Virtualisation.ChaOS.Kernel Kernel = new Virtualisation.ChaOS.Kernel(term.term._shell);
                 Kernel.Start();
 
                 Kernel = null;
