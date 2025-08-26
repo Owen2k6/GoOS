@@ -77,6 +77,12 @@ namespace GoOS.GUI
             Render();
         }
 
+        internal override void HandleDown(MouseEventArgs _args)
+        {
+            base.HandleDown();
+            Render();
+        }
+
         internal override void HandleUp()
         {
             base.HandleUp();
