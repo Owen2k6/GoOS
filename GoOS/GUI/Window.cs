@@ -170,7 +170,7 @@ namespace GoOS.GUI
         {
             Contents.DrawImage(4, 4, IsMouseOverCloseButton && MouseManager.MouseState == MouseState.Left ? Resources.closeButtonPressed : Resources.closeButton);
             Contents.DrawImage(Width - 33, 4, IsMouseOverMaximizeButton && MouseManager.MouseState == MouseState.Left ? Resources.maximizePressed : Resources.maximize);
-            Contents.DrawImage(Width - 17, 4, IsMouseOverMinimizeButton && MouseManager.MouseState == MouseState.Left ? Resources.minimisePressed : Resources.minimisePressed);
+            Contents.DrawImage(Width - 17, 4, IsMouseOverMinimizeButton && MouseManager.MouseState == MouseState.Left ? Resources.minimisePressed : Resources.minimise);
             WindowManager.Render();
         }
         internal override void HandleRun()
