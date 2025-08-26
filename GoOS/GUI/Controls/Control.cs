@@ -14,6 +14,7 @@ namespace GoOS.GUI
 
         internal Window Parent;
         internal Action Clicked;
+        internal Action<string> ClickedStr;
         internal Canvas Contents;
 
         public bool IsMouseOver
@@ -39,10 +40,7 @@ namespace GoOS.GUI
         internal virtual void HandleDown()
             => Pressed = true;
         
-        internal virtual void HandleDown(MouseEventArgs args)
-        {
-            HandleDown();
-        }
+        internal virtual void HandleDown(MouseEventArgs args) => Pressed = true;
 
         internal virtual void HandleUp()
             => Pressed = false;
