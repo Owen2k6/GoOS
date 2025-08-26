@@ -2,7 +2,6 @@ mod actions;
 mod project;
 
 use std::{env, fs, thread};
-use std::hash::Hash;
 use std::process::Command;
 use std::time::Instant;
 use crate::actions::kernel::kernel_actions;
@@ -14,11 +13,8 @@ fn main() -> std::io::Result<()> {
     let mut build_image = true;
     let mut build_debug = true;
     let mut build_clean = false;
-    let build_arch = "unknown";
     let cores = thread::available_parallelism().expect("REASON").get();
 
-    // Make default build architecture match host CPU.
-    // It will only stay "unknown" if it's not listed here which means, for now, it's unsupported.
     #[cfg(target_arch = "x86")]
     let mut build_arch = "i386";
     #[cfg(target_arch = "x86_64")]
@@ -48,6 +44,7 @@ fn main() -> std::io::Result<()> {
         _ => {
             eprintln!("Error: Unsupported architecture! Must be x86, amd64, arm64, or all.");
             eprintln!("You may report your architecture to the GoOS devs over at Owen2k6 network, and we may consider support for your architecture.");
+            std::process::exit(1);
         }
     }
 
@@ -55,7 +52,7 @@ fn main() -> std::io::Result<()> {
         "x86_64" => "x86_64-unknown-linux-gnu",
         "arm64" => "aarch64-unknown-linux-gnu",
         "i386" => "i686-unknown-linux-gnu",
-        "powerpc" => "powerpc-unknown-linux-gnu",
+        /*"powerpc" => "powerpc-unknown-linux-gnu",*/
         _ => "fucking hell mate"
     };
 
@@ -127,11 +124,13 @@ fn main() -> std::io::Result<()> {
     println!("Creating ./out/{}/image", build_arch);
     if let Err(e) = fs::create_dir_all(format!("out/{}/image", build_arch)) {
         eprintln!("Failed to create {:?}: {}", format!("./out/{}/image", build_arch), e);
+        std::process::exit(1);
     }
 
     println!("Copying ./configs/kernel/{}.config to ./kernel/.config", build_arch);
     if let Err(e) = fs::copy(format!("configs/kernel/{}.config", build_arch), "kernel/.config") {
         eprintln!("Failed to copy {:?}: {}", format!("./out/{}/image", build_arch), e);
+        std::process::exit(1);
     }
 
     // Add new projects in add_c_projects and add_rust_projects (these are found at the bottom of the file)
@@ -143,7 +142,7 @@ fn main() -> std::io::Result<()> {
 
     while completed_builds.len() < c_projects.len() + rust_projects.len() {
         'c_projects: for project in &c_projects {
-            if build_kernel && project.name == "kernel" {
+            if !build_kernel && project.name == "kernel" {
                 continue 'c_projects;
             }
 
@@ -165,7 +164,12 @@ fn main() -> std::io::Result<()> {
                         &format!("-j{}", cores)
                     ])
                     .current_dir(&project.name)
-                    .status();
+                    .status()?;
+
+                if !status.success() {
+                    eprintln!("Build failed for {}!", project.name);
+                    std::process::exit(1);
+                }
 
                 match project.post_build {
                     Some(f) => { f(); println!("Ran post-build action for project {} ", &project.name); },
@@ -197,6 +201,11 @@ fn main() -> std::io::Result<()> {
                             ])
                             .current_dir(&project.name)
                             .status()?;
+
+                        if !status.success() {
+                            eprintln!("Build failed for {}!", project.name);
+                            std::process::exit(1);
+                        }
                     }
                     else {
                         let status = Command::new("cargo")
@@ -207,6 +216,11 @@ fn main() -> std::io::Result<()> {
                             ])
                             .current_dir(&project.name)
                             .status()?;
+
+                        if !status.success() {
+                            eprintln!("Build failed for {}!", project.name);
+                            std::process::exit(1);
+                        }
                     }
 
                     match project.post_build {
