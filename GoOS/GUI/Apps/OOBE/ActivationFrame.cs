@@ -28,9 +28,10 @@ namespace GoOS.GUI.Apps.OOBE
 
             // Paint the window.
             Contents.DrawImage(0, 0, OOBEblank, false);
-            NextButton.Render();
             Contents.DrawString(20, 5, "GoOS Activation", Font_2x, Color.White);
             Contents.DrawString(20, 40, "You're all set to continue and begin setting up the OS files.\nClicking continue will begin creating files onto your HDD\nThere is still time to cancel setup if you do not wish to install GoOS Files.", Font_1x, Color.White);
+
+            base.Render();
         }
 
         private void NextButton_Click()
@@ -55,7 +56,7 @@ namespace GoOS.GUI.Apps.OOBE
             File.WriteAllText(@"0:\content\themes\dark.gtheme", "Default = Gray\nBackground = Black\nStartup = DarkGray,Gray,DarkGray\nWindowText = Gray\nWindowBorder = DarkGray\nErrorText = DarkGray\nOther1 = DarkGray");
             File.WriteAllText(@"0:\content\themes\light.gtheme", "Default = Black\nBackground = White\nStartup = Black,Black,Black\nWindowText = Black\nWindowBorder = Black\nErrorText = Black\nOther1 = Black");
             File.WriteAllText(@"0:\content\sys\theme.gms", "ThemeFile = " + @"0:\content\themes\default.gtheme");
-            WindowManager.AddWindow(new DoneFrame());
+            Kernel.ProcessScheduler.AddProcess(new DoneFrame());
             Dispose();
         }
     }

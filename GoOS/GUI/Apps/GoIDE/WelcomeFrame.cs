@@ -26,8 +26,8 @@ namespace GoOS.GUI.Apps.GoIDE
             Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4), 38, 0, Color.DeepGray);
             Contents.DrawString(10, 10, "Welcome", Font_2x, Color.White);
             Contents.DrawString(10, 52, "Welcome to GoIDE! This program will let you\ncreate and debug GoOS applications.\n\nGoIDE currently supports GoCode and 9xCode.\n\nPress next to install GoIDE and create a new\nproject.", Resources.Font_1x, Color.White);
-            CancelButton.Render();
-            NextButton.Render();
+
+            base.Render();
         }
 
         private void NextButton_Click()
@@ -37,7 +37,7 @@ namespace GoOS.GUI.Apps.GoIDE
             Directory.CreateDirectory(@"0:\content\prf\GoIDE\SaveData");
 
             Dispose();
-            WindowManager.AddWindow(new NewProjectFrame());
+            Kernel.ProcessScheduler.AddProcess(new NewProjectFrame());
         }
 
         private void CancelButton_Click()

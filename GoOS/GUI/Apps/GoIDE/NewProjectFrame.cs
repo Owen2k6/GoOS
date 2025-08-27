@@ -38,12 +38,8 @@ namespace GoOS.GUI.Apps.GoIDE
                 Contents.DrawString(10, 82, "Location: ", Font_1x, Color.White);
                 Contents.DrawString(10, 112, "Language: ", Font_1x, Color.White);
                 Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4), 38, 0, Color.DeepGray);
-                CreateButton.Render();
-                CancelButton.Render();
-                ScriptName.Render();
-                ScriptLocation.Render();
-                GoCodeButton.Render();
-                _9xCodeButton.Render();
+                
+                base.Render();
             }
             catch
             {
@@ -85,13 +81,13 @@ namespace GoOS.GUI.Apps.GoIDE
 
             File.Create(location + name + (GoCodeButton.Pressed ? ".gexe" : ".9xc"));
 
-            WindowManager.AddWindow(new IDEFrame(name, location + name + (GoCodeButton.Pressed ? ".gexe" : ".9xc"), _9xCodeButton.Pressed ? true : false));
+            Kernel.ProcessScheduler.AddProcess(new IDEFrame(name, location + name + (GoCodeButton.Pressed ? ".gexe" : ".9xc"), _9xCodeButton.Pressed));
             Dispose();
         }
 
         void CancelButton_Click()
         {
-            WindowManager.AddWindow(new ProjectsFrame());
+            Kernel.ProcessScheduler.AddProcess(new ProjectsFrame());
             Dispose();
         }
 
@@ -100,8 +96,7 @@ namespace GoOS.GUI.Apps.GoIDE
             // Toggle the GoCode and 9xCode buttons
             GoCodeButton.Pressed = true;
             _9xCodeButton.Pressed = false;
-            GoCodeButton.Render();
-            _9xCodeButton.Render();
+            base.Render();
         }
 
         void _9xCodeButton_Click()
@@ -109,8 +104,7 @@ namespace GoOS.GUI.Apps.GoIDE
             // Toggle the GoCode and 9xCode buttons
             GoCodeButton.Pressed = false;
             _9xCodeButton.Pressed = true;
-            GoCodeButton.Render();
-            _9xCodeButton.Render();
+            base.Render();
         }
     }
 }

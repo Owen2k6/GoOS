@@ -21,7 +21,8 @@ namespace GoOS.GUI
 
         public bool IsMouseOver
         {
-            get => MouseManager.X > Parent.X + X + (!NoOffset ? Parent.Borderless ? 2 : 6 : 0) &&
+            get => Parent.IsMouseOver() && 
+                   MouseManager.X > Parent.X + X + (!NoOffset ? Parent.Borderless ? 2 : 6 : 0) && 
                    MouseManager.X < Parent.X + X + Width + (!NoOffset ? Parent.Borderless ? 2 : 6 : 0) &&
                    MouseManager.Y > Parent.Y + Y + (!NoOffset ? Parent.Borderless ? 2 : 22 : 0) &&
                    MouseManager.Y < Parent.Y + Y + Height + (!NoOffset ? Parent.Borderless ? 2 : 22 : 0);
@@ -51,15 +52,22 @@ namespace GoOS.GUI
 
         internal virtual void HandleRun()
         {
-            if (Parent.Focused && IsMouseOver && Parent.IsMouseOver() && MouseManager.MouseState == MouseState.Left && !Pressed)
-                HandleDown();
-
-            if (Parent.Focused && IsMouseOver && Parent.IsMouseOver() && MouseManager.MouseState == MouseState.None && Pressed)
+            if (IsMouseOver && Parent.Focused)
             {
-                HandleUp();
-                
-                Clicked?.Invoke();
-                ClickedStr?.Invoke(Name);
+                if (MouseManager.MouseState == MouseState.Left && !Pressed)
+                {
+                    HandleDown();
+                    Parent.Render();
+                }
+
+                if (MouseManager.MouseState == MouseState.None && Pressed)
+                {
+                    Clicked?.Invoke();
+                    ClickedStr?.Invoke(Name);
+                    
+                    HandleUp();
+                    Parent.Render();
+                }
             }
         }
     }

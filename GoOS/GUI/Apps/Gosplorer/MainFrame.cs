@@ -106,8 +106,6 @@ namespace GoOS.GUI.Apps.Gosplorer
 
         internal override void Render()
         {
-            base.Render();
-            
             Contents.DrawImage(0, 0, appbackground, false);
             Contents.DrawImage(0, 0, header, false);
             Contents.DrawImage(0, 40, sidebar, false);
@@ -115,14 +113,16 @@ namespace GoOS.GUI.Apps.Gosplorer
             Contents.DrawImage(10, 70, drive_locked);
             Contents.DrawImage(10, 95, ideIconSmall);
 
-            AddressBar.Render();
-            BackButton.Render();
-            ForwardButton.Render();
-            UpButton.Render();
-            RefreshButton.Render();
+            //AddressBar.Render();
+            //BackButton.Render();
+            //ForwardButton.Render();
+            //UpButton.Render();
+            //RefreshButton.Render();
 
-            foreach (Button i in Shortcuts) i.Render();
-            foreach (Button i in FolderContents) if (i != null) i.Render();
+            //foreach (Button i in Shortcuts) i.Render();
+            //foreach (Button i in FolderContents) if (i != null) i.Render();
+            
+            base.Render();
         }
 
         private Button GetButtonUnderMouse()

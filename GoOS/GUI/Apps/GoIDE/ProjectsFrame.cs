@@ -64,11 +64,7 @@ namespace GoOS.GUI.Apps.GoIDE
                 Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40),
                     Convert.ToUInt16(Contents.Width - 4), 38, 0, Color.DeepGray);
                 Contents.DrawString(10, 10, "All projects", Font_2x, Color.White);
-                foreach (Button i in RecentProjectsButtons) i.Render();
-                DeleteButton.Render();
-                ImportButton.Render();
-                LoadExistingButton.Render();
-                CreateNewButton.Render();
+                base.Render();
             }
             catch
             {
@@ -81,11 +77,11 @@ namespace GoOS.GUI.Apps.GoIDE
             {
                 File.Delete(@"0:\content\prf\GoIDE\Projects\" + i);
                 Dispose();
-                WindowManager.AddWindow(new ProjectsFrame());
+                Kernel.ProcessScheduler.AddProcess(new ProjectsFrame());
             }
             else
             {
-                WindowManager.AddWindow(new IDEFrame(i.Remove(i.LastIndexOf(".")),
+                Kernel.ProcessScheduler.AddProcess(new IDEFrame(i.Remove(i.LastIndexOf(".")),
                     @"0:\content\prf\GoIDE\Projects\" + i, i.EndsWith(".9xc")));
                 Dispose();
             }
@@ -93,19 +89,19 @@ namespace GoOS.GUI.Apps.GoIDE
 
         private void ImportButton_Click()
         {
-            WindowManager.AddWindow(new ImportProjectFrame());
+            Kernel.ProcessScheduler.AddProcess(new ImportProjectFrame());
             Dispose();
         }
 
         private void LoadExistingButton_Click()
         {
-            WindowManager.AddWindow(new LoadProjectFrame());
+            Kernel.ProcessScheduler.AddProcess(new LoadProjectFrame());
             Dispose();
         }
 
         private void CreateNewButton_Click()
         {
-            WindowManager.AddWindow(new NewProjectFrame());
+            Kernel.ProcessScheduler.AddProcess(new NewProjectFrame());
             Dispose();
         }
 

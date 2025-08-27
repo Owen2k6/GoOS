@@ -40,8 +40,6 @@ namespace GoOS.GUI.Apps
             Contents.DrawImage(0, 0, background, false);
             SetDock(WindowDock.None);
 
-            Contents.DrawString(10, 20, "GoOS v1.6", Resources.Charcoal, Color.White, Shadow: true);
-
             if (Kernel.BuildType != "R")
             {
                 if (Kernel.BuildType == "NIFPR")

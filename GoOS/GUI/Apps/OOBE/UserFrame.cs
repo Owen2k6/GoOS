@@ -30,9 +30,8 @@ namespace GoOS.GUI.Apps.OOBE
             Contents.DrawString(20, 246,
                 "Please keep in mind that this can not be changed later. \nWe plan on adding this feature in the future.",
                 Font_1x, Color.White);
-            UserName.Render();
-            ComputerName.Render();
-            NextButton.Render();
+            
+            base.Render();
         }
 
         private void NextButton_Click()
@@ -64,7 +63,7 @@ namespace GoOS.GUI.Apps.OOBE
             string computername = ComputerName.Text.Replace(" ", "_");
             
             // Continue.
-            WindowManager.AddWindow(new ActivationFrame(username, computername));
+            Kernel.ProcessScheduler.AddProcess(new ActivationFrame(username, computername));
             Dispose();
         }
     }

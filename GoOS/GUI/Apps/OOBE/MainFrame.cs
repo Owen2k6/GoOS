@@ -16,13 +16,14 @@ namespace GoOS.GUI.Apps.OOBE
 
             // Paint the window.
             Contents.DrawImage(0, 0, OOBEmain, false);
-            NextButton.Render();
+            
+            base.Render();
         }
 
         private void NextButton_Click()
         {
             // Continue.
-            WindowManager.AddWindow(new TermsFrame());
+            Kernel.ProcessScheduler.AddProcess(new TermsFrame());
             Dispose();
         }
     }

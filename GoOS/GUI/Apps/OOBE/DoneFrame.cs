@@ -19,7 +19,8 @@ namespace GoOS.GUI.Apps.OOBE
             Contents.DrawImage(0, 0, OOBEblank, false);
             Contents.DrawString(20, 5, "Welcome to GoOS.", Font_2x, Color.White);
             Contents.DrawString(20, 40, "We just need to restart the system in order to apply settings and load the OS fully!\nOnce you've restarted, You will be welcomed to the GoOS Desktop!", Font_1x, Color.White);
-            RestartButton.Render();
+            
+            base.Render();
         }
 
         private void RestartButton_Click()

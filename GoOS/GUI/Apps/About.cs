@@ -16,6 +16,8 @@ namespace GoOS.GUI.Apps
             Contents.DrawString(10, 176, "GoCode " + GoCode.GoCode.Version, Resources.Font_1x, Color.White);
             Contents.DrawString(10, 188, "9xCode " + Interpreter.Version, Resources.Font_1x, Color.White);
             Contents.DrawString(10, 200, "Giff " + Giff.Giff.Version, Resources.Font_1x, Color.White);
+            
+            base.Render();
         }
     }
 }

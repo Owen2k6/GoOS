@@ -23,10 +23,15 @@ public class Frame : Window
         SetDock(WindowDock.Auto);
         // Paint the window.
         ReDraw();
-        foreach (Control control in Controls)
-        {
-            control.Render();
-        }
+        //foreach (Control control in Controls)
+        //{
+        //    control.Render();
+        //}
+    }
+
+    internal override void Render()
+    {
+        ReDraw();
     }
 
     public void ReDraw()
@@ -36,12 +41,8 @@ public class Frame : Window
         sButtons.Clear();
         Draw();
         AddSideButtons();
-        foreach (Control control in Controls)
-        {
-            control.Render();
-        }
     }
-
+    
     public void Draw()
     {
         Contents.DrawImage(0, 0, Resources.SBG, false);
@@ -600,15 +601,13 @@ public class Frame : Window
                                     new byte[] { 13 });
                             }
                         };
-                        foreach (Control control in Controls)
-                        {
-                            control.Render();
-                        }
                     }
                 };
 
                 break;
         }
+        
+        base.Render();
     }
 
     public void DrawSideBar(string name, int ID, Action clickedAction)
@@ -625,6 +624,8 @@ public class Frame : Window
                 //BackgroundColour = new Color(0, 0, 0, 0)
                 //Image = Resources.SBGBS
             });
+            
+            base.Render();
         }
         else
         {
@@ -635,6 +636,8 @@ public class Frame : Window
                 RenderWithAlpha = true,
                 //BackgroundColour = new Color(0, 0, 0, 0)
             });
+            
+            base.Render();
         }
     }
 
@@ -651,10 +654,8 @@ public class Frame : Window
             Image = Resources.SBBB
         };
         Contents.DrawString(33, 6, Name, Resources.Font_1x, Color.White);
-        foreach (Control control in Controls)
-        {
-            control.Render();
-        }
+        
+        base.Render();
     }
 
     private void AddSideButtons()

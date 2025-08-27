@@ -21,7 +21,7 @@ public class GoVM : Window
         Contents.Clear(Color.White);
         //RenderSystemStyleBorder();
         
-        ChaOS_VM_b.Render();
+        base.Render();
     }
 
     private void ChaOS_VM_b_Click()
@@ -29,7 +29,7 @@ public class GoVM : Window
         if (oig)
         {
             oig = false;
-            WindowManager.AddWindow(new ChaOS_VM());
+            Kernel.ProcessScheduler.AddProcess(new ChaOS_VM());
         }
     }
 }
@@ -54,6 +54,8 @@ public class ChaOS_VM : Window
             SetDock(WindowDock.Auto);
 
             Commands.VM.Run("chaos");
+            
+            base.Render();
         }
         catch (Exception eee)
         {

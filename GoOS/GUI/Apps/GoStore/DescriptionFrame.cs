@@ -72,7 +72,6 @@ namespace GoOS.GUI.Apps.GoStore
 
         internal override void Render()
         {
-            base.Render();
             Controls.Remove(OpenButton);
             Controls.Remove(InstallButton);
 
@@ -123,9 +122,8 @@ namespace GoOS.GUI.Apps.GoStore
 
                 Contents.DrawImage(InstallButton.X, InstallButton.Y, GoStoreButtonGreen);
             }
-
-            OpenButton.Render();
-            InstallButton.Render();
+            
+            base.Render();
         }
 
         private void InstallButton_Click()
@@ -219,14 +217,14 @@ namespace GoOS.GUI.Apps.GoStore
             else
             {
                 Terminal.GoTerminal term = new Terminal.GoTerminal();
-                WindowManager.AddWindow(term);
+                Kernel.ProcessScheduler.AddProcess(term);
 
                 if (!App.Filename.EndsWith(".9xc"))
                     Run.Main(term.term._shell, @"0:\go\" + App.Filename, false);
                 else
                     _9xCode.Interpreter.Run(term.term._shell, @"0:\go\" + App.Filename);
 
-                WindowManager.Windows.Remove(term);
+                term.Dispose();
             }
         }
     }

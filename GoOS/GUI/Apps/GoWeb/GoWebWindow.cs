@@ -33,14 +33,14 @@ namespace GoOS.GUI.Apps.GoWeb
             Contents.DrawImage(0, 0, GoWebResources.toolbarBackground, false);
 
             AddressBar = new Input(this, 44, 16, (ushort)(Contents.Width - 158), 20, "Enter Web address");
-            AddressBar.Render();
+            //AddressBar.Render();
 
             HomeButton = new Button(this, 16, 16, 20, 20, string.Empty)
             {
                 Image = GoWebResources.home,
                 Clicked = Home_Click
             };
-            HomeButton.Render();
+            //HomeButton.Render();
 
             GoButton = new Button(this, (ushort)(AddressBar.X + AddressBar.Contents.Width + 8), 16, 20, 20,
                 string.Empty)
@@ -48,9 +48,11 @@ namespace GoOS.GUI.Apps.GoWeb
                 Image = GoWebResources.go,
                 Clicked = Go_Click
             };
-            GoButton.Render();
+            //GoButton.Render();
 
             Goto(HOMEPAGE);
+            
+            base.Render();
         }
 
         void DisplayStatus(string message)
@@ -73,7 +75,7 @@ namespace GoOS.GUI.Apps.GoWeb
             Contents.DrawString(boxX + 70, boxY + (boxH - Resources.Font_1x.GetHeight()) / 2, message,
                 Resources.Font_1x, Color.Black);
 
-            WindowManager.Render();
+            base.Render();
         }
 
         void Goto(Uri uri)

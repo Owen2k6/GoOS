@@ -57,19 +57,12 @@ public class Notepad : Window
 
         Contents.Clear(Color.LightGray);
 
-        SaveButton.Render();
-        CopyButton.Render();
-        PasteButton.Render();
-        //AttemptOne.Render();
-
         if (openFile)
         {
             LoadFile(fileToOpen);
         }
-        else
-        {
-            AttemptOne.Render();
-        }
+        
+        base.Render();
     }
 
     private void LoadFile(string filefile)
@@ -84,7 +77,7 @@ public class Notepad : Window
             
             AttemptOne.Text = toreturn;
 
-            AttemptOne.Render();
+            base.Render();
         }
         else
         {
@@ -97,7 +90,7 @@ public class Notepad : Window
 
             AttemptOne.Text = toreturn;
 
-            AttemptOne.Render();
+            base.Render();
         }
     }
 
@@ -111,12 +104,12 @@ public class Notepad : Window
 
         if (punchyouintheface.Contains("YwB49Aqwtew1XeHJk0+rrEDtRq7Y6kfF5zGV9sKNe6w="))
         {
-            WindowManager.AddWindow(new Cut());
+            Kernel.ProcessScheduler.AddProcess(new Cut());
         }
 
         if (!gms)
         {
-            WindowManager.AddWindow(new NotepadSaveAs(infi, shittosave));
+            Kernel.ProcessScheduler.AddProcess(new NotepadSaveAs(infi, shittosave));
         }
     }
 
@@ -183,6 +176,8 @@ public class NotepadSaveAs : Window
         //AttemptOne.Render();
 
         /*AttemptOne.Text = placetheholderofthetextplease;*/
+        
+        base.Render();
     }
 
     private void SaveClick()

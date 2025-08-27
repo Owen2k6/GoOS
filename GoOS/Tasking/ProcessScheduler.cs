@@ -9,11 +9,11 @@ namespace GoOS.Tasking;
 
 internal class ProcessScheduler
 {
-    internal int IPS { get; private set; } = 0; // Iterations Per Second, how fast the backend (processes) are running.
+    //internal int IPS { get; private set; } = 0; // Iterations Per Second, how fast the backend (processes) are running.
     
-    private int _iterations = 0; // For IPS timer
-    
-    public int Iterations { get; private set; } = 0; // For "public" usage
+    //private int _iterations = 0;
+
+    internal int LastSecond = -1;
     
     internal List<Process> Processes = new List<Process>();
     
@@ -23,13 +23,11 @@ internal class ProcessScheduler
 
     internal ProcessScheduler()
     {
-        Timer T = new((_) =>
+        /*Timer T = new(_ =>
         {
-            IPS = _iterations * 2;
+            IPS = _iterations;
             _iterations = 0;
-        }, null, 500, 0);
-        
-        Timer t = new((_) => Iterations = 0, null, 1000, 0);
+        }, null, 1000, 0);*/
     }
 
     internal Process AddProcess(Process process)
@@ -180,8 +178,9 @@ internal class ProcessScheduler
             if (ProcessIndex >= Processes.Count)
                 ProcessIndex = 0;
         }
-
-        Iterations++;
-        _iterations++;
+        
+        //_iterations++;
+        
+        LastSecond = RTC.Second;
     }
 }

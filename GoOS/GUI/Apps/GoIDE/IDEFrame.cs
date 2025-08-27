@@ -12,6 +12,7 @@ namespace GoOS.GUI.Apps.GoIDE
         Button RunButton;
         InputNUMBERS Code;
 
+        private string status = "Loading";
         string ProjectPath;
         bool Is9xCode;
 
@@ -45,13 +46,21 @@ namespace GoOS.GUI.Apps.GoIDE
 
         void Paint(string status)
         {
+            this.status = status;
+            Render();
+        }
+
+        internal override void Render()
+        {
             Contents.Clear(Color.LightGray);
             //RenderSystemStyleBorder();
             Contents.DrawImage(Contents.Width - 62, 0, RunImage);
-            SaveButton.Render();
-            RunButton.Render();
-            Code.Render();
+            //SaveButton.Render();
+            //RunButton.Render();
+            //Code.Render();
             Contents.DrawString(4, Contents.Height - 20, status, Font_1x, Color.LighterBlack);
+            
+            base.Render();
         }
 
         bool Debugging = false;

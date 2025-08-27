@@ -14,6 +14,8 @@ namespace GoOS.GUI.Apps
             Contents.Clear(Color.LightGray);
             Title = Name;
             SetDock(WindowDock.Center);
+            
+            base.Render();
         }
         
         public static void AddString(Window me, string Text, int X, int Y)

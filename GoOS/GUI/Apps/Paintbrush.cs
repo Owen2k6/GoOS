@@ -61,7 +61,9 @@ namespace GoOS.GUI.Apps
 
             Dialog_TextBox = new Input(sizeDialogue, 80, 52, 195, 20, "800x600");
 
-            WindowManager.AddWindow(sizeDialogue);
+            Kernel.ProcessScheduler.AddProcess(sizeDialogue);
+            
+            base.Render();
         }
 
         private void Size_Handler()
@@ -144,7 +146,7 @@ namespace GoOS.GUI.Apps
 
             Dialog_TextBox = new Input(pencilDialogue, 80, 52, 187, 20, BrushSize.ToString());
 
-            WindowManager.AddWindow(pencilDialogue);
+            Kernel.ProcessScheduler.AddProcess(pencilDialogue);
         }
 
         private void Pencil_Handler()
@@ -270,7 +272,7 @@ namespace GoOS.GUI.Apps
 
                         Dialog_TextBox = new Input(pencilDialogue, 80, 52, 187, 20, string.Empty);
 
-                        WindowManager.AddWindow(pencilDialogue);
+                        Kernel.ProcessScheduler.AddProcess(pencilDialogue);
                         break;
                 }
             }
@@ -278,27 +280,16 @@ namespace GoOS.GUI.Apps
             if (IsOverColorTable)
                 SelectedColor = Contents[(int)MouseManager.X - X - 1, (int)MouseManager.Y - Y - 19];
 
-            RenderButtons();
+            base.Render();
         }
 
         private void RenderPanel()
         {
             Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 52), Convert.ToUInt16(Contents.Width - 4), 50, 0, Color.DeepGray);
             Contents.DrawImage(54, Convert.ToUInt16(Contents.Height - 42), colorTable, false);
-            RenderButtons();
             //RenderSystemStyleBorder();
-        }
-
-        private void RenderButtons()
-        {
-            AboutButton.Pressed = false;
-            AboutButton.Render();
-
-            foreach (var util in Utilities)
-            {
-                util.Pressed = false;
-                util.Render();
-            }
+            
+            base.Render();
         }
 
         /* Paint utilities */

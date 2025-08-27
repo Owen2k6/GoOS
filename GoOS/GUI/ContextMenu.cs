@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using Cosmos.System;
 using Gold.Graphics;
 
@@ -8,6 +9,8 @@ namespace GoOS.GUI
     {
         public string[] Items;
         public Action<string> Handle;
+        private bool _pressed = false;
+        private int _pressedIndex = -1;
 
         // State: ignore the first Left->None transition (the opener)
         //private bool suppressNextOutsideRelease = true;
@@ -35,7 +38,7 @@ namespace GoOS.GUI
         {
             Items = items;
             //WindowManager.MouseMove = MouseMove;
-            
+
             //Visible = true;
             //Closable = false;
             //HasTitlebar = false;
@@ -67,22 +70,52 @@ namespace GoOS.GUI
         {
             Contents.Clear(Color.LightGray);
             for (int i = 0; i < Items.Length; i++)
-                Contents.DrawString(0, i * 16, Items[i], Resources.Font_1x, Color.White);
-            
+            {
+                if (i == _pressedIndex)
+                    Contents.DrawString(1, i * 16 + 1, Items[i], Resources.Font_1x, Color.White);
+                else
+                    Contents.DrawString(0, i * 16, Items[i], Resources.Font_1x, Color.White, false, true);
+            }
+
             base.Render();
         }
 
         internal override void HandleRun()
-        { //Kernel.ProcessScheduler.Iterations >= Kernel.ProcessScheduler.IPS / 2
-            if (MouseManager.MouseState == MouseState.Left)
+        {
+            if (IsMouseOver())
             {
-                if (IsMouseOver())
-                {
-                    int index = (int)((MouseManager.Y - Y) / 16); // cast long->int
-                    if (index >= 0 && index < Items.Length)
-                        Handle?.Invoke(Items[index]);
+                if (_pressed) {
+                    _pressedIndex = (int)((MouseManager.Y - Y) / 16);
                 }
-                else Dispose();
+                
+                if (MouseManager.MouseState == MouseState.Left && !_pressed)
+                {
+                    _pressed = true;
+                }
+
+                if (MouseManager.MouseState == MouseState.None && _pressed)
+                {
+                    if (_pressedIndex >= 0 && _pressedIndex < Items.Length)
+                    {
+                        Handle?.Invoke(Items[_pressedIndex]);
+                        Dispose();
+                    }
+
+                    _pressed = false;
+                    _pressedIndex = -1;
+                }
+            }
+            else 
+            {
+                if (MouseManager.MouseState == MouseState.None && _pressed)
+                {
+                    _pressed = false;
+                    _pressedIndex = -1;
+                }
+                
+                if (MouseManager.MouseState == MouseState.Left)
+                    Dispose();
+                
             }
         }
 

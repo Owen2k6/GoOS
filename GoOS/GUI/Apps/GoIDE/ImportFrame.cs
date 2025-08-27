@@ -33,9 +33,12 @@ namespace GoOS.GUI.Apps.GoIDE
                 Contents.DrawString(10, 10, "Import project", Resources.Font_2x, Color.White);
                 Contents.DrawString(10, 52, "Location: ", Resources.Font_1x, Color.White);
                 Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4), 38, 0, Color.DeepGray);
-                ImportButton.Render();
-                CancelButton.Render();
-                ScriptLocation.Render();
+                //ImportButton.Render();
+                //CancelButton.Render();
+                //ScriptLocation.Render();
+                
+                base.Render();
+                WindowManager.Render();
             }
             catch
             {
@@ -57,13 +60,13 @@ namespace GoOS.GUI.Apps.GoIDE
 
             File.WriteAllBytes(@"0:\content\prf\GoIDE\Projects\" + name, File.ReadAllBytes(location));
 
-            WindowManager.AddWindow(new ProjectsFrame());
+            Kernel.ProcessScheduler.AddProcess(new ProjectsFrame());
             Dispose();
         }
 
         void CancelButton_Click()
         {
-            WindowManager.AddWindow(new ProjectsFrame());
+            Kernel.ProcessScheduler.AddProcess(new ProjectsFrame());
             Dispose();
         }
     }

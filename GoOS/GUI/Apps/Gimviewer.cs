@@ -14,6 +14,8 @@ public class Gimviewer : Window
         Height = gim.Height;
         Contents = gim;
         Title = "Gimviewer! Currently viewing: "+aeiou;
+        
+        base.Render();
     }
 
     public void ProcessImg(byte[] image, int type)

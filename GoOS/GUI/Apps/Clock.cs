@@ -1,4 +1,5 @@
 ﻿using System;
+using Cosmos.HAL;
 using Gold.Graphics;
 using static GoOS.Resources;
 
@@ -22,6 +23,7 @@ namespace GoOS.GUI.Apps
             Contents = new Canvas(192, 192);
             Title = "Clock";
             SetDock(WindowDock.Auto);
+            Render();
         }
 
         private void RenderHand(int originX, int originY, int handLength, double radians, Color color)
@@ -83,13 +85,10 @@ namespace GoOS.GUI.Apps
 
         internal override void HandleRun()
         {
-            base.HandleRun();
-
-            if (Cosmos.HAL.RTC.Second != lastSecond)
-            {
-                lastSecond = Cosmos.HAL.RTC.Second;
+            if (Kernel.ProcessScheduler.LastSecond != RTC.Second)
                 Render();
-            }
+            
+            base.HandleRun();
         }
 
         public override void ShowContextMenu()

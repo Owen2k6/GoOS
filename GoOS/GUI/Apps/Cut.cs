@@ -12,5 +12,7 @@ public class Cut : Window
         Contents.Clear(Color.White);
         
         Contents.DrawImage(0, 0, cutIcon);
+        
+        base.Render();
     }
 }

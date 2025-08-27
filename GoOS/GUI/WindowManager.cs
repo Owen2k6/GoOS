@@ -6,19 +6,20 @@ using Gold.Hardware.GPU;
 using Cosmos.HAL;
 using GoOS.Tasking;
 using System.IO;
+using System.Threading;
 
 namespace GoOS.GUI
 {
     internal sealed class WindowManager : Process
     {
-        private static int _framesToHeapCollect = 20;
-
         internal static List<Window> Windows = new List<Window>();
         internal static List<Window> SpecialWindows = new List<Window>();
 
         internal static Display Screen = null;
 
         internal static WindowManager Instance;
+
+        private static int _renderedAt = -1;
 
         internal WindowManager(Display screen = null) : base(nameof(WindowManager))
         {
@@ -104,13 +105,13 @@ namespace GoOS.GUI
 
                 if (w.Borderless) continue;
 
-                Screen.DrawLine(w.X + 2, w.Y + (w.Minimized ? 22 : w.Height), w.X + w.Width + 1,
-                    w.Y + (w.Minimized ? 22 : w.Height), Color.Black);
-                Screen.DrawLine(w.X + w.Width, w.Y + 2, w.X + w.Width, w.Y + (w.Minimized ? 22 : w.Height) + 1,
+                Screen.DrawLine(w.X + 2, w.Y + w.Height, w.X + w.Width + 1,
+                    w.Y + w.Height, Color.Black);
+                Screen.DrawLine(w.X + w.Width, w.Y + 2, w.X + w.Width, w.Y + w.Height + 1,
                     Color.Black);
             }
 
-            Screen.DrawString(10, 20, "GoOS v1.6", Resources.Charcoal, Color.White, Shadow: true);
+            /*Screen.DrawString(10, 20, "GoOS v1.6", Resources.Charcoal, Color.White, Shadow: true);
             Screen.DrawString(10, 36, Screen.GetFPS() + " FPS", Resources.Charcoal, Color.White, Shadow: true);
             Screen.DrawString(10, 52, Kernel.ProcessScheduler.IPS + " IPS", Resources.Charcoal, Color.White, Shadow: true);
 
@@ -124,7 +125,7 @@ namespace GoOS.GUI
             Screen.DrawString(200, 88, "Window list:", Resources.Charcoal, Color.White, Shadow: true);
             for (int i = 0; i < Windows.Count; i++)
                 Screen.DrawString(200, 114 + (i * 16), Windows[i].PID + " (" + Windows[i].Name + ")",
-                    Resources.Charcoal, Color.White, Shadow: true);
+                    Resources.Charcoal, Color.White, Shadow: true);*/
 
             foreach (Window w in Windows)
             {
@@ -156,23 +157,15 @@ namespace GoOS.GUI
 
             Screen.Update();
 
-            if (_framesToHeapCollect <= 0)
-            {
-                Heap.Collect();
-                _framesToHeapCollect = 20;
-            }
-
-            _framesToHeapCollect--;
+            _renderedAt = RTC.Second;
         }
 
         internal override void HandleRun()
         {
-            if (Kernel.ProcessScheduler.Iterations / Kernel.ProcessScheduler.IPS >= 1)
+            if (_renderedAt != RTC.Second)
                 Render();
-
-            // Rendering the mouse technically counts as rendering a frame.
-            // Since we don't need to copy the framebuffer for rendering the
-            // mouse, just increase the FPS counter by one.
+                
+            
             Screen.SetCursor(MouseManager.X, MouseManager.Y, true);
         }
     }
