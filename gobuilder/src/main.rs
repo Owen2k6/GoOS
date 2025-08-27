@@ -12,16 +12,18 @@ fn main() -> std::io::Result<()> {
     // Set up variables
     let mut build_kernel = true;
     let mut build_image = true;
+    let mut build_run = false;
     let mut build_debug = true;
     let mut build_clean = false;
     let cores = thread::available_parallelism().expect("REASON").get();
+    let version = "2.0-internal-test";
 
     #[cfg(target_arch = "x86")]
     let mut build_arch = "i386";
     #[cfg(target_arch = "x86_64")]
     let mut build_arch = "x86_64";
     #[cfg(target_arch = "aarch64")]
-    let mut build_arch = "arm64";
+    let mut build_arch = "aarch64";
 
     // Command line arguments
     let args: Vec<String> = env::args().collect();
@@ -31,9 +33,10 @@ fn main() -> std::io::Result<()> {
             "--no-kernel" => build_kernel = false, // Disables compiling the kernel
             "--x86" => build_arch = "i386", // Compiles the OS for x86 systems
             "--amd64" => build_arch = "x86_64", // Compiles the OS for amd64/x86_64 systems
-            "--arm64" => build_arch = "arm64", // Compiles the OS for arm64 systems
+            "--arm64" => build_arch = "aarch64", // Compiles the OS for arm64 systems
             "--all" => build_arch = "all", // Compiles the OS for all supported architectures (useful for releases)
             "--no-image" => build_image = false, // Disables building an image
+            "--run" => build_run = true,
             "--release" => build_debug = false, // Compiles the OS with release
             "--clean" => build_clean = true, // Just cleans
             _ => {} // "default"
@@ -41,7 +44,7 @@ fn main() -> std::io::Result<()> {
     }
  
     match build_arch {
-        "i386"|"x86_64"|"arm64"|"all" => {},
+        "i386"|"x86_64"|"aarch64"|"all" => {},
         _ => {
             eprintln!("Error: Unsupported architecture! Must be x86, amd64, arm64, or all.");
             eprintln!("You may report your architecture to the GoOS devs over at Owen2k6 network, and we may consider support for your architecture.");
@@ -51,7 +54,7 @@ fn main() -> std::io::Result<()> {
 
     let rust_target = match build_arch {
         "x86_64" => "x86_64-unknown-linux-gnu",
-        "arm64" => "aarch64-unknown-linux-gnu",
+        "aarch64" => "aarch64-unknown-linux-gnu",
         "i386" => "i686-unknown-linux-gnu",
         /*"powerpc" => "powerpc-unknown-linux-gnu",*/
         _ => "fucking hell mate"
@@ -162,7 +165,7 @@ fn main() -> std::io::Result<()> {
 
                 let status = Command::new("make")
                     .args(&[
-                        &format!("ARCH={}", build_arch),
+                        &format!("ARCH={}", if build_arch == "aarch64" { "arm64" } else { build_arch }),
                         "LLVM=1",
                         &format!("-j{}", cores)
                     ])
@@ -239,11 +242,73 @@ fn main() -> std::io::Result<()> {
         }
     }
 
-    if build_image {
+    do_initramfs(build_arch)?;
 
+    if build_image {
+        do_image(build_arch, version)?;
     }
 
     println!("Done! Total time elapsed: {:?}", total_timer.elapsed());
+
+    if build_run {
+        println!("Running via QEMU...");
+
+        let status = Command::new(format!("qemu-system-{}", build_arch))
+            .args(&[
+                "-cdrom",
+                &format!("./out/{}/GoOS-{}-{}.iso", build_arch, version, build_arch),
+                "-m",
+                "512M" // increase as needed
+            ])
+            .status()?;
+
+        if !status.success() {
+            eprintln!("Failed while running!");
+            std::process::exit(1);
+        }
+    }
+
+    Ok(())
+}
+
+fn do_image(build_arch: &str, version: &str) -> std::io::Result<()> {
+    let timer = Instant::now();
+    println!("Building bootable image...");
+
+    let status = Command::new("grub-mkrescue")
+        .args(&[
+            "-o",
+            &format!("./out/{}/GoOS-{}-{}.iso", build_arch, version, build_arch),
+            &format!("./out/{}/image", build_arch)
+        ])
+        .status()?;
+
+    if !status.success() {
+        eprintln!("Failed to create bootable image!");
+        std::process::exit(1);
+    }
+
+    println!("Done building bootable image, took {:?}", timer.elapsed());
+
+    Ok(())
+}
+
+fn do_initramfs(build_arch: &str) -> std::io::Result<()> {
+    let timer = Instant::now();
+    println!("Building initramfs...");
+
+    let status = Command::new("sh")
+        .args(&["-c", "find . -print0 | cpio -o -H newc -0 | gzip -9 > boot/initramfs.img"])
+        .current_dir(format!("./out/{}/image", build_arch))
+        .status()?;
+
+    if !status.success() {
+        eprintln!("Failed to create initramfs!");
+        std::process::exit(1);
+    }
+
+    println!("Done building initramfs, took {:?}", timer.elapsed());
+
     Ok(())
 }
 

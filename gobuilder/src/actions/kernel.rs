@@ -1,6 +1,6 @@
 use std::fs;
 
-pub(crate) fn kernel_actions(build_arch: &str, build_debug: bool) {
+pub(crate) fn kernel_actions(build_arch: &str, _build_debug: bool) {
     println!("Creating ./out/{}/image/boot", build_arch);
     if let Err(e) = fs::create_dir_all(format!("out/{}/image/boot", build_arch)) {
         eprintln!("Failed to create {:?}: {}", format!("./out/{}/image/boot", build_arch), e);
@@ -9,7 +9,7 @@ pub(crate) fn kernel_actions(build_arch: &str, build_debug: bool) {
 
     let kernel_location = match build_arch {
         "x86_64" | "i386" => "kernel/arch/x86/boot/bzImage",
-        "arm64" => "kernel/arch/arm64/boot/Image",
+        "aarch64" => "kernel/arch/arm64/boot/Image",
         _ => "architecture_not_supported"// handle other cases
     };
 
