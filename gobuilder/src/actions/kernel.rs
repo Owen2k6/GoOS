@@ -1,6 +1,6 @@
 use std::fs;
 
-pub(crate) fn kernel_actions(build_arch: &str, _build_debug: bool) {
+pub(crate) fn kernel_actions(build_arch: &str, _rust_build: &str, _build_debug: bool) {
     println!("Creating ./out/{}/image/boot", build_arch);
     if let Err(e) = fs::create_dir_all(format!("out/{}/image/boot", build_arch)) {
         eprintln!("Failed to create {:?}: {}", format!("./out/{}/image/boot", build_arch), e);

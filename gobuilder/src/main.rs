@@ -52,11 +52,11 @@ fn main() -> std::io::Result<()> {
         }
     }
 
-    let rust_target = match build_arch {
-        "x86_64" => "x86_64-unknown-linux-gnu",
-        "aarch64" => "aarch64-unknown-linux-gnu",
-        "i386" => "i686-unknown-linux-gnu",
-        /*"powerpc" => "powerpc-unknown-linux-gnu",*/
+    let rust_target_table = match build_arch {
+        "x86_64" => "x86_64-unknown-linux-",
+        "aarch64" => "aarch64-unknown-linux-",
+        "i386" => "i686-unknown-linux-",
+        /*"powerpc" => "powerpc-unknown-linux-",*/
         _ => "fucking hell mate"
     };
 
@@ -122,6 +122,8 @@ fn main() -> std::io::Result<()> {
                 }
             }
         }
+
+        std::process::exit(0);
     }
 
     // Remake out, the arch folder, and the ISO Image before being iso-ed folder in one go
@@ -178,7 +180,7 @@ fn main() -> std::io::Result<()> {
                 }
 
                 match project.post_build {
-                    Some(f) => { f(build_arch, build_debug); println!("Ran post-build action for project {} ", &project.name); },
+                    Some(f) => { f(build_arch, "", build_debug); println!("Ran post-build action for project {} ", &project.name); },
                     None => println!("No post-build action for project {}, continuing", &project.name)
                 }
 
@@ -193,6 +195,8 @@ fn main() -> std::io::Result<()> {
                 if !completed_builds.contains(dependency) {
                     continue 'rust_projects;
                 }
+
+                let rust_target = &(rust_target_table.to_owned() + if project.name == "init" { "musl" } else { "gnu" });
 
                 if !completed_builds.contains(&project.name)
                 {
@@ -230,7 +234,7 @@ fn main() -> std::io::Result<()> {
                     }
 
                     match project.post_build {
-                        Some(f) => { f(build_arch, build_debug); println!("Ran post-build action for project {} ", &project.name); },
+                        Some(f) => { f(build_arch, rust_target, build_debug); println!("Ran post-build action for project {} ", &project.name); },
                         None => println!("No post-build action for project {}, continuing", &project.name)
                     }
 
@@ -245,7 +249,7 @@ fn main() -> std::io::Result<()> {
     do_initramfs(build_arch)?;
 
     if build_image {
-        do_image(build_arch, version)?;
+        do_image(build_arch, version, build_debug)?;
     }
 
     println!("Done! Total time elapsed: {:?}", total_timer.elapsed());
@@ -256,9 +260,11 @@ fn main() -> std::io::Result<()> {
         let status = Command::new(format!("qemu-system-{}", build_arch))
             .args(&[
                 "-cdrom",
-                &format!("./out/{}/GoOS-{}-{}.iso", build_arch, version, build_arch),
+                &format!("./out/{}/GoOS-{}-{}{}.iso", build_arch, version, build_arch, if build_debug { "-debug" } else { "" }),
                 "-m",
-                "512M" // increase as needed
+                "512M", // increase as needed
+                if build_debug { "-serial" } else { "" },
+                if build_debug { "stdio" } else { "" }
             ])
             .status()?;
 
@@ -271,14 +277,14 @@ fn main() -> std::io::Result<()> {
     Ok(())
 }
 
-fn do_image(build_arch: &str, version: &str) -> std::io::Result<()> {
+fn do_image(build_arch: &str, version: &str, build_debug: bool) -> std::io::Result<()> {
     let timer = Instant::now();
     println!("Building bootable image...");
 
     let status = Command::new("grub-mkrescue")
         .args(&[
             "-o",
-            &format!("./out/{}/GoOS-{}-{}.iso", build_arch, version, build_arch),
+            &format!("./out/{}/GoOS-{}-{}{}.iso", build_arch, version, build_arch, if build_debug { "-debug" } else { "" }),
             &format!("./out/{}/image", build_arch)
         ])
         .status()?;
@@ -298,12 +304,18 @@ fn do_initramfs(build_arch: &str) -> std::io::Result<()> {
     println!("Building initramfs...");
 
     let status = Command::new("sh")
-        .args(&["-c", "find . -print0 | cpio -o -H newc -0 | gzip -9 > boot/initramfs.img"])
+        .args(&["-c", "find . -print0 | cpio -o -H newc -0 | gzip -9 > ../initramfs.img"])
         .current_dir(format!("./out/{}/image", build_arch))
         .status()?;
 
     if !status.success() {
         eprintln!("Failed to create initramfs!");
+        std::process::exit(1);
+    }
+
+    println!("Moving ./out/{}/initramfs.img to ./out/{}/image/boot/initramfs.img", build_arch, build_arch);
+    if let Err(e) = fs::rename(format!("out/{}/initramfs.img", build_arch), format!("out/{}/image/boot/initramfs.img", build_arch)) {
+        eprintln!("Failed to move {:?}: {}", format!("./out/{}/initramfs.img", build_arch), e);
         std::process::exit(1);
     }
 
