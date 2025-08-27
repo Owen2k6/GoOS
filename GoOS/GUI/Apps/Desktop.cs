@@ -1,6 +1,7 @@
 ﻿using Cosmos.Core.Memory;
 using Cosmos.System;
 using Gold.Graphics;
+using GoOS.Tasking;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps
@@ -37,9 +38,9 @@ namespace GoOS.GUI.Apps
             //Contents = new Canvas(WindowManager.Canvas.Width, Convert.ToUInt16(WindowManager.Canvas.Height - 28));
             //Contents.Clear(Kernel.DesktopColour);
             Contents.DrawImage(0, 0, background, false);
-            Title = nameof(Desktop);
             SetDock(WindowDock.None);
 
+            Contents.DrawString(10, 20, "GoOS v1.6", Resources.Charcoal, Color.White, Shadow: true);
 
             if (Kernel.BuildType != "R")
             {
@@ -128,7 +129,33 @@ namespace GoOS.GUI.Apps
 
         internal override void Render()
         {
+            //Contents.DrawImage(0, 0, background, false);
             
+            //Contents.DrawString(200, 46, WindowManager.FPS + " FPS", Resources.Charcoal, Color.White, Shadow: true);
+            
+            // This generates MASSIVE lag spikes; only use if you really need to debug this sort of stuff
+            /*Contents.DrawString(200, 88, "Process list:", Resources.Charcoal, Color.White, Shadow: true);
+            for (int i = 0; i < ProcessScheduler.Processes.Count; i++)
+                Contents.DrawString(150, 114 + (i * 16), ProcessScheduler.Processes[i].PID + " (" + ProcessScheduler.Processes[i].Name + ")",
+                    Resources.Charcoal, Color.White, Shadow: true);
+
+            Contents.DrawString(400, 88, "Window list:", Resources.Charcoal, Color.White, Shadow: true);
+            for (int i = 0; i < WindowManager.Windows.Count; i++)
+                Contents.DrawString(400, 114 + (i * 16), WindowManager.Windows[i].PID + " (" + WindowManager.Windows[i].Name + ")",
+                    Resources.Charcoal, Color.White, Shadow: true);*/
+        }
+        
+        internal override void HandleRun()
+        {
+            Render();
+            
+            foreach (Control c in Controls)
+            {
+                if (c == null) Controls.Remove(c);
+                else c.HandleRun();
+            }
+            
+            if (MouseManager.LastMouseState != MouseManager.MouseState && IsMouseOver()) WindowManager.FocusedWindow = this;
         }
     }
 }

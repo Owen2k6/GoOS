@@ -27,7 +27,7 @@ namespace GoOS.GUI
 
             Kernel.InfoSound();
             var dialogue = new Dialogue(title, message, buttons, icon);
-            WindowManager.AddWindow(dialogue);
+            Kernel.ProcessScheduler.AddProcess(dialogue);
             //WindowManager.Update();
             return dialogue;
         }

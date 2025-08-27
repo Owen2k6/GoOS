@@ -125,7 +125,7 @@ namespace GoOS.GUI.Apps
             switch (item)
             {
                 case " About GoOS ":
-                    WindowManager.AddWindow(new About()); break;
+                    Kernel.ProcessScheduler.AddProcess(new About()); break;
 
                 case " Check for Updates ":
                     CheckForUpdates(); break;
@@ -148,16 +148,16 @@ namespace GoOS.GUI.Apps
                     );
                     break;
 
-                case " Clock App ":          WindowManager.AddWindow(new Clock()); break;
-                case " GoStore ":            WindowManager.AddWindow(new GoStore.MainFrame()); break;
-                case " GoIDE ":              WindowManager.AddWindow(new WelcomeFrame()); break;
-                case " Gosplorer ":          WindowManager.AddWindow(new Gosplorer.MainFrame()); break;
-                case " GoWeb ":              WindowManager.AddWindow(new GoWebWindow()); break;
-                case " Notepad ":            WindowManager.AddWindow(new Notepad(false, null)); break;
-                case " Paint ":              WindowManager.AddWindow(new Paintbrush()); break;
-                case " System Monitor ":     WindowManager.AddWindow(new TaskManager()); break;
-                case " Settings ":           WindowManager.AddWindow(new Frame()); break;
-                case " Terminal ":           WindowManager.AddWindow(new Terminal.GoTerminal()); break;
+                case " Clock App ":          Kernel.ProcessScheduler.AddProcess(new Clock()); break;
+                case " GoStore ":            Kernel.ProcessScheduler.AddProcess(new GoStore.MainFrame()); break;
+                case " GoIDE ":              Kernel.ProcessScheduler.AddProcess(new WelcomeFrame()); break;
+                case " Gosplorer ":          Kernel.ProcessScheduler.AddProcess(new Gosplorer.MainFrame()); break;
+                case " GoWeb ":              Kernel.ProcessScheduler.AddProcess(new GoWebWindow()); break;
+                case " Notepad ":            Kernel.ProcessScheduler.AddProcess(new Notepad(false, null)); break;
+                case " Paint ":              Kernel.ProcessScheduler.AddProcess(new Paintbrush()); break;
+                case " System Monitor ":     Kernel.ProcessScheduler.AddProcess(new TaskManager()); break;
+                case " Settings ":           Kernel.ProcessScheduler.AddProcess(new Frame()); break;
+                case " Terminal ":           Kernel.ProcessScheduler.AddProcess(new Terminal.GoTerminal()); break;
             }
         }
 

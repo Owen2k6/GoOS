@@ -28,9 +28,11 @@ namespace GoOS.GUI.Apps.Terminal
         {
             SetDock(WindowDock.Auto);
             
-            term = new GUI.Terminal(this, 0, 0, (ushort)(Width - 12), (ushort)(Height - 29));
+            term = new GUI.Terminal(this, 0, 0, Width, Height);
 
             Controls.Add(term);
+
+            Render();
         }
         
     }

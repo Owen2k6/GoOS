@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Principal;
 using Cosmos.System;
 using Gold.Graphics;
 using GoOS.Tasking;
@@ -20,6 +21,7 @@ namespace GoOS.GUI
         internal bool Maximized = false;
         internal bool Minimized = false;
 
+        internal Canvas _contents;
         internal Canvas Contents;
         internal List<Control> Controls;
         
@@ -38,10 +40,28 @@ namespace GoOS.GUI
 
         internal bool IsMouseOver() // Empty comments!
         {
+            if (!isMouseOverArea) return false;
+            
             bool toReturn = true;
 
-            int location = WindowManager.Windows.IndexOf(this);
-            
+            int location = 0;
+
+            if (WindowManager.SpecialWindows.Contains(this))
+            {
+                location = WindowManager.SpecialWindows.IndexOf(this);
+
+                // Loop through higher windows and check if mouse is over any of them along with ours
+                for (int i = location + 1; i < WindowManager.SpecialWindows.Count; i++)
+                    // If the mouse is not over a higher window, true.
+                    toReturn = toReturn && !WindowManager.SpecialWindows[i].isMouseOverArea && isMouseOverArea;
+
+                location = -1;
+            }
+            else location = WindowManager.Windows.IndexOf(this);
+
+            if (WindowManager.Windows.Count == 0)
+                return toReturn;
+
             // Loop through higher windows and check if mouse is over any of them along with ours
             for (int i = location + 1; i < WindowManager.Windows.Count; i++) 
                 // If the mouse is not over a higher window, true.
@@ -60,10 +80,11 @@ namespace GoOS.GUI
             this.Title = Title;
             this.X = X;
             this.Y = Y;
-            this.Width = Width;
-            this.Height = Height;
+            this.Width = (ushort)(Width + 12);
+            this.Height = (ushort)(Height + 29);
             this.Borderless = Borderless;
 
+            _contents = new Canvas(this.Width, this.Height);
             Contents = new Canvas(Width, Height);
             Controls = new List<Control>();
 
@@ -72,11 +93,11 @@ namespace GoOS.GUI
                 closeButton = new Button(this, 4, 4, 13, 13, "", true, Resources.closeButton, Resources.closeButtonPressed, true);
                 closeButton.Clicked = () => Dispose();
                 
-                maximiseButton = new Button(this, Width - 33, 4, 13, 13, "", true, Resources.maximize, Resources.maximizePressed, true);
+                maximiseButton = new Button(this, this.Width - 33, 4, 13, 13, "", true, Resources.maximize, Resources.maximizePressed, true);
                 maximiseButton.Clicked = () =>
                 {
                     if (Minimized)
-                        Height = _originalHeight;
+                        this.Height = _originalHeight;
 
                     Maximized = !Maximized;
                     Minimized = false;
@@ -84,44 +105,48 @@ namespace GoOS.GUI
                     // Do the resizing
                     if (Maximized)
                     {
-                        _originalX = X;
-                        _originalY = Y;
-                        _originalWidth = Width;
-                        _originalHeight = Height;
+                        _originalX = this.X;
+                        _originalY = this.Y;
+                        _originalWidth = this.Width;
+                        _originalHeight = this.Height;
 
                         X = 0;
                         Y = 0;
-                        Width = WindowManager.Screen.Width;
-                        Height = WindowManager.Screen.Height;
+                        this.Width = WindowManager.Screen.Width;
+                        this.Height = WindowManager.Screen.Height;
                     }
                     else
                     {
                         X = _originalX;
                         Y = _originalY;
-                        Width = _originalWidth;
-                        Height = _originalHeight;
+                        this.Width = _originalWidth;
+                        this.Height = _originalHeight;
                     }
 
-                    Contents.Dispose();
-                    Contents = new Canvas(Width, Height);
+                    _contents.Dispose();
+                    _contents = new Canvas(this.Width, this.Height);
+                    Contents = new Canvas((ushort)(this.Width - 12), (ushort)(this.Height - 29));
                     Render();
                 };
                 
-                minimiseButton = new Button(this, Width - 17, 4, 13, 13, "", true, Resources.minimise, Resources.minimisePressed, true);
+                minimiseButton = new Button(this, this.Width - 17, 4, 13, 13, "", true, Resources.minimise, Resources.minimisePressed, true);
                 minimiseButton.Clicked = () =>
                 {
                     Minimized = !Minimized;
                     Maximized = false;
 
                     if (Minimized)
-                        _originalHeight = Height;
+                        _originalHeight = this.Height;
 
-                    Height = Minimized ? (ushort)22 : _originalHeight;
+                    this.Height = Minimized ? (ushort)22 : _originalHeight;
 
-                    Contents.Dispose();
-                    Contents = new Canvas(Width, Height);
+                    _contents.Dispose();
+                    _contents = new Canvas(this.Width, this.Height);
+                    //Contents = new Canvas((ushort)(this.Width - 12), (ushort)(this.Height - (Minimized ? 0 : 29)));
                     Render();
                 };
+                
+                Controls = new List<Control>(); // Ignore the double initialization, trust me.
             }
 
             WindowManager.AddWindow(this);
@@ -131,6 +156,8 @@ namespace GoOS.GUI
         {
             if (Borderless)
             {
+                _contents.DrawImage(0, 0, Contents);
+                
                 // Render the controls
                 RenderControls();
 
@@ -140,37 +167,37 @@ namespace GoOS.GUI
             }
             
             // Clear the window
-            Contents.Clear(new Color(0xFFDADADA));
+            _contents.Clear(new Color(0xFFDADADA));
             
             // Render the window corners
-            Contents[Width - 2, 1] = new Color(0xFFF3F3F3);
-            Contents[1, Height - 2] = new Color(0xFFF3F3F3);
+            _contents[Width - 2, 1] = new Color(0xFFF3F3F3);
+            _contents[1, Height - 2] = new Color(0xFFF3F3F3);
             
             // Render the window border
-            Contents.DrawLine(1, 1, Width - 2, 1, Color.White);
-            Contents.DrawLine(1, 1, 1, Height - 2, Color.White);
-            Contents.DrawLine(2, Height - 2, Width - 1, Height - 2, new Color(0xFFB3B3B3));
-            Contents.DrawLine(Width - 2, 2, Width - 2, Height - 2, new Color(0xFFB3B3B3)); 
+            _contents.DrawLine(1, 1, Width - 2, 1, Color.White);
+            _contents.DrawLine(1, 1, 1, Height - 2, Color.White);
+            _contents.DrawLine(2, Height - 2, Width - 1, Height - 2, new Color(0xFFB3B3B3));
+            _contents.DrawLine(Width - 2, 2, Width - 2, Height - 2, new Color(0xFFB3B3B3)); 
 
             // Render the title bar
             closeButton.Render();
-            Contents.DrawImage(closeButton.X, closeButton.Y, closeButton.Contents, closeButton.RenderWithAlpha);
+            _contents.DrawImage(closeButton.X, closeButton.Y, closeButton.Contents, closeButton.RenderWithAlpha);
             maximiseButton.Render();
-            Contents.DrawImage(maximiseButton.X, maximiseButton.Y, maximiseButton.Contents,maximiseButton.RenderWithAlpha);
+            _contents.DrawImage(maximiseButton.X, maximiseButton.Y, maximiseButton.Contents,maximiseButton.RenderWithAlpha);
             minimiseButton.Render();
-            Contents.DrawImage(minimiseButton.X, minimiseButton.Y, minimiseButton.Contents, minimiseButton.RenderWithAlpha);
+            _contents.DrawImage(minimiseButton.X, minimiseButton.Y, minimiseButton.Contents, minimiseButton.RenderWithAlpha);
 
-            for (int i = 0; i < 6; i++) Contents.DrawLine(21, 4 + i * 2, Width - 38, 4 + i * 2, Color.White);
-            for (int i = 0; i < 6; i++) Contents.DrawLine(22, 5 + i * 2, Width - 37, 5 + i * 2, new Color(0xFF969696));
+            for (int i = 0; i < 6; i++) _contents.DrawLine(21, 4 + i * 2, Width - 38, 4 + i * 2, Color.White);
+            for (int i = 0; i < 6; i++) _contents.DrawLine(22, 5 + i * 2, Width - 37, 5 + i * 2, new Color(0xFF969696));
 
-            Contents.DrawFilledRectangle((Width / 2) - (Resources.Charcoal.MeasureString(Title + " ") / 2) - 1,
+            _contents.DrawFilledRectangle((Width / 2) - (Resources.Charcoal.MeasureString(Title + " ") / 2) - 1,
                 4, (ushort)(Resources.Charcoal.MeasureString(Title + " ") + 2), 12, 0, new Color(0xFFDADADA));
-            Contents.DrawString((Width / 2) - (Resources.Charcoal.MeasureString(Title) / 2) - 1,
+            _contents.DrawString((Width / 2) - (Resources.Charcoal.MeasureString(Title) / 2) - 1,
                 2, Title, Resources.Charcoal, Color.Black);
 
-            for (int i = 0; i < 6; i++) Contents[(Width / 2) + (Resources.Charcoal.MeasureString(Title + " ") / 2),
+            for (int i = 0; i < 6; i++) _contents[(Width / 2) + (Resources.Charcoal.MeasureString(Title + " ") / 2),
                 4 + i * 2] = Color.White;
-            for (int i = 0; i < 6; i++) Contents[(Width / 2) - (Resources.Charcoal.MeasureString(Title + " ") / 2) - 1,
+            for (int i = 0; i < 6; i++) _contents[(Width / 2) - (Resources.Charcoal.MeasureString(Title + " ") / 2) - 1,
                 5 + i * 2] = new Color(0xFF969696);
 
             if (Minimized)
@@ -178,15 +205,17 @@ namespace GoOS.GUI
                 WindowManager.Render();
                 return;
             }
-
+            
             // Render window contents area
-            Contents.DrawLine(4, 20, Width - 6, 20, new Color(0xFFB3B3B3));
-            Contents.DrawLine(4, 20, 4, Height - 6, new Color(0xFFB3B3B3));
-            Contents.DrawLine(4, Height - 6, Width - 5, Height - 6, Color.White);
-            Contents.DrawLine(Width - 5, 21, Width - 5, Height - 6, Color.White);
-            Contents.DrawRectangle(5, 21, (ushort)(Width - 10), (ushort)(Height - 27), 0, Color.Black);
-            Contents.DrawFilledRectangle(6, 22, (ushort)(Width - 12), (ushort)(Height - 29), 0, new Color(0xFFE7E7E7));
-
+            _contents.DrawLine(4, 20, Width - 6, 20, new Color(0xFFB3B3B3));
+            _contents.DrawLine(4, 20, 4, Height - 6, new Color(0xFFB3B3B3));
+            _contents.DrawLine(4, Height - 6, Width - 5, Height - 6, Color.White);
+            _contents.DrawLine(Width - 5, 21, Width - 5, Height - 6, Color.White);
+            _contents.DrawRectangle(5, 21, (ushort)(Width - 10), (ushort)(Height - 27), 0, Color.Black);
+            _contents.DrawFilledRectangle(6, 22, (ushort)(Width - 12), (ushort)(Height - 29), 0, new Color(0xFFE7E7E7));
+            
+            _contents.DrawImage(6, 22, Contents, false);
+            
             // Render the controls
             RenderControls();
 
@@ -204,17 +233,15 @@ namespace GoOS.GUI
             foreach (Control c in Controls)
             {
                 if (c == null) Controls.Remove(c);
-                else Contents.DrawImage(c.X + (c.NoOffset ? 0 : Borderless ? 2 : 6), c.Y + (c.NoOffset ? 0 : Borderless ? 2 : 22), c.Contents, c.RenderWithAlpha);
+                else Contents.DrawImage(c.X/* + (c.NoOffset ? 0 : Borderless ? 2 : 6*/, c.Y/* + (c.NoOffset ? 0 : Borderless ? 2 : 22)*/, c.Contents, c.RenderWithAlpha);
             }
         }
         
         internal override void HandleRun()
         {
             if (Focused) {
-
                 // Handle dragging
-                if (!Borderless && IsMouseOverTitlebar && !closeButton.IsMouseOver && !maximiseButton.IsMouseOver && !minimiseButton.IsMouseOver &&
-                    MouseManager.LastMouseState == MouseState.None &&
+                if (!Borderless && IsMouseOver() && IsMouseOverTitlebar && !closeButton.IsMouseOver && !maximiseButton.IsMouseOver && !minimiseButton.IsMouseOver &&
                     MouseManager.MouseState == MouseState.Left && !_dragging)
                 {
                     _dragStartX = X;
@@ -222,17 +249,12 @@ namespace GoOS.GUI
                     _dragStartMouseX = (int)MouseManager.X;
                     _dragStartMouseY = (int)MouseManager.Y;
                     _dragging = true;
-                    
-                    ProcessScheduler.RequestExclusivity(this);
                 }
 
                 if (_dragging)
                 {
                     if (MouseManager.MouseState == MouseState.None)
-                    {
                         _dragging = false;
-                        ProcessScheduler.ExitExclusivity(this);
-                    }
                     
                     X = (int)(_dragStartX + (MouseManager.X - _dragStartMouseX));
                     Y = (int)(_dragStartY + (MouseManager.Y - _dragStartMouseY));
@@ -242,18 +264,24 @@ namespace GoOS.GUI
                     return;
                 }
                 
-                // Handle the controls
-                foreach (Control c in Controls)
-                {
-                    if (!Borderless)
-                    {
-                        closeButton.HandleRun();
-                        maximiseButton.HandleRun();
-                        minimiseButton.HandleRun();
-                    }
+                if (MouseManager.MouseState == MouseState.Right && IsMouseOver())
+                    ShowContextMenu();
                 
-                    if (c == null) Controls.Remove(c);
-                    else c.HandleRun();
+                // Handle the controls
+                if (Controls.Count > 0)
+                {
+                    foreach (Control c in Controls)
+                    {
+                        if (!Borderless)
+                        {
+                            closeButton.HandleRun();
+                            maximiseButton.HandleRun();
+                            minimiseButton.HandleRun();
+                        }
+
+                        if (c == null) Controls.Remove(c);
+                        else c.HandleRun();
+                    }
                 }
             }
             else if (MouseManager.LastMouseState != MouseManager.MouseState && IsMouseOver()) WindowManager.FocusedWindow = this;
@@ -270,8 +298,8 @@ namespace GoOS.GUI
                     Y = 50 + WindowManager.Windows.Count * 50;
                     break;
                 case WindowDock.Center:
-                    X = WindowManager.Screen.Width / 2 - Contents.Width / 2;
-                    Y = WindowManager.Screen.Height / 2 - Contents.Height / 2;
+                    X = WindowManager.Screen.Width / 2 - _contents.Width / 2;
+                    Y = WindowManager.Screen.Height / 2 - _contents.Height / 2;
                     break;
             }
         }

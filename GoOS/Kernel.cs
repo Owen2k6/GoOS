@@ -51,6 +51,8 @@ namespace GoOS
 
         // PATH entries (simple array; no LINQ)
         public static string[] pathPaths = new string[0];
+        
+        internal static ProcessScheduler ProcessScheduler;
 
         // Placeholder (kept)
         public static string cutStatus = "Disabled";
@@ -158,6 +160,8 @@ namespace GoOS
                 }
             }*/
             
+            ProcessScheduler =  new ProcessScheduler(); // Literally the first thing we MUST do.
+            
             Console.Write("Welcome to ");
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("GoOS");
@@ -195,30 +199,10 @@ namespace GoOS
                 
                 //LoadingDialogue.Instance.Dispose();
                 
-                //ProcessScheduler.AddPriorityProcess(new Desktop());
+                ProcessScheduler.AddPriorityProcess(new Desktop());
                 ProcessScheduler.AddPriorityProcess(new Menubar());
                 ProcessScheduler.AddPriorityProcess(new Taskbar());
                 
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
-                ProcessScheduler.AddProcess(new GoTerminal());
                 ProcessScheduler.AddProcess(new GoTerminal());
             }
             catch (Exception ex)
@@ -375,7 +359,8 @@ namespace GoOS
             try
             {
                 ProcessScheduler.HandleRun();
-                //MemoryWatch.Watch();
+                //WindowManager.Render();
+                MemoryWatch.Watch();
             }
             catch (Exception ex)
             {

@@ -51,16 +51,10 @@ namespace GoOS.GUI
 
         internal virtual void HandleRun()
         {
-            if (Parent.Focused && IsMouseOver &&
-                MouseManager.LastMouseState == MouseState.None &&
-                MouseManager.MouseState == MouseState.Left && !Pressed)
-            {
+            if (Parent.Focused && IsMouseOver && Parent.IsMouseOver() && MouseManager.MouseState == MouseState.Left && !Pressed)
                 HandleDown();
-            }
 
-            if (Parent.Focused && IsMouseOver &&
-                MouseManager.LastMouseState == MouseState.Left &&
-                MouseManager.MouseState == MouseState.None && Pressed)
+            if (Parent.Focused && IsMouseOver && Parent.IsMouseOver() && MouseManager.MouseState == MouseState.None && Pressed)
             {
                 HandleUp();
                 

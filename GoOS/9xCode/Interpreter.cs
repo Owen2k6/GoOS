@@ -1023,7 +1023,7 @@ namespace GoOS._9xCode
             }
             
             MemoryWatch.Watch();
-            ProcessScheduler.HandleRun();
+            Kernel.ProcessScheduler.HandleRun();
         }
 
         private static void HandleError(string Title, string Message)

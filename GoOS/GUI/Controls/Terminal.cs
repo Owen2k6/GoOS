@@ -26,7 +26,7 @@ internal class Terminal : Control
     }
     
     private void IdleRequest() {
-        ProcessScheduler.HandleRun();
+        Kernel.ProcessScheduler.HandleRun();
 
         if (KeyboardManager.TryReadKey(out var key)) terminal.KeyBuffer.Enqueue(key);
     }

@@ -1,40 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using Cosmos.Core;
 using Cosmos.HAL;
 using GoOS.GUI;
  
 namespace GoOS.Tasking;
 
-internal static class ProcessScheduler
+internal class ProcessScheduler
 {
-    internal static byte _lastSecond { get; private set; } = RTC.Second;
-    internal static byte _lastMinute { get; private set; } = RTC.Minute;
+    internal int IPS { get; private set; } = 0; // Iterations Per Second, how fast the backend (processes) are running.
     
-    internal static List<Process> Processes = new List<Process>();
+    private int _iterations = 0; // For IPS timer
     
-    internal static List<Process> PriorityProcesses = new List<Process>();
+    public int Iterations { get; private set; } = 0; // For "public" usage
+    
+    internal List<Process> Processes = new List<Process>();
+    
+    internal List<Process> PriorityProcesses = new List<Process>();
 
-    internal static Process ExclusiveProcess { get; private set; }
+    private int ProcessIndex = 0;
 
-    private static int ProcessIndex = 0;
+    internal ProcessScheduler()
+    {
+        Timer T = new((_) =>
+        {
+            IPS = _iterations * 2;
+            _iterations = 0;
+        }, null, 500, 0);
+        
+        Timer t = new((_) => Iterations = 0, null, 1000, 0);
+    }
 
-    internal static Process AddProcess(Process process)
+    internal Process AddProcess(Process process)
     {
         Processes.Add(process);
         return process;
     }
     
-    internal static Process AddPriorityProcess(Process process)
+    internal Process AddPriorityProcess(Process process)
     {
         PriorityProcesses.Add(process);
         return process;
     }
 
-
-    internal static void KillProcess(Process process)
+    internal void KillProcess(Process process)
         => Processes.Remove(process);
 
-    internal static void KillProcess(int PID)
+    internal void KillProcess(int PID)
     {
         foreach (Process p in Processes)
         {
@@ -47,7 +60,7 @@ internal static class ProcessScheduler
         throw new ArgumentException("Process not found!");
     }
 
-    internal static void KillProcess(string name)
+    internal void KillProcess(string name)
     {
         foreach (Process p in Processes)
         {
@@ -59,121 +72,116 @@ internal static class ProcessScheduler
 
         throw new ArgumentException("Process not found!");
     }
+    
+    private void KillPriorityProcess(Process process)
+        => PriorityProcesses.Remove(process);
 
-    internal static void HandleRun()
+    private void KillPriorityProcess(int PID)
     {
-        // Handle priority processes, these run no matter what. Even if a Process has exclusivity.
         foreach (Process p in PriorityProcesses)
         {
-            try
-            {
-                if (!p.Closing) p.HandleRun();
-                else
-                {
-                    if (p is Window)
-                    {
-                        WindowManager.RemoveWindow((Window)p);
-                        WindowManager.Render();
-                    }
+            if (p.PID != PID) continue;
 
-                    KillProcess(p);
-                }
-            }
-            catch (Exception) { KillProcess(p); }
-        }
-        
-        // Handle exclusive process
-        if (ExclusiveProcess != null)
-        {
-            CheckExclusivity();
-
-            try
-            {
-                if (ExclusiveProcess.Closing)
-                {
-                    if (ExclusiveProcess is Window)
-                    {
-                        WindowManager.RemoveWindow((Window)ExclusiveProcess);
-                        WindowManager.Render();
-                    }
-
-                    KillProcess(ExclusiveProcess);
-
-                    ExclusiveProcess = null;
-                }
-                else ExclusiveProcess.HandleRun();
-            } catch (Exception) { KillProcess(ExclusiveProcess); }
-
-            _lastSecond = RTC.Second;
-            _lastMinute = RTC.Minute;
-            
+            PriorityProcesses.Remove(p);
             return;
         }
-        
-        if (Processes.Count == 0)
-            return;
-        
-        // Handle processes, "batching" them according to how many there are.
-        int endIndex = Math.Min(ProcessIndex + (Processes.Count / Processes.Count < 8 ? 1 : Processes.Count < 16 ? 2 : 4), Processes.Count);
 
-        int i = 0;
-        for (i = ProcessIndex; i < endIndex; i++)
+        throw new ArgumentException("Process not found!");
+    }
+
+    internal void HandleRun()
+    {
+        // Handle priority processes, these run no matter what. Even if a Process has exclusivity.
+        if (PriorityProcesses.Count > 0)
         {
-            Process p = Processes[i];
-            
-            try
+            foreach (Process p in PriorityProcesses)
             {
-                if (!p.Closing) p.HandleRun();
-                else
+                try
                 {
-                    if (p is Window)
+                    if (!p.Closing) p.HandleRun();
+                    else
                     {
-                        WindowManager.RemoveWindow((Window)p);
-                        WindowManager.Render();
-                    }
+                        if (p is Window)
+                        {
+                            WindowManager.RemoveWindow((Window)p);
+                            WindowManager.Render();
+                        }
 
-                    KillProcess(p);
+                        KillPriorityProcess(p);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    KillPriorityProcess(p);
+                    
+                    WindowManager.Screen.IsEnabled = false;
+
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("The process scheduler crashed!: " + ex.Message);
+                    Console.WriteLine("    at GoOS.Tasking.ProcessScheduler.HandleRun()");
+                    Console.WriteLine("    at GoOS.Kernel.Run()");
+                    Console.WriteLine("    at Cosmos.System.Kernel.Start()");
+
+                    Console.ResetColor();
+                    Console.WriteLine("\nPress any key to reboot...");
+                    Console.ReadKey(true);
+                    CPU.Reboot();
                 }
             }
-            catch (Exception) { KillProcess(p); }
         }
-        ProcessIndex = i;
 
-        if (ProcessIndex >= Processes.Count)
-            ProcessIndex = 0;
-        
-        _lastSecond = RTC.Second;
-        _lastMinute = RTC.Minute;
-    }
-
-    internal static void CheckExclusivity()
-    {
-        // Processes only get exclusivity for 1 minute at a time, at most. 
-        // They are expected to return it after finished, but if they don't we cut them off after a minute.
-        // Yes, regardless of if it is done.
-        if (_lastMinute != RTC.Minute)
-            ExclusiveProcess = null;
-    }
-
-    internal static bool RequestExclusivity(Process process)
-    {
-        if (ExclusiveProcess == null)
+        if (Processes.Count > 0)
         {
-            ExclusiveProcess = process;
-            return true;
-        }
-        
-        return false;
-    }
+            // Handle processes, "batching" them according to how many there are.
+            int endIndex =
+                Math.Min(ProcessIndex + (Processes.Count / Processes.Count < 8 ? 1 : Processes.Count < 16 ? 2 : 4),
+                    Processes.Count);
 
-    internal static bool ExitExclusivity(Process process)
-    {
-        if (ExclusiveProcess != null && ExclusiveProcess == process)
-        {
-            ExclusiveProcess = null;
-            return true;
+            int i = 0;
+            for (i = ProcessIndex; i < endIndex; i++)
+            {
+                Process p = Processes[i];
+
+                try
+                {
+                    if (!p.Closing) p.HandleRun();
+                    else
+                    {
+                        if (p is Window)
+                        {
+                            WindowManager.RemoveWindow((Window)p);
+                            WindowManager.Render();
+                        }
+
+                        KillProcess(p);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    KillProcess(p);
+
+                    WindowManager.Screen.IsEnabled = false;
+
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("The process scheduler crashed!: " + ex.Message);
+                    Console.WriteLine("    at GoOS.Tasking.ProcessScheduler.HandleRun()");
+                    Console.WriteLine("    at GoOS.Kernel.Run()");
+                    Console.WriteLine("    at Cosmos.System.Kernel.Start()");
+
+                    Console.ResetColor();
+                    Console.WriteLine("\nPress any key to reboot...");
+                    Console.ReadKey(true);
+                    CPU.Reboot();
+                }
+            }
+
+            ProcessIndex = i;
+
+            if (ProcessIndex >= Processes.Count)
+                ProcessIndex = 0;
         }
 
-        return false;
+        Iterations++;
+        _iterations++;
     }
 }

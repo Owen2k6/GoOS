@@ -33,8 +33,6 @@ namespace GoOS.GUI.Apps
 
         internal override void Render()
         {
-            base.Render();
-            
             // Paint the window.
             DateTime now = DateTime.Now;
             string timeText = DateTime.Now.ToString("HH:mm:ss");
@@ -79,6 +77,8 @@ namespace GoOS.GUI.Apps
 
                 Contents.DrawString(x, y, timeText, Font_2x, Color.CoolGreen);
             }
+            
+            base.Render();
         }
 
         internal override void HandleRun()
