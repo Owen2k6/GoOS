@@ -24,7 +24,6 @@ public class Frame : Window
         Title = "Settings";
         Visible = true;
         Closable = true;
-        Sizable = false;
         SetDock(WindowDock.Auto);
         // Paint the window.
         ReDraw();

@@ -18,7 +18,6 @@ namespace GoOS.GUI.Apps
             Title = "About this GoPC";
             Visible = true;
             Closable = true;
-            Sizable = false;
             SetDock(WindowDock.Auto);
             // Paint the window.
             Contents.DrawImage(0, 0, Resources.abtbg, false);

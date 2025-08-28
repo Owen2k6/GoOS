@@ -391,10 +391,6 @@ namespace GoOS
                     Console.Visible = false;
                     break;
 
-                case "ping":
-                    Ping.Run();
-                    break;
-
                 case "install":
                     if (!CheckArgCount(args, 2, true)) break;
                     GoCodeInstaller.Install(args[1]);

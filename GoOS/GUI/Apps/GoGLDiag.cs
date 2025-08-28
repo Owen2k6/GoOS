@@ -16,7 +16,6 @@ namespace GoOS.GUI.Apps
             Title = "About GoGL";
             Visible = true;
             Closable = true;
-            Sizable = false;
             
             SetDock(WindowDock.Auto);
             // Paint the window.

@@ -28,7 +28,6 @@ namespace GoOS.GUI.Apps
             Title = "Clock";
             Visible = true;
             Closable = true;
-            Sizable = true;
             SetDock(WindowDock.Auto);
         }
 

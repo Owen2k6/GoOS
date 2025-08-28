@@ -10,7 +10,6 @@ namespace GoOS.GUI
     public class Window
     {
         public Canvas Contents;
-
         public int X = 50, Y = 50;
         public string Title;
         public bool Visible;
@@ -19,57 +18,47 @@ namespace GoOS.GUI
         public bool Closing;
         public bool HasTitlebar = true;
         public bool Unkillable = false;
-        public bool Sizable = false;
-
-        // OS 9 style roll-up (minimise) state
-        public bool Collapsed = false;
-
+        public bool Collapsed;
         public List<Control> Controls = new();
-
-        private int DragStartX;
-        private int DragStartY;
-        private int DragStartMouseX;
-        private int DragStartMouseY;
-
+        private int DragStartX, DragStartY, DragStartMouseX, DragStartMouseY;
         private MouseState previousMouseState = MouseState.None;
-        private bool wasDown = false;
-        private Control downOnControl = null;
+        private bool wasDown;
+        private Control downOnControl;
+        public Control FocusedControl;
+        public const int TITLE_BAR_HEIGHT = 22;
+        private const int FRAME_L = 6, FRAME_R = 6, FRAME_B = 7;
+        private static readonly Color TitleBandFill = new Color(0xFFDADADA);
+        private static readonly Color TitleStripeLight = Color.White;
+        private static readonly Color TitleStripeDark = new Color(0xFF969696);
+        private static readonly Color TitleTextColour = Color.Black;
+        private static readonly Color OuterTL = Color.White; 
+        private static readonly Color OuterBR = new Color(0xFFB3B3B3); 
+        private static readonly Color ContentFill = new (0xFFE7E7E7);
+        private static readonly Color PlatFace = new (71, 71, 71);
+        private int OuterWidth
+            => (Contents != null ? Contents.Width : 0) + (HasTitlebar ? (FRAME_L + FRAME_R) : 0);
 
-        public Control FocusedControl = null;
+        private int OuterHeight
+            => !HasTitlebar
+                ? (Contents != null ? Contents.Height : 0)
+                : (Collapsed
+                    ? TITLE_BAR_HEIGHT
+                    : (Contents != null ? TITLE_BAR_HEIGHT + FRAME_B + Contents.Height : TITLE_BAR_HEIGHT));
 
-        public const int TITLE_BAR_HEIGHT = 19;
-
-        // ---- Platinum palette (dark chrome) ----
-        private static readonly Color PlatFace = new Color(71, 71, 71);   // your existing body fill
-        private static readonly Color FrameHi = new Color(100, 100, 100);  // inner highlight
-        private static readonly Color FrameMid = new Color(64, 64, 64);   // mid shadow
-        private static readonly Color FrameLo = new Color(32, 32, 32);   // deep shadow
-        private static readonly Color FrameBlack = Color.Black;
-
-        private static readonly Color TitleFocusedBG = Color.LighterBlack;      // dark focused bar
-        private static readonly Color TitleUnfocusBG = Color.DeepGray;          // dark unfocused bar
-        private static readonly Color TitleStripe = new Color(96, 96, 96);   // subtle pin-stripes
-        private static readonly Color TitleText = Color.White;
+        private int ContentLeft => HasTitlebar ? X + FRAME_L : X;
+        private int ContentTop => HasTitlebar ? Y + TITLE_BAR_HEIGHT : Y;
 
         public virtual void HandleRun()
         {
             if (!Collapsed)
-            {
                 foreach (var control in Controls)
                     control.Update();
-            }
 
             if (wasDown && MouseManager.MouseState == MouseState.None)
             {
                 wasDown = false;
-
-                HandleRelease(new MouseEventArgs()
-                {
-                    X = RelativeMouseX,
-                    Y = RelativeMouseY,
-                    MouseState = previousMouseState
-                });
-
+                HandleRelease(new MouseEventArgs
+                    { X = RelativeMouseX, Y = RelativeMouseY, MouseState = previousMouseState });
                 downOnControl?.HandleRelease();
                 downOnControl = null;
             }
@@ -78,74 +67,82 @@ namespace GoOS.GUI
         public virtual void RenderControls()
         {
             if (Collapsed) return;
-            foreach (var control in Controls)
-                Contents.DrawImage(control.X, control.Y, control.Contents, control.RenderWithAlpha);
+            foreach (var c in Controls)
+                Contents.DrawImage(c.X, c.Y, c.Contents, c.RenderWithAlpha);
         }
 
         public bool Focused => WindowManager.windows[WindowManager.windows.Count - 1] == this;
 
-        public int RelativeMouseX => (int)(MouseManager.X - X);
-
-        public int RelativeMouseY => (int)(MouseManager.Y - Y - (HasTitlebar ? TITLE_BAR_HEIGHT : 0));
+        public int RelativeMouseX => (int)MouseManager.X - ContentLeft;
+        public int RelativeMouseY => (int)MouseManager.Y - ContentTop;
 
         public bool IsMouseOver
         {
             get
             {
-                int totalHeight = HasTitlebar
-                    ? (Collapsed ? TITLE_BAR_HEIGHT : TITLE_BAR_HEIGHT + Contents.Height)
-                    : (Collapsed ? 0 : Contents.Height);
-
-                return MouseManager.X >= X &&
-                       MouseManager.X < X + Contents.Width &&
-                       MouseManager.Y >= Y &&
-                       MouseManager.Y < Y + totalHeight;
+                if (Contents == null && !HasTitlebar) return false;
+                return MouseManager.X >= X && MouseManager.X < X + OuterWidth &&
+                       MouseManager.Y >= Y && MouseManager.Y < Y + OuterHeight;
             }
         }
-
         public bool IsMouseOverContent
         {
             get
             {
-                if (Collapsed) return false;
-
-                return MouseManager.X >= X &&
-                       MouseManager.X < X + Contents.Width &&
-                       MouseManager.Y >= Y + (HasTitlebar ? TITLE_BAR_HEIGHT : 0) &&
-                       MouseManager.Y < Y + (HasTitlebar ? TITLE_BAR_HEIGHT : 0) + Contents.Height;
+                if (Contents == null || Collapsed) return false;
+                return MouseManager.X >= ContentLeft && MouseManager.X < ContentLeft + Contents.Width &&
+                       MouseManager.Y >= ContentTop && MouseManager.Y < ContentTop + Contents.Height;
             }
         }
-
         public bool IsMouseOverTitleBar
         {
             get
             {
                 if (!HasTitlebar) return false;
+                return MouseManager.X >= X && MouseManager.X < X + OuterWidth &&
+                       MouseManager.Y >= Y && MouseManager.Y < Y + TITLE_BAR_HEIGHT;
+            }
+        }
+        private void GetButtonRects(out int closeX, out int shadeX, out int btnY)
+        {
+            const int BTN_MARGIN = 4;
+            const int BTN_SIZE = 13;
+            closeX = X + BTN_MARGIN;
+            shadeX = X + OuterWidth - BTN_MARGIN - BTN_SIZE;
+            btnY = Y + 4;
+        }
 
-                return MouseManager.X >= X &&
-                       MouseManager.X < X + Contents.Width &&
-                       MouseManager.Y >= Y &&
-                       MouseManager.Y < Y + TITLE_BAR_HEIGHT;
+
+        public bool IsMouseOverCloseButton
+        {
+            get
+            {
+                if (!HasTitlebar) return false;
+                int cx, sx, by;
+                GetButtonRects(out cx, out sx, out by);
+                int px = (int)MouseManager.X, py = (int)MouseManager.Y;
+                return px >= cx && px < cx + 13 && py >= by && py < by + 13;
             }
         }
 
-        // Close: LEFT segment
-        public bool IsMouseOverCloseButton =>
-            IsMouseOverTitleBar &&
-            MouseManager.X >= X &&
-            MouseManager.X <= X + TITLE_BAR_HEIGHT;
-
-        // Minimise (roll-up toggle): RIGHT segment
-        public bool IsMouseOverMinimizeButton =>
-            IsMouseOverTitleBar &&
-            MouseManager.X >= X + Contents.Width - TITLE_BAR_HEIGHT &&
-            MouseManager.X <= X + Contents.Width;
+        public bool IsMouseOverMinimizeButton
+        {
+            get
+            {
+                if (!HasTitlebar) return false;
+                int cx, sx, by;
+                GetButtonRects(out cx, out sx, out by);
+                int px = (int)MouseManager.X, py = (int)MouseManager.Y;
+                return px >= sx && px < sx + 13 && py >= by && py < by + 13;
+            }
+        }
 
         private Control GetHoveredControl()
         {
             if (Collapsed) return null;
             foreach (var control in Controls)
-                if (control.IsMouseOver) return control;
+                if (control.IsMouseOver)
+                    return control;
             return null;
         }
 
@@ -155,26 +152,22 @@ namespace GoOS.GUI
         {
             if (IsHandling) return;
             IsHandling = true;
-
-            // Close (left)
-            if (Closable &&
+            if (HasTitlebar && Closable &&
                 IsMouseOverCloseButton &&
                 MouseManager.MouseState == MouseState.None &&
                 previousMouseState == MouseState.Left)
             {
                 Closing = true;
             }
-
-            // Roll-up toggle (right)
-            if (IsMouseOverMinimizeButton &&
+            if (HasTitlebar &&
+                IsMouseOverMinimizeButton &&
                 MouseManager.MouseState == MouseState.None &&
                 previousMouseState == MouseState.Left)
             {
-                ToggleCollapsed();
+                Collapsed = !Collapsed;
             }
-
-            // Dragging (title bar, not on buttons)
-            if (IsMouseOverTitleBar &&
+            if (HasTitlebar &&
+                IsMouseOverTitleBar &&
                 !IsMouseOverCloseButton &&
                 !IsMouseOverMinimizeButton &&
                 MouseManager.MouseState == MouseState.Left &&
@@ -186,172 +179,180 @@ namespace GoOS.GUI
                 DragStartMouseY = (int)MouseManager.Y;
                 Dragging = true;
             }
-
             if (MouseManager.MouseState == MouseState.None)
                 Dragging = false;
-
-            if (MouseManager.MouseState == MouseState.None && previousMouseState == MouseState.Right)
+            if (IsMouseOver &&
+                MouseManager.MouseState == MouseState.None &&
+                previousMouseState == MouseState.Right)
+            {
                 ShowContextMenu();
+            }
 
             if (Dragging)
             {
-                X = (int)(DragStartX + (MouseManager.X - DragStartMouseX));
-                int newY = (int)(DragStartY + (MouseManager.Y - DragStartMouseY));
-                if (newY < WindowManager.Canvas.Height - 28) Y = newY;
+                X = DragStartX + ((int)MouseManager.X - DragStartMouseX);
+                Y = DragStartY + ((int)MouseManager.Y - DragStartMouseY);
+                if (WindowManager.Canvas != null)
+                {
+                    int clamp = WindowManager.Canvas.Height - 28;
+                    if (Y >= clamp) Y = clamp - 1;
+                }
             }
-
-            var hoveredControl = GetHoveredControl();
-
-            // Down, any button.
+            var hovered = GetHoveredControl();
             if (!Collapsed && MouseManager.MouseState != MouseState.None && previousMouseState == MouseState.None)
             {
                 wasDown = true;
-                downOnControl = hoveredControl;
+                downOnControl = hovered;
 
-                HandleDown(new MouseEventArgs()
-                {
-                    X = RelativeMouseX,
-                    Y = RelativeMouseY,
-                    MouseState = MouseManager.MouseState
-                });
+                HandleDown(new MouseEventArgs
+                    { X = RelativeMouseX, Y = RelativeMouseY, MouseState = MouseManager.MouseState });
 
                 if (MouseManager.MouseState == MouseState.Left)
                 {
-                    FocusedControl = hoveredControl;
-                    hoveredControl?.HandleDown(new MouseEventArgs()
+                    FocusedControl = hovered;
+                    hovered?.HandleDown(new MouseEventArgs
                     {
-                        X = RelativeMouseX - hoveredControl.X,
-                        Y = RelativeMouseY - hoveredControl.Y,
+                        X = RelativeMouseX - hovered.X,
+                        Y = RelativeMouseY - hovered.Y,
                         MouseState = MouseManager.MouseState
                     });
                 }
             }
-
-            // Click, any button.
             if (!Collapsed && MouseManager.MouseState == MouseState.None && previousMouseState == MouseState.Left)
             {
-                HandleClick(new MouseEventArgs()
-                {
-                    X = RelativeMouseX,
-                    Y = RelativeMouseY,
-                    MouseState = previousMouseState
-                });
+                HandleClick(new MouseEventArgs
+                    { X = RelativeMouseX, Y = RelativeMouseY, MouseState = previousMouseState });
 
-                FocusedControl = hoveredControl;
+                FocusedControl = hovered;
 
-                hoveredControl?.HandleClick(new MouseEventArgs()
+                hovered?.HandleClick(new MouseEventArgs
                 {
-                    X = RelativeMouseX - hoveredControl.X,
-                    Y = RelativeMouseY - hoveredControl.Y,
+                    X = RelativeMouseX - hovered.X,
+                    Y = RelativeMouseY - hovered.Y,
                     MouseState = MouseManager.MouseState
                 });
 
-                foreach (var control in Controls)
-                    if (control != hoveredControl) control.HandleUnfocus();
+                foreach (var c in Controls)
+                    if (c != hovered)
+                        c.HandleUnfocus();
             }
 
             previousMouseState = MouseManager.MouseState;
             IsHandling = false;
         }
 
-        private void ToggleCollapsed() => Collapsed = !Collapsed;
-
         public void DrawWindow(Canvas cv, bool focused)
         {
-            if (HasTitlebar)
-                DrawPlatinumTitleBar(cv, focused);
-
-            if (!Collapsed)
+            if (!HasTitlebar)
             {
-                DrawPlatinumBodyAndFrame(cv);
-                cv.DrawImage(X, Y + (HasTitlebar ? TITLE_BAR_HEIGHT : 0), Contents, false);
+                if (!Collapsed && Contents != null)
+                    cv.DrawImage(X, Y, Contents, false);
+                return;
+            }
+            DrawDropShadow(cv);
+            cv.DrawFilledRectangle(X, Y, (ushort)OuterWidth, (ushort)OuterHeight, 0, TitleBandFill);
+            cv.DrawRectangle(X, Y, (ushort)OuterWidth, (ushort)OuterHeight, 0, Color.Black);
+            cv.DrawLine(X + 1, Y + 1, X + OuterWidth - 2, Y + 1, OuterTL);
+            cv.DrawLine(X + 1, Y + 1, X + 1, Y + OuterHeight - 2, OuterTL);
+            cv.DrawLine(X + 1, Y + OuterHeight - 2, X + OuterWidth - 2, Y + OuterHeight - 2, OuterBR);
+            cv.DrawLine(X + OuterWidth - 2, Y + 1, X + OuterWidth - 2, Y + OuterHeight - 2, OuterBR);
+            DrawPlatinumTitleBar(cv);
+            if (!Collapsed && Contents != null)
+            {
+                int ctL = ContentLeft; 
+                int ctT = ContentTop; 
+                int ctW = Contents.Width;
+                int ctH = Contents.Height;
+                cv.DrawLine(ctL - 2, ctT - 2, ctL + ctW + 1, ctT - 2, OuterBR); // top
+                cv.DrawLine(ctL - 2, ctT - 2, ctL - 2, ctT + ctH + 1, OuterBR); // left
+                cv.DrawLine(ctL - 2, ctT + ctH + 1, ctL + ctW + 2, ctT + ctH + 1, OuterTL); // bottom
+                cv.DrawLine(ctL + ctW + 1, ctT - 1, ctL + ctW + 1, ctT + ctH + 1, OuterTL); // right
+                cv.DrawFilledRectangle(ctL, ctT, (ushort)ctW, (ushort)ctH, 0, ContentFill);
+                cv.DrawImage(ctL, ctT, Contents, false);
+                if (ctW > 2 && ctH > 2)
+                    cv.DrawRectangle(ctL + 0, ctT + 0, (ushort)(ctW - 1), (ushort)(ctH - 1), 0, Color.Black);
             }
         }
 
-        private void DrawPlatinumTitleBar(Canvas cv, bool focused)
+
+        private void DrawPlatinumTitleBar(Canvas cv)
         {
-            // Background
-            Color bg = focused ? TitleFocusedBG : TitleUnfocusBG;
-            cv.DrawFilledRectangle(X, Y, Contents.Width, TITLE_BAR_HEIGHT, 0, bg);
-
-            // Pin-stripes (subtle)
-            for (int yy = 2; yy < TITLE_BAR_HEIGHT - 1; yy += 2)
-                cv.DrawLine(X + 1, Y + yy, X + Contents.Width - 2, Y + yy, TitleStripe);
-
-            // Simple bevel
-            cv.DrawLine(X, Y, X + Contents.Width - 1, Y, FrameHi);
-            cv.DrawLine(X, Y, X, Y + TITLE_BAR_HEIGHT - 1, FrameHi);
-            cv.DrawLine(X, Y + TITLE_BAR_HEIGHT - 1, X + Contents.Width - 1, Y + TITLE_BAR_HEIGHT - 1, FrameMid);
-            cv.DrawLine(X + Contents.Width - 1, Y, X + Contents.Width - 1, Y + TITLE_BAR_HEIGHT - 1, FrameMid);
-
-            // Buttons
-            if (Closable)
-            {
-                Canvas closeImg = closeButton;
-                Canvas miniImg = minimise;
-
-                if (IsMouseOverCloseButton)
-                    closeImg = MouseManager.MouseState == MouseState.Left ? closeButtonPressed : closeButtonHover;
-                else if (IsMouseOverMinimizeButton)
-                    miniImg = MouseManager.MouseState == MouseState.Left ? minimisePressed : minimiseHover;
-
-                cv.DrawImage(X + 1, Y + 1, closeImg);
-                cv.DrawImage(X + Contents.Width - TITLE_BAR_HEIGHT + 1, Y + 1, miniImg);
-            }
-
-            // Title: centre by pixel width, clamped between buttons
-            int textWidth = MeasureTextWidth(Title);
-            int centredX = X + ((Contents.Width - textWidth) / 2);
-
-            // Clamp between buttons
-            int leftLimit = X + TITLE_BAR_HEIGHT + 3;
-            int rightLimit = X + Contents.Width - TITLE_BAR_HEIGHT - 3 - textWidth;
-
-            int titleX = Math.Clamp(centredX, leftLimit, rightLimit);
-
-            cv.DrawString(titleX, Y, Title, Resources.Font_1x, TitleText);
+            int w = OuterWidth;
+            int cx, sx, by;
+            GetButtonRects(out cx, out sx, out by);
+            int stripeLeft = X + 21;
+            int stripeRight = sx - 3;
+            if (stripeRight < stripeLeft) stripeRight = stripeLeft;
+            for (int i = 0; i < 6; i++)
+                cv.DrawLine(stripeLeft, Y + 4 + i * 2, stripeRight, Y + 4 + i * 2, TitleStripeLight);
+            for (int i = 0; i < 6; i++)
+                cv.DrawLine(stripeLeft + 1, Y + 5 + i * 2, stripeRight + 1, Y + 5 + i * 2, TitleStripeDark);
+            string t = Title ?? string.Empty;
+            int textW = Resources.Charcoal.MeasureString(t);
+            const int PLAQUE_PAD = 3;
+            int avail = stripeRight - stripeLeft;
+            int tx = stripeLeft + ((avail - textW) / 2);
+            int minTx = stripeLeft + PLAQUE_PAD;
+            int maxTx = stripeRight - PLAQUE_PAD - textW;
+            if (tx < minTx) tx = minTx;
+            if (tx > maxTx) tx = maxTx;
+            int px = tx - PLAQUE_PAD;
+            int plaqueW = textW + (PLAQUE_PAD * 2);
+            cv.DrawFilledRectangle(px, Y + 4, (ushort)plaqueW, 12, 0, TitleBandFill);
+            for (int i = 0; i < 6; i++)
+                cv.DrawLine(px + plaqueW, Y + 4 + i * 2, px + plaqueW, Y + 4 + i * 2, TitleStripeLight);
+            for (int i = 0; i < 6; i++)
+                cv.DrawLine(px - 1, Y + 5 + i * 2, px - 1, Y + 5 + i * 2, TitleStripeDark);
+            cv.DrawString(tx, Y + 3, t, Resources.Charcoal, TitleTextColour);
+            Canvas closeImg = (IsMouseOverCloseButton && MouseManager.MouseState == MouseState.Left)
+                ? closeButtonPressed
+                : closeButton;
+            Canvas shadImg = (IsMouseOverMinimizeButton && MouseManager.MouseState == MouseState.Left)
+                ? minimisePressed
+                : minimise;
+            cv.DrawImage(cx, by, closeImg);
+            cv.DrawImage(sx, by, shadImg);
         }
 
-        private void DrawPlatinumBodyAndFrame(Canvas cv)
+        private void DrawDropShadow(Canvas cv)
         {
-            int bodyY = Y + (HasTitlebar ? TITLE_BAR_HEIGHT : 0);
-            int w = Contents.Width;
-            int h = Contents.Height;
-
-            // Fill body face (your darker grey)
-            cv.DrawRectangle(X, bodyY, (ushort)w, (ushort)h, 1, FrameBlack);
-
-            // Multi-line Platinum frame (outer->inner), with correct casts + thickness + colour
-            DrawRect(cv, X, bodyY, w, h, 1, FrameBlack);
-            DrawRect(cv, X + 1, bodyY + 1, w - 2, h - 2, 1, FrameLo);
-            DrawRect(cv, X + 2, bodyY + 2, w - 4, h - 4, 1, FrameMid);
-            DrawRect(cv, X + 3, bodyY + 3, w - 6, h - 6, 1, FrameHi);
+            int r = X + OuterWidth;
+            int b = Y + OuterHeight;
+            cv.DrawLine(r + 2, Y + 3, r + 2, b + 3, Color.Black);
+            cv.DrawLine(r + 1, Y + 3, r + 1, b + 3, Color.Black);
+            cv.DrawLine(X + 3, b + 2, r + 3, b + 2, Color.Black);
+            cv.DrawLine(X + 3, b + 1, r + 3, b + 1, Color.Black);
         }
 
-        // Safe wrapper that clamps to >= 1 before casting to ushort
-        private static void DrawRect(Canvas cv, int x, int y, int w, int h, ushort thickness, Color colour)
+        public virtual void HandleClick(MouseEventArgs e)
         {
-            if (w < 1 || h < 1) return;
-            ushort uw = (ushort)(w < 1 ? 1 : w);
-            ushort uh = (ushort)(h < 1 ? 1 : h);
-            cv.DrawRectangle(x, y, uw, uh, thickness, colour);
         }
 
-        public virtual void HandleClick(MouseEventArgs e) { }
-        public virtual void HandleDown(MouseEventArgs e) { }
-        public virtual void HandleRelease(MouseEventArgs e) { }
+        public virtual void HandleDown(MouseEventArgs e)
+        {
+        }
+
+        public virtual void HandleRelease(MouseEventArgs e)
+        {
+        }
 
         public virtual void HandleKey(KeyEvent key)
         {
             if (Collapsed) return;
             foreach (var control in Controls)
-                if (control == FocusedControl) control.HandleKey(key);
+                if (control == FocusedControl)
+                    control.HandleKey(key);
         }
 
-        public virtual void ShowContextMenu() { }
+        public virtual void ShowContextMenu()
+        {
+        }
 
-        public void Dispose() { Closing = true; }
-
+        public void Dispose()
+        {
+            Closing = true;
+        }
+        
         public void RenderOutsetWindowBackground()
         {
             if (Collapsed) return;
@@ -360,7 +361,6 @@ namespace GoOS.GUI
 
         public void RenderSystemStyleBorder()
         {
-            // No-op: border drawn in DrawPlatinumBodyAndFrame.
         }
 
         protected void ShowAboutDialog(string version)
@@ -371,6 +371,7 @@ namespace GoOS.GUI
                 null,
                 heightOverride: 144);
         }
+
         protected void ShowAboutDialog() => ShowAboutDialog(Kernel.version);
 
         protected void SetDock(WindowDock dock)
@@ -378,19 +379,23 @@ namespace GoOS.GUI
             switch (dock)
             {
                 case WindowDock.None:
-                    X = 0; Y = 0; break;
+                    X = 0;
+                    Y = 0;
+                    break;
                 case WindowDock.Auto:
                     X = 50 + (WindowManager.GetAmountOfWindowsByTitle(Title) * 50);
                     Y = 50 + (WindowManager.GetAmountOfWindowsByTitle(Title) * 50);
                     break;
                 case WindowDock.Center:
-                    X = (WindowManager.Canvas.Width / 2) - (Contents.Width / 2);
-                    Y = (WindowManager.Canvas.Height / 2) - (Contents.Height / 2);
+                    X = (WindowManager.Canvas.Width / 2) - (OuterWidth / 2);
+                    Y = (WindowManager.Canvas.Height / 2) - (OuterHeight / 2);
                     break;
             }
         }
 
-        public virtual void Paint() { }
+        public virtual void Paint()
+        {
+        }
 
         public void AutoCreate(WindowDock dock, int Width, int Height, string Title)
         {
@@ -419,12 +424,7 @@ namespace GoOS.GUI
             Dispose();
         }
 
-        // --- Text measurement (approx) ---
-        private static int MeasureTextWidth(string s)
-        {
-            if (string.IsNullOrEmpty(s)) return 0;
-            const int CHAR_W = 8; // adjust: likely 8px for Font_1x, not 6
-            return s.Length * CHAR_W;
-        }
+        // fallback
+        private static int MeasureTextWidth(string s) => string.IsNullOrEmpty(s) ? 0 : s.Length * 8;
     }
 }

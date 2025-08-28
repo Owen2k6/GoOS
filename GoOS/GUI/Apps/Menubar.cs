@@ -40,7 +40,7 @@ namespace GoOS.GUI.Apps
         private const int SidePadding = 6;
         private const int ItemGap = 6;
         private const int RightMargin = 8;
-        private const int Font1xHeight = 10; // your 1x font height
+        private const int CharcoalHeight = 10;
         private const ushort ContextWidth = 155;
 
         // state
@@ -268,7 +268,7 @@ namespace GoOS.GUI.Apps
             {
                 foreach (var menu in menus)
                 {
-                    int width = Resources.Font_1x.MeasureString(menu.Title) + 12;
+                    int width = Charcoal.MeasureString(menu.Title) + 12;
                     if (x > Contents.Width - 180) break;
 
                     var btn = new Button(this,
@@ -331,22 +331,22 @@ namespace GoOS.GUI.Apps
             string timeString = DateTime.Now.ToString("HH:mm");
             string dateString = DateTime.Now.ToString("dd/MM/yyyy");
 
-            int timeW = Resources.Font_1x.MeasureString(timeString);
-            int dateW = Resources.Font_1x.MeasureString(dateString);
+            int timeW = Charcoal.MeasureString(timeString);
+            int dateW = Charcoal.MeasureString(dateString);
 
-            int baselineY = ((BarHeight - Font1xHeight) / 2) + 5;
+            int baselineY = ((BarHeight - CharcoalHeight) / 2) + 5;
 
             int timeX = Contents.Width - RightMargin - timeW + 20;
             int dateX = (timeX - 6 - dateW) + 24;
 
             if (dateX <= menusRightEdge + ItemGap)
             {
-                Contents.DrawString(timeX, baselineY, timeString, Resources.Font_1x, Color.Black, true);
+                Contents.DrawString(timeX, baselineY, timeString, Charcoal, Color.Black, true);
                 return;
             }
 
-            Contents.DrawString(dateX, baselineY, dateString, Resources.Font_1x, Color.Black, true);
-            Contents.DrawString(timeX, baselineY, timeString, Resources.Font_1x, Color.Black, true);
+            Contents.DrawString(dateX, baselineY, dateString, Charcoal, Color.Black, true);
+            Contents.DrawString(timeX, baselineY, timeString, Charcoal, Color.Black, true);
         }
 
         public override void HandleRun()

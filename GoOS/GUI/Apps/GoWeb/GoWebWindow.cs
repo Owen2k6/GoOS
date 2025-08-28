@@ -28,7 +28,6 @@ namespace GoOS.GUI.Apps.GoWeb
             Title = "GoWeb";
             Visible = true;
             Closable = true;
-            Sizable = false;
             SetDock(WindowDock.Auto);
 
             PageCanvas = new((ushort)Contents.Width, (ushort)(Contents.Height - TOOLBAR_HEIGHT));
