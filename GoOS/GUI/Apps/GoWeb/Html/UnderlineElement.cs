@@ -1,9 +1,14 @@
-﻿namespace GoOS.GUI.Apps.GoWeb.Html
-{
-    public class UnderlineElement : Element
-    {
-        public override string GetTag() => "u";
+﻿namespace GoOS.GUI.Apps.GoWeb.Html;
 
-        public override bool GetUnderline() => true;
+public class UnderlineElement : Element
+{
+    public override string GetTag()
+    {
+        return "u";
+    }
+
+    public override bool GetUnderline()
+    {
+        return true;
     }
 }

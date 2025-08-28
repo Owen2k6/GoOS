@@ -1,65 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Console = BetterConsole;
 
-namespace GoOS.Commands
+namespace GoOS.Commands;
+
+internal class Delete
 {
-    internal class Delete
+    public static void DeleteDirectory(string args)
     {
-        public static void DeleteDirectory(string args)
-        {
-            if (args.Contains(@"0:\"))
-            {
-                args.Replace(@"0:\", "");
-            }
+        if (args.Contains(@"0:\")) args.Replace(@"0:\", "");
 
-            args = "\\" + args;
-            if (Directory.Exists(Directory.GetCurrentDirectory() + @"\" + args))
-                Directory.Delete(Directory.GetCurrentDirectory() + @"\" + args, true);
-            else if (!Directory.Exists(args))
-            {
-                Console.WriteLine("Directory does not exist.");
-            }
-        }
+        args = "\\" + args;
+        if (Directory.Exists(Directory.GetCurrentDirectory() + @"\" + args))
+            Directory.Delete(Directory.GetCurrentDirectory() + @"\" + args, true);
+        else if (!Directory.Exists(args)) Console.WriteLine("Directory does not exist.");
+    }
 
-        public static void DeleteFile(string args)
-        {
-            if (args.Contains("0:\\"))
-            {
-                args.Replace(@"0:\", "");
-            }
+    public static void DeleteFile(string args)
+    {
+        if (args.Contains("0:\\")) args.Replace(@"0:\", "");
 
-            if (File.Exists(Directory.GetCurrentDirectory() + @"\" + args))
-                File.Delete(Directory.GetCurrentDirectory() + @"\" + args);
-            else if (!File.Exists(args))
-            {
-                Console.WriteLine("File does not exist.");
-            }
+        if (File.Exists(Directory.GetCurrentDirectory() + @"\" + args))
+            File.Delete(Directory.GetCurrentDirectory() + @"\" + args);
+        else if (!File.Exists(args)) Console.WriteLine("File does not exist.");
 
-            ;
-        }
-        
-        public static void UniversalDelete(string args)
-        {
-            if (args.Contains("0:\\"))
-            {
-                args.Replace(@"0:\", "");
-            }
-        
-            String DirArgs = "\\" + args;
-        
-            if (File.Exists(Directory.GetCurrentDirectory() + @"\" + args))
-                File.Delete(Directory.GetCurrentDirectory() + @"\" + args);
-            else if (Directory.Exists(Directory.GetCurrentDirectory() + @"\" + args))
-                Directory.Delete(Directory.GetCurrentDirectory() + @"\" + args, true);
-            else
-            {
-                Console.WriteLine("File or Directory not found!");
-            }
-        }
+        ;
+    }
+
+    public static void UniversalDelete(string args)
+    {
+        if (args.Contains("0:\\")) args.Replace(@"0:\", "");
+
+        var DirArgs = "\\" + args;
+
+        if (File.Exists(Directory.GetCurrentDirectory() + @"\" + args))
+            File.Delete(Directory.GetCurrentDirectory() + @"\" + args);
+        else if (Directory.Exists(Directory.GetCurrentDirectory() + @"\" + args))
+            Directory.Delete(Directory.GetCurrentDirectory() + @"\" + args, true);
+        else
+            Console.WriteLine("File or Directory not found!");
     }
 }

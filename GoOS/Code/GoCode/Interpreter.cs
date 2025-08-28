@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Cosmos.Core;
-using Cosmos.HAL;
+using System.Threading;
 using Cosmos.System;
-using GoOS.GUI;
-using GoOS.GUI.Apps;
-using GoOS.Themes;
 using GoGL.Graphics;
+using GoOS.GUI;
+using GoOS.Themes;
 using Console = BetterConsole;
 using static ConsoleColorEx;
 using static GoOS.Core;
@@ -18,59 +16,54 @@ namespace GoOS.GoCode;
 
 public class Interpreter
 {
+    private readonly Dictionary<string, bool> Booleans = new();
+
+    private readonly Dictionary<string, int> ButtonActions = new();
+
+    private readonly Dictionary<string, int> Integers = new();
     // TODO: This is past ekeleze
     // TODO: i, past ekeleze, am putting off doing if statements
     // TODO: there is a likley chance current ekeleze has forgotten all about this and has not implemeted if statments.
     // TODO: If current ekeleze has said he is done, and if statements are not implemented
     // TODO: REMIND HIM!
 
-    private Dictionary<string, string> Strings = new Dictionary<string, string>() { };
-    private Dictionary<string, int> Integers = new Dictionary<string, int>() { };
-    private Dictionary<string, bool> Booleans = new Dictionary<string, bool>() { };
-    private Dictionary<string, Window> Windows = new Dictionary<string, Window>();
-
-    private Dictionary<string, int> ButtonActions = new Dictionary<string, int>();
+    private readonly Dictionary<string, string> Strings = new();
+    private readonly Dictionary<string, Window> Windows = new();
+    private int currentLevel;
+    private string endmessage = "Process has ended.";
+    private int expectedLevel;
 
     private string fuckingprogramname = "";
-    private bool hasbeenregistered = false;
-    private String endmessage = "Process has ended.";
+    private bool hasbeenregistered;
+
+    private int i;
 
     private int skipLevel = 1;
-    private int currentLevel = 0;
-    private int expectedLevel = 0;
-
-    private int i = 0;
 
     public void Interpret(string[] lines, bool unnecessaryOutputs = true)
     {
-        string tabSkip = "\t";
-        for (int a = 0; a < skipLevel; a++)
-        {
-            tabSkip = tabSkip + "\t";
-        }
+        var tabSkip = "\t";
+        for (var a = 0; a < skipLevel; a++) tabSkip = tabSkip + "\t";
         for (i = 0; i < lines.Length; i++)
         {
-            string line = lines[i];
+            var line = lines[i];
 
-            if (Cosmos.System.KeyboardManager.TryReadKey(out var key))
-            {
+            if (KeyboardManager.TryReadKey(out var key))
                 if (key.Key == ConsoleKeyEx.Escape)
-                {
                     i = lines.Length;
-                }
-            }
 
-            string[] tabCountString = line.Split("\t");
+            var tabCountString = line.Split("\t");
 
             currentLevel = tabCountString.Length - 1;
 
-            string trueLine = line.Replace("\t", "");
+            var trueLine = line.Replace("\t", "");
 
             if (currentLevel < expectedLevel)
             {
                 expectedLevel = currentLevel;
                 skipLevel = expectedLevel + 1;
             }
+
             if (currentLevel >= skipLevel)
                 break;
 
@@ -79,88 +72,79 @@ public class Interpreter
 
         if (unnecessaryOutputs)
         {
-            if (endmessage != null)
-            {
-                endmessage = "Process has ended.";
-            }
+            if (endmessage != null) endmessage = "Process has ended.";
 
             log(ThemeManager.ErrorText, endmessage);
         }
     }
 
-    private void switchThis(String line)
+    private void switchThis(string line)
     {
         switch (line)
         {
             case { } a when a.StartsWith("button="):
-                string buttonLess = a.Replace("button=", "");
-                string parentWindowName = buttonLess.Split("=")[0];
-                
-                string buttonName = buttonLess.Split("=")[1];
-                
-                string awindowWidthPre = buttonLess.Split("=")[2];
-                string awindowHeightPre = buttonLess.Split("=")[3];
-                ushort awindowWidth = ushort.Parse(awindowWidthPre);
-                ushort awindowHeight = ushort.Parse(awindowHeightPre);
-                
-                string xpre = buttonLess.Split("=")[4];
-                string ypre = buttonLess.Split("=")[5];
-                ushort x = ushort.Parse(xpre);
-                ushort y = ushort.Parse(ypre);
-                
-                string clickActionLinepre = buttonLess.Split("=")[5];
-                ushort clickActionLine = ushort.Parse(clickActionLinepre);
+                var buttonLess = a.Replace("button=", "");
+                var parentWindowName = buttonLess.Split("=")[0];
+
+                var buttonName = buttonLess.Split("=")[1];
+
+                var awindowWidthPre = buttonLess.Split("=")[2];
+                var awindowHeightPre = buttonLess.Split("=")[3];
+                var awindowWidth = ushort.Parse(awindowWidthPre);
+                var awindowHeight = ushort.Parse(awindowHeightPre);
+
+                var xpre = buttonLess.Split("=")[4];
+                var ypre = buttonLess.Split("=")[5];
+                var x = ushort.Parse(xpre);
+                var y = ushort.Parse(ypre);
+
+                var clickActionLinepre = buttonLess.Split("=")[5];
+                var clickActionLine = ushort.Parse(clickActionLinepre);
 
                 if (!Windows.ContainsKey(parentWindowName))
                 {
                     log(ThemeManager.ErrorText, "Could not find specified parent window!");
                     break;
                 }
-                
-                if (ButtonActions.ContainsKey(buttonName))
-                {
-                    ButtonActions.Remove(buttonName);
-                }
+
+                if (ButtonActions.ContainsKey(buttonName)) ButtonActions.Remove(buttonName);
 
                 ButtonActions.Add(buttonName, clickActionLine);
-                
-                Windows.TryGetValue(parentWindowName, out Window buttonWindow);
 
-                Button button = new Button(buttonWindow, x, y, awindowWidth, awindowHeight, buttonName);
+                Windows.TryGetValue(parentWindowName, out var buttonWindow);
+
+                var button = new Button(buttonWindow, x, y, awindowWidth, awindowHeight, buttonName);
                 button.ClickedAlt = ClickAction;
                 break;
             case { } a when a.StartsWith("window="):
-                Window window = new Window();
-                string windowLess = a.Replace("window=", "");
-                string windowName = windowLess.Split("=")[0];
+                var window = new Window();
+                var windowLess = a.Replace("window=", "");
+                var windowName = windowLess.Split("=")[0];
 
                 window.Title = windowName;
-                
-                if (Windows.ContainsKey(windowName))
-                {
-                    Windows.Remove(windowName);
-                }
-                
-                string windowWidthPre = windowLess.Split("=")[1];
-                string windowHeightPre = windowLess.Split("=")[2];
-                ushort windowWidth = ushort.Parse(windowWidthPre);
-                ushort windowHeight = ushort.Parse(windowHeightPre);
+
+                if (Windows.ContainsKey(windowName)) Windows.Remove(windowName);
+
+                var windowWidthPre = windowLess.Split("=")[1];
+                var windowHeightPre = windowLess.Split("=")[2];
+                var windowWidth = ushort.Parse(windowWidthPre);
+                var windowHeight = ushort.Parse(windowHeightPre);
 
                 window.Contents = new Canvas(windowWidth, windowHeight);
                 window.Visible = true;
                 window.Closable = true;
-                
+
                 window.Contents.Clear(Color.LightGray);
                 window.RenderSystemStyleBorder();
-                
+
                 Windows.Add(windowName, window);
                 WindowManager.AddWindow(window);
                 break;
             case { } a when a.StartsWith("bool="):
-                string input = a.Replace("bool=", "");
+                var input = a.Replace("bool=", "");
 
-                string name = input.Split("=")[0];
-                bool content = input.Split("=")[1].ToLower() == "true";
+                var name = input.Split("=")[0];
+                var content = input.Split("=")[1].ToLower() == "true";
 
                 if (Booleans.ContainsKey(name))
                 {
@@ -168,27 +152,24 @@ public class Interpreter
                     Booleans.Add(name, content);
                     break;
                 }
-                
+
                 Booleans.Add(name, content);
                 break;
             case { } a when a.StartsWith("if="):
 
-                string iffingHell = line.Replace("if=", "");
+                var iffingHell = line.Replace("if=", "");
 
                 if (!iffingHell.StartsWith("!"))
                 {
                     switch (iffingHell)
                     {
                         case { } q when q.Contains("<"):
-                            int inputOne = 0;
-                            int inputTwo = 0;
-                            string[] inputs = iffingHell.Split("<");
+                            var inputOne = 0;
+                            var inputTwo = 0;
+                            var inputs = iffingHell.Split("<");
                             if (inputs[0].Contains("\"") || inputs[0].Contains("\""))
-                            {
                                 log(ThemeManager.ErrorText, "You cannot use < with strings.");
-                            }
                             else
-                            {
                                 try
                                 {
                                     inputOne = int.Parse(inputs[0]);
@@ -199,17 +180,10 @@ public class Interpreter
                                     inputOne = 0;
                                     inputTwo = 0;
                                 }
-                            }
 
-                            if (Integers.ContainsKey(inputs[0]))
-                            {
-                                Integers.TryGetValue(inputs[0], out inputOne);
-                            }
+                            if (Integers.ContainsKey(inputs[0])) Integers.TryGetValue(inputs[0], out inputOne);
 
-                            if (Integers.ContainsKey(inputs[1]))
-                            {
-                                Integers.TryGetValue(inputs[1], out inputTwo);
-                            }
+                            if (Integers.ContainsKey(inputs[1])) Integers.TryGetValue(inputs[1], out inputTwo);
 
                             if (inputOne < inputTwo)
                             {
@@ -219,15 +193,12 @@ public class Interpreter
 
                             break;
                         case { } q when q.Contains("<="):
-                            int inputOnea = 0;
-                            int inputTwoa = 0;
-                            string[] inputsa = iffingHell.Split("<=");
+                            var inputOnea = 0;
+                            var inputTwoa = 0;
+                            var inputsa = iffingHell.Split("<=");
                             if (inputsa[0].Contains("\"") || inputsa[0].Contains("\""))
-                            {
                                 log(ThemeManager.ErrorText, "You cannot use <= with strings.");
-                            }
                             else
-                            {
                                 try
                                 {
                                     inputOnea = int.Parse(inputsa[0]);
@@ -238,17 +209,10 @@ public class Interpreter
                                     inputOnea = 0;
                                     inputTwoa = 0;
                                 }
-                            }
 
-                            if (Integers.ContainsKey(inputsa[0]))
-                            {
-                                Integers.TryGetValue(inputsa[0], out inputOnea);
-                            }
+                            if (Integers.ContainsKey(inputsa[0])) Integers.TryGetValue(inputsa[0], out inputOnea);
 
-                            if (Integers.ContainsKey(inputsa[1]))
-                            {
-                                Integers.TryGetValue(inputsa[1], out inputTwoa);
-                            }
+                            if (Integers.ContainsKey(inputsa[1])) Integers.TryGetValue(inputsa[1], out inputTwoa);
 
                             if (inputOnea <= inputTwoa)
                             {
@@ -258,15 +222,12 @@ public class Interpreter
 
                             break;
                         case { } q when q.Contains(">"):
-                            int inputOneb = 0;
-                            int inputTwob = 0;
-                            string[] inputsb = iffingHell.Split(">");
+                            var inputOneb = 0;
+                            var inputTwob = 0;
+                            var inputsb = iffingHell.Split(">");
                             if (inputsb[0].Contains("\"") || inputsb[0].Contains("\""))
-                            {
                                 log(ThemeManager.ErrorText, "You cannot use < with strings.");
-                            }
                             else
-                            {
                                 try
                                 {
                                     inputOneb = int.Parse(inputsb[0]);
@@ -277,17 +238,10 @@ public class Interpreter
                                     inputOneb = 0;
                                     inputTwob = 0;
                                 }
-                            }
 
-                            if (Integers.ContainsKey(inputsb[0]))
-                            {
-                                Integers.TryGetValue(inputsb[0], out inputOneb);
-                            }
+                            if (Integers.ContainsKey(inputsb[0])) Integers.TryGetValue(inputsb[0], out inputOneb);
 
-                            if (Integers.ContainsKey(inputsb[1]))
-                            {
-                                Integers.TryGetValue(inputsb[1], out inputTwob);
-                            }
+                            if (Integers.ContainsKey(inputsb[1])) Integers.TryGetValue(inputsb[1], out inputTwob);
 
                             if (inputOneb > inputTwob)
                             {
@@ -297,15 +251,12 @@ public class Interpreter
 
                             break;
                         case { } q when q.Contains(">="):
-                            int inputOnec = 0;
-                            int inputTwoc = 0;
-                            string[] inputsc = iffingHell.Split(">=");
+                            var inputOnec = 0;
+                            var inputTwoc = 0;
+                            var inputsc = iffingHell.Split(">=");
                             if (inputsc[0].Contains("\"") || inputsc[0].Contains("\""))
-                            {
                                 log(ThemeManager.ErrorText, "You cannot use < with strings.");
-                            }
                             else
-                            {
                                 try
                                 {
                                     inputOnec = int.Parse(inputsc[0]);
@@ -316,17 +267,10 @@ public class Interpreter
                                     inputOnec = 0;
                                     inputTwoc = 0;
                                 }
-                            }
 
-                            if (Integers.ContainsKey(inputsc[0]))
-                            {
-                                Integers.TryGetValue(inputsc[0], out inputOnec);
-                            }
+                            if (Integers.ContainsKey(inputsc[0])) Integers.TryGetValue(inputsc[0], out inputOnec);
 
-                            if (Integers.ContainsKey(inputsc[1]))
-                            {
-                                Integers.TryGetValue(inputsc[1], out inputTwoc);
-                            }
+                            if (Integers.ContainsKey(inputsc[1])) Integers.TryGetValue(inputsc[1], out inputTwoc);
 
                             if (inputOnec >= inputTwoc)
                             {
@@ -336,22 +280,16 @@ public class Interpreter
 
                             break;
                         case { } q when q.Contains("=="):
-                            string[] inputsd = iffingHell.Split("==");
+                            var inputsd = iffingHell.Split("==");
 
                             if (inputsd[0].StartsWith("\"") || inputsd[1].StartsWith("\"") ||
                                 Strings.ContainsKey(inputsd[0]) || Strings.ContainsKey(inputsd[1]))
                             {
-                                string inputOned = "";
-                                string inputTwod = "";
-                                if (Strings.ContainsKey(inputsd[0]))
-                                {
-                                    Strings.TryGetValue(inputsd[0], out inputOned);
-                                }
+                                var inputOned = "";
+                                var inputTwod = "";
+                                if (Strings.ContainsKey(inputsd[0])) Strings.TryGetValue(inputsd[0], out inputOned);
 
-                                if (Strings.ContainsKey(inputsd[1]))
-                                {
-                                    Strings.TryGetValue(inputsd[1], out inputTwod);
-                                }
+                                if (Strings.ContainsKey(inputsd[1])) Strings.TryGetValue(inputsd[1], out inputTwod);
 
                                 if (inputOned == inputTwod)
                                 {
@@ -361,8 +299,8 @@ public class Interpreter
                             }
                             else
                             {
-                                int inputOned = 0;
-                                int inputTwod = 0;
+                                var inputOned = 0;
+                                var inputTwod = 0;
                                 try
                                 {
                                     inputOned = int.Parse(inputsd[0]);
@@ -374,15 +312,9 @@ public class Interpreter
                                     inputTwod = 0;
                                 }
 
-                                if (Integers.ContainsKey(inputsd[0]))
-                                {
-                                    Integers.TryGetValue(inputsd[0], out inputOned);
-                                }
+                                if (Integers.ContainsKey(inputsd[0])) Integers.TryGetValue(inputsd[0], out inputOned);
 
-                                if (Integers.ContainsKey(inputsd[1]))
-                                {
-                                    Integers.TryGetValue(inputsd[1], out inputTwod);
-                                }
+                                if (Integers.ContainsKey(inputsd[1])) Integers.TryGetValue(inputsd[1], out inputTwod);
 
                                 if (inputOned == inputTwod)
                                 {
@@ -396,23 +328,17 @@ public class Interpreter
                 }
                 else
                 {
-                    string shit = iffingHell.Replace("!", "");
-                    string[] inputsd = shit.Split("==");
+                    var shit = iffingHell.Replace("!", "");
+                    var inputsd = shit.Split("==");
 
                     if (inputsd[0].StartsWith("\"") || inputsd[1].StartsWith("\"") ||
                         Strings.ContainsKey(inputsd[0]) || Strings.ContainsKey(inputsd[1]))
                     {
-                        string inputOned = "";
-                        string inputTwod = "";
-                        if (Strings.ContainsKey(inputsd[0]))
-                        {
-                            Strings.TryGetValue(inputsd[0], out inputOned);
-                        }
+                        var inputOned = "";
+                        var inputTwod = "";
+                        if (Strings.ContainsKey(inputsd[0])) Strings.TryGetValue(inputsd[0], out inputOned);
 
-                        if (Strings.ContainsKey(inputsd[1]))
-                        {
-                            Strings.TryGetValue(inputsd[1], out inputTwod);
-                        }
+                        if (Strings.ContainsKey(inputsd[1])) Strings.TryGetValue(inputsd[1], out inputTwod);
 
                         if (inputOned == inputTwod)
                         {
@@ -422,8 +348,8 @@ public class Interpreter
                     }
                     else
                     {
-                        int inputOned = 0;
-                        int inputTwod = 0;
+                        var inputOned = 0;
+                        var inputTwod = 0;
                         try
                         {
                             inputOned = int.Parse(inputsd[0]);
@@ -435,15 +361,9 @@ public class Interpreter
                             inputTwod = 0;
                         }
 
-                        if (Integers.ContainsKey(inputsd[0]))
-                        {
-                            Integers.TryGetValue(inputsd[0], out inputOned);
-                        }
+                        if (Integers.ContainsKey(inputsd[0])) Integers.TryGetValue(inputsd[0], out inputOned);
 
-                        if (Integers.ContainsKey(inputsd[1]))
-                        {
-                            Integers.TryGetValue(inputsd[1], out inputTwod);
-                        }
+                        if (Integers.ContainsKey(inputsd[1])) Integers.TryGetValue(inputsd[1], out inputTwod);
 
                         if (inputOned == inputTwod)
                         {
@@ -452,22 +372,23 @@ public class Interpreter
                         }
                     }
                 }
+
                 break;
             case { } a when a.StartsWith("goto"):
-                String howlong = line.Split("=")[1];
-                int potato = Convert.ToInt32(howlong);
+                var howlong = line.Split("=")[1];
+                var potato = Convert.ToInt32(howlong);
                 i = potato - 2;
                 break;
             case { } a when a.StartsWith("sleep"):
-                String howlonga = line.Split("=")[1];
-                int potatoa = Convert.ToInt32(howlonga);
-                System.Threading.Thread.Sleep(potatoa);
+                var howlonga = line.Split("=")[1];
+                var potatoa = Convert.ToInt32(howlonga);
+                Thread.Sleep(potatoa);
                 break;
             case { } a when a.StartsWith("input"):
                 if (line == "input=")
                 {
                     textcolour(Blue);
-                    string theysaid = Console.ReadLine();
+                    var theysaid = Console.ReadLine();
 
                     if (Strings.ContainsKey("input"))
                     {
@@ -479,15 +400,12 @@ public class Interpreter
                 }
                 else
                 {
-                    String addon = line.Replace("input=", "");
+                    var addon = line.Replace("input=", "");
                     write(addon);
                     textcolour(Blue);
-                    string theysaid = Console.ReadLine();
+                    var theysaid = Console.ReadLine();
 
-                    if (Strings.ContainsKey("input"))
-                    {
-                        Strings.Remove("input");
-                    }
+                    if (Strings.ContainsKey("input")) Strings.Remove("input");
 
                     Strings.Add("input", theysaid);
                 }
@@ -503,7 +421,7 @@ public class Interpreter
                 }
                 else
                 {
-                    String addon = line.Replace("stop=", "");
+                    var addon = line.Replace("stop=", "");
                     textcolour(DarkRed);
                     write(addon);
                     textcolour(Blue);
@@ -526,9 +444,7 @@ public class Interpreter
                 {
                     Directory.CreateDirectory(@"0:\content\prf\");
                     if (!Directory.Exists(@"0:\content\prf\" + fuckingprogramname + @"\"))
-                    {
                         Directory.CreateDirectory(@"0:\content\prf\" + fuckingprogramname + @"\");
-                    }
                 }
                 else if (!Directory.Exists(@"0:\content\prf\" + fuckingprogramname + @"\"))
                 {
@@ -537,9 +453,9 @@ public class Interpreter
 
                 break;
             case { } a when a.StartsWith("string"):
-                string whythehellnotwork = "";
-                string varName = "";
-                string varContents = "";
+                var whythehellnotwork = "";
+                var varName = "";
+                var varContents = "";
                 if (line.StartsWith("string "))
                 {
                     whythehellnotwork = line.Replace(@"string ", "");
@@ -553,18 +469,15 @@ public class Interpreter
                     varContents = whythehellnotwork.Split(@"=")[1];
                 }
 
-                if (Strings.ContainsKey(varName))
-                {
-                    Strings.Remove(varName);
-                }
+                if (Strings.ContainsKey(varName)) Strings.Remove(varName);
 
                 Strings.Add(varName, varContents);
                 break;
             case { } a when a.StartsWith("int"):
-                int intCont = 0;
-                string whythehellnotworka = "";
-                string varNamea = "";
-                string varContentsa = "";
+                var intCont = 0;
+                var whythehellnotworka = "";
+                var varNamea = "";
+                var varContentsa = "";
                 if (line.StartsWith("int "))
                 {
                     whythehellnotworka = line.Replace(@"int ", "");
@@ -587,34 +500,27 @@ public class Interpreter
                     Console.WriteLine(@"Integer: int " + varNamea + " is formatted incorrectly.");
                 }
 
-                if (Integers.ContainsKey(varNamea))
-                {
-                    Integers.Remove(varNamea);
-                }
+                if (Integers.ContainsKey(varNamea)) Integers.Remove(varNamea);
 
                 Integers.Add(varNamea, intCont);
                 break;
             case { } a when a.StartsWith("print="):
-                string assSplitter = line.Replace(@"print=", "");
+                var assSplitter = line.Replace(@"print=", "");
                 // We (still) like splitting ass round here
 
-                string[] plusSplitter = assSplitter.Split(" + ");
+                var plusSplitter = assSplitter.Split(" + ");
                 // Im sorry owen, but i had to remove it. It was so long it was getting in the way, may add it back.
 
                 foreach (var str in plusSplitter)
-                {
                     if (assSplitter.Contains("\""))
                     {
-                        string thighs = str.Replace("\"", "");
+                        var thighs = str.Replace("\"", "");
 
-                        if (thighs.Contains(@"\n"))
-                        {
-                            thighs = thighs.Replace(@"\n", "\n");
-                        }
+                        if (thighs.Contains(@"\n")) thighs = thighs.Replace(@"\n", "\n");
 
                         Console.Write(thighs);
                     }
-                    else if (Strings.TryGetValue(str, out string what))
+                    else if (Strings.TryGetValue(str, out var what))
                     {
                         try
                         {
@@ -625,7 +531,7 @@ public class Interpreter
                             Console.Write("owen is gay");
                         }
                     }
-                    else if (Integers.TryGetValue(str, out int whatint))
+                    else if (Integers.TryGetValue(str, out var whatint))
                     {
                         try
                         {
@@ -636,30 +542,25 @@ public class Interpreter
                             Console.WriteLine("owen is gay");
                         }
                     }
-                }
 
                 break;
             case { } a when a.StartsWith("println="):
-                string assSplittera = line.Replace(@"println=", "");
+                var assSplittera = line.Replace(@"println=", "");
                 // We (still) like splitting ass round here
 
-                string[] plusSplittera = assSplittera.Split(" + ");
+                var plusSplittera = assSplittera.Split(" + ");
                 // Im sorry owen, but i had to remove it. It was so long it was getting in the way, may add it back.
 
                 foreach (var str in plusSplittera)
-                {
                     if (assSplittera.Contains("\""))
                     {
-                        string thighs = str.Replace("\"", "");
+                        var thighs = str.Replace("\"", "");
 
-                        if (thighs.Contains(@"\n"))
-                        {
-                            thighs = thighs.Replace(@"\n", "\n");
-                        }
+                        if (thighs.Contains(@"\n")) thighs = thighs.Replace(@"\n", "\n");
 
                         Console.Write(thighs);
                     }
-                    else if (Strings.TryGetValue(str, out string what))
+                    else if (Strings.TryGetValue(str, out var what))
                     {
                         try
                         {
@@ -670,7 +571,7 @@ public class Interpreter
                             Console.Write("owen is gay");
                         }
                     }
-                    else if (Integers.TryGetValue(str, out int whatint))
+                    else if (Integers.TryGetValue(str, out var whatint))
                     {
                         try
                         {
@@ -681,13 +582,12 @@ public class Interpreter
                             Console.WriteLine("owen is gay");
                         }
                     }
-                }
 
                 Console.WriteLine("");
                 break;
             case { } a when a.StartsWith("save="):
-                string whatvartosave = line.Substring(5);
-                if (Strings.TryGetValue(whatvartosave, out string strval))
+                var whatvartosave = line.Substring(5);
+                if (Strings.TryGetValue(whatvartosave, out var strval))
                 {
                     if (Directory.Exists(@"0:\content\prf\"))
                     {
@@ -739,7 +639,7 @@ public class Interpreter
                         }
                     }
                 }
-                else if (Integers.TryGetValue(whatvartosave, out int intval))
+                else if (Integers.TryGetValue(whatvartosave, out var intval))
                 {
                     if (Directory.Exists(@"0:\content\prf\"))
                     {
@@ -794,16 +694,14 @@ public class Interpreter
 
                 break;
             case { } a when a.StartsWith("load="):
-                int intConta = 0;
-                string whatvartoload = line.Substring(5);
+                var intConta = 0;
+                var whatvartoload = line.Substring(5);
                 string ass = null;
                 string assType = null;
-                if (Strings.TryGetValue(whatvartoload, out string strvala))
-                {
+                if (Strings.TryGetValue(whatvartoload, out var strvala))
                     if (File.Exists(
                             @"0:\content\prf\" + fuckingprogramname + @"\" + whatvartoload + @".txt"))
-                    {
-                        using (StreamReader streamReader = new StreamReader(
+                        using (var streamReader = new StreamReader(
                                    @"0:\content\prf\" + fuckingprogramname + @"\" + whatvartoload +
                                    @".txt",
                                    Encoding.UTF8))
@@ -814,13 +712,10 @@ public class Interpreter
                                 .ReadLines(@"0:\content\prf\" + fuckingprogramname + @"\" +
                                            whatvartoload +
                                            @".txt").Skip(1).Take(1).First();
-                            string assSplitter2 = assType.Split('=')[1];
+                            var assSplitter2 = assType.Split('=')[1];
                             if (assSplitter2 == "string")
                             {
-                                if (Strings.ContainsKey(whatvartoload))
-                                {
-                                    Strings.Remove(whatvartoload);
-                                }
+                                if (Strings.ContainsKey(whatvartoload)) Strings.Remove(whatvartoload);
 
                                 Strings.Add(whatvartoload, ass);
                             }
@@ -837,154 +732,83 @@ public class Interpreter
                                                       " is formatted incorrectly.");
                                 }
 
-                                string trueCont = intConta.ToString();
+                                var trueCont = intConta.ToString();
 
-                                if (Integers.ContainsKey(whatvartoload))
-                                {
-                                    Integers.Remove(whatvartoload);
-                                }
+                                if (Integers.ContainsKey(whatvartoload)) Integers.Remove(whatvartoload);
 
                                 Integers.Add(whatvartoload, intConta);
                             }
                         }
-                    }
-                }
 
                 break;
             case { } a when a.StartsWith("frontcolor="):
-                string assa = line.Substring(11);
+                var assa = line.Substring(11);
                 if (assa == "white")
-                {
                     Console.ForegroundColor = White;
-                }
                 else if (assa == "blue")
-                {
                     Console.ForegroundColor = Blue;
-                }
                 else if (assa == "green")
-                {
                     Console.ForegroundColor = Green;
-                }
                 else if (assa == "yellow")
-                {
                     Console.ForegroundColor = Yellow;
-                }
                 else if (assa == "black")
-                {
                     Console.ForegroundColor = Black;
-                }
                 else if (assa == "cyan")
-                {
                     Console.ForegroundColor = Cyan;
-                }
                 else if (assa == "gray")
-                {
                     Console.ForegroundColor = Gray;
-                }
                 else if (assa == "magenta")
-                {
                     Console.ForegroundColor = Magenta;
-                }
                 else if (assa == "red")
-                {
                     Console.ForegroundColor = Red;
-                }
                 else if (assa == "darkblue")
-                {
                     Console.ForegroundColor = DarkBlue;
-                }
                 else if (assa == "darkcyan")
-                {
                     Console.ForegroundColor = DarkCyan;
-                }
                 else if (assa == "darkgray")
-                {
                     Console.ForegroundColor = DarkGray;
-                }
                 else if (assa == "darkgreen")
-                {
                     Console.ForegroundColor = DarkGreen;
-                }
                 else if (assa == "darkmageneta")
-                {
                     Console.ForegroundColor = DarkMagenta;
-                }
                 else if (assa == "darkred")
-                {
                     Console.ForegroundColor = DarkRed;
-                }
-                else if (assa == "darkyellow")
-                {
-                    Console.ForegroundColor = DarkYellow;
-                }
+                else if (assa == "darkyellow") Console.ForegroundColor = DarkYellow;
 
                 break;
             case { } a when a.StartsWith("backcolor="):
-                string assb = line.Substring(10);
+                var assb = line.Substring(10);
                 if (assb == "white")
-                {
                     Console.BackgroundColor = White;
-                }
                 else if (assb == "blue")
-                {
                     Console.BackgroundColor = Blue;
-                }
                 else if (assb == "green")
-                {
                     Console.BackgroundColor = Green;
-                }
                 else if (assb == "yellow")
-                {
                     Console.BackgroundColor = Yellow;
-                }
                 else if (assb == "black")
-                {
                     Console.BackgroundColor = Black;
-                }
                 else if (assb == "cyan")
-                {
                     Console.BackgroundColor = Cyan;
-                }
                 else if (assb == "gray")
-                {
                     Console.BackgroundColor = Gray;
-                }
                 else if (assb == "magenta")
-                {
                     Console.BackgroundColor = Magenta;
-                }
                 else if (assb == "red")
-                {
                     Console.BackgroundColor = Red;
-                }
                 else if (assb == "darkblue")
-                {
                     Console.BackgroundColor = DarkBlue;
-                }
                 else if (assb == "darkcyan")
-                {
                     Console.BackgroundColor = DarkCyan;
-                }
                 else if (assb == "darkgray")
-                {
                     Console.BackgroundColor = DarkGray;
-                }
                 else if (assb == "darkgreen")
-                {
                     Console.BackgroundColor = DarkGreen;
-                }
                 else if (assb == "darkmageneta")
-                {
                     Console.BackgroundColor = DarkMagenta;
-                }
                 else if (assb == "darkred")
-                {
                     Console.BackgroundColor = DarkRed;
-                }
-                else if (assb == "darkyellow")
-                {
-                    Console.BackgroundColor = DarkYellow;
-                }
+                else if (assb == "darkyellow") Console.BackgroundColor = DarkYellow;
 
                 break;
         }
@@ -992,11 +816,6 @@ public class Interpreter
 
     private void ClickAction(string name)
     {
-        if (ButtonActions.ContainsKey(name))
-        {
-            ButtonActions.TryGetValue(name, out i);
-        }
+        if (ButtonActions.ContainsKey(name)) ButtonActions.TryGetValue(name, out i);
     }
-    
-    
 }

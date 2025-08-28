@@ -1,75 +1,66 @@
 ﻿using GoOS.GUI.Apps.GoWeb.Html;
 
-namespace GoOS.GUI.Apps.GoWeb.Render
+namespace GoOS.GUI.Apps.GoWeb.Render;
+
+public class DocumentLayout
 {
-    public class DocumentLayout
+    private readonly Document _document;
+    public int LineHeight;
+    public bool PermitWhitespace;
+
+    public int ScreenWidth;
+
+    public int X;
+    public int Y;
+
+    public DocumentLayout(Document document, int screenWidth)
     {
-        public DocumentLayout(Document document, int screenWidth)
+        _document = document;
+        ScreenWidth = screenWidth;
+        LayOut();
+    }
+
+    public void LayOutRecurse(Element element)
+    {
+        ;
+        if (!element.IsVisible()) return;
+
+        var isBlockLevel = element.IsBlockLevel();
+        int height = element.GetFont().Size;
+
+        element.X = X;
+        element.Y = Y;
+
+        if (X > 0 && isBlockLevel)
         {
-            _document = document;
-            ScreenWidth = screenWidth;
-            LayOut();
+            X = 0;
+            Y += LineHeight;
+            LineHeight = height;
+            PermitWhitespace = false;
         }
 
-        public void LayOutRecurse(Element element)
-        {;
-            if (!element.IsVisible())
-            {
-                return;
-            }
-
-            bool isBlockLevel = element.IsBlockLevel();
-            int height = element.GetFont().Size;
-
-            element.X = X;
-            element.Y = Y;
-
-            if (X > 0 && isBlockLevel)
-            {
-                X = 0;
-                Y += LineHeight;
-                LineHeight = height;
-                PermitWhitespace = false;
-            }
-
-            if (element is TextNode textNode)
-            {
-                var glyphRun = new GlyphRun(this, textNode);
-
-                textNode.GlyphRun = glyphRun;
-            }
-
-            foreach (Element child in element.Children)
-            {
-                LayOutRecurse(child);
-            }
-
-            if (element is BreakElement || isBlockLevel)
-            {
-                X = 0;
-                Y += height;
-                LineHeight = height;
-                PermitWhitespace = false;
-            }
-
-            if (height > LineHeight)
-            {
-                LineHeight = height;
-            }
-        }
-
-        private void LayOut()
+        if (element is TextNode textNode)
         {
-            LayOutRecurse(_document.Body);
+            var glyphRun = new GlyphRun(this, textNode);
+
+            textNode.GlyphRun = glyphRun;
         }
 
-        readonly Document _document;
+        foreach (var child in element.Children) LayOutRecurse(child);
 
-        public int X = 0;
-        public int Y = 0;
-        public int LineHeight = 0;
-        public bool PermitWhitespace = false;
+        if (element is BreakElement || isBlockLevel)
+        {
+            X = 0;
+            Y += height;
+            LineHeight = height;
+            PermitWhitespace = false;
+        }
 
-        public int ScreenWidth;
+        if (height > LineHeight) LineHeight = height;
+    }
+
+    private void LayOut()
+    {
+        LayOutRecurse(_document.Body);
     }
 }

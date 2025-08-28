@@ -1,13 +1,21 @@
 ﻿using GoGL.Graphics;
 
-namespace GoOS.GUI.Apps.GoWeb.Html
+namespace GoOS.GUI.Apps.GoWeb.Html;
+
+public class AnchorElement : Element
 {
-    public class AnchorElement : Element
+    public override string GetTag()
     {
-        public override string GetTag() => "a";
+        return "a";
+    }
 
-        public override Color GetColor() => Color.Blue;
+    public override Color GetColor()
+    {
+        return Color.Blue;
+    }
 
-        public override bool GetUnderline() => true;
+    public override bool GetUnderline()
+    {
+        return true;
     }
 }

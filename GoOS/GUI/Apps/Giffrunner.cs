@@ -1,45 +1,47 @@
 ﻿// File: GoOS/Apps/GiffRunner.cs
+
 using System;
 using System.IO;
-using GoOS.GUI;           // Dialogue
-using GoOS.Giff;     // Giff.Run
+using GoOS.GUI;
+// Dialogue
 
-namespace GoOS.Apps
+// Giff.Run
+
+namespace GoOS.Apps;
+
+public static class GiffRunner
 {
-    public static class GiffRunner
+    /// <summary>Executes a .giff file from disk. Shows a Dialogue on errors.</summary>
+    public static void RunFile(string path)
     {
-        /// <summary>Executes a .giff file from disk. Shows a Dialogue on errors.</summary>
-        public static void RunFile(string path)
+        if (string.IsNullOrWhiteSpace(path))
         {
-            if (string.IsNullOrWhiteSpace(path))
+            Dialogue.Show("Giff", "No file specified.");
+            return;
+        }
+
+        try
+        {
+            if (!File.Exists(path))
             {
-                Dialogue.Show("Giff", "No file specified.");
+                Dialogue.Show("Giff", $"File not found:\n{path}");
                 return;
             }
 
-            try
+            var script = File.ReadAllText(path);
+            if (string.IsNullOrWhiteSpace(script))
             {
-                if (!File.Exists(path))
-                {
-                    Dialogue.Show("Giff", $"File not found:\n{path}");
-                    return;
-                }
-
-                string script = File.ReadAllText(path);
-                if (string.IsNullOrWhiteSpace(script))
-                {
-                    Dialogue.Show("Giff", "File is empty.");
-                    return;
-                }
-
-                var windows = Giff.Giff.Run(script);
-                if (windows == null || windows.Count == 0)
-                    Dialogue.Show("Giff", "Script executed, but no windows were created.");
+                Dialogue.Show("Giff", "File is empty.");
+                return;
             }
-            catch (Exception ex)
-            {
-                Dialogue.Show("Giff", "Failed to execute script:\n" + ex);
-            }
+
+            var windows = Giff.Giff.Run(script);
+            if (windows == null || windows.Count == 0)
+                Dialogue.Show("Giff", "Script executed, but no windows were created.");
+        }
+        catch (Exception ex)
+        {
+            Dialogue.Show("Giff", "Failed to execute script:\n" + ex);
         }
     }
 }

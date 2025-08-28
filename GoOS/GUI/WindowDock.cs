@@ -1,9 +1,8 @@
-﻿namespace GoOS.GUI
+﻿namespace GoOS.GUI;
+
+public enum WindowDock
 {
-    public enum WindowDock
-    {
-        None = 0,
-        Auto = 1,
-        Center = 2
-    }
+    None = 0,
+    Auto = 1,
+    Center = 2
 }

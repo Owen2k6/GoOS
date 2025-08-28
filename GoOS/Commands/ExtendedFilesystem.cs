@@ -1,27 +1,19 @@
-﻿using System.Reflection.Metadata.Ecma335;
+﻿using System.IO;
 
 namespace GoOS.Commands;
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Console = BetterConsole;
 
 public class ExtendedFilesystem
 {
     public static void CopyFile(string from, string to)
     {
         if (from.Contains("\\"))
-        {   
+        {
             //Console.WriteLine("1");
-            string whatToRemove = from.Substring(from.LastIndexOf("\\"));
+            var whatToRemove = from.Substring(from.LastIndexOf("\\"));
 
-            string FullName = from.Replace(whatToRemove, "");
+            var FullName = from.Replace(whatToRemove, "");
 
-            string name = FullName.Substring(FullName.IndexOf("."));
+            var name = FullName.Substring(FullName.IndexOf("."));
 
             var Contents = File.ReadAllBytes(from);
             File.Create(to + FullName);
@@ -30,9 +22,9 @@ public class ExtendedFilesystem
         else
         {
             //Console.WriteLine("2");
-            string FullName = from;
+            var FullName = from;
 
-            string name = FullName.Substring(FullName.IndexOf("."));
+            var name = FullName.Substring(FullName.IndexOf("."));
 
             var Contents = File.ReadAllBytes(from);
             File.Create(to + FullName);
@@ -44,11 +36,11 @@ public class ExtendedFilesystem
     {
         if (from.Contains("\\"))
         {
-            string whatToRemove = from.Substring(from.LastIndexOf("\\"));
+            var whatToRemove = from.Substring(from.LastIndexOf("\\"));
 
-            string FullName = from.Replace(whatToRemove, "");
+            var FullName = from.Replace(whatToRemove, "");
 
-            string name = FullName.Substring(FullName.IndexOf("."));
+            var name = FullName.Substring(FullName.IndexOf("."));
 
             var Contents = File.ReadAllBytes(from);
             File.Create(to + FullName);
@@ -57,9 +49,9 @@ public class ExtendedFilesystem
         }
         else
         {
-            string FullName = from;
+            var FullName = from;
 
-            string name = FullName.Substring(FullName.IndexOf("."));
+            var name = FullName.Substring(FullName.IndexOf("."));
 
             var Contents = File.ReadAllBytes(from);
             File.Create(to + FullName);

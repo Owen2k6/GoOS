@@ -1,15 +1,17 @@
 ﻿#nullable enable
-namespace GoOS.GUI.Apps.GoWeb.Html
+namespace GoOS.GUI.Apps.GoWeb.Html;
+
+public class UnknownElement : Element
 {
-    public class UnknownElement : Element
+    public UnknownElement(string tag)
     {
-        public UnknownElement(string tag)
-        {
-            Tag = tag;
-        }
+        Tag = tag;
+    }
 
-        public override string GetTag() => Tag;
+    public string Tag { get; init; }
 
-        public string Tag { get; init; }
+    public override string GetTag()
+    {
+        return Tag;
     }
 }

@@ -1,25 +1,24 @@
-﻿using GoOS.GUI.Apps.GoWeb.Html;
-using GoGL.Graphics;
+﻿using GoGL.Graphics;
+using GoOS.GUI.Apps.GoWeb.Html;
 
-namespace GoOS.GUI.Apps.GoWeb.Render
+namespace GoOS.GUI.Apps.GoWeb.Render;
+
+public class RenderContext
 {
-    public class RenderContext
-    {
-        internal RenderContext(Canvas target)
-        {
-            Target = target;
-        }
+    public Canvas Target;
 
-        public Canvas Target;
+    internal RenderContext(Canvas target)
+    {
+        Target = target;
     }
+}
 
-    public static class Renderer
+public static class Renderer
+{
+    public static void Render(Document document, Canvas target)
     {
-        public static void Render(Document document, Canvas target)
-        {
-            RenderContext ctx = new RenderContext(target);
-            target.Clear(Color.White);
-            document.Body.Render(ctx);
-        }
+        var ctx = new RenderContext(target);
+        target.Clear(Color.White);
+        document.Body.Render(ctx);
     }
 }

@@ -1,12 +1,6 @@
 ﻿using System;
 using System.IO;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using GoOS.Themes;
 using static GoOS.Core;
 
@@ -27,13 +21,13 @@ public class GoCodeInstaller
                 {
                     //Console.WriteLine("3");
 
-                    string whatToRemove = file.Substring(file.LastIndexOf("\\"));
+                    var whatToRemove = file.Substring(file.LastIndexOf("\\"));
 
-                    string FullName = file.Replace(whatToRemove, "");
+                    var FullName = file.Replace(whatToRemove, "");
 
-                    string name = FullName.Replace(".gexe", "");
+                    var name = FullName.Replace(".gexe", "");
 
-                    string location = @"0:\content\GCI\" + FullName;
+                    var location = @"0:\content\GCI\" + FullName;
 
                     Kernel.InstalledPrograms.Add(name, location);
                 }
@@ -41,11 +35,11 @@ public class GoCodeInstaller
                 {
                     //Console.WriteLine("4");
 
-                    string FullName = file;
+                    var FullName = file;
 
-                    string name = FullName.Replace(".gexe", "");
+                    var name = FullName.Replace(".gexe", "");
 
-                    string location = @"0:\content\GCI\" + FullName;
+                    var location = @"0:\content\GCI\" + FullName;
 
                     Kernel.InstalledPrograms.Add(name, location);
                 }
@@ -54,23 +48,23 @@ public class GoCodeInstaller
             {
                 if (file.Contains("\\"))
                 {
-                    string whatToRemove = file.Substring(file.LastIndexOf("\\"));
+                    var whatToRemove = file.Substring(file.LastIndexOf("\\"));
 
-                    string FullName = file.Replace(whatToRemove, "");
+                    var FullName = file.Replace(whatToRemove, "");
 
-                    string name = FullName.Replace(".goexe", "");
+                    var name = FullName.Replace(".goexe", "");
 
-                    string location = @"0:\content\GCI\" + FullName;
+                    var location = @"0:\content\GCI\" + FullName;
 
                     Kernel.InstalledPrograms.Add(name, location);
                 }
                 else
                 {
-                    string FullName = file;
+                    var FullName = file;
 
-                    string name = FullName.Replace(".goexe", "");
+                    var name = FullName.Replace(".goexe", "");
 
-                    string location = @"0:\content\GCI\" + FullName;
+                    var location = @"0:\content\GCI\" + FullName;
 
                     Kernel.InstalledPrograms.Add(name, location);
                 }
@@ -86,51 +80,44 @@ public class GoCodeInstaller
     {
         try
         {
-            string[] firectories = File.ReadAllLines(@"0:\content\sys\path.ugms");
+            var firectories = File.ReadAllLines(@"0:\content\sys\path.ugms");
 
             foreach (var firectory in firectories)
-            {
                 if (!Kernel.pathPaths.Contains(firectory))
-                {
-                    Kernel.pathPaths.Append(firectory); 
-                    
-                }
-            }
-            
+                    Kernel.pathPaths.Append(firectory);
+
             foreach (var pathDir in Kernel.pathPaths)
             {
                 var directory_list = Directory.GetFiles(pathDir);
 
                 foreach (var file in directory_list)
-                {
                     if (file.EndsWith(".gexe"))
                     {
-                        string name = file.Replace(".gexe", "");
+                        var name = file.Replace(".gexe", "");
 
-                        string location = pathDir + @"\" + file;
+                        var location = pathDir + @"\" + file;
 
                         if (!Kernel.InstalledPrograms.ContainsKey(name))
                             Kernel.InstalledPrograms.Add(name, location);
                     }
                     else if (file.EndsWith(".goexe"))
                     {
-                        string name = file.Replace(".goexe", "");
+                        var name = file.Replace(".goexe", "");
 
-                        string location = pathDir + @"\" + file;
+                        var location = pathDir + @"\" + file;
 
                         if (!Kernel.InstalledPrograms.ContainsKey(name))
                             Kernel.InstalledPrograms.Add(name, location);
                     }
                     else if (file.EndsWith(".9xc"))
                     {
-                        string name = file.Replace(".9xc", "");
-                        
-                        string location = pathDir + @"\" + file;
-                        
+                        var name = file.Replace(".9xc", "");
+
+                        var location = pathDir + @"\" + file;
+
                         if (!Kernel.InstalledPrograms.ContainsKey(name))
                             Kernel.InstalledPrograms.Add(name, location);
                     }
-                }
             }
         }
         catch (Exception e)
@@ -143,20 +130,17 @@ public class GoCodeInstaller
     {
         if (Kernel.InstalledPrograms.ContainsKey(name))
         {
-            string rootass = @"0:\";
+            var rootass = @"0:\";
 
-            string currentDIRRRRRR = Directory.GetCurrentDirectory();
+            var currentDIRRRRRR = Directory.GetCurrentDirectory();
 
             Directory.SetCurrentDirectory(rootass);
 
-            Kernel.InstalledPrograms.TryGetValue(name, out string locat);
+            Kernel.InstalledPrograms.TryGetValue(name, out var locat);
 
-            string TrueLocat = locat;
+            var TrueLocat = locat;
 
-            if (locat.Contains(@"0:\"))
-            {
-                TrueLocat = TrueLocat.Replace(@"0:\", "");
-            }
+            if (locat.Contains(@"0:\")) TrueLocat = TrueLocat.Replace(@"0:\", "");
 
             File.Delete(TrueLocat);
             Kernel.InstalledPrograms.Remove(name);

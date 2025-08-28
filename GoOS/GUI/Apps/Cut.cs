@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using IL2CPU.API.Attribs;
-using GoGL.Graphics;
-using System.IO;
-using System.Threading;
+﻿using GoGL.Graphics;
 using static GoOS.Resources;
 
 namespace GoOS.GUI.Apps;
@@ -25,7 +16,7 @@ public class Cut : Window
 
         Contents.Clear(Color.White);
         RenderSystemStyleBorder();
-        
-        Contents.DrawImage(0, 0, cutIcon, true);
+
+        Contents.DrawImage(0, 0, cutIcon);
     }
 }

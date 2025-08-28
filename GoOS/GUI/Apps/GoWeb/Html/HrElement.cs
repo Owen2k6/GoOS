@@ -1,17 +1,19 @@
-﻿using GoOS.GUI.Apps.GoWeb.Render;
-using GoGL.Graphics;
+﻿using GoGL.Graphics;
+using GoOS.GUI.Apps.GoWeb.Render;
 
-namespace GoOS.GUI.Apps.GoWeb.Html
+namespace GoOS.GUI.Apps.GoWeb.Html;
+
+public class HrElement : Element
 {
-    public class HrElement : Element
+    private const int MARGIN = 10;
+
+    public override string GetTag()
     {
-        public override string GetTag() => "hr";
+        return "hr";
+    }
 
-        private const int MARGIN = 10;
-
-        public override void Render(RenderContext ctx)
-        {
-            ctx.Target.DrawLine(X + MARGIN, Y, ctx.Target.Width - MARGIN, Y, Color.LightGray);
-        }
+    public override void Render(RenderContext ctx)
+    {
+        ctx.Target.DrawLine(X + MARGIN, Y, ctx.Target.Width - MARGIN, Y, Color.LightGray);
     }
 }

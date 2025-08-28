@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cosmos.HAL.Drivers.Video;
-using IL2CPU.API.Attribs;
+﻿using System.Collections.Generic;
+using Cosmos.HAL;
 using GoGL.Graphics;
 
 namespace GoOS.GUI.Apps;
 
 public class Taskbar : Window
 {
-    private List<(Window window, Button button)> windowButtons = new(10);
-
     private const int windowButtonSpacing = 10;
     private const int windowButtonPadding = 10;
+    private readonly List<(Window window, Button button)> windowButtons = new(10);
 
-    private byte lastSecond = Cosmos.HAL.RTC.Second;
-    private int timeAreaWidth = 0;
+    private byte lastSecond = RTC.Second;
     private bool needsRedraw = true;
+    private int timeAreaWidth = 0;
 
     public Taskbar()
     {
@@ -46,7 +40,7 @@ public class Taskbar : Window
     {
         if (!needsRedraw) return;
 
-        DrawBackgroundTiled();   // ⬅️ tile the 1px-wide resource across the width
+        DrawBackgroundTiled(); // ⬅️ tile the 1px-wide resource across the width
         RenderControls();
 
         needsRedraw = false;
@@ -60,7 +54,7 @@ public class Taskbar : Window
         // If it’s the expected 1×barHeight strip, tile it horizontally
         if (tile != null && tile.Width == 1 && tile.Height == Contents.Height)
         {
-            for (int x = 0; x < Contents.Width; x++)
+            for (var x = 0; x < Contents.Width; x++)
                 Contents.DrawImage(x, 0, tile, false);
         }
         else
@@ -73,19 +67,17 @@ public class Taskbar : Window
 
     private void WindowRemoved(Window window)
     {
-        int indexToRemove = -1;
+        var indexToRemove = -1;
         Button removedButton = null;
 
         // Find the button to remove
-        for (int i = 0; i < windowButtons.Count; i++)
-        {
+        for (var i = 0; i < windowButtons.Count; i++)
             if (windowButtons[i].window == window)
             {
                 indexToRemove = i;
                 removedButton = windowButtons[i].button;
                 break;
             }
-        }
 
         if (indexToRemove == -1) return;
 
@@ -95,7 +87,7 @@ public class Taskbar : Window
         windowButtons.RemoveAt(indexToRemove);
 
         // Shift remaining buttons
-        for (int i = indexToRemove; i < windowButtons.Count; i++)
+        for (var i = indexToRemove; i < windowButtons.Count; i++)
         {
             var button = windowButtons[i].button;
             button.X -= (ushort)(buttonWidth + windowButtonSpacing);
@@ -108,12 +100,12 @@ public class Taskbar : Window
 
     private void UpdateFocusIndication()
     {
-        Window focusedWindow = WindowManager.FocusedWindow;
-        bool anyChanges = false;
+        var focusedWindow = WindowManager.FocusedWindow;
+        var anyChanges = false;
 
         foreach (var item in windowButtons)
         {
-            bool shouldBePressed = focusedWindow == item.window;
+            var shouldBePressed = focusedWindow == item.window;
             if (item.button.AppearPressed != shouldBePressed)
             {
                 item.button.AppearPressed = shouldBePressed;
@@ -122,26 +114,20 @@ public class Taskbar : Window
             }
         }
 
-        if (anyChanges)
-        {
-            needsRedraw = true;
-        }
+        if (anyChanges) needsRedraw = true;
     }
 
     private void WindowAdded(Window window)
     {
         // Don't add windows without titlebars to the taskbar
-        if (!window.HasTitlebar)
-        {
-            return;
-        }
+        if (!window.HasTitlebar) return;
 
         // Calculate button dimensions
-        int width = (windowButtonPadding * 2) + Resources.Font_1x.MeasureString(window.Title);
-        int x = CalculateNewButtonX(width);
+        var width = windowButtonPadding * 2 + Resources.Font_1x.MeasureString(window.Title);
+        var x = CalculateNewButtonX(width);
 
         // Create and render button
-        Button button = new Button(this, (ushort)x, 4, (ushort)width, 20, window.Title);
+        var button = new Button(this, (ushort)x, 4, (ushort)width, 20, window.Title);
         button.Clicked = () => WindowManager.MoveWindowToFront(window);
         button.Render();
 
@@ -169,7 +155,7 @@ public class Taskbar : Window
         base.HandleRun();
 
         // Only redraw when time changes (once per second)
-        byte currentSecond = Cosmos.HAL.RTC.Second;
+        var currentSecond = RTC.Second;
         if (currentSecond != lastSecond)
         {
             lastSecond = currentSecond;

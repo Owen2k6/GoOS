@@ -1,7 +1,9 @@
-﻿namespace GoOS.GUI.Apps.GoWeb.Html
+﻿namespace GoOS.GUI.Apps.GoWeb.Html;
+
+public class BreakElement : Element
 {
-    public class BreakElement : Element
+    public override string GetTag()
     {
-        public override string GetTag() => "br";
+        return "br";
     }
 }

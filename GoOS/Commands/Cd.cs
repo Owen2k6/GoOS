@@ -1,41 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Console = BetterConsole;
 
-namespace GoOS.Commands
+namespace GoOS.Commands;
+
+internal class Cd
 {
-    internal class Cd
+    public static void Run(string fuck)
     {
-        public static void Run(string fuck)
+        try
         {
-            try
-            {
-                string rootf = @"0:\";
-                string cdir = Directory.GetCurrentDirectory();
-                Kernel.olddir = cdir;
-                // this fuck = fuck.Split("cd ")[1];
-                if (fuck.Contains(@"0:\"))
-                {
-                    fuck.Replace(@"0:\", "");
-                }
+            var rootf = @"0:\";
+            var cdir = Directory.GetCurrentDirectory();
+            Kernel.olddir = cdir;
+            // this fuck = fuck.Split("cd ")[1];
+            if (fuck.Contains(@"0:\")) fuck.Replace(@"0:\", "");
 
-                if (!fuck.Contains("\\") && fuck != rootf)
-                {
-                    fuck = "\\" + fuck;
-                }
+            if (!fuck.Contains("\\") && fuck != rootf) fuck = "\\" + fuck;
 
-                // this too fuck = fuck.Split("cd ")[1];
-                if (Directory.Exists(Directory.GetCurrentDirectory() + fuck))
-                    Directory.SetCurrentDirectory(Directory.GetCurrentDirectory() + fuck);
-            }
-            catch
-            {
-                Console.WriteLine("\nDirectory not found\n");
-            }
+            // this too fuck = fuck.Split("cd ")[1];
+            if (Directory.Exists(Directory.GetCurrentDirectory() + fuck))
+                Directory.SetCurrentDirectory(Directory.GetCurrentDirectory() + fuck);
+        }
+        catch
+        {
+            Console.WriteLine("\nDirectory not found\n");
         }
     }
 }

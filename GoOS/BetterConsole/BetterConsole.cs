@@ -2,49 +2,54 @@
 using System.Collections.Generic;
 using Cosmos.Core.Memory;
 using Cosmos.System;
-using GoOS.GUI;
-using GoOS.Themes;
 using GoGL.Graphics;
+using GoOS.GUI;
 using GoOS.GUI.Apps.Settings;
+using GoOS.Themes;
 using static GoOS.Resources;
+using Kernel = GoOS.Kernel;
 
 /// <summary>
-/// <see cref="BetterConsole"/> class
+///     <see cref="BetterConsole" /> class
 /// </summary>
 public static class BetterConsole
 {
-    /* The canvas for the console */
-    public static Canvas Canvas;
-
     /* Character width and height */
     public const ushort CharWidth = 8;
     public const ushort CharHeight = 16;
 
-    private static readonly List<string> MenuOptions = new List<string>
+    // Maximum size for key buffer to prevent memory issues
+    private const int MaxKeyBufferSize = 256;
+
+    private const string TabSpaces = "    ";
+
+    /* The canvas for the console */
+    public static Canvas Canvas;
+
+    private static readonly List<string> MenuOptions = new()
     {
         "Launch Settings",
         "Reboot"
     };
 
-    // Maximum size for key buffer to prevent memory issues
-    private const int MaxKeyBufferSize = 256;
-    private const string TabSpaces = "    ";
-
     public static bool ConsoleMode = false;
     public static bool Visible = false;
 
     /// <summary>The X position of the cursor</summary>
-    public static int CursorLeft = 0;
-    /// <summary>The Y position of the cursor</summary>
-    public static int CursorTop = 0;
+    public static int CursorLeft;
 
-    /// <summary>The width of the <see cref="BetterConsole"/></summary>
-    public static ushort WindowWidth = 0;
-    /// <summary>The height of the <see cref="BetterConsole"/></summary>
-    public static ushort WindowHeight = 0;
+    /// <summary>The Y position of the cursor</summary>
+    public static int CursorTop;
+
+    /// <summary>The width of the <see cref="BetterConsole" /></summary>
+    public static ushort WindowWidth;
+
+    /// <summary>The height of the <see cref="BetterConsole" /></summary>
+    public static ushort WindowHeight;
 
     /// <summary>The foreground colour</summary>
     public static Color ForegroundColor = ConsoleColorEx.White;
+
     /// <summary>The background colour</summary>
     public static Color BackgroundColor = ConsoleColorEx.Black;
 
@@ -52,23 +57,23 @@ public static class BetterConsole
     public static bool CursorVisible = true;
 
     /// <summary>If true, callers control when Render() happens</summary>
-    public static bool DoubleBufferedMode = false;
+    public static bool DoubleBufferedMode;
 
     /// <summary>Queue of key events destined for the console</summary>
-    public static Queue<KeyEvent> KeyBuffer = new Queue<KeyEvent>();
+    public static Queue<KeyEvent> KeyBuffer = new();
 
     public static string Title = "GTerm";
 
     private static string lastInput = string.Empty;
-    private static byte scrollCounter = 0;
+    private static byte scrollCounter;
 
     // cursor state cache to stop redundant redraws
-    private static bool _cursorDrawn = false;
+    private static bool _cursorDrawn;
     private static int _cursorLeftDrawn = -1;
     private static int _cursorTopDrawn = -1;
 
     /// <summary>
-    /// Initialises the <see cref="BetterConsole">
+    ///     Initialises the <see cref="BetterConsole">
     /// </summary>
     public static void Init(ushort width, ushort height)
     {
@@ -92,7 +97,10 @@ public static class BetterConsole
     }
 
     /// <summary>Renders the console</summary>
-    public static void Render() => WindowManager.Update();
+    public static void Render()
+    {
+        WindowManager.Update();
+    }
 
     /// <summary>Writes text</summary>
     public static void Write(object text, bool quick = false)
@@ -102,10 +110,10 @@ public static class BetterConsole
         // hide cursor whilst drawing to avoid flicker
         SmartCursor(false);
 
-        string s = text.ToString();
-        for (int i = 0; i < s.Length; i++)
+        var s = text.ToString();
+        for (var i = 0; i < s.Length; i++)
         {
-            char c = s[i];
+            var c = s[i];
 
             if (c == '\n')
             {
@@ -114,11 +122,13 @@ public static class BetterConsole
                 CheckNewline();
                 continue;
             }
+
             if (c == '\r')
             {
                 CursorLeft = 0;
                 continue;
             }
+
             if (c == '\t')
             {
                 // print 4 spaces using same post-draw wrap behaviour
@@ -151,7 +161,9 @@ public static class BetterConsole
 
     /// <summary>Writes line</summary>
     public static void WriteLine(object text = null, bool quick = false)
-        => Write((text ?? string.Empty).ToString() + "\n", quick);
+    {
+        Write((text ?? string.Empty).ToString() + "\n", quick);
+    }
 
     /// <summary>Read a single key</summary>
     public static ConsoleKeyInfo ReadKey(bool intercept = true)
@@ -173,9 +185,9 @@ public static class BetterConsole
                 if (!intercept)
                     Write(key.KeyChar);
 
-                bool xShift = (key.Modifiers & ConsoleModifiers.Shift) == ConsoleModifiers.Shift;
-                bool xAlt = (key.Modifiers & ConsoleModifiers.Alt) == ConsoleModifiers.Alt;
-                bool xControl = (key.Modifiers & ConsoleModifiers.Control) == ConsoleModifiers.Control;
+                var xShift = (key.Modifiers & ConsoleModifiers.Shift) == ConsoleModifiers.Shift;
+                var xAlt = (key.Modifiers & ConsoleModifiers.Alt) == ConsoleModifiers.Alt;
+                var xControl = (key.Modifiers & ConsoleModifiers.Control) == ConsoleModifiers.Control;
 
                 return new ConsoleKeyInfo(key.KeyChar, key.Key.ToConsoleKey(), xShift, xAlt, xControl);
             }
@@ -191,9 +203,9 @@ public static class BetterConsole
     public static string ReadLine()
     {
         int startX = CursorLeft, startY = CursorTop;
-        string line = string.Empty;
+        var line = string.Empty;
 
-        bool reading = true;
+        var reading = true;
         while (reading)
         {
             if (CursorVisible)
@@ -232,9 +244,11 @@ public static class BetterConsole
                                 CursorLeft--;
                                 PutChar(' ', CursorLeft, CursorTop);
                             }
+
                             if (line.Length > 0)
                                 line = line.Remove(line.Length - 1);
                         }
+
                         break;
 
                     case ConsoleKeyEx.Tab:
@@ -247,8 +261,8 @@ public static class BetterConsole
                         {
                             // clear current input (overwrite with spaces)
                             SetCursorPosition(startX, startY);
-                            int toClear = line.Length;
-                            for (int i = 0; i < toClear; i++)
+                            var toClear = line.Length;
+                            for (var i = 0; i < toClear; i++)
                             {
                                 PutChar(' ', CursorLeft, CursorTop, true);
                                 if (CursorLeft == WindowWidth - 1)
@@ -262,11 +276,13 @@ public static class BetterConsole
                                     CursorLeft++;
                                 }
                             }
+
                             // write previous input
                             SetCursorPosition(startX, startY);
                             Write(lastInput, true);
                             line = lastInput;
                         }
+
                         break;
 
                     default:
@@ -274,8 +290,8 @@ public static class BetterConsole
                         {
                             if (key.Key == ConsoleKeyEx.G)
                             {
-                                string collected = Heap.Collect() + " items collected";
-                                Canvas.DrawString(Canvas.Width - (collected.Length * 8) - 8, Canvas.Height - 32,
+                                var collected = Heap.Collect() + " items collected";
+                                Canvas.DrawString(Canvas.Width - collected.Length * 8 - 8, Canvas.Height - 32,
                                     collected, Font_1x, ThemeManager.WindowText);
                                 Write(line, true);
                             }
@@ -288,19 +304,19 @@ public static class BetterConsole
                             else if (KeyboardManager.ShiftPressed && key.Key == ConsoleKeyEx.E)
                             {
                                 Write("> ", true);
-                                string input = ReadLine();
+                                var input = ReadLine();
                                 if (input == "e015")
                                 {
                                     Clear();
                                     Canvas.DrawImage(0, 0, easterEgg, false);
-                                    ReadKey(true);
+                                    ReadKey();
                                     Clear();
                                 }
                             }
                             else if (ConsoleMode && KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
                             {
                                 ShowConsoleMenu();
-                                GoOS.Kernel.DrawPrompt();
+                                Kernel.DrawPrompt();
                             }
                         }
                         else
@@ -309,6 +325,7 @@ public static class BetterConsole
                             Write(key.KeyChar.ToString(), true);
                             line += key.KeyChar;
                         }
+
                         break;
                 }
 
@@ -333,9 +350,15 @@ public static class BetterConsole
         _cursorDrawn = false; // force re-draw at new location when requested
     }
 
-    public static (int Left, int Top) GetCursorPosition() => (CursorLeft, CursorTop);
+    public static (int Left, int Top) GetCursorPosition()
+    {
+        return (CursorLeft, CursorTop);
+    }
 
-    public static void Beep(uint freq = 800, uint duration = 125) => PCSpeaker.Beep(freq, duration);
+    public static void Beep(uint freq = 800, uint duration = 125)
+    {
+        PCSpeaker.Beep(freq, duration);
+    }
 
     #region Private
 
@@ -352,13 +375,13 @@ public static class BetterConsole
             // first make sure previous cursor (if any) is cleared
             if (_cursorDrawn)
             {
-                int pxOld = _cursorLeftDrawn * CharWidth;
-                int pyOld = _cursorTopDrawn * CharHeight;
+                var pxOld = _cursorLeftDrawn * CharWidth;
+                var pyOld = _cursorTopDrawn * CharHeight;
                 Canvas.DrawFilledRectangle(pxOld, pyOld, CharWidth, CharHeight, 0, BackgroundColor);
             }
 
-            int px = CursorLeft * CharWidth;
-            int py = CursorTop * CharHeight;
+            var px = CursorLeft * CharWidth;
+            var py = CursorTop * CharHeight;
             Canvas.DrawString(px, py, "_", Font_1x, ForegroundColor);
 
             _cursorDrawn = true;
@@ -368,8 +391,8 @@ public static class BetterConsole
         else
         {
             if (!_cursorDrawn) return;
-            int px = _cursorLeftDrawn * CharWidth;
-            int py = _cursorTopDrawn * CharHeight;
+            var px = _cursorLeftDrawn * CharWidth;
+            var py = _cursorTopDrawn * CharHeight;
             Canvas.DrawFilledRectangle(px, py, CharWidth, CharHeight, 0, BackgroundColor);
             _cursorDrawn = false;
         }
@@ -403,12 +426,12 @@ public static class BetterConsole
     private static void ShowConsoleMenu()
     {
         // Save colours and buffering
-        Color oldFg = ForegroundColor;
-        Color oldBg = BackgroundColor;
-        bool oldDb = DoubleBufferedMode;
+        var oldFg = ForegroundColor;
+        var oldBg = BackgroundColor;
+        var oldDb = DoubleBufferedMode;
         DoubleBufferedMode = true; // reduce flicker
 
-        int selected = 0;
+        var selected = 0;
 
         Clear(false);
         DrawMenuBorder();
@@ -418,10 +441,10 @@ public static class BetterConsole
             if (MenuOptions.Count > 0)
                 selected = (selected + MenuOptions.Count) % MenuOptions.Count;
 
-            for (int i = 0; i < MenuOptions.Count; i++)
+            for (var i = 0; i < MenuOptions.Count; i++)
             {
-                SetCursorPosition((WindowWidth / 2) - (15 / 2) - 1,
-                    (WindowHeight / 2) - 1 + (i * 2));
+                SetCursorPosition(WindowWidth / 2 - 15 / 2 - 1,
+                    WindowHeight / 2 - 1 + i * 2);
 
                 if (i == selected)
                 {
@@ -436,6 +459,7 @@ public static class BetterConsole
 
                 Write(MenuOptions[i], true);
             }
+
             Render();
 
             var key = KeyboardManager.ReadKey();
@@ -443,7 +467,9 @@ public static class BetterConsole
             {
                 case ConsoleKeyEx.Escape:
                     Clear(false);
-                    ForegroundColor = oldFg; BackgroundColor = oldBg; DoubleBufferedMode = oldDb;
+                    ForegroundColor = oldFg;
+                    BackgroundColor = oldBg;
+                    DoubleBufferedMode = oldDb;
                     Render();
                     return;
 
@@ -451,7 +477,9 @@ public static class BetterConsole
                     if (selected == 0) WindowManager.AddWindow(new Frame());
                     else if (selected == 1) Power.Reboot();
                     Clear(false);
-                    ForegroundColor = oldFg; BackgroundColor = oldBg; DoubleBufferedMode = oldDb;
+                    ForegroundColor = oldFg;
+                    BackgroundColor = oldBg;
+                    DoubleBufferedMode = oldDb;
                     Render();
                     return;
 
@@ -469,13 +497,13 @@ public static class BetterConsole
     private static void DrawMenuBorder()
     {
         ushort menuWidth = 144;
-        ushort menuHeight = (ushort)((MenuOptions.Count + 4) * 16);
-        ushort menuX = (ushort)((Canvas.Width / 2) - (menuWidth / 2));
-        ushort menuY = (ushort)((Canvas.Height / 2) - (menuHeight / 2));
+        var menuHeight = (ushort)((MenuOptions.Count + 4) * 16);
+        var menuX = (ushort)(Canvas.Width / 2 - menuWidth / 2);
+        var menuY = (ushort)(Canvas.Height / 2 - menuHeight / 2);
 
         Canvas.DrawRectangle(menuX, menuY, menuWidth, menuHeight, 0, ThemeManager.WindowBorder);
         Canvas.DrawRectangle((ushort)(menuX + 1), (ushort)(menuY + 1),
-                             (ushort)(menuWidth - 2), (ushort)(menuHeight - 2), 0, ThemeManager.WindowBorder);
+            (ushort)(menuWidth - 2), (ushort)(menuHeight - 2), 0, ThemeManager.WindowBorder);
     }
 
     public static void PutChar(char c, int x, int y, bool quick = false)
@@ -485,8 +513,8 @@ public static class BetterConsole
             return;
 
         // Clear the background for this cell
-        int px = x * CharWidth;
-        int py = y * CharHeight;
+        var px = x * CharWidth;
+        var py = y * CharHeight;
         Canvas.DrawFilledRectangle(px, py, CharWidth, CharHeight, 0, BackgroundColor);
 
         if (c != ' ')
@@ -500,24 +528,24 @@ public static class BetterConsole
 }
 
 /// <summary>
-/// <see cref="ConsoleColorEx"/> class
+///     <see cref="ConsoleColorEx" /> class
 /// </summary>
 public static class ConsoleColorEx
 {
-    public static readonly Color Black = new Color(0, 0, 0);
-    public static readonly Color DarkBlue = new Color(0, 0, 170);
-    public static readonly Color DarkGreen = new Color(0, 170, 0);
-    public static readonly Color DarkCyan = new Color(0, 170, 170);
-    public static readonly Color DarkRed = new Color(170, 0, 0);
-    public static readonly Color DarkMagenta = new Color(170, 0, 170);
-    public static readonly Color DarkYellow = new Color(170, 85, 0);
-    public static readonly Color Gray = new Color(170, 170, 170);
-    public static readonly Color DarkGray = new Color(85, 85, 85);
-    public static readonly Color Blue = new Color(85, 85, 255);
-    public static readonly Color Green = new Color(85, 255, 85);
-    public static readonly Color Cyan = new Color(85, 255, 255);
-    public static readonly Color Red = new Color(255, 85, 85);
-    public static readonly Color Magenta = new Color(255, 85, 255);
-    public static readonly Color Yellow = new Color(255, 255, 85);
-    public static readonly Color White = new Color(255, 255, 255);
+    public static readonly Color Black = new(0, 0, 0);
+    public static readonly Color DarkBlue = new(0, 0, 170);
+    public static readonly Color DarkGreen = new(0, 170, 0);
+    public static readonly Color DarkCyan = new(0, 170, 170);
+    public static readonly Color DarkRed = new(170, 0, 0);
+    public static readonly Color DarkMagenta = new(170, 0, 170);
+    public static readonly Color DarkYellow = new(170, 85, 0);
+    public static readonly Color Gray = new(170, 170, 170);
+    public static readonly Color DarkGray = new(85, 85, 85);
+    public static readonly Color Blue = new(85, 85, 255);
+    public static readonly Color Green = new(85, 255, 85);
+    public static readonly Color Cyan = new(85, 255, 255);
+    public static readonly Color Red = new(255, 85, 85);
+    public static readonly Color Magenta = new(255, 85, 255);
+    public static readonly Color Yellow = new(255, 255, 85);
+    public static readonly Color White = new(255, 255, 255);
 }

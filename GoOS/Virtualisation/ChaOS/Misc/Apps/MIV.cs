@@ -3,7 +3,7 @@ using ConsoleKeyInfo = System.ConsoleKeyInfo;
 using ConsoleKey = System.ConsoleKey;
 using Console = BetterConsole;
 
-class MIV
+internal class MIV
 {
     public static void printMIVStartScreen()
     {
@@ -36,25 +36,21 @@ class MIV
 
     public static string stringCopy(string value)
     {
-        string newString = string.Empty;
+        var newString = string.Empty;
 
-        for (int i = 0; i < value.Length - 1; i++)
-        {
-            newString += value[i];
-        }
+        for (var i = 0; i < value.Length - 1; i++) newString += value[i];
 
         return newString;
     }
 
     public static void printMIVScreen(char[] chars, int pos, string infoBar, bool editMode)
     {
-        int countNewLine = 0;
-        int countChars = 0;
+        var countNewLine = 0;
+        var countChars = 0;
         delay(1000);
         Console.Clear();
 
-        for (int i = 0; i < pos; i++)
-        {
+        for (var i = 0; i < pos; i++)
             if (chars[i] == '\n')
             {
                 Console.WriteLine("");
@@ -65,16 +61,12 @@ class MIV
             {
                 Console.Write(chars[i]);
                 countChars++;
-                if (countChars % 80 == 79)
-                {
-                    countNewLine++;
-                }
+                if (countChars % 80 == 79) countNewLine++;
             }
-        }
 
         Console.Write("/");
 
-        for (int i = 0; i < 23 - countNewLine; i++)
+        for (var i = 0; i < 23 - countNewLine; i++)
         {
             Console.WriteLine("");
             Console.Write("~");
@@ -82,31 +74,21 @@ class MIV
 
         //PRINT INSTRUCTION
         Console.WriteLine();
-        for (int i = 0; i < 72; i++)
-        {
+        for (var i = 0; i < 72; i++)
             if (i < infoBar.Length)
-            {
                 Console.Write(infoBar[i]);
-            }
             else
-            {
                 Console.Write(" ");
-            }
-        }
 
-        if (editMode)
-        {
-            Console.Write(countNewLine + 1 + "," + countChars);
-        }
-
+        if (editMode) Console.Write(countNewLine + 1 + "," + countChars);
     }
 
     public static string miv(string start)
     {
-        bool editMode = false;
-        int pos = 0;
-        char[] chars = new char[2000];
-        string infoBar = string.Empty;
+        var editMode = false;
+        var pos = 0;
+        var chars = new char[2000];
+        var infoBar = string.Empty;
 
         if (start == null)
         {
@@ -116,10 +98,7 @@ class MIV
         {
             pos = start.Length;
 
-            for (int i = 0; i < start.Length; i++)
-            {
-                chars[i] = start[i];
-            }
+            for (var i = 0; i < start.Length; i++) chars[i] = start[i];
             printMIVScreen(chars, pos, infoBar, editMode);
         }
 
@@ -127,46 +106,40 @@ class MIV
 
         do
         {
-            keyInfo = Console.ReadKey(true);
+            keyInfo = Console.ReadKey();
 
             if (isForbiddenKey(keyInfo.Key)) continue;
 
-            else if (!editMode && keyInfo.KeyChar == ':')
+            if (!editMode && keyInfo.KeyChar == ':')
             {
                 infoBar = ":";
                 printMIVScreen(chars, pos, infoBar, editMode);
                 do
                 {
-                    keyInfo = Console.ReadKey(true);
+                    keyInfo = Console.ReadKey();
                     if (keyInfo.Key == ConsoleKey.Enter)
                     {
                         if (infoBar == ":wq")
                         {
-                            string returnString = string.Empty;
-                            for (int i = 0; i < pos; i++)
-                            {
-                                returnString += chars[i];
-                            }
+                            var returnString = string.Empty;
+                            for (var i = 0; i < pos; i++) returnString += chars[i];
                             return returnString;
                         }
-                        else if (infoBar == ":q")
-                        {
-                            return null;
 
-                        }
-                        else if (infoBar == ":help")
+                        if (infoBar == ":q") return null;
+
+                        if (infoBar == ":help")
                         {
                             printMIVStartScreen();
                             break;
                         }
-                        else
-                        {
-                            infoBar = "ERROR: No such command";
-                            printMIVScreen(chars, pos, infoBar, editMode);
-                            break;
-                        }
+
+                        infoBar = "ERROR: No such command";
+                        printMIVScreen(chars, pos, infoBar, editMode);
+                        break;
                     }
-                    else if (keyInfo.Key == ConsoleKey.Backspace)
+
+                    if (keyInfo.Key == ConsoleKey.Backspace)
                     {
                         infoBar = stringCopy(infoBar);
                         printMIVScreen(chars, pos, infoBar, editMode);
@@ -203,10 +176,8 @@ class MIV
                     {
                         continue;
                     }
+
                     printMIVScreen(chars, pos, infoBar, editMode);
-
-
-
                 } while (keyInfo.Key != ConsoleKey.Escape);
             }
 
@@ -247,33 +218,42 @@ class MIV
                 chars[pos++] = keyInfo.KeyChar;
                 printMIVScreen(chars, pos, infoBar, editMode);
             }
-
         } while (true);
     }
 
     public static bool isForbiddenKey(ConsoleKey key)
     {
-        ConsoleKey[] forbiddenKeys = { ConsoleKey.Print, ConsoleKey.PrintScreen, ConsoleKey.Pause, ConsoleKey.Home, ConsoleKey.PageUp, ConsoleKey.PageDown, ConsoleKey.End, ConsoleKey.NumPad0, ConsoleKey.NumPad1, ConsoleKey.NumPad2, ConsoleKey.NumPad3, ConsoleKey.NumPad4, ConsoleKey.NumPad5, ConsoleKey.NumPad6, ConsoleKey.NumPad7, ConsoleKey.NumPad8, ConsoleKey.NumPad9, ConsoleKey.Insert, ConsoleKey.F1, ConsoleKey.F2, ConsoleKey.F3, ConsoleKey.F4, ConsoleKey.F5, ConsoleKey.F6, ConsoleKey.F7, ConsoleKey.F8, ConsoleKey.F9, ConsoleKey.F10, ConsoleKey.F11, ConsoleKey.F12, ConsoleKey.Add, ConsoleKey.Divide, ConsoleKey.Multiply, ConsoleKey.Subtract, ConsoleKey.LeftWindows, ConsoleKey.RightWindows };
-        for (int i = 0; i < forbiddenKeys.Length; i++)
+        ConsoleKey[] forbiddenKeys =
         {
-            if (key == forbiddenKeys[i]) return true;
-        }
+            ConsoleKey.Print, ConsoleKey.PrintScreen, ConsoleKey.Pause, ConsoleKey.Home, ConsoleKey.PageUp,
+            ConsoleKey.PageDown, ConsoleKey.End, ConsoleKey.NumPad0, ConsoleKey.NumPad1, ConsoleKey.NumPad2,
+            ConsoleKey.NumPad3, ConsoleKey.NumPad4, ConsoleKey.NumPad5, ConsoleKey.NumPad6, ConsoleKey.NumPad7,
+            ConsoleKey.NumPad8, ConsoleKey.NumPad9, ConsoleKey.Insert, ConsoleKey.F1, ConsoleKey.F2, ConsoleKey.F3,
+            ConsoleKey.F4, ConsoleKey.F5, ConsoleKey.F6, ConsoleKey.F7, ConsoleKey.F8, ConsoleKey.F9, ConsoleKey.F10,
+            ConsoleKey.F11, ConsoleKey.F12, ConsoleKey.Add, ConsoleKey.Divide, ConsoleKey.Multiply, ConsoleKey.Subtract,
+            ConsoleKey.LeftWindows, ConsoleKey.RightWindows
+        };
+        for (var i = 0; i < forbiddenKeys.Length; i++)
+            if (key == forbiddenKeys[i])
+                return true;
         return false;
     }
 
     public static void delay(int time)
     {
-        for (int i = 0; i < time; i++) ;
+        for (var i = 0; i < time; i++) ;
     }
+
     public static void StartMIV(string args = null)
     {
-        string file = args;
+        var file = args;
         if (args == null)
         {
             Console.WriteLine("Enter file's filename to open:");
             Console.WriteLine("If the specified file does not exist, it will be created.");
             file = Console.ReadLine();
         }
+
         if (File.Exists(Directory.GetCurrentDirectory() + "\\" + file))
         {
             Console.WriteLine("Found file!");
@@ -283,27 +263,27 @@ class MIV
             Console.WriteLine("Creating file!");
             File.Create(Directory.GetCurrentDirectory() + "\\" + file);
         }
+
         Console.Clear();
 
-        string text = string.Empty;
-        Console.WriteLine("Do you want to open " + Path.Combine(Directory.GetCurrentDirectory() + "\\" + file) + " content? (Yes/No)");
+        var text = string.Empty;
+        Console.WriteLine("Do you want to open " + Path.Combine(Directory.GetCurrentDirectory() + "\\" + file) +
+                          " content? (Yes/No)");
         if (Console.ReadLine().ToLower() == "yes" || Console.ReadLine().ToLower() == "y")
-        {
             text = miv(File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory() + "\\" + file)));
-        }
         else
-        {
             text = miv(null);
-        }
 
         Console.Clear();
 
         if (text != null)
         {
             File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory() + "\\" + file), text);
-            Console.WriteLine("Content has been saved to " + Path.Combine(Directory.GetCurrentDirectory() + "\\" + file));
+            Console.WriteLine(
+                "Content has been saved to " + Path.Combine(Directory.GetCurrentDirectory() + "\\" + file));
         }
+
         Console.WriteLine("Press any key to continue...");
-        Console.ReadKey(true);
+        Console.ReadKey();
     }
 }

@@ -3,19 +3,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
+using Cosmos.Core;
+using Cosmos.System;
 using Cosmos.System.Network.Config;
-using Cosmos.System.Network.IPv4;
 using Cosmos.System.Network.IPv4.UDP.DNS;
 using Cosmos.System.ScanMaps;
+using GoGL;
 using GoGL.Graphics;
+using GoGL.Hardware.GPU;
+using GoOS._9xCode;
+using GoOS.GUI.Apps.GoStore;
+using GoOS.GUI.Apps.GoWeb;
 
 namespace GoOS.GUI.Apps.Settings;
 
 public class Frame : Window
 {
-    List<Button> sButtons = new();
     private const int buttonHeight = 24;
-    private int page = 0;
+    private readonly List<Button> sButtons = new();
+    private int page;
 
     public Frame()
     {
@@ -27,10 +33,7 @@ public class Frame : Window
         SetDock(WindowDock.Auto);
         // Paint the window.
         ReDraw();
-        foreach (Control control in Controls)
-        {
-            control.Render();
-        }
+        foreach (var control in Controls) control.Render();
     }
 
     public void ReDraw()
@@ -40,10 +43,7 @@ public class Frame : Window
         sButtons.Clear();
         Draw();
         AddSideButtons();
-        foreach (Control control in Controls)
-        {
-            control.Render();
-        }
+        foreach (var control in Controls) control.Render();
     }
 
     public void Draw()
@@ -51,7 +51,7 @@ public class Frame : Window
         Contents.DrawImage(0, 0, Resources.SBG, false);
         switch (page)
         {
-            case (0):
+            case 0:
                 new Button(this, 109, 4, 185, 24, "About")
                 {
                     Clicked = () =>
@@ -63,18 +63,18 @@ public class Frame : Window
                             Color.White);
                         Contents.DrawString(5, 122, "Owen2k6 Open Sourced Licence", Resources.Font_1x, Color.White);
                         Contents.DrawString(5, 144, "Made In England", Resources.Font_1x, Color.White);
-                        Contents.DrawString(5, 188, "System Memory: " + Cosmos.Core.CPU.GetAmountOfRAM() + "MB",
+                        Contents.DrawString(5, 188, "System Memory: " + CPU.GetAmountOfRAM() + "MB",
                             Resources.Font_1x, Color.White);
                         Contents.DrawString(5, 222, "GoOS Implementations --", Resources.Font_1x, Color.White);
-                        Contents.DrawString(5, 234, "GoGL Version " + new GoGL.Info().getVersion(), Resources.Font_1x,
+                        Contents.DrawString(5, 234, "GoGL Version " + new Info().getVersion(), Resources.Font_1x,
                             Color.White);
                         Contents.DrawString(5, 246, "GoCode Version " + GoCode.GoCode.Version, Resources.Font_1x,
                             Color.White);
-                        Contents.DrawString(5, 258, "9xCode Version " + _9xCode.Interpreter.Version, Resources.Font_1x,
+                        Contents.DrawString(5, 258, "9xCode Version " + Interpreter.Version, Resources.Font_1x,
                             Color.White);
-                        Contents.DrawString(5, 270, "GoStore Version " + GoStore.MainFrame.Version, Resources.Font_1x,
+                        Contents.DrawString(5, 270, "GoStore Version " + MainFrame.Version, Resources.Font_1x,
                             Color.White);
-                        Contents.DrawString(5, 282, "GoWeb Version " + GoWeb.GoWebWindow.Version, Resources.Font_1x,
+                        Contents.DrawString(5, 282, "GoWeb Version " + GoWebWindow.Version, Resources.Font_1x,
                             Color.White);
                     }
                 };
@@ -86,7 +86,7 @@ public class Frame : Window
 
                         try
                         {
-                            using (TcpClient tcpClient = new TcpClient())
+                            using (var tcpClient = new TcpClient())
                             {
                                 var dnsClient = new DnsClient();
 
@@ -95,34 +95,34 @@ public class Frame : Window
                                 dnsClient.SendAsk("api.goos.owen2k6.com");
 
                                 // Address from IP
-                                Address address = dnsClient.Receive();
+                                var address = dnsClient.Receive();
                                 dnsClient.Close();
-                                string serverIP = address.ToString();
+                                var serverIP = address.ToString();
 
                                 tcpClient.Connect(serverIP, 80);
-                                NetworkStream stream = tcpClient.GetStream();
-                                string httpget = "GET /GoOS/" + Kernel.edition + ".goos HTTP/1.1\r\n" +
-                                                 "User-Agent: GoOS\r\n" +
-                                                 "Accept: */*\r\n" +
-                                                 "Accept-Encoding: identity\r\n" +
-                                                 "Host: api.goos.owen2k6.com\r\n" +
-                                                 "Connection: Keep-Alive\r\n\r\n";
-                                byte[] dataToSend = Encoding.ASCII.GetBytes(httpget);
+                                var stream = tcpClient.GetStream();
+                                var httpget = "GET /GoOS/" + Kernel.edition + ".goos HTTP/1.1\r\n" +
+                                              "User-Agent: GoOS\r\n" +
+                                              "Accept: */*\r\n" +
+                                              "Accept-Encoding: identity\r\n" +
+                                              "Host: api.goos.owen2k6.com\r\n" +
+                                              "Connection: Keep-Alive\r\n\r\n";
+                                var dataToSend = Encoding.ASCII.GetBytes(httpget);
                                 stream.Write(dataToSend, 0, dataToSend.Length);
 
                                 // Receive data
-                                byte[] receivedData = new byte[tcpClient.ReceiveBufferSize];
-                                int bytesRead = stream.Read(receivedData, 0, receivedData.Length);
-                                string receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
+                                var receivedData = new byte[tcpClient.ReceiveBufferSize];
+                                var bytesRead = stream.Read(receivedData, 0, receivedData.Length);
+                                var receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
 
-                                string[] responseParts =
+                                var responseParts =
                                     receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
 
                                 if (responseParts.Length < 2 || responseParts.Length > 2)
                                     Dialogue.Show("GoOS Update", "Invalid HTTP response!", default,
                                         WindowManager.errorIcon);
 
-                                string content = responseParts[1];
+                                var content = responseParts[1];
 
                                 if (content != Kernel.version && content != Kernel.editionnext)
                                 {
@@ -136,17 +136,15 @@ public class Frame : Window
                                             "Check with Owen2k6 for ITB updates or return to GoOS Release.",
                                             Resources.Font_1x, Color.White);
                                     }
-                                    else
-                                    {
-                                        RenderInternalMenu("Software Update");
-                                        Contents.DrawString(5, 33, "GoOS " + content, Resources.Font_2x,
-                                            Color.White);
-                                        Contents.DrawString(5, 78, "A new version of GoOS is available.",
-                                            Resources.Font_1x, Color.White);
-                                        Contents.DrawString(5, 100,
-                                            "To Update, go to \nhttps://github.com/Owen2k6/GoOS/", Resources.Font_1x,
-                                            Color.White);
-                                    }
+
+                                    RenderInternalMenu("Software Update");
+                                    Contents.DrawString(5, 33, "GoOS " + content, Resources.Font_2x,
+                                        Color.White);
+                                    Contents.DrawString(5, 78, "A new version of GoOS is available.",
+                                        Resources.Font_1x, Color.White);
+                                    Contents.DrawString(5, 100,
+                                        "To Update, go to \nhttps://github.com/Owen2k6/GoOS/", Resources.Font_1x,
+                                        Color.White);
                                 }
                                 else if (content == Kernel.editionnext)
                                 {
@@ -160,15 +158,13 @@ public class Frame : Window
                                             "Check with Owen2k6 for ITB updates \nor return to GoOS Release.",
                                             Resources.Font_1x, Color.White);
                                     }
-                                    else
-                                    {
-                                        RenderInternalMenu("Software Update");
-                                        Contents.DrawString(5, 33, "GoOS " + content, Resources.Font_2x,
-                                            Color.White);
-                                        Contents.DrawString(5, 78,
-                                            "The next edition of GoOS is here!\nGoOS Update will no longer display \nupdates beyond this version.\n\nDon't worry, you don't have to update\nto receive continued support.\nWhile GoOS Update will no longer \ndisplay updates, this edition may \nstill receive updates.\nCheck https://github.com/Owen2k6/GoOS\nIf you wish to update your edition \nor version.",
-                                            Resources.Font_1x, Color.White);
-                                    }
+
+                                    RenderInternalMenu("Software Update");
+                                    Contents.DrawString(5, 33, "GoOS " + content, Resources.Font_2x,
+                                        Color.White);
+                                    Contents.DrawString(5, 78,
+                                        "The next edition of GoOS is here!\nGoOS Update will no longer display \nupdates beyond this version.\n\nDon't worry, you don't have to update\nto receive continued support.\nWhile GoOS Update will no longer \ndisplay updates, this edition may \nstill receive updates.\nCheck https://github.com/Owen2k6/GoOS\nIf you wish to update your edition \nor version.",
+                                        Resources.Font_1x, Color.White);
                                 }
                                 else if (content == "404")
                                 {
@@ -196,7 +192,7 @@ public class Frame : Window
 
                         try
                         {
-                            using (TcpClient tcpClient = new TcpClient())
+                            using (var tcpClient = new TcpClient())
                             {
                                 var dnsClient = new DnsClient();
 
@@ -205,34 +201,34 @@ public class Frame : Window
                                 dnsClient.SendAsk("api.goos.owen2k6.com");
 
                                 // Address from IP
-                                Address address = dnsClient.Receive();
+                                var address = dnsClient.Receive();
                                 dnsClient.Close();
-                                string serverIP = address.ToString();
+                                var serverIP = address.ToString();
 
                                 tcpClient.Connect(serverIP, 80);
-                                NetworkStream stream = tcpClient.GetStream();
-                                string httpget = "GET /GoOS/" + Kernel.edition + "-support.goos HTTP/1.1\r\n" +
-                                                 "User-Agent: GoOS\r\n" +
-                                                 "Accept: */*\r\n" +
-                                                 "Accept-Encoding: identity\r\n" +
-                                                 "Host: api.goos.owen2k6.com\r\n" +
-                                                 "Connection: Keep-Alive\r\n\r\n";
-                                byte[] dataToSend = Encoding.ASCII.GetBytes(httpget);
+                                var stream = tcpClient.GetStream();
+                                var httpget = "GET /GoOS/" + Kernel.edition + "-support.goos HTTP/1.1\r\n" +
+                                              "User-Agent: GoOS\r\n" +
+                                              "Accept: */*\r\n" +
+                                              "Accept-Encoding: identity\r\n" +
+                                              "Host: api.goos.owen2k6.com\r\n" +
+                                              "Connection: Keep-Alive\r\n\r\n";
+                                var dataToSend = Encoding.ASCII.GetBytes(httpget);
                                 stream.Write(dataToSend, 0, dataToSend.Length);
 
                                 // Receive data
-                                byte[] receivedData = new byte[tcpClient.ReceiveBufferSize];
-                                int bytesRead = stream.Read(receivedData, 0, receivedData.Length);
-                                string receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
+                                var receivedData = new byte[tcpClient.ReceiveBufferSize];
+                                var bytesRead = stream.Read(receivedData, 0, receivedData.Length);
+                                var receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
 
-                                string[] responseParts =
+                                var responseParts =
                                     receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
 
                                 if (responseParts.Length < 2 || responseParts.Length > 2)
                                     Dialogue.Show("GoOS Update", "Invalid HTTP response!", default,
                                         WindowManager.errorIcon);
 
-                                string content = responseParts[1];
+                                var content = responseParts[1];
 
                                 if (content == "true")
                                 {
@@ -258,15 +254,13 @@ public class Frame : Window
                                             "Check with Owen2k6 for ITB updates \nor return to GoOS Release.",
                                             Resources.Font_1x, Color.White);
                                     }
-                                    else
-                                    {
-                                        RenderInternalMenu("Software Update");
-                                        Contents.DrawString(5, 33, "Contact Support", Resources.Font_2x,
-                                            Color.White);
-                                        Contents.DrawString(5, 78,
-                                            "GoOS Authenticity could not be verified.\nPlease contact Owen2k6 for support.",
-                                            Resources.Font_1x, Color.White);
-                                    }
+
+                                    RenderInternalMenu("Software Update");
+                                    Contents.DrawString(5, 33, "Contact Support", Resources.Font_2x,
+                                        Color.White);
+                                    Contents.DrawString(5, 78,
+                                        "GoOS Authenticity could not be verified.\nPlease contact Owen2k6 for support.",
+                                        Resources.Font_1x, Color.White);
                                 }
                             }
                         }
@@ -279,14 +273,14 @@ public class Frame : Window
                         #endregion
                     }
                 };
-                new Button(this, 109, 4 + (24 * 2), 185, 24, "Storage")
+                new Button(this, 109, 4 + 24 * 2, 185, 24, "Storage")
                 {
                     Clicked = () =>
                     {
-                        string ttype = "Bytes";
-                        string tsize = Kernel.FS.GetTotalSize(@"0").ToString();
-                        string tftype = "Bytes";
-                        string tfsize = Kernel.FS.GetTotalFreeSpace(@"0").ToString();
+                        var ttype = "Bytes";
+                        var tsize = Kernel.FS.GetTotalSize(@"0").ToString();
+                        var tftype = "Bytes";
+                        var tfsize = Kernel.FS.GetTotalFreeSpace(@"0").ToString();
                         RenderInternalMenu("Storage");
                         Contents.DrawString(5, 33, "Volume " + Kernel.FS.GetFileSystemLabel(@"0"), Resources.Font_2x,
                             Color.White);
@@ -330,11 +324,11 @@ public class Frame : Window
                         Contents.DrawString(5, 100, "Free Storage: " + tfsize + tftype, Resources.Font_1x, Color.White);
                         Contents.DrawString(5, 122, "Format: " + Kernel.FS.GetFileSystemType(@"0"), Resources.Font_1x,
                             Color.White);
-                        Contents.DrawString(5, 144, "Validation: " + Kernel.FS.IsValidDriveId(@"0").ToString(),
+                        Contents.DrawString(5, 144, "Validation: " + Kernel.FS.IsValidDriveId(@"0"),
                             Resources.Font_1x, Color.White);
                     }
                 };
-                new Button(this, 109, 4 + (24 * 4), 185, 24, "Language and Locale")
+                new Button(this, 109, 4 + 24 * 4, 185, 24, "Language and Locale")
                 {
                     Clicked = () =>
                     {
@@ -342,50 +336,49 @@ public class Frame : Window
                             "This feature is planned but at this time, the GoOS Kernel is not able to parse language data.");
                     }
                 };
-                new Button(this, 109, 4 + (24 * 5), 185, 24, "Keyboard Layout")
+                new Button(this, 109, 4 + 24 * 5, 185, 24, "Keyboard Layout")
                 {
                     Clicked = () =>
                     {
                         RenderInternalMenu("Keyboard Layout");
                         new Button(this, 5, 52, 298, 24, "English US (104USQWERTY-US-1.0)")
                         {
-                            Clicked = () => { Cosmos.System.KeyboardManager.SetKeyLayout(new USStandardLayout()); }
+                            Clicked = () => { KeyboardManager.SetKeyLayout(new USStandardLayout()); }
                         };
                         new Button(this, 5, 76, 298, 24, "English UK (105GBQWERTY-GB-1.0)")
                         {
-                            Clicked = () => { Cosmos.System.KeyboardManager.SetKeyLayout(new GBStandardLayout()); }
+                            Clicked = () => { KeyboardManager.SetKeyLayout(new GBStandardLayout()); }
                         };
                         new Button(this, 5, 100, 298, 24, "Spanish (105ESQWERTY-ES-1.0)")
                         {
-                            Clicked = () => { Cosmos.System.KeyboardManager.SetKeyLayout(new ESStandardLayout()); }
+                            Clicked = () => { KeyboardManager.SetKeyLayout(new ESStandardLayout()); }
                         };
                         new Button(this, 5, 124, 298, 24, "French (105FRQWERTY-FR-1.0)")
                         {
-                            Clicked = () => { Cosmos.System.KeyboardManager.SetKeyLayout(new FRStandardLayout()); }
+                            Clicked = () => { KeyboardManager.SetKeyLayout(new FRStandardLayout()); }
                         };
                         new Button(this, 5, 148, 298, 24, "German (105DEQWERTY-DE-1.0)")
                         {
-                            Clicked = () => { Cosmos.System.KeyboardManager.SetKeyLayout(new DEStandardLayout()); }
+                            Clicked = () => { KeyboardManager.SetKeyLayout(new DEStandardLayout()); }
                         };
                         new Button(this, 5, 172, 298, 24, "Turkish (105TRQWERTY-TR-1.0)")
                         {
-                            Clicked = () => { Cosmos.System.KeyboardManager.SetKeyLayout(new TRStandardLayout()); }
+                            Clicked = () => { KeyboardManager.SetKeyLayout(new TRStandardLayout()); }
                         };
                         Contents.DrawString(5, 33, "Setting does not persist post reboot.", Resources.Font_1x,
                             Color.Red);
-                        foreach (Control control in Controls)
-                        {
-                            control.Render();
-                        }
+                        foreach (var control in Controls) control.Render();
                     }
                 };
-                new Button(this, 109, 4 + (24 * 7), 185, 24, "Reset")
+                new Button(this, 109, 4 + 24 * 7, 185, 24, "Reset")
                 {
                     Clicked = () => { Dialogue.Show("Unimplemented", "Work In Progress"); }
                 };
                 break;
-            case (1):
-                Contents.DrawString(109, 11, "Current: " + GUI.WindowManager.Canvas.Width+"x"+GUI.WindowManager.Canvas.Height, Resources.Font_1x,
+            case 1:
+                Contents.DrawString(109, 11,
+                    "Current: " + WindowManager.Canvas.Width + "x" + WindowManager.Canvas.Height,
+                    Resources.Font_1x,
                     Color.White);
                 new Button(this, 109, 28, 185, 24, "Change Resolution")
                 {
@@ -397,14 +390,14 @@ public class Frame : Window
                             Clicked = () =>
                             {
                                 BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Display.GetDisplay(
                                     800, 600);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
+                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
-                                GUI.WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 0 });
@@ -415,14 +408,14 @@ public class Frame : Window
                             Clicked = () =>
                             {
                                 BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Display.GetDisplay(
                                     1024, 768);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
+                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
-                                GUI.WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 1 });
@@ -433,14 +426,14 @@ public class Frame : Window
                             Clicked = () =>
                             {
                                 BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Display.GetDisplay(
                                     1280, 960);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
+                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
-                                GUI.WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 2 });
@@ -451,14 +444,14 @@ public class Frame : Window
                             Clicked = () =>
                             {
                                 BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Display.GetDisplay(
                                     1400, 1050);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
+                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
-                                GUI.WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 3 });
@@ -469,14 +462,14 @@ public class Frame : Window
                             Clicked = () =>
                             {
                                 BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Display.GetDisplay(
                                     1600, 1200);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
+                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
-                                GUI.WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 4 });
@@ -487,14 +480,14 @@ public class Frame : Window
                             Clicked = () =>
                             {
                                 BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Display.GetDisplay(
                                     1280, 720);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
+                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
-                                GUI.WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 5 });
@@ -505,14 +498,14 @@ public class Frame : Window
                             Clicked = () =>
                             {
                                 BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Display.GetDisplay(
                                     1280, 800);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
+                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
-                                GUI.WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 6 });
@@ -523,14 +516,14 @@ public class Frame : Window
                             Clicked = () =>
                             {
                                 BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Display.GetDisplay(
                                     1366, 768);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
+                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
-                                GUI.WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 7 });
@@ -541,14 +534,14 @@ public class Frame : Window
                             Clicked = () =>
                             {
                                 BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Display.GetDisplay(
                                     1440, 900);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
+                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
-                                GUI.WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 8 });
@@ -559,14 +552,14 @@ public class Frame : Window
                             Clicked = () =>
                             {
                                 BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Display.GetDisplay(
                                     1600, 900);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
+                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
-                                GUI.WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 9 });
@@ -577,14 +570,14 @@ public class Frame : Window
                             Clicked = () =>
                             {
                                 BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Display.GetDisplay(
                                     1680, 1050);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
+                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
-                                GUI.WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 10 });
@@ -595,14 +588,14 @@ public class Frame : Window
                             Clicked = () =>
                             {
                                 BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Display.GetDisplay(
                                     1920, 1080);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
+                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
-                                GUI.WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 11 });
@@ -613,14 +606,14 @@ public class Frame : Window
                             Clicked = () =>
                             {
                                 BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Display.GetDisplay(
                                     1920, 1200);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
+                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
-                                GUI.WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 12 });
@@ -631,23 +624,20 @@ public class Frame : Window
                             Clicked = () =>
                             {
                                 BetterConsole.ConsoleMode = true;
-                                GUI.WindowManager.Canvas = GoGL.Hardware.GPU.Display.GetDisplay(
+                                WindowManager.Canvas = Display.GetDisplay(
                                     2560, 1440);
-                                GUI.WindowManager.Update();
-                                GUI.WindowManager.windows = new List<GUI.Window>(10);
+                                WindowManager.Update();
+                                WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
-                                GUI.WindowManager.AddWindow(new Taskbar());
+                                WindowManager.AddWindow(new Desktop());
+                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
-                                GUI.WindowManager.AddWindow(new Desktop());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
                                     new byte[] { 13 });
                             }
                         };
-                        foreach (Control control in Controls)
-                        {
-                            control.Render();
-                        }
+                        foreach (var control in Controls) control.Render();
                     }
                 };
 
@@ -674,7 +664,7 @@ public class Frame : Window
         else
         {
             sButtons.Add(new Button(this, 0,
-                (ushort)((sButtons.Count * buttonHeight)), 96, buttonHeight, name)
+                (ushort)(sButtons.Count * buttonHeight), 96, buttonHeight, name)
             {
                 Clicked = clickedAction,
                 RenderWithAlpha = true,
@@ -698,10 +688,7 @@ public class Frame : Window
             Image = Resources.SBBB
         };
         Contents.DrawString(33, 6, Name, Resources.Font_1x, Color.White);
-        foreach (Control control in Controls)
-        {
-            control.Render();
-        }
+        foreach (var control in Controls) control.Render();
     }
 
     private void AddSideButtons()

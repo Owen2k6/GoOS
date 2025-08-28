@@ -1,10 +1,11 @@
 ﻿using System;
 using GoGL.Graphics;
+
 namespace GoOS.GUI.Apps;
 
 public class GoVM : Window
 {
-    private Button ChaOS_VM_b;
+    private readonly Button ChaOS_VM_b;
     private bool oig = true;
 
     public GoVM()
@@ -19,10 +20,10 @@ public class GoVM : Window
         {
             Clicked = ChaOS_VM_b_Click
         };
-        
+
         Contents.Clear(Color.White);
         RenderSystemStyleBorder();
-        
+
         ChaOS_VM_b.Render();
     }
 
@@ -38,9 +39,8 @@ public class GoVM : Window
 
 public class ChaOS_VM : Window
 {
-    
     public static VMBetterConsole VMTERM;
-    
+
     public ChaOS_VM()
     {
         /*Dialogue.Show(
@@ -69,6 +69,5 @@ public class ChaOS_VM : Window
                 null, // default buttons
                 WindowManager.errorIcon);
         }
-        
     }
 }

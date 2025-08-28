@@ -6,7 +6,7 @@ namespace GoOS.Util;
 
 public class localRepo
 {
-    private Dictionary<string, string> fileContents;
+    private readonly Dictionary<string, string> fileContents;
 
     public localRepo()
     {
@@ -16,15 +16,9 @@ public class localRepo
 
     public string GetFile(string name)
     {
-        if (fileContents.ContainsKey(name))
-        {
-            return fileContents[name];
-        }
-        else
-        {
-            log(ThemeManager.ErrorText,$"LR: Unable to locate {name}!");
-            return null;
-        }
+        if (fileContents.ContainsKey(name)) return fileContents[name];
+
+        log(ThemeManager.ErrorText, $"LR: Unable to locate {name}!");
+        return null;
     }
-    
 }

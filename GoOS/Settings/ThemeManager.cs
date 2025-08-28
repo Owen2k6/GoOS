@@ -1,156 +1,134 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using Console = BetterConsole;
 using ConsoleColor = GoGL.Graphics.Color;
 using static ConsoleColorEx;
 
-namespace GoOS.Themes
+namespace GoOS.Themes;
+
+public enum Theme
 {
-    public enum Theme
+    Fallback = 0
+}
+
+public static class ThemeManager
+{
+    public static ConsoleColor Default;
+    public static ConsoleColor Background;
+    public static ConsoleColor[] Startup;
+    public static ConsoleColor WindowText;
+    public static ConsoleColor WindowBorder;
+    public static ConsoleColor ErrorText;
+    public static ConsoleColor Other1;
+
+    private static readonly Dictionary<string, ConsoleColor> StringToConsoleColor = new()
     {
-        Fallback = 0
+        { "Black", Black }, { "DarkBlue", DarkBlue },
+        { "DarkGreen", DarkGreen }, { "DarkCyan", DarkCyan },
+        { "DarkRed", DarkRed }, { "DarkMagenta", DarkMagenta },
+        { "DarkYellow", DarkYellow }, { "Gray", Gray },
+        { "DarkGray", DarkGray }, { "Blue", Blue },
+        { "Green", Green }, { "Cyan", Cyan },
+        { "Red", Red }, { "Magenta", Magenta },
+        { "Yellow", Yellow }, { "White", White }
+    };
+
+    public static void SetTheme(Theme theme)
+    {
+        if (theme == Theme.Fallback)
+        {
+            Default = White;
+            Background = Black;
+            Startup = new ConsoleColor[3] { DarkMagenta, Red, DarkRed };
+            WindowText = Cyan;
+            WindowBorder = Green;
+            ErrorText = Red;
+            Other1 = Yellow;
+        }
     }
 
-    public static class ThemeManager
+    public static void SetTheme(string themeFile, bool echo = true)
     {
-        public static ConsoleColor Default;
-        public static ConsoleColor Background;
-        public static ConsoleColor[] Startup;
-        public static ConsoleColor WindowText;
-        public static ConsoleColor WindowBorder;
-        public static ConsoleColor ErrorText;
-        public static ConsoleColor Other1;
-
-        public static void SetTheme(Theme theme)
+        try
         {
-            if (theme == Theme.Fallback)
+            if (File.Exists(themeFile) && themeFile.EndsWith(".gtheme"))
             {
-                Default = White;
-                Background = Black;
-                Startup = new ConsoleColor[3] { DarkMagenta, Red, DarkRed };
-                WindowText = Cyan;
-                WindowBorder = Green;
-                ErrorText = Red;
-                Other1 = Yellow;
-            }
-        }
+                var themeContents = File.ReadAllLines(themeFile);
 
-        private static Dictionary<string, ConsoleColor> StringToConsoleColor = new Dictionary<string, ConsoleColor>()
-        {
-            { "Black", Black }, { "DarkBlue", DarkBlue },
-            { "DarkGreen", DarkGreen }, { "DarkCyan", DarkCyan },
-            { "DarkRed", DarkRed }, { "DarkMagenta", DarkMagenta },
-            { "DarkYellow", DarkYellow }, { "Gray", Gray },
-            { "DarkGray", DarkGray }, { "Blue", Blue },
-            { "Green", Green }, { "Cyan", Cyan },
-            { "Red", Red }, { "Magenta", Magenta },
-            { "Yellow", Yellow }, { "White", White },
-        };
+                foreach (var line in themeContents)
+                    if (line.StartsWith("Default = "))
+                    {
+                        var result = line.Substring(10);
 
-        public static void SetTheme(string themeFile, bool echo = true)
-        {
-            try
-            {
-                if (File.Exists(themeFile) && themeFile.EndsWith(".gtheme"))
+                        if (StringToConsoleColor.TryGetValue(result, out var colorval)) Default = colorval;
+                    }
+                    else if (line.StartsWith("Background = "))
+                    {
+                        var result = line.Substring(13);
+
+                        if (StringToConsoleColor.TryGetValue(result, out var colorval))
+                        {
+                            Background = colorval;
+                            Console.BackgroundColor = colorval;
+                        }
+                    }
+                    else if (line.StartsWith("Startup = "))
+                    {
+                        var result = line.Substring(10).Split(',');
+
+                        for (var i = 0; i < 3; i++)
+                            if (StringToConsoleColor.TryGetValue(result[i], out var colorval))
+                                Startup[i] = colorval;
+                    }
+                    else if (line.StartsWith("WindowText = "))
+                    {
+                        var result = line.Substring(13);
+
+                        if (StringToConsoleColor.TryGetValue(result, out var colorval)) WindowText = colorval;
+                    }
+                    else if (line.StartsWith("WindowBorder = "))
+                    {
+                        var result = line.Substring(15);
+
+                        if (StringToConsoleColor.TryGetValue(result, out var colorval)) WindowBorder = colorval;
+                    }
+                    else if (line.StartsWith("ErrorText = "))
+                    {
+                        var result = line.Substring(12);
+
+                        if (StringToConsoleColor.TryGetValue(result, out var colorval)) ErrorText = colorval;
+                    }
+                    else if (line.StartsWith("Other1 = "))
+                    {
+                        var result = line.Substring(9);
+
+                        if (StringToConsoleColor.TryGetValue(result, out var colorval)) Other1 = colorval;
+                    }
+
+                File.WriteAllText(@"0:\content\sys\theme.gms", @"ThemeFile = " + themeFile);
+
+                if (echo)
                 {
-                    string[] themeContents = File.ReadAllLines(themeFile);
-
-                    foreach (string line in themeContents)
-                    {
-                        if (line.StartsWith("Default = "))
-                        {
-                            string result = line.Substring(10);
-
-                            if (StringToConsoleColor.TryGetValue(result, out ConsoleColor colorval))
-                            {
-                                Default = colorval;
-                            }
-                        }
-                        else if (line.StartsWith("Background = "))
-                        {
-                            string result = line.Substring(13);
-
-                            if (StringToConsoleColor.TryGetValue(result, out ConsoleColor colorval))
-                            {
-                                Background = colorval;
-                                Console.BackgroundColor = colorval;
-                            }
-                        }
-                        else if (line.StartsWith("Startup = "))
-                        {
-                            string[] result = line.Substring(10).Split(',');
-
-                            for (int i = 0; i < 3; i++)
-                            {
-                                if (StringToConsoleColor.TryGetValue(result[i], out ConsoleColor colorval))
-                                {
-                                    Startup[i] = colorval;
-                                }
-                            }
-                        }
-                        else if (line.StartsWith("WindowText = "))
-                        {
-                            string result = line.Substring(13);
-
-                            if (StringToConsoleColor.TryGetValue(result, out ConsoleColor colorval))
-                            {
-                                WindowText = colorval;
-                            }
-                        }
-                        else if (line.StartsWith("WindowBorder = "))
-                        {
-                            string result = line.Substring(15);
-
-                            if (StringToConsoleColor.TryGetValue(result, out ConsoleColor colorval))
-                            {
-                                WindowBorder = colorval;
-                            }
-                        }
-                        else if (line.StartsWith("ErrorText = "))
-                        {
-                            string result = line.Substring(12);
-
-                            if (StringToConsoleColor.TryGetValue(result, out ConsoleColor colorval))
-                            {
-                                ErrorText = colorval;
-                            }
-                        }
-                        else if (line.StartsWith("Other1 = "))
-                        {
-                            string result = line.Substring(9);
-
-                            if (StringToConsoleColor.TryGetValue(result, out ConsoleColor colorval))
-                            {
-                                Other1 = colorval;
-                            }
-                        }
-                    }
-
-                    File.WriteAllText(@"0:\content\sys\theme.gms", @"ThemeFile = " + themeFile);
-
-                    if (echo)
-                    {
-                        Console.ForegroundColor = ThemeManager.WindowText;
-                        Console.WriteLine("ThemeManager - Theme changed successfully!");
-                    }
-                }
-                else
-                {
-                    if (echo)
-                    {
-                        Console.ForegroundColor = ThemeManager.ErrorText;
-                        Console.WriteLine("ThemeManager - Theme file doesn't exist or is not a Goplex Theme File!");
-                    }
+                    Console.ForegroundColor = WindowText;
+                    Console.WriteLine("ThemeManager - Theme changed successfully!");
                 }
             }
-            catch (Exception e)
+            else
             {
                 if (echo)
                 {
-                    Console.ForegroundColor = ThemeManager.ErrorText;
-                    Console.WriteLine("ThemeManager - Error while setting theme!\n" + e);
+                    Console.ForegroundColor = ErrorText;
+                    Console.WriteLine("ThemeManager - Theme file doesn't exist or is not a Goplex Theme File!");
                 }
+            }
+        }
+        catch (Exception e)
+        {
+            if (echo)
+            {
+                Console.ForegroundColor = ErrorText;
+                Console.WriteLine("ThemeManager - Error while setting theme!\n" + e);
             }
         }
     }

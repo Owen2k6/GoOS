@@ -1,63 +1,55 @@
 ﻿using System;
 
-namespace GoOS.GUI.Apps.GoWeb.Http
+namespace GoOS.GUI.Apps.GoWeb.Http;
+
+public class Uri
 {
-    public class Uri
+    public Uri(string protocol, string host, string path)
     {
-        public Uri(string protocol, string host, string path)
-        {
-            Protocol = protocol;
-            Host = host;
-            Path = path;
-        }
+        Protocol = protocol;
+        Host = host;
+        Path = path;
+    }
 
-        /*
-         * TODOTODO: Decode escaped characters.
-         */
-        public static Uri FromString(string uri)
-        {
-            uri = uri.Trim();
-            if (string.IsNullOrEmpty(uri))
-            {
-                throw new ArgumentException("Invalid URI");
-            }
+    public string Protocol { get; init; }
 
-            int protoIdx = uri.IndexOf(':');
-            string proto;
-            if (protoIdx != -1)
-            {
-                proto = uri.Substring(0, protoIdx);
-            }
-            else
-            {
-                throw new ArgumentException("Invalid URI");
-            }
+    public string Host { get; init; }
 
-            int pathIdx = uri.IndexOf('/', protoIdx + (uri.StartsWith(proto + "://") ? 3 : 1));
+    public string Path { get; init; }
 
-            string path = pathIdx != -1 ? uri.Substring(pathIdx) : string.Empty;
+    /*
+     * TODOTODO: Decode escaped characters.
+     */
+    public static Uri FromString(string uri)
+    {
+        uri = uri.Trim();
+        if (string.IsNullOrEmpty(uri)) throw new ArgumentException("Invalid URI");
 
-            int queryIdx = path.IndexOf('?');
-            if (queryIdx != -1)
-                path = path.Substring(0, queryIdx); // drop query
-            int fgmtIdx = path.IndexOf('#');
-            if (fgmtIdx != -1)
-                path = path.Substring(0, fgmtIdx); // drop fgmt
+        var protoIdx = uri.IndexOf(':');
+        string proto;
+        if (protoIdx != -1)
+            proto = uri.Substring(0, protoIdx);
+        else
+            throw new ArgumentException("Invalid URI");
 
-            string host = uri.Substring(protoIdx + 1, uri.Length - path.Length - protoIdx - 1);
+        var pathIdx = uri.IndexOf('/', protoIdx + (uri.StartsWith(proto + "://") ? 3 : 1));
 
-            return new Uri(proto, host, path);
-        }
+        var path = pathIdx != -1 ? uri.Substring(pathIdx) : string.Empty;
 
-        public override string ToString()
-        {
-            return $"{Protocol}:{Host}{Path}";
-        }
+        var queryIdx = path.IndexOf('?');
+        if (queryIdx != -1)
+            path = path.Substring(0, queryIdx); // drop query
+        var fgmtIdx = path.IndexOf('#');
+        if (fgmtIdx != -1)
+            path = path.Substring(0, fgmtIdx); // drop fgmt
 
-        public string Protocol { get; init; }
+        var host = uri.Substring(protoIdx + 1, uri.Length - path.Length - protoIdx - 1);
 
-        public string Host { get; init; }
+        return new Uri(proto, host, path);
+    }
 
-        public string Path { get; init; }
+    public override string ToString()
+    {
+        return $"{Protocol}:{Host}{Path}";
     }
 }

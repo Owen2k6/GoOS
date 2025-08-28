@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using IL2CPU.API.Attribs;
-using GoGL.Graphics;
 using System.IO;
-using System.Net.Security;
-using System.Threading;
+using System.Text;
+using GoGL.Graphics;
+using GoOS.Commands;
 using GoOS.Security;
 using static GoOS.Resources;
 
@@ -16,21 +10,20 @@ namespace GoOS.GUI.Apps;
 
 public class Notepad : Window
 {
-    private bool gms = false;
-    private Button SaveButton;
-    private Button CopyButton;
-    private Button PasteButton;
-    private InputNUMBERS AttemptOne;
-    private Input Dialog_TextBox;
+    private readonly InputNUMBERS AttemptOne;
+    private readonly Button CopyButton;
 
-    private string infi = "";
+    private readonly string infi = "";
+    private readonly Button PasteButton;
+    private readonly Button SaveButton;
+    private Input Dialog_TextBox;
+    private bool gms;
 
 
     public Notepad(bool openFile, string fileToOpen)
     {
-        string infi = fileToOpen;
-        
-        
+        var infi = fileToOpen;
+
 
         Contents = new Canvas(500, 300);
         Title = "GoOS Notepad";
@@ -82,37 +75,30 @@ public class Notepad : Window
         //AttemptOne.Render();
 
         if (openFile)
-        {
             LoadFile(fileToOpen);
-        }
         else
-        {
             AttemptOne.Render();
-        }
     }
 
     private void LoadFile(string filefile)
     {
-        string infi = filefile;
+        var infi = filefile;
 
         if (infi.ToLower().Contains(".gms") && !Kernel.devMode)
         {
             gms = true;
-            
-            string toreturn = "You cannot open .gms files in notepad.";
-            
+
+            var toreturn = "You cannot open .gms files in notepad.";
+
             AttemptOne.Text = toreturn;
 
             AttemptOne.Render();
         }
         else
         {
-            string toreturn = "";
-            string[] lines = File.ReadAllLines(filefile);
-            foreach (var line in lines)
-            {
-                toreturn = toreturn + line + "\n";
-            }
+            var toreturn = "";
+            var lines = File.ReadAllLines(filefile);
+            foreach (var line in lines) toreturn = toreturn + line + "\n";
 
             AttemptOne.Text = toreturn;
 
@@ -122,9 +108,9 @@ public class Notepad : Window
 
     private void SaveClick()
     {
-        string shittosave = AttemptOne.Text;
+        var shittosave = AttemptOne.Text;
 
-        string punchyouintheface = HashPasswordSha256(shittosave);
+        var punchyouintheface = HashPasswordSha256(shittosave);
 
         /* BUILD YOU DAMNED COMPILER FROM HELL! */
 
@@ -285,17 +271,14 @@ public class Notepad : Window
             WindowManager.AddWindow(new Cut());
         }
 
-        if (!gms)
-        {
-            WindowManager.AddWindow(new NotepadSaveAs(infi, shittosave));
-        }
+        if (!gms) WindowManager.AddWindow(new NotepadSaveAs(infi, shittosave));
     }
 
     internal static string HashPasswordSha256(string hellomario)
     {
-        Sha256 sha256 = new Sha256();
+        var sha256 = new Sha256();
 
-        byte[] passwordBytesUnhashed = Encoding.Unicode.GetBytes(hellomario);
+        var passwordBytesUnhashed = Encoding.Unicode.GetBytes(hellomario);
         sha256.AddData(passwordBytesUnhashed, 0, (uint)passwordBytesUnhashed.Length);
 
         return Convert.ToBase64String(sha256.GetHash());
@@ -312,16 +295,16 @@ public class Notepad : Window
 
 public class NotepadSaveAs : Window
 {
-    private Button SaveButton;
-    private Button CancelButton;
-    private Input AttemptOne;
+    private readonly Input AttemptOne;
+    private readonly Button CancelButton;
+    private readonly Button SaveButton;
 
-    private string sts = "";
-    
+    private readonly string sts = "";
+
     public NotepadSaveAs(string placetheholderofthetextplease, string stufftosave)
     {
         sts = stufftosave;
-        
+
         Contents = new Canvas(300, 80);
         Title = "Save - GoOS Notepad";
         Visible = true;
@@ -338,53 +321,50 @@ public class NotepadSaveAs : Window
             Clicked = Dispose
         };
 
-        AttemptOne = new Input(this, 5, 25, 300 - 10, 20, "")
-        {
-        };
+        AttemptOne = new Input(this, 5, 25, 300 - 10, 20, "");
 
         Contents.Clear(Color.LightGray);
         RenderSystemStyleBorder();
 
-        Contents.DrawString(5, 5, "Please input file name below:", Resources.Font_1x, Color.White);
-        
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        
+        Contents.DrawString(5, 5, "Please input file name below:", Font_1x, Color.White);
+
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;
+
         SaveButton.Render();
         CancelButton.Render();
         AttemptOne.Render();
 
         AttemptOne.Text = placetheholderofthetextplease;
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
-        AttemptOne.Text = placetheholderofthetextplease;  
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;
+        AttemptOne.Text = placetheholderofthetextplease;
     }
 
     private void SaveClick()
     {
         try
         {
-            Commands.Make.MakeFile(AttemptOne.Text);
+            Make.MakeFile(AttemptOne.Text);
             File.WriteAllText(AttemptOne.Text, sts);
             Dialogue.Show(
                 "Saved!",
-                "Your file has been saved.",
-                null);
+                "Your file has been saved.");
 
             Dispose();
         }

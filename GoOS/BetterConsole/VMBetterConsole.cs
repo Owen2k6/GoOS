@@ -2,27 +2,21 @@
 using System.Collections.Generic;
 using Cosmos.Core.Memory;
 using Cosmos.System;
+using GoGL.Graphics;
+using GoGL.Graphics.Fonts;
 using GoOS.GUI;
 using GoOS.Themes;
 using IL2CPU.API.Attribs;
-using GoGL.Graphics;
-using GoGL.Graphics.Fonts;
 
 /// <summary>
-/// <see cref="VMBetterConsole"/> class
+///     <see cref="VMBetterConsole" /> class
 /// </summary>
 public class VMBetterConsole //Shitter Console
 {
-    /* The raw global font */
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_1x.btf")]
-    public byte[] rawFont;
-
-    /* The credits easter egg */
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.Credits05.bmp")]
-    private byte[] easterEgg;
-
-    /* The global font */
-    public Font font;
+    /// <summary>
+    ///     The background color of the <see cref="BetterConsole" />
+    /// </summary>
+    public Color BackgroundColor = Color.Black;
 
     /* The canvas for the console */
     public Canvas Canvas;
@@ -38,55 +32,61 @@ public class VMBetterConsole //Shitter Console
 
     public bool ConsoleMode = false;
 
-    public bool Visible = false;
+    /// <summary>
+    ///     The X position of the cursor
+    ///     </remarks>
+    public int CursorLeft;
 
     /// <summary>
-    /// The X position of the cursor
-    /// </remarks>
-    public int CursorLeft = 0;
-
-    /// <summary>
-    /// The Y position of the cursor
+    ///     The Y position of the cursor
     /// </summary>
-    public int CursorTop = 0;
+    public int CursorTop;
 
     /// <summary>
-    /// The width of the <see cref="BetterConsole"/>
-    /// </summary>
-    public ushort WindowWidth = 0;
-
-    /// <summary>
-    /// The height of the <see cref="BetterConsole"/>
-    /// </summary>
-    public ushort WindowHeight = 0;
-
-    /// <summary>
-    /// The foreground color of the <see cref="BetterConsole"/>
-    /// </summary>
-    public Color ForegroundColor = Color.White;
-
-    /// <summary>
-    /// The background color of the <see cref="BetterConsole"/>
-    /// </summary>
-    public Color BackgroundColor = Color.Black;
-
-    /// <summary>
-    /// Determines if the cursor is visible
+    ///     Determines if the cursor is visible
     /// </summary>
     public bool CursorVisible = true;
 
     /// <summary>
-    /// Determines if every command calls Render() when finishes
+    ///     Determines if every command calls Render() when finishes
     /// </summary>
     public bool DoubleBufferedMode = false;
 
-    /// <summary>
-    /// The queue of key events to send to the <see cref="BetterConsole"/>
-    /// </summary>
-    public Queue<KeyEvent> KeyBuffer = new Queue<KeyEvent>();
+    /* The credits easter egg */
+    [ManifestResourceStream(ResourceName = "GoOS.Resources.Credits05.bmp")]
+    private byte[] easterEgg;
+
+    /* The global font */
+    public Font font;
 
     /// <summary>
-    /// Initializes the <see cref="BetterConsole">
+    ///     The foreground color of the <see cref="BetterConsole" />
+    /// </summary>
+    public Color ForegroundColor = Color.White;
+
+    /// <summary>
+    ///     The queue of key events to send to the <see cref="BetterConsole" />
+    /// </summary>
+    public Queue<KeyEvent> KeyBuffer = new();
+
+    /* The raw global font */
+    [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_1x.btf")]
+    public byte[] rawFont;
+
+    public bool Visible = false;
+
+    /// <summary>
+    ///     The height of the <see cref="BetterConsole" />
+    /// </summary>
+    public ushort WindowHeight;
+
+    /// <summary>
+    ///     The width of the <see cref="BetterConsole" />
+    /// </summary>
+    public ushort WindowWidth;
+
+    /// <summary>
+    ///     Initializes the <see cref="BetterConsole">
     /// </summary>
     /// <param name="videoWidth">The width of the canvas</param>
     /// <param name="videoHeight">The height of the canvas</param>
@@ -101,7 +101,7 @@ public class VMBetterConsole //Shitter Console
     }
 
     /// <summary>
-    /// Clears the console
+    ///     Clears the console
     /// </summary>
     public void Clear(bool render = true)
     {
@@ -113,7 +113,7 @@ public class VMBetterConsole //Shitter Console
     }
 
     /// <summary>
-    /// Renders the <see cref="BetterConsole">
+    ///     Renders the <see cref="BetterConsole">
     /// </summary>
     public void Render()
     {
@@ -121,12 +121,12 @@ public class VMBetterConsole //Shitter Console
     }
 
     /// <summary>
-    /// Writes a string to the <see cref="BetterConsole"/>
+    ///     Writes a string to the <see cref="BetterConsole" />
     /// </summary>
     /// <param name="text">The string to write</param>
     public void Write(object text, bool quick = false)
     {
-        foreach (char c in text.ToString())
+        foreach (var c in text.ToString())
         {
             Newline();
 
@@ -147,13 +147,16 @@ public class VMBetterConsole //Shitter Console
     }
 
     /// <summary>
-    /// Writes a string to the <see cref="BetterConsole"/>
+    ///     Writes a string to the <see cref="BetterConsole" />
     /// </summary>
     /// <param name="text">The string to write</param>
-    public void WriteLine(object text = null, bool quick = false) => Write(text + "\n", quick);
+    public void WriteLine(object text = null, bool quick = false)
+    {
+        Write(text + "\n", quick);
+    }
 
     /// <summary>
-    /// Reads input from the user
+    ///     Reads input from the user
     /// </summary>
     /// <param name="intercept">Print the key pressed</param>
     /// <returns>The key pressed</returns>
@@ -162,48 +165,44 @@ public class VMBetterConsole //Shitter Console
         while (true)
         {
             if (CursorVisible)
-            {
-                Canvas.DrawString(CursorLeft * charWidth, CursorTop * charHeight, '_'.ToString(), font, ForegroundColor);
-            }
+                Canvas.DrawString(CursorLeft * charWidth, CursorTop * charHeight, '_'.ToString(), font,
+                    ForegroundColor);
 
             var keyPressed = KeyBuffer.TryDequeue(out var key);
             if (keyPressed)
             {
-                if (intercept == false)
-                {
-                    Write(key.KeyChar);
-                }
+                if (!intercept) Write(key.KeyChar);
 
-                bool xShift = (key.Modifiers & ConsoleModifiers.Shift) == ConsoleModifiers.Shift;
-                bool xAlt = (key.Modifiers & ConsoleModifiers.Alt) == ConsoleModifiers.Alt;
-                bool xControl = (key.Modifiers & ConsoleModifiers.Control) == ConsoleModifiers.Control;
+                var xShift = (key.Modifiers & ConsoleModifiers.Shift) == ConsoleModifiers.Shift;
+                var xAlt = (key.Modifiers & ConsoleModifiers.Alt) == ConsoleModifiers.Alt;
+                var xControl = (key.Modifiers & ConsoleModifiers.Control) == ConsoleModifiers.Control;
 
                 return new ConsoleKeyInfo(key.KeyChar, key.Key.ToConsoleKey(), xShift, xAlt, xControl);
             }
-            else
-            {
-                WindowManager.Update();
-            }
+
+            WindowManager.Update();
 
             if (CursorVisible)
             {
                 // Just to be safe
-                Canvas.DrawString((CursorLeft - 1) * charWidth, CursorTop * charHeight, '_'.ToString(), font, Color.Black);
-                Canvas.DrawString((CursorLeft + 1) * charWidth, CursorTop * charHeight, '_'.ToString(), font, Color.Black);
+                Canvas.DrawString((CursorLeft - 1) * charWidth, CursorTop * charHeight, '_'.ToString(), font,
+                    Color.Black);
+                Canvas.DrawString((CursorLeft + 1) * charWidth, CursorTop * charHeight, '_'.ToString(), font,
+                    Color.Black);
             }
         }
     }
 
     /// <summary>
-    /// Gets input from the user
+    ///     Gets input from the user
     /// </summary>
     /// <returns>The teCursorLeftt that the user typed</returns>
     public string ReadLine()
     {
         int startCursorLeft = CursorLeft, startY = CursorTop;
-        string returnValue = string.Empty;
+        var returnValue = string.Empty;
 
-        bool reading = true;
+        var reading = true;
         while (reading)
         {
             if (CursorVisible)
@@ -257,9 +256,9 @@ public class VMBetterConsole //Shitter Console
                         {
                             if (key.Key == ConsoleKeyEx.G)
                             {
-                                string collected = Heap.Collect() + " items collected";
+                                var collected = Heap.Collect() + " items collected";
                                 //Init(Canvas.Width, Canvas.Height);
-                                Canvas.DrawString(Canvas.Width - (collected.Length * 8) - 8, Canvas.Height - 32,
+                                Canvas.DrawString(Canvas.Width - collected.Length * 8 - 8, Canvas.Height - 32,
                                     collected, font, ThemeManager.WindowText);
                                 // SetCursorPosition(0, 0);
                                 // GoOS.Kernel.DrawPrompt();
@@ -274,13 +273,13 @@ public class VMBetterConsole //Shitter Console
                             else if (KeyboardManager.ShiftPressed && key.Key == ConsoleKeyEx.E)
                             {
                                 Write("> ");
-                                string input = ReadLine();
+                                var input = ReadLine();
                                 if (input == "e015")
                                 {
                                     Clear();
-                                    Canvas.DrawImage(0, 0, Image.FromBitmap(easterEgg, false), false);
+                                    Canvas.DrawImage(0, 0, Image.FromBitmap(easterEgg), false);
                                     //Canvas.Update(); it stopped working?
-                                    ReadKey(true);
+                                    ReadKey();
                                     Clear();
                                 }
                                 else
@@ -380,7 +379,7 @@ public class VMBetterConsole //Shitter Console
     }
 
     /// <summary>
-    /// Set the cursor position of the <see cref="BetterConsole"/>
+    ///     Set the cursor position of the <see cref="BetterConsole" />
     /// </summary>
     /// <param name="CursorLeft">The CursorLeft position of the cursor</param>
     /// <param name="y">The Y position of the cursor</param>
@@ -414,16 +413,12 @@ public class VMBetterConsole //Shitter Console
         {
             Canvas.DrawFilledRectangle(0, 0, Canvas.Width, charHeight, 0, Color.Black);
             for (int y = charHeight; y < Canvas.Height; y++)
-            {
-                for (int CursorLeft = 0; CursorLeft < Canvas.Width; CursorLeft++)
-                {
-                    Canvas[CursorLeft, y - charHeight] = Canvas[CursorLeft, y];
-                }
-            }
+            for (var CursorLeft = 0; CursorLeft < Canvas.Width; CursorLeft++)
+                Canvas[CursorLeft, y - charHeight] = Canvas[CursorLeft, y];
 
             Canvas.DrawFilledRectangle(0, Canvas.Height - charHeight, Canvas.Width, charHeight, 0, Color.Black);
             CursorLeft = 0;
-            CursorTop = (Canvas.Height / charHeight) - 1;
+            CursorTop = Canvas.Height / charHeight - 1;
             if (!DoubleBufferedMode)
                 Render();
             Heap.Collect();
@@ -434,7 +429,7 @@ public class VMBetterConsole //Shitter Console
     {
         if (!quick)
             Canvas.DrawFilledRectangle(CursorLeft * charWidth, y * charHeight,
-                Convert.ToUInt16(charWidth + (charWidth / 8)), charHeight, 0, BackgroundColor); //yes this is correct
+                Convert.ToUInt16(charWidth + charWidth / 8), charHeight, 0, BackgroundColor); //yes this is correct
         if (c != ' ')
             Canvas.DrawString(CursorLeft * charWidth, y * charHeight, c.ToString(), font, ForegroundColor);
     }

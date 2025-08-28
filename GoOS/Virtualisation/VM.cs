@@ -3,57 +3,58 @@ using GoOS.Themes;
 using Console = BetterConsole;
 using static GoOS.Core;
 
-namespace GoOS.Virtualisation
+namespace GoOS.Virtualisation;
+
+public abstract class VM
 {
-    public abstract class VM
+    protected bool mStarted;
+
+    protected bool mStopped;
+    public string name;
+
+    public virtual void Start()
     {
-        public string name;
-
-        protected bool mStarted = false;
-
-        protected bool mStopped = false;
-
-        public virtual void Start()
+        try
         {
-            try
-            {
-                log(ThemeManager.WindowText, $"\nStarting virtual machine {name}...\n");
+            log(ThemeManager.WindowText, $"\nStarting virtual machine {name}...\n");
 
-                if (mStarted)
-                {
-                    throw new Exception("A virtual machine cannot be started twice!");
-                }
-                mStarted = true;
+            if (mStarted) throw new Exception("A virtual machine cannot be started twice!");
+            mStarted = true;
 
-                Console.ForegroundColor = ConsoleColorEx.White;
-                Console.BackgroundColor = ConsoleColorEx.Black;
+            Console.ForegroundColor = ConsoleColorEx.White;
+            Console.BackgroundColor = ConsoleColorEx.Black;
 
-                OnBoot();
-                BeforeRun();
+            OnBoot();
+            BeforeRun();
 
-                while (!mStopped)
-                {
-                    Run();
-                }
+            while (!mStopped) Run();
 
-                AfterRun();
+            AfterRun();
 
-                log(ThemeManager.WindowText, "\nReturning back to GoOS...\n");
-            }
-            catch (Exception ex)
-            {
-                log(ThemeManager.ErrorText, $"\nAn exception occured in the virtual machine {name}\n{ex}\n");
-            }
+            log(ThemeManager.WindowText, "\nReturning back to GoOS...\n");
         }
+        catch (Exception ex)
+        {
+            log(ThemeManager.ErrorText, $"\nAn exception occured in the virtual machine {name}\n{ex}\n");
+        }
+    }
 
-        protected virtual void OnBoot() { }
+    protected virtual void OnBoot()
+    {
+    }
 
-        protected virtual void BeforeRun() { }
+    protected virtual void BeforeRun()
+    {
+    }
 
-        protected abstract void Run();
+    protected abstract void Run();
 
-        protected virtual void AfterRun() { }
+    protected virtual void AfterRun()
+    {
+    }
 
-        public virtual void Stop() => mStopped = true;
+    public virtual void Stop()
+    {
+        mStopped = true;
     }
 }
