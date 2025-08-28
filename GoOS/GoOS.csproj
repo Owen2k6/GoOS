@@ -127,7 +127,6 @@
       <None Remove="Resources\OOBE\oobe.bmp" />
       <None Remove="Resources\OOBE\oobebg.bmp" />
       <Compile Remove="OOBE.cs" />
-      <None Include="OOBE.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -283,6 +282,10 @@
     <ItemGroup>
       <None Remove="Resources\GUI\StoreButton.bmp" />
       <EmbeddedResource Include="Resources\GUI\StoreButton.bmp" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Code\" />
     </ItemGroup>
 	
 </Project>
