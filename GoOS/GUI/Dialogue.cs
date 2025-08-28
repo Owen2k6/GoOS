@@ -18,7 +18,6 @@ namespace GoOS.GUI
     public class Dialogue : Window
     {
         private const int buttonSpacing = 20;
-
         private const int buttonPadding = 20;
 
         /// <summary>
@@ -44,7 +43,7 @@ namespace GoOS.GUI
             {
                 len = Math.Max(
                     len,
-                    Resources.Font_1x.MeasureString(line)
+                    Charcoal.MeasureString(line)
                 );
             }
 
@@ -81,12 +80,12 @@ namespace GoOS.GUI
 
             Contents.DrawImage(20, 20, icon, true);
 
-            Contents.DrawString(80, 20, message, Resources.Font_1x, Color.White);
+            Contents.DrawString(80, 20, message, Charcoal, Color.Black);
 
             int x = Contents.Width;
             foreach (DialogueButton dialogueButton in buttons)
             {
-                ushort width = (ushort)(Resources.Font_1x.MeasureString(dialogueButton.Text) + (buttonPadding * 2));
+                ushort width = (ushort)(Charcoal.MeasureString(dialogueButton.Text) + (buttonPadding * 2));
                 x -= width + buttonSpacing;
 
                 Button button = new Button(

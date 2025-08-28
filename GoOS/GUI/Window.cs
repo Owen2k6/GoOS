@@ -27,14 +27,14 @@ namespace GoOS.GUI
         public Control FocusedControl;
         public const int TITLE_BAR_HEIGHT = 22;
         private const int FRAME_L = 6, FRAME_R = 6, FRAME_B = 7;
-        private static readonly Color TitleBandFill = new Color(0xFFDADADA);
+        private static readonly Color TitleBandFill = new (0xFFDADADA);
         private static readonly Color TitleStripeLight = Color.White;
-        private static readonly Color TitleStripeDark = new Color(0xFF969696);
+        private static readonly Color TitleStripeDark = new (0xFF969696);
         private static readonly Color TitleTextColour = Color.Black;
         private static readonly Color OuterTL = Color.White; 
-        private static readonly Color OuterBR = new Color(0xFFB3B3B3); 
+        private static readonly Color OuterBR = new (0xFFB3B3B3); 
         private static readonly Color ContentFill = new (0xFFE7E7E7);
-        private static readonly Color PlatFace = new (71, 71, 71);
+        private static readonly Color PlatFace = new(0xFFE7E7E7);
         private int OuterWidth
             => (Contents != null ? Contents.Width : 0) + (HasTitlebar ? (FRAME_L + FRAME_R) : 0);
 
