@@ -12,6 +12,7 @@ using GoOS.GUI.Apps.Terminal;
 using IL2CPU.API.Attribs;
 using Sys = Cosmos.System;
 using GoOS.Tasking;
+using GoOS.Themes;
 
 // Goplex Studios - GoOS
 // Copyright (C) 2025
@@ -67,52 +68,7 @@ namespace GoOS
         // =========================================================
         protected override void BeforeRun()
         {
-            /*System.Console.Clear();
-
-            // RAM gate (Cosmos-safe)
-            uint ramAmount = CPU.GetAmountOfRAM();
-            if (ramAmount < 256)
-            {
-                System.Console.ForegroundColor = System.ConsoleColor.Red;
-                FATALErrorSound();
-                System.Console.WriteLine("GoOS - Insufficient memory to initialise GoOS.");
-                System.Console.WriteLine("GoOS - Recommended: 1024 MiB; minimum: 256 MiB");
-                while (true)
-                {
-                }
-            }
-
-            Resources.Generate(ResourceType.Boot);
-
-            InitialiseFileSystem();
-            InitialiseGold();
-
-            //var test = Display.GetDisplay(800, 600);
-            
-            //System.Console.WriteLine("HI!");
-            
-            //test
-            
-            Resources.Generate(ResourceType.Fonts);
-            Resources.Generate(ResourceType.Priority);
-            Resources.Generate(ResourceType.Normal);
-            ThemeManager.SetTheme(Theme.Fallback);
-            
-            //System.Console.WriteLine("BOOT");
-            //while (true) { }
-
-            // First run / OOBE
-            if (!File.Exists(@"0:\content\sys\setup.gms"))
-            {
-                WindowManager.Canvas.DrawImage(0, 0, Resources.bootbackground, false);
-                WindowManager.Update();
-
-                Resources.Generate(ResourceType.OOBE);
-                WindowManager.IsInOOBE = true;
-                WindowManager.AddWindow(new GUI.Apps.OOBE.MainFrame());
-                return;
-            }
-
+            /*
             SetupPathAndGCI();
             LoadUserSettings();
             InitNetwork();
@@ -121,12 +77,7 @@ namespace GoOS
             WindowManager.AddWindow(new Taskbar());
             WindowManager.AddWindow(new Desktop());
             WindowManager.AddWindow(new Menubar());
-
-            MouseManager.X = 0;
-            MouseManager.Y = 0;
-
             //Console.Clear();
-
             // Intro splash to console canvas
             Canvas cv = Image.FromBitmap(rawBootLogo, false);
             WindowManager.Canvas.DrawImage(0, 0, cv, false);
@@ -161,36 +112,43 @@ namespace GoOS
             }*/
             
             ProcessScheduler =  new ProcessScheduler(); // Literally the first thing we MUST do.
-            
-            Console.Write("Welcome to ");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write("GoOS");
-            Console.ResetColor();
-            Console.WriteLine("!\n");
-
             try
             {
+                uint ramAmount = CPU.GetAmountOfRAM();
+                if (ramAmount < 256)
+                {
+                    System.Console.ForegroundColor = System.ConsoleColor.Red;
+                    FATALErrorSound();
+                    System.Console.WriteLine("GoOS - Insufficient memory to initialise GoOS.");
+                    System.Console.WriteLine("GoOS - Recommended: 1024 MiB; minimum: 256 MiB");
+                    while (true)
+                    {
+                    }
+                }
+                ThemeManager.SetTheme(Theme.Fallback);
                 FS = new Sys.FileSystem.CosmosVFS();
                 Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS);
                 FS.Initialize(true); 
-                
                 byte[] screenRes = File.Exists(@"0:\content\sys\resolution.gms")
                     ? File.ReadAllBytes(@"0:\content\sys\resolution.gms")
                     : new byte[] { 6 };
-
-                var videoMode = ControlPanel.videoModes[screenRes[0]].Item2;
-                
+                var videoMode = videoModes[screenRes[0]].Item2;
                 Display Screen = Display.GetDisplay(videoMode.Width, videoMode.Height);
-                
                 Resources.Generate(ResourceType.Boot);
-                
                 Screen.Clear();
                 Screen.DrawImage(videoMode.Width / 2 - 37, videoMode.Height / 2 - 37, Resources.bootlogo, false);
                 Screen.Update();
-                
                 Resources.Generate(ResourceType.Fonts);
                 Resources.Generate(ResourceType.Priority);
                 Resources.Generate(ResourceType.Normal);
+                if (!File.Exists(@"0:\content\sys\setup.gms"))
+                {
+                    Resources.Generate(ResourceType.OOBE);
+                    ProcessScheduler.AddPriorityProcess(new WindowManager(Screen));
+                    ProcessScheduler.AddProcess(new GUI.Apps.OOBE.MainFrame());
+                    return;
+                }
+                InitNetwork();
                 
                 ProcessScheduler.AddPriorityProcess(new WindowManager(Screen));
                 
@@ -448,6 +406,24 @@ namespace GoOS
 
             return true;
         }
+        
+        public static readonly List<(string, (ushort Width, ushort Height))> videoModes = new()
+        {
+            ("800  × 600 (4:3)", (800, 600)),
+            ("1024 × 768 (4:3)", (1024, 768)),
+            ("1280 × 960 (4:3)", (1280, 960)),
+            ("1400 × 1050 (4:3)", (1400, 1050)),
+            ("1600 × 1200 (4:3)", (1600, 1200)),
+            ("1280 × 720 (16:9)", (1280, 720)),
+            ("1280 × 800 (16:10)", (1280, 800)),
+            ("1366 × 768 (16:9)", (1366, 768)),
+            ("1440 × 900 (16:10)", (1440, 900)),
+            ("1600 × 900 (16:9)", (1600, 900)),
+            ("1680 × 1050 (16:10)", (1680, 1050)),
+            ("1920 × 1080 (16:9)", (1920, 1080)),
+            ("1920 × 1200 (16:10)", (1920, 1200)),
+            ("2560 × 1440 (16:9)", (2560, 1440))
+        };
 
         public static byte[] fallback_font = new byte[]
         {

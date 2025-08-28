@@ -5,7 +5,6 @@ namespace Gold;
 
 public static class Info
 {
-    #region Fields
 
     #pragma warning disable CS8604
 
@@ -14,8 +13,6 @@ public static class Info
 
     #pragma warning restore CS8604
 
-    public const string Version = "0.0.1"; //The version of GOLD.
+    public const string Version = "0.0.2"; //The version of GOLD.
     public const string ApiVersion = "1.3"; //The PrismAPI version which GOLD is based off.
-
-    #endregion
 }

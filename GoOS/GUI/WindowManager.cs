@@ -29,7 +29,7 @@ namespace GoOS.GUI
                     ? File.ReadAllBytes(@"0:\content\sys\resolution.gms")
                     : new byte[] { 6 };
 
-                var videoMode = ControlPanel.videoModes[screenRes[0]].Item2;
+                var videoMode = Kernel.videoModes[screenRes[0]].Item2;
 
                 Screen = Display.GetDisplay(videoMode.Width, videoMode.Height);
             }

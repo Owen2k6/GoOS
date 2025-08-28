@@ -69,15 +69,11 @@ namespace GoOS.GUI
                 Width: (ushort)(100 + GetLongestLineWidth(message)),
                 Height: 128
             );
-            //RenderOutsetWindowBackground();
             SetDock(WindowDock.Center);
+            Contents.Clear(new Color(0xFFDADADA));
             Title = title;
-            //Visible = true;
-            //Closable = true;
-
             Contents.DrawImage(20, 20, icon, true);
-
-            Contents.DrawString(80, 20, message, Resources.Font_1x, Color.White);
+            Contents.DrawString(80, 20, message, Resources.Font_1x, Color.Black);
 
             int x = Contents.Width;
             foreach (DialogueButton dialogueButton in buttons)
@@ -106,6 +102,7 @@ namespace GoOS.GUI
             {
                 control.Render();
             }
+            base.Render();
         }
     }
 }
