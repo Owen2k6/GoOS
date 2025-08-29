@@ -144,13 +144,6 @@
         <EmbeddedResource Include="Resources\GUI\FileManager\header.bmp"/>
         <EmbeddedResource Include="Resources\GUI\FileManager\sidebar.bmp"/>
         <EmbeddedResource Include="Resources\GUI\GoIDE\run.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\GoStore.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\GoStoreButtonBlue.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\GoStoreButtonGreen.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\GoStoreButtonRed.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\GoStoreDescFrame.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\GoStoreicon.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\GoStoreinfoboard.bmp"/>
         <EmbeddedResource Include="Resources\GUI\GoWeb.bmp"/>
         <EmbeddedResource Include="Resources\GUI\GoWeb\Go.bmp"/>
         <EmbeddedResource Include="Resources\GUI\GoWeb\Home.bmp"/>
@@ -188,9 +181,8 @@
         <EmbeddedResource Include="Resources\GUI\Gosplorer\NEW.bmp"/>
         <EmbeddedResource Include="Resources\GUI\Gosplorer\LOADINNOTEPAD.bmp"/>
         <EmbeddedResource Include="Resources\OOBE\setupfinal.bmp"/>
-        <EmbeddedResource Include="Resources\Credits05.bmp"/>
+        <None Include="Resources\Credits05.bmp" />
         <EmbeddedResource Include="Resources\Font_1x.btf"/>
-        <EmbeddedResource Include="Resources\GoOS_Intro.bmp"/>
         <EmbeddedResource Include="Resources\OOBE\setupcomputer.bmp"/>
         <EmbeddedResource Include="Resources\OOBE\setupres.bmp"/>
         <EmbeddedResource Include="Resources\OOBE\setupthm.bmp"/>
@@ -199,7 +191,6 @@
         <EmbeddedResource Include="Resources\OOBE\setupuser.bmp"/>
         <EmbeddedResource Include="Resources\OOBE\setupwelcome.bmp"/>
         <EmbeddedResource Include="Resources\GUI\question.bmp"/>
-        <EmbeddedResource Include="Resources\Welcome.bmp"/>
         <EmbeddedResource Include="Resources\GUI\warning.bmp"/>
         <None Remove="Resources\GUI\TaskStart\startmenuBG.bmp"/>
         <EmbeddedResource Include="Resources\GUI\TaskStart\startmenuBG.bmp"/>
@@ -210,7 +201,6 @@
         <None Remove="Resources\GUI\TaskStart\taskbar.bmp"/>
         <EmbeddedResource Include="Resources\GUI\TaskStart\taskbar.bmp"/>
         <None Remove="Resources\GUI\GoStoreSoon.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\GoStoreSoon.bmp"/>
         <None Remove="Resources\GUI\bootlogo.bmp"/>
         <EmbeddedResource Include="Resources\GUI\bootlogo.bmp"/>
         <None Remove="Resources\GUI\Settings\Background.bmp"/>

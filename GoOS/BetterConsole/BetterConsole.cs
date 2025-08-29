@@ -308,7 +308,15 @@ public static class BetterConsole
                                 if (input == "e015")
                                 {
                                     Clear();
-                                    Canvas.DrawImage(0, 0, easterEgg, false);
+                                    WriteLine("Thank you for using GoOS - Owen2k6");
+                                    WriteLine("There used to be an image here however");
+                                    WriteLine("due to Console resizing it had to be");
+                                    WriteLine("removed.");
+                                    WriteLine("Check the source code on github to see it!");
+                                    WriteLine("Big thanks to all who helped develop GoOS");
+                                    WriteLine("Over the years. Great people!");
+                                    WriteLine("- Owen2k6");
+                                    WriteLine("Press enter twice to escape!");
                                     ReadKey();
                                     Clear();
                                 }

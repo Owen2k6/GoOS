@@ -72,9 +72,6 @@ public class Kernel : Cosmos.System.Kernel
 
     public static CosmosVFS FS;
 
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GoOS_Intro.bmp")]
-    public static byte[] rawBootLogo;
-
     // =========================================================
     //                          BOOT
     // =========================================================
@@ -99,14 +96,10 @@ public class Kernel : Cosmos.System.Kernel
 
         InitialiseFileSystem();
         InitialiseGoGL();
-
         Resources.Generate(ResourceType.Fonts);
         Resources.Generate(ResourceType.Priority);
         Resources.Generate(ResourceType.Normal);
-
         ThemeManager.SetTheme(Theme.Fallback);
-
-        // First run / OOBE
         if (!File.Exists(@"0:\content\sys\setup.gms"))
         {
             WindowManager.Canvas.DrawImage(0, 0, Resources.bootbackground, false);
@@ -121,22 +114,16 @@ public class Kernel : Cosmos.System.Kernel
         SetupPathAndGCI();
         LoadUserSettings();
         InitNetwork();
-
         WindowManager.windows = new List<Window>(10);
         WindowManager.AddWindow(new Taskbar());
         WindowManager.AddWindow(new Desktop());
         WindowManager.AddWindow(new Menubar());
-
         MouseManager.X = 0;
         MouseManager.Y = 0;
-
         Console.Clear();
-
-        // Intro splash to console canvas
-        var cv = Image.FromBitmap(rawBootLogo);
-        Console.Canvas.DrawImage(0, 0, cv, false);
-        Console.SetCursorPosition(0, 13);
-
+        Console.WriteLine("Welcome to the GoOS Terminal");
+        Console.WriteLine("Version "+version);
+        Console.WriteLine("Type HELP for a list of commands.");
         Directory.SetCurrentDirectory(@"0:\");
     }
 
@@ -147,7 +134,6 @@ public class Kernel : Cosmos.System.Kernel
     {
         try
         {
-            System.Console.WriteLine("Initialising filesystem...");
             FS = new CosmosVFS();
             VFSManager.RegisterVFS(FS);
             FS.Initialize(true);
@@ -168,19 +154,15 @@ public class Kernel : Cosmos.System.Kernel
 
     private void InitialiseGoGL()
     {
-        System.Console.WriteLine("Initialising GoGL...");
-
         var screenRes = File.Exists(@"0:\content\sys\resolution.gms")
             ? File.ReadAllBytes(@"0:\content\sys\resolution.gms")
             : new byte[] { 6 };
 
         var videoMode = ControlPanel.videoModes[screenRes[0]].Item2;
         WindowManager.Canvas = Display.GetDisplay(videoMode.Width, videoMode.Height);
-
         WindowManager.Canvas.DrawImage(0, 0, Resources.bootbackground, false);
         WindowManager.Canvas.DrawImage(videoMode.Width / 2 - 37, videoMode.Height / 2 - 37, Resources.bootlogo);
-
-        Console.Init(800, 600);
+        Console.Init(400, 300);
 
         PCSpeaker.Beep(600, 100);
         WindowManager.Update();
@@ -188,7 +170,6 @@ public class Kernel : Cosmos.System.Kernel
 
     private void SetupPathAndGCI()
     {
-        // Ensure PATH file exists
         if (!File.Exists(@"0:\content\sys\path.ugms"))
             try
             {
@@ -202,7 +183,6 @@ public class Kernel : Cosmos.System.Kernel
                 pathPaths = null;
             }
 
-        // Ensure GCI dir exists and is on PATH
         if (!Directory.Exists(@"0:\content\GCI\"))
             try
             {
@@ -217,16 +197,13 @@ public class Kernel : Cosmos.System.Kernel
             }
             catch
             {
-                // ignore
+                /* Ignored */
             }
     }
-
-    // STREAMED (allocation-light) settings loader
     private void LoadUserSettings()
     {
         try
         {
-            // user.gms
             {
                 var p = @"0:\content\sys\user.gms";
                 if (File.Exists(p))
@@ -240,8 +217,6 @@ public class Kernel : Cosmos.System.Kernel
                                 computername = line.Substring(14);
                     }
             }
-
-            // theme.gms
             {
                 var p = @"0:\content\sys\theme.gms";
                 if (File.Exists(p))
@@ -253,7 +228,6 @@ public class Kernel : Cosmos.System.Kernel
                         while ((line = sr.ReadLine()) != null)
                             if (line.StartsWith(key))
                                 ThemeManager.SetTheme(line.Substring(key.Length));
-                        // keep reading; last one wins (same semantics)
                     }
                 }
             }

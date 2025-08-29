@@ -7,223 +7,220 @@ using Cosmos.System.Network.IPv4.UDP.DNS;
 using GoGL.Graphics;
 using GoOS._9xCode;
 using GoOS.Commands;
+using GoOS.GUI;                 // Window, Button
+using GoOS.GUI.Models;         // Control base, if needed
 using IO = System.IO;
 using static GoOS.Resources;
 using Console = BetterConsole;
 
-namespace GoOS.GUI.Apps.GoStore;
-
-public class DescriptionFrame : Window
+namespace GoOS.GUI.Apps.GoStore
 {
-    private readonly Application App;
-    private readonly List<string> DescriptionLines;
-    private Button InstallButton;
-    private Button OpenButton;
-
-    public DescriptionFrame(Application app)
+    public class DescriptionFrame : Window
     {
-        // Set class variables
-        App = app;
+        private readonly Application App;
+        private readonly List<string> DescriptionLines = new();
 
-        // Create the window.
-        Contents = new Canvas(480, 360);
-        Title = "GoStore";
-        Visible = true;
-        Closable = true;
-        SetDock(WindowDock.Center);
+        private Button InstallButton;
+        private Button OpenButton;
 
-        // Initialize the controls
-        OpenButton = new Button(this, 101, 323, 133, 30, "Open")
+        // Bottom bar metrics (match MainFrame’s footer)
+        private const int FOOTER_H = 23;
+
+        // Colours (OS 9 look)
+        private static readonly Color PanelFill   = new Color(0xFFFFFFFF); // OS9 white background
+        private static readonly Color FooterFill  = new Color(0xFFDADADA); // platinum strip
+        private static readonly Color DividerDark = new Color(0xFFB3B3B3);
+        private static readonly Color TextBlack   = Color.Black;
+
+        public DescriptionFrame(Application app)
         {
-            Clicked = OpenButton_Click,
-            UseSystemStyle = false,
-            BackgroundColour = new Color(0, 0, 0, 0),
-            RenderWithAlpha = true
-        };
-        InstallButton = new Button(this, 246, 323, 133, 30,
-            !IO.File.Exists(@"0:\go\" + app.Filename) ? "Install" : "Uninstall")
-        {
-            Clicked = InstallButton_Click,
-            UseSystemStyle = false,
-            BackgroundColour = new Color(0, 0, 0, 0),
-            RenderWithAlpha = true
-        };
+            App = app;
 
-        DescriptionLines = new List<string>();
-        DescriptionLines.AddRange(SpliceText("Description: " + app.Description.Replace("\\n", "\n"), 59));
-        DescriptionLines.AddRange(SpliceText("Version: " + app.Version.Replace("\\n", "\n"), 59));
-        DescriptionLines.AddRange(SpliceText("Author: " + app.Author.Replace("\\n", "\n"), 59));
-        DescriptionLines.AddRange(SpliceText("Category: " + app.Category.Replace("\\n", "\n"), 59));
-        DescriptionLines.AddRange(SpliceText("GoOS Version: " + app.GoOSVersion.Replace("\\n", "\n"), 59));
+            // Create the window (transparent base; we paint our own white background)
+            Contents = new Canvas(480, 360);
+            try { Contents.Clear(new Color(0x00000000)); } catch { }
+            Title = "GoStore";
+            Visible = true;
+            Closable = true;
+            SetDock(WindowDock.Center);
 
-        Contents.DrawString(10, 10, "test", default, Color.White);
-    }
+            // Prepare description text (using Charcoal when drawn)
+            DescriptionLines.AddRange(SpliceText(app.Description.Replace("\\n", "\n")+"\n\n", 55));
+            DescriptionLines.AddRange(SpliceText("Version: "    + app.Version.Replace("\\n", "\n"),     55));
+            DescriptionLines.AddRange(SpliceText("Author: "     + app.Author.Replace("\\n", "\n"),      55));
+            DescriptionLines.AddRange(SpliceText("Category: "   + app.Category.Replace("\\n", "\n"),    55));
+            DescriptionLines.AddRange(SpliceText("GoOS Version: " + app.GoOSVersion.Replace("\\n", "\n"), 55));
 
-    private static string[] SpliceText(string input, int n)
-    {
-        var result = new StringBuilder();
-
-        for (var i = 0; i < input.Length; i++)
-        {
-            result.Append(input[i]);
-
-            if ((i + 1) % n == 0) result.Append("\n");
+            // Create buttons once; render in Paint()
+            CreateButtons();
         }
 
-        return result.ToString().Split('\n');
-    }
-
-    public override void Paint()
-    {
-        Controls.Remove(OpenButton);
-        Controls.Remove(InstallButton);
-
-        OpenButton = null;
-        InstallButton = null;
-
-        Contents.Clear();
-
-        Contents.DrawImage(0, 0, GoStoreDescFrame, false);
-        Contents.DrawString(10, 10, App.Name, Font_2x, Color.White);
-        //Contents.DrawImage(OpenButton.X, OpenButton.Y, GoStoreButtonBlue);
-        //Contents.DrawImage(InstallButton.X, InstallButton.Y,
-        //InstallButton.Title == "Install" ? GoStoreButtonGreen : GoStoreButtonRed);
-        for (var i = 0; i < DescriptionLines.Count; i++)
-            Contents.DrawString(10, 56 + i * 16, DescriptionLines[i], Font_1x, Color.White);
-
-        OpenButton = new Button(this, 101, 323, 133, 30, "Open")
+        private void CreateButtons()
         {
-            //Image = GoStoreButtonBlue,
-            Clicked = OpenButton_Click,
-            UseSystemStyle = false,
-            BackgroundColour = Color.Transparent,
-            RenderWithAlpha = true
-        };
+            // Layout inside the bottom bar
+            int btnH = 20, btnW = 120;
+            int footerTop = Contents.Height - FOOTER_H;
+            int btnY = footerTop + (FOOTER_H - btnH) / 2;
 
-        Contents.DrawImage(OpenButton.X, OpenButton.Y, GoStoreButtonBlue);
-
-        if (IO.File.Exists(@"0:\go\" + App.Filename))
-        {
-            InstallButton = new Button(this, 246, 323, 133, 30, "Uninstall")
+            // Open (left)
+            OpenButton = new Button(this,
+                8, (ushort)btnY, (ushort)btnW, (ushort)btnH, "Open")
             {
-                //Image = GoStoreButtonRed,
-                Clicked = InstallButton_Click,
-                UseSystemStyle = false,
-                BackgroundColour = Color.Transparent,
-                RenderWithAlpha = true
+                UseSystemStyle = true,
+                RenderWithAlpha = true,
+                CenterTitle = true,
+                Clicked = OpenButton_Click
             };
 
-            Contents.DrawImage(InstallButton.X, InstallButton.Y, GoStoreButtonRed);
-        }
-        else
-        {
-            InstallButton = new Button(this, 246, 323, 133, 30, "Install")
+            // Install/Uninstall toggle (right)
+            InstallButton = new Button(this,
+                (ushort)(Contents.Width - 8 - btnW), (ushort)btnY, (ushort)btnW, (ushort)btnH,
+                IO.File.Exists(@"0:\go\" + App.Filename) ? "Uninstall" : "Install")
             {
-                //Image = GoStoreButtonGreen,
-                Clicked = InstallButton_Click,
-                UseSystemStyle = false,
-                BackgroundColour = Color.Transparent,
-                RenderWithAlpha = true
+                UseSystemStyle = true,
+                RenderWithAlpha = true,
+                CenterTitle = true,
+                Clicked = InstallButton_Click
             };
 
-            Contents.DrawImage(InstallButton.X, InstallButton.Y, GoStoreButtonGreen);
+            // Reflect installed state in the bevel (pressed look when installed)
+            UpdateInstallButtonStateVisual();
         }
 
-        OpenButton.Render();
-        InstallButton.Render();
-        RenderSystemStyleBorder();
-    }
-
-    private void InstallButton_Click()
-    {
-        try
+        private void UpdateInstallButtonStateVisual()
         {
-            //Cosmos.System.MouseManager.X = (uint)X + InstallButton.X;
-            //Cosmos.System.MouseManager.Y = (uint)Y + InstallButton.Y;
+            bool installed = IO.File.Exists(@"0:\go\" + App.Filename);
+            InstallButton.Title = installed ? "Uninstall" : "Install";
+            InstallButton.AppearPressed = installed;   // pressed look = “installed”
+        }
 
-            //if (!MainFrame.AllowDLFrom.Contains(App.GoOSVersion.Trim()))
-            //{
-            //    Dialogue.Show("GoStore", "This application requires a newer version of GoOS!");
-            //    return;
-            //}
-
-            if (!IO.File.Exists(@"0:\go\" + App.Filename))
+        private static string[] SpliceText(string input, int n)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < input.Length; i++)
             {
-                using (var tcpClient = new TcpClient())
+                sb.Append(input[i]);
+                if ((i + 1) % n == 0) sb.Append("\n");
+            }
+            return sb.ToString().Split('\n');
+        }
+
+        public override void Paint()
+        {
+            // Clear, then paint an OS9 white panel instead of a skinned image
+            try { Contents.Clear(new Color(0x00000000)); } catch { }
+            var font = Resources.Charcoal ?? Font_1x;
+
+            // White background for the whole content area
+            Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, PanelFill);
+
+            // Text (black, OS9-style)
+            Contents.DrawString(10, 10, App.Name, font, TextBlack);
+            for (int i = 0; i < DescriptionLines.Count; i++)
+                Contents.DrawString(10, 56 + i * 16, DescriptionLines[i], font, TextBlack);
+
+            // Bottom bar (system-style strip)
+            DrawBottomBar();
+
+            // Render buttons on top
+            OpenButton.Render();
+            InstallButton.Render();
+
+            RenderSystemStyleBorder();
+        }
+
+        private void DrawBottomBar()
+        {
+            int footerTop = Contents.Height - FOOTER_H;
+
+            // Fill bar and top divider
+            Contents.DrawFilledRectangle(0, footerTop, (ushort)Contents.Width, FOOTER_H, 0, FooterFill);
+            Contents.DrawLine(0, footerTop, Contents.Width, footerTop, DividerDark);
+        }
+
+        private void InstallButton_Click()
+        {
+            try
+            {
+                // Toggle install state
+                if (!IO.File.Exists(@"0:\go\" + App.Filename))
                 {
-                    var dnsClient = new DnsClient();
-
-                    // DNS
-                    dnsClient.Connect(DNSConfig.DNSNameservers[0]);
-                    dnsClient.SendAsk(App.Repository);
-
-                    // Address from IP
-                    var address = dnsClient.Receive();
-                    dnsClient.Close();
-                    var serverIP = address.ToString();
-
-                    tcpClient.Connect(serverIP, 80);
-                    var stream = tcpClient.GetStream();
-                    var httpget = "GET /" + App.Filename + " HTTP/1.1\r\n" +
-                                  "User-Agent: GoOS\r\n" +
-                                  "Accept: */*\r\n" +
-                                  "Accept-Encoding: identity\r\n" +
-                                  "Host: " + App.Repository + "\r\n" +
-                                  "Connection: Keep-Alive\r\n\r\n";
-                    var dataToSend = Encoding.ASCII.GetBytes(httpget);
-                    stream.Write(dataToSend, 0, dataToSend.Length);
-
-                    // Receive data
-                    var receivedData = new byte[tcpClient.ReceiveBufferSize];
-                    var bytesRead = stream.Read(receivedData, 0, receivedData.Length);
-                    var receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
-
-                    var responseParts =
-                        receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
-
-                    if (responseParts.Length < 2 || responseParts.Length > 2)
-                        Dialogue.Show("GoStore", "Invalid HTTP response!", default, WindowManager.errorIcon);
-
-                    if (responseParts[1] == "404")
+                    using (var tcpClient = new TcpClient())
                     {
-                        Dialogue.Show("Error", "The requested file or resource was not found.", default,
-                            WindowManager.errorIcon);
-                        return;
+                        var dnsClient = new DnsClient();
+
+                        // DNS
+                        dnsClient.Connect(DNSConfig.DNSNameservers[0]);
+                        dnsClient.SendAsk(App.Repository);
+
+                        // Address from IP
+                        var address = dnsClient.Receive();
+                        dnsClient.Close();
+                        var serverIP = address.ToString();
+
+                        tcpClient.Connect(serverIP, 80);
+                        var stream = tcpClient.GetStream();
+                        var httpget = "GET /" + App.Filename + " HTTP/1.1\r\n" +
+                                      "User-Agent: GoOS\r\n" +
+                                      "Accept: */*\r\n" +
+                                      "Accept-Encoding: identity\r\n" +
+                                      "Host: " + App.Repository + "\r\n" +
+                                      "Connection: Keep-Alive\r\n\r\n";
+                        var dataToSend = Encoding.ASCII.GetBytes(httpget);
+                        stream.Write(dataToSend, 0, dataToSend.Length);
+
+                        // Receive data
+                        var receivedData = new byte[tcpClient.ReceiveBufferSize];
+                        var bytesRead = stream.Read(receivedData, 0, receivedData.Length);
+                        var receivedMessage = Encoding.ASCII.GetString(receivedData, 0, bytesRead);
+
+                        var parts = receivedMessage.Split(new[] { "\r\n\r\n" }, 2, StringSplitOptions.None);
+                        if (parts.Length != 2)
+                        {
+                            Dialogue.Show("GoStore", "Invalid HTTP response!", default, WindowManager.errorIcon);
+                            return;
+                        }
+
+                        if (parts[1] == "404")
+                        {
+                            Dialogue.Show("Error", "The requested file or resource was not found.", default, WindowManager.errorIcon);
+                            return;
+                        }
+
+                        if (!IO.Directory.Exists(@"0:\go")) IO.Directory.CreateDirectory(@"0:\go");
+                        IO.File.WriteAllText(@"0:\go\" + App.Filename, parts[1]);
                     }
 
-                    if (!IO.Directory.Exists(@"0:\go")) IO.Directory.CreateDirectory(@"0:\go");
+                    Dialogue.Show("Success", "Application installed successfully.");
+                }
+                else
+                {
+                    while (IO.File.Exists(@"0:\go\" + App.Filename))
+                        IO.File.Delete(@"0:\go\" + App.Filename);
 
-                    IO.File.WriteAllText(@"0:\go\" + App.Filename, responseParts[1]);
+                    Dialogue.Show("Success", "Application uninstalled successfully.");
                 }
 
-                Dialogue.Show("Success", "Application installed successfully.");
-                //InstallButton.Title = "Uninstall";
+                // Reflect new state on the same button (no re-creation)
+                UpdateInstallButtonStateVisual();
+
+                // Repaint once
+                Paint();
             }
-            else
+            catch (Exception ex)
             {
-                while (IO.File.Exists(@"0:\go\" + App.Filename)) IO.File.Delete(@"0:\go\" + App.Filename);
+                Dialogue.Show("Error", "An error occurred while installing the app:\n" + ex.Message);
+            }
+        }
 
-                Dialogue.Show("Success", "Application uninstalled successfully.");
-                //InstallButton.Title = "Install";
+        private void OpenButton_Click()
+        {
+            if (!IO.File.Exists(@"0:\go\" + App.Filename))
+            {
+                Dialogue.Show("Error", "You must install the app before you can use it.", default, WindowManager.errorIcon);
+                return;
             }
 
-            Paint();
-        }
-        catch (Exception ex)
-        {
-            Dialogue.Show("Error", "An error occurred while installing the app:\n" + ex.Message);
-        }
-    }
-
-    private void OpenButton_Click()
-    {
-        if (!IO.File.Exists(@"0:\go\" + App.Filename))
-        {
-            Dialogue.Show("Error", "You must install the app before you can use it.", default,
-                WindowManager.errorIcon);
-        }
-        else
-        {
             Console.Clear();
             Console.Title = "Terminal - GoIDE";
             WindowManager.AddWindow(new GTerm(false));

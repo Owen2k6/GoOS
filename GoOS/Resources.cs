@@ -25,9 +25,6 @@ public class Resources
     [ManifestResourceStream(ResourceName = "GoOS.Resources.OOBE.oobebg.bmp")]
     private static byte[] OOBEblankraw;
 
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.Credits05.bmp")]
-    private static byte[] easterEggRaw;
-
     [ManifestResourceStream(ResourceName = "GoOS.Resources.Font_1x.btf")]
     private static byte[] font_1x_raw;
 
@@ -163,33 +160,6 @@ public class Resources
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.MaximizedPressed.bmp")]
     private static byte[] maximisePressedRaw;
 
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStore.bmp")]
-    private static byte[] GoStoreRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreSoon.bmp")]
-    private static byte[] GoStoreSoonRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreicon.bmp")]
-    private static byte[] GoStoreiconRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.StoreButton.bmp")]
-    private static byte[] StoreButtonRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreinfoboard.bmp")]
-    private static byte[] GoStoreinfoboardRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreButtonBlue.bmp")]
-    private static byte[] GoStoreButtonBlueRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreButtonGreen.bmp")]
-    private static byte[] GoStoreButtonGreenRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreButtonRed.bmp")]
-    private static byte[] GoStoreButtonRedRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoStoreDescFrame.bmp")]
-    private static byte[] GoStoreDescFrameRaw;
-
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.appbackground.bmp")]
     private static byte[] appbackgroundRaw;
 
@@ -243,12 +213,7 @@ public class Resources
 
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.error.bmp")]
     private static byte[] errorIconRaw;
-
-
-    //[ManifestResourceStream(ResourceName = "GoOS.Resources.Fragment.acf")]
-    //static byte[] FragmentRaw;
-
-    public static Canvas easterEgg;
+    
     public static Canvas RunImage;
     public static Canvas gtermIcon;
     public static Canvas clockIcon;
@@ -281,7 +246,6 @@ public class Resources
     public static Canvas rubber;
     public static Canvas userImage;
     public static Canvas shutdownIcon;
-    public static Canvas welcomeImage;
     public static Canvas infoIcon;
     public static Canvas drumIcon;
     public static Canvas warningIcon;
@@ -342,7 +306,6 @@ public class Resources
                 break;
 
             case ResourceType.Normal:
-                easterEgg = Image.FromBitmap(easterEggRaw);
                 RunImage = Image.FromBitmap(runRaw);
                 gtermIcon = Image.FromBitmap(gtermIconRaw);
                 clockIcon = Image.FromBitmap(clockIconRaw);
@@ -372,15 +335,6 @@ public class Resources
                 rubber = Image.FromBitmap(rubberRaw);
                 infoIcon = Image.FromBitmap(infoIconRaw);
                 warningIcon = Image.FromBitmap(warningIconRaw);
-                GoStore = Image.FromBitmap(GoStoreRaw);
-                GoStoreSoon = Image.FromBitmap(GoStoreSoonRaw);
-                GoStoreicon = Image.FromBitmap(GoStoreiconRaw);
-                StoreButton = Image.FromBitmap(StoreButtonRaw);
-                GoStoreinfoboard = Image.FromBitmap(GoStoreinfoboardRaw);
-                GoStoreButtonBlue = Image.FromBitmap(GoStoreButtonBlueRaw);
-                GoStoreButtonGreen = Image.FromBitmap(GoStoreButtonGreenRaw);
-                GoStoreButtonRed = Image.FromBitmap(GoStoreButtonRedRaw);
-                GoStoreDescFrame = Image.FromBitmap(GoStoreDescFrameRaw);
                 appbackground = Image.FromBitmap(appbackgroundRaw);
                 arrowleft = Image.FromBitmap(arrowleftRaw);
                 arrowright = Image.FromBitmap(arrowrightRaw);

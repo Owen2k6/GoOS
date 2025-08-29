@@ -6,7 +6,7 @@ public class GTerm : Window
 {
     public GTerm(bool overrideTitle = true)
     {
-        if (overrideTitle) BetterConsole.Title = "GTerm";
+        if (overrideTitle) BetterConsole.Title = "Terminal";
 
         Contents = BetterConsole.Canvas;
         Title = BetterConsole.Title;
