@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using GoGL.Graphics;
+using Gold.Graphics;
 using GoOS.Commands;
 using GoOS.Security;
 using static GoOS.Resources;

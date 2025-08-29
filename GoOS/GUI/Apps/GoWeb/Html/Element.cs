@@ -1,8 +1,8 @@
 ﻿#nullable enable
 using System.Collections.Generic;
 using System.Linq;
-using GoGL.Graphics;
-using GoGL.Graphics.Fonts;
+using Gold.Graphics;
+using Gold.Graphics.Fonts;
 using GoOS.GUI.Apps.GoWeb.Render;
 
 namespace GoOS.GUI.Apps.GoWeb.Html;

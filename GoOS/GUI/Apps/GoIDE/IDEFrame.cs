@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using GoGL.Graphics;
+using Gold.Graphics;
 using GoOS._9xCode;
 using static GoOS.Commands.Run;
 using Console = BetterConsole;

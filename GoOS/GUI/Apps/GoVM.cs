@@ -1,5 +1,5 @@
 ﻿using System;
-using GoGL.Graphics;
+using Gold.Graphics;
 
 namespace GoOS.GUI.Apps;
 

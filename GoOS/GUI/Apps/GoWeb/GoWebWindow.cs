@@ -1,6 +1,6 @@
 ﻿#nullable enable
 using System;
-using GoGL.Graphics;
+using Gold.Graphics;
 using GoOS.GUI.Apps.GoWeb.Html;
 using GoOS.GUI.Apps.GoWeb.Render;
 using Uri = GoOS.GUI.Apps.GoWeb.Http.Uri;

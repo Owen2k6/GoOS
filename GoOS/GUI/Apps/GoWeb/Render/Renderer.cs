@@ -1,4 +1,4 @@
-﻿using GoGL.Graphics;
+﻿using Gold.Graphics;
 using GoOS.GUI.Apps.GoWeb.Html;
 
 namespace GoOS.GUI.Apps.GoWeb.Render;

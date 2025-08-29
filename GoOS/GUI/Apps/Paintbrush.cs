@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cosmos.System;
-using GoGL.Graphics;
+using Gold.Graphics;
 using GoOS.GUI.Models;
 using static GoOS.Resources;
 

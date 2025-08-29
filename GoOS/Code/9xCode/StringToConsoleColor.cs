@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ConsoleColor = GoGL.Graphics.Color;
+using ConsoleColor = Gold.Graphics.Color;
 using static ConsoleColorEx;
 
 namespace GoOS._9xCode;

@@ -1,6 +1,6 @@
 ﻿using System;
 using Console = BetterConsole;
-using ConsoleColor = GoGL.Graphics.Color;
+using ConsoleColor = Gold.Graphics.Color;
 using static ConsoleColorEx;
 
 namespace ChaOS;

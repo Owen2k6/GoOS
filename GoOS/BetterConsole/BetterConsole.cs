@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Cosmos.Core.Memory;
 using Cosmos.System;
-using GoGL.Graphics;
+using Gold.Graphics;
 using GoOS.GUI;
 using GoOS.GUI.Apps.Settings;
 using GoOS.Themes;

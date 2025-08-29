@@ -1,5 +1,5 @@
-﻿using GoGL.Graphics;
-using GoGL.Graphics.Fonts;
+﻿using Gold.Graphics;
+using Gold.Graphics.Fonts;
 using IL2CPU.API.Attribs;
 
 namespace GoOS;

@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4.UDP.DNS;
-using GoGL.Graphics;
+using Gold.Graphics;
 using GoOS._9xCode;
 using GoOS.Commands;
 // Window, Button

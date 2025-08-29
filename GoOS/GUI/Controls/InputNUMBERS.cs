@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Cosmos.System;
-using GoGL.Graphics;
+using Gold.Graphics;
 using GoOS.GUI.Models;
 
 namespace GoOS.GUI;

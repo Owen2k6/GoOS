@@ -6,8 +6,8 @@ using System.Globalization;
 using System.Text;
 using GoOS.GUI;
 // Avoid Canvas ambiguity
-using GCanvas = GoGL.Graphics.Canvas;
-using GColor = GoGL.Graphics.Color;
+using GCanvas = Gold.Graphics.Canvas;
+using GColor = Gold.Graphics.Color;
 
 // Dialogue, Window, WindowManager
 // Color

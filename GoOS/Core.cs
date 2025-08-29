@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using Console = BetterConsole;
-using ConsoleColor = GoGL.Graphics.Color;
+using ConsoleColor = Gold.Graphics.Color;
 
 namespace GoOS;
 

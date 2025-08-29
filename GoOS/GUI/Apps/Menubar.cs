@@ -5,7 +5,7 @@ using System.Text;
 using Cosmos.HAL;
 using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4.UDP.DNS;
-using GoGL.Graphics;
+using Gold.Graphics;
 using GoOS.GUI.Apps.GoIDE;
 using GoOS.GUI.Apps.GoStore;
 using GoOS.GUI.Apps.GoWeb;

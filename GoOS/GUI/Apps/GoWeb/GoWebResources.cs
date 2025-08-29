@@ -1,4 +1,4 @@
-﻿using GoGL.Graphics;
+﻿using Gold.Graphics;
 using IL2CPU.API.Attribs;
 
 namespace GoOS.GUI.Apps.GoWeb;

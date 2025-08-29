@@ -1,5 +1,5 @@
 ﻿using Cosmos.System;
-using GoGL.Graphics;
+using Gold.Graphics;
 using GoOS.GUI.Apps;
 using GoOS.GUI.Models;
 using IL2CPU.API.Attribs;
@@ -13,7 +13,7 @@ public class Button : Control
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.mouse_click.bmp")]
     private static byte[] mouseClickRaw;
 
-    private static readonly Canvas mouseClick = GoGL.Graphics.Image.FromBitmap(mouseClickRaw);
+    private static readonly Canvas mouseClick = Gold.Graphics.Image.FromBitmap(mouseClickRaw);
 
     public bool AppearPressed = false;
 

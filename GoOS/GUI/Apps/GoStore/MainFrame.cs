@@ -3,8 +3,8 @@
 
 using System;
 using System.Collections.Generic;
-using GoGL.Graphics;
-using GoGL.Graphics.Fonts;
+using Gold.Graphics;
+using Gold.Graphics.Fonts;
 using GoOS.Networking;
 using static GoOS.Resources;
 

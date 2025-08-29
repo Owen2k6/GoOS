@@ -10,7 +10,7 @@ using System.IO;
 using Cosmos.System;
 using GoOS.Util;
 using Console = BetterConsole;
-using ConsoleColor = GoGL.Graphics.Color;
+using ConsoleColor = Gold.Graphics.Color;
 
 namespace GoOS;
 

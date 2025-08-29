@@ -1,5 +1,5 @@
-﻿using GoGL.Graphics;
-using GoGL.Graphics.Fonts;
+﻿using Gold.Graphics;
+using Gold.Graphics.Fonts;
 using GoOS.GUI.Apps.GoWeb.Html;
 
 namespace GoOS.GUI.Apps.GoWeb.Render;

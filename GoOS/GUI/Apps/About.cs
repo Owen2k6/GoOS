@@ -1,5 +1,5 @@
-﻿using GoGL;
-using GoGL.Graphics;
+﻿using Gold;
+using Gold.Graphics;
 using GoOS._9xCode;
 
 namespace GoOS.GUI.Apps;
@@ -17,7 +17,7 @@ public class About : Window
         // Paint the window.
         Contents.DrawImage(0, 0, Resources.abtbg, false);
         Contents.DrawString(10, 152, "GoOS " + Kernel.version, Resources.Font_1x, Color.White);
-        Contents.DrawString(10, 164, "GoGL " + new Info().getVersion(), Resources.Font_1x, Color.White);
+        Contents.DrawString(10, 164, "Gold " + Info.Version, Resources.Font_1x, Color.White);
         Contents.DrawString(10, 176, "GoCode " + GoCode.GoCode.Version, Resources.Font_1x, Color.White);
         Contents.DrawString(10, 188, "9xCode " + Interpreter.Version, Resources.Font_1x, Color.White);
     }

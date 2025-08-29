@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Cosmos.System;
-using GoGL.Graphics;
+using Gold.Graphics;
 using GoOS._9xCode;
 using GoOS.Apps;
 using GoOS.Commands;

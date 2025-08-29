@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cosmos.System;
-using GoGL.Graphics;
+using Gold.Graphics;
 using GoOS.GUI.Models;
 using static GoOS.Resources;
 
@@ -322,10 +322,8 @@ public class Window
     {
         var r = X + OuterWidth;
         var b = Y + OuterHeight;
-        cv.DrawLine(r + 2, Y + 3, r + 2, b + 3, Color.Black);
-        cv.DrawLine(r + 1, Y + 3, r + 1, b + 3, Color.Black);
-        cv.DrawLine(X + 3, b + 2, r + 3, b + 2, Color.Black);
-        cv.DrawLine(X + 3, b + 1, r + 3, b + 1, Color.Black);
+        cv.DrawLine(r + 0, Y + 3, r + 0, b + 3, Color.Black);
+        cv.DrawLine(X + 3, b + 0, r + 3, b + 0, Color.Black);
     }
 
     public virtual void HandleClick(MouseEventArgs e)

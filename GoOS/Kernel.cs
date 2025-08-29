@@ -10,7 +10,7 @@ using Cosmos.System.FileSystem.VFS;
 using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4.UDP.DHCP;
 using Cosmos.System.Network.IPv4.UDP.DNS;
-using GoGL.Hardware.GPU;
+using Gold.Hardware.GPU;
 using GoOS._9xCode;
 using GoOS.Commands;
 using GoOS.GUI;
@@ -20,7 +20,7 @@ using GoOS.Themes;
 using GoOS.Util;
 using LibDotNetParser.CILApi;
 using Console = BetterConsole;
-using ConsoleColor = GoGL.Graphics.Color;
+using ConsoleColor = Gold.Graphics.Color;
 using static GoOS.Core;
 
 // Goplex Studios - GoOS
@@ -93,7 +93,7 @@ public class Kernel : Cosmos.System.Kernel
         Resources.Generate(ResourceType.Boot);
 
         InitialiseFileSystem();
-        InitialiseGoGL();
+        InitialiseGold();
         Resources.Generate(ResourceType.Fonts);
         Resources.Generate(ResourceType.Priority);
         Resources.Generate(ResourceType.Normal);
@@ -149,7 +149,7 @@ public class Kernel : Cosmos.System.Kernel
         }
     }
 
-    private void InitialiseGoGL()
+    private void InitialiseGold()
     {
         var screenRes = File.Exists(@"0:\content\sys\resolution.gms")
             ? File.ReadAllBytes(@"0:\content\sys\resolution.gms")

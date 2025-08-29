@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Cosmos.Core.Memory;
 using Cosmos.System;
-using GoGL.Graphics;
-using GoGL.Hardware.GPU;
+using Gold.Graphics;
+using Gold.Hardware.GPU;
 using GoOS.GUI.Apps;
 using IL2CPU.API.Attribs;
 

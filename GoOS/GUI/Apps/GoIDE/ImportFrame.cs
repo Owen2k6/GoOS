@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using GoGL.Graphics;
+using Gold.Graphics;
 
 namespace GoOS.GUI.Apps.GoIDE;
 

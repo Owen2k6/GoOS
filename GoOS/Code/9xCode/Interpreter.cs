@@ -4,11 +4,11 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using Cosmos.System;
-using GoGL.Graphics;
+using Gold.Graphics;
 using GoOS.GUI;
 using static ConsoleColorEx;
 using Console = BetterConsole;
-using ConsoleColor = GoGL.Graphics.Color;
+using ConsoleColor = Gold.Graphics.Color;
 using static GoOS.Resources;
 
 // 9xCode Beta 3.1

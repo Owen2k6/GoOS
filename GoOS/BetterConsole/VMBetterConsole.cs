@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Cosmos.Core.Memory;
 using Cosmos.System;
-using GoGL.Graphics;
-using GoGL.Graphics.Fonts;
+using Gold.Graphics;
+using Gold.Graphics.Fonts;
 using GoOS.GUI;
 using GoOS.Themes;
 using IL2CPU.API.Attribs;

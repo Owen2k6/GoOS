@@ -8,9 +8,9 @@ using Cosmos.System;
 using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4.UDP.DNS;
 using Cosmos.System.ScanMaps;
-using GoGL;
-using GoGL.Graphics;
-using GoGL.Hardware.GPU;
+using Gold;
+using Gold.Graphics;
+using Gold.Hardware.GPU;
 using GoOS._9xCode;
 using GoOS.GUI.Apps.GoStore;
 using GoOS.GUI.Apps.GoWeb;
@@ -66,7 +66,7 @@ public class Frame : Window
                         Contents.DrawString(5, 188, "System Memory: " + CPU.GetAmountOfRAM() + "MB",
                             Resources.Font_1x, Color.White);
                         Contents.DrawString(5, 222, "GoOS Implementations --", Resources.Font_1x, Color.White);
-                        Contents.DrawString(5, 234, "GoGL Version " + new Info().getVersion(), Resources.Font_1x,
+                        Contents.DrawString(5, 234, "Gold Version " + Info.Version, Resources.Font_1x,
                             Color.White);
                         Contents.DrawString(5, 246, "GoCode Version " + GoCode.GoCode.Version, Resources.Font_1x,
                             Color.White);
