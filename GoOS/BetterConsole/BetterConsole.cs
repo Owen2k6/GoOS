@@ -162,7 +162,7 @@ public static class BetterConsole
     /// <summary>Writes line</summary>
     public static void WriteLine(object text = null, bool quick = false)
     {
-        Write((text ?? string.Empty).ToString() + "\n", quick);
+        Write((text ?? string.Empty) + "\n", quick);
     }
 
     /// <summary>Read a single key</summary>

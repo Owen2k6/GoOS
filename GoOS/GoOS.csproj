@@ -132,7 +132,6 @@
     <ItemGroup>
         <EmbeddedResource Include="Resources\Font_2x.btf"/>
         <EmbeddedResource Include="Resources\GUI\aboutGoOS.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\appbackground.bmp"/>
         <EmbeddedResource Include="Resources\GUI\desktopwallpaper.bmp"/>
         <EmbeddedResource Include="Resources\GUI\error.bmp"/>
         <EmbeddedResource Include="Resources\GUI\file.bmp"/>
@@ -141,10 +140,7 @@
         <EmbeddedResource Include="Resources\GUI\FileManager\arrowup.bmp"/>
         <EmbeddedResource Include="Resources\GUI\FileManager\drive.bmp"/>
         <EmbeddedResource Include="Resources\GUI\FileManager\drive_locked.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\FileManager\header.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\FileManager\sidebar.bmp"/>
         <EmbeddedResource Include="Resources\GUI\GoIDE\run.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\GoWeb.bmp"/>
         <EmbeddedResource Include="Resources\GUI\GoWeb\Go.bmp"/>
         <EmbeddedResource Include="Resources\GUI\GoWeb\Home.bmp"/>
         <EmbeddedResource Include="Resources\GUI\GoWeb\ToolbarBackground.bmp"/>
@@ -159,17 +155,13 @@
         <EmbeddedResource Include="Resources\GUI\Paint\colors.bmp"/>
         <EmbeddedResource Include="Resources\GUI\drum.bmp"/>
         <EmbeddedResource Include="Resources\GUI\folder.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\gterm.bmp"/>
         <EmbeddedResource Include="Resources\GUI\info.bmp"/>
         <EmbeddedResource Include="Resources\GUI\mouse.bmp"/>
         <EmbeddedResource Include="Resources\GUI\Paint\rubber.bmp"/>
         <EmbeddedResource Include="Resources\GUI\Paint\text.bmp"/>
         <EmbeddedResource Include="Resources\GUI\shutdown.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\user.bmp"/>
         <EmbeddedResource Include="Resources\OOBE\oobe.bmp"/>
         <EmbeddedResource Include="Resources\OOBE\oobebg.bmp"/>
-        <EmbeddedResource Include="Resources\OOBE\setupsupport.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\TaskManager.bmp"/>
         <EmbeddedResource Include="Resources\GUI\Notepad\SAVE.bmp"/>
         <EmbeddedResource Include="Resources\GUI\Notepad\PASTE.bmp"/>
         <EmbeddedResource Include="Resources\GUI\Notepad\COPY.bmp"/>
@@ -180,24 +172,14 @@
         <EmbeddedResource Include="Resources\GUI\Gosplorer\PARENT.bmp"/>
         <EmbeddedResource Include="Resources\GUI\Gosplorer\NEW.bmp"/>
         <EmbeddedResource Include="Resources\GUI\Gosplorer\LOADINNOTEPAD.bmp"/>
-        <EmbeddedResource Include="Resources\OOBE\setupfinal.bmp"/>
-        <None Include="Resources\Credits05.bmp" />
+        <None Include="Resources\Credits05.bmp"/>
         <EmbeddedResource Include="Resources\Font_1x.btf"/>
-        <EmbeddedResource Include="Resources\OOBE\setupcomputer.bmp"/>
-        <EmbeddedResource Include="Resources\OOBE\setupres.bmp"/>
-        <EmbeddedResource Include="Resources\OOBE\setupthm.bmp"/>
-        <EmbeddedResource Include="Resources\OOBE\setupTOU.bmp"/>
-        <EmbeddedResource Include="Resources\OOBE\setupua.bmp"/>
-        <EmbeddedResource Include="Resources\OOBE\setupuser.bmp"/>
-        <EmbeddedResource Include="Resources\OOBE\setupwelcome.bmp"/>
         <EmbeddedResource Include="Resources\GUI\question.bmp"/>
         <EmbeddedResource Include="Resources\GUI\warning.bmp"/>
         <None Remove="Resources\GUI\TaskStart\startmenuBG.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\TaskStart\startmenuBG.bmp"/>
         <None Remove="Resources\GUI\Gosplorer\REFRESH.bmp"/>
         <EmbeddedResource Include="Resources\GUI\Gosplorer\REFRESH.bmp"/>
         <None Remove="Resources\GUI\TaskStart\start.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\TaskStart\start.bmp"/>
         <None Remove="Resources\GUI\TaskStart\taskbar.bmp"/>
         <EmbeddedResource Include="Resources\GUI\TaskStart\taskbar.bmp"/>
         <None Remove="Resources\GUI\GoStoreSoon.bmp"/>
@@ -278,7 +260,6 @@
 
     <ItemGroup>
         <None Remove="Resources\GUI\StoreButton.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\StoreButton.bmp"/>
     </ItemGroup>
 
     <ItemGroup>

@@ -1,0 +1,4 @@
+You have inserted a GoOS CD!
+Please note that GoOS 1x is designed to be ran in a VMWare Instance.
+
+While it can run bare metal, we do NOT recomend it.

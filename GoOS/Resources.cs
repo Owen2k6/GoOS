@@ -49,15 +49,6 @@ public class Resources
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoIDE.run.bmp")]
     private static byte[] runRaw;
 
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.gterm.bmp")]
-    private static byte[] gtermIconRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.clock.bmp")]
-    private static byte[] clockIconRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskManager.bmp")]
-    private static byte[] taskmanIconRaw;
-
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.ide.bmp")]
     private static byte[] ideIconRaw;
 
@@ -160,9 +151,6 @@ public class Resources
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.MaximizedPressed.bmp")]
     private static byte[] maximisePressedRaw;
 
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.appbackground.bmp")]
-    private static byte[] appbackgroundRaw;
-
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.arrowleft.bmp")]
     private static byte[] arrowleftRaw;
 
@@ -178,17 +166,8 @@ public class Resources
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.drive_locked.bmp")]
     private static byte[] drive_lockedRaw;
 
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.header.bmp")]
-    private static byte[] headerRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.sidebar.bmp")]
-    private static byte[] sidebarRaw;
-
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskStart.taskbar.bmp")]
     private static byte[] taskbarBackgroundRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoWeb.bmp")]
-    private static byte[] goWebIconRaw;
 
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Settings.Background.bmp")]
     private static byte[] SBGRaw;
@@ -213,11 +192,8 @@ public class Resources
 
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.error.bmp")]
     private static byte[] errorIconRaw;
-    
+
     public static Canvas RunImage;
-    public static Canvas gtermIcon;
-    public static Canvas clockIcon;
-    public static Canvas taskmanIcon;
     public static Canvas ideIcon;
     public static Canvas ideIconSmall;
     public static Canvas cutIcon;
@@ -244,40 +220,21 @@ public class Resources
     public static Canvas text;
     public static Canvas mouse_text;
     public static Canvas rubber;
-    public static Canvas userImage;
-    public static Canvas shutdownIcon;
     public static Canvas infoIcon;
     public static Canvas drumIcon;
     public static Canvas warningIcon;
     public static Canvas closeButton;
     public static Canvas closeButtonPressed;
-    public static Canvas maximise;
-    public static Canvas maximisePressed;
     public static Canvas minimise;
     public static Canvas minimisePressed;
-    public static Canvas GoStore;
-    public static Canvas GoStoreSoon;
-    public static Canvas GoStoreicon;
-    public static Canvas StoreButton;
     public static Canvas OOBEmain;
     public static Canvas OOBEblank;
-    public static Canvas GoStoreinfoboard;
-    public static Canvas GoStoreButtonBlue;
-    public static Canvas GoStoreButtonGreen;
-    public static Canvas GoStoreButtonRed;
-    public static Canvas GoStoreDescFrame;
-    public static Canvas appbackground;
     public static Canvas arrowleft;
     public static Canvas arrowright;
     public static Canvas arrowup;
     public static Canvas drive;
     public static Canvas drive_locked;
-    public static Canvas header;
-    public static Canvas sidebar;
-    public static Canvas startMenuBackground;
-    public static Canvas startBackground;
     public static Canvas taskbarBackground;
-    public static Canvas goWebIcon;
     public static Canvas SBG;
     public static Canvas Unknown;
     public static Canvas SBGM;
@@ -307,9 +264,6 @@ public class Resources
 
             case ResourceType.Normal:
                 RunImage = Image.FromBitmap(runRaw);
-                gtermIcon = Image.FromBitmap(gtermIconRaw);
-                clockIcon = Image.FromBitmap(clockIconRaw);
-                taskmanIcon = Image.FromBitmap(taskmanIconRaw);
                 ideIcon = Image.FromBitmap(ideIconRaw);
                 ideIconSmall = Image.FromBitmap(ideIconSmallRaw);
                 cutIcon = Image.FromBitmap(cutIconRaw);
@@ -335,16 +289,12 @@ public class Resources
                 rubber = Image.FromBitmap(rubberRaw);
                 infoIcon = Image.FromBitmap(infoIconRaw);
                 warningIcon = Image.FromBitmap(warningIconRaw);
-                appbackground = Image.FromBitmap(appbackgroundRaw);
                 arrowleft = Image.FromBitmap(arrowleftRaw);
                 arrowright = Image.FromBitmap(arrowrightRaw);
                 arrowup = Image.FromBitmap(arrowupRaw);
                 drive = Image.FromBitmap(driveRaw);
                 drive_locked = Image.FromBitmap(drive_lockedRaw);
-                header = Image.FromBitmap(headerRaw);
-                sidebar = Image.FromBitmap(sidebarRaw);
                 taskbarBackground = Image.FromBitmap(taskbarBackgroundRaw);
-                goWebIcon = Image.FromBitmap(goWebIconRaw);
                 SBG = Image.FromBitmap(SBGRaw);
                 Unknown = Image.FromBitmap(UnknownRaw);
                 SBGM = Image.FromBitmap(SBGMRaw);
@@ -356,8 +306,6 @@ public class Resources
             case ResourceType.Priority:
                 closeButton = Image.FromBitmap(closeButtonRaw);
                 closeButtonPressed = Image.FromBitmap(closeButtonPressedRaw);
-                maximise = Image.FromBitmap(maximiseRaw);
-                maximisePressed = Image.FromBitmap(maximiseRaw);
                 minimise = Image.FromBitmap(minimiseRaw);
                 minimisePressed = Image.FromBitmap(minimisePressedRaw);
                 background = Image.FromBitmap(backgroundRaw);

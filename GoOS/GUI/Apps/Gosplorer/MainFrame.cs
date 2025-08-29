@@ -1,6 +1,4 @@
-﻿// File: GoOS/GUI/Apps/Gosplorer/MainFrame.cs
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,8 +8,6 @@ using GoOS._9xCode;
 using GoOS.Apps;
 using GoOS.Commands;
 using static GoOS.Resources;
-
-// <-- for GiffRunner
 
 namespace GoOS.GUI.Apps.Gosplorer;
 
@@ -85,6 +81,7 @@ public class MainFrame : Window
                 UseSystemStyle = false,
                 RenderWithAlpha = true,
                 BackgroundColour = new Color(0, 0, 0, 0),
+                TextColour = Color.Black,
                 Name = @"0:\",
                 ClickedAlt = Shortcut_Click
             },
@@ -93,6 +90,7 @@ public class MainFrame : Window
                 UseSystemStyle = false,
                 RenderWithAlpha = true,
                 BackgroundColour = new Color(0, 0, 0, 0),
+                TextColour = Color.Black,
                 Name = @"1:\",
                 ClickedAlt = Shortcut_Click
             },
@@ -101,6 +99,7 @@ public class MainFrame : Window
                 UseSystemStyle = false,
                 RenderWithAlpha = true,
                 BackgroundColour = new Color(0, 0, 0, 0),
+                TextColour = Color.Black,
                 Name = "Apps",
                 ClickedAlt = Shortcut_Click
             }
@@ -119,26 +118,26 @@ public class MainFrame : Window
 
     public override void Paint()
     {
-        Contents.DrawImage(0, 0, appbackground, false);
-        Contents.DrawImage(0, 0, header, false);
-        Contents.DrawImage(0, 40, sidebar, false);
+        Contents.DrawFilledRectangle(0, 0, Contents.Width, Contents.Height, 0, new Color(0xFFF8F8F8));
+        Contents.DrawFilledRectangle(0, 0, Contents.Width, 40, 0, new Color(0xFFE0E0E0));
+        Contents.DrawFilledRectangle(0, 40, 84, Contents.Height, 0, new Color(0xFFC0C0C0));
+        Contents.DrawLine(84, 40, 84, Contents.Height, Color.Black);
+        Contents.DrawLine(0, 40, Contents.Width, 40, Color.Black);
         Contents.DrawImage(10, 45, drive);
         Contents.DrawImage(10, 70, drive_locked);
         Contents.DrawImage(10, 95, ideIconSmall);
-
         AddressBar.Render();
         BackButton.Render();
         ForwardButton.Render();
         UpButton.Render();
         RefreshButton.Render();
-
         foreach (var i in Shortcuts) i.Render();
-        foreach (var i in FolderContents)
-            if (i != null)
-                i.Render();
-
+        if (FolderContents != null)
+            foreach (var i in FolderContents)
+                i?.Render();
         RenderSystemStyleBorder();
     }
+
 
     private Button GetButtonUnderMouse()
     {
@@ -380,6 +379,7 @@ public class MainFrame : Window
                 UseSystemStyle = false,
                 RenderWithAlpha = true,
                 BackgroundColour = new Color(0, 0, 0, 0),
+                TextColour = Color.Black,
                 Image = itemTypes[i] ? folderIcon : fileIcon,
                 ClickedAlt = FolderContents_Clicked,
                 Name = itemNames[i]

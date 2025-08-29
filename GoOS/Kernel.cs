@@ -10,7 +10,6 @@ using Cosmos.System.FileSystem.VFS;
 using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4.UDP.DHCP;
 using Cosmos.System.Network.IPv4.UDP.DNS;
-using GoGL.Graphics;
 using GoGL.Hardware.GPU;
 using GoOS._9xCode;
 using GoOS.Commands;
@@ -19,7 +18,6 @@ using GoOS.GUI.Apps;
 using GoOS.GUI.Apps.OOBE;
 using GoOS.Themes;
 using GoOS.Util;
-using IL2CPU.API.Attribs;
 using LibDotNetParser.CILApi;
 using Console = BetterConsole;
 using ConsoleColor = GoGL.Graphics.Color;
@@ -122,7 +120,7 @@ public class Kernel : Cosmos.System.Kernel
         MouseManager.Y = 0;
         Console.Clear();
         Console.WriteLine("Welcome to the GoOS Terminal");
-        Console.WriteLine("Version "+version);
+        Console.WriteLine("Version " + version);
         Console.WriteLine("Type HELP for a list of commands.");
         Directory.SetCurrentDirectory(@"0:\");
     }
@@ -200,6 +198,7 @@ public class Kernel : Cosmos.System.Kernel
                 /* Ignored */
             }
     }
+
     private void LoadUserSettings()
     {
         try
