@@ -1,6 +1,4 @@
 ﻿using System;
-using Cosmos.Core.Memory;
-using Cosmos.System;
 using GoGL.Graphics;
 using static GoOS.Resources;
 
@@ -8,13 +6,10 @@ namespace GoOS.GUI.Apps;
 
 public class Desktop : Window
 {
-    private readonly string[] contextMenuButtons =
-    {
-        " Garbage Collect "
-    };
-
-    private Button AppsFolderButton;
-
+    // private readonly string[] contextMenuButtons =
+    // {
+    //     " Garbage Collect "
+    // };
     public Desktop()
     {
         Contents = new Canvas(WindowManager.Canvas.Width, Convert.ToUInt16(WindowManager.Canvas.Height - 19));
@@ -121,7 +116,7 @@ public class Desktop : Window
     // {
     //     switch (item)
     //     {
-    //         case " Garbage Collect ":
+    //         case " Rubbish Collect ":
     //             Dialogue.Show("Garbage Collection", Heap.Collect() + " bytes freed");
     //             break;
     //     }

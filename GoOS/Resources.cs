@@ -147,7 +147,7 @@ public class Resources
 
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Settings.Background.bmp")]
     private static byte[] SBGRaw;
-    
+
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Settings.BackgroundMenu.bmp")]
     private static byte[] SBGMRaw;
 
