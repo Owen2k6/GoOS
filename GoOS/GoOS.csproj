@@ -166,7 +166,6 @@
         <EmbeddedResource Include="Resources\GUI\Notepad\PASTE.bmp"/>
         <EmbeddedResource Include="Resources\GUI\Notepad\COPY.bmp"/>
         <EmbeddedResource Include="Resources\GUI\Notepad\CUT.bmp"/>
-        <None Include="Resources\Credits05.bmp"/>
         <EmbeddedResource Include="Resources\Font_1x.btf"/>
         <EmbeddedResource Include="Resources\GUI\question.bmp"/>
         <EmbeddedResource Include="Resources\GUI\warning.bmp"/>
@@ -209,6 +208,8 @@
         <EmbeddedResource Include="Resources\GUI\Minimize.bmp"/>
         <None Remove="Resources\GUI\MinimizePressed.bmp"/>
         <EmbeddedResource Include="Resources\GUI\MinimizePressed.bmp"/>
+        <None Remove="Resources\GUI\menuicon.bmp" />
+        <EmbeddedResource Include="Resources\GUI\menuicon.bmp" />
     </ItemGroup>
 
     <PropertyGroup>

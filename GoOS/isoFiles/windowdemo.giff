@@ -1,0 +1,80 @@
+// All windows in one file to exercise positioning, panels, checkboxes, radios, images, and onLoad/onClose.
+// All coordinates are client-relative (top-left of Contents; title bar excluded).
+
+window DemoCorners {
+  title: "Corners & Centre";
+  x: 40; y: 40; width: 420; height: 220;
+  background: #F0F0F0;
+
+  // Top-left
+  label { text: "TL (0,0)"; x: 0; y: 0; textColour: black; }
+
+  // Top-right (near client max; clamping ensures safety)
+  label { text: "TR"; x: 400; y: 0; textColour: black; }
+
+  // Bottom-left
+  label { text: "BL"; x: 0; y: 200; textColour: black; }
+
+  // Bottom-right button
+  button DemoOK { text: "OK"; x: 340; y: 190; width: 70; height: 24;
+    onClick { message "Bottom-right OK clicked"; }
+  }
+
+  // Centred label (X only)
+  label { text: "This should be centred on X"; centre: true; x: 0; y: 100; textColour: grey; }
+}
+
+window PanelPlay {
+  title: "Panel layout";
+  x: 520; y: 40; width: 500; height: 260; background: #E8ECEF;
+
+  panel {
+    x: 16; y: 20; width: 300; height: 140; background: #D8D8D8;
+
+    label { text: "Inside panel (10,10)"; x: 10; y: 10; textColour: black; }
+    input { x: 10; y: 30; width: 200; height: 20; placeholder: "Panel input"; }
+    button { text: "Panel Button"; x: 10; y: 60; width: 120; height: 24;
+      onClick { message "Panel button clicked"; }
+    }
+
+    // Checkbox & radio inside panel to prove relative coords
+    checkbox { x: 160; y: 60; width: 120; height: 20; text: "Tick me"; checked: false; }
+    radio { x: 160; y: 84; width: 120; height: 20; text: "Choice A"; group: "grp1"; checked: true; }
+    radio { x: 160; y: 106; width: 120; height: 20; text: "Choice B"; group: "grp1"; checked: false; }
+  }
+
+  // Outside the panel
+  button { text: "Window Close"; x: 400; y: 220; width: 90; height: 24; onClick { close; } }
+}
+
+window Toggles {
+  title: "Checkbox & Radio";
+  x: 40; y: 320; width: 440; height: 220; background: #F6F6F6;
+
+  label { text: "Checkboxes:"; x: 12; y: 12; textColour: black; }
+  checkbox { x: 12; y: 32; width: 200; height: 20; text: "Enable logs"; checked: false; }
+  checkbox { x: 12; y: 54; width: 200; height: 20; text: "Use beta features"; checked: true; }
+
+  label { text: "Radio (Group: theme)"; x: 230; y: 12; textColour: black; }
+  radio { x: 230; y: 32; width: 160; height: 20; text: "Light";  group: "theme"; checked: true; }
+  radio { x: 230; y: 54; width: 160; height: 20; text: "Dark";   group: "theme"; checked: false; }
+  radio { x: 230; y: 76; width: 160; height: 20; text: "System"; group: "theme"; checked: false; }
+
+  button Apply { text: "Apply"; x: 340; y: 180; width: 80; height: 24;
+    onClick { message "Applied (demo)"; }
+  }
+}
+
+window ImageTest {
+  title: "Image loader (placeholder)";
+  x: 520; y: 320; width: 460; height: 260; background: white;
+
+  label { text: "Below should show a grey placeholder with an 'X':"; x: 10; y: 12; textColour: black; }
+  image { x: 10; y: 36; width: 128; height: 128; src: "0:\\res\\logo.png"; }
+  image { x: 150; y: 36; width: 64; height: 64; src: "0:\\res\\icon.bmp"; }
+
+  button { text: "Close"; x: 370; y: 220; width: 70; height: 24; onClick { close; } }
+
+  onLoad  { message "ImageTest opened (onLoad runs after window is shown)"; }
+  onClose { message "Goodbye from ImageTest"; }
+}

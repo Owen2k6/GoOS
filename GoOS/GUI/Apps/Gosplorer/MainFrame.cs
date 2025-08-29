@@ -46,32 +46,28 @@ public class MainFrame : Window
             Image = arrowleft,
             Clicked = BackButton_Click,
             UseSystemStyle = false,
-            RenderWithAlpha = true,
-            BackgroundColour = Color.Transparent
+            BackgroundColour = new Color(0,0,0)
         };
         ForwardButton = new Button(this, 29, 6, 26, 26, string.Empty)
         {
             Image = arrowright,
             Clicked = ForwardButton_Click,
             UseSystemStyle = false,
-            RenderWithAlpha = true,
-            BackgroundColour = Color.Transparent
+            BackgroundColour = new Color(0,0,0)
         };
         UpButton = new Button(this, 59, 6, 26, 26, string.Empty)
         {
             Image = arrowup,
             Clicked = UpArrow_Click,
             UseSystemStyle = false,
-            RenderWithAlpha = true,
-            BackgroundColour = Color.Transparent
+            BackgroundColour = new Color(0,0,0)
         };
         RefreshButton = new Button(this, 800, 6, 26, 26, string.Empty)
         {
             Image = refIcon,
             Clicked = RenderFolderItems,
             UseSystemStyle = false,
-            RenderWithAlpha = true,
-            BackgroundColour = Color.Transparent
+            BackgroundColour = new Color(0,0,0)
         };
 
         Shortcuts = new[]
@@ -79,8 +75,7 @@ public class MainFrame : Window
             new Button(this, 26, 45, 40, 20, @"0:\")
             {
                 UseSystemStyle = false,
-                RenderWithAlpha = true,
-                BackgroundColour = new Color(0, 0, 0, 0),
+                BackgroundColour = new Color(192, 192, 192),
                 TextColour = Color.Black,
                 Name = @"0:\",
                 ClickedAlt = Shortcut_Click
@@ -88,8 +83,7 @@ public class MainFrame : Window
             new Button(this, 26, 70, 40, 20, @"1:\")
             {
                 UseSystemStyle = false,
-                RenderWithAlpha = true,
-                BackgroundColour = new Color(0, 0, 0, 0),
+                BackgroundColour = new Color(192, 192, 192),
                 TextColour = Color.Black,
                 Name = @"1:\",
                 ClickedAlt = Shortcut_Click
@@ -97,8 +91,7 @@ public class MainFrame : Window
             new Button(this, 26, 95, 48, 20, "Apps")
             {
                 UseSystemStyle = false,
-                RenderWithAlpha = true,
-                BackgroundColour = new Color(0, 0, 0, 0),
+                BackgroundColour = new Color(192, 192, 192),
                 TextColour = Color.Black,
                 Name = "Apps",
                 ClickedAlt = Shortcut_Click
@@ -377,8 +370,7 @@ public class MainFrame : Window
                 IconWidth, IconHeight, itemNames[i])
             {
                 UseSystemStyle = false,
-                RenderWithAlpha = true,
-                BackgroundColour = new Color(0, 0, 0, 0),
+                BackgroundColour = new Color(248, 248, 248),
                 TextColour = Color.Black,
                 Image = itemTypes[i] ? folderIcon : fileIcon,
                 ClickedAlt = FolderContents_Clicked,

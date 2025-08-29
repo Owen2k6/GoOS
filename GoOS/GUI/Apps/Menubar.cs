@@ -29,7 +29,7 @@ namespace GoOS.GUI.Apps;
 /// </summary>
 public class Menubar : Window
 {
-    private const int SidePadding = 6;
+    private const int SidePadding = 3;
     private const int ItemGap = 6;
     private const int RightMargin = 8;
     private const int CharcoalHeight = 10;
@@ -109,17 +109,18 @@ public class Menubar : Window
     {
         var btnH = Math.Max(1, BarHeight - 4);
         var btnY = 2;
-        var btnW = 40;
+        var btnW = 16;
 
         menuButton = new Button(this,
             SidePadding,
             (ushort)btnY,
             (ushort)btnW,
             (ushort)btnH,
-            "Menu")
+            "")
         {
             UseSystemStyle = false, // flat label
             BackgroundColour = Color.Transparent,
+            Image = menuicon,
             TextColour = Color.Black,
             RenderWithAlpha = true
         };

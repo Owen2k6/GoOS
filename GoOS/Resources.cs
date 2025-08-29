@@ -165,8 +165,12 @@ public class Resources
 
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.error.bmp")]
     private static byte[] errorIconRaw;
+    
+    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.menuicon.bmp")]
+    private static byte[] menuiconRaw;
 
     public static Canvas RunImage;
+    public static Canvas menuicon;
     public static Canvas ideIconSmall;
     public static Canvas cutIcon;
     public static Canvas folderIcon;
@@ -227,6 +231,7 @@ public class Resources
                 break;
 
             case ResourceType.Normal:
+                menuicon = Image.FromBitmap(menuiconRaw);
                 RunImage = Image.FromBitmap(runRaw);
                 ideIconSmall = Image.FromBitmap(ideIconSmallRaw);
                 cutIcon = Image.FromBitmap(cutIconRaw);
