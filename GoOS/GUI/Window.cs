@@ -396,6 +396,10 @@ public class Window
                 X = WindowManager.Canvas.Width / 2 - OuterWidth / 2;
                 Y = WindowManager.Canvas.Height / 2 - OuterHeight / 2;
                 break;
+            case WindowDock.Desktop:
+                X = 0;
+                Y = 19;
+                break;
         }
     }
 
