@@ -145,15 +145,9 @@ public class Resources
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.FileManager.drive_locked.bmp")]
     private static byte[] drive_lockedRaw;
 
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.TaskStart.taskbar.bmp")]
-    private static byte[] taskbarBackgroundRaw;
-
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Settings.Background.bmp")]
     private static byte[] SBGRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Settings.Unknown.bmp")]
-    private static byte[] UnknownRaw;
-
+    
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Settings.BackgroundMenu.bmp")]
     private static byte[] SBGMRaw;
 
@@ -206,9 +200,7 @@ public class Resources
     public static Canvas arrowup;
     public static Canvas drive;
     public static Canvas drive_locked;
-    public static Canvas taskbarBackground;
     public static Canvas SBG;
-    public static Canvas Unknown;
     public static Canvas SBGM;
     public static Canvas SBGBS;
     public static Canvas SBBB;
@@ -259,9 +251,7 @@ public class Resources
                 arrowup = Image.FromBitmap(arrowupRaw);
                 drive = Image.FromBitmap(driveRaw);
                 drive_locked = Image.FromBitmap(drive_lockedRaw);
-                taskbarBackground = Image.FromBitmap(taskbarBackgroundRaw);
                 SBG = Image.FromBitmap(SBGRaw);
-                Unknown = Image.FromBitmap(UnknownRaw);
                 SBGM = Image.FromBitmap(SBGMRaw);
                 SBGBS = Image.FromBitmap(SBGBSRaw);
                 SBBB = Image.FromBitmap(SBBBRaw);

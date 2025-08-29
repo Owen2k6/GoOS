@@ -319,12 +319,12 @@ public class WindowManager
                     if (focused && Dimmed)
                         DimBackground();
 
-                    if (window.Visible && window.Title != nameof(Taskbar)) window.DrawWindow(Canvas, focused);
+                    if (window.Visible && window.Title != nameof(Menubar)) window.DrawWindow(Canvas, focused);
                 }
 
                 // Special windows (hard coded)
                 for (var i = 0; i < windows.Count; i++)
-                    if (windows[i].Title == nameof(Taskbar))
+                    if (windows[i].Title == nameof(Menubar))
                         windows[i].DrawWindow(Canvas, i == windows.Count - 1);
 
                 // move back up if it doesn't work

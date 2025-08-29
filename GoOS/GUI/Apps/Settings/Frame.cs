@@ -396,7 +396,6 @@ public class Frame : Window
                                 WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
                                 WindowManager.AddWindow(new Desktop());
-                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
@@ -414,7 +413,6 @@ public class Frame : Window
                                 WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
                                 WindowManager.AddWindow(new Desktop());
-                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
@@ -432,7 +430,6 @@ public class Frame : Window
                                 WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
                                 WindowManager.AddWindow(new Desktop());
-                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
@@ -450,7 +447,6 @@ public class Frame : Window
                                 WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
                                 WindowManager.AddWindow(new Desktop());
-                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
@@ -468,7 +464,6 @@ public class Frame : Window
                                 WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
                                 WindowManager.AddWindow(new Desktop());
-                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
@@ -486,7 +481,6 @@ public class Frame : Window
                                 WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
                                 WindowManager.AddWindow(new Desktop());
-                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
@@ -504,7 +498,6 @@ public class Frame : Window
                                 WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
                                 WindowManager.AddWindow(new Desktop());
-                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
@@ -522,7 +515,6 @@ public class Frame : Window
                                 WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
                                 WindowManager.AddWindow(new Desktop());
-                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
@@ -540,7 +532,6 @@ public class Frame : Window
                                 WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
                                 WindowManager.AddWindow(new Desktop());
-                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
@@ -558,7 +549,6 @@ public class Frame : Window
                                 WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
                                 WindowManager.AddWindow(new Desktop());
-                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
@@ -576,7 +566,6 @@ public class Frame : Window
                                 WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
                                 WindowManager.AddWindow(new Desktop());
-                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
@@ -594,7 +583,6 @@ public class Frame : Window
                                 WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
                                 WindowManager.AddWindow(new Desktop());
-                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
@@ -612,7 +600,6 @@ public class Frame : Window
                                 WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
                                 WindowManager.AddWindow(new Desktop());
-                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",
@@ -630,7 +617,6 @@ public class Frame : Window
                                 WindowManager.windows = new List<Window>(10);
                                 BetterConsole.ConsoleMode = false;
                                 WindowManager.AddWindow(new Desktop());
-                                WindowManager.AddWindow(new Taskbar());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
                                 File.WriteAllBytes(@"0:\content\sys\resolution.gms",

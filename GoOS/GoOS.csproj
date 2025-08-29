@@ -175,41 +175,40 @@
         <EmbeddedResource Include="Resources\GUI\Gosplorer\REFRESH.bmp"/>
         <None Remove="Resources\GUI\TaskStart\start.bmp"/>
         <None Remove="Resources\GUI\TaskStart\taskbar.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\TaskStart\taskbar.bmp"/>
-        <None Remove="Resources\GUI\GoStoreSoon.bmp"/>
-        <None Remove="Resources\GUI\bootlogo.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\bootlogo.bmp"/>
-        <None Remove="Resources\GUI\Settings\Background.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\Settings\Background.bmp"/>
-        <None Remove="Resources\GUI\Settings\Unknown.bmp"/>
-        <None Remove="Resources\GUI\Settings\BackgroundMenu.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\Settings\BackgroundMenu.bmp"/>
-        <None Remove="Resources\GUI\Settings\ButtonSelection.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\Settings\ButtonSelection.bmp"/>
-        <None Remove="Resources\GUI\Settings\Back.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\Settings\Back.bmp"/>
-        <None Remove="Resources\MicrosoftSansSerif16.btf"/>
-        <EmbeddedResource Include="Resources\MicrosoftSansSerif16.btf"/>
-        <None Remove="Resources\MSUIGothic16.btf"/>
-        <EmbeddedResource Include="Resources\MSUIGothic16.btf"/>
-        <None Remove="Resources\Charcoal.btf"/>
-        <EmbeddedResource Include="Resources\Charcoal.btf"/>
-        <None Remove="Resources\Chicago.btf"/>
-        <EmbeddedResource Include="Resources\Chicago.btf"/>
-        <None Remove="Resources\Geneva.btf"/>
-        <EmbeddedResource Include="Resources\Geneva.btf"/>
-        <None Remove="Resources\GUI\Close.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\Close.bmp"/>
-        <None Remove="Resources\GUI\ClosePressed.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\ClosePressed.bmp"/>
-        <None Remove="Resources\GUI\Maximize.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\Maximize.bmp"/>
-        <None Remove="Resources\GUI\MaximizePressed.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\MaximizePressed.bmp"/>
-        <None Remove="Resources\GUI\Minimize.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\Minimize.bmp"/>
-        <None Remove="Resources\GUI\MinimizePressed.bmp"/>
-        <EmbeddedResource Include="Resources\GUI\MinimizePressed.bmp"/>
+        <None Remove="Resources\GUI\GoStoreSoon.bmp" />
+        <None Remove="Resources\GUI\bootlogo.bmp" />
+        <EmbeddedResource Include="Resources\GUI\bootlogo.bmp" />
+        <None Remove="Resources\GUI\Settings\Background.bmp" />
+        <EmbeddedResource Include="Resources\GUI\Settings\Background.bmp" />
+        <None Remove="Resources\GUI\Settings\Unknown.bmp" />
+        <None Remove="Resources\GUI\Settings\BackgroundMenu.bmp" />
+        <EmbeddedResource Include="Resources\GUI\Settings\BackgroundMenu.bmp" />
+        <None Remove="Resources\GUI\Settings\ButtonSelection.bmp" />
+        <EmbeddedResource Include="Resources\GUI\Settings\ButtonSelection.bmp" />
+        <None Remove="Resources\GUI\Settings\Back.bmp" />
+        <EmbeddedResource Include="Resources\GUI\Settings\Back.bmp" />
+        <None Remove="Resources\MicrosoftSansSerif16.btf" />
+        <EmbeddedResource Include="Resources\MicrosoftSansSerif16.btf" />
+        <None Remove="Resources\MSUIGothic16.btf" />
+        <EmbeddedResource Include="Resources\MSUIGothic16.btf" />
+        <None Remove="Resources\Charcoal.btf" />
+        <EmbeddedResource Include="Resources\Charcoal.btf" />
+        <None Remove="Resources\Chicago.btf" />
+        <EmbeddedResource Include="Resources\Chicago.btf" />
+        <None Remove="Resources\Geneva.btf" />
+        <EmbeddedResource Include="Resources\Geneva.btf" />
+        <None Remove="Resources\GUI\Close.bmp" />
+        <EmbeddedResource Include="Resources\GUI\Close.bmp" />
+        <None Remove="Resources\GUI\ClosePressed.bmp" />
+        <EmbeddedResource Include="Resources\GUI\ClosePressed.bmp" />
+        <None Remove="Resources\GUI\Maximize.bmp" />
+        <EmbeddedResource Include="Resources\GUI\Maximize.bmp" />
+        <None Remove="Resources\GUI\MaximizePressed.bmp" />
+        <EmbeddedResource Include="Resources\GUI\MaximizePressed.bmp" />
+        <None Remove="Resources\GUI\Minimize.bmp" />
+        <EmbeddedResource Include="Resources\GUI\Minimize.bmp" />
+        <None Remove="Resources\GUI\MinimizePressed.bmp" />
+        <EmbeddedResource Include="Resources\GUI\MinimizePressed.bmp" />
     </ItemGroup>
 
     <PropertyGroup>
@@ -218,8 +217,8 @@
     </PropertyGroup>
 
     <ItemGroup Condition="'$(DefineConstants.Contains(BUILD_GOWEB))' != 'true'">
-        <Compile Remove="GUI\Apps\GoWeb\**"/>
-        <Compile Remove="Networking\FastDns.cs"/>
+        <Compile Remove="GUI\Apps\GoWeb\**" />
+        <Compile Remove="Networking\FastDns.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -227,13 +226,13 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Cosmos.Core" Version="0.1.0-*"/>
-        <PackageReference Include="Cosmos.Debug.Kernel" Version="0-*" NoWarn="NU1604"/>
-        <PackageReference Include="Cosmos.HAL2" Version="0.1.0-*"/>
-        <PackageReference Include="Cosmos.Plugs" Version="0.1.0-localbuild"/>
-        <PackageReference Include="Cosmos.System2" Version="0.1.0-localbuild"/>
-        <PackageReference Include="IL2CPU.API" Version="0.1.0-*"/>
-        <PackageReference Include="PrismAPI" Version="1.0.3"/>
+        <PackageReference Include="Cosmos.Core" Version="0.1.0-*" />
+        <PackageReference Include="Cosmos.Debug.Kernel" Version="0-*" NoWarn="NU1604" />
+        <PackageReference Include="Cosmos.HAL2" Version="0.1.0-*" />
+        <PackageReference Include="Cosmos.Plugs" Version="0.1.0-localbuild" />
+        <PackageReference Include="Cosmos.System2" Version="0.1.0-localbuild" />
+        <PackageReference Include="IL2CPU.API" Version="0.1.0-*" />
+        <PackageReference Include="PrismAPI" Version="1.0.3" />
     </ItemGroup>
 
     <ItemGroup>
@@ -252,11 +251,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Resources\GUI\StoreButton.bmp"/>
+        <None Remove="Resources\GUI\StoreButton.bmp" />
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Code\"/>
+        <Folder Include="Code\" />
     </ItemGroup>
 
 </Project>

@@ -113,7 +113,6 @@ public class Kernel : Cosmos.System.Kernel
         LoadUserSettings();
         InitNetwork();
         WindowManager.windows = new List<Window>(10);
-        WindowManager.AddWindow(new Taskbar());
         WindowManager.AddWindow(new Desktop());
         WindowManager.AddWindow(new Menubar());
         MouseManager.X = 0;
