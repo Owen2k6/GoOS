@@ -345,10 +345,6 @@ public class Kernel : Cosmos.System.Kernel
 
         switch (cmd0)
         {
-            case "gldiag":
-                WindowManager.AddWindow(new GoGLDiag());
-                break;
-
             case "codeswitch":
                 oldCode = !oldCode;
                 break;

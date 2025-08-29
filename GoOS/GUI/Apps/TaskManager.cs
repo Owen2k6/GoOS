@@ -14,7 +14,7 @@ public class TaskManager : Window
     public TaskManager()
     {
         Contents = new Canvas(270, 310);
-        Title = "Task Manager";
+        Title = "System Monitor";
         Visible = true;
         Closable = true;
         Unkillable = true;

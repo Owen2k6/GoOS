@@ -49,9 +49,6 @@ public class Resources
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.GoIDE.run.bmp")]
     private static byte[] runRaw;
 
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.ide.bmp")]
-    private static byte[] ideIconRaw;
-
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.idesmall.bmp")]
     private static byte[] ideIconSmallRaw;
 
@@ -70,21 +67,6 @@ public class Resources
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.bootlogo.bmp")]
     private static byte[] bootlogoRaw;
 
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.NEW.bmp")]
-    private static byte[] NewIconRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.BIN.bmp")]
-    private static byte[] BinIconRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.CHILD.bmp")]
-    private static byte[] ChildIconRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.PARENT.bmp")]
-    private static byte[] ParentIconRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.MOVE.bmp")]
-    private static byte[] MoveIconRaw;
-
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Notepad.COPY.bmp")]
     private static byte[] copyIconRaw;
 
@@ -93,9 +75,6 @@ public class Resources
 
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.REFRESH.bmp")]
     private static byte[] refIconRaw;
-
-    [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.Gosplorer.LOADINNOTEPAD.bmp")]
-    private static byte[] linIconRaw;
 
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.aboutGoOS.bmp")]
     private static byte[] aboutbgRAW;
@@ -194,7 +173,6 @@ public class Resources
     private static byte[] errorIconRaw;
 
     public static Canvas RunImage;
-    public static Canvas ideIcon;
     public static Canvas ideIconSmall;
     public static Canvas cutIcon;
     public static Canvas folderIcon;
@@ -202,15 +180,9 @@ public class Resources
     public static Canvas background;
     public static Canvas bootbackground;
     public static Canvas bootlogo;
-    public static Canvas newIcon;
-    public static Canvas binIcon;
-    public static Canvas childIcon;
-    public static Canvas parentIcon;
-    public static Canvas moveIcon;
     public static Canvas copyIcon;
     public static Canvas pasteIcon;
     public static Canvas refIcon;
-    public static Canvas linIcon;
     public static Canvas abtbg;
     public static Canvas saveIcon;
     public static Canvas question;
@@ -264,20 +236,13 @@ public class Resources
 
             case ResourceType.Normal:
                 RunImage = Image.FromBitmap(runRaw);
-                ideIcon = Image.FromBitmap(ideIconRaw);
                 ideIconSmall = Image.FromBitmap(ideIconSmallRaw);
                 cutIcon = Image.FromBitmap(cutIconRaw);
                 folderIcon = Image.FromBitmap(folderIconRaw);
                 fileIcon = Image.FromBitmap(fileIconRaw);
-                newIcon = Image.FromBitmap(NewIconRaw);
-                binIcon = Image.FromBitmap(BinIconRaw);
-                childIcon = Image.FromBitmap(ChildIconRaw);
-                parentIcon = Image.FromBitmap(ParentIconRaw);
-                moveIcon = Image.FromBitmap(MoveIconRaw);
                 copyIcon = Image.FromBitmap(copyIconRaw);
                 pasteIcon = Image.FromBitmap(pasteIconRaw);
                 refIcon = Image.FromBitmap(refIconRaw);
-                linIcon = Image.FromBitmap(linIconRaw);
                 abtbg = Image.FromBitmap(aboutbgRAW);
                 saveIcon = Image.FromBitmap(saveIconRaw);
                 question = Image.FromBitmap(questionRaw);
