@@ -1,0 +1,13 @@
+﻿window ImageTest {
+  title = "Image loader (placeholder)";
+  x = 40; y = 280; width = 420; height = 220; background = white;
+
+  label { text = "Placeholders below:"; x = 10; y = 12; textColour = black; }
+  image { x = 10;  y = 36; width = 128; height = 128; src = "0:\\res\\logo.png"; }
+  image { x = 150; y = 36; width = 64;  height =  64;  src = "0:\\res\\icon.bmp"; }
+
+  button { text = "Close"; x = 330; y = 180; width = 70; height = 24; onClick { close; } }
+
+  onLoad  { message "ImageTest opened"; }
+  onClose { message "Goodbye from ImageTest"; }
+}

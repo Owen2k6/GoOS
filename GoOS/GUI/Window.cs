@@ -320,10 +320,10 @@ public class Window
 
     private void DrawDropShadow(Canvas cv)
     {
-        var r = X + OuterWidth;
-        var b = Y + OuterHeight;
-        cv.DrawLine(r + 0, Y + 3, r + 0, b + 3, Color.Black);
-        cv.DrawLine(X + 3, b + 0, r + 3, b + 0, Color.Black);
+        var shadowX = X + OuterWidth;
+        var shadowY = Y + OuterHeight;
+        cv.DrawLine(shadowX, Y+ 2, shadowX, shadowY, Color.Black);
+        cv.DrawLine(X + 2, shadowY , shadowX, shadowY, Color.Black);
     }
 
     public virtual void HandleClick(MouseEventArgs e)
