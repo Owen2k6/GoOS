@@ -1,0 +1,148 @@
+﻿window ColourDemo {
+    title = "Colour Showcase"
+    width = 450
+    height = 350
+    background = white
+    
+    label TitleLabel {
+        x = 20
+        y = 20
+        text = "Giff Colour System"
+        textColour = #004080
+    }
+    
+    // Basic colours
+    panel Colour1 {
+        x = 20
+        y = 60
+        width = 80
+        height = 80
+        background = #FF0000
+    }
+    
+    panel Colour2 {
+        x = 110
+        y = 60
+        width = 80
+        height = 80
+        background = #00FF00
+    }
+    
+    panel Colour3 {
+        x = 200
+        y = 60
+        width = 80
+        height = 80
+        background = #0000FF
+    }
+    
+    panel Colour4 {
+        x = 290
+        y = 60
+        width = 80
+        height = 80
+        background = #FFFF00
+    }
+    
+    // Colour labels
+    label Label1 {
+        x = 35
+        y = 150
+        text = "Red"
+        textColour = black
+    }
+    
+    label Label2 {
+        x = 125
+        y = 150
+        text = "Green"
+        textColour = black
+    }
+    
+    label Label3 {
+        x = 220
+        y = 150
+        text = "Blue"
+        textColour = black
+    }
+    
+    label Label4 {
+        x = 305
+        y = 150
+        text = "Yellow"
+        textColour = black
+    }
+    
+    // Grayscale
+    panel Gray1 {
+        x = 20
+        y = 180
+        width = 80
+        height = 60
+        background = #FFFFFF
+    }
+    
+    panel Gray2 {
+        x = 110
+        y = 180
+        width = 80
+        height = 60
+        background = #BBBBBB
+    }
+    
+    panel Gray3 {
+        x = 200
+        y = 180
+        width = 80
+        height = 60
+        background = #777777
+    }
+    
+    panel Gray4 {
+        x = 290
+        y = 180
+        width = 80
+        height = 60
+        background = #333333
+    }
+    
+    // Grayscale labels
+    label GrayLabel1 {
+        x = 30
+        y = 250
+        text = "White"
+        textColour = black
+    }
+    
+    label GrayLabel2 {
+        x = 115
+        y = 250
+        text = "Light Grey"
+        textColour = black
+    }
+    
+    label GrayLabel3 {
+        x = 205
+        y = 250
+        text = "Grey"
+        textColour = black
+    }
+    
+    label GrayLabel4 {
+        x = 305
+        y = 250
+        text = "Dark Grey"
+        textColour = black
+    }
+    
+    button BackButton {
+        x = 350
+        y = 300
+        width = 80
+        height = 30
+        text = "Back"
+        onClick {
+            close;
+        }
+    }
+}

@@ -15,18 +15,6 @@ using Power = Cosmos.System.Power;
 
 namespace GoOS.GUI.Apps;
 
-/// <summary>
-///     Minimal, safe OS 9–style menubar:
-///     - Background: tiles 1×H Resources.menubarBackground
-///     - Left: flat “Menu” button (dropdown under button)
-///     - Left area: per-app menu labels (dropdown under each label)
-///     - Right: date then time (black text), small offsets
-///     - No focused-window title
-///     Safety:
-///     - No immediate renders from hooks
-///     - Render re-entrancy guard
-///     - Deferred menu registration processed in HandleRun
-/// </summary>
 public class Menubar : Window
 {
     private const int SidePadding = 3;
@@ -34,9 +22,12 @@ public class Menubar : Window
     private const int RightMargin = 8;
     private const int CharcoalHeight = 10;
     private const ushort ContextWidth = 155;
-    private static readonly Dictionary<Window, List<MenuModel>> menusByWindow = new();
+    
+    // Simple static menu storage
+    private static List<MenuModel> _activeMenus = null;
+    private static Window _menuOwner = null;
 
-    // root menu items (match ContextMenu labels)
+    // Hard-coded root menu items
     private static readonly string[] RootMenuItems =
     {
         " About GoOS ",
@@ -57,105 +48,87 @@ public class Menubar : Window
         " Shutdown Computer "
     };
 
-    private readonly Queue<PendingMenus> _pendingMenus = new();
-
-    // layout
     private readonly int BarHeight;
-    private bool _hasPendingMenus;
-    private bool _isRendering;
     private int lastCanvasWidth;
     private byte lastSecond = RTC.Second;
-
-    // state
     private Button menuButton;
     private int menusRightEdge;
-    private bool needsRedraw = true;
-
+    
     public Menubar()
     {
         Instance = this;
-
         var tile = menubarBackground;
         BarHeight = tile != null && tile.Width == 1 && tile.Height > 0 ? tile.Height : 19;
-
         X = 0;
         Y = 0;
         Contents = new Canvas(WindowManager.Canvas.Width, (ushort)BarHeight);
         lastCanvasWidth = WindowManager.Canvas.Width;
-
         Title = nameof(Menubar);
         Visible = true;
         Closable = false;
         HasTitlebar = false;
         Unkillable = true;
-
-        InitialiseMenuButton();
-
-        // focus hook: mark dirty only (never render here)
-        WindowManager.TaskbarFocusChangedHook = () =>
-        {
-            if (!_isRendering) needsRedraw = true;
-        };
-
-        // first frame
-        RenderWindow();
-    }
-
-    // public surface
-    public static Menubar Instance { get; private set; }
-    public static bool IsRenderingNow => Instance != null && Instance._isRendering;
-
-    private void InitialiseMenuButton()
-    {
-        var btnH = Math.Max(1, BarHeight - 4);
-        var btnY = 2;
-        var btnW = 16;
-
+        
+        // Create GoOS menu button with correct 15x15 size
         menuButton = new Button(this,
             SidePadding,
-            (ushort)btnY,
-            (ushort)btnW,
-            (ushort)btnH,
+            2,
+            15,
+            15,
             "")
         {
-            UseSystemStyle = false, // flat label
+            UseSystemStyle = false,
             BackgroundColour = Color.Transparent,
             Image = menuicon,
             TextColour = Color.Black,
             RenderWithAlpha = true
         };
-
-        // dropdown anchored under the button
+        
         menuButton.Clicked = () =>
         {
-            var anchorX = X + menuButton.X;
-            var anchorY = Y + Contents.Height;
-            ContextMenu.ShowAt(anchorX, anchorY, RootMenuItems, ContextWidth, RootMenu_Handle);
+            // Show menu at proper position
+            ContextMenu.ShowAt(menuButton.X, Contents.Height, RootMenuItems, ContextWidth, RootMenu_Handle);
+            
+            // Redraw immediately to prevent darkening
+            DrawBackground();
+            menuButton.Render();
+            RenderClock();
         };
-
+        
+        DrawBackground();
         menuButton.Render();
+        RenderClock();
     }
 
-    // ===== external API for apps (deferred) =====
-    public static void RegisterMenus(Window window, IEnumerable<MenuModel> menus)
+    public static Menubar Instance { get; private set; }
+    
+    // Menu registration
+    public static void RegisterMenus(Window window, List<MenuModel> menus)
     {
-        if (window == null || menus == null || Instance == null) return;
-
-        var copy = new List<MenuModel>();
-        foreach (var m in menus) copy.Add(m);
-
-        Instance._pendingMenus.Enqueue(new PendingMenus { Win = window, Models = copy });
-        Instance._hasPendingMenus = true;
+        _activeMenus = menus;
+        _menuOwner = window;
+        
+        if (Instance != null)
+        {
+            Instance.DrawMenus();
+        }
     }
 
+    // Clear menus
     public static void ClearMenus(Window window)
     {
-        if (window == null || Instance == null) return;
-        menusByWindow.Remove(window);
-        Instance.needsRedraw = true;
+        if (_menuOwner == window)
+        {
+            _activeMenus = null;
+            _menuOwner = null;
+            
+            if (Instance != null)
+            {
+                Instance.DrawMenus();
+            }
+        }
     }
 
-    // ===== root dropdown =====
     private void RootMenu_Handle(string item)
     {
         switch (item)
@@ -163,29 +136,19 @@ public class Menubar : Window
             case " About GoOS ":
                 WindowManager.AddWindow(new About());
                 break;
-
             case " Check for Updates ":
                 CheckForUpdates();
                 break;
-
             case " Restart Computer ":
-                Dialogue.Show(
-                    "GoOS",
-                    "Are you sure you want to restart your computer?",
+                Dialogue.Show("GoOS", "Are you sure you want to restart your computer?",
                     new List<DialogueButton> { new() { Text = "Reboot", Callback = () => Power.Reboot() } },
-                    question
-                );
+                    question);
                 break;
-
             case " Shutdown Computer ":
-                Dialogue.Show(
-                    "GoOS",
-                    "Are you sure you want to shut down your computer?",
+                Dialogue.Show("GoOS", "Are you sure you want to shut down your computer?",
                     new List<DialogueButton> { new() { Text = "Shut Down", Callback = () => Power.Shutdown() } },
-                    question
-                );
+                    question);
                 break;
-
             case " Clock App ":
                 WindowManager.AddWindow(new Clock()); break;
             case " GoStore ":
@@ -207,131 +170,162 @@ public class Menubar : Window
             case " Terminal ":
                 WindowManager.AddWindow(new GTerm()); break;
         }
+        
+        // Redraw menubar after handling menu action
+        DrawBackground();
+        menuButton.Render();
+        DrawMenus();
     }
-
-    // ===== rendering =====
-    private void RenderWindow()
-    {
-        if (_isRendering) return; // re-entrancy guard
-        _isRendering = true;
-        try
-        {
-            if (WindowManager.Canvas.Width != lastCanvasWidth || Contents.Width != WindowManager.Canvas.Width)
-            {
-                lastCanvasWidth = WindowManager.Canvas.Width;
-                Contents = new Canvas(WindowManager.Canvas.Width, (ushort)BarHeight);
-                needsRedraw = true;
-            }
-
-            if (!needsRedraw) return;
-
-            DrawBackgroundTiled();
-            RenderControls();
-            RenderAppMenusLeft();
-            RenderRightClockAndDate();
-
-            needsRedraw = false;
-        }
-        finally
-        {
-            _isRendering = false;
-        }
-    }
-
-    private void DrawBackgroundTiled()
+    
+    private void DrawBackground()
     {
         var tile = menubarBackground;
         if (tile != null && tile.Width == 1 && tile.Height == BarHeight)
             for (var x = 0; x < Contents.Width; x++)
                 Contents.DrawImage(x, 0, tile, false);
-        // no fallback fill: keep previous frame if resource missing
     }
-
-    private void RenderAppMenusLeft()
+    
+    // Draw menu buttons
+    private void DrawMenus()
     {
-        // remove previous label buttons (keep Menu)
+        // Remove all existing menu buttons except GoOS button
         var toRemove = new List<Control>();
         foreach (var c in Controls)
             if (c is Button b && b != menuButton)
                 toRemove.Add(c);
-        foreach (var c in toRemove) Controls.Remove(c);
-
+                
+        foreach (var c in toRemove) 
+            Controls.Remove(c);
+        
+        // Draw background again
+        DrawBackground();
+        menuButton.Render();
+        
+        // No active menus? Just draw the clock
+        if (_activeMenus == null)
+        {
+            RenderClock();
+            return;
+        }
+        
+        // Draw menu buttons
         var x = menuButton.X + menuButton.Contents.Width + ItemGap;
-        var btnH = Math.Max(1, BarHeight - 4);
+        var btnH = 15; // Match height to menu icon
         var btnY = 2;
-
-        var focused = WindowManager.FocusedWindow;
-        if (focused != null && menusByWindow.TryGetValue(focused, out var menus) && menus != null)
-            foreach (var menu in menus)
+        
+        for (int i = 0; i < _activeMenus.Count; i++)
+        {
+            var menu = _activeMenus[i];
+            
+            // Skip empty menus
+            if (string.IsNullOrEmpty(menu.Title))
+                continue;
+            
+            // Calculate button width
+            var width = Charcoal.MeasureString(menu.Title) + 12;
+            if (x > Contents.Width - 180) 
+                break;
+            
+            // Create standard button with transparent background
+            var btn = new Button(this,
+                (ushort)x,
+                (ushort)btnY,
+                (ushort)width,
+                (ushort)btnH,
+                menu.Title)
             {
-                var width = Charcoal.MeasureString(menu.Title) + 12;
-                if (x > Contents.Width - 180) break;
-
-                var btn = new Button(this,
-                    (ushort)x,
-                    (ushort)btnY,
-                    (ushort)width,
-                    (ushort)btnH,
-                    menu.Title)
-                {
-                    UseSystemStyle = false,
-                    BackgroundColour = Color.Transparent,
-                    TextColour = Color.Black,
-                    RenderWithAlpha = true
-                };
-
-                var entries = menu.Items; // capture
-                btn.Clicked = () =>
-                {
-                    // build a local dispatch map to avoid shared state
-                    var clickMap = new Dictionary<string, Action>(entries.Count);
-                    var labels = new string[entries.Count];
-
-                    for (var i = 0; i < entries.Count; i++)
-                        if (entries[i].IsSeparator)
-                        {
-                            labels[i] = "----";
-                        }
-                        else
-                        {
-                            var text = entries[i].Text ?? string.Empty;
-                            labels[i] = text;
-                            if (!clickMap.ContainsKey(text) && entries[i].OnClick != null)
-                                clickMap[text] = entries[i].OnClick;
-                        }
-
-                    var anchorX = X + btn.X;
-                    var anchorY = Y + Contents.Height;
-
-                    ContextMenu.ShowAt(anchorX, anchorY, labels, ContextWidth, label =>
-                    {
-                        if (label == "----" || string.IsNullOrEmpty(label)) return;
-                        if (clickMap.TryGetValue(label, out var act) && act != null) act();
-                    });
-                };
-
-                btn.Render();
-                x += width + ItemGap;
-            }
-
+                UseSystemStyle = false,
+                BackgroundColour = Color.Transparent,
+                TextColour = Color.Black,
+                RenderWithAlpha = true
+            };
+            
+            // Simple click handler
+            int menuIndex = i;
+            
+            btn.Clicked = () => {
+                ShowMenuItems(menuIndex);
+                
+                // Force redraw immediately after click
+                DrawBackground();
+                menuButton.Render();
+                DrawMenus();
+            };
+            
+            btn.Render();
+            x += width + ItemGap;
+        }
+        
         menusRightEdge = x;
-        RenderControls();
+        RenderClock();
+    }
+    
+    // Show menu items when a menu button is clicked
+    private void ShowMenuItems(int menuIndex)
+    {
+        // Validation
+        if (_activeMenus == null || menuIndex < 0 || menuIndex >= _activeMenus.Count)
+            return;
+            
+        var menu = _activeMenus[menuIndex];
+        
+        // No items? Skip
+        if (menu.Items == null || menu.Items.Count == 0)
+            return;
+            
+        // Convert menu items to strings
+        string[] items = new string[menu.Items.Count];
+        for (int i = 0; i < menu.Items.Count; i++)
+        {
+            items[i] = menu.Items[i].IsSeparator ? "----" : menu.Items[i].Text;
+        }
+        
+        // Get the button that was clicked
+        Button menuButton = null;
+        foreach (var control in Controls)
+        {
+            if (control is Button btn && btn != this.menuButton)
+            {
+                if (btn.Title == menu.Title)
+                {
+                    menuButton = btn;
+                    break;
+                }
+            }
+        }
+        
+        // Show the menu at the proper position
+        if (menuButton != null)
+        {
+            ContextMenu.ShowAt(menuButton.X, Contents.Height, items, ContextWidth, selectedItem => 
+            {
+                // Find and execute the action
+                for (int i = 0; i < menu.Items.Count; i++)
+                {
+                    if (!menu.Items[i].IsSeparator && menu.Items[i].Text == selectedItem)
+                    {
+                        menu.Items[i].OnClick?.Invoke();
+                        break;
+                    }
+                }
+                
+                // Force complete redraw to prevent darkening
+                DrawBackground();
+                this.menuButton.Render();
+                DrawMenus();
+            });
+        }
     }
 
-    // offsets: baseline +5; small right shifts (stable)
-    private void RenderRightClockAndDate()
+    private void RenderClock()
     {
         var timeString = DateTime.Now.ToString("HH:mm");
         var dateString = DateTime.Now.ToString("dd/MM/yyyy");
-
         int timeW = Charcoal.MeasureString(timeString);
         int dateW = Charcoal.MeasureString(dateString);
-
         var baselineY = (BarHeight - CharcoalHeight) / 2 + 5;
-
         var timeX = Contents.Width - RightMargin - timeW + 20;
         var dateX = timeX - 6 - dateW + 24;
-
         if (dateX <= menusRightEdge + ItemGap)
         {
             Contents.DrawString(timeX, baselineY, timeString, Charcoal, Color.Black, true);
@@ -344,33 +338,26 @@ public class Menubar : Window
 
     public override void HandleRun()
     {
-        // apply deferred menu registrations safely here
-        if (_hasPendingMenus)
-        {
-            while (_pendingMenus.Count > 0)
-            {
-                var p = _pendingMenus.Dequeue();
-                menusByWindow[p.Win] = p.Models; // replace for that window
-            }
-
-            _hasPendingMenus = false;
-            needsRedraw = true;
-        }
-
         base.HandleRun();
-
-        var widthChanged = WindowManager.Canvas.Width != lastCanvasWidth;
+        
+        // Update clock once per second
         var currentSecond = RTC.Second;
-
-        if (currentSecond != lastSecond || widthChanged || needsRedraw)
+        if (currentSecond != lastSecond)
         {
             lastSecond = currentSecond;
-            RenderWindow();
+            RenderClock();
+        }
+        
+        // Handle canvas resize
+        if (WindowManager.Canvas.Width != lastCanvasWidth)
+        {
+            lastCanvasWidth = WindowManager.Canvas.Width;
+            Contents = new Canvas(WindowManager.Canvas.Width, (ushort)BarHeight);
+            DrawMenus();
         }
     }
 
-    // ===== “Check for Updates” (same behaviour as Desktop) =====
-    private static void CheckForUpdates()
+    public static void CheckForUpdates()
     {
         try
         {
@@ -438,7 +425,7 @@ public class Menubar : Window
                             "The Internal Test Version for this edition of GoOS has ended\nThis build of GoOS can no longer access GoOS Online Services.\nPlease check with your INTERNAL TEST Group to see if a new version has been issued.");
                     else if (body == Kernel.editionnext)
                         Dialogue.Show("GoOS Update",
-                            "The next GoOS has been released.\nWe don't want to force you to update but at least check out whats new in GoOS " +
+                            "The next GoOS has been released.\nWe don't want to force you to update but at least check out what's new in GoOS " +
                             Kernel.editionnext + "!\nhttps://github.com/Owen2k6/GoOS/releases/tag/" +
                             Kernel.editionnext);
                     else if (body == "404")
@@ -456,23 +443,15 @@ public class Menubar : Window
         }
     }
 
-    // deferred menu registration (avoid re-entrancy)
-    private struct PendingMenus
-    {
-        public Window Win;
-        public List<MenuModel> Models;
-    }
-
-    // ===== simple models for per-app menus =====
     public readonly struct MenuModel
     {
         public readonly string Title;
         public readonly List<MenuItem> Items;
 
-        public MenuModel(string title, IEnumerable<MenuItem> items)
+        public MenuModel(string title, List<MenuItem> items)
         {
             Title = title ?? string.Empty;
-            Items = new List<MenuItem>(items ?? Array.Empty<MenuItem>());
+            Items = items ?? new List<MenuItem>();
         }
     }
 
@@ -481,12 +460,16 @@ public class Menubar : Window
         public readonly string Text;
         public readonly Action OnClick;
         public readonly bool IsSeparator;
+        public readonly string Shortcut;
+        public readonly bool IsDisabled;
 
-        public MenuItem(string text, Action onClick)
+        public MenuItem(string text, Action onClick, string shortcut = null, bool isDisabled = false)
         {
             Text = text ?? string.Empty;
             OnClick = onClick;
             IsSeparator = false;
+            Shortcut = shortcut ?? string.Empty;
+            IsDisabled = isDisabled;
         }
 
         private MenuItem(bool _sep)
@@ -494,6 +477,8 @@ public class Menubar : Window
             Text = string.Empty;
             OnClick = null;
             IsSeparator = true;
+            Shortcut = string.Empty;
+            IsDisabled = false;
         }
 
         public static MenuItem Separator()

@@ -1,0 +1,103 @@
+﻿window FileOperationsDemo {
+    title = "File Operations Demo"
+    width = 400
+    height = 300
+    background = #E8E8E8
+    
+    label TitleLabel {
+        x = 20
+        y = 20
+        text = "File Operations"
+        textColour = #004080
+    }
+    
+    input FileNameInput {
+        x = 20
+        y = 50
+        width = 250
+        height = 25
+        placeholder = "Enter filename"
+        text = "testfile.txt"
+    }
+    
+    input FileContentInput {
+        x = 20
+        y = 85
+        width = 360
+        height = 100
+        placeholder = "Enter content to save"
+        text = "This is a test file created by Giff"
+    }
+    
+    button SaveButton {
+        x = 20
+        y = 195
+        width = 100
+        height = 30
+        text = "Save File"
+        onClick {
+            message "Saving file...";
+            fileWrite "0:\\testfile.txt", "This is a test file created by Giff";
+        }
+    }
+    
+    button ReadButton {
+        x = 130
+        y = 195
+        width = 100
+        height = 30
+        text = "Read File"
+        onClick {
+            message "Reading file...";
+            fileRead "0:\\testfile.txt", fileContent;
+        }
+    }
+    
+    button DeleteButton {
+        x = 240
+        y = 195
+        width = 100
+        height = 30
+        text = "Delete File"
+        onClick {
+            message "Deleting file...";
+            fileDelete "0:\\testfile.txt";
+        }
+    }
+    
+    // Directory operations
+    button CreateDirButton {
+        x = 20
+        y = 235
+        width = 160
+        height = 30
+        text = "Create Directory"
+        onClick {
+            message "Creating directory...";
+            dirCreate "0:\\gifftest";
+        }
+    }
+    
+    button DeleteDirButton {
+        x = 190
+        y = 235
+        width = 160
+        height = 30
+        text = "Delete Directory"
+        onClick {
+            message "Deleting directory...";
+            dirDelete "0:\\gifftest";
+        }
+    }
+    
+    button BackButton {
+        x = 300
+        y = 15
+        width = 80
+        height = 30
+        text = "Back"
+        onClick {
+            close;
+        }
+    }
+}

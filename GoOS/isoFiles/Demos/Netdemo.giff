@@ -1,0 +1,29 @@
+﻿window NetDemo {
+  title = "Net & Vars";
+  x = 40; y = 40; width = 420; height = 220; background = #EFEFEF;
+
+  button { text = "Fetch text"; x = 10; y = 10; width = 100; height = 22;
+    onClick {
+      netGetText "http://example.com/", page;
+      message "Status: $net_status, size: $net_size";
+      varsSave "0:\\tmp\\vars.txt";
+    }
+  }
+
+  button { text = "Download file"; x = 10; y = 40; width = 120; height = 22;
+    onClick {
+      netGet "http://example.com/", "0:\\tmp\\page.html";
+      message "Saved? $net_status";
+    }
+  }
+
+  button { text = "String ops"; x = 10; y = 70; width = 100; height = 22;
+    onClick {
+      set name = "GoOS";
+      concat "Hello, ", "$name", greeting;
+      length "$greeting", glen;
+      substr "$greeting", 0, 5, first;
+      message "[$greeting] len=$glen first=$first";
+    }
+  }
+}
