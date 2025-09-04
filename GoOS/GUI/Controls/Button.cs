@@ -113,14 +113,14 @@ public class Button : Control
                 // Bevel lines (trimmed to avoid corners)
                 if (w >= 6)
                 {
-                    Contents.DrawLine(3, 0, w - 4, 0, Color.Black);
-                    Contents.DrawLine(3, h - 1, w - 4, h - 1, Color.Black);
+                    Contents.DrawLine(3, 0, w - 3, 0, Color.Black);
+                    Contents.DrawLine(3, h - 1, w - 3, h - 1, Color.Black);
                 }
 
                 if (h >= 6)
                 {
-                    Contents.DrawLine(0, 3, 0, h - 4, Color.Black);
-                    Contents.DrawLine(w - 1, 3, w - 1, h - 4, Color.Black);
+                    Contents.DrawLine(0, 3, 0, h - 3, Color.Black);
+                    Contents.DrawLine(w - 1, 3, w - 1, h - 3, Color.Black);
                 }
 
                 Contents.DrawLine(2, 2, w - 3, 2, drawPressed ? new Color(0xFF777777) : Color.White);
