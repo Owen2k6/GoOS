@@ -1,14 +1,17 @@
 mod actions;
 mod project;
+mod setup;
 
 use std::{env, fs, thread};
 use std::process::Command;
 use std::time::Instant;
+use crate::actions::busybox::busybox_actions;
 use crate::actions::init::init_actions;
 use crate::actions::kernel::kernel_actions;
 use crate::project::Project;
+use crate::setup::setup;
 
-fn main() -> std::io::Result<()> {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Set up variables
     let mut build_kernel = true;
     let mut build_image = true;
@@ -34,17 +37,17 @@ fn main() -> std::io::Result<()> {
             "--x86" => build_arch = "i386", // Compiles the OS for x86 systems
             "--amd64" => build_arch = "x86_64", // Compiles the OS for amd64/x86_64 systems
             "--arm64" => build_arch = "aarch64", // Compiles the OS for arm64 systems
-            "--all" => build_arch = "all", // Compiles the OS for all supported architectures (useful for releases)
             "--no-image" => build_image = false, // Disables building an image
             "--run" => build_run = true,
             "--release" => build_debug = false, // Compiles the OS with release
             "--clean" => build_clean = true, // Just cleans
+            "--setup" => setup(build_arch),
             _ => {} // "default"
         }
     }
  
     match build_arch {
-        "i386"|"x86_64"|"aarch64"|"all" => {},
+        "i386"|"x86_64"|"aarch64" => {},
         _ => {
             eprintln!("Error: Unsupported architecture! Must be x86, amd64, arm64, or all.");
             eprintln!("You may report your architecture to the GoOS devs over at Owen2k6 network, and we may consider support for your architecture.");
@@ -196,7 +199,8 @@ fn main() -> std::io::Result<()> {
                     continue 'rust_projects;
                 }
 
-                let rust_target = &(rust_target_table.to_owned() + if project.name == "init" { "musl" } else { "gnu" });
+                //let rust_target = &(rust_target_table.to_owned() + if project.name == "init" { "musl" } else { "gnu" });
+                let rust_target = &(rust_target_table.to_owned() + "musl");
 
                 if !completed_builds.contains(&project.name)
                 {
@@ -349,6 +353,24 @@ fn do_dirs(build_arch: &str) {
         std::process::exit(1);
     }
 
+    println!("Creating ./out/{}/image/lib", build_arch);
+    if let Err(e) = fs::create_dir_all(format!("out/{}/image/lib", build_arch)) {
+        eprintln!("Failed to create {:?}: {}", format!("./out/{}/image/lib", build_arch), e);
+        std::process::exit(1);
+    }
+
+    println!("Creating ./out/{}/image/bin", build_arch);
+    if let Err(e) = fs::create_dir_all(format!("out/{}/image/bin", build_arch)) {
+        eprintln!("Failed to create {:?}: {}", format!("./out/{}/image/bin", build_arch), e);
+        std::process::exit(1);
+    }
+
+    println!("Creating ./out/{}/image/.Services", build_arch);
+    if let Err(e) = fs::create_dir_all(format!("out/{}/image/.Services", build_arch)) {
+        eprintln!("Failed to create {:?}: {}", format!("./out/{}/image/.Services", build_arch), e);
+        std::process::exit(1);
+    }
+
     println!("Creating ./out/{}/image/Applications", build_arch);
     if let Err(e) = fs::create_dir_all(format!("out/{}/image/Applications", build_arch)) {
         eprintln!("Failed to create {:?}: {}", format!("./out/{}/image/Applications", build_arch), e);
@@ -362,6 +384,7 @@ fn add_c_projects() -> Vec<Project> {
     // Add C projects here (folder name, then function with any special actions you need done after compilation)
     // Note: Replace Some(fn), fn being your post compilation actions, with None to do nothing after compilation.
     c_proj.push(Project::new("kernel", Some(kernel_actions), vec![/* Put project names here to make it build after them */]));
+    c_proj.push(Project::new("busybox", Some(busybox_actions), vec!["kernel"]));
 
     c_proj // return without return
 }
@@ -369,7 +392,7 @@ fn add_c_projects() -> Vec<Project> {
 fn add_rust_projects() -> Vec<Project> {
     let mut rust_proj: Vec<Project> = Vec::new();
 
-    rust_proj.push(Project::new("init", Some(init_actions), vec!["kernel"]));
+    rust_proj.push(Project::new("init", Some(init_actions), vec!["kernel", "busybox"]));
 
     rust_proj
 }

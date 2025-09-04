@@ -1,3 +1,6 @@
 [submodule "kernel"]
 	path = kernel
 	url = https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[submodule "busybox"]
+	path = busybox
+	url = https://git.busybox.net/busybox
