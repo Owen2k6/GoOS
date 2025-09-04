@@ -20,6 +20,7 @@ public class MainFrame : Window
     private readonly List<string> BrowseHistory;
     private readonly Button ForwardButton;
     private readonly Button RefreshButton;
+    private readonly Button ShowHiddenButton;
 
     private readonly Button[] Shortcuts;
     private readonly Button UpButton;
@@ -30,6 +31,8 @@ public class MainFrame : Window
     private Input Dialog_TextBox;
     private Button[] FolderContents;
     private string Path = @"0:\";
+
+    private bool ShowHidden = false;
 
     public MainFrame()
     {
@@ -69,6 +72,14 @@ public class MainFrame : Window
             UseSystemStyle = false,
             BackgroundColour = new Color(0, 0, 0)
         };
+        ShowHiddenButton = new Button(this, (ushort)(Contents.Width - 120), (ushort)(Contents.Height - 30), 110, 20, "Show Hidden")
+        {
+            UseSystemStyle = true,
+            BackgroundColour = new Color(192, 192, 192),
+            TextColour = Color.Black,
+            Name = "HiddenToggle",
+            ClickedAlt = HiddenToggle_Click
+        };
 
         Shortcuts = new[]
         {
@@ -103,6 +114,13 @@ public class MainFrame : Window
         RenderFolderItems();
     }
 
+    private void HiddenToggle_Click(string _)
+    {
+        ShowHidden = !ShowHidden;
+        ShowHiddenButton.AppearPressed = !ShowHiddenButton.AppearPressed;
+        RenderFolderItems();
+    }
+
     private bool IsMouseOverFolderArea =>
         MouseManager.X >= X + 84 &&
         MouseManager.X < X + 84 + Contents.Width &&
@@ -124,6 +142,7 @@ public class MainFrame : Window
         ForwardButton.Render();
         UpButton.Render();
         RefreshButton.Render();
+        ShowHiddenButton.Render();
         foreach (var i in Shortcuts) i.Render();
         if (FolderContents != null)
             foreach (var i in FolderContents)
@@ -356,7 +375,7 @@ public class MainFrame : Window
         FolderContents = new Button[itemNames.Length];
         for (var i = 0; i < itemNames.Length; i++)
         {
-            if (itemNames[i].EndsWith(".gms") && !Kernel.devMode) continue;
+            if (itemNames[i].EndsWith(".gms") && !ShowHidden) continue;
 
             if (column >= 10)
             {
