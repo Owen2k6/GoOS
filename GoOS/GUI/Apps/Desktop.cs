@@ -96,6 +96,27 @@ public class Desktop : Window
                 Contents.DrawString(Contents.Width - Geneva.MeasureString(line1) - 1, Contents.Height - 17, line1,
                     Geneva,
                     Color.White);
+            } else if (Kernel.BuildType == "DB")
+            {
+                var line1 = "GoOS " + Kernel.version;
+                var line2 =
+                    "This is a GoOS Developer Beta build.";
+                var line3 =
+                    "Expect changes to be made throughout the releases.";
+                var line4 = "This build sports beta functions that may not be included in the final release.";
+
+                Contents.DrawString(Contents.Width - Charcoal.MeasureString(line1) - 1, Contents.Height - 53, line1,
+                    Charcoal,
+                    Color.White);
+                Contents.DrawString(Contents.Width - Charcoal.MeasureString(line2) - 1, Contents.Height - 41, line2,
+                    Charcoal,
+                    Color.White);
+                Contents.DrawString(Contents.Width - Charcoal.MeasureString(line3) - 1, Contents.Height - 29, line3,
+                    Charcoal,
+                    Color.White);
+                Contents.DrawString(Contents.Width - Charcoal.MeasureString(line4) - 1, Contents.Height - 17, line4,
+                    Charcoal,
+                    Color.White);
             }
             else
             {

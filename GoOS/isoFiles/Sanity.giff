@@ -1,7 +1,0 @@
-﻿window T {
-  title = "Sanity";
-  x = 40; y = 40; width = 240; height = 200; background = #EFEFEF;
-
-  label  { text = "HI @ (0,0)"; x = 0;   y = 0;   textColour = black; }
-  button { text = "OK";         x = 120; y = 150; width = 60; height = 22; }
-}

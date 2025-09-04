@@ -34,11 +34,11 @@ public class Kernel : Cosmos.System.Kernel
     // =========================================================
     //                      CONSTANTS / META
     // =========================================================
-    public const string version = "1.6";
-    public const string edition = "1.6"; // Used by Updater
+    public const string version = "1.6 Developer Beta 1";
+    public const string edition = "1.6dev"; // Used by Updater
     public const string editiontitle = "Scafell Pike"; // Display name
-    public const string editionnext = "1.7"; // Used by Updater
-    public const string BuildType = "NIFPR";
+    public const string editionnext = "1.6"; // Used by Updater
+    public const string BuildType = "DB";
     public const string Copyright = "2021-2025";
 
     // =========================================================

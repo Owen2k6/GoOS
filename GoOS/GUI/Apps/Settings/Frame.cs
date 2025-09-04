@@ -57,25 +57,26 @@ public class Frame : Window
                     Clicked = () =>
                     {
                         RenderInternalMenu("About GoOS");
-                        Contents.DrawString(5, 33, "GoOS " + Kernel.editiontitle, Resources.Font_2x, Color.White);
-                        Contents.DrawString(5, 78, "Version " + Kernel.version, Resources.Font_1x, Color.White);
-                        Contents.DrawString(5, 100, "Copyright (C) Owen2k6 " + Kernel.Copyright, Resources.Font_1x,
-                            Color.White);
-                        Contents.DrawString(5, 122, "Owen2k6 Open Sourced Licence", Resources.Font_1x, Color.White);
-                        Contents.DrawString(5, 144, "Made In England", Resources.Font_1x, Color.White);
+                        Contents.DrawString(5, 33, "GoOS " + Kernel.editiontitle, Resources.Font_2x, Color.Black);
+                        Contents.DrawString(5, 78, "Version " + Kernel.version, Resources.Geneva, Color.Black);
+                        Contents.DrawString(5, 100, "Copyright (C) Owen2k6 " + Kernel.Copyright, Resources.Geneva,
+                            Color.Black);
+                        Contents.DrawString(5, 122, "Owen2k6 Open Sourced Licence", Resources.Geneva, Color.Black);
+                        Contents.DrawString(5, 144, "Made In England", Resources.Geneva, Color.Black);
                         Contents.DrawString(5, 188, "System Memory: " + CPU.GetAmountOfRAM() + "MB",
-                            Resources.Font_1x, Color.White);
-                        Contents.DrawString(5, 222, "GoOS Implementations --", Resources.Font_1x, Color.White);
-                        Contents.DrawString(5, 234, "Gold Version " + Info.Version, Resources.Font_1x,
-                            Color.White);
-                        Contents.DrawString(5, 246, "GoCode Version " + GoCode.GoCode.Version, Resources.Font_1x,
-                            Color.White);
-                        Contents.DrawString(5, 258, "9xCode Version " + Interpreter.Version, Resources.Font_1x,
-                            Color.White);
-                        Contents.DrawString(5, 270, "GoStore Version " + MainFrame.Version, Resources.Font_1x,
-                            Color.White);
-                        Contents.DrawString(5, 282, "GoWeb Version " + GoWebWindow.Version, Resources.Font_1x,
-                            Color.White);
+                            Resources.Geneva, Color.Black);
+                        Contents.DrawString(5, 222, "GoOS Implementations --", Resources.Geneva, Color.Black);
+                        Contents.DrawString(5, 234, "Gold Version " + Info.Version, Resources.Geneva,
+                            Color.Black);
+                        Contents.DrawString(5, 246, "GoCode Version " + GoCode.GoCode.Version, Resources.Geneva,
+                            Color.Black);
+                        Contents.DrawString(5, 258, "9xCode Version " + Interpreter.Version, Resources.Geneva,
+                            Color.Black);
+                        Contents.DrawString(5, 270, "GoStore Version " + MainFrame.Version, Resources.Geneva,
+                            Color.Black);
+                        Contents.DrawString(5, 282, "GoWeb Version " + GoWebWindow.Version, Resources.Geneva,
+                            Color.Black);
+                        Contents.DrawString(5,294, "Giff Engine " + Giff.Giff.Version, Resources.Geneva, Color.Black);
                     }
                 };
                 new Button(this, 109, 4 + 24, 185, 24, "Software Update")
@@ -130,21 +131,21 @@ public class Frame : Window
                                     {
                                         RenderInternalMenu("Software Update");
                                         Contents.DrawString(5, 33, "GoOS " + content, Resources.Font_2x,
-                                            Color.White);
-                                        Contents.DrawString(5, 78, "ITB Expired.", Resources.Font_1x, Color.White);
+                                            Color.Black);
+                                        Contents.DrawString(5, 78, "ITB Expired.", Resources.Geneva, Color.Black);
                                         Contents.DrawString(5, 100,
                                             "Check with Owen2k6 for ITB updates or return to GoOS Release.",
-                                            Resources.Font_1x, Color.White);
+                                            Resources.Geneva, Color.Black);
                                     }
 
                                     RenderInternalMenu("Software Update");
                                     Contents.DrawString(5, 33, "GoOS " + content, Resources.Font_2x,
-                                        Color.White);
+                                        Color.Black);
                                     Contents.DrawString(5, 78, "A new version of GoOS is available.",
-                                        Resources.Font_1x, Color.White);
+                                        Resources.Geneva, Color.Black);
                                     Contents.DrawString(5, 100,
-                                        "To Update, go to \nhttps://github.com/Owen2k6/GoOS/", Resources.Font_1x,
-                                        Color.White);
+                                        "To Update, go to \nhttps://github.com/Owen2k6/GoOS/", Resources.Geneva,
+                                        Color.Black);
                                 }
                                 else if (content == Kernel.editionnext)
                                 {
@@ -152,19 +153,19 @@ public class Frame : Window
                                     {
                                         RenderInternalMenu("Software Update");
                                         Contents.DrawString(5, 33, "GoOS " + content, Resources.Font_2x,
-                                            Color.White);
-                                        Contents.DrawString(5, 78, "ITB Expired.", Resources.Font_1x, Color.White);
+                                            Color.Black);
+                                        Contents.DrawString(5, 78, "ITB Expired.", Resources.Geneva, Color.Black);
                                         Contents.DrawString(5, 100,
                                             "Check with Owen2k6 for ITB updates \nor return to GoOS Release.",
-                                            Resources.Font_1x, Color.White);
+                                            Resources.Geneva, Color.Black);
                                     }
 
                                     RenderInternalMenu("Software Update");
                                     Contents.DrawString(5, 33, "GoOS " + content, Resources.Font_2x,
-                                        Color.White);
+                                        Color.Black);
                                     Contents.DrawString(5, 78,
                                         "The next edition of GoOS is here!\nGoOS Update will no longer display \nupdates beyond this version.\n\nDon't worry, you don't have to update\nto receive continued support.\nWhile GoOS Update will no longer \ndisplay updates, this edition may \nstill receive updates.\nCheck https://github.com/Owen2k6/GoOS\nIf you wish to update your edition \nor version.",
-                                        Resources.Font_1x, Color.White);
+                                        Resources.Geneva, Color.Black);
                                 }
                                 else if (content == "404")
                                 {
@@ -175,8 +176,8 @@ public class Frame : Window
                                 {
                                     RenderInternalMenu("Software Update");
                                     Contents.DrawString(5, 33, "GoOS " + content, Resources.Font_2x,
-                                        Color.White);
-                                    Contents.DrawString(5, 78, "GoOS is up to date!", Resources.Font_1x, Color.White);
+                                        Color.Black);
+                                    Contents.DrawString(5, 78, "GoOS is up to date!", Resources.Geneva, Color.Black);
                                 }
                             }
                         }
@@ -237,10 +238,10 @@ public class Frame : Window
                                 {
                                     RenderInternalMenu("Software Update");
                                     Contents.DrawString(5, 33, "GoOS Support has ended.", Resources.Font_2x,
-                                        Color.White);
+                                        Color.Black);
                                     Contents.DrawString(5, 78,
                                         "Your version of GoOS is no longer \nsupported. It's time to update if you \nwant to continue receiving \nsupport and updates.\n\nDon't fret, GoOS Services will \ncontinue to work, but you will \nno longer receive updates. \n Eventually, GoStore apps will \nno longer be compatible with \nthis version of GoOS.\n\nWe do recommend updating to the \nlatest version of GoOS. \n\nCheck https://github.com/Owen2k6/GoOS\nIf you wish to update your edition.",
-                                        Resources.Font_1x, Color.White);
+                                        Resources.Geneva, Color.Black);
                                 }
                                 else
                                 {
@@ -248,19 +249,19 @@ public class Frame : Window
                                     {
                                         RenderInternalMenu("Software Update");
                                         Contents.DrawString(5, 33, "GoOS " + content, Resources.Font_2x,
-                                            Color.White);
-                                        Contents.DrawString(5, 78, "ITB Expired.", Resources.Font_1x, Color.White);
+                                            Color.Black);
+                                        Contents.DrawString(5, 78, "ITB Expired.", Resources.Geneva, Color.Black);
                                         Contents.DrawString(5, 100,
                                             "Check with Owen2k6 for ITB updates \nor return to GoOS Release.",
-                                            Resources.Font_1x, Color.White);
+                                            Resources.Geneva, Color.Black);
                                     }
 
                                     RenderInternalMenu("Software Update");
                                     Contents.DrawString(5, 33, "Contact Support", Resources.Font_2x,
-                                        Color.White);
+                                        Color.Black);
                                     Contents.DrawString(5, 78,
                                         "GoOS Authenticity could not be verified.\nPlease contact Owen2k6 for support.",
-                                        Resources.Font_1x, Color.White);
+                                        Resources.Geneva, Color.Black);
                                 }
                             }
                         }
@@ -283,7 +284,7 @@ public class Frame : Window
                         var tfsize = Kernel.FS.GetTotalFreeSpace(@"0").ToString();
                         RenderInternalMenu("Storage");
                         Contents.DrawString(5, 33, "Volume " + Kernel.FS.GetFileSystemLabel(@"0"), Resources.Font_2x,
-                            Color.White);
+                            Color.Black);
                         if (Kernel.FS.GetTotalSize(@"0") > 1000)
                         {
                             ttype = "KB";
@@ -302,7 +303,7 @@ public class Frame : Window
                             tsize = (Kernel.FS.GetTotalSize(@"0") / 1000000000).ToString();
                         }
 
-                        Contents.DrawString(5, 78, "Total Storage: " + tsize + ttype, Resources.Font_1x, Color.White);
+                        Contents.DrawString(5, 78, "Total Storage: " + tsize + ttype, Resources.Geneva, Color.Black);
                         if (Kernel.FS.GetTotalFreeSpace(@"0") > 1000)
                         {
                             tftype = "KB";
@@ -321,11 +322,11 @@ public class Frame : Window
                             tfsize = (Kernel.FS.GetTotalFreeSpace(@"0") / 1000000000).ToString();
                         }
 
-                        Contents.DrawString(5, 100, "Free Storage: " + tfsize + tftype, Resources.Font_1x, Color.White);
-                        Contents.DrawString(5, 122, "Format: " + Kernel.FS.GetFileSystemType(@"0"), Resources.Font_1x,
-                            Color.White);
+                        Contents.DrawString(5, 100, "Free Storage: " + tfsize + tftype, Resources.Geneva, Color.Black);
+                        Contents.DrawString(5, 122, "Format: " + Kernel.FS.GetFileSystemType(@"0"), Resources.Geneva,
+                            Color.Black);
                         Contents.DrawString(5, 144, "Validation: " + Kernel.FS.IsValidDriveId(@"0"),
-                            Resources.Font_1x, Color.White);
+                            Resources.Geneva, Color.Black);
                     }
                 };
                 new Button(this, 109, 4 + 24 * 4, 185, 24, "Language and Locale")
@@ -365,7 +366,7 @@ public class Frame : Window
                         {
                             Clicked = () => { KeyboardManager.SetKeyLayout(new TRStandardLayout()); }
                         };
-                        Contents.DrawString(5, 33, "Setting does not persist post reboot.", Resources.Font_1x,
+                        Contents.DrawString(5, 33, "Setting does not persist post reboot.", Resources.Geneva,
                             Color.Red);
                         foreach (var control in Controls) control.Render();
                     }
@@ -378,8 +379,8 @@ public class Frame : Window
             case 1:
                 Contents.DrawString(109, 11,
                     "Current: " + WindowManager.Canvas.Width + "x" + WindowManager.Canvas.Height,
-                    Resources.Font_1x,
-                    Color.White);
+                    Resources.Charcoal,
+                    Color.Black);
                 new Button(this, 109, 28, 185, 24, "Change Resolution")
                 {
                     Clicked = () =>
@@ -673,7 +674,7 @@ public class Frame : Window
             BackgroundColour = new Color(0, 0, 0, 0),
             Image = Resources.SBBB
         };
-        Contents.DrawString(33, 6, Name, Resources.Font_1x, Color.White);
+        Contents.DrawString(33, 6, Name, Resources.Charcoal, Color.Black);
         foreach (var control in Controls) control.Render();
     }
 

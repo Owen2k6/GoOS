@@ -17,7 +17,7 @@ namespace GoOS.Giff;
 
 public static class Giff
 {
-    public static readonly string Version = "0.35";
+    public const string Version = "0.35";
     private static readonly string[] Authors = { "Owen2k6", "GoOS Team" };
 
     public static List<Window> Run(string script)

@@ -22,9 +22,9 @@ public class Menubar : Window
     private const int RightMargin = 8;
     private const int CharcoalHeight = 10;
     private const ushort ContextWidth = 155;
-    private static List<MenuModel> _activeMenus;
-    private static Window _menuOwner;
+    private static readonly Dictionary<Window, List<MenuModel>> menusByWindow = new();
 
+    // root menu items (match ContextMenu labels)
     private static readonly string[] RootMenuItems =
     {
         " About GoOS ",
@@ -45,71 +45,105 @@ public class Menubar : Window
         " Shutdown Computer "
     };
 
+    private readonly Queue<PendingMenus> _pendingMenus = new();
+
+    // layout
     private readonly int BarHeight;
-    private readonly Button menuButton;
+    private bool _hasPendingMenus;
+    private bool _isRendering;
     private int lastCanvasWidth;
     private byte lastSecond = RTC.Second;
+
+    // state
+    private Button menuButton;
     private int menusRightEdge;
+    private bool needsRedraw = true;
 
     public Menubar()
     {
         Instance = this;
+
         var tile = menubarBackground;
         BarHeight = tile != null && tile.Width == 1 && tile.Height > 0 ? tile.Height : 19;
+
         X = 0;
         Y = 0;
         Contents = new Canvas(WindowManager.Canvas.Width, (ushort)BarHeight);
         lastCanvasWidth = WindowManager.Canvas.Width;
+
         Title = nameof(Menubar);
         Visible = true;
         Closable = false;
         HasTitlebar = false;
         Unkillable = true;
+
+        InitialiseMenuButton();
+
+        // focus hook: mark dirty only (never render here)
+        WindowManager.TaskbarFocusChangedHook = () =>
+        {
+            if (!_isRendering) needsRedraw = true;
+        };
+
+        // first frame
+        RenderWindow();
+    }
+
+    // public surface
+    public static Menubar Instance { get; private set; }
+    public static bool IsRenderingNow => Instance != null && Instance._isRendering;
+
+    private void InitialiseMenuButton()
+    {
+        var btnH = Math.Max(1, BarHeight - 4);
+        var btnY = 2;
+        var btnW = 16;
+
         menuButton = new Button(this,
             SidePadding,
-            2,
-            15,
-            15,
+            (ushort)btnY,
+            (ushort)btnW,
+            (ushort)btnH,
             "")
         {
-            UseSystemStyle = false,
+            UseSystemStyle = false, // flat label
             BackgroundColour = Color.Transparent,
             Image = menuicon,
             TextColour = Color.Black,
             RenderWithAlpha = true
         };
+
+        // dropdown anchored under the button
         menuButton.Clicked = () =>
         {
-            ContextMenu.ShowAt(menuButton.X, Contents.Height, RootMenuItems, ContextWidth, RootMenu_Handle);
-            DrawBackground();
-            menuButton.Render();
-            RenderClock();
+            var anchorX = X + menuButton.X;
+            var anchorY = Y + Contents.Height;
+            ContextMenu.ShowAt(anchorX, anchorY, RootMenuItems, ContextWidth, RootMenu_Handle);
         };
-        DrawBackground();
+
         menuButton.Render();
-        RenderClock();
     }
 
-    public static Menubar Instance { get; private set; }
-
-    public static void RegisterMenus(Window window, List<MenuModel> menus)
+    // ===== external API for apps (deferred) =====
+    public static void RegisterMenus(Window window, IEnumerable<MenuModel> menus)
     {
-        _activeMenus = menus;
-        _menuOwner = window;
+        if (window == null || menus == null || Instance == null) return;
 
-        if (Instance != null) Instance.DrawMenus();
+        var copy = new List<MenuModel>();
+        foreach (var m in menus) copy.Add(m);
+
+        Instance._pendingMenus.Enqueue(new PendingMenus { Win = window, Models = copy });
+        Instance._hasPendingMenus = true;
     }
 
     public static void ClearMenus(Window window)
     {
-        if (_menuOwner == window)
-        {
-            _activeMenus = null;
-            _menuOwner = null;
-            if (Instance != null) Instance.DrawMenus();
-        }
+        if (window == null || Instance == null) return;
+        menusByWindow.Remove(window);
+        Instance.needsRedraw = true;
     }
 
+    // ===== root dropdown =====
     private void RootMenu_Handle(string item)
     {
         switch (item)
@@ -117,19 +151,29 @@ public class Menubar : Window
             case " About GoOS ":
                 WindowManager.AddWindow(new About());
                 break;
+
             case " Check for Updates ":
                 CheckForUpdates();
                 break;
+
             case " Restart Computer ":
-                Dialogue.Show("GoOS", "Are you sure you want to restart your computer?",
+                Dialogue.Show(
+                    "GoOS",
+                    "Are you sure you want to restart your computer?",
                     new List<DialogueButton> { new() { Text = "Reboot", Callback = () => Power.Reboot() } },
-                    question);
+                    question
+                );
                 break;
+
             case " Shutdown Computer ":
-                Dialogue.Show("GoOS", "Are you sure you want to shut down your computer?",
+                Dialogue.Show(
+                    "GoOS",
+                    "Are you sure you want to shut down your computer?",
                     new List<DialogueButton> { new() { Text = "Shut Down", Callback = () => Power.Shutdown() } },
-                    question);
+                    question
+                );
                 break;
+
             case " Clock App ":
                 WindowManager.AddWindow(new Clock()); break;
             case " GoStore ":
@@ -151,119 +195,131 @@ public class Menubar : Window
             case " Terminal ":
                 WindowManager.AddWindow(new GTerm()); break;
         }
-
-        DrawBackground();
-        menuButton.Render();
-        DrawMenus();
     }
 
-    private void DrawBackground()
+    // ===== rendering =====
+    private void RenderWindow()
+    {
+        if (_isRendering) return; // re-entrancy guard
+        _isRendering = true;
+        try
+        {
+            if (WindowManager.Canvas.Width != lastCanvasWidth || Contents.Width != WindowManager.Canvas.Width)
+            {
+                lastCanvasWidth = WindowManager.Canvas.Width;
+                Contents = new Canvas(WindowManager.Canvas.Width, (ushort)BarHeight);
+                needsRedraw = true;
+            }
+
+            if (!needsRedraw) return;
+
+            DrawBackgroundTiled();
+            RenderControls();
+            RenderAppMenusLeft();
+            RenderRightClockAndDate();
+
+            needsRedraw = false;
+        }
+        finally
+        {
+            _isRendering = false;
+        }
+    }
+
+    private void DrawBackgroundTiled()
     {
         var tile = menubarBackground;
         if (tile != null && tile.Width == 1 && tile.Height == BarHeight)
             for (var x = 0; x < Contents.Width; x++)
                 Contents.DrawImage(x, 0, tile, false);
+        // no fallback fill: keep previous frame if resource missing
     }
 
-    private void DrawMenus()
+    private void RenderAppMenusLeft()
     {
+        // remove previous label buttons (keep Menu)
         var toRemove = new List<Control>();
         foreach (var c in Controls)
             if (c is Button b && b != menuButton)
                 toRemove.Add(c);
-        foreach (var c in toRemove)
-            Controls.Remove(c);
-        DrawBackground();
-        menuButton.Render();
-        if (_activeMenus == null)
-        {
-            RenderClock();
-            return;
-        }
+        foreach (var c in toRemove) Controls.Remove(c);
 
         var x = menuButton.X + menuButton.Contents.Width + ItemGap;
-        var btnH = 15;
+        var btnH = Math.Max(1, BarHeight - 4);
         var btnY = 2;
 
-        for (var i = 0; i < _activeMenus.Count; i++)
-        {
-            var menu = _activeMenus[i];
-            if (string.IsNullOrEmpty(menu.Title))
-                continue;
-            var width = Charcoal.MeasureString(menu.Title) + 12;
-            if (x > Contents.Width - 180)
-                break;
-            var btn = new Button(this,
-                (ushort)x,
-                (ushort)btnY,
-                (ushort)width,
-                (ushort)btnH,
-                menu.Title)
+        var focused = WindowManager.FocusedWindow;
+        if (focused != null && menusByWindow.TryGetValue(focused, out var menus) && menus != null)
+            foreach (var menu in menus)
             {
-                UseSystemStyle = false,
-                BackgroundColour = Color.Transparent,
-                TextColour = Color.Black,
-                RenderWithAlpha = true
-            };
-            var menuIndex = i;
-            btn.Clicked = () =>
-            {
-                ShowMenuItems(menuIndex);
-                DrawBackground();
-                menuButton.Render();
-                DrawMenus();
-            };
-            btn.Render();
-            x += width + ItemGap;
-        }
+                var width = Charcoal.MeasureString(menu.Title) + 12;
+                if (x > Contents.Width - 180) break;
+
+                var btn = new Button(this,
+                    (ushort)x,
+                    (ushort)btnY,
+                    (ushort)width,
+                    (ushort)btnH,
+                    menu.Title)
+                {
+                    UseSystemStyle = false,
+                    BackgroundColour = Color.Transparent,
+                    TextColour = Color.Black,
+                    RenderWithAlpha = true
+                };
+
+                var entries = menu.Items; // capture
+                btn.Clicked = () =>
+                {
+                    // build a local dispatch map to avoid shared state
+                    var clickMap = new Dictionary<string, Action>(entries.Count);
+                    var labels = new string[entries.Count];
+
+                    for (var i = 0; i < entries.Count; i++)
+                        if (entries[i].IsSeparator)
+                        {
+                            labels[i] = "----";
+                        }
+                        else
+                        {
+                            var text = entries[i].Text ?? string.Empty;
+                            labels[i] = text;
+                            if (!clickMap.ContainsKey(text) && entries[i].OnClick != null)
+                                clickMap[text] = entries[i].OnClick;
+                        }
+
+                    var anchorX = X + btn.X;
+                    var anchorY = Y + Contents.Height;
+
+                    ContextMenu.ShowAt(anchorX, anchorY, labels, ContextWidth, label =>
+                    {
+                        if (label == "----" || string.IsNullOrEmpty(label)) return;
+                        if (clickMap.TryGetValue(label, out var act) && act != null) act();
+                    });
+                };
+
+                btn.Render();
+                x += width + ItemGap;
+            }
 
         menusRightEdge = x;
-        RenderClock();
+        RenderControls();
     }
 
-    private void ShowMenuItems(int menuIndex)
-    {
-        if (_activeMenus == null || menuIndex < 0 || menuIndex >= _activeMenus.Count)
-            return;
-        var menu = _activeMenus[menuIndex];
-        if (menu.Items == null || menu.Items.Count == 0)
-            return;
-        var items = new string[menu.Items.Count];
-        for (var i = 0; i < menu.Items.Count; i++) items[i] = menu.Items[i].IsSeparator ? "----" : menu.Items[i].Text;
-        Button menuButton = null;
-        foreach (var control in Controls)
-            if (control is Button btn && btn != this.menuButton)
-                if (btn.Title == menu.Title)
-                {
-                    menuButton = btn;
-                    break;
-                }
-
-        if (menuButton != null)
-            ContextMenu.ShowAt(menuButton.X, Contents.Height, items, ContextWidth, selectedItem =>
-            {
-                for (var i = 0; i < menu.Items.Count; i++)
-                    if (!menu.Items[i].IsSeparator && menu.Items[i].Text == selectedItem)
-                    {
-                        menu.Items[i].OnClick?.Invoke();
-                        break;
-                    }
-
-                DrawBackground();
-                this.menuButton.Render();
-                DrawMenus();
-            });
-    }
-
-    private void RenderClock()
+    // offsets: baseline +5; small right shifts (stable)
+    private void RenderRightClockAndDate()
     {
         var timeString = DateTime.Now.ToString("HH:mm");
         var dateString = DateTime.Now.ToString("dd/MM/yyyy");
+
         int timeW = Charcoal.MeasureString(timeString);
         int dateW = Charcoal.MeasureString(dateString);
+
         var baselineY = (BarHeight - CharcoalHeight) / 2 + 5;
+
         var timeX = Contents.Width - RightMargin - timeW + 20;
         var dateX = timeX - 6 - dateW + 24;
+
         if (dateX <= menusRightEdge + ItemGap)
         {
             Contents.DrawString(timeX, baselineY, timeString, Charcoal, Color.Black, true);
@@ -276,34 +332,46 @@ public class Menubar : Window
 
     public override void HandleRun()
     {
-        base.HandleRun();
-        var currentSecond = RTC.Second;
-        if (currentSecond != lastSecond)
+        // apply deferred menu registrations safely here
+        if (_hasPendingMenus)
         {
-            lastSecond = currentSecond;
-            RenderClock();
+            while (_pendingMenus.Count > 0)
+            {
+                var p = _pendingMenus.Dequeue();
+                menusByWindow[p.Win] = p.Models; // replace for that window
+            }
+
+            _hasPendingMenus = false;
+            needsRedraw = true;
         }
 
-        if (WindowManager.Canvas.Width != lastCanvasWidth)
+        base.HandleRun();
+
+        var widthChanged = WindowManager.Canvas.Width != lastCanvasWidth;
+        var currentSecond = RTC.Second;
+
+        if (currentSecond != lastSecond || widthChanged || needsRedraw)
         {
-            lastCanvasWidth = WindowManager.Canvas.Width;
-            Contents = new Canvas(WindowManager.Canvas.Width, (ushort)BarHeight);
-            DrawMenus();
+            lastSecond = currentSecond;
+            RenderWindow();
         }
     }
 
-    public static void CheckForUpdates()
+    // ===== “Check for Updates” (same behaviour as Desktop) =====
+    private static void CheckForUpdates()
     {
         try
         {
             var apiHost = "api.goos.owen2k6.com";
             string serverIP;
+
             using (var dnsClient = new DnsClient())
             {
                 dnsClient.Connect(DNSConfig.DNSNameservers[0]);
                 dnsClient.SendAsk(apiHost);
                 var address = dnsClient.Receive();
                 dnsClient.Close();
+
                 serverIP = address?.ToString();
                 if (string.IsNullOrEmpty(serverIP))
                 {
@@ -325,8 +393,10 @@ public class Menubar : Window
                         "Accept: */*\r\n" +
                         "Accept-Encoding: identity\r\n" +
                         "Connection: close\r\n\r\n";
+
                     var req = Encoding.ASCII.GetBytes(http);
                     stream.Write(req, 0, req.Length);
+
                     var buf = new byte[tcpClient.ReceiveBufferSize];
                     var read = stream.Read(buf, 0, buf.Length);
                     if (read <= 0)
@@ -344,18 +414,19 @@ public class Menubar : Window
                     }
 
                     var body = resp.Substring(sep + 4).Trim();
+
                     if (body != Kernel.version && body != Kernel.editionnext &&
-                        Kernel.BuildType != "ITB")
+                        Kernel.BuildType != "INTERNAL TEST BUILD")
                         Dialogue.Show("GoOS Update",
                             "A newer version of GoOS is available on Github.\nWe recommend you update to the latest version for stability and security reasons.\nhttps://github.com/Owen2k6/GoOS/releases\nCurrent Version: " +
                             Kernel.version + "\nLatest Version: " + body);
                     if (body != Kernel.version && body != Kernel.editionnext &&
-                        Kernel.BuildType == "ITB")
+                        Kernel.BuildType == "INTERNAL TEST BUILD")
                         Dialogue.Show("It's time to move on...",
                             "The Internal Test Version for this edition of GoOS has ended\nThis build of GoOS can no longer access GoOS Online Services.\nPlease check with your INTERNAL TEST Group to see if a new version has been issued.");
                     else if (body == Kernel.editionnext)
                         Dialogue.Show("GoOS Update",
-                            "The next GoOS has been released.\nWe don't want to force you to update but at least check out what's new in GoOS " +
+                            "The next GoOS has been released.\nWe don't want to force you to update but at least check out whats new in GoOS " +
                             Kernel.editionnext + "!\nhttps://github.com/Owen2k6/GoOS/releases/tag/" +
                             Kernel.editionnext);
                     else if (body == "404")
@@ -373,15 +444,23 @@ public class Menubar : Window
         }
     }
 
+    // deferred menu registration (avoid re-entrancy)
+    private struct PendingMenus
+    {
+        public Window Win;
+        public List<MenuModel> Models;
+    }
+
+    // ===== simple models for per-app menus =====
     public readonly struct MenuModel
     {
         public readonly string Title;
         public readonly List<MenuItem> Items;
 
-        public MenuModel(string title, List<MenuItem> items)
+        public MenuModel(string title, IEnumerable<MenuItem> items)
         {
             Title = title ?? string.Empty;
-            Items = items ?? new List<MenuItem>();
+            Items = new List<MenuItem>(items ?? Array.Empty<MenuItem>());
         }
     }
 
@@ -390,16 +469,12 @@ public class Menubar : Window
         public readonly string Text;
         public readonly Action OnClick;
         public readonly bool IsSeparator;
-        public readonly string Shortcut;
-        public readonly bool IsDisabled;
 
-        public MenuItem(string text, Action onClick, string shortcut = null, bool isDisabled = false)
+        public MenuItem(string text, Action onClick)
         {
             Text = text ?? string.Empty;
             OnClick = onClick;
             IsSeparator = false;
-            Shortcut = shortcut ?? string.Empty;
-            IsDisabled = isDisabled;
         }
 
         private MenuItem(bool _sep)
@@ -407,8 +482,6 @@ public class Menubar : Window
             Text = string.Empty;
             OnClick = null;
             IsSeparator = true;
-            Shortcut = string.Empty;
-            IsDisabled = false;
         }
 
         public static MenuItem Separator()
