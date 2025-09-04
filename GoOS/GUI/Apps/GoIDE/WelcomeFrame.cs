@@ -24,14 +24,14 @@ public class WelcomeFrame : Window
                 "Next") { Clicked = NextButton_Click };
 
         // Paint the window.
-        Contents.Clear(Color.LightGray);
+        Contents.Clear(Color.White);
         RenderSystemStyleBorder();
         Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40), Convert.ToUInt16(Contents.Width - 4),
-            38, 0, Color.DeepGray);
-        Contents.DrawString(10, 10, "Welcome", Font_2x, Color.White);
+            38, 0, new Color(0xFFCCCCCC));
+        Contents.DrawString(10, 10, "Welcome", Font_2x, Color.Black);
         Contents.DrawString(10, 52,
             "Welcome to GoIDE! This program will let you\ncreate and debug GoOS applications.\n\nGoIDE currently supports GoCode and 9xCode.\n\nPress next to install GoIDE and create a new\nproject.",
-            Font_1x, Color.White);
+            Font_1x, Color.Black);
         CancelButton.Render();
         NextButton.Render();
     }

@@ -36,9 +36,9 @@ public class IDEFrame : Window
 
             // Initialize the controls.
             SaveButton = new Button(this, 2, 2, 48, 18, "Save")
-                { Clicked = SaveButton_Click, UseSystemStyle = false, BackgroundColour = Color.LightGray };
+                { Clicked = SaveButton_Click, UseSystemStyle = false, BackgroundColour = new Color(0xFFCCCCCC) };
             RunButton = new Button(this, Convert.ToUInt16(Contents.Width - 42), 2, 40, 18, "Run")
-                { Clicked = RunButton_Click, UseSystemStyle = false, BackgroundColour = Color.LightGray };
+                { Clicked = RunButton_Click, UseSystemStyle = false, BackgroundColour = new Color(0xFFCCCCCC) };
             Code = new InputNUMBERS(this, 2, 20, Convert.ToUInt16(Contents.Width - 4),
                 Convert.ToUInt16(Contents.Height - 43), string.Empty) { MultiLine = true };
             Code.Text = File.ReadAllText(projectPath);
@@ -54,7 +54,7 @@ public class IDEFrame : Window
 
     private void Paint(string status)
     {
-        Contents.Clear(Color.LightGray);
+        Contents.Clear(new Color(0xFFCCCCCC));
         RenderSystemStyleBorder();
         Contents.DrawImage(Contents.Width - 62, 0, RunImage);
         SaveButton.Render();

@@ -48,8 +48,9 @@ public class ProjectsFrame : Window
                 {
                     Name = recentProjects[i],
                     UseSystemStyle = false,
-                    BackgroundColour = Color.LightGray,
-                    SelectionColour = new Color(100, 100, 100),
+                    BackgroundColour = Color.White,
+                    TextColour = Color.Black,
+                    SelectionColour = new Color(0xFFCCCCCC),
                     HasSelectionColour = true,
                     ClickedAlt = RecentProjects_Click
                 };
@@ -68,11 +69,11 @@ public class ProjectsFrame : Window
                     "Create new") { Clicked = CreateNewButton_Click };
 
             // Paint the window.
-            Contents.Clear(Color.LightGray);
+            Contents.Clear(Color.White);
             RenderSystemStyleBorder();
             Contents.DrawFilledRectangle(2, Convert.ToUInt16(Contents.Height - 40),
-                Convert.ToUInt16(Contents.Width - 4), 38, 0, Color.DeepGray);
-            Contents.DrawString(10, 10, "All projects", Font_2x, Color.White);
+                Convert.ToUInt16(Contents.Width - 4), 38, 0, new Color(0xFFCCCCCC));
+            Contents.DrawString(10, 10, "All projects", Font_2x, Color.Black);
             foreach (var i in RecentProjectsButtons) i.Render();
             DeleteButton.Render();
             ImportButton.Render();

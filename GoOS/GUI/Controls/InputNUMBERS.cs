@@ -309,11 +309,11 @@ public class InputNUMBERS : Control
         if (Text == string.Empty)
         {
             Contents.DrawRectangle(0, 0, Contents.Width, Contents.Height, 0, Color.DeepGray);
-            Contents.DrawString(0, 0, PlaceholderText, Resources.Font_1x, Color.LightGray);
+            Contents.DrawString(0, 0, PlaceholderText, Resources.Font_1x, new Color(0xFFCCCCCC));
 
             Contents.DrawLine(34, caretLine * 14, 34, caretLine * 14 + 16, Color.Black);
 
-            Contents.DrawFilledRectangle(0, 0, 32, Convert.ToUInt16(Contents.Height), 0, Color.LightGray);
+            Contents.DrawFilledRectangle(0, 0, 32, Convert.ToUInt16(Contents.Height), 0, new Color(0xFFCCCCCC));
 
             for (var i = 0; i < Contents.Height / 14; i++)
                 Contents.DrawString(4, i * 14, (i + 1 + lineOffset).ToString(), Resources.Font_1x,
@@ -331,7 +331,7 @@ public class InputNUMBERS : Control
         var caretTwitter = GetEndXAtCol(caretCol) + 32;
         Contents.DrawLine(caretTwitter, caretLine * 14, caretTwitter, caretLine * 14 + 16, Color.Black);
 
-        Contents.DrawFilledRectangle(0, 0, 32, Convert.ToUInt16(Contents.Height), 0, Color.LightGray);
+        Contents.DrawFilledRectangle(0, 0, 32, Convert.ToUInt16(Contents.Height), 0, new Color(0xFFCCCCCC));
 
         for (var i = 0; i < Contents.Height / 14; i++)
             Contents.DrawString(4, i * 14, (i + 1 + lineOffset).ToString(), Resources.Font_1x, Color.LighterBlack);
