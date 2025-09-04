@@ -165,7 +165,7 @@ public class Resources
 
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.error.bmp")]
     private static byte[] errorIconRaw;
-    
+
     [ManifestResourceStream(ResourceName = "GoOS.Resources.GUI.menuicon.bmp")]
     private static byte[] menuiconRaw;
 

@@ -4,14 +4,14 @@ using System.Globalization;
 namespace Gold.Graphics;
 
 /// <summary>
-/// Color class, used for drawing.
+///     Color class, used for drawing.
 /// </summary>
 public struct Color
 {
     #region Constructors
 
     /// <summary>
-    /// Creates a new instance of the <see cref="Color"/> class with 4 channels specified.
+    ///     Creates a new instance of the <see cref="Color" /> class with 4 channels specified.
     /// </summary>
     /// <param name="A">The Alpha channel.</param>
     /// <param name="R">The Red channel.</param>
@@ -30,7 +30,7 @@ public struct Color
     }
 
     /// <summary>
-    /// Creates a new instance of the <see cref="Color"/> class with 3 channels specified.
+    ///     Creates a new instance of the <see cref="Color" /> class with 3 channels specified.
     /// </summary>
     /// <param name="R">The Red channel.</param>
     /// <param name="G">The Green channel.</param>
@@ -48,19 +48,19 @@ public struct Color
     }
 
     /// <summary>
-    /// Creates a new instance of the <see cref="Color"/> class using an input string.
-    /// <list type="table">
-    /// <item>cymk(float, float, float, float)</item>
-    /// <item>argb(float, float, float, float)</item>
-    /// <item>argb(byte, byte, byte, byte)</item>
-    /// <item>argb(uint)</item>
-    /// <item>rgb(float, float, float)</item>
-    /// <item>rgb(byte, byte, byte)</item>
-    /// <item>hsl(float, float, float)</item>
-    /// <item>#XXXXXXXX</item>
-    /// <item>#XXXXXX</item>
-    /// <item>Web color name</item>
-    /// </list>
+    ///     Creates a new instance of the <see cref="Color" /> class using an input string.
+    ///     <list type="table">
+    ///         <item>cymk(float, float, float, float)</item>
+    ///         <item>argb(float, float, float, float)</item>
+    ///         <item>argb(byte, byte, byte, byte)</item>
+    ///         <item>argb(uint)</item>
+    ///         <item>rgb(float, float, float)</item>
+    ///         <item>rgb(byte, byte, byte)</item>
+    ///         <item>hsl(float, float, float)</item>
+    ///         <item>#XXXXXXXX</item>
+    ///         <item>#XXXXXX</item>
+    ///         <item>Web color name</item>
+    ///     </list>
     /// </summary>
     /// <param name="ColorInfo">The string to read.</param>
     public Color(string ColorInfo) : this()
@@ -83,13 +83,13 @@ public struct Color
         if (ColorInfo.StartsWith("cymk("))
         {
             // Get individual components.
-            string[] Components = ColorInfo[5..].Split(',');
+            var Components = ColorInfo[5..].Split(',');
 
             // Parse component data.
-            byte C = byte.Parse(Components[0]);
-            byte Y = byte.Parse(Components[1]);
-            byte M = byte.Parse(Components[2]);
-            byte K = byte.Parse(Components[3]);
+            var C = byte.Parse(Components[0]);
+            var Y = byte.Parse(Components[1]);
+            var M = byte.Parse(Components[2]);
+            var K = byte.Parse(Components[3]);
 
             // Alpha is always 255 with CYMK.
             _A = 255;
@@ -128,7 +128,7 @@ public struct Color
             }
 
             // Get individual components.
-            string[] Components = ColorInfo[5..].Split(',');
+            var Components = ColorInfo[5..].Split(',');
 
             // Parse component data.
             try
@@ -156,7 +156,7 @@ public struct Color
         if (ColorInfo.StartsWith("rgb("))
         {
             // Get individual components.
-            string[] Components = ColorInfo[5..].Split(',');
+            var Components = ColorInfo[5..].Split(',');
 
             // Alpha is always 255 with RGB.
             _A = 255;
@@ -187,14 +187,14 @@ public struct Color
         if (ColorInfo.StartsWith("hsl("))
         {
             // Get individual components.
-            string[] Components = ColorInfo[5..].Split(',');
+            var Components = ColorInfo[5..].Split(',');
 
             // Alpha is always 100% with HSL.
             _A = 255;
 
-            float H = float.Parse(Components[0]);
-            float S = float.Parse(Components[1]);
-            float L = float.Parse(Components[2]);
+            var H = float.Parse(Components[0]);
+            var S = float.Parse(Components[1]);
+            var L = float.Parse(Components[2]);
 
             S = (float)Math.Clamp(S, 0.0, 1.0);
             L = (float)Math.Clamp(L, 0.0, 1.0);
@@ -210,12 +210,12 @@ public struct Color
                 return;
             }
 
-            float Q = L < 0.5 ? (L * S) + L : L + S - (L * S);
-            float P = (2 * L) - Q;
+            var Q = L < 0.5 ? L * S + L : L + S - L * S;
+            var P = 2 * L - Q;
 
-            _R = FromHue(P, Q, H + (1 / 3));
+            _R = FromHue(P, Q, H + 1 / 3);
             _G = FromHue(P, Q, H);
-            _B = FromHue(P, Q, H - (1 / 3));
+            _B = FromHue(P, Q, H - 1 / 3);
 
             // Assign the ARGB value.
             _ARGB = GetPacked(_A, _R, _G, _B);
@@ -401,14 +401,12 @@ public struct Color
             "WhiteSmoke" => 0xFFF5F5F5,
             "Yellow" => 0xFFFFFF00,
             "YellowGreen" => 0xFF9ACD32,
-            _ => throw new($"Color '{ColorInfo}' does not exist!"),
+            _ => throw new Exception($"Color '{ColorInfo}' does not exist!")
         };
-
-        return;
     }
 
     /// <summary>
-    /// Creates a new instance of the <see cref="Color"/> class.
+    ///     Creates a new instance of the <see cref="Color" /> class.
     /// </summary>
     /// <param name="ARGB">A 32-bit packed ARGB value.</param>
     public Color(uint ARGB) : this()
@@ -428,12 +426,12 @@ public struct Color
     #region Properties
 
     /// <summary>
-    /// Property used to get the overall brightness of the color.
+    ///     Property used to get the overall brightness of the color.
     /// </summary>
     public float Brightness => (Max(this) + Min(this)) / (byte.MaxValue * 2f);
 
     /// <summary>
-    /// Packed ARGB value of the color.
+    ///     Packed ARGB value of the color.
     /// </summary>
     public uint ARGB
     {
@@ -449,7 +447,7 @@ public struct Color
     }
 
     /// <summary>
-    /// Alpha channel of the color.
+    ///     Alpha channel of the color.
     /// </summary>
     public float A
     {
@@ -462,7 +460,7 @@ public struct Color
     }
 
     /// <summary>
-    /// Red channel of the color.
+    ///     Red channel of the color.
     /// </summary>
     public float R
     {
@@ -475,7 +473,7 @@ public struct Color
     }
 
     /// <summary>
-    /// Green channel of the color.
+    ///     Green channel of the color.
     /// </summary>
     public float G
     {
@@ -488,7 +486,7 @@ public struct Color
     }
 
     /// <summary>
-    /// Blue channel of the color.
+    ///     Blue channel of the color.
     /// </summary>
     public float B
     {
@@ -504,77 +502,113 @@ public struct Color
 
     #region Operators
 
-    public static Color operator +(Color Original, Color Value) => new(
-        Original.A + Value.A,
-        Original.R + Value.R,
-        Original.G + Value.G,
-        Original.B + Value.B);
+    public static Color operator +(Color Original, Color Value)
+    {
+        return new Color(
+            Original.A + Value.A,
+            Original.R + Value.R,
+            Original.G + Value.G,
+            Original.B + Value.B);
+    }
 
-    public static Color operator -(Color Original, Color Value) => new(
-        Original.A - Value.A,
-        Original.R - Value.R,
-        Original.G - Value.G,
-        Original.B - Value.B);
+    public static Color operator -(Color Original, Color Value)
+    {
+        return new Color(
+            Original.A - Value.A,
+            Original.R - Value.R,
+            Original.G - Value.G,
+            Original.B - Value.B);
+    }
 
-    public static Color operator *(Color Original, Color Value) => new(
-        Original.A * Value.A,
-        Original.R * Value.R,
-        Original.G * Value.G,
-        Original.B * Value.B);
+    public static Color operator *(Color Original, Color Value)
+    {
+        return new Color(
+            Original.A * Value.A,
+            Original.R * Value.R,
+            Original.G * Value.G,
+            Original.B * Value.B);
+    }
 
-    public static Color operator /(Color Original, Color Value) => new(
-        Original.A / Value.A,
-        Original.R / Value.R,
-        Original.G / Value.G,
-        Original.B / Value.B);
+    public static Color operator /(Color Original, Color Value)
+    {
+        return new Color(
+            Original.A / Value.A,
+            Original.R / Value.R,
+            Original.G / Value.G,
+            Original.B / Value.B);
+    }
 
-    public static Color operator +(Color Original, float Value) => new(
-        Original.A + Value,
-        Original.R + Value,
-        Original.G + Value,
-        Original.B + Value);
+    public static Color operator +(Color Original, float Value)
+    {
+        return new Color(
+            Original.A + Value,
+            Original.R + Value,
+            Original.G + Value,
+            Original.B + Value);
+    }
 
-    public static Color operator -(Color Original, float Value) => new(
-        Original.A - Value,
-        Original.R - Value,
-        Original.G - Value,
-        Original.B - Value);
+    public static Color operator -(Color Original, float Value)
+    {
+        return new Color(
+            Original.A - Value,
+            Original.R - Value,
+            Original.G - Value,
+            Original.B - Value);
+    }
 
-    public static Color operator *(Color Original, float Value) => new(
-        Original.A * Value,
-        Original.R * Value,
-        Original.G * Value,
-        Original.B * Value);
+    public static Color operator *(Color Original, float Value)
+    {
+        return new Color(
+            Original.A * Value,
+            Original.R * Value,
+            Original.G * Value,
+            Original.B * Value);
+    }
 
-    public static Color operator /(Color Original, float Value) => new(
-        Original.A / Value,
-        Original.R / Value,
-        Original.G / Value,
-        Original.B / Value);
+    public static Color operator /(Color Original, float Value)
+    {
+        return new Color(
+            Original.A / Value,
+            Original.R / Value,
+            Original.G / Value,
+            Original.B / Value);
+    }
 
-    public static Color operator +(float Value, Color Original) => new(
-        Value + Original.A,
-        Value + Original.R,
-        Value + Original.G,
-        Value + Original.B);
+    public static Color operator +(float Value, Color Original)
+    {
+        return new Color(
+            Value + Original.A,
+            Value + Original.R,
+            Value + Original.G,
+            Value + Original.B);
+    }
 
-    public static Color operator -(float Value, Color Original) => new(
-        Value - Original.A,
-        Value - Original.R,
-        Value - Original.G,
-        Value - Original.B);
+    public static Color operator -(float Value, Color Original)
+    {
+        return new Color(
+            Value - Original.A,
+            Value - Original.R,
+            Value - Original.G,
+            Value - Original.B);
+    }
 
-    public static Color operator *(float Value, Color Original) => new(
-        Value * Original.A,
-        Value * Original.R,
-        Value * Original.G,
-        Value * Original.B);
+    public static Color operator *(float Value, Color Original)
+    {
+        return new Color(
+            Value * Original.A,
+            Value * Original.R,
+            Value * Original.G,
+            Value * Original.B);
+    }
 
-    public static Color operator /(float Value, Color Original) => new(
-        Value / Original.A,
-        Value / Original.R,
-        Value / Original.G,
-        Value / Original.B);
+    public static Color operator /(float Value, Color Original)
+    {
+        return new Color(
+            Value / Original.A,
+            Value / Original.R,
+            Value / Original.G,
+            Value / Original.B);
+    }
 
     public static bool operator ==(Color C1, Color C2)
     {
@@ -586,7 +620,7 @@ public struct Color
         return C1.ARGB != C2.ARGB;
     }
 
-    public override bool Equals(Object? o)
+    public override bool Equals(object? o)
     {
         if (o == null || GetType() != o.GetType()) return false;
 
@@ -604,19 +638,13 @@ public struct Color
 
     public static Color AlphaBlend(Color Background, Color Foreground)
     {
-        if (Foreground.A == 255)
-        {
-            return Foreground;
-        }
+        if (Foreground.A == 255) return Foreground;
 
-        if (Foreground.A == 0)
-        {
-            return Background;
-        }
+        if (Foreground.A == 0) return Background;
 
-        byte alpha = (byte)Foreground.A;
-        int invAlpha = (int)(256 - Foreground.A);
-        return new()
+        var alpha = (byte)Foreground.A;
+        var invAlpha = (int)(256 - Foreground.A);
+        return new Color
         {
             A = 255,
             R = (byte)((int)(alpha * Foreground.R + invAlpha * Background.R) >> 8),
@@ -626,7 +654,7 @@ public struct Color
     }
 
     /// <summary>
-    /// Converts an ARGB color to it's packed ARGB format.
+    ///     Converts an ARGB color to it's packed ARGB format.
     /// </summary>
     /// <param name="A">Alpha channel.</param>
     /// <param name="R">Red channel.</param>
@@ -635,11 +663,11 @@ public struct Color
     /// <returns>Packed value.</returns>
     private static uint GetPacked(float A, float R, float G, float B)
     {
-        return BitConverter.ToUInt32(new byte[] { (byte)B, (byte)G, (byte)R, (byte)A });
+        return BitConverter.ToUInt32(new[] { (byte)B, (byte)G, (byte)R, (byte)A });
     }
 
     /// <summary>
-    /// Normalizes the color to be between 0.0 and 1.0.
+    ///     Normalizes the color to be between 0.0 and 1.0.
     /// </summary>
     /// <returns>A normalized color.</returns>
     public static Color Normalize(Color ToNormalize)
@@ -649,8 +677,8 @@ public struct Color
     }
 
     /// <summary>
-    /// Internal method, used by <see cref="FromHSL(float, float, float)"/>./>
-    /// See: <seealso cref="https://github.com/CharlesStover/hsl2rgb-js/blob/master/src/hsl2rgb.js"/>
+    ///     Internal method, used by <see cref="FromHSL(float, float, float)" />./>
+    ///     See: <seealso cref="https://github.com/CharlesStover/hsl2rgb-js/blob/master/src/hsl2rgb.js" />
     /// </summary>
     /// <param name="P">Unknown.</param>
     /// <param name="Q">Unknown.</param>
@@ -658,36 +686,21 @@ public struct Color
     /// <returns>Unknown.</returns>
     private static float FromHue(float P, float Q, float T)
     {
-        if (T < 0)
-        {
-            T++;
-        }
+        if (T < 0) T++;
 
-        if (T > 1)
-        {
-            T--;
-        }
+        if (T > 1) T--;
 
-        if (T < 1 / 6)
-        {
-            return P + ((Q - P) * 6 * T);
-        }
+        if (T < 1 / 6) return P + (Q - P) * 6 * T;
 
-        if (T < 0.5)
-        {
-            return Q;
-        }
+        if (T < 0.5) return Q;
 
-        if (T < 2 / 3)
-        {
-            return P + ((Q - P) * ((2 / 3) - T) * 6);
-        }
+        if (T < 2 / 3) return P + (Q - P) * (2 / 3 - T) * 6;
 
         return P;
     }
 
     /// <summary>
-    /// Inverts the specified color.
+    ///     Inverts the specified color.
     /// </summary>
     /// <param name="ToInvert">The color that will be inverted.</param>
     /// <returns>An inverted variant of the input.</returns>
@@ -697,7 +710,7 @@ public struct Color
     }
 
     /// <summary>
-    /// The function to linearly interpolate between 2 colors. (32-bit)
+    ///     The function to linearly interpolate between 2 colors. (32-bit)
     /// </summary>
     /// <param name="StartValue">The color to start with.</param>
     /// <param name="EndValue">The color to end with.</param>
@@ -708,20 +721,20 @@ public struct Color
         // Ensure 'Index' is between 0.0 and 1.0.
         Index = (float)Math.Clamp(Index, 0.0, 1.0);
 
-        return new()
+        return new Color
         {
-            A = StartValue.A + ((EndValue.A - StartValue.A) * Index),
-            R = StartValue.R + ((EndValue.R - StartValue.R) * Index),
-            G = StartValue.G + ((EndValue.G - StartValue.G) * Index),
-            B = StartValue.B + ((EndValue.B - StartValue.B) * Index),
+            A = StartValue.A + (EndValue.A - StartValue.A) * Index,
+            R = StartValue.R + (EndValue.R - StartValue.R) * Index,
+            G = StartValue.G + (EndValue.G - StartValue.G) * Index,
+            B = StartValue.B + (EndValue.B - StartValue.B) * Index
         };
     }
 
     /// <summary>
-    /// Gets the value of the channel with the most value.
+    ///     Gets the value of the channel with the most value.
     /// </summary>
     /// <param name="Color">The color to calculate.</param>
-    /// <returns><see cref="R"/> if <see cref="R"/> is more than <see cref="G"/> and <see cref="B"/>, etc...</returns>
+    /// <returns><see cref="R" /> if <see cref="R" /> is more than <see cref="G" /> and <see cref="B" />, etc...</returns>
     public static float Max(Color Color)
     {
         // Get the minimum value of each channel.
@@ -729,10 +742,10 @@ public struct Color
     }
 
     /// <summary>
-    /// Gets the value of the channel with the least value.
+    ///     Gets the value of the channel with the least value.
     /// </summary>
     /// <param name="Color">The color to calculate.</param>
-    /// <returns><see cref="R"/> if <see cref="R"/> is less than <see cref="G"/> and <see cref="B"/>, etc...</returns>
+    /// <returns><see cref="R" /> if <see cref="R" /> is less than <see cref="G" /> and <see cref="B" />, etc...</returns>
     public static float Min(Color Color)
     {
         // Get the minimum value of each channel.
@@ -740,12 +753,12 @@ public struct Color
     }
 
     /// <summary>
-    /// Converts the color to be only in grayscale.
+    ///     Converts the color to be only in grayscale.
     /// </summary>
     /// <returns>Grayscale color.</returns>
     public Color ToGrayscale()
     {
-        return new(255, Brightness, Brightness, Brightness);
+        return new Color(255, Brightness, Brightness, Brightness);
     }
 
     #endregion
@@ -795,7 +808,7 @@ public struct Color
 
     #endregion
 
-    private int _hash;
+    private readonly int _hash;
     private uint _ARGB;
     private float _A;
     private float _R;

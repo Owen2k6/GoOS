@@ -208,8 +208,8 @@
         <EmbeddedResource Include="Resources\GUI\Minimize.bmp"/>
         <None Remove="Resources\GUI\MinimizePressed.bmp"/>
         <EmbeddedResource Include="Resources\GUI\MinimizePressed.bmp"/>
-        <None Remove="Resources\GUI\menuicon.bmp" />
-        <EmbeddedResource Include="Resources\GUI\menuicon.bmp" />
+        <None Remove="Resources\GUI\menuicon.bmp"/>
+        <EmbeddedResource Include="Resources\GUI\menuicon.bmp"/>
     </ItemGroup>
 
     <PropertyGroup>

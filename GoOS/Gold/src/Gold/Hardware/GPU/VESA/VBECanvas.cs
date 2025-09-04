@@ -5,14 +5,14 @@ using Gold.Graphics;
 namespace Gold.Hardware.GPU.VESA;
 
 /// <summary>
-/// The VBE canvas extention class.
+///     The VBE canvas extention class.
 /// </summary>
 public unsafe class VBECanvas : Display
 {
     #region Constructors
 
     /// <summary>
-    /// Creates a new instance of the <see cref="VBECanvas"/> class.
+    ///     Creates a new instance of the <see cref="VBECanvas" /> class.
     /// </summary>
     public VBECanvas() : base((ushort)Multiboot2.Framebuffer->Width, (ushort)Multiboot2.Framebuffer->Height)
     {
@@ -53,17 +53,17 @@ public unsafe class VBECanvas : Display
         return nameof(VBECanvas);
     }
 
-	public override void Update()
-	{
-		CopyTo((uint*)Multiboot2.Framebuffer->Address);
+    public override void Update()
+    {
+        CopyTo((uint*)Multiboot2.Framebuffer->Address);
         Frames++;
-	}
+    }
 
-	public override void Update(bool IncreaseFPSCounter)
-	{
-		CopyTo((uint*)Multiboot2.Framebuffer->Address);
-		if (IncreaseFPSCounter) Frames++;
-	}
-    
-	#endregion
+    public override void Update(bool IncreaseFPSCounter)
+    {
+        CopyTo((uint*)Multiboot2.Framebuffer->Address);
+        if (IncreaseFPSCounter) Frames++;
+    }
+
+    #endregion
 }

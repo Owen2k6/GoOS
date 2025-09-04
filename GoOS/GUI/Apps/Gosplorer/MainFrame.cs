@@ -46,28 +46,28 @@ public class MainFrame : Window
             Image = arrowleft,
             Clicked = BackButton_Click,
             UseSystemStyle = false,
-            BackgroundColour = new Color(0,0,0)
+            BackgroundColour = new Color(0, 0, 0)
         };
         ForwardButton = new Button(this, 29, 6, 26, 26, string.Empty)
         {
             Image = arrowright,
             Clicked = ForwardButton_Click,
             UseSystemStyle = false,
-            BackgroundColour = new Color(0,0,0)
+            BackgroundColour = new Color(0, 0, 0)
         };
         UpButton = new Button(this, 59, 6, 26, 26, string.Empty)
         {
             Image = arrowup,
             Clicked = UpArrow_Click,
             UseSystemStyle = false,
-            BackgroundColour = new Color(0,0,0)
+            BackgroundColour = new Color(0, 0, 0)
         };
         RefreshButton = new Button(this, 800, 6, 26, 26, string.Empty)
         {
             Image = refIcon,
             Clicked = RenderFolderItems,
             UseSystemStyle = false,
-            BackgroundColour = new Color(0,0,0)
+            BackgroundColour = new Color(0, 0, 0)
         };
 
         Shortcuts = new[]

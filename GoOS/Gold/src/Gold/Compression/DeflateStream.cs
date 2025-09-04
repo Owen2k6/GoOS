@@ -4,18 +4,18 @@ using System.Collections.Generic;
 namespace Gold.Compression;
 
 /// <summary>
-/// public domain zlib decode
-/// original: v0.2  Sean Barrett 2006-11-18
-/// ported to C# by Tammo Hinrichs, 2012-08-02
-/// simple implementation
-/// - all input must be provided in an upfront buffer
-/// - all output is written to a single output buffer
-/// - Warning: This is SLOW. It's no miracle .NET as well as Mono implement DeflateStream natively.
+///     public domain zlib decode
+///     original: v0.2  Sean Barrett 2006-11-18
+///     ported to C# by Tammo Hinrichs, 2012-08-02
+///     simple implementation
+///     - all input must be provided in an upfront buffer
+///     - all output is written to a single output buffer
+///     - Warning: This is SLOW. It's no miracle .NET as well as Mono implement DeflateStream natively.
 /// </summary>
 public class DeflateStream
 {
     /// <summary>
-    /// Decode deflated data.
+    ///     Decode deflated data.
     /// </summary>
     /// <param name="compressed">deflated input data</param>
     /// <returns>uncompressed output</returns>
@@ -30,33 +30,33 @@ public class DeflateStream
     private const int FastBits = 9; // accelerate all cases in default tables
     private const int FastMask = (1 << FastBits) - 1;
 
-    private static readonly int[] DistExtra = new[]
+    private static readonly int[] DistExtra =
     {
         0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9,
         10, 10, 11, 11, 12, 12, 13, 13
     };
 
-    private static readonly int[] LengthBase = new[]
+    private static readonly int[] LengthBase =
     {
         3, 4, 5, 6, 7, 8, 9, 10, 11, 13,
         15, 17, 19, 23, 27, 31, 35, 43, 51, 59,
         67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0
     };
 
-    private static readonly int[] LengthExtra = new[]
+    private static readonly int[] LengthExtra =
     {
         0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4,
         4, 4, 4, 5, 5, 5, 5, 0, 0, 0
     };
 
-    private static readonly int[] DistBase = new[]
+    private static readonly int[] DistBase =
     {
         1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193,
         257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145, 8193,
         12289, 16385, 24577, 0, 0
     };
 
-    private static readonly int[] LengthDezigzag = new[]
+    private static readonly int[] LengthDezigzag =
     {
         16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2,
         14,
@@ -72,8 +72,8 @@ public class DeflateStream
     private uint CodeBuffer;
     private int NumBits;
 
-    private Huffman Distance = new(new());
-    private Huffman Length = new(new());
+    private Huffman Distance = new(new ArraySegment<byte>());
+    private Huffman Length = new(new ArraySegment<byte>());
 
     private int InPos;
 
@@ -90,10 +90,10 @@ public class DeflateStream
 
     private static int BitReverse16(int n)
     {
-        n = (n & 0xAAAA) >> 1 | (n & 0x5555) << 1;
-        n = (n & 0xCCCC) >> 2 | (n & 0x3333) << 2;
-        n = (n & 0xF0F0) >> 4 | (n & 0x0F0F) << 4;
-        n = (n & 0xFF00) >> 8 | (n & 0x00FF) << 8;
+        n = ((n & 0xAAAA) >> 1) | ((n & 0x5555) << 1);
+        n = ((n & 0xCCCC) >> 2) | ((n & 0x3333) << 2);
+        n = ((n & 0xF0F0) >> 4) | ((n & 0x0F0F) << 4);
+        n = ((n & 0xFF00) >> 8) | ((n & 0x00FF) << 8);
         return n;
     }
 
@@ -102,7 +102,7 @@ public class DeflateStream
         //  Debug.Assert(bits <= 16);
         // to bit reverse n bits, reverse 16 and shift
         // e.g. 11 bits, bit reverse and shift away 5
-        return BitReverse16(v) >> 16 - bits;
+        return BitReverse16(v) >> (16 - bits);
     }
 
     private int Get8()
@@ -123,7 +123,7 @@ public class DeflateStream
     private uint Receive(int n)
     {
         if (NumBits < n) FillBits();
-        var k = (uint)(CodeBuffer & (1 << n) - 1);
+        var k = (uint)(CodeBuffer & ((1 << n) - 1));
         CodeBuffer >>= n;
         NumBits -= n;
         return k;
@@ -144,17 +144,15 @@ public class DeflateStream
 
         // not resolved by fast table, so compute it the slow way
         // use jpeg approach, which requires MSbits at top
-        int k = BitReverse((int)CodeBuffer, 16);
+        var k = BitReverse((int)CodeBuffer, 16);
 
-        for (s = FastBits + 1; ; ++s)
-        {
+        for (s = FastBits + 1;; ++s)
             if (k < z.MaxCode[s])
                 break;
-        }
 
         if (s == 16) return -1; // invalid code!
-                                // code size is s, so:
-        b = (k >> 16 - s) - z.FirstCode[s] + z.FirstSymbol[s];
+        // code size is s, so:
+        b = (k >> (16 - s)) - z.FirstCode[s] + z.FirstSymbol[s];
         //  Debug.Assert(z.Size[b] == s);
         CodeBuffer >>= s;
         NumBits -= s;
@@ -163,9 +161,9 @@ public class DeflateStream
 
     private void ParseHuffmanBlock()
     {
-        for (; ; )
+        for (;;)
         {
-            int z = HuffmanDecode(Length);
+            var z = HuffmanDecode(Length);
             if (z < 256)
             {
                 if (z < 0) throw new Exception("bad huffman code"); // error in huffman codes
@@ -175,15 +173,15 @@ public class DeflateStream
             {
                 if (z == 256) return;
                 z -= 257;
-                int len = LengthBase[z];
+                var len = LengthBase[z];
                 if (LengthExtra[z] != 0) len += (int)Receive(LengthExtra[z]);
                 z = HuffmanDecode(Distance);
                 if (z < 0) throw new Exception("bad huffman code");
-                int dist = DistBase[z];
+                var dist = DistBase[z];
                 if (DistExtra[z] != 0) dist += (int)Receive(DistExtra[z]);
                 dist = Out.Count - dist;
                 if (dist < 0) throw new Exception("bad dist");
-                for (int i = 0; i < len; i++, dist++)
+                for (var i = 0; i < len; i++, dist++)
                     Out.Add(Out[dist]);
             }
         }
@@ -194,19 +192,19 @@ public class DeflateStream
         var lenCodes = new byte[286 + 32 + 137]; //padding for maximum single op
         var codeLengthSizes = new byte[19];
 
-        uint hlit = Receive(5) + 257;
-        uint hdist = Receive(5) + 1;
-        uint hclen = Receive(4) + 4;
+        var hlit = Receive(5) + 257;
+        var hdist = Receive(5) + 1;
+        var hclen = Receive(4) + 4;
 
-        for (int i = 0; i < hclen; ++i)
+        for (var i = 0; i < hclen; ++i)
             codeLengthSizes[LengthDezigzag[i]] = (byte)Receive(3);
 
         var codeLength = new Huffman(new ArraySegment<byte>(codeLengthSizes));
 
-        int n = 0;
+        var n = 0;
         while (n < hlit + hdist)
         {
-            int c = HuffmanDecode(codeLength);
+            var c = HuffmanDecode(codeLength);
             // Debug.Assert(c >= 0 && c < 19);
             if (c < 16)
             {
@@ -215,23 +213,24 @@ public class DeflateStream
             else if (c == 16)
             {
                 c = (int)Receive(2) + 3;
-                for (int i = 0; i < c; i++) lenCodes[n + i] = lenCodes[n - 1];
+                for (var i = 0; i < c; i++) lenCodes[n + i] = lenCodes[n - 1];
                 n += c;
             }
             else if (c == 17)
             {
                 c = (int)Receive(3) + 3;
-                for (int i = 0; i < c; i++) lenCodes[n + i] = 0;
+                for (var i = 0; i < c; i++) lenCodes[n + i] = 0;
                 n += c;
             }
             else
             {
                 //Debug.Assert(c == 18);
                 c = (int)Receive(7) + 11;
-                for (int i = 0; i < c; i++) lenCodes[n + i] = 0;
+                for (var i = 0; i < c; i++) lenCodes[n + i] = 0;
                 n += c;
             }
         }
+
         if (n != hlit + hdist) throw new Exception("bad codelengths");
         Length = new Huffman(new ArraySegment<byte>(lenCodes, 0, (int)hlit));
         Distance = new Huffman(new ArraySegment<byte>(lenCodes, (int)hlit, (int)hdist));
@@ -242,31 +241,26 @@ public class DeflateStream
         var header = new byte[4];
         if ((NumBits & 7) != 0)
             Receive(NumBits & 7); // discard
-                                  // drain the bit-packed data into header
-        int k = 0;
+        // drain the bit-packed data into header
+        var k = 0;
         while (NumBits > 0)
         {
             header[k++] = (byte)(CodeBuffer & 255); // wtf this warns?
             CodeBuffer >>= 8;
             NumBits -= 8;
         }
+
         //Debug.Assert(NumBits == 0);
         // now fill header the normal way
-        while (k < 4)
-        {
-            header[k++] = (byte)Get8();
-        }
+        while (k < 4) header[k++] = (byte)Get8();
 
-        int len = (header[1] * 256) + header[0];
-        int nlen = (header[3] * 256) + header[2];
+        var len = header[1] * 256 + header[0];
+        var nlen = header[3] * 256 + header[2];
 
         if (nlen != (len ^ 0xffff)) throw new Exception("zlib corrupt");
         if (InPos + len > In.Count) throw new Exception("read past buffer");
 
-        for (int i = InPos; i < InPos + len; i++)
-        {
-            Out.Add(In[i]);
-        }
+        for (var i = InPos; i < InPos + len; i++) Out.Add(In[i]);
         InPos += len;
     }
 
@@ -302,6 +296,7 @@ public class DeflateStream
                 {
                     ComputeHuffmanCodes();
                 }
+
                 ParseHuffmanBlock();
             }
         } while (!final);
@@ -320,13 +315,10 @@ public class DeflateStream
 
         public Huffman(ArraySegment<byte> sizeList)
         {
-            if (sizeList.Array == null)
-            {
-                return;
-            }
+            if (sizeList.Array == null) return;
 
             int i;
-            int k = 0;
+            var k = 0;
             var nextCode = new int[16];
             var sizes = new int[17];
 
@@ -337,7 +329,7 @@ public class DeflateStream
             sizes[0] = 0;
             /*   for (i = 1; i < 16; ++i)
                    Debug.Assert(sizes[i] <= (1 << i));*/
-            int code = 0;
+            var code = 0;
             for (i = 1; i < 16; ++i)
             {
                 nextCode[i] = code;
@@ -345,29 +337,32 @@ public class DeflateStream
                 FirstSymbol[i] = (ushort)k;
                 code += sizes[i];
                 if (sizes[i] != 0)
-                    if (code - 1 >= 1 << i) throw new Exception("bad codelengths");
-                MaxCode[i] = code << 16 - i; // preshift for inner loop
+                    if (code - 1 >= 1 << i)
+                        throw new Exception("bad codelengths");
+                MaxCode[i] = code << (16 - i); // preshift for inner loop
                 code <<= 1;
                 k += sizes[i];
             }
+
             MaxCode[16] = 0x10000; // sentinel
             for (i = 0; i < sizeList.Count; ++i)
             {
                 int s = sizeList.Array[i + sizeList.Offset];
                 if (s != 0)
                 {
-                    int c = nextCode[s] - FirstCode[s] + FirstSymbol[s];
+                    var c = nextCode[s] - FirstCode[s] + FirstSymbol[s];
                     Size[c] = (byte)s;
                     Value[c] = (ushort)i;
                     if (s <= FastBits)
                     {
-                        int j = BitReverse(nextCode[s], s);
+                        var j = BitReverse(nextCode[s], s);
                         while (j < 1 << FastBits)
                         {
                             Fast[j] = (ushort)c;
                             j += 1 << s;
                         }
                     }
+
                     ++nextCode[s];
                 }
             }

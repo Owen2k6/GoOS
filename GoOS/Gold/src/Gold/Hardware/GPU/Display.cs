@@ -9,21 +9,21 @@ using Gold.Hardware.GPU.VMWare;
 namespace Gold.Hardware.GPU;
 
 /// <summary>
-/// The generic display interface. Used to abstract driver classes and get display output.
+///     The generic display interface. Used to abstract driver classes and get display output.
 /// </summary>
 public abstract class Display : Canvas
 {
     #region Constructors
 
     /// <summary>
-    /// A generic constructor used to initialize the FPS counter.
+    ///     A generic constructor used to initialize the FPS counter.
     /// </summary>
     /// <param name="Width">The Width of the display.</param>
     /// <param name="Height">The Height of the display.</param>
     internal Display(ushort Width, ushort Height) : base(Width, Height)
     {
         // Setup the FPS counter timer.
-        Timer T = new((_) =>
+        Timer T = new(_ =>
         {
             _FPS = Frames;
             Frames = 0;
@@ -39,7 +39,7 @@ public abstract class Display : Canvas
     #region Properties
 
     /// <summary>
-    /// A toggle telling whether the display is enabled or not.
+    ///     A toggle telling whether the display is enabled or not.
     /// </summary>
     public abstract bool IsEnabled { get; set; }
 
@@ -48,61 +48,55 @@ public abstract class Display : Canvas
     #region Methods
 
     /// <summary>
-    /// Gets a display output, the best mode is automatically chosen.
-    /// The Width and Height arguments may not always be used.
+    ///     Gets a display output, the best mode is automatically chosen.
+    ///     The Width and Height arguments may not always be used.
     /// </summary>
     /// <param name="Width">The requested Width of the display.</param>
     /// <param name="Height">The requested Height of the display.</param>
     /// <returns>An instance of the display class.</returns>
     public static Display GetDisplay(ushort Width, ushort Height)
     {
-        if (VMTools.IsVMWare)
-        {
-            return new SVGAIICanvas(Width, Height);
-        }
+        if (VMTools.IsVMWare) return new SVGAIICanvas(Width, Height);
 
-        if (Multiboot2.IsVBEAvailable)
-        {
-            return new VBECanvas();
-        }
+        if (Multiboot2.IsVBEAvailable) return new VBECanvas();
 
         //Console.WriteLine("No display avialable!");
         throw new NotImplementedException("No display is available!");
     }
 
     /// <summary>
-    /// Sets the position of the hardware accelerated cursor on the screen.
-    /// Please note that this may not work on all display methods.
+    ///     Sets the position of the hardware accelerated cursor on the screen.
+    ///     Please note that this may not work on all display methods.
     /// </summary>
     /// <param name="X">The X-axis position.</param>
     /// <param name="Y">The Y-axis position.</param>
     public abstract void SetCursor(uint X, uint Y, bool IsVisible);
 
     /// <summary>
-    /// Sets the image of the hardware accelerated cursor.
-    /// Please note that this may not work on all display methods.
+    ///     Sets the image of the hardware accelerated cursor.
+    ///     Please note that this may not work on all display methods.
     /// </summary>
     /// <param name="Cursor">The image to use as the cursor.</param>
     public abstract void DefineCursor(Canvas Cursor);
 
     /// <summary>
-    /// Gets the display driver's name.
+    ///     Gets the display driver's name.
     /// </summary>
     /// <returns>the display name.</returns>
     public abstract string GetName();
 
     /// <summary>
-    /// Copies the second buffer to the primary display buffer.
+    ///     Copies the second buffer to the primary display buffer.
     /// </summary>
     public abstract void Update();
 
     /// <summary>
-    /// Copies the second buffer to the primary display buffer.
+    ///     Copies the second buffer to the primary display buffer.
     /// </summary>
     public abstract void Update(bool IncreaseFPSCounter);
 
     /// <summary>
-    /// Gets the FPS measurment of the display.
+    ///     Gets the FPS measurment of the display.
     /// </summary>
     /// <returns>The FPS as a uint number.</returns>
     public uint GetFPS()
@@ -115,12 +109,12 @@ public abstract class Display : Canvas
     #region Fields
 
     /// <summary>
-    /// The frame counter, used for FPS calculation.
+    ///     The frame counter, used for FPS calculation.
     /// </summary>
     public uint Frames;
 
     /// <summary>
-    /// The internal FPS value, returned from <see cref="GetFPS()"/>.
+    ///     The internal FPS value, returned from <see cref="GetFPS()" />.
     /// </summary>
     internal uint _FPS;
 

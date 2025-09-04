@@ -4,15 +4,15 @@ using System.Collections.Generic;
 namespace Gold.Graphics.Fonts;
 
 /// <summary>
-/// A (mostly) custom made font class that uses glyph caching.
-/// Font logic designed by nifanfa.
+///     A (mostly) custom made font class that uses glyph caching.
+///     Font logic designed by nifanfa.
 /// </summary>
 public class Font
 {
     #region Constructors
 
     /// <summary>
-    /// Creates a new instance of the <see cref="Font"/> class.
+    ///     Creates a new instance of the <see cref="Font" /> class.
     /// </summary>
     /// <param name="Binary">Binary of the font file.</param>
     /// <param name="Size">Height of the font.</param>
@@ -26,7 +26,7 @@ public class Font
         this.Size = Size;
 
         // Create cache instance.
-        Glyphs = new();
+        Glyphs = new Dictionary<char, Glyph>();
     }
 
     #endregion
@@ -34,7 +34,7 @@ public class Font
     #region Methods
 
     /// <summary>
-    /// Measures a string's total width.
+    ///     Measures a string's total width.
     /// </summary>
     /// <param name="Text">String to measure.</param>
     /// <returns>Width of the input string.</returns>
@@ -43,8 +43,7 @@ public class Font
         ushort Width = 0;
 
         // Loop over every character in the string.
-        for (int I = 0; I < Text.Length; I++)
-        {
+        for (var I = 0; I < Text.Length; I++)
             switch (Text[I])
             {
                 case '\n': // We don't measure height currently.
@@ -60,29 +59,25 @@ public class Font
                     Width += (ushort)(GetGlyph(Text[I]).Width + 2);
                     continue;
             }
-        }
 
         return Width;
     }
 
     /// <summary>
-    /// Generates or loads a cached font glyph.
+    ///     Generates or loads a cached font glyph.
     /// </summary>
     /// <param name="C">The char to load a glyph for.</param>
     /// <returns>Existing or generated glyph.</returns>
     public Glyph GetGlyph(char C)
     {
         // Return cached value if it exists.
-        if (Glyphs.ContainsKey(C))
-        {
-            return Glyphs[C];
-        }
+        if (Glyphs.ContainsKey(C)) return Glyphs[C];
 
         // Create new empty glyph.
         Glyph Temp = new(0, Size);
 
         // Get the index of the char in the font.
-        int Index = DefaultCharset.IndexOf(C);
+        var Index = DefaultCharset.IndexOf(C);
 
         if (Index < 0)
         {
@@ -90,25 +85,23 @@ public class Font
             return Temp;
         }
 
-        ushort SizePerFont = (ushort)(Size * Size8 * Index);
+        var SizePerFont = (ushort)(Size * Size8 * Index);
 
-        for (int I = 0; I < Size * Size8; I++)
+        for (var I = 0; I < Size * Size8; I++)
         {
-            int X = I % Size8;
-            int Y = I / Size8;
+            var X = I % Size8;
+            var Y = I / Size8;
 
-            for (int ww = 0; ww < 8; ww++)
-            {
-                if ((Binary[SizePerFont + (Y * Size8) + X] & (0x80 >> ww)) != 0)
+            for (var ww = 0; ww < 8; ww++)
+                if ((Binary[SizePerFont + Y * Size8 + X] & (0x80 >> ww)) != 0)
                 {
-                    int Max = (X * 8) + ww;
+                    var Max = X * 8 + ww;
 
                     Temp.Points.Add((Max, Y));
 
                     // Get max font width used.
                     Temp.Width = (ushort)Math.Max(Temp.Width, Max);
                 }
-            }
         }
 
         // Add the glyph to the glyph cache and return it.
@@ -121,13 +114,13 @@ public class Font
     #region Fields
 
     /// <summary>
-    /// The standard charset of all fonts.
+    ///     The standard charset of all fonts.
     /// </summary>
     public const string DefaultCharset =
         "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
     /// <summary>
-    /// The default font used before other fonts can be loaded.
+    ///     The default font used before other fonts can be loaded.
     /// </summary>
     public static readonly Font Fallback = new(new byte[]
     {
@@ -322,22 +315,22 @@ public class Font
     }, 16);
 
     /// <summary>
-    /// The glyph cache, it stores previously used glyphs to increase performance by skipping rendering.
+    ///     The glyph cache, it stores previously used glyphs to increase performance by skipping rendering.
     /// </summary>
     public Dictionary<char, Glyph> Glyphs;
 
     /// <summary>
-    /// The pointer to the raw memory for the font file.
+    ///     The pointer to the raw memory for the font file.
     /// </summary>
     public byte[] Binary;
 
     /// <summary>
-    /// Size divided by 8.
+    ///     Size divided by 8.
     /// </summary>
     public ushort Size8;
 
     /// <summary>
-    /// Size (Height) of the font.
+    ///     Size (Height) of the font.
     /// </summary>
     public ushort Size;
 

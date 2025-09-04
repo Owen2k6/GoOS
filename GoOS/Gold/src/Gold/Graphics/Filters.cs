@@ -4,13 +4,13 @@ using Cosmos.Core;
 namespace Gold.Graphics;
 
 /// <summary>
-/// The <see cref="Filters"/> class, used to apply advanced filter effects to a graphics canvas.
-/// Only use this on the base <see cref="Canvas"/> class to avoid memory issues.
+///     The <see cref="Filters" /> class, used to apply advanced filter effects to a graphics canvas.
+///     Only use this on the base <see cref="Canvas" /> class to avoid memory issues.
 /// </summary>
 public static unsafe class Filters
 {
     /// <summary>
-    /// Samples/Crops a graphics item.
+    ///     Samples/Crops a graphics item.
     /// </summary>
     /// <param name="X">The X position to start at.</param>
     /// <param name="Y">The Y position to start at.</param>
@@ -24,11 +24,11 @@ public static unsafe class Filters
         Canvas Temp = new(Width, Height);
 
         // Get addresses for initial source and destination.
-        uint* Destination = Temp.Internal;
-        uint* Source = G.Internal + ((Y * G.Width) + X);
+        var Destination = Temp.Internal;
+        var Source = G.Internal + (Y * G.Width + X);
 
         // Loop over each horizontal line.
-        for (int I = 0; I < Height; I++)
+        for (var I = 0; I < Height; I++)
         {
             // Copy one whole line to the temporary image.
             MemoryOperations.Copy(Destination, Source, Width);
@@ -43,7 +43,7 @@ public static unsafe class Filters
     }
 
     /// <summary>
-    /// Re-scales the image to the desired size.
+    ///     Re-scales the image to the desired size.
     /// </summary>
     /// <param name="Width">New width to scale to.</param>
     /// <param name="Height">New height to scale to.</param>
@@ -53,27 +53,24 @@ public static unsafe class Filters
     public static Canvas Scale(ushort Width, ushort Height, Canvas G)
     {
         // Out of bounds check.
-        if (Width <= 0 || Height <= 0 || Width == G.Width || Height == G.Height)
-        {
-            return G;
-        }
+        if (Width <= 0 || Height <= 0 || Width == G.Width || Height == G.Height) return G;
 
         // Create a temporary buffer.
         Canvas Result = new(Width, Height);
 
         // Find the scale ratios.
-        double XRatio = (double)G.Width / Width;
-        double YRatio = (double)G.Height / Height;
+        var XRatio = (double)G.Width / Width;
+        var YRatio = (double)G.Height / Height;
 
         for (uint Y = 0; Y < Height; Y++)
         {
-            double PY = Math.Floor(Y * YRatio);
+            var PY = Math.Floor(Y * YRatio);
 
             for (uint X = 0; X < Width; X++)
             {
-                double PX = Math.Floor(X * XRatio);
+                var PX = Math.Floor(X * XRatio);
 
-                Result.Internal[(Y * Width) + X] = G.Internal[(uint)((PY * G.Width) + PX)];
+                Result.Internal[Y * Width + X] = G.Internal[(uint)(PY * G.Width + PX)];
             }
         }
 
@@ -82,7 +79,7 @@ public static unsafe class Filters
     }
 
     /// <summary>
-    /// Masks the gradient over anything in the input surface that isn't alpha.
+    ///     Masks the gradient over anything in the input surface that isn't alpha.
     /// </summary>
     /// <param name="Input">The input canvas to mask.</param>
     /// <param name="Mask">The mask to use on top of the input.</param>
@@ -96,10 +93,7 @@ public static unsafe class Filters
         for (uint I = 0; I < ToMask.Size; I++)
         {
             // Skip if pixel is alpha.
-            if (ToMask[I].A < 255)
-            {
-                continue;
-            }
+            if (ToMask[I].A < 255) continue;
 
             // Set gradient pixel.
             Temp.Internal[I] = Mask.Internal[I];
@@ -109,7 +103,7 @@ public static unsafe class Filters
     }
 
     /// <summary>
-    /// Rotates the image to the desired angle.
+    ///     Rotates the image to the desired angle.
     /// </summary>
     /// <param name="Angle">Angle to rotate in.</param>
     /// <param name="G">The canvas to filter.</param>
@@ -126,58 +120,46 @@ public static unsafe class Filters
             case 0:
                 return G;
             case 90:
-                Result = new(G.Height, G.Width);
+                Result = new Canvas(G.Height, G.Width);
 
                 // Loop over each pixel...
-                for (int X = 0; X < G.Width; X++)
-                {
-                    for (int Y = 0; Y < G.Height; Y++)
-                    {
-                        // Just swap X and Y for the effect.
-                        Result[Y, X] = G[X, Y];
-                    }
-                }
+                for (var X = 0; X < G.Width; X++)
+                for (var Y = 0; Y < G.Height; Y++)
+                    // Just swap X and Y for the effect.
+                    Result[Y, X] = G[X, Y];
 
                 return Result;
             case -90:
-                Result = new(G.Height, G.Width);
+                Result = new Canvas(G.Height, G.Width);
 
                 // Loop over each pixel...
-                for (int X = 0; X < G.Width; X++)
-                {
-                    for (int Y = 0; Y < G.Height; Y++)
-                    {
-                        // Just swap X and Y for the effect.
-                        Result[-Y, -X] = G[X, Y];
-                    }
-                }
+                for (var X = 0; X < G.Width; X++)
+                for (var Y = 0; Y < G.Height; Y++)
+                    // Just swap X and Y for the effect.
+                    Result[-Y, -X] = G[X, Y];
 
                 return Result;
             case 180:
-                Result = new(G.Width, G.Height);
+                Result = new Canvas(G.Width, G.Height);
 
                 // Loop over each pixel...
                 for (uint I = 0; I < G.Size; I++)
-                {
                     // Copy the pixels in reverse order.
                     Result.Internal[G.Size - I] = G.Internal[I];
-                }
 
                 return Result;
         }
 
         // Create temporary buffer.
-        Result = new(G.Width, G.Height);
+        Result = new Canvas(G.Width, G.Height);
 
-        for (int X = 0; X < G.Width; X++)
+        for (var X = 0; X < G.Width; X++)
+        for (var Y = 0; Y < G.Height; Y++)
         {
-            for (int Y = 0; Y < G.Height; Y++)
-            {
-                int X2 = (int)((Math.Cos(Angle) * X) - (Math.Sin(Angle) * Y));
-                int Y2 = (int)((Math.Sin(Angle) * X) + (Math.Cos(Angle) * Y));
+            var X2 = (int)(Math.Cos(Angle) * X - Math.Sin(Angle) * Y);
+            var Y2 = (int)(Math.Sin(Angle) * X + Math.Cos(Angle) * Y);
 
-                Result[X2, Y2] = G[X, Y];
-            }
+            Result[X2, Y2] = G[X, Y];
         }
 
         // Return filtered image.
@@ -185,8 +167,8 @@ public static unsafe class Filters
     }
 
     /// <summary>
-    /// Applies an HDR affect to an image given the High and Low exposure inputs.
-    /// Assumes High and Low are the same size as Normal.
+    ///     Applies an HDR affect to an image given the High and Low exposure inputs.
+    ///     Assumes High and Low are the same size as Normal.
     /// </summary>
     /// <param name="High">The high exposure variant.</param>
     /// <param name="Normal">The normal exposure variant.</param>
@@ -198,18 +180,15 @@ public static unsafe class Filters
         Canvas Result = new(Normal.Width, Normal.Height);
 
         // Loop over & blend all pixels together.
-        for (uint I = 0; I < Result.Size; I++)
-        {
-            Result.Internal[I] = ((High[I] + Normal[I] + Low[I]) / 3).ARGB;
-        }
+        for (uint I = 0; I < Result.Size; I++) Result.Internal[I] = ((High[I] + Normal[I] + Low[I]) / 3).ARGB;
 
         // Resurn HDR blend result.
         return Result;
     }
 
     /// <summary>
-    /// Applies a basic anti-aliasing filter to the graphics layer.
-    /// Warning: This method is somewhat slow.
+    ///     Applies a basic anti-aliasing filter to the graphics layer.
+    ///     Warning: This method is somewhat slow.
     /// </summary>
     /// <param name="G">The canvas to filter.</param>
     /// <returns>Filtered canvas image.</returns>
@@ -219,15 +198,12 @@ public static unsafe class Filters
         Canvas Result = new(G.Width, G.Height);
 
         // Loop over all pixels.
-        for (uint I = (uint)(G.Width + 1); I < G.Size - G.Width - 1; I++)
+        for (var I = (uint)(G.Width + 1); I < G.Size - G.Width - 1; I++)
         {
             // Skip the left and right edges of the frame buffer.
-            if (I % G.Width == 0 || I % G.Width == G.Width - 1)
-            {
-                continue;
-            }
+            if (I % G.Width == 0 || I % G.Width == G.Width - 1) continue;
 
-            Color Average = G[I] / 3; // Center point.
+            var Average = G[I] / 3; // Center point.
 
             Average += G[I - G.Width] / 6; // Top.
             Average += G[I + G.Width] / 6; // Bottom.
@@ -243,7 +219,7 @@ public static unsafe class Filters
     }
 
     /// <summary>
-    /// Inverts an image's colors.
+    ///     Inverts an image's colors.
     /// </summary>
     /// <param name="G">The input to invert.</param>
     /// <returns>An inverted version of the input.</returns>
@@ -253,10 +229,7 @@ public static unsafe class Filters
         Canvas Result = new(G.Width, G.Height);
 
         // Loop over all pixel linearly.
-        for (uint I = 0; I < G.Size; I++)
-        {
-            Result.Internal[I] = Color.Invert(G[I]).ARGB;
-        }
+        for (uint I = 0; I < G.Size; I++) Result.Internal[I] = Color.Invert(G[I]).ARGB;
 
         // Return the result of the operation.
         return Result;
@@ -280,7 +253,7 @@ public static unsafe class Filters
     private static void BoxBlurH4(int[] source, int[] dest, int w, int h, int r)
     {
         var iar = (double)1 / (r + r + 1);
-        for (int I = 0; I < h; I++)
+        for (var I = 0; I < h; I++)
         {
             var ti = I * w;
             var li = ti;
@@ -312,15 +285,15 @@ public static unsafe class Filters
     private static void BoxBlurT4(int[] source, int[] dest, int w, int h, int r)
     {
         var iar = (double)1 / (r + r + 1);
-        for (int I = 0; I < w; I++)
+        for (var I = 0; I < w; I++)
         {
             var ti = I;
             var li = ti;
-            var ri = ti + (r * w);
+            var ri = ti + r * w;
             var fv = source[ti];
-            var lv = source[ti + (w * (h - 1))];
+            var lv = source[ti + w * (h - 1)];
             var val = (r + 1) * fv;
-            for (var j = 0; j < r; j++) val += source[ti + (j * w)];
+            for (var j = 0; j < r; j++) val += source[ti + j * w];
             for (var j = 0; j <= r; j++)
             {
                 val += source[ri] - fv;
@@ -350,24 +323,18 @@ public static unsafe class Filters
 
     private static int[] BoxesForGauss(int sigma, int n)
     {
-        var wIdeal = Math.Sqrt((12 * sigma * sigma / n) + 1);
+        var wIdeal = Math.Sqrt(12 * sigma * sigma / n + 1);
         var wl = (int)Math.Floor(wIdeal);
-        if (wl % 2 == 0)
-        {
-            wl--;
-        }
+        if (wl % 2 == 0) wl--;
 
         var wu = wl + 2;
 
-        var mIdeal = (double)((12 * sigma * sigma) - (n * wl * wl) - (4 * n * wl) - (3 * n)) / ((-4 * wl) - 4);
+        var mIdeal = (double)(12 * sigma * sigma - n * wl * wl - 4 * n * wl - 3 * n) / (-4 * wl - 4);
         var m = Math.Round(mIdeal);
 
-        int[] Sizes = new int[n];
+        var Sizes = new int[n];
 
-        for (var i = 0; i < n; i++)
-        {
-            Sizes[i] = i < m ? wl : wu;
-        }
+        for (var i = 0; i < n; i++) Sizes[i] = i < m ? wl : wu;
 
         return Sizes;
     }

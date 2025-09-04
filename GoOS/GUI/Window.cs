@@ -322,8 +322,8 @@ public class Window
     {
         var shadowX = X + OuterWidth;
         var shadowY = Y + OuterHeight;
-        cv.DrawLine(shadowX, Y+ 2, shadowX, shadowY, Color.Black);
-        cv.DrawLine(X + 2, shadowY , shadowX, shadowY, Color.Black);
+        cv.DrawLine(shadowX, Y + 2, shadowX, shadowY, Color.Black);
+        cv.DrawLine(X + 2, shadowY, shadowX, shadowY, Color.Black);
     }
 
     public virtual void HandleClick(MouseEventArgs e)
