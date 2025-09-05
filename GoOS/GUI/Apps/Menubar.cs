@@ -193,7 +193,7 @@ public class Menubar : Window
             case " Settings ":
                 WindowManager.AddWindow(new Frame()); break;
             case " Terminal ":
-                WindowManager.AddWindow(new GTerm()); break;
+                WindowManager.AddWindow(new NewConsole()); break;
         }
     }
 

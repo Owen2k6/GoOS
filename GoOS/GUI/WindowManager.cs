@@ -51,6 +51,8 @@ public class WindowManager
 
     private static uint LastCursorX, LastCursorY;
 
+    static bool Updating;
+
     public static Window FocusedWindow
     {
         get
@@ -282,6 +284,9 @@ public class WindowManager
 
     public static void Update()
     {
+        //if (Updating) return;
+        Updating = true;
+
         try
         {
             SyncMouseBoundsAndClamp();
@@ -354,7 +359,7 @@ public class WindowManager
             if (framesToHeapCollect == 0)
             {
                 Heap.Collect();
-                framesToHeapCollect = 10;
+                framesToHeapCollect = 1;
             }
 
             framesToHeapCollect--;
@@ -367,6 +372,8 @@ public class WindowManager
                 null, // default buttons
                 errorIcon);
         }
+
+        Updating = false;
     }
 
     private static void DimBackground()

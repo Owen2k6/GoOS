@@ -1,6 +1,7 @@
 ﻿using Gold.Graphics;
 using Gold.Graphics.Fonts;
 using IL2CPU.API.Attribs;
+using SVGAIITerminal.TextKit;
 
 namespace GoOS;
 
@@ -216,6 +217,7 @@ public class Resources
     public static Font Geneva;
     public static Font Charcoal;
     public static Font Chicago;
+    public static BtfFontFace TerminalFont;
     public static Canvas Mouse;
     private static Canvas MouseClick;
     public static Canvas errorIcon;
@@ -286,6 +288,7 @@ public class Resources
                 Geneva = new Font(genevaRaw, 16);
                 Charcoal = new Font(charcoalRaw, 16);
                 Chicago = new Font(chicagoRaw, 16);
+                TerminalFont = new BtfFontFace(font_1x_raw, 16);
                 break;
 
             case ResourceType.OOBE:
