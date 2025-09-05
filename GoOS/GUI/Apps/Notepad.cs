@@ -10,7 +10,7 @@ namespace GoOS.GUI.Apps;
 
 public class Notepad : Window
 {
-    private readonly InputNUMBERS AttemptOne;
+    private readonly Input AttemptOne;
     private readonly Button CopyButton;
     private readonly string infi = "";
     private readonly Button PasteButton;
@@ -26,7 +26,7 @@ public class Notepad : Window
         Visible = true;
         Closable = true;
         SetDock(WindowDock.Auto);
-        AttemptOne = new InputNUMBERS(this, 5, 25, 500 - 10, 300 - 30, "")
+        AttemptOne = new Input(this, 5, 25, 500 - 10, 300 - 30, "")
         {
             MultiLine = true
         };

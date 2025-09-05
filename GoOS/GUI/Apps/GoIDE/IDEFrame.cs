@@ -10,7 +10,7 @@ namespace GoOS.GUI.Apps.GoIDE;
 
 public class IDEFrame : Window
 {
-    private readonly InputNUMBERS Code;
+    private readonly Input Code;
     private readonly bool Is9xCode;
 
     private readonly string ProjectPath;
@@ -39,8 +39,8 @@ public class IDEFrame : Window
                 { Clicked = SaveButton_Click, UseSystemStyle = false, BackgroundColour = new Color(0xFFCCCCCC) };
             RunButton = new Button(this, Convert.ToUInt16(Contents.Width - 42), 2, 40, 18, "Run")
                 { Clicked = RunButton_Click, UseSystemStyle = false, BackgroundColour = new Color(0xFFCCCCCC) };
-            Code = new InputNUMBERS(this, 2, 20, Convert.ToUInt16(Contents.Width - 4),
-                Convert.ToUInt16(Contents.Height - 43), string.Empty) { MultiLine = true };
+            Code = new Input(this, 2, 20, Convert.ToUInt16(Contents.Width - 4),
+                Convert.ToUInt16(Contents.Height - 43), string.Empty) { MultiLine = true, Numbers = true };
             Code.Text = File.ReadAllText(projectPath);
 
             // Paint the window.
