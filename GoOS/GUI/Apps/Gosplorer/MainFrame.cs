@@ -179,7 +179,7 @@ public class MainFrame : Window
         {
             contextMenuEntries = new[] { " Open", " Delete", "----", " About Gosplorer" };
         }
-        if (isFile)
+        else if (isFile)
         {
             contextMenuEntries = new[] { " Open", " Edit", " Delete", "----", " About Gosplorer" };
         }
