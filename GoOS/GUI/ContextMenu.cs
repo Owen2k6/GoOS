@@ -92,7 +92,7 @@ public class ContextMenu : Window
 
                 if (isHovered) Contents.DrawFilledRectangle(0, i * 16, Contents.Width, 16, 0, MenuHighlight);
 
-                Contents.DrawString(4, i * 16 + 2, Items[i], Resources.Font_1x, MenuText);
+                Contents.DrawString(4, i * 16, Items[i], Resources.Font_1x, MenuText);
             }
 
         Contents.DrawRectangle(0, 0, (ushort)(Contents.Width - 1), (ushort)(Contents.Height - 1), 0, MenuBorder);

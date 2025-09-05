@@ -56,6 +56,7 @@ public class Menubar : Window
 
     // state
     private Button menuButton;
+    private Button soundButton;
     private int menusRightEdge;
     private bool needsRedraw = true;
 
@@ -78,6 +79,16 @@ public class Menubar : Window
         Unkillable = true;
 
         InitialiseMenuButton();
+        soundButton = new Button(this, (ushort)(WindowManager.Canvas.Width - 164), 2, 16, 16, "")
+        {
+            UseSystemStyle = false,
+            BackgroundColour = new Color(0xFFDDDDDD),
+            Image = soundIcon,
+            TextColour = Color.Black,
+            RenderWithAlpha = true,
+            ClickedAlt = ToggleSound
+        };
+        soundButton.Render();
 
         // focus hook: mark dirty only (never render here)
         WindowManager.TaskbarFocusChangedHook = () =>
@@ -92,6 +103,17 @@ public class Menubar : Window
     // public surface
     public static Menubar Instance { get; private set; }
     public static bool IsRenderingNow => Instance != null && Instance._isRendering;
+
+    private void ToggleSound(string _)
+    {
+        Kernel.SoundEnabled = !Kernel.SoundEnabled;
+        Paint();
+
+        if (Kernel.SoundEnabled)
+            Dialogue.Show("Sound", "Sound enabled");
+        else
+            Dialogue.Show("Sound", "Sound disabled");
+    }
 
     private void InitialiseMenuButton()
     {
@@ -119,6 +141,7 @@ public class Menubar : Window
             var anchorX = X + menuButton.X;
             var anchorY = Y + Contents.Height;
             ContextMenu.ShowAt(anchorX, anchorY, RootMenuItems, ContextWidth, RootMenu_Handle);
+            RenderWindow();
         };
 
         menuButton.Render();
@@ -328,6 +351,8 @@ public class Menubar : Window
 
         Contents.DrawString(dateX, baselineY, dateString, Charcoal, Color.Black, true);
         Contents.DrawString(timeX, baselineY, timeString, Charcoal, Color.Black, true);
+
+        soundButton.Image = Kernel.SoundEnabled ? soundIcon : nosoundIcon;
     }
 
     public override void HandleRun()

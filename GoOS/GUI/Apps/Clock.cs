@@ -10,7 +10,9 @@ public class Clock : Window
     private readonly string[] contextMenuButtons =
     {
         " Analog view",
-        " Digital view"
+        " Digital view",
+        "----",
+        " About Clock"
     };
 
     private bool digitalView;
@@ -95,12 +97,13 @@ public class Clock : Window
 
     public override void ShowContextMenu()
     {
-        ContextMenu.Show(contextMenuButtons, 112, ContextMenu_Handle);
+        ContextMenu.Show(contextMenuButtons, 114, ContextMenu_Handle);
     }
 
     private void ContextMenu_Handle(string item)
     {
         digitalView = item == contextMenuButtons[1];
+        if (item == contextMenuButtons[3]) ShowAboutDialog("1.0");
         Paint();
     }
 }

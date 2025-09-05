@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Cosmos.System;
 using Gold.Graphics;
 using GoOS._9xCode;
@@ -176,28 +177,28 @@ public class MainFrame : Window
 
         if (isFolder)
         {
-            contextMenuEntries = new[] { " Open", " Delete" };
+            contextMenuEntries = new[] { " Open", " Delete", "----", " About Gosplorer" };
         }
-        else if (isFile)
+        if (isFile)
         {
-            var items = new List<string> { " Open", " Delete", " Pin to start menu", " Unpin from start menu" };
-            if (ext == ".giff") items.Add(" Open with Notepad");
-            contextMenuEntries = items.ToArray();
+            contextMenuEntries = new[] { " Open", " Edit", " Delete", "----", " About Gosplorer" };
         }
         else if (!Path.StartsWith(@"1:\"))
         {
-            contextMenuEntries = new[] { " New Folder", " New File" };
+            contextMenuEntries = new[] { " New Folder", " New File", "----", " About Gosplorer" };
         }
 
-        ContextMenu.Show(contextMenuEntries.ToArray(),
-            isFile || isFolder ? (ushort)168 : (ushort)64,
-            ContextMenu_Handle);
+        ContextMenu.Show(contextMenuEntries.ToArray(), 136, ContextMenu_Handle);
     }
 
     private void ContextMenu_Handle(string item)
     {
         switch (item)
         {
+            case " About Gosplorer":
+                ShowAboutDialog("2.0");
+                break;
+
             case " Open":
                 FolderContents_Clicked(ContextButton.Name);
                 break;
@@ -209,33 +210,7 @@ public class MainFrame : Window
                 RenderFolderItems();
                 break;
 
-            case " Pin to start menu":
-            {
-                var lines = new List<string>(File.ReadAllLines(@"0:\content\sys\pinnedapps.gms"))
-                {
-                    (Path + (Path.EndsWith(@"\") ? "" : @"\") + ContextButton.Name).Trim()
-                };
-                File.WriteAllLines(@"0:\content\sys\pinnedapps.gms", lines.ToArray());
-                Dialogue.Show("Gosplorer", "App pinned to start menu");
-                break;
-            }
-
-            case " Unpin to start menu":
-            {
-                var lines2 = new List<string>(File.ReadAllLines(@"0:\content\sys\pinnedapps.gms"));
-                for (var i = 0; i < lines2.Count; i++)
-                    if (lines2[i] == (Path + (Path.EndsWith(@"\") ? "" : @"\") + ContextButton.Name).Trim())
-                    {
-                        lines2.RemoveAt(i);
-                        i--;
-                    }
-
-                File.WriteAllLines(@"0:\content\sys\pinnedapps.gms", lines2.ToArray());
-                Dialogue.Show("Gosplorer", "App unpinned to start menu");
-                break;
-            }
-
-            case " Open with Notepad":
+            case " Edit":
             {
                 var full = Path + (Path.EndsWith(@"\") ? "" : @"\") + ContextButton.Name;
                 WindowManager.AddWindow(new Notepad(true, full));
