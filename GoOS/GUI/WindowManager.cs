@@ -284,85 +284,73 @@ public class WindowManager
     {
         try
         {
-            if (!BetterConsole.ConsoleMode)
+            SyncMouseBoundsAndClamp();
+
+            if (MouseManager.ScreenWidth != Canvas.Width || MouseManager.ScreenHeight != Canvas.Height)
             {
-                SyncMouseBoundsAndClamp();
-
-                if (MouseManager.ScreenWidth != Canvas.Width || MouseManager.ScreenHeight != Canvas.Height)
-                {
-                    MouseManager.ScreenWidth = Canvas.Width;
-                    MouseManager.ScreenHeight = Canvas.Height;
-                }
-
-                if (IsInOOBE) Canvas.DrawImage(0, 0, Resources.background, false);
-
-                if (MouseManager.X != LastCursorX || MouseManager.Y != LastCursorY) MouseMove?.Invoke();
-
-                DoInput();
-
-                /*if (KeyboardManager.TryReadKey(out var key))
-                {
-                    if (KeyboardManager.ControlPressed && KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
-                    {
-                        AddWindow(new TaskManager());
-                    }
-                }*/
-
-                // Regular windows
-                for (var i = 0; i <= windows.Count - 1; i++)
-                {
-                    var window = windows[i];
-                    var focused = i == windows.Count - 1;
-
-                    window.HandleRun();
-
-                    if (focused && Dimmed)
-                        DimBackground();
-
-                    if (window.Visible && window.Title != nameof(Menubar)) window.DrawWindow(Canvas, focused);
-                }
-
-                // Special windows (hard coded)
-                for (var i = 0; i < windows.Count; i++)
-                    if (windows[i].Title == nameof(Menubar))
-                        windows[i].DrawWindow(Canvas, i == windows.Count - 1);
-
-                // move back up if it doesn't work
-                for (var i = windows.Count - 1; i >= 0; i--)
-                    if (windows[i].Closing)
-                    {
-                        TaskbarWindowRemovedHook?.Invoke(windows[i]);
-
-                        if (windows[i].Title == "GoOS")
-                            Dimmed = false;
-
-                        windows.RemoveAt(i);
-
-                        TaskmanHook?.Invoke();
-                    }
-
-                DrawMouse();
-
-                MouseToDraw = mouse;
-                MouseOffsetX = 0;
-                MouseOffsetY = 0;
-
-                Canvas.Update();
-
-                MemoryWatch.Watch();
-
-                LastCursorX = MouseManager.X;
-                LastCursorY = MouseManager.Y;
-            }
-            else
-            {
-                var keyPressed = KeyboardManager.TryReadKey(out var key);
-                if (keyPressed) BetterConsole.KeyBuffer.Enqueue(key);
-
-                Canvas.DrawImage(0, 0, BetterConsole.Canvas, false);
-                Canvas.Update();
+                MouseManager.ScreenWidth = Canvas.Width;
+                MouseManager.ScreenHeight = Canvas.Height;
             }
 
+            if (IsInOOBE) Canvas.DrawImage(0, 0, Resources.background, false);
+
+            if (MouseManager.X != LastCursorX || MouseManager.Y != LastCursorY) MouseMove?.Invoke();
+
+            DoInput();
+
+            /*if (KeyboardManager.TryReadKey(out var key))
+            {
+                if (KeyboardManager.ControlPressed && KeyboardManager.AltPressed && key.Key == ConsoleKeyEx.Delete)
+                {
+                    AddWindow(new TaskManager());
+                }
+            }*/
+
+            // Regular windows
+            for (var i = 0; i <= windows.Count - 1; i++)
+            {
+                var window = windows[i];
+                var focused = i == windows.Count - 1;
+
+                window.HandleRun();
+
+                if (focused && Dimmed)
+                    DimBackground();
+
+                if (window.Visible && window.Title != nameof(Menubar)) window.DrawWindow(Canvas, focused);
+            }
+
+            // Special windows (hard coded)
+            for (var i = 0; i < windows.Count; i++)
+                if (windows[i].Title == nameof(Menubar))
+                    windows[i].DrawWindow(Canvas, i == windows.Count - 1);
+
+            // move back up if it doesn't work
+            for (var i = windows.Count - 1; i >= 0; i--)
+                if (windows[i].Closing)
+                {
+                    TaskbarWindowRemovedHook?.Invoke(windows[i]);
+
+                    if (windows[i].Title == "GoOS")
+                        Dimmed = false;
+
+                    windows.RemoveAt(i);
+
+                    TaskmanHook?.Invoke();
+                }
+
+            DrawMouse();
+
+            MouseToDraw = mouse;
+            MouseOffsetX = 0;
+            MouseOffsetY = 0;
+
+            Canvas.Update();
+
+            MemoryWatch.Watch();
+
+            LastCursorX = MouseManager.X;
+            LastCursorY = MouseManager.Y;
             if (framesToHeapCollect == 0)
             {
                 Heap.Collect();

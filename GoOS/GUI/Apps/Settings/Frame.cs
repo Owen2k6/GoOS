@@ -390,12 +390,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
+                                
                                 WindowManager.Canvas = Display.GetDisplay(
                                     800, 600);
                                 WindowManager.Update();
                                 WindowManager.windows = new List<Window>(10);
-                                BetterConsole.ConsoleMode = false;
+                                
                                 WindowManager.AddWindow(new Desktop());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -407,12 +407,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
+                                
                                 WindowManager.Canvas = Display.GetDisplay(
                                     1024, 768);
                                 WindowManager.Update();
                                 WindowManager.windows = new List<Window>(10);
-                                BetterConsole.ConsoleMode = false;
+                                
                                 WindowManager.AddWindow(new Desktop());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -424,12 +424,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
+                                
                                 WindowManager.Canvas = Display.GetDisplay(
                                     1280, 960);
                                 WindowManager.Update();
                                 WindowManager.windows = new List<Window>(10);
-                                BetterConsole.ConsoleMode = false;
+                                
                                 WindowManager.AddWindow(new Desktop());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -441,12 +441,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
+                                
                                 WindowManager.Canvas = Display.GetDisplay(
                                     1400, 1050);
                                 WindowManager.Update();
                                 WindowManager.windows = new List<Window>(10);
-                                BetterConsole.ConsoleMode = false;
+                                
                                 WindowManager.AddWindow(new Desktop());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -458,12 +458,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
+                                
                                 WindowManager.Canvas = Display.GetDisplay(
                                     1600, 1200);
                                 WindowManager.Update();
                                 WindowManager.windows = new List<Window>(10);
-                                BetterConsole.ConsoleMode = false;
+                                
                                 WindowManager.AddWindow(new Desktop());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -475,12 +475,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
+                                
                                 WindowManager.Canvas = Display.GetDisplay(
                                     1280, 720);
                                 WindowManager.Update();
                                 WindowManager.windows = new List<Window>(10);
-                                BetterConsole.ConsoleMode = false;
+                                
                                 WindowManager.AddWindow(new Desktop());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -492,12 +492,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
+                                
                                 WindowManager.Canvas = Display.GetDisplay(
                                     1280, 800);
                                 WindowManager.Update();
                                 WindowManager.windows = new List<Window>(10);
-                                BetterConsole.ConsoleMode = false;
+                                
                                 WindowManager.AddWindow(new Desktop());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -509,12 +509,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
+                                
                                 WindowManager.Canvas = Display.GetDisplay(
                                     1366, 768);
                                 WindowManager.Update();
                                 WindowManager.windows = new List<Window>(10);
-                                BetterConsole.ConsoleMode = false;
+                                
                                 WindowManager.AddWindow(new Desktop());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -526,12 +526,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
+                                
                                 WindowManager.Canvas = Display.GetDisplay(
                                     1440, 900);
                                 WindowManager.Update();
                                 WindowManager.windows = new List<Window>(10);
-                                BetterConsole.ConsoleMode = false;
+                                
                                 WindowManager.AddWindow(new Desktop());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -543,12 +543,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
+                                
                                 WindowManager.Canvas = Display.GetDisplay(
                                     1600, 900);
                                 WindowManager.Update();
                                 WindowManager.windows = new List<Window>(10);
-                                BetterConsole.ConsoleMode = false;
+                                
                                 WindowManager.AddWindow(new Desktop());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -560,12 +560,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
+                                
                                 WindowManager.Canvas = Display.GetDisplay(
                                     1680, 1050);
                                 WindowManager.Update();
                                 WindowManager.windows = new List<Window>(10);
-                                BetterConsole.ConsoleMode = false;
+                                
                                 WindowManager.AddWindow(new Desktop());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -577,12 +577,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
+                                
                                 WindowManager.Canvas = Display.GetDisplay(
                                     1920, 1080);
                                 WindowManager.Update();
                                 WindowManager.windows = new List<Window>(10);
-                                BetterConsole.ConsoleMode = false;
+                                
                                 WindowManager.AddWindow(new Desktop());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -594,12 +594,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
+                                
                                 WindowManager.Canvas = Display.GetDisplay(
                                     1920, 1200);
                                 WindowManager.Update();
                                 WindowManager.windows = new List<Window>(10);
-                                BetterConsole.ConsoleMode = false;
+                                
                                 WindowManager.AddWindow(new Desktop());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");
@@ -611,12 +611,12 @@ public class Frame : Window
                         {
                             Clicked = () =>
                             {
-                                BetterConsole.ConsoleMode = true;
+                                
                                 WindowManager.Canvas = Display.GetDisplay(
                                     2560, 1440);
                                 WindowManager.Update();
                                 WindowManager.windows = new List<Window>(10);
-                                BetterConsole.ConsoleMode = false;
+                                
                                 WindowManager.AddWindow(new Desktop());
                                 WindowManager.AddWindow(new Menubar());
                                 File.Create(@"0:\content\sys\resolution.gms");

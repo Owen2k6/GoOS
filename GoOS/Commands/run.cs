@@ -17,17 +17,10 @@ namespace GoOS.Commands;
 public class Run
 {
     private static readonly Dictionary<string, string> Strings = new();
-
     private static readonly Dictionary<string, int> Integers = new();
-
     public static string[] InstallLines;
-
     public static string[] splitit;
-
     public static Window window;
-
-    public static bool windowed;
-
     public static ushort windowwidth;
     public static ushort windowheight;
 
@@ -644,7 +637,6 @@ public class Run
 
                             window = new CustomInterface(fuckingprogramname, windowwidth, windowheight);
                             WindowManager.AddWindow(window);
-                            windowed = true;
                             Console.WriteLine(
                                 "TIP: Window created. Any drawing on the window must be done prior to loading another.");
                         }
@@ -652,7 +644,6 @@ public class Run
                         {
                             window = new CustomInterface(splitit[1], windowwidth, windowheight);
                             WindowManager.AddWindow(window);
-                            windowed = true;
                             Console.WriteLine(
                                 "TIP: Window created. Any drawing on the window must be done prior to loading another.");
                         }

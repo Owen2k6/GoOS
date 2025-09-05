@@ -18,7 +18,6 @@ using GoOS.GUI.Apps;
 using GoOS.GUI.Apps.OOBE;
 using GoOS.Themes;
 using GoOS.Util;
-using LibDotNetParser.CILApi;
 using Console = BetterConsole;
 using ConsoleColor = Gold.Graphics.Color;
 using static GoOS.Core;
@@ -44,28 +43,16 @@ public class Kernel : Cosmos.System.Kernel
     // =========================================================
     //                      GLOBAL STATE
     // =========================================================
-    // Temporary toggle for old/new GoCode interpreters (to be removed once new is final)
+
     public static bool oldCode;
     public static readonly bool devMode = false;
-
     public static bool isGCIenabled = true;
     public static string olddir = @"0:\";
     public static string currentdirfix = string.Empty;
-
     public static string username;
     public static string computername;
-
-    // Notepad transient state (preserved)
-    public static string Notepadtextsavething = "";
-    public static string NotepadFileToSaveNameThing = "";
-
-    // Registered programmes (name -> path)
     public static readonly Dictionary<string, string> InstalledPrograms = new(16);
-
-    // PATH entries (simple array; no LINQ)
     public static string[] pathPaths = new string[0];
-
-    // Placeholder (kept)
     public static string cutStatus = "Disabled";
 
     public static CosmosVFS FS;
@@ -76,8 +63,6 @@ public class Kernel : Cosmos.System.Kernel
     protected override void BeforeRun()
     {
         System.Console.Clear();
-
-        // RAM gate (Cosmos-safe)
         var ramAmount = CPU.GetAmountOfRAM();
         if (ramAmount < 256)
         {
@@ -91,7 +76,6 @@ public class Kernel : Cosmos.System.Kernel
         }
 
         Resources.Generate(ResourceType.Boot);
-
         InitialiseFileSystem();
         InitialiseGold();
         Resources.Generate(ResourceType.Fonts);
@@ -102,7 +86,6 @@ public class Kernel : Cosmos.System.Kernel
         {
             WindowManager.Canvas.DrawImage(0, 0, Resources.bootbackground, false);
             WindowManager.Update();
-
             Resources.Generate(ResourceType.OOBE);
             WindowManager.IsInOOBE = true;
             WindowManager.AddWindow(new MainFrame());
@@ -135,7 +118,6 @@ public class Kernel : Cosmos.System.Kernel
             VFSManager.RegisterVFS(FS);
             FS.Initialize(true);
             FS.GetTotalSize(@"0:\"); // warm-up
-            System.Console.WriteLine("SUCCESSFUL!");
         }
         catch
         {
@@ -154,13 +136,11 @@ public class Kernel : Cosmos.System.Kernel
         var screenRes = File.Exists(@"0:\content\sys\resolution.gms")
             ? File.ReadAllBytes(@"0:\content\sys\resolution.gms")
             : new byte[] { 6 };
-
         var videoMode = ControlPanel.videoModes[screenRes[0]].Item2;
         WindowManager.Canvas = Display.GetDisplay(videoMode.Width, videoMode.Height);
         WindowManager.Canvas.DrawImage(0, 0, Resources.bootbackground, false);
         WindowManager.Canvas.DrawImage(videoMode.Width / 2 - 37, videoMode.Height / 2 - 37, Resources.bootlogo);
-        Console.Init(400, 300);
-
+        Console.Init(417, 346);
         PCSpeaker.Beep(600, 100);
         WindowManager.Update();
     }
@@ -184,7 +164,6 @@ public class Kernel : Cosmos.System.Kernel
             try
             {
                 Directory.CreateDirectory(@"0:\content\GCI\");
-                // append safely
                 var old = pathPaths;
                 var n = old == null ? 0 : old.Length;
                 var np = new string[n + 1];
@@ -237,7 +216,6 @@ public class Kernel : Cosmos.System.Kernel
                 "Failed to load settings!\nContinuing with default values...",
                 default,
                 Resources.warningIcon));
-
             log(ThemeManager.Other1, "GoOS - Failed to load settings, continuing with default values...");
         }
 
@@ -261,15 +239,12 @@ public class Kernel : Cosmos.System.Kernel
     {
         var currentdir = Directory.GetCurrentDirectory();
         if (!currentdir.EndsWith("\\")) currentdir += "\\";
-
-        // normalise 0:\ path artefacts
         if (currentdir.IndexOf(@"0:\\\") >= 0)
             currentdirfix = currentdir.Replace(@"0:\\\", @"0:\");
         else if (currentdir.IndexOf(@"0:\\") >= 0)
             currentdirfix = currentdir.Replace(@"0:\\", @"0:\");
         else
             currentdirfix = currentdir;
-
         textcolour(ThemeManager.WindowText);
         write(username);
         textcolour(ThemeManager.Other1);
@@ -308,561 +283,70 @@ public class Kernel : Cosmos.System.Kernel
     // =========================================================
     protected override void Run()
     {
-        isGCIenabled = File.Exists(@"0:\content\sys\path.ugms");
-        if (isGCIenabled) GoCodeInstaller.CheckForInstalledPrograms();
-
-        if (cutStatus == "FULL" || cutStatus == "Single")
-        {
-            // placeholder retained
-        }
-
-        DrawPrompt();
-
-        var line = Console.ReadLine();
-        if (line == null) return;
-
-        // manual trim (avoid extra allocations on whitespace input)
-        int start = 0, end = line.Length - 1;
-        while (start <= end && line[start] == ' ') start++;
-        while (end >= start && line[end] == ' ') end--;
-        if (start > end) return;
-
-        var args = SplitBySpaces(line, start, end);
-        if (args == null || args.Length == 0) return;
-
-        var totalRam = (int)CPU.GetAmountOfRAM();
-
-        ProcessCommand(args, totalRam);
+        Pump();
+        // isGCIenabled = File.Exists(@"0:\content\sys\path.ugms");
+        // if (isGCIenabled) GoCodeInstaller.CheckForInstalledPrograms();
+        // if (cutStatus == "FULL" || cutStatus == "Single")
+        // {
+        // }
+        // DrawPrompt();
+        //var line = Console.ReadLine();
+        // if (line == null) return;
+        // int start = 0, end = line.Length - 1;
+        // while (start <= end && line[start] == ' ') start++;
+        // while (end >= start && line[end] == ' ') end--;
+        // if (start > end) return;
+        // var args = SplitBySpaces(line, start, end);
+        // if (args == null || args.Length == 0) return;
+        // var totalRam = (int)CPU.GetAmountOfRAM();
+        // ProcessCommand(args, totalRam);
     }
 
     // =========================================================
     //                 COMMAND DISPATCHER
     // =========================================================
-    private void ProcessCommand(string[] args, int totalRam)
+    // private void ProcessCommand(string[] args, int totalRam)
+    // {
+    //     var cmd0 = args[0];
+    //     switch (cmd0)
+    //     {
+    //         // case "run":
+    //         //     if (!CheckArgCount(args, 2, true)) break;
+    //         //     if (oldCode) Commands.Run.Main(args[1]);
+    //         //     else GoCode.GoCode.Run(args[1]);
+    //         //     break;
+    //         // case "notepad":
+    //         //     if (!CheckRamAndArguments(totalRam, args, 2)) break;
+    //         //     if (EndsWithIgnoreCase(args[1], ".gms") && !devMode)
+    //         //     {
+    //         //         log(ThemeManager.ErrorText, "Files that end with .gms cannot be opened. they are protected files.");
+    //         //         break;
+    //         //     }
+    //         //
+    //         //     textcolour(ThemeManager.Default);
+    //         // {
+    //         //     var p = Paths.JoinPaths(currentdirfix, args[1]);
+    //         //     var editor = new TextEditor(p);
+    //         //     editor.Start();
+    //         // }
+    //         //     break;
+    //         // case "vm":
+    //         //     if (!CheckArgCount(args, 2, true)) break;
+    //         //     VM.Run(args[1]);
+    //         //     break;
+    //         // case "clear":
+    //         //     Console.Clear();
+    //         //     break;
+    //     }
+    // }
+    
+    
+    public static void Pump()
     {
-        var cmd0 = args[0];
-
-        switch (cmd0)
-        {
-            case "codeswitch":
-                oldCode = !oldCode;
-                break;
-
-            case "fm":
-                WindowManager.AddWindow(new GUI.Apps.Gosplorer.MainFrame());
-                break;
-
-            case "exit":
-                Console.Visible = false;
-                break;
-
-            case "install":
-                if (!CheckArgCount(args, 2, true)) break;
-                GoCodeInstaller.Install(args[1]);
-                break;
-
-            case "uninstall":
-                if (!CheckArgCount(args, 2, true)) break;
-                GoCodeInstaller.Uninstall(args[1]);
-                break;
-
-            case "movefile":
-                if (!CheckArgCount(args, 3, true)) break;
-                try
-                {
-                    ExtendedFilesystem.MoveFile(args[1], args[2]);
-                }
-                catch (Exception e)
-                {
-                    System.Console.WriteLine("Error whilst trying to move file: " + e);
-                }
-
-                break;
-
-            case "copyfile":
-                if (!CheckArgCount(args, 3, true)) break;
-                try
-                {
-                    ExtendedFilesystem.CopyFile(args[1], args[2]);
-                }
-                catch (Exception e)
-                {
-                    System.Console.WriteLine("Error whilst trying to copy file: " + e);
-                }
-
-                break;
-
-            case "help":
-                if (args.Length > 1)
-                {
-                    log(ThemeManager.ErrorText, "Too many arguments");
-                    break;
-                }
-
-                Help.Main();
-                break;
-
-            case "go":
-                if (!CheckArgCount(args, 2, true)) break;
-                HandleGoCommand(args);
-                break;
-
-            case "run":
-                if (!CheckArgCount(args, 2, true)) break;
-                if (oldCode) Commands.Run.Main(args[1]);
-                else GoCode.GoCode.Run(args[1]);
-                break;
-
-            case "mkdir":
-                if (!CheckArgCount(args, 2, true)) break;
-                Make.MakeDirectory(args[1]);
-                break;
-
-            case "mkfile":
-                if (!CheckArgCount(args, 2, true)) break;
-                Make.MakeFile(args[1]);
-                break;
-
-            case "deldir":
-                if (!CheckArgCount(args, 2, true)) break;
-                Delete.DeleteDirectory(args[1]);
-                break;
-
-            case "delfile":
-                if (!CheckArgCount(args, 2, true)) break;
-                Delete.DeleteFile(args[1]);
-                break;
-
-            case "del":
-                if (!CheckArgCount(args, 2, true)) break;
-                Delete.UniversalDelete(args[1]);
-                break;
-
-            case "cd":
-                if (!CheckArgCount(args, 2, true)) break;
-                Cd.Run(args[1]);
-                break;
-
-            case "cd..":
-                if (args.Length > 1)
-                {
-                    log(ThemeManager.ErrorText, "Too many arguments");
-                    break;
-                }
-
-                NavigateToParentDirectory();
-                break;
-
-            case "cdr":
-                if (args.Length > 1)
-                {
-                    log(ThemeManager.ErrorText, "Too many arguments");
-                    break;
-                }
-
-                Directory.SetCurrentDirectory(@"0:\");
-                break;
-
-            case "dir":
-            case "ls":
-                if (args.Length > 1)
-                {
-                    log(ThemeManager.ErrorText, "Too many arguments");
-                    break;
-                }
-
-                Dir.Run();
-                break;
-
-            case "notepad":
-                if (!CheckRamAndArguments(totalRam, args, 2)) break;
-                if (EndsWithIgnoreCase(args[1], ".gms") && !devMode)
-                {
-                    log(ThemeManager.ErrorText, "Files that end with .gms cannot be opened. they are protected files.");
-                    break;
-                }
-
-                textcolour(ThemeManager.Default);
-            {
-                var p = Paths.JoinPaths(currentdirfix, args[1]);
-                var editor = new TextEditor(p);
-                editor.Start();
-            }
-                break;
-
-            case "vm":
-                if (!CheckArgCount(args, 2, true)) break;
-                VM.Run(args[1]);
-                break;
-
-            case "clear":
-                Console.Clear();
-                break;
-
-            case "whoami":
-                log(ThemeManager.ErrorText, "Showing Internet Information");
-                log(ThemeManager.ErrorText, NetworkConfiguration.CurrentAddress.ToString());
-                break;
-
-            case "dotnet":
-            {
-                if (!CheckArgCount(args, 2, true)) break;
-                var fl = new DotNetFile(Directory.GetCurrentDirectory() + args[1]);
-                var clr = new DotNetClr.DotNetClr(fl, @"0:\framework");
-                clr.Start();
-                break;
-            }
-
-            case "9xcode":
-                if (!CheckArgCount(args, 2, true)) break;
-                Interpreter.Run(Directory.GetCurrentDirectory() + args[1]);
-                break;
-
-            default:
-                HandleDefaultCommand(args);
-                break;
-        }
+        if (BetterConsole.CursorVisible)
+            BetterConsole.SmartCursor(true);
+        BetterConsole.Render();
+        BetterConsole.TrimKeyBuffer();
     }
 
-    // =========================================================
-    //                         HELPERS
-    // =========================================================
-    // Space-splitter over a slice [start..end] (no LINQ/regex)
-    private static string[] SplitBySpaces(string input, int start, int end)
-    {
-        var tmp = new string[16];
-        var count = 0;
-        var i = start;
-
-        while (i <= end)
-        {
-            while (i <= end && input[i] == ' ') i++;
-            if (i > end) break;
-
-            var s = i;
-            while (i <= end && input[i] != ' ') i++;
-            var len = i - s;
-
-            if (len > 0)
-            {
-                if (count == tmp.Length)
-                {
-                    var grow = new string[tmp.Length * 2];
-                    for (var k = 0; k < tmp.Length; k++) grow[k] = tmp[k];
-                    tmp = grow;
-                }
-
-                tmp[count++] = input.Substring(s, len);
-            }
-        }
-
-        if (count == 0) return new string[0];
-        var res = new string[count];
-        for (var k = 0; k < count; k++) res[k] = tmp[k];
-        return res;
-    }
-
-    private static bool EndsWithIgnoreCase(string text, string suffix)
-    {
-        int tl = text.Length, sl = suffix.Length;
-        if (sl > tl) return false;
-        var off = tl - sl;
-        for (var i = 0; i < sl; i++)
-        {
-            var a = text[off + i];
-            var b = suffix[i];
-            if (a >= 'A' && a <= 'Z') a = (char)(a + 32);
-            if (b >= 'A' && b <= 'Z') b = (char)(b + 32);
-            if (a != b) return false;
-        }
-
-        return true;
-    }
-
-    private static string GetExtension(string path)
-    {
-        if (path == null) return "";
-        var i = path.Length - 1;
-        while (i >= 0)
-        {
-            var c = path[i];
-            if (c == '.') return path.Substring(i);
-            if (c == '\\' || c == '/') break; // stop at path separator
-            i--;
-        }
-
-        return "";
-    }
-
-    private static bool EqualsIgnoreCase(string a, string b)
-    {
-        if (ReferenceEquals(a, b)) return true;
-        if (a == null || b == null) return false;
-        if (a.Length != b.Length) return false;
-        for (var i = 0; i < a.Length; i++)
-        {
-            char ca = a[i], cb = b[i];
-            if (ca >= 'A' && ca <= 'Z') ca = (char)(ca + 32);
-            if (cb >= 'A' && cb <= 'Z') cb = (char)(cb + 32);
-            if (ca != cb) return false;
-        }
-
-        return true;
-    }
-
-    private bool CheckArgCount(string[] args, int expectedCount, bool exact)
-    {
-        if (args.Length < expectedCount)
-        {
-            log(ThemeManager.ErrorText, "Missing arguments");
-            return false;
-        }
-
-        if (exact && args.Length > expectedCount)
-        {
-            log(ThemeManager.ErrorText, "Too many arguments");
-            return false;
-        }
-
-        return true;
-    }
-
-    private bool CheckRamAndArguments(int totalRam, string[] args, int expectedCount)
-    {
-        if (totalRam < 1000)
-        {
-            log(ThemeManager.ErrorText, "This programme has been disabled due to low RAM.");
-            return false;
-        }
-
-        return CheckArgCount(args, expectedCount, true);
-    }
-
-    private void NavigateToParentDirectory()
-    {
-        try
-        {
-            var currentDir = Directory.GetCurrentDirectory().TrimEnd('\\');
-            var lastSlashIndex = currentDir.LastIndexOf('\\');
-
-            if (lastSlashIndex > 2) // keep "0:\"
-                Directory.SetCurrentDirectory(currentDir.Remove(lastSlashIndex));
-            else
-                Directory.SetCurrentDirectory(@"0:\");
-        }
-        catch
-        {
-            Directory.SetCurrentDirectory(@"0:\");
-        }
-    }
-
-    // =========================================================
-    //                     "go" COMMAND HELPERS
-    // =========================================================
-    private void HandleGoCommand(string[] args)
-    {
-        var sub = args[1];
-
-        if (sub == "type")
-        {
-            log(ConsoleColor.Minty, "GoOS - Application Types");
-            log(ConsoleColor.GoogleYellow, "-g Goexe");
-            log(ConsoleColor.GoogleYellow, "-9 9xCode");
-            return;
-        }
-
-        if (sub == "install")
-        {
-            if (args.Length != 5)
-            {
-                log(ThemeManager.ErrorText, "X: go install <repo> <appname> -<type>");
-                return;
-            }
-
-            DownloadApplication(args[2], args[3], args[4]);
-            return;
-        }
-
-        log(ThemeManager.ErrorText, "Unknown request.");
-    }
-
-    private void DownloadApplication(string repo, string fileToGet, string typeFlag)
-    {
-        try
-        {
-            string type;
-            if (typeFlag == "-g")
-            {
-                type = "goexe";
-            }
-            else if (typeFlag == "-9")
-            {
-                type = "9xc";
-            }
-            else
-            {
-                log(ThemeManager.ErrorText, "Unknown application type");
-                return;
-            }
-
-            log(ConsoleColor.Red, "Downloading " + fileToGet + "." + type + " from " + repo);
-
-            // DNS resolve
-            var dnsClient = new DnsClient();
-            dnsClient.Connect(DNSConfig.DNSNameservers[0]);
-            dnsClient.SendAsk(repo);
-            var address = dnsClient.Receive();
-            dnsClient.Close();
-
-            // TCP GET
-            using (var tcpClient = new TcpClient())
-            {
-                tcpClient.Connect(address.ToString(), 80);
-
-                using (var stream = tcpClient.GetStream())
-                {
-                    var request =
-                        "GET /" + fileToGet + "." + type + " HTTP/1.1\r\n" +
-                        "User-Agent: GoOS\r\n" +
-                        "Accept: */*\r\n" +
-                        "Accept-Encoding: identity\r\n" +
-                        "Host: " + repo + "\r\n" +
-                        "Connection: close\r\n\r\n";
-
-                    var dataToSend = Encoding.ASCII.GetBytes(request);
-                    stream.Write(dataToSend, 0, dataToSend.Length);
-
-                    var filePath = @"0:\" + fileToGet + "." + type;
-
-                    var buffer = new byte[4096];
-                    var headerEndAt = -1;
-                    int bytesRead;
-                    var headerLen = 0;
-                    var headerBuf = new byte[8192];
-
-                    while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
-                        if (headerEndAt < 0)
-                        {
-                            var toCopy = bytesRead;
-                            if (headerLen + toCopy > headerBuf.Length)
-                                toCopy = headerBuf.Length - headerLen;
-
-                            for (var i = 0; i < toCopy; i++)
-                                headerBuf[headerLen + i] = buffer[i];
-                            headerLen += toCopy;
-
-                            headerEndAt = FindHeaderEnd(headerBuf, headerLen);
-                            if (headerEndAt >= 0)
-                            {
-                                var firstLineEnd = IndexOfCrlf(headerBuf, 0, headerEndAt + 4);
-                                var statusLine = GetAscii(headerBuf, 0, firstLineEnd);
-                                if (statusLine.IndexOf(" 200") < 0)
-                                {
-                                    Dialogue.Show("GoOS Update", "HTTP error: " + statusLine, default,
-                                        WindowManager.errorIcon);
-                                    return;
-                                }
-
-                                using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                                {
-                                    // body bytes already in headerBuf
-                                    var bodyFromHeaderBuf = headerLen - (headerEndAt + 4);
-                                    if (bodyFromHeaderBuf > 0)
-                                        fs.Write(headerBuf, headerEndAt + 4, bodyFromHeaderBuf);
-
-                                    // any unread portion of current buffer (not copied into headerBuf)
-                                    var remainingFromCurrentRead = bytesRead - toCopy;
-                                    if (remainingFromCurrentRead > 0)
-                                        fs.Write(buffer, toCopy, remainingFromCurrentRead);
-
-                                    // stream remaining body
-                                    while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
-                                        fs.Write(buffer, 0, bytesRead);
-                                }
-
-                                log(ConsoleColor.Green, "Downloaded " + fileToGet + "." + type);
-                                return;
-                            }
-
-                            if (headerLen == headerBuf.Length)
-                            {
-                                Dialogue.Show("GoOS Update", "Invalid HTTP response (headers too large).", default,
-                                    WindowManager.errorIcon);
-                                return;
-                            }
-                        }
-
-                    Dialogue.Show("GoOS Update", "Invalid or empty HTTP response!", default, WindowManager.errorIcon);
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.ToString());
-        }
-    }
-
-    private static int FindHeaderEnd(byte[] buf, int len)
-    {
-        for (var i = 0; i <= len - 4; i++)
-            if (buf[i] == 13 && buf[i + 1] == 10 && buf[i + 2] == 13 && buf[i + 3] == 10)
-                return i;
-        return -1;
-    }
-
-    private static int IndexOfCrlf(byte[] buf, int start, int max)
-    {
-        for (var i = start; i < max - 1; i++)
-            if (buf[i] == 13 && buf[i + 1] == 10)
-                return i;
-        return -1;
-    }
-
-    private static string GetAscii(byte[] buf, int start, int endExclusive)
-    {
-        var n = endExclusive - start;
-        if (n <= 0) return "";
-        return Encoding.ASCII.GetString(buf, start, n);
-    }
-
-    // =========================================================
-    //            FALLBACK COMMAND HANDLER (TIGHTENED)
-    // =========================================================
-    private void HandleDefaultCommand(string[] args)
-    {
-        if (isGCIenabled) GoCodeInstaller.CheckForInstalledPrograms();
-
-        var key = args[0];
-        if (InstalledPrograms.ContainsKey(key))
-        {
-            var currentDir = Directory.GetCurrentDirectory();
-            Directory.SetCurrentDirectory(@"0:\");
-
-            string location;
-            if (InstalledPrograms.TryGetValue(key, out location) && location != null)
-            {
-                // Interpret entries under 0:\ as relative for runners
-                var actualLocation = location.StartsWith(@"0:\")
-                    ? location.Substring(3)
-                    : location;
-
-                // Decide once by extension (case-insensitive)
-                var ext = GetExtension(actualLocation);
-
-                if (EqualsIgnoreCase(ext, ".goexe") || EqualsIgnoreCase(ext, ".gexe"))
-                    Commands.Run.Main(actualLocation);
-                else if (EqualsIgnoreCase(ext, ".9xc"))
-                    // Using _9xCode.Interpreter via using GoOS._9xCode
-                    Interpreter.Run(actualLocation);
-                // Silent unknown type (keeps original semantics)
-                // Console.WriteLine("Unknown application type.");
-            }
-
-            Directory.SetCurrentDirectory(currentDir);
-        }
-        else
-        {
-            Console.WriteLine("Invalid command.");
-        }
-    }
 }

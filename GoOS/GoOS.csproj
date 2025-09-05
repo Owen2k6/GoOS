@@ -233,22 +233,6 @@
         <PackageReference Include="Cosmos.Plugs" Version="0.1.0-localbuild"/>
         <PackageReference Include="Cosmos.System2" Version="0.1.0-localbuild"/>
         <PackageReference Include="IL2CPU.API" Version="0.1.0-*"/>
-        <PackageReference Include="PrismAPI" Version="1.0.3"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Reference Include="DotNetClr">
-            <HintPath>DotNetClr.dll</HintPath>
-        </Reference>
-        <Reference Include="DotNetParser">
-            <HintPath>DotNetParser.dll</HintPath>
-        </Reference>
-        <Reference Include="Gold">
-            <HintPath>Gold.dll</HintPath>
-        </Reference>
-        <Reference Include="LibDotNetParser">
-            <HintPath>LibDotNetParser.dll</HintPath>
-        </Reference>
     </ItemGroup>
 
     <ItemGroup>
