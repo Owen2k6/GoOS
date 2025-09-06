@@ -12,14 +12,15 @@ public class NewConsole : Window
 
     public NewConsole()
     {
-        terminal = new SVGAIITerminal(720, 400, Resources.TerminalFont, null, null);
+        terminal = new SVGAIITerminal(640, 400, Resources.TerminalFont, null, null);
         Contents = terminal.Contents;
         Title = "SVGAIITerminal";
         Visible = true;
         Closable = true;
         SetDock(WindowDock.Auto);
 
-        terminal.WriteLine("GoOS Terminal v1.6\n");
+        terminal.Clear();
+        terminal.WriteLine(File.ReadAllText(@"0:\content\motd.txt"));
         DrawPrompt();
     }
 
@@ -33,75 +34,248 @@ public class NewConsole : Window
         terminal.Write(" ");
         terminal.Write(CWD, ConsoleColor.Green);
         terminal.Write(" # ");
+        startX = terminal.CursorLeft;
+        startY = terminal.CursorTop;
     }
 
     private void ParseInput()
     {
         string[] args = input.Trim().Split(' ');
 
-        switch (args[0])
+        try
         {
-            case "":
-                break;
-            case "ping":
-                terminal.WriteLine("Pong!");
-                break;
-            case "echo":
-                for (int i = 1; i < args.Length; i++)
-                {
-                    terminal.Write($"{args[i]} ");
-                }
-                terminal.WriteLine();
-                break;
-            case "exit":
-                Dispose();
-                break;
-            case "ls":
-                if (Directory.GetDirectories(CWD).Length > 0)
-                    terminal.Write(string.Join("  ", Directory.GetDirectories(CWD)).Trim() + "  ", ConsoleColor.Blue);
-                if (Directory.GetFiles(CWD).Length > 0)
-                    terminal.Write(string.Join("  ", Directory.GetFiles(CWD)).Trim(), ConsoleColor.Red);
-                terminal.WriteLine();
-                break;
-            case "cd":
-                string target = CWD;
-                if (args[1] == ".")
-                {
+            switch (args[0])
+            {
+                case "":
                     break;
-                }
-                else if (args[1] == "..")
-                {
-                    if (CWD != @"0:\")
+                case "help":
+                    terminal.Write(
+                        "GoOS Terminal v1.6\n" +
+                        "These shell commands are defined internally. Type `help' to see this list.\n" +
+                        "\n" +
+                        "A star (*) next to a name means that the command is disabled.\n" +
+                        "\n" +
+                        "about                                   mkdir DIR\n" +
+                        "cat FILE                                notepad [FILE]\n" +
+                        "cd DIR                                  paint | paintbrush\n" +
+                        "clock                                   ping\n" +
+                        "cmd | terminal                          rm FILE\n" +
+                        "control | settings                      rmdir DIR\n" +
+                        "echo [ARGS...]                          store | gostore\n" +
+                        "exit                                    taskmgr | taskman | sysmon\n" +
+                        "fm | explorer | gosplorer [DIR]         touch FILE\n" +
+                        "gimviewer FILE                          goide [FILE]\n" +
+                        "goweb                                   ls\n" +
+                        "help                                    clear\n"
+                        );
+                    break;
+                case "ping":
+                    terminal.WriteLine("Pong!");
+                    break;
+                case "echo":
+                    for (int i = 1; i < args.Length; i++)
                     {
-                        try
-                        {
-                            target = Path.GetDirectoryName(CWD.TrimEnd('\\')) ?? @"0:\";
-                        }
-                        catch
-                        {
-                            target = @"0:\";
-                        }
+                        terminal.Write($"{args[i]} ");
                     }
-                }
-                else
-                {
-                    target = Path.Combine(CWD, args[1]);
-                }
-                if (!Directory.Exists(target))
-                {
-                    terminal.WriteLine($"cd: No such file or directory \"{args[1]}\"", ConsoleColor.Red);
+                    terminal.WriteLine();
                     break;
-                }
-                CWD = target;
-                break;
-            default:
-                terminal.WriteLine($"{args[0]}: not found", ConsoleColor.Red);
-                break;
+                case "exit":
+                    Dispose();
+                    break;
+                case "ls":
+                    if (Directory.GetDirectories(CWD).Length > 0)
+                        terminal.Write(string.Join("  ", Directory.GetDirectories(CWD)).Trim() + "  ", ConsoleColor.Blue);
+                    if (Directory.GetFiles(CWD).Length > 0)
+                        terminal.Write(string.Join("  ", Directory.GetFiles(CWD)).Trim(), ConsoleColor.Red);
+                    terminal.WriteLine();
+                    break;
+                case "cd":
+                    {
+                        string target = CWD;
+                        if (args[1] == ".")
+                        {
+                            break;
+                        }
+                        else if (args[1] == "..")
+                        {
+                            if (CWD != @"0:\")
+                            {
+                                try
+                                {
+                                    target = Path.GetDirectoryName(CWD.TrimEnd('\\')) ?? @"0:\";
+                                }
+                                catch
+                                {
+                                    target = @"0:\";
+                                }
+                            }
+                        }
+                        else
+                        {
+                            target = args[1].Contains(':') ? args[1] : Path.Combine(CWD, args[1]);
+                        }
+                        if (!Directory.Exists(target))
+                        {
+                            terminal.WriteLine($"cd: No such file or directory \"{args[1]}\"", ConsoleColor.Red);
+                            break;
+                        }
+                        CWD = target;
+                    }
+                    break;
+                case "cat":
+                    {
+                        string path = args[1].Contains(':') ? args[1] : Path.Combine(CWD, args[1]);
+                        if (!File.Exists(path))
+                        {
+                            terminal.WriteLine($"cat: No such file or directory \"{args[1]}\"", ConsoleColor.Red);
+                            break;
+                        }
+                        terminal.WriteLine(File.ReadAllText(path));
+                    }
+                    break;
+                case "touch":
+                    File.Create(args[1].Contains(':') ? args[1] : Path.Combine(CWD, args[1]));
+                    break;
+                case "mkdir":
+                    Directory.CreateDirectory(args[1].Contains(':') ? args[1] : Path.Combine(CWD, args[1]));
+                    break;
+                case "rm":
+                    {
+                        string path = args[1].Contains(':') ? args[1] : Path.Combine(CWD, args[1]);
+                        if (!File.Exists(path))
+                        {
+                            terminal.WriteLine($"rm: No such file or directory \"{args[1]}\"", ConsoleColor.Red);
+                            break;
+                        }
+                        File.Delete(path);
+                    }
+                    break;
+                case "rmdir":
+                    {
+                        string path = args[1].Contains(':') ? args[1] : Path.Combine(CWD, args[1]);
+                        if (!Directory.Exists(path))
+                        {
+                            terminal.WriteLine($"rmdir: No such file or directory \"{args[1]}\"", ConsoleColor.Red);
+                            break;
+                        }
+                        Directory.Delete(path);
+                    }
+                    break;
+                case "about":
+                    WindowManager.AddWindow(new About());
+                    break;
+                case "clock":
+                    WindowManager.AddWindow(new Clock());
+                    break;
+                case "gimviewer:":
+                    {
+                        string path = args[1].Contains(':') ? args[1] : Path.Combine(CWD, args[1]);
+                        if (!File.Exists(path))
+                        {
+                            terminal.WriteLine($"gimviewer: No such file or directory \"{args[1]}\"", ConsoleColor.Red);
+                            break;
+                        }
+                        int type = 0;
+                        switch (args[1].Split('.')[1])
+                        {
+                            case "bmp": type = 0; break;
+                            case "png": type = 1; break;
+                            case "ppm": type = 2; break;
+                            case "tga": type = 3; break;
+                        }
+                        WindowManager.AddWindow(new Gimviewer(File.ReadAllBytes(path), type));
+                    }
+                    break;
+                case "cmd":
+                case "terminal":
+                    WindowManager.AddWindow(new NewConsole());
+                    break;
+                case "notepad":
+                    if (args.Length < 2)
+                    {
+                        WindowManager.AddWindow(new Notepad(false, string.Empty));
+                        break;
+                    }
+                    {
+                        string path = args[1].Contains(':') ? args[1] : Path.Combine(CWD, args[1]);
+                        if (!File.Exists(path))
+                        {
+                            terminal.WriteLine($"notepad: No such file or directory \"{args[1]}\"", ConsoleColor.Red);
+                            break;
+                        }
+                        WindowManager.AddWindow(new Notepad(true, path));
+                    }
+                    break;
+                case "paint":
+                case "paintbrush":
+                    WindowManager.AddWindow(new Paintbrush());
+                    break;
+                case "taskmgr":
+                case "taskman":
+                case "sysmon":
+                    WindowManager.AddWindow(new TaskManager());
+                    break;
+                case "goide":
+                    if (args.Length < 2)
+                    {
+                        WindowManager.AddWindow(new GoIDE.ProjectsFrame());
+                        break;
+                    }
+                    {
+                        string path = args[1].Contains(':') ? args[1] : Path.Combine(CWD, args[1]);
+                        if (!File.Exists(path))
+                        {
+                            terminal.WriteLine($"goide: No such file or directory \"{args[1]}\"", ConsoleColor.Red);
+                            break;
+                        }
+                        WindowManager.AddWindow(new GoIDE.IDEFrame(path.Remove(path.LastIndexOf(".")).Substring(1), path, path.EndsWith(".9xc")));
+                    }
+                    break;
+                case "control":
+                case "settings":
+                    WindowManager.AddWindow(new Settings.Frame());
+                    break;
+                case "goweb":
+                    WindowManager.AddWindow(new GoWeb.GoWebWindow());
+                    break;
+                case "store":
+                case "gostore":
+                    WindowManager.AddWindow(new GoStore.MainFrame());
+                    break;
+                case "fm":
+                case "explorer":
+                case "gosplorer":
+                    if (args.Length < 2)
+                    {
+                        WindowManager.AddWindow(new Gosplorer.MainFrame());
+                        break;
+                    }
+                    {
+                        string path = args[1].Contains(':') ? args[1] : Path.Combine(CWD, args[1]);
+                        if (!Directory.Exists(path))
+                        {
+                            terminal.WriteLine($"gosplorer: No such file or directory \"{args[1]}\"", ConsoleColor.Red);
+                            break;
+                        }
+                        WindowManager.AddWindow(new Gosplorer.MainFrame(path));
+                    }
+                    break;
+                case "clear":
+                    terminal.Clear();
+                    break;
+                default:
+                    terminal.WriteLine($"{args[0]}: not found", ConsoleColor.Red);
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            terminal.WriteLine($"{args[0]}: ${ex.Message}", ConsoleColor.Red);
         }
     }
 
     private string input = string.Empty;
-    private int startX = -1, startY = -1;
+    private int startX = 0, startY = 0;
 
     public override void HandleRun()
     {
@@ -111,13 +285,6 @@ public class NewConsole : Window
         }
 
         terminal.ForceDrawCursor();
-
-        if (startX == -1 || startY == -1)
-        {
-            startX = terminal.CursorLeft;
-            startY = terminal.CursorTop;
-        }
-
         terminal.TryDrawCursor();
 
         if (!terminal.KeyBuffer.TryDequeue(out var key))

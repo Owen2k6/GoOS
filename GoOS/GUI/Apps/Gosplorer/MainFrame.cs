@@ -35,8 +35,13 @@ public class MainFrame : Window
 
     private bool ShowHidden = false;
 
-    public MainFrame()
+    public MainFrame(string path = default)
     {
+        if (path != default)
+        {
+            Path = path;
+        }
+
         Contents = new Canvas(835, 600);
         Title = Path + " - Gosplorer";
         Visible = true;

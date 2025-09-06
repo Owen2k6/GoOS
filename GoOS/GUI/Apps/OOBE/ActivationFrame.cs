@@ -43,6 +43,8 @@ public class ActivationFrame : Window
         Directory.CreateDirectory(@"0:\content\prf");
         Directory.CreateDirectory(@"0:\framework");
         Directory.CreateDirectory(@"0:\go");
+        File.WriteAllText(@"0:\content\motd.txt",
+            "GoOS Terminal 1.6\nThis message can be edited in 0:\\content\\motd.txt\n");
         File.Create(@"0:\content\sys\option-showprotectedfiles.gms");
         File.Create(@"0:\content\sys\option-editprotectedfiles.gms");
         File.Create(@"0:\content\sys\option-deleteprotectedfiles.gms");

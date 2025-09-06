@@ -17,7 +17,7 @@ public class ImportProjectFrame : Window
         {
             // Create the window.
             Contents = new Canvas(400, 300);
-            Title = "Load project - GoIDE";
+            Title = "Import project - GoIDE";
             Visible = true;
             Closable = true;
             SetDock(WindowDock.Center);
