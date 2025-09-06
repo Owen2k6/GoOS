@@ -218,7 +218,7 @@ public class MainFrame : Window
             case " Edit":
             {
                 var full = Path + (Path.EndsWith(@"\") ? "" : @"\") + ContextButton.Name;
-                WindowManager.AddWindow(new Notepad(true, full));
+                WindowManager.AddWindow(new Notepad(full));
                 break;
             }
 
@@ -405,7 +405,7 @@ public class MainFrame : Window
         switch (fullLower)
         {
             case { } a when a.EndsWith(".txt") || a.EndsWith(".log") || a.EndsWith(".md") || a.EndsWith(".gtheme"):
-                WindowManager.AddWindow(new Notepad(true, full));
+                WindowManager.AddWindow(new Notepad(full));
                 break;
 
             case { } a when a.EndsWith(".gexe") || a.EndsWith(".goexe"):

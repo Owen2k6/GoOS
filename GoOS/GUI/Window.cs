@@ -369,7 +369,7 @@ public class Window
     {
         Dialogue.Show(
             $"About {Title}",
-            $"GoOS {Title} v{version}\n\nCopyright (c) " + Kernel.Copyright + " Owen2k6\nAll rights reserved.",
+            $"GoOS {Title} v{version}\n\nCopyright (c) " + Kernel.Copyright + " Owen2k6, et al.\nGPLv3 - free software.",
             heightOverride: 144);
     }
 

@@ -193,7 +193,7 @@ public class NewConsole : Window
                 case "notepad":
                     if (args.Length < 2)
                     {
-                        WindowManager.AddWindow(new Notepad(false, string.Empty));
+                        WindowManager.AddWindow(new Notepad());
                         break;
                     }
                     {
@@ -203,7 +203,7 @@ public class NewConsole : Window
                             terminal.WriteLine($"notepad: No such file or directory \"{args[1]}\"", ConsoleColor.Red);
                             break;
                         }
-                        WindowManager.AddWindow(new Notepad(true, path));
+                        WindowManager.AddWindow(new Notepad(path));
                     }
                     break;
                 case "paint":

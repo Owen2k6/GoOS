@@ -185,7 +185,7 @@ public class Menubar : Window
             case " GoWeb ":
                 WindowManager.AddWindow(new GoWebWindow()); break;
             case " Notepad ":
-                WindowManager.AddWindow(new Notepad(false, null)); break;
+                WindowManager.AddWindow(new Notepad()); break;
             case " Paint ":
                 WindowManager.AddWindow(new Paintbrush()); break;
             case " System Monitor ":
