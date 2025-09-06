@@ -167,7 +167,7 @@ public class NewConsole : Window
                 case "clock":
                     WindowManager.AddWindow(new Clock());
                     break;
-                case "gimviewer:":
+                case "gimviewer":
                     {
                         string path = args[1].Contains(':') ? args[1] : Path.Combine(CWD, args[1]);
                         if (!File.Exists(path))
