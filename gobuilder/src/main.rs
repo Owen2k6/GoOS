@@ -5,9 +5,9 @@ mod setup;
 use std::{env, fs, thread};
 use std::process::Command;
 use std::time::Instant;
-use crate::actions::busybox::busybox_actions;
+use crate::actions::busybox::{busybox_actions, busybox_pre_actions};
 use crate::actions::init::init_actions;
-use crate::actions::kernel::kernel_actions;
+use crate::actions::kernel::{kernel_actions, kernel_pre_actions};
 use crate::project::Project;
 use crate::setup::setup;
 
@@ -27,6 +27,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut build_arch = "x86_64";
     #[cfg(target_arch = "aarch64")]
     let mut build_arch = "aarch64";
+    #[cfg(target_arch = "powerpc")]
+    let mut build_arch = "powerpc";
 
     // Command line arguments
     let args: Vec<String> = env::args().collect();
@@ -37,6 +39,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             "--x86" => build_arch = "i386", // Compiles the OS for x86 systems
             "--amd64" => build_arch = "x86_64", // Compiles the OS for amd64/x86_64 systems
             "--arm64" => build_arch = "aarch64", // Compiles the OS for arm64 systems
+            "--powerpc" => build_arch = "powerpc", // Compiles the OS for 32 bit PPC systems
             "--no-image" => build_image = false, // Disables building an image
             "--run" => build_run = true,
             "--release" => build_debug = false, // Compiles the OS with release
@@ -47,9 +50,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
  
     match build_arch {
-        "i386"|"x86_64"|"aarch64" => {},
+        "i386"|"x86_64"|"aarch64"|"powerpc" => {},
         _ => {
-            eprintln!("Error: Unsupported architecture! Must be x86, amd64, arm64, or all.");
+            eprintln!("Error: Unsupported architecture! Must be x86, amd64, arm64, powerpc, or all.");
             eprintln!("You may report your architecture to the GoOS devs over at Owen2k6 network, and we may consider support for your architecture.");
             std::process::exit(1);
         }
@@ -59,7 +62,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         "x86_64" => "x86_64-unknown-linux-",
         "aarch64" => "aarch64-unknown-linux-",
         "i386" => "i686-unknown-linux-",
-        /*"powerpc" => "powerpc-unknown-linux-",*/
+        "powerpc" => "powerpc-unknown-linux-",
         _ => "fucking hell mate"
     };
 
@@ -138,12 +141,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     do_dirs(build_arch);
 
-    println!("Copying ./configs/kernel/{}.config to ./kernel/.config", build_arch);
-    if let Err(e) = fs::copy(format!("configs/kernel/{}.config", build_arch), "kernel/.config") {
-        eprintln!("Failed to copy {:?}: {}", format!("./out/{}/image", build_arch), e);
-        std::process::exit(1);
-    }
-
     // Add new projects in add_c_projects and add_rust_projects (these are found at the bottom of the file)
     let c_projects = add_c_projects(); // Array for C based projects to compile
     let rust_projects = add_rust_projects();
@@ -167,6 +164,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             {
                 let timer = Instant::now();
                 println!("Building {}...", project.name);
+
+                match project.pre_build {
+                    Some(f) => {
+                        if let Err(e) = f(build_arch, "", build_debug) {
+                            eprintln!("Pre-build action failed for project {}: {}", &project.name, e);
+                            std::process::exit(1);
+                        }
+                        println!("Ran pre-build action for project {}", &project.name);
+                    },
+                    None => println!("No pre-build action for project {}, continuing", &project.name)
+                }
 
                 let status = Command::new("make")
                     .args(&[
@@ -206,6 +214,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 {
                     let timer = Instant::now();
                     println!("Building {}...", project.name);
+
+                    match project.pre_build {
+                        Some(f) => {
+                            if let Err(e) = f(build_arch, rust_target, build_debug) {
+                                eprintln!("Pre-build action failed for project {}: {}", &project.name, e);
+                                std::process::exit(1);
+                            }
+                            println!("Ran pre-build action for project {}", &project.name);
+                        },
+                        None => println!("No pre-build action for project {}, continuing", &project.name)
+                    }
 
                     if build_debug {
                         let status = Command::new("cargo")
@@ -383,8 +402,8 @@ fn add_c_projects() -> Vec<Project> {
 
     // Add C projects here (folder name, then function with any special actions you need done after compilation)
     // Note: Replace Some(fn), fn being your post compilation actions, with None to do nothing after compilation.
-    c_proj.push(Project::new("kernel", Some(kernel_actions), vec![/* Put project names here to make it build after them */]));
-    c_proj.push(Project::new("busybox", Some(busybox_actions), vec!["kernel"]));
+    c_proj.push(Project::new("kernel", Some(kernel_pre_actions), Some(kernel_actions), vec![/* Put project names here to make it build after them */]));
+    c_proj.push(Project::new("busybox", Some(busybox_pre_actions), Some(busybox_actions), vec!["kernel"]));
 
     c_proj // return without return
 }
@@ -392,7 +411,7 @@ fn add_c_projects() -> Vec<Project> {
 fn add_rust_projects() -> Vec<Project> {
     let mut rust_proj: Vec<Project> = Vec::new();
 
-    rust_proj.push(Project::new("init", Some(init_actions), vec!["kernel", "busybox"]));
+    rust_proj.push(Project::new("init", None, Some(init_actions), vec!["kernel", "busybox"]));
 
     rust_proj
 }

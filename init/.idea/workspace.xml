@@ -6,22 +6,19 @@
   <component name="CargoProjects">
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml">
       <package file="$PROJECT_DIR$">
-        <enabledFeature name="default" />
+        <feature name="default" enabled="true" />
       </package>
     </cargoProject>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2fd44745-00ff-4de4-8578-2ebdc4ad564e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../busybox" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitmodules" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitmodules" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../configs/grub/arm_grub.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/../configs/grub/arm_grub.cfg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../configs/grub/x86_grub.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/../configs/grub/x86_grub.cfg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gobuilder/src/actions/init.rs" beforeDir="false" afterPath="$PROJECT_DIR$/../gobuilder/src/actions/init.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../busybox" beforeDir="false" afterPath="$PROJECT_DIR$/../busybox" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../busybox/scripts/kconfig/lxdialog/check-lxdialog.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../busybox/scripts/kconfig/lxdialog/check-lxdialog.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../configs/kernel/overrides.config" beforeDir="false" afterPath="$PROJECT_DIR$/../configs/kernel/overrides.config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gobuilder/src/actions/busybox.rs" beforeDir="false" afterPath="$PROJECT_DIR$/../gobuilder/src/actions/busybox.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../gobuilder/src/actions/kernel.rs" beforeDir="false" afterPath="$PROJECT_DIR$/../gobuilder/src/actions/kernel.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gobuilder/src/actions/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/../gobuilder/src/actions/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../gobuilder/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/../gobuilder/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gobuilder/src/project.rs" beforeDir="false" afterPath="$PROJECT_DIR$/../gobuilder/src/project.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +36,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "ekeleze"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Owen2k6/GoOS.git",
+    "accountId": "2c60785d-5972-4e03-9167-68f0b293d884"
+  }
+}]]></component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="MHpR9foe" />
   </component>
@@ -50,24 +59,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
-    &quot;org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon&quot;: &quot;&quot;,
-    &quot;org.rust.first.attach.projects&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.rust.reset.selective.auto.import": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "git-widget-placeholder": "2.0",
+    "last_opened_file_path": "/home/ekeleze/Documents/GoOS/init",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
+    "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
+    "org.rust.first.attach.projects": "true",
+    "settings.editor.selected.configurable": "language.rust",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="buildProfileId" value="dev" />
@@ -89,7 +101,7 @@
     </configuration>
   </component>
   <component name="RustProjectSettings">
-    <option name="toolchainHomeDirectory" value="/usr/bin" />
+    <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -104,6 +116,7 @@
       <workItem from="1756334367246" duration="4600000" />
       <workItem from="1756419464956" duration="4144000" />
       <workItem from="1756428297443" duration="796000" />
+      <workItem from="1772743887778" duration="307000" />
     </task>
     <servers />
   </component>
