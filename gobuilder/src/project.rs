@@ -1,5 +1,3 @@
-use std::os::raw::c_float;
-
 #[derive(Clone)]
 pub struct Project {
     pub(crate) name: String,
