@@ -24,3 +24,4 @@ out/
 
 configs/kernel/*.config
 !configs/kernel/overrides.config
+!configs/kernel/old/*.config
