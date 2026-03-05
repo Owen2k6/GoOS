@@ -2,6 +2,8 @@
 	path = kernel
 	url = https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
 	branch = linux-rolling-stable
+	shallow = true
 [submodule "busybox"]
 	path = busybox
 	url = https://git.busybox.net/busybox
+	shallow = true
